@@ -1,0 +1,61 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="QUnit tests" verbose="1" parallel="tests" thread-count="20" data-provider-thread-count="20">
+
+    <!-- Selenium Grid hub connection details -->
+    <parameter name="seleniumHost" value="anthill.svc.ft.com" />
+    <parameter name="seleniumPort" value="4444" />
+
+    <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
+    <parameter name="majorBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
+
+
+    <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
+    <parameter name="localBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
+
+    <parameter name="testRoot" value="target/test-classes" />
+
+    <listeners>
+        <listener class-name="org.uncommons.reportng.HTMLReporter" />
+    </listeners>
+
+    <!--
+         Each <test> gathers the QUnit test suite .htm files in the directories specified in testRoot and with the include or exclude regular expressions
+         Tests will run in parallel so careful consideration as to the grouping of tests based on the number and execution time of each QUnit test suite .htm
+         file is important. The entire run will be as slow as the longest <test> Tests will be run on the specified browser for each test.
+     -->
+
+    <test name="iexplore8-windows">
+        <parameter name="browser" value="iexplore8-windows" />
+        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+
+    <test name="iexplore9-win7-x86">
+        <parameter name="browser" value="iexplore9-win7-x86" />
+        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+
+
+
+    <test name="googlechrome-windows">
+        <parameter name="browser" value="googlechrome-windows" />
+        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+
+    <test name="firefox14-windows">
+        <parameter name="browser" value="firefox14-windows" />
+        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+</suite>
