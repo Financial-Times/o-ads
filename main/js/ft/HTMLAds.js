@@ -1,4 +1,3 @@
-/*IGNORETHISglobal FT, XMLHttpRequest, alert, navigator, ad, document, window, clientAds*/
 
 /*members HTMLAds, HTMLAdData, urlStem, injectionDiv, injectionClass,
 prototype, buildAdURL, match, urlStem, getHTMLAd, open, setRequestHeader,

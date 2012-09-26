@@ -3,15 +3,8 @@
 // LIBRARIES. THIS SHOULD END WHEN FALCON HAVE REDESIGNED THE THIRD PARTY WRAPPERS
 // AND ARTICLE PAGES.
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
-// SEPT 21 - AMATEO
 
-/*IGNOREglobal Advert: true, AdvertDE, FT, Math, RegExp, clearInterval, clearTimeout,
-     doTrackRefresh, document, parseInt, setInterval, setTimeout, window,
-     escape, unescape, clientAds: true, pageUUID, getUUIDFromString, $,
-     jQuery
-*/
-
-/* members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21",
+/*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21",
      "27", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
      KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
      Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
@@ -73,9 +66,11 @@
      getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
      exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, addClass,
      removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
-     pushDownFormats, placeHolderTag, divId, aminatedProperty, expansionSubtrahend,
-     VAR, pushDownImg, getConsentValue, cc, html, pushDownExpand, pollAdHeightAndExpand,
-    find, css */
+     pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
+     VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
+    DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
+    pushDownExpandingAsset, getConsentValue, ad_network_code, cc, ip, html, pushDownExpand,
+    pollAdHeightAndExpand, find, DFPPremiumReadOnlyNetworkCode, nodeName, css */
 
 /* The Falcon Ads API follows from here. */
 
@@ -87,7 +82,8 @@ FT.Advertising = function () {
 
     // Regex to match valid DFP ad server two letter codes at this time.
     this.CONST.AD_SERVERS = /^((a[lutre])|(b[rsgaye])|(c[nohazl])|(d[ke])|(e[gse])|(f[ri])|(g[rt])|(h[ukr])|(i[stlne])|(j[p])|(k[wr])|(l[uvt])|(m[yxaekd])|(n[olz])|(p[lthk])|(r[suo])|(s[gekai])|(t[rhw])|(u[kas])|(v[e])|(z[a]))$/i;
-
+    //DFP Network code
+    this.CONST.DFPNetworkCode = '/N5887';
     // Map ad position names to ad properties.
     // sz= allowable ad sizes in this position.
     // dcopt= doubleclick options. ist means interstitial ad - only one allowed per page
@@ -116,11 +112,11 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'cc','pos', 'bht', 'tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'cc', 'pos', 'bht', 'tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
-    this.CONST.uKeyOrder =  ['eid', 'uuid', 'auuid', 'ts'];
+    this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
@@ -153,10 +149,18 @@ FT.Advertising = function () {
     this.CONST.trackUrl = "http://track.ft.com/track/dfp_error.gif";
     this.CONST.cookieConsentName = 'cookieconsent';
     this.CONST.cookieConsentAcceptanceValue = 'accepted';
-    this.CONST.pushDownFormats = {'banlb': {'pos': 'banlb', 'placeHolderTag' : 'img', 'divId' : 'header', 'aminatedProperty' : 'padding-top', 'expansionSubtrahend': 80}};
+    this.CONST.pushDownFormats = {'banlb': {'pos': 'banlb', 'width' : 970, 'height' : 90, 'animatedDivId' : 'header', 'animatedProperty': 'padding-top', 'expansionSubtrahend': 78 }};
 
+    //DFP migration environments
+    this.CONST.DFPPremiumCopy = "gdfp-testing-only.g.doubleclick.net";
+    this.CONST.DFPPremiumCopyNetworkCode = '/N282450';
+    this.CONST.DFPPremiumReadOnly = this.CONST.DFPPremiumCopy;
+    this.CONST.DFPPremiumReadOnlyNetworkCode = this.CONST.DFPNetworkCode;
+
+    //variables we need to store between function calls
     this.VAR = {};
-    this.VAR.pushDownImg = null;
+    this.VAR.pushDownFullWidthAssetsHeights = {};
+    this.VAR.pushDownExpandingAsset = null;
 };
 
 if (FT.lib) {
@@ -800,6 +804,24 @@ FT.Advertising.prototype.erightsID = function () {
     return eid;
 };
 
+FT.Advertising.prototype.getIP = function () {
+    var ip, tmp, ftUserTrackVal = FT.cookie.get('FTUserTrack'), ipTemp;
+
+    // sample FTUserTrackValue = 203.190.72.182.1344916650137365
+    if (ftUserTrackVal) {
+        ip = ftUserTrackVal;
+        tmp = ftUserTrackVal.match(/^\w{1,3}\.\w{1,3}\.\w{1,3}\.\w{1,3}\.\w+$/);
+        if (tmp) {
+            tmp = tmp[0];
+            ipTemp = tmp.match(/\w{1,3}/g);
+            if (ipTemp) {
+                ip = ipTemp[0] + "." + ipTemp[1] + "." + ipTemp[2] + "." + ipTemp[3];
+            }
+        }
+    }
+    return ip;
+};
+
 FT.Advertising.prototype.prepareUParams = function () {
     var uValue = '',
         uOrder = this.CONST.uKeyOrder,
@@ -893,8 +915,7 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
 };
 
 FT.Advertising.prototype.getConsentValue = function () {
-    var cookieConsentName = FT.ads.CONST.cookieConsentName,
-        cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
+    var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
 
     if (FT.cookie.get(cookieConsentName) === cookieConsentAcceptanceValue) {
         return "y"; //accepted
@@ -905,11 +926,25 @@ FT.Advertising.prototype.getConsentValue = function () {
 
 FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     // get AYSC cookie values to determine ad server
-    var AllVars = this.prepareAdVars(this.getAyscVars({})),
+    var AllVars = this.prepareAdVars(this.getAyscVars({})), cookie = FT.cookie.get("FTQA"),
         rFormat,
         docUUID;
     this.baseAdvert.pos = pos;
-    this.baseAdvert.ad_server = this.adServerCountry(AllVars['15'], pos);
+
+    if ((cookie) && (cookie.match(/env=(.*)premiumcopy/))) {
+        //cookie switch to DFP Premium Copy network for testing
+        this.baseAdvert.ad_server = this.CONST.DFPPremiumCopy;
+        this.baseAdvert.ad_network_code = this.CONST.DFPPremiumCopyNetworkCode;
+    } else if ((cookie) && (cookie.match(/env=(.*)premiumreadonly/))) {
+        //cookie switch to DFP Premium Read Only network -- shadow live network
+        this.baseAdvert.ad_server = this.CONST.DFPPremiumReadOnly;
+        this.baseAdvert.ad_network_code = this.CONST.DFPPremiumReadOnlyNetworkCode;
+    } else {
+        //pre-migrated DFP network
+        this.baseAdvert.ad_server = this.adServerCountry(AllVars['15'], pos);
+        this.baseAdvert.ad_network_code = this.CONST.DFPNetworkCode;
+    }
+
 
     // now lets exclude fields based on either key names or values
     AllVars = this.excludeFields(this.CONST.exclusions, AllVars);
@@ -965,16 +1000,13 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
             }
         }
     }
-    //remeber and un-comment
-    /*
     if (typeof articleUUID !== 'undefined') {
         if (articleUUID !== null && articleUUID !== '') {
             this.baseAdvert.auuid = articleUUID;
         }
     }
-    */
-
     this.baseAdvert.ts = this.getTimestamp();
+    this.baseAdvert.ip = this.getIP();
     this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);
 
     // Check if we are running in a non-live environment and change the site name
@@ -1171,7 +1203,7 @@ FT.Advertising.prototype.buildURLFromBaseAdvert = function (mode) {
     var type = (mode === 'video') ? "/pfadx/" : "/adj/",
         URL;
     type = (mode === 'videoSync') ? "/adi/" : type;
-    URL = "http://" + this.baseAdvert.ad_server + type + this.baseAdvert.dfp_site + "/" + this.baseAdvert.dfp_zone + ";";
+    URL = "http://" + this.baseAdvert.ad_server + this.baseAdvert.ad_network_code + type + this.baseAdvert.dfp_site + "/" + this.baseAdvert.dfp_zone + ";";
     URL += this.encodeBaseAdvertProperties(mode);
     if (mode !== 'video') {
         URL = URL + '?';
@@ -1241,16 +1273,14 @@ FT.Advertising.prototype.requestInsertedAds = function () {
     }
 }; // requestInsertedAds()
 
-// proxy function to allow falcon pages to switch between
-// legacy and DFP ad server call to newssubs position.
-// We could just put FT.ads.request('newssubs'); on pages now
-// and remove this function. (BSAC 09/2010)
-// TESTED in dfp-advertising.html
+//originally a proxy function but now used for deciding whether to serve newssubs
+//depending whether we have a banlb or full-width billboard ad served in the
+//banlb position
 FT.Advertising.prototype.requestNewssubs = function () {
 
     var tryBanlb, banlbDiv, j, isBillboardAd = false, banlbInnerHTML, why;
 
-     for (j = 0; j < this.CONST.proxy_div_prefixes.length; j++) {
+    for (j = 0; j < this.CONST.proxy_div_prefixes.length; j++) {
         tryBanlb = this.CONST.proxy_div_prefixes[j] + "banlb";
         if (jQuery('#' + tryBanlb).length > 0) {
             banlbDiv = tryBanlb;
@@ -1261,13 +1291,14 @@ FT.Advertising.prototype.requestNewssubs = function () {
         why = "Can't detect a banlb div in DOM";
         clientAds.log("FT.Advertising.requestNewssubs()" + why);
     } else {
-            banlbInnerHTML = jQuery('#' + banlbDiv).html();
-            clientAds.log("banlb ad state=" + banlbInnerHTML);
+        banlbInnerHTML = jQuery('#' + banlbDiv).html();
+        clientAds.log("banlb ad state=" + banlbInnerHTML);
 
-            //will need a better permanent solution to parse on than this
-            if (banlbInnerHTML.match(/width=(["]{0,1})970(["]{0,1})|width:([\s]*)970/)) {
-                isBillboardAd = true;
-            }
+        //tests for assets within the div which indicate a billboard ad
+        //by virtue of width property
+        if (banlbInnerHTML.match(/width=(["]{0,1})970(["]{0,1})|width:([\s]*)970/)) {
+            isBillboardAd = true;
+        }
     }
 
     if (isBillboardAd === true) {
@@ -1941,8 +1972,9 @@ FT.Advertising.prototype.breakout = function (rResponse) {
             }
         }
         if (pause) {
-            //debugger;
-            console.log("debugger");
+            /*jshint debug:true*/
+            debugger;
+            /*jshint debug:false*/
         }
     }
 };
@@ -1971,7 +2003,7 @@ FT.Advertising.prototype.initDFP = function (env) {
     clientAds.log("FT.Advertising.initDFP() - top");
     env = env || FT.env;
     this.hasCalledInitDFP = true;
-    if (typeof env.useDFP !== 'undefined') {
+    if (env.useDFP !== undefined) {
         // We have already initialised the DFP prototype methods, all we need to
         // do is reset the baseAdvert and other global page settings.
         this.beginNewPage(env);
@@ -2021,7 +2053,7 @@ FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMillisecond
     var timeoutVal;
 
     // Checking if the position is supported for the pushdown Ad
-    if (typeof FT.ads.CONST.pushDownFormats[adFormat] === "undefined") {
+    if (FT.ads.CONST.pushDownFormats[adFormat] === undefined) {
         return;
     }
 
@@ -2034,25 +2066,40 @@ FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMillisecond
 // Tested in dfp-advertising.html
 FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMilliseconds) {
 
-    var expandableHeight, creativeOffsetHeight = 0, pushDownDiv = FT.ads.CONST.pushDownFormats[adFormat];
+    var expandableHeight, creativeOffsetHeight = 0, pushDownDiv = FT.ads.CONST.pushDownFormats[adFormat],
+        clientHeight, clientWidth;
 
-   if (FT.ads.VAR.pushDownImg === null) {
-        FT.ads.VAR.pushDownImg = jQuery('#' + pushDownDiv.pos).find(pushDownDiv.placeHolderTag)[0];
-   }
+    if (FT.ads.VAR.pushDownExpandingAsset === null) {
+        //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
+        jQuery('#' + pushDownDiv.pos).find('*').each(function () {
+            //div, img and object nodes are most likely candidates
+            if (this.nodeName.match(/DIV|IMG|OBJECT/)) {
+                clientHeight = this.clientHeight || this.offsetHeight || null;
+                clientWidth = this.clientWidth || null;
+                if ((typeof clientHeight !== "null") && (clientHeight > 0) && (clientWidth === pushDownDiv.width)) {
+                    if (typeof FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] === "undefined") {
+                        //acquire the  initial height of each asset and preserve it in a data structure
+                        FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] = clientHeight;
+                    } else if (FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] < clientHeight) {
+                        //asset appears to be expanding in height - set as watched asset for expanding page
+                        FT.ads.VAR.pushDownExpandingAsset = this;
+                    }
 
-    if ((typeof FT.ads.VAR.pushDownImg.clientHeight !== "undefined") && (FT.ads.VAR.pushDownImg.clientHeight !== null) &&  FT.ads.VAR.pushDownImg.clientHeight > 0 ) {
-        creativeOffsetHeight= FT.ads.VAR.pushDownImg.clientHeight;
-    } else if ((typeof FT.ads.VAR.pushDownImg.offsetHeight !== "undefined") && (FT.ads.VAR.pushDownImg.offsetHeight !== null) && (FT.ads.VAR.pushDownImg.offsetHeight > 0 )) {
-        //for firefox which does not always recognise clientHeight property
-        creativeOffsetHeight= FT.ads.VAR.pushDownImg.offsetHeight;
-    } else if (creativeOffsetHeight === 0) {
-        //still not set? Something wrong - return
-        return;
+                }
+            }
+        });
     }
 
-    expandableHeight = creativeOffsetHeight - pushDownDiv.expansionSubtrahend;
+    //we think we know the expanding asset so reset relevant DOM element height
+    if (FT.ads.VAR.pushDownExpandingAsset !== null) {
+        creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight ||
+            FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
 
-    jQuery('#' + pushDownDiv.divId).css(pushDownDiv.aminatedProperty, expandableHeight);
+        expandableHeight = creativeOffsetHeight - pushDownDiv.expansionSubtrahend;
+
+        jQuery('#' + pushDownDiv.animatedDivId).css(pushDownDiv.animatedProperty, expandableHeight);
+
+    }
 
     setTimeout(function () {FT.ads.pollAdHeightAndExpand(adFormat, pauseInMilliseconds); }, pauseInMilliseconds);
 
@@ -2258,7 +2305,7 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
-FT.Advertising.prototype.VERSION = "Live $Rev: 124438 $";
+FT.Advertising.prototype.VERSION = "Live $Rev: 127825 $";
 FT.Advertising.prototype.library = "falcon";
 clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
 
