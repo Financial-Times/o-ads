@@ -1584,6 +1584,7 @@ FT.Advertising.prototype.startRefreshTimer = function (delay) {
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
+
     var rDiv,
         link,
         img,
@@ -1622,9 +1623,7 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
 
     // create a placeholder so we can render th link and img next to it (e.g. inside the div.advert OR the #mktsdata span
     imageclickPlaceholderId = rResponse.name + "_imageclick_placeholder";
-    // Fool jslint in this occasion to accept a document.write
-    doc = document;
-    doc.write('<span style="display:none" id="' + imageclickPlaceholderId + '"></span>');
+    document.write('<span style="display:none" id="' + imageclickPlaceholderId + '"></span>');
     imageclickPlaceholderDiv = document.getElementById(imageclickPlaceholderId);
 
     if (imageclickPlaceholderDiv.parentNode.insertBefore(link, imageclickPlaceholderDiv)) {
@@ -2264,6 +2263,8 @@ clientAds = {
     },
     // From here, just a few functions to help with debugging for now.
     'log'    : function (msg) {
+        /*jshint devel:true */
+        //allow use of console in this method only
         if (this.debug === null) {
             this.debug = false;
             if (FT.cookie.get("FTQA") && FT.cookie.get("FTQA").match(/debug/)) {
