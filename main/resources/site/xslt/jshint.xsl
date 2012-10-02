@@ -8,22 +8,30 @@
 <xsl:template match="//lint">
   <html>
     <head>
-<!--       <link href="site/css/bootstrap.min.css" rel="stylesheet" />
-      <link href="site/css/custom.css" rel="stylesheet" /> -->
       <link href="../css/bootstrap.min.css" rel="stylesheet" />
       <link href="../css/jshint.css" rel="stylesheet" />
     </head>
     <body>
       <h1>JSHint Report</h1>
+      <xsl:variable name="fileCount" select="count(file[@name and generate-id(.) = generate-id(key('files', @name))])" />
+      <xsl:choose>
+        <xsl:when test="$fileCount > 0">
+          <!-- Summary part -->
+          <xsl:apply-templates select="." mode="summary" />
 
-      <!-- Summary part -->
-      <xsl:apply-templates select="." mode="summary" />
+          <!-- File List part -->
+          <xsl:apply-templates select="." mode="filelist" />
 
-      <!-- File List part -->
-      <xsl:apply-templates select="." mode="filelist" />
-
-      <!-- For each file create its part -->
-      <xsl:apply-templates select="file[@name and generate-id(.) = generate-id(key('files', @name))]" />
+          <!-- For each file create its part -->
+          <xsl:apply-templates select="file[@name and generate-id(.) = generate-id(key('files', @name))]" />
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="alert-message success">
+            <p>Good job! <span class="logo">JSHint</span> hasn't found any problems with
+          your code.</p>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
     </body>
   </html>
 </xsl:template>

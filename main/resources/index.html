@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>>Ads Lib Reporting</title>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
   <link href="site/css/bootstrap.min.css" rel="stylesheet">
   <!--link href="site/css/bootstrap-responsive.min.css" rel="stylesheet" -->
   <link href="site/css/custom.css" rel="stylesheet">
@@ -28,6 +29,17 @@
       </div>
     </div>
   </div>
-  <iframe src="" name="content" />
+  <iframe src="" name="content"></iframe>
+  <script>
+    (function (w, d, $, u) {
+      function validateMenuLink(index, item) {
+        $.ajax(item.href).error(function () {
+          $(item).parents('li').hide();
+        });
+      }
+
+      $('.nav a').each(validateMenuLink);
+    }(window, document, jQuery))
+  </script>
 </body>
 </html>

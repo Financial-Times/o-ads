@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml-stylesheet type="text/xsl" href="jshint.xsl"?>
-<lint>
-  <file name="/js/ft/DartForPublishers.js">
-    <issue char="1" evidence="fnsldnflsnlsknd// NOTEs: TEMPORARILY THE FTCOMBASE AND PHOENIX ADS LIBRARIES DEPEND ON THIS FILE" line="1" reason="Expected an assignment or function call and instead saw an expression."/>
-    <issue char="16" evidence="fnsldnflsnlsknd// NOTEs: TEMPORARILY THE FTCOMBASE AND PHOENIX ADS LIBRARIES DEPEND ON THIS FILE" line="250" reason="Missing semicolon."/>
-  </file>
-</lint>
