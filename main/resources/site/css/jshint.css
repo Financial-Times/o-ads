@@ -1,0 +1,68 @@
+html, body {
+  height: 100%;
+  background-color: #E3E9ED;
+  margin: 1em;
+}
+
+body {
+  font-size: 10pt;
+  font-family: "PT Sans", Helvetica, Arial, Sans-Serif;
+  color: #444;
+}
+
+h1, h2 {
+  display: inline-block;
+}
+
+h2 {
+  margin-left: 1em;
+}
+
+a {
+  color: #4183C4;
+}
+
+table.files {
+  width: 50%;
+  border: 1px solid #AAA;
+  border-width: 1px 1px 0 0;
+}
+
+table.files thead {
+  background: white;
+}
+
+table.files th,
+table.files td {
+  border: 1px solid #AAA;
+  border-width: 0 0 1px 1px
+}
+
+pre, code {
+  font-family: "Inconsolata";
+  font-size: 10pt;
+}
+
+code {
+  background-color: #FEE9CC;
+  color: rgba(0, 0, 0, 0.75);
+  padding: 1px 3px;
+}
+
+ul.jshint-errors {
+  margin: 0;
+  list-style-type: none;
+  border: 1px solid #FBC7C6;
+  border-bottom: none;
+}
+
+ul.jshint-errors li {
+  padding: 0.5em 1em;
+  background-color: #FDDFDE;
+  border-bottom: 1px solid #FBC7C6;
+}
+
+#file-content .error {
+  cursor: auto !important;
+  background-color: #FDDFDE !important;
+}
