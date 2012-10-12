@@ -42,7 +42,7 @@
       <xsl:variable name="errorCount" select="count(file/issue)" />
       <xsl:value-of select="$fileCount" />
       file(s) analyzed;
-      <xsl:value-of select="$errorCount" />
+      <span id="errors"><xsl:value-of select="$errorCount" /></span>
       issue(s) found.</h2>
   </xsl:template>
 
