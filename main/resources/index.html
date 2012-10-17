@@ -29,9 +29,14 @@
       </div>
     </div>
   </div>
-  <iframe src="" name="content"></iframe>
+  <iframe src="" name="content">
+    <h1>hi there</h1>
+    <p>please pick an option from the top</p>
+  </iframe>
   <script>
     (function (w, d, $, u) {
+      var iframe;
+
       function validateDomain() {
         if(location.hostname.match(/ft\.com$/) === null) {
           alert("Warning: Not viewing this site on an ft.com domain will cause some tests to fail!");
@@ -40,20 +45,35 @@
 
       function validateMenuLinks() {
         function each(index, item) {
-          $.ajax(item.href).error(function () {
-            $(item).parents('li').hide();
+          $.ajax(item.href).success(function () {
+            $(item).parents('li').show();
           });
         }
         $('.nav a').each(each);
       }
 
-      function onReadyEvents() {
-        validateMenuLinks();
-        validateDomain();
+      function rememberCurrentLocation(ev) {
+        var current = iframe.contentWindow.location.href;
+        localStorage.setItem('location', current);
       }
 
-      $(onReadyEvents);
-    }(window, document, jQuery))
+      function reloadLocation() {
+        var old = localStorage.getItem('location');
+        if(old !== null) {
+          iframe.src = localStorage.getItem('location');
+        }
+      }
+
+      function onReady() {
+        iframe = d.querySelector('iframe');
+        validateDomain();
+        validateMenuLinks();
+        reloadLocation();
+        $(w).unload(rememberCurrentLocation);
+      }
+
+      $(onReady);
+    }(window, document, jQuery));
   </script>
 </body>
 </html>
