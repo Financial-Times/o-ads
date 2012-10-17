@@ -4,8 +4,8 @@
 // AND ARTICLE PAGES.
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
 
-/*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21",
-     "27", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
+/*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21", "22", "27",
+    "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
      KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
      Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
      ad_server, addClassName, addDiagnostic, addNewAttributes,
@@ -70,7 +70,7 @@
      VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
     DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, ip, html, pushDownExpand,
-    pollAdHeightAndExpand, find, DFPPremiumReadOnlyNetworkCode, nodeName, css */
+    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName  */
 
 /* The Falcon Ads API follows from here. */
 
@@ -123,15 +123,15 @@ FT.Advertising = function () {
     this.CONST.leading_zero_key_names = [ '19', '21' ];
     this.CONST.remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1,  '20': 1, '21': 1};
     this.CONST.remove_res_pvt = {'14': 1, 'cn': 1, '27' : 1};
-    this.CONST.regex_key_names = ['22'];
+    this.CONST.regex_key_names = ['22','97'];
 
     this.CONST.SubsLevelReplaceLookup = {
-        'edt': /^edit$/,
-        'int': /^Ftemp$/,
-        'cor': /^[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/,
-        'lv1': /^[PL]1[A-Za-z][A-Za-z]/,
-        'lv2': /^[PL]2[A-Za-z][A-Za-z]/,
-        'reg': /^[PL]0[A-Za-z][A-Za-z]/
+        'edt': { '22' : /^edit$/, '97' : /^.*/ },
+        'int': { '22' : /^Ftemp$/, '97': /^.*/ },
+        'cor': { '22' : /^[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/, '97' : /^c$/ },
+        'lv1': { '22' : /^[PL]*[0]*[PL]1[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
+        'lv2': { '22' : /^[PL]*[0]*[PL]2[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
+        'reg': { '22' : /^[PL]0[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ }
     };
     // format for creating a new key name and value from an old one using substring is: 'old key=start substring=no characters in substring=new key'
     this.CONST.substr_key_names = ['24=0=3=cn'];
@@ -1282,7 +1282,7 @@ FT.Advertising.prototype.requestNewssubs = function () {
 
     for (j = 0; j < this.CONST.proxy_div_prefixes.length; j++) {
         tryBanlb = this.CONST.proxy_div_prefixes[j] + "banlb";
-        if (jQuery('#' + tryBanlb).length > 0) {
+        if ($('#' + tryBanlb).length > 0) {
             banlbDiv = tryBanlb;
         }
     }
@@ -1291,7 +1291,7 @@ FT.Advertising.prototype.requestNewssubs = function () {
         why = "Can't detect a banlb div in DOM";
         clientAds.log("FT.Advertising.requestNewssubs()" + why);
     } else {
-        banlbInnerHTML = jQuery('#' + banlbDiv).html();
+        banlbInnerHTML = $('#' + banlbDiv).html();
         clientAds.log("banlb ad state=" + banlbInnerHTML);
 
         //tests for assets within the div which indicate a billboard ad
@@ -1584,7 +1584,6 @@ FT.Advertising.prototype.startRefreshTimer = function (delay) {
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
-
     var rDiv,
         link,
         img,
@@ -1845,14 +1844,20 @@ FT.Advertising.prototype.stripLeadingZeros = function (KeysToStrip, obj) {
 
 //here we do substitutions based on regexs.
 FT.Advertising.prototype.fieldRegex = function (RegexKeyNames, obj) {
-    this.foreach(RegexKeyNames, function (keyName) {
-        var value = obj[keyName];
-        if (value !== undefined) {
-            this.foreach(this.CONST.SubsLevelReplaceLookup, function (replaceValue, regex) {
-                if (value.match(regex)) {
-                    obj.slv = replaceValue;
-                }
-            });
+    var myBool = false;
+    this.foreach(this.CONST.SubsLevelReplaceLookup, function (replaceValue, regexHash) {
+        this.foreach(RegexKeyNames, function (keyName) {
+            var value = obj[keyName];
+            if (value === undefined) {
+                return;
+            } else if (value.match(regexHash[keyName])) {
+                myBool = true;
+            } else  {
+                myBool = false;
+            }
+        });
+        if (myBool) {
+            obj.slv = replaceValue;
         }
     });
 
@@ -2070,7 +2075,7 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
 
     if (FT.ads.VAR.pushDownExpandingAsset === null) {
         //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
-        jQuery('#' + pushDownDiv.pos).find('*').each(function () {
+        $('#' + pushDownDiv.pos).find('*').each(function () {
             //div, img and object nodes are most likely candidates
             if (this.nodeName.match(/DIV|IMG|OBJECT/)) {
                 clientHeight = this.clientHeight || this.offsetHeight || null;
@@ -2091,12 +2096,11 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
 
     //we think we know the expanding asset so reset relevant DOM element height
     if (FT.ads.VAR.pushDownExpandingAsset !== null) {
-        creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight ||
-            FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
+        creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
 
         expandableHeight = creativeOffsetHeight - pushDownDiv.expansionSubtrahend;
 
-        jQuery('#' + pushDownDiv.animatedDivId).css(pushDownDiv.animatedProperty, expandableHeight);
+        $('#' + pushDownDiv.animatedDivId).css(pushDownDiv.animatedProperty, expandableHeight);
 
     }
 
@@ -2306,7 +2310,7 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
-FT.Advertising.prototype.VERSION = "Live $Rev: 127825 $";
+FT.Advertising.prototype.VERSION = "Live $Rev: 132623 $";
 FT.Advertising.prototype.library = "falcon";
 clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
 

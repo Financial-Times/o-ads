@@ -185,10 +185,12 @@ TEST.OmitXXX = ['02', '05', '06', '07', '20', '21', '19'];
 TEST.OmitPVTRES = ['14', '27', '24' ];
 
 // Test values for subscription level ID matching
-TEST.SlvCorp = ['P0P1Tools', 'P0P2Admin', 'P0L1Ape', 'P0L2Dog', 'L0L1Ties', 'L0L2Tent', 'L0P1Towels', 'L0P2What'];
-TEST.SlvLv1 = ['P1Tools', 'L1Edit'];
-TEST.SlvLv2 = ['P2Tools', 'L2Edit'];
+TEST.SlvCorp = ['P0P1Tools', 'P0P2Admin', 'P0P1P1Tools', 'P0P1P2Tools', 'P0L1Ape', 'P0L2Dog', 'L0L1Ties', 'L0L2Tent', 'L0P1Towels', 'L0P2What'];
+TEST.SlvLv1 = ['P1Tools', 'L1Edit','P0P1Tools'];
+TEST.SlvLv2 = ['P2Tools', 'L2Edit','P0P2Tools'];
 TEST.SlvReg = ['P0Tools', 'L0Edit'];
+TEST.SlvAYSC97 = ['c',''];
+
 TEST.SlvNope = ['P0P1T', 'P2', 'L2', 'P1', 'L1', 'P0', 'L0', 'P1L1', 'nomatch'];
 
 TEST.Base36		 = [907717, 8724,  707711,  0,  2599999]; // 3 real values plus min/max possible values to test
@@ -272,10 +274,10 @@ FT.cookie = mockFTCookie;
 	<div class="adRequests">
 		<div id="temp-mpu" class="tempAds">
 			<script>
-        //FT.ads.request('mpu');
-        //var name = "mpu";
-        //FT.ads.setTimer( name );
-     </script>
+              //FT.ads.request('mpu');
+              //var name = "mpu";
+              //FT.ads.setTimer( name );
+             </script>
 		</div>
 
 		<div id="live-ad-call" class="tempAds">
@@ -2572,52 +2574,52 @@ FT.$(document).ready(function (){
 
 		beginNewPage('buildURL AYSC Cookie 22');
 
-        mockCookies.AYSC = "_22edit_";
+        mockCookies.AYSC = "_22edit_97_";
 		url = testBuildURL("test AYSC 22 = Subscription ID Level mapped to slv=edit");
 		matches(url, ';slv=edt;', "Ad URL AYSC field 22 edt present in url");
 
-        mockCookies.AYSC = "_22Ftemp_";
+        mockCookies.AYSC = "_22Ftemp_97_";
 		url = testBuildURL("test AYSC 22 = slv=int");
 		matches(url, ';slv=int;', "Ad URL AYSC field 22 int present in url");
 
-		beginNewPage('buildURL AYSC Cookie 22 Corp A');
+		beginNewPage('buildURL AYSC Cookie 22 Corp A and is flagged as corporate user ( AYSC Cookie 97 = "c" )');
 		for (idx = 0; idx < 8; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvCorp[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvCorp[idx] + "_97" + TEST.SlvAYSC97[0] + '_';
 			url = testBuildURL("test AYSC 22 = slv=cor " + TEST.SlvCorp[idx]);
-			matches(url, ';slv=cor;',	 "Ad URL AYSC field 22 cor present in url for " + TEST.SlvCorp[idx]);
+			matches(url, ';slv=cor;',	 "key value slv=cor present in url for " + TEST.SlvCorp[idx]);
 		}
 
-		beginNewPage('buildURL AYSC Cookie 22 Corp B');
+		beginNewPage('buildURL AYSC Cookie 22 Corp B and is flagged as corporate user ( AYSC 97 = "" )');
 		for (idx = 9; idx < TEST.SlvCorp.length; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvCorp[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvCorp[idx] + "_97" + TEST.SlvAYSC97[0] + '_';
 			url = testBuildURL("test AYSC 22 = slv=cor " + TEST.SlvCorp[idx]);
-			matches(url, ';slv=cor;',	 "Ad URL AYSC field 22 cor present in url for " + TEST.SlvCorp[idx]);
+			matches(url, ';slv=cor;',	 "Ad URL key value slv=cor present in url for " + TEST.SlvCorp[idx]);
 		}
 
-		beginNewPage('buildURL AYSC Cookie 22 Lv1');
+		beginNewPage('buildURL AYSC Cookie 22 Lv1 and is not flagged as corporate user ( AYSC 97 = "" )');
 		for (idx = 0; idx < TEST.SlvLv1.length; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvLv1[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvLv1[idx] + "_97" + TEST.SlvAYSC97[1] + '_';
 			url = testBuildURL("test AYSC 22 = slv=lv1 " + TEST.SlvLv1[idx]);
-			matches(url, ';slv=lv1;',	 "Ad URL AYSC field 22 lv1 present in url for " + TEST.SlvLv1[idx]);
+			matches(url, ';slv=lv1;',	 "Ad URL key value slv=lv1 present in url for " + TEST.SlvLv1[idx]);
 		}
 
-		beginNewPage('buildURL AYSC Cookie 22 Lv2');
+		beginNewPage('buildURL AYSC Cookie 22 Lv2 and is not flagged as corporate user ( AYSC 97 = "" )');
 		for (idx = 0; idx < TEST.SlvLv2.length; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvLv2[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvLv2[idx] + "_97" + TEST.SlvAYSC97[1] + '_';
 			url = testBuildURL("test AYSC 22 = slv=lv2 " + TEST.SlvLv2[idx]);
-			matches(url, ';slv=lv2;',	 "Ad URL AYSC field 22 lv2 present in url for " + TEST.SlvLv2[idx]);
+			matches(url, ';slv=lv2;',	 "Ad URL key value slv=lv2 present in url for " + TEST.SlvLv2[idx]);
 		}
 
-		beginNewPage('buildURL AYSC Cookie 22 Reg');
+		beginNewPage('buildURL AYSC Cookie 22 Reg and is not flagged as corporate user ( AYSC 97 = "" )');
 		for (idx = 0; idx < TEST.SlvReg.length; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvReg[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvReg[idx] + "_97" + TEST.SlvAYSC97[1] + '_';
 			url = testBuildURL("test AYSC 22 = slv=reg " + TEST.SlvReg[idx]);
-			matches(url, ';slv=reg;',	 "Ad URL AYSC field 22 reg present in url for " + TEST.SlvReg[idx]);
+			matches(url, ';slv=reg;',	 "Ad URL key value slv=reg present in url for " + TEST.SlvReg[idx]);
 		}
 
-		beginNewPage('buildURL AYSC Cookie 22 No Match');
+		beginNewPage('buildURL AYSC Cookie 22 No Match and is not flagged as corporate user ( AYSC 97 = "" )');
 		for (idx = 0; idx < TEST.SlvNope.length; ++idx) {
-            mockCookies.AYSC = "_22" + TEST.SlvNope[idx] + '_';
+            mockCookies.AYSC = "_22" + TEST.SlvNope[idx] + "_97" + TEST.SlvAYSC97[1] + '_';
 			url = testBuildURL("test AYSC 22 = slv= omitted for " + TEST.SlvNope[idx]);
 			matches(url, ';22=', "Ad URL AYSC field 22 not present in url for " + TEST.SlvNope[idx], false);
 		}
@@ -2953,7 +2955,7 @@ FT.$(document).ready(function (){
 
 		beginNewPage('buildURL Comprehensive with AudSci parameters split up and no u or eid param', { 'env':{ 'url_location': "http://www.ft.com/?q=cat+dog" } });
         mockCookies = {};
-        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
+        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_97c";
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
 		url = testBuildURL("test with all cookie information", { 'pos': 'banlb' });
 

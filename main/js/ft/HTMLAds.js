@@ -37,9 +37,9 @@ FT.HTMLAds.prototype.buildAdURL = function (AYSC98, AYSC22, AYSC27, regex) {
     var userType = 'anon/',
         fileName = '',
         urlStemNewAMO;
-    if ((AYSC22.match(regex.cor)) || (AYSC22.match(regex.lv1)) || (AYSC22.match(regex.lv2))) {
+    if ((AYSC22.match(regex.cor[22])) || (AYSC22.match(regex.lv1[22])) || (AYSC22.match(regex.lv2[22]))) {
         userType = 'subscribed/';
-    } else if ((AYSC22.match(regex.reg))) {
+    } else if ((AYSC22.match(regex.reg[22]))) {
         userType = 'registered/';
     }
     if (AYSC98 === '' || AYSC98.match(/PVT/)) {
@@ -59,13 +59,8 @@ FT.HTMLAds.prototype.buildAdURL = function (AYSC98, AYSC22, AYSC27, regex) {
 
 //get the html ad and inject it
 FT.HTMLAds.prototype.getHTMLAd = function (adType, inj, fileName) {
-    var js = '<script src="' + fileName + '" type="text/javascript">' +
-             '/* Do not remove comment */' +
-             '</script>',
-        CorppopDiv,
-        CorppopDivName,
-        corppopDivAgain,
-        Script1;
+    var    CorppopDiv, CorppopDivName, corppopDivAgain, Script1;
+
     //force parent div to display: block, even if no banlb ad is served
     inj.style.display = "block";
 
@@ -103,7 +98,7 @@ FT.HTMLAds.prototype.isCorporateUser = function (AYSC97, AYSC98, AYSC22, AYSC27,
        //guard against code injection
         if ((AYSC22.match(/[<>]/)) || (AYSC27.match(/[<>]/)) || (AYSC27.match(/RES/)) || (AYSC27.match(/PVT/))) {
             return 0;
-        } else if ((!AYSC27.match(/[0-9A-Za-z]/)) || (AYSC22.match(regex.cor)) || (AYSC22.match(regex.lv1)) || (AYSC22.match(regex.lv2))) {
+        } else if ((!AYSC27.match(/[0-9A-Za-z]/)) || (AYSC22.match(regex.cor[22])) || (AYSC22.match(regex.lv1[22])) || (AYSC22.match(regex.lv2[22]))) {
           //corppop should not be served
             return 0;
         }
