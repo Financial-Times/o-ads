@@ -32,13 +32,27 @@
   <iframe src="" name="content"></iframe>
   <script>
     (function (w, d, $, u) {
-      function validateMenuLink(index, item) {
-        $.ajax(item.href).error(function () {
-          $(item).parents('li').hide();
-        });
+      function validateDomain() {
+        if(location.hostname.match(/ft\.com$/) === null) {
+          alert("Warning: Not viewing this site on an ft.com domain will cause some tests to fail!");
+        }
       }
 
-      $('.nav a').each(validateMenuLink);
+      function validateMenuLinks() {
+        function each(index, item) {
+          $.ajax(item.href).error(function () {
+            $(item).parents('li').hide();
+          });
+        }
+        $('.nav a').each(each);
+      }
+
+      function onReadyEvents() {
+        validateMenuLinks();
+        validateDomain();
+      }
+
+      $(onReadyEvents);
     }(window, document, jQuery))
   </script>
 </body>
