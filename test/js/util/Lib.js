@@ -2,6 +2,8 @@
 
 var FT = FT || {};
 
+FT.defaultCookies = ${ads.defaultCookies};
+
 FT.lib = {
 
     /**
@@ -156,7 +158,23 @@ FT.lib = {
                 }
             }
         }
+    },
+
+    /**
+     * This sets cookies passed in from maven properties when the file compiled
+     * @param  {object} cookies an object hash of cookies name values to be set
+     */
+    setCookies: function (cookies) {
+        var name, value;
+        cookies = cookies || FT.defaultCookies;
+        for(name in cookies) {
+            if(cookies.hasOwnProperty(name)) {
+                value = cookies[name];
+                $.cookie(name, value);
+            }
+        }
     }
 };
 
+FT.lib.setCookies();
 FT.lib.hashCookies();
