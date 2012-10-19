@@ -10,12 +10,13 @@
 <title>Test Plan DartForPublishers.js - with UUID in URL</title>
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" href="../../../../lib/qunit/qunit.css" media="screen" />
-<script src="../../../../lib/qunit/qunit.js"></script>
-<script src="../../../../lib/QUnitChainer.js"></script>
-<script src="../../../../lib/qunitMock.lib.js"></script>
-<script src="../../../../../../../main/webapp/media/js/lib/jQueryCoreBundle/jquery-1.7.2.min.js"></script>
-<script src="../../../../../../../main/webapp/media/js/lib/jQueryCoreBundle/jquery-ft-namespacing.js"></script>
+<link rel="stylesheet" href="css/qunit-1.10.0pre.css" media="screen" />
+<script src="lib/qunit/qunit-1.10.0pre.js"></script>
+<script src="js/util/QUnitChainer.js"></script>
+<script src="js/util/qunitMock.lib.js"></script>
+<script src="lib/jquery/jquery-1.7.2.js"></script>
+<script src="lib/jquery/jquery.cookie.js"></script>
+<script src="js/util/jquery-ft-namespacing.js"></script>
 
 <style>
 #banlb {
@@ -233,9 +234,9 @@ var mockFTCookie = {
 };
 FT.cookie = mockFTCookie;
 </script>
-<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Lib.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/RenderHeadBundle/Advertising/DartForPublishers.js"></script>
-<script src="../../../../lib/Advertising/test-helpers.html.js"></script>
+<script src="js/util/Lib.js"></script>
+<script src="js/ft/DartForPublishers.js"></script>
+<script src="js/util/test-helpers.html.js"></script>
 <script>
 // TODO mock a referring url
 //FT.ads.baseAdvert['referrer'] = "http://www.ft.com/home/uk" ;
