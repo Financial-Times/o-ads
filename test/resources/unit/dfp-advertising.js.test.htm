@@ -8,17 +8,17 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     <title>Test Plan DartForPublishers.js</title>
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="css/qunit-1.10.0pre.css" type='text/css' media='screen'/>
-    <script type="text/javascript" src="lib/jquery/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="lib/jquery/jquery.cookie.js"></script>
-    <script type="text/javascript" src="lib/qunit/qunit-1.10.0pre.js"></script>
-    <script src="js/util/QUnitChainer.js"></script>
-    <script src="js/util/qunitMock.lib.js"></script>
-    <script src="js/util/jquery-ft-namespacing.js"></script>
-    <script src="js/util/test-helpers.html.js"></script>
-    <script src="js/util/page-helpers.html.js"></script>
-    <script src="lib/sinon/sinon-1.1.1.js"></script>
-	  <script src="lib/sinon/sinon-ie-1.1.1.js"></script>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type='text/css' media='screen'/>
+    <script type="text/javascript" src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/jquery-ft-namespacing.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+	  <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
 
     <style>
     #banlb {
@@ -41,16 +41,6 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     </style>
 
 <script>
-
-/*jslint evil: true, white: true, browser: true, undef: true,
-	nomen: false, vars: true, plusplus: false, bitwise: true,
-	regexp: true, newcap: true, maxerr: 1000, indent: 4
-*/
-
-/*globals $, get_diagnostic, window, module, test, expect, pending, ok,
-	same, differs, deepEqual, matches, arrayLike, type, type_size, getType,
-	debug, jsDump
-*/
 
 /*members "01", AYSC, AdFormat, AdPos, AdServerCodes, Advertising,
 	AudSci, AudSciResult, AudSciResultShort, AudSciResultSplit, Base36,
@@ -242,9 +232,9 @@ var mockFTCookie = {
 FT.cookie = mockFTCookie;
 </script>
 
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
-<script src="js/ft/HTMLAds.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
 <script>
 	// TODO mock a referring url
 	//FT.ads.baseAdvert['referrer'] = "http://www.ft.com/home/uk" ;
@@ -3683,7 +3673,7 @@ FT.$(document).ready(function (){
 		var stub1 = sinon.stub(FT.ads,"request",func);
 		var stub2 = sinon.stub(FT.ads,"pushDownExpand",func2);
 
-		jQuery('#banlb').html("<img id='banlb_ad' src='images/banlb-728x90.gif' />");
+		jQuery('#banlb').html("<img id='banlb_ad' src='../images/banlb-728x90.gif' />");
 		FT.ads.requestNewssubs();
 
 		equal(FT.ads.request.calledWith("newssubs"),true,"newssubs position is called when ad is banlb");
@@ -3803,7 +3793,7 @@ FT.$(document).ready(function (){
 
         beginNewPage();
 
-        jQuery('#banlb').html("<img id='pollTest' src='images/banlb-728x90.gif' height='90' width='970'>");
+        jQuery('#banlb').html("<img id='pollTest' src='../images/banlb-728x90.gif' height='90' width='970'>");
 
         expect(21);
 

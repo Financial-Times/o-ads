@@ -1,0 +1,333 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<title>Test DFP Ad on a page with interstitial and
+		no banlb</title>
+<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+<style type="text/css">
+#banlb-not {
+	height: 100px;
+	width: 300px;
+	background-color: pink;
+	border: 1px solid black;
+}
+
+#mpu-not {
+	height: 200px;
+	width: 300px;
+	background-color: blue;
+	border: 1px solid black;
+}
+
+a img {
+	border: none;
+}
+
+div {
+	border: 1px solid black;
+}
+
+.advertising {
+	border: 1px solid red;
+}
+
+.tempAds {
+	display: none;
+}
+
+.warning {
+	background-color: red;
+}
+
+#feedback {
+	border: none;
+}
+
+#xpopad {
+	display: none;
+}
+</style>
+
+<script type="text/javascript">
+
+
+
+
+
+/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+    banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+    hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+    refreshTimer, regex, request, requestNewssubs, response,
+    timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write, oob,
+    initDFP, lib, writeScriptMock, FTQA, writeScript
+*/
+
+var FT = FT || {};
+FT.env =
+{
+   "dfp_site": "test.5887.dev",
+   "dfp_zone": "interstitial-test",
+   "asset":    "page",
+
+   // Override timeout values to ensure the interval timer is fast enough for the interstitial
+   // to be expanded before the tests run.
+   "timeoutTolerance": 300,
+   "timeIntervalTolerance": 25
+};
+
+// Mock the properties object so we are considered to be non-live
+FT.Properties = { 'ENV': "ci" };
+var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+
+      </script>
+
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../js/util/page-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
+<script src="../lib/jquery/jquery.cookie.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+
+<script type="text/javascript">
+//cookies can now be passed within a  get string to the page
+setCookies();
+var MockSubdir = true;
+</script>
+
+<script src="../../../../../../../main/webapp/media/js/lib/HeadCoreBundle/aop.js"></script>
+<script src="../lib/jquery/jquery.cookie.js"></script>
+<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties.js"></script>
+<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties-int.js"></script>
+<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Namespaces.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/pre-init.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+
+<script src="../js/util/mock-ads.html.js"></script>
+
+<script type="text/javascript">
+
+// Clear the cookies which cause values to be inserted into the Ad calls.
+//initCookies("debug,dfp_ads,interval=25,timeout=300");
+
+var Tests = {
+   'intro': TestMockNoAd.intro,
+   'banlb': TestMockAd.banlb,
+   'newssubs': TestMockAd.newssubs,
+   'corppop': TestMockNoAd.corppop
+};
+
+var Plan = {};
+Plan.nextTestPlan =  'dfp-advertising-refer-page.html';
+QUnitChainer.init(Plan);
+
+FT.ads.initDFP();
+FT.lib.writeScriptMock = function (URL)
+{
+   mockAdContent(URL, Tests); // Ads injected immediately
+};
+
+//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+var testMode = unitOrIntegrationMode(FT.cookies.FTQA);
+
+if (testMode === 'unit')
+{
+   //if unit test, then we override FT.lib.writeScript with the call to Mocking
+   FT.lib.writeScript = FT.lib.writeScriptMock;
+}
+
+// Clear the cookies which cause values to be inserted into the Ad calls.
+initCookies("debug,dfp_ads,interval=25,timeout=300");
+
+test("Page Environment", function ()
+{
+   expect(4);
+
+   ok(FT.env,                                                                                      "FT.env should be defined");
+   ok(FT.cookies,                                                                                  "FT.cookies should be defined");
+   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
+   ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
+});
+
+test("intro", function ()
+{
+   expect(1);
+   equal(FT.$('#intro_overlay').length, 0,                                                      'intro ad should not be inserted into the DOM');
+});
+
+test("banlb", function ()
+{
+   expect(8);
+   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
+   // Banlb has interstitial so should be visible even though no banlb ad.
+   testNoAd('banlb', undefined, undefined, 2, 'block');
+});
+
+test("interstitial off banlb", function ()
+{
+   expect(2);
+   equal(FT.$('#interstitial_overlay').length, 1,                                               'interstitial ad should be inserted into the DOM with count');
+   // the following check is in to check for interstitial corppop regression:
+   equal(FT.$('#popad').length, 0,                                                              '#popad should not be present');
+});
+
+test("corppop off banlb", function ()
+{
+   expect(2);
+   equal(FT.$('#corppop_overlay').length, 0,                                                    'div with #corpop_overlay should have count');
+   equal(FT.$('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
+});
+
+test("newssubs", function ()
+{
+   expect(7);
+   testNoAd('newssubs');
+});
+
+      </script>
+</head>
+
+<body class="no-banlb no-newssubs">
+	<h1 id="qunit-header"><a href="/~robinmarr/ft/svn/online/website/ft-cmsWeb/src/test/js/qunit/FT/RenderHeadBundle/Advertising/integration/ad-on-a-page-interstitial.html">Test DFP Ad on a page with interstitial and
+		no banlb</a> </h1>
+	<h2 id="qunit-banner" class=""></h2>
+	<h2 id="qunit-userAgent">Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.7.0 Safari/534.34</h2>
+	<p>
+		The purpose of this page is to see the Falcon FT.ads library working
+		with Dart for Publishers using the deepEqual page structure that is in use
+		on the Falcon home pages i.e. <a href="http://www.ft.com/home/uk">http://www.ft.com/home/uk</a>
+	</p>
+	<p>
+		<b>This page tests with targeting settings chosen to deliver ads
+			and the corporate popup as an interstitial.</b>
+	</p>
+	<p>The ads are booked under</p>
+	<ol>
+		<li>Advertiser:<a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;advertiserid=2389285">2389285</a>
+			FT DFP Test 1 Account</li>
+		<li>Order:<a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;orderid=3903162">3903162</a>
+			Ongoing Test</li>
+		<li>Ad: Ongoing banlb 468x60 ID: <a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;&amp;adid=217726086">217726086</a>
+			and others.</li>
+	</ol>
+	<p>
+		And are targeted to DFP site/zone<b> <script type="text/javascript">
+document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
+      </script>test.5887.dev/interstitial-test
+		</b>
+	</p>
+	<p>
+		See <a href="ad-on-a-page-noads.html">ad-on-a-page-noads.html</a> for
+		using the Falcon API with no targeted ads to see div collapse.
+	</p>
+	<p>
+		See <a href="ad-on-a-page-legacy.html">ad-on-a-page-legacy.html</a>
+		for using the Legacy Ads API with the Falcon library as for example on
+		the blogs pages <a href="http://blogs.ft.com/dearlucy">http://blogs.ft.com/dearlucy</a>
+	</p>
+	<hr>
+	<form>
+		<input type="button" name="expand" value="expand" onclick="expandAll()" alt="show all Ad divs on the page"> <input type="button" name="diagnose" value="diagnose" onclick="showDiagnosis()" alt="display Ad diagnostics"> <input type="button" name="stop timer" value="stop timer" onclick="stopTimer()" alt="stop the interval timer">
+	</form>
+	<hr>
+	<div id="mode">You are in UNIT TEST MODE. Set cookie FTQA=integration to switch to integration test mode.</div>
+	<p id="qunit-testresult" class="result">Running...<br>&nbsp;</p><ol id="qunit-tests"></ol>
+
+	<div id="main"></div>
+	<!-- if in integration mode, make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
+	<div id="dccookie" style="display: none">
+		<script>unitOrIntegrationMessage(testMode);</script>
+	</div>
+
+	<hr>
+	<p>From here down the page's div structure resembles the home page
+		structure. Div's to hold the final ad location are just below.</p>
+	<p>If no ads show, then there is something wrong with the code or
+		with the ad targeting.</p>
+
+	<div id="fullpage-container">Ad request fullpage-container</div>
+	<script type="text/javascript">
+FT.ads.request('intro');
+</script>
+	<div class="clearfix container">
+		clearfix container
+		<div class="master-column middleSection" data-zone="middleSection">
+			master-column middleSection
+			<div class="master-row topAds">
+				master-row topAds
+				<div id="banlb" class="advertising" style="display: none; ">
+					Ad request banlb
+					<script type="text/javascript">
+FT.ads.request("banlb");
+            </script>
+<img src="../images/ft-no-ad-728x90.gif"><!-- Begin Interstitial Ad --><!-- ad ID: 220435672  creative ID: 34653048 -->
+<style type="text/css">
+         #interstitial_overlay {
+            position: absolute; 
+            top: 20px; 
+            left: 100px; 
+            width: 500px; 
+            height: 300px;
+            border: 4px solid red;
+            padding: 4px;
+            background: black;
+            color:white;
+            font-family: verdana, arial, helvetica, sans-serif;
+            z-index: 100000;
+         }
+         #interstitial_overlay a {
+            text-decoration: none;
+         }
+         #interstitial_overlay a:hover {
+            text-decoration: underline;
+         }
+         #interstitial_overlay .close_button {
+            float: right;
+            margin: 5px 10px 0 0;
+            font-weight: bold;
+         }
+         #interstitial_overlay .logo {
+            float: left;
+            margin: 5px 10px 0 0;
+            font-weight: bold;
+         }
+      </style>
+<div id="interstitial_overlay" class="new_interstitial">
+         <!-- The percent i macro below records the interstitial impression when served -->
+         <div class="logo"><img src="../images/favicon.ico" width="64" height="64"></div>
+         <div class="close_button" onclick="javascript: this.parentNode.style.display='none';">
+            <a href="#">X</a>
+         </div>
+         <h2>interstitial</h2>
+         <!-- The percent u macro below inserts the click through URL -->
+         <h3><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/39d6/2/0/%2a/z%3B220435672%3B0-0%3B0%3B46484925%3B255-0/0%3B34653048/34670926/1%3B%3B%7Esscs%3D%3fhttp://www.ft.com">1x1</a></h3>
+      </div>
+
+				</div>
+				<div id="newssubs" class="advertising" style="display: none; ">
+					Ad request newssubs
+					<script>
+FT.ads.requestNewssubs();
+            </script>
+<img src="../images/ft-no-ad-239x90.gif">
+				</div>
+			</div>
+			<div class="master-row railSection" data-zone="railSection">master-row railSection</div>
+		</div>
+
+	</div>
+	
+
+	<hr>
+	<form>
+		<input type="button" name="expand" value="expand" onclick="expandAll()" alt="show all Ad divs on the page"> <input type="button" name="diagnose" value="diagnose" onclick="showDiagnosis()" alt="display Ad diagnostics"> <input type="button" name="stop timer" value="stop timer" onclick="stopTimer()" alt="stop the interval timer">
+	</form>
+	<hr>
+
+
+
+</body></html>
