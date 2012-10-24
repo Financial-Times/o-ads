@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Test Locally Served Corppop Ad on a page with legacy API</title>
-    <link rel="stylesheet" href="css/qunit-1.10.0pre.css" media="screen" />
-    <style>
-    #banlb-not {
-        height: 100px;
-        width: 300px;
-        background-color: pink;
-        border: 1px solid black;
-    }
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Legacy Test DFP Ad on a page with legacy API</title>
+<link rel="stylesheet" href="../css/qunit-1.10.0pre.css"
+	type="text/css" media="screen" />
+<style>
+#banlb-not {
+	height: 100px;
+	width: 300px;
+	background-color: pink;
+	border: 1px solid black;
+}
 
-    #mpu-not {
-        height: 200px;
-        width: 300px;
-        background-color: blue;
-        border: 1px solid black;
-    }
+#mpu-not {
+	height: 200px;
+	width: 300px;
+	background-color: blue;
+	border: 1px solid black;
+}
 
-    a img {
-        border: none;
-    }
+a img {
+	border: none;
+}
 
-    div {
-        border: 1px solid black;
-    }
+div {
+	border: 1px solid black;
+}
 
-    .advertising {
-        border: 1px solid red;
-    }
+.advertising {
+	border: 1px solid red;
+}
 
-    .tempAds {
-        display: none;
-    }
+.tempAds {
+	display: none;
+}
 
-    .warning {
-        background-color: red;
-    }
+.warning {
+	background-color: red;
+}
 
-    #feedback {
-        border: none;
-    }
+#feedback {
+	border: none;
+}
 
-    #xpopad {
-        display: none;
-    }
-    </style>
+#xpopad {
+	display: none;
+}
+</style>
 
 <script>
 
@@ -77,7 +78,8 @@
 */
 
 var FT = FT || {};
-FT.env = {
+FT.env =
+{
    "dfp_site": "test.5887.dev",
    "dfp_zone": "build-url-test",
    "asset":    "page",
@@ -92,29 +94,32 @@ FT.Properties = { 'ENV': "ci" };
 var CheckAds = ['banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'mpu', 'doublet', 'oob', 'corppop', 'refresh'];
       </script>
 
-<script src="js/util/QUnitChainer.js"></script>
-<script src="js/util/test-helpers.html.js"></script>
-<script src="js/util/page-helpers.html.js"></script>
-<script src="lib/jquery/jquery-1.7.2.js"></script>
-<script src="js/util/jquery-ft-namespacing.js"></script>
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../js/util/page-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
 <script>
-FT.$.cookie = function(){};
+FT.$.cookie = function() {};
 </script>
-<script src="lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="js/util/qunitMock.lib.js"></script>
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+<script src="../js/util/qunitMock.lib.js"></script>
 
 <script>
 //cookies can now be passed within a  get string to the page
-//setCookies();
+setCookies();
 var MockSubdir = false;
 </script>
 
-<script src="js/util/cookie.js"></script>
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/HTMLAds.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
-<script src="js/util/mock-ads.html.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/util/mock-ads.html.js"></script>
 <script>
+// Clear the cookies which cause values to be inserted into the Ad calls.
+//initCookies();
+
 var Tests = {
    'banlb': TestMockAd.banlb3,
    'newssubs': TestMockAd.newssubs2,
@@ -124,13 +129,14 @@ var Tests = {
 };
 
 var Plan = {};
-Plan.nextTestPlan =  '0-test-ftcom-ads-end.html';
+Plan.nextTestPlan =  'ad-on-a-page-legacy-noads.js.test.htm';
 QUnitChainer.init(Plan);
 
 var LegacyBoolean = 'yes';
 
 FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL){
+FT.lib.writeScriptMock = function (URL)
+{
    mockAdContent(URL, Tests, LegacyBoolean); // Ads injected immediately
 };
 
@@ -145,67 +151,53 @@ if (testMode === 'unit')
    FT.corppop.HTMLAdData.urlStem = '';
 }
 
-// Clear the cookies which cause values to be inserted into the Ad calls.
-//initCookies();
-
-var mockCookies = {};
-function mock$cookie(n, v) {
-    if ( FT.$.type(n) !== "undefined" && FT.$.type(v) === "undefined" ) {
-        return mockCookies[n];
-    } else {
-        mockCookies[n] = v;
-    }
-}
-
-module("Ads", {
-    setup: function() {
-        mockCookies = {};
-        FT.$.cookie = mockFunction(mock$cookie);
-    },
-    teardown: function() {}
-});
-
 test("Page Environment", function (){
    ok(FT.env,                                                                                      "FT.env should be defined");
    ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
    ok(FT.env.isLegacyAPI,                                                                          "Legacy API should be used");
 });
 
-//test("banlb", function () {
-//   ok(true, "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
-//   testImageAd('banlb', 3, 'ad-placeholder-');
-//});
+test("banlb", function (){
+   expect(5);
+   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
+   testImageAd('banlb', 2, 'ad-placeholder-');
+});
 
-//test("interstitial off banlb", function (){
-//   equal(FT.$('#interstitial_overlay').length, 1,                                               'interstitial ad should be inserted into the DOM with count');
-//   // the following check is in to check for interstitial corppop regression:
-//   equal(FT.$('#popad').length, 1,                                                              '#popad should not be present');
-//});
+test("interstitial off banlb", function (){
+   expect(2);
+   equal(FT.$('#interstitial_overlay').length, 1,                                               'interstitial ad should be inserted into the DOM with count');
+   // the following check is in to check for interstitial corppop regression:
+   equal(FT.$('#popad').length, 0,                                                              '#popad should not be present');
+});
 
-//test("corppop off banlb", function (){
-//   equal(FT.$('#corppop_overlay').length, 1,                                                    'div with #corpop_overlay should have count');
-//   equal(FT.$('.corppop_single_occurence').length, 1,                                           'there should no corp pop ad');
-//});
+test("corppop off banlb", function () {
+   expect(2);
+   equal(FT.$('#corppop_overlay').length, 0,                                                    'div with #corpop_overlay should have count');
+   equal(FT.$('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
+});
 
 test("newssubs", function (){
+   expect(4);
    testImageAd('newssubs', 1, 'ad-container-');
 });
 
-test("mpu", function (){
+test("mpu", function () {
+   expect(4);
    testImageAd('mpu', 1, 'ad-container-');
 });
 
-test("refresh", function (){
+test("refresh", function() {
+   expect(10);
    testRefreshAd('refresh', 'ad-container-');
-   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767',                      'refresh should correctly store obj value as');
-   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000,                                  'refresh should correctly store refreshTimer value as');
+   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767', 'refresh should correctly store obj value as');
+   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000, 'refresh should correctly store refreshTimer value as');
 });
 
       </script>
 </head>
 
 <body>
-	<h1 id="qunit-header">Test Locally Served Corppop Ad on a page with legacy API</h1>
+	<h1 id="qunit-header">Test DFP Ad on a page with legacy API</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
 	<p>
@@ -430,10 +422,10 @@ oob.init();
 				<div id="ad-placeholder-corppop" class="ad-placeholder ad-corppop">
 					Ad ad-placeholder-corppop
 					<script>
-               mockCookies.AYSC = "_22PL0AAAAA_2712345_";
-             //force CorpPopTimeout to be unset
+               //AYSC is undefined, so shouldnt get corppop
 var adPop = new Advert(AD_CORPPOP);
 adPop.init();
+
                   </script>
 				</div>
 				<div id="ad-container-macroad" class="ad ad-container-macroad">
@@ -825,7 +817,7 @@ clientAds.render();
 	</form>
 	<hr>
 	<script
-		src="js/util/test-helpers.html.js"></script>
+		src="../js/util/test-helpers.html.js"></script>
 
 </body>
 </html>

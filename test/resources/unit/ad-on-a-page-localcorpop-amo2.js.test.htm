@@ -5,7 +5,7 @@
       <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <title>Test Ad on a page - Locally served corporate access popup</title>
-      <link rel="stylesheet" href="css/qunit-1.10.0pre.css"/>
+      <link rel="stylesheet" href="../css/qunit-1.10.0pre.css"/>
       <style>
          #banlb-not { height: 100px;width:300px;background-color:pink;border:1px solid black; }
          #mpu-not   { height: 200px;width:300px;background-color:blue;border:1px solid black; }
@@ -53,26 +53,26 @@ FT.Properties = { 'ENV': "ci" };
 var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
 
       </script>
-<script src="js/util/QUnitChainer.js"></script>
-<script src="js/util/test-helpers.html.js"></script>
-<script src="js/util/page-helpers.html.js"></script>
-<script src="lib/jquery/jquery-1.7.2.js"></script>
-<script src="js/util/jquery-ft-namespacing.js"></script>
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../js/util/page-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
 <script>
 FT.$.cookie = function() {};
 </script>
-<script src="lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="js/util/qunitMock.lib.js"></script>
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+<script src="../js/util/qunitMock.lib.js"></script>
 <script>
 var MockSubdir = false;
 // cookie consent is required for corporate popup to function
 createConsentCookie();
 </script>
-<script src="js/util/cookie.js"></script>
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/HTMLAds.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
-<script src="js/util/mock-ads.html.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.

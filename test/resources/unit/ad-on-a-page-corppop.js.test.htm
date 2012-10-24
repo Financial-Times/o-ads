@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Test Ad on a page - Locally served corporate access popup</title>
-<link rel="stylesheet" href="css/qunit-1.10.0pre.css" media="screen" />
-<style>
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Corp Test DFP Ad on a page - corporate access popup</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+    <style>
+    #banlb-not {
+        height: 100px;
+        width: 300px;
+        background-color: pink;
+        border: 1px solid black;
+    }
 
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
+    #mpu-not {
+        height: 200px;
+        width: 300px;
+        background-color: blue;
+        border: 1px solid black;
+    }
 
-a img {
-	border: none;
-}
+    a img {
+        border: none;
+    }
 
-div {
-	border: 1px solid black;
-}
+    div {
+        border: 1px solid black;
+    }
 
-.advertising {
-	border: 1px solid red;
-}
+    .advertising {
+        border: 1px solid red;
+    }
 
-.tempAds {
-	display: none;
-}
+    .tempAds {
+        display: none;
+    }
 
-.warning {
-	background-color: red;
-}
+    .warning {
+        background-color: red;
+    }
 
-#feedback {
-	border: none;
-}
+    #feedback {
+        border: none;
+    }
 
-#xpopad {
-	display: none;
-}
+    #xpopad {
+        display: none;
+    }
 </style>
 
 <script>
@@ -84,32 +84,30 @@ FT.env = {
 FT.Properties = { 'ENV': "ci" };
 var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
 
-      </script>
-
-<script src="js/util/QUnitChainer.js"></script>
-<script src="js/util/test-helpers.html.js"></script>
-<script src="js/util/page-helpers.html.js"></script>
-<script src="lib/jquery/jquery-1.7.2.js"></script>
-<script src="js/util/jquery-ft-namespacing.js"></script>
-<script>
-FT.$.cookie = function() {};
 </script>
-<script src="lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="js/util/qunitMock.lib.js"></script>
+
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../js/util/page-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
+<script>
+//FT.$.cookie = function(){};
+</script>
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
 
 <script>
-//cookies can now be passed within a  get string to the page
-setCookies();
 var MockSubdir = false;
-// cookie consent is required for corporate popup to function
-createConsentCookie();
 </script>
 
-<script src="js/util/cookie.js"></script>
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/HTMLAds.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
-<script src="js/util/mock-ads.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
+<script src="../lib/jquery/jquery.cookie.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
@@ -127,7 +125,7 @@ var Tests = {
 };
 
 var Plan = {};
-Plan.nextTestPlan =  'ad-on-a-page-corppop.js.test.htm';
+Plan.nextTestPlan =  'ad-on-a-page-legacy.js.test.htm';
 QUnitChainer.init(Plan);
 
 FT.ads.initDFP();
@@ -138,32 +136,48 @@ FT.lib.writeScriptMock = function (URL){
 //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
 var testMode = unitOrIntegrationMode(FT.cookie.get("FTQA"));
 
-if (testMode === 'unit')
-{
+if (testMode === 'unit') {
    //if unit test, then we override FT.lib.writeScript with the call to Mocking
    FT.lib.writeScript = FT.lib.writeScriptMock;
-   //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
-   FT.corppop.HTMLAdData.urlStem = '';
+ //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
+   FT.corppop.HTMLAdData.urlStem = '../images/';
 }
 
+// Clear the cookies which cause values to be inserted into the Ad calls.
+initCookies();
+
 var mockCookies = {};
-function mock$cookie(n, v) {
-    if ( FT.$.type(n) !== "undefined" && FT.$.type(v) === "undefined" ) {
+var mockCookieParams = {};
+var mockFTCookie = {
+    get: function(n) {
         return mockCookies[n];
-    } else {
-        mockCookies[n] = v;
+    },
+    getParam: function(n, p) {
+        if ( mockCookieParams[n] && mockCookieParams[n][p] ) {
+            return mockCookieParams[n][p];
+        }
     }
-}
+};
+
+//overrides the FTQA value but that doesn't
+//stop us from using this to define testing mode
+//prior to this point
+mockCookies.FTQA = "ord=123123123";
+mockCookieParams.FTQA = { ord : "123123123" };
+mockCookies.AYSC = '_22P0Tools_2712345_';
+mockCookieParams.AYSC = {22 : "P0Tools", 27 : "12345"};
+mockCookies.cookieconsent = "accepted";
+
+
+FT.cookie = mockFTCookie;
+
 module("Ads", {
     setup: function() {
-        mockCookies = {};
-        FT.$.cookie = mockFunction(mock$cookie);
+
     }
 });
 
 test("Page Environment", function (){
-//   expect(6);
-
    ok(FT.env,                                                                                      "FT.env should be defined");
    ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
    ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
@@ -175,36 +189,19 @@ test("intro", function ()
    equal(FT.$('#intro_overlay').length, 1,                                                      'intro ad should be inserted into the DOM with count');
 });
 
-//test("banlb", function ()
-//{
-//   expect(5);
-//   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
-//   testImageAd('banlb', 3);
-//});
-
-test("interstitial off banlb", function ()
+test("banlb", function ()
 {
-   expect(2);
-
-   //the decoupling of corppop from the adserver means that we will no longer be able to detect corpops via the adserver logic
-   //and therefore whether interstitial ads should be served or not.
-   //consequently interstitials AND corppops may appear, though the number of interstitials should never be more than 1
-   var numberInterstitials = FT.$('#interstitial_overlay').length;
-   ok(numberInterstitials < 2, 																	'no more than one interstitial ad should not be present in DOM');
-
-   var totalPopAds = FT.$('#popad').length;
-   var totalPopAdsinCorpClass = FT.$('.corpSignPopad').length
-
-   testPopAds (totalPopAds,totalPopAdsinCorpClass);
-
+   expect(5);
+   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
+   testImageAd('banlb', 3);
 });
 
-//test("corppop html ad injected into banlb", function () {
-//   equal(FT.$('#corppop_overlay').length, 1,                                                    'div with #corppop #corppop_overlay should have count');
-//   equal(FT.$('.corpSignPopad').length, 1,                                           		   'there should only be 1 corp pop ad');
-//   mockCookies.AYSC = "_22PL0AAAAA_2712345_";
-//   testAYSC22(FT.cookie.get("AYSC"), FT.ads.CONST.SubsLevelReplaceLookup);
-//});
+test("corppop off banlb", function ()
+{
+   expect(2);
+   equal(FT.$('#corppop_overlay').length, 1,                                                    'div with #corppop #corpop_overlay should have count');
+   equal(FT.$('.corppop_single_occurence').length, 1,                                           'there should only be 1 corp pop ad');
+});
 
 test("newssubs", function ()
 {
@@ -251,8 +248,7 @@ test("refresh", function ()
 </head>
 
 <body>
-	<h1 id="qunit-header">Test Ad on a page - Locally served corporate
-		access popup</h1>
+	<h1 id="qunit-header">Test DFP Ad on a page - corporate access popup</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
 	<p>
@@ -266,17 +262,23 @@ test("refresh", function ()
 	</p>
 	<p>The ads are booked under
 	<ol>
-		<li>Advertiser:<a title="Must use IE for this link" href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&advertiserid=2389285'>2389285</a>
-					FT DFP Test 1 Account</li>
-		<li>Order:<a title="Must use IE for this link" href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&orderid=3903162'>3903162</a>
-Ongoing Test</li>
-		<li>Ad: Ongoing banlb 468x60 ID: <a title="Must use IE for this link" href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&&adid=217726086'>217726086</a>
+		<li>Advertiser:<a title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&advertiserid=2389285'>2389285</a>
+					FT DFP Test 1 Account
+		</li>
+		<li>Order:<a title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&orderid=3903162'>3903162</a>
+					Ongoing Test
+		</li>
+		<li>Ad: Ongoing banlb 468x60 ID: <a
+			title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&&adid=217726086'>217726086</a>
 			and others.</li>
 	</ol>
 	</p>
 	<p>
-		And are targeted to DFP site/zone<b>
-        <script>
+		And are targeted to DFP site/zone<b> <script
+				type='text/javascript'>
 document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
       </script>
 		</b>
@@ -290,7 +292,7 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 		for using the Legacy Ads API with the Falcon library as for example on
 		the blogs pages <a href="http://blogs.ft.com/dearlucy">http://blogs.ft.com/dearlucy</a>
 	</p>
-	<hr />
+	<hr>
 	<form>
 		<input type='button' name='expand' value='expand'
 			onclick='expandAll()' alt='show all Ad divs on the page'> <input
@@ -299,7 +301,7 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 			type='button' name='stop timer' value='stop timer'
 			onclick='stopTimer()' alt='stop the interval timer'>
 	</form>
-	<hr />
+	<hr>
 	<div id="mode"></div>
 	<ol id="qunit-tests">
 		<li></li>
@@ -319,11 +321,10 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 		with the ad targeting.</p>
 	<div id='father-of-intro'>
 		<div id="fullpage-container">Ad request fullpage-container</div>
-		<script>
-mockCookies.FTQA = "ord=123123123";
-FT.ads.request('intro');
-</script>
-	</div>
+		    <script>
+                FT.ads.request('intro');
+            </script>
+	    </div>
 	<div class="clearfix container">
 		clearfix container
 		<div class="master-column middleSection" data-zone="middleSection">
@@ -333,17 +334,15 @@ FT.ads.request('intro');
 				<div id="banlb" class="advertising">
 					Ad request banlb
 					<script>
-// Add cookies only to this ad call to force the corporate popup
-//we define the _22 field to allow corppops to appear on this page
-//the _27 field defines the corporate ID and the filename to fetch for the HTML Ad
-//nothing booked against this value in DFP, so interstitial is served
 FT.ads.request("banlb");
             </script>
 				</div>
 				<div id="newssubs" class="advertising">
 					Ad request newssubs
 					<script>
+
 FT.ads.requestNewssubs();
+
             </script>
 				</div>
 			</div>
@@ -409,9 +408,6 @@ FT.ads.request('oob');
 			<div id="corppop">
 				Ad request corppop
 				<script>
-         //we define the _22 field to allow corppops to appear on this page
-         //the _27 field defines the corporate ID and the filename to fetch for the HTML Ad
-//force CorpPopTimeout to be unset
 FT.ads.request('corppop');
          </script>
 			</div>
@@ -435,9 +431,6 @@ FT.ads.request('refresh');
 			onclick='stopTimer()' alt='stop the interval timer'>
 	</form>
 	<hr>
-		<script>
-            //clean up cookies set in test
-            eraseConsentCookie();
-         </script>
+
 </body>
 </html>

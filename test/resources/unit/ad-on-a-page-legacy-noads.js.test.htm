@@ -4,9 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Legacy Test DFP Ad on a page with legacy API</title>
-<link rel="stylesheet" href="css/qunit-1.10.0pre.css"
-	type="text/css" media="screen" />
+<title>Legacy NoAd Test DFP No Ads on a page with legacy API</title>
+<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
 <style>
 #banlb-not {
 	height: 100px;
@@ -60,10 +59,9 @@ div {
 
 /*globals AD_BANLB, AD_CORPPOP, AD_MPU, AD_NEWSSUBS, AD_OOB, Advert,
    jQuery, beginNewPage, clientAds, defaults, document, equal, expect,
-   initTest, locateDiv, matches, ok, test, testBuildURL, testImageAd,
-   testRefreshAd, testRichMediaAd, initCookies, AD_REFRESH,
-   unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
-   mockAdContent, MockSubdir
+   initTest, locateDiv, matches, ok, test, testBuildURL, testNoAd,
+   testRefreshAd, testRichMediaAd, initCookies, AD_REFRESH, TestMockNoAd,
+   mockAdContent, unitOrIntegrationMessage, unitOrIntegrationMode, MockSubdir
 */
 
 /*members AYSC, CONST, DefaultAdTag, ENV, FT_U, Properties, adName, ads,
@@ -73,15 +71,15 @@ div {
    initDFP, injectUrlTrackCall, isLegacyAPI, length, lib, mktsdata, name,
    newssubs, next, nextAll, oob, pos, refresh, refreshTimer, regex, render,
    response, slice, src, timeIntervalTolerance, timeoutTolerance, tlbxrib,
-   trackUrl, type, urlThreshold, urlThresholdMax, useDFP, write, writeScript,
-   writeScriptMock, FTQA, banlb3, newssubs2, corppop2
+   trackUrl, type, urlThreshold, urlThresholdMax, useDFP, write, intro,
+   writeScript, writeScriptMock, FTQA
 */
 
 var FT = FT || {};
 FT.env =
 {
    "dfp_site": "test.5887.dev",
-   "dfp_zone": "build-url-test",
+   "dfp_zone": "no-ads-targeted-here",
    "asset":    "page",
 
    // Override timeout values to ensure the ad calls have time to come back
@@ -94,16 +92,15 @@ FT.Properties = { 'ENV': "ci" };
 var CheckAds = ['banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'mpu', 'doublet', 'oob', 'corppop', 'refresh'];
       </script>
 
-<script src="js/util/QUnitChainer.js"></script>
-<script src="js/util/test-helpers.html.js"></script>
-<script src="js/util/page-helpers.html.js"></script>
-<script src="lib/jquery/jquery-1.7.2.js"></script>
-<script src="js/util/jquery-ft-namespacing.js"></script>
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../js/util/page-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
 <script>
-FT.$.cookie = function() {};
+FT.$.cookie = function(){};
 </script>
-<script src="lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="js/util/qunitMock.lib.js"></script>
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
 
 <script>
 //cookies can now be passed within a  get string to the page
@@ -111,25 +108,26 @@ setCookies();
 var MockSubdir = false;
 </script>
 
-<script src="js/util/cookie.js"></script>
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/HTMLAds.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
-<script src="js/util/mock-ads.html.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/util/mock-ads.html.js"></script>
 <script>
 // Clear the cookies which cause values to be inserted into the Ad calls.
 //initCookies();
 
 var Tests = {
-   'banlb': TestMockAd.banlb3,
-   'newssubs': TestMockAd.newssubs2,
-   'mpu': TestMockAd.mpu,
-   'corppop': TestMockAd.corppop2,
-   'refresh': TestMockAd.refresh
+   'intro': TestMockNoAd.intro,
+   'banlb': TestMockNoAd.banlb,
+   'newssubs': TestMockNoAd.newssubs,
+   'mpu': TestMockNoAd.mpu,
+   'corppop': TestMockNoAd.corppop,
+   'refresh': TestMockNoAd.refresh
 };
 
 var Plan = {};
-Plan.nextTestPlan =  'ad-on-a-page-legacy-noads.js.test.htm';
+Plan.nextTestPlan =  'ad-on-a-page-legacy-with-localcorppop.js.test.htm';
 QUnitChainer.init(Plan);
 
 var LegacyBoolean = 'yes';
@@ -147,57 +145,66 @@ if (testMode === 'unit')
 {
    //if unit test, then we override FT.lib.writeScript with the call to Mocking
    FT.lib.writeScript = FT.lib.writeScriptMock;
- //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
-   FT.corppop.HTMLAdData.urlStem = '';
 }
 
-test("Page Environment", function (){
+// Clear the cookies which cause values to be inserted into the Ad calls.
+initCookies();
+
+test("Page Environment", function () {
    ok(FT.env,                                                                                      "FT.env should be defined");
    ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
    ok(FT.env.isLegacyAPI,                                                                          "Legacy API should be used");
 });
 
-test("banlb", function (){
-   expect(5);
+test("banlb", function ()
+{
+   expect(8);
    ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
-   testImageAd('banlb', 2, 'ad-placeholder-');
+   testNoAd('banlb', undefined, 'ad-placeholder-');
 });
 
-test("interstitial off banlb", function (){
+test("interstitial off banlb when no ads targeted", function ()
+{
    expect(2);
-   equal(FT.$('#interstitial_overlay').length, 1,                                               'interstitial ad should be inserted into the DOM with count');
+   equal(FT.$('#interstitial_overlay').length, 0,                                               'interstitial ad should be inserted into the DOM with count');
    // the following check is in to check for interstitial corppop regression:
    equal(FT.$('#popad').length, 0,                                                              '#popad should not be present');
 });
 
-test("corppop off banlb", function () {
+test("corppop off banlb when no ads targeted", function ()
+{
    expect(2);
    equal(FT.$('#corppop_overlay').length, 0,                                                    'div with #corpop_overlay should have count');
    equal(FT.$('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
 });
 
-test("newssubs", function (){
-   expect(4);
-   testImageAd('newssubs', 1, 'ad-container-');
+test("companion newssubs for banlb when no ads targeted", function ()
+{
+   expect(7);
+   testNoAd('newssubs', undefined, 'ad-container-');
 });
 
-test("mpu", function () {
-   expect(4);
-   testImageAd('mpu', 1, 'ad-container-');
+test("mpu when no ads targeted", function ()
+{
+   expect(7);
+   testNoAd('mpu', undefined, 'ad-container-');
 });
 
-test("refresh", function() {
-   expect(10);
-   testRefreshAd('refresh', 'ad-container-');
-   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767', 'refresh should correctly store obj value as');
-   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000, 'refresh should correctly store refreshTimer value as');
+test("refresh when no ads targeted", function ()
+{
+   expect(8);
+   testNoAd('refresh', undefined, 'ad-placeholder-');
+   if (FT.ads.adverts.refresh.response)
+   {
+      equal(FT.ads.adverts.refresh.response.refreshTimer, undefined,                              'refresh object refreshTimer should be');
+   }
 });
 
       </script>
 </head>
 
 <body>
-	<h1 id="qunit-header">Test DFP Ad on a page with legacy API</h1>
+	<h1 id="qunit-header">Test DFP No Ads on a page with legacy API</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
 	<p>
@@ -205,39 +212,29 @@ test("refresh", function() {
 		with Dart for Publishers using the deepEqual page structure that is in use
 		on the Falcon blogs pages i.e. <a href="http://blogs.ft.com/dearlucy">http://blogs.ft.com/dearlucy</a>
 	</p>
+
 	<p>
-		<b>This page tests with targeting settings chosen to deliver ads.</b>
+		<b>This page tests with targeting settings chosen to deliver no
+			ads to check div collapse</b>
 	</p>
-	<p>The ads are booked under
-	<ol>
-		<li>Advertiser:<a title="Must use IE for this link"
-			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&advertiserid=2389285'>2389285</a>
-					FT DFP Test 1 Account
-		</li>
-		<li>Order:<a title="Must use IE for this link"
-			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&orderid=3903162'>3903162</a>
-					Ongoing Test
-		</li>
-		<li>Ad: Ongoing banlb 468x60 ID: <a
-			title="Must use IE for this link"
-			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&&adid=217726086'>217726086</a>
-			and others.</li>
-	</ol>
-	</p>
+
 	<p>
-		And are targeted to DFP site/zone<b> <script>
+		Ad calls are targeted to DFP site/zone<b> <script
+				type='text/javascript'>
 document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
       </script>
 		</b>
 	</p>
 	<p>
-		See <a href="ad-on-a-page.html">ad-on-a-page.html</a> for using the
-		Falcon API with targeted ads.
+		See <a href="ad-on-a-page-legacy.html">ad-on-a-page-legacy.html</a>
+		for using the Falcon API with targeted ads.
 	</p>
 	<p>
-		See <a href="ad-on-a-page-noads.html">ad-on-a-page-noads.html</a> for
-		using the Falcon API with no targeted ads to see div collapse.
+		See <a href="ad-on-a-page.html">ad-on-a-page.html</a> for using the
+		Falcon API with the Falcon library as for example on the home pages <a
+			href="http://www.ft.com/home/uk">http://www.ft.com/home/uk</a>
 	</p>
+
 	<hr>
 	<form>
 		<input type='button' name='expand' value='expand'
@@ -248,11 +245,11 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 			onclick='stopTimer()' alt='stop the interval timer'>
 	</form>
 	<hr>
-	<div id="mode"></div>
+
 	<ol id="qunit-tests">
 		<li></li>
 	</ol>
-
+	<div id="mode"></div>
 	<div id="main"></div>
 
 	<!-- make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
@@ -422,7 +419,7 @@ oob.init();
 				<div id="ad-placeholder-corppop" class="ad-placeholder ad-corppop">
 					Ad ad-placeholder-corppop
 					<script>
-               //AYSC is undefined, so shouldnt get corppop
+
 var adPop = new Advert(AD_CORPPOP);
 adPop.init();
 
@@ -817,7 +814,7 @@ clientAds.render();
 	</form>
 	<hr>
 	<script
-		src="js/util/test-helpers.html.js"></script>
+		src="../js/util/test-helpers.html.js"></script>
 
 </body>
 </html>

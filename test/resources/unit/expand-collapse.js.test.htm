@@ -5,8 +5,8 @@
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Test expand / collapse logic</title>
-<link rel="stylesheet" href="css/qunit-1.10.0pre.css" media="screen" />
-<script src="lib/qunit/qunit-1.10.0pre.js"></script>
+<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
 <script>
 
 /*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
@@ -42,16 +42,16 @@ var CheckAds = ['banlb', 'newssubs'];
 //setCookies();
 </script>
 
-<script src="js/util/QUnitChainer.js"></script>
-<script src="js/util/test-helpers.html.js"></script>
-<script src="lib/jquery/jquery-1.7.2.js"></script>
-<script src="js/util/jquery-ft-namespacing.js"></script>
+<script src="../js/util/QUnitChainer.js"></script>
+<script src="../js/util/test-helpers.html.js"></script>
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
 <script>
 FT.$.cookie = function() {};
 </script>
-<script src="js/util/cookie.js"></script>
-<script src="js/util/Lib.js"></script>
-<script src="js/ft/DartForPublishers.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script src="../js/util/Lib.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
 
 <script>
 
@@ -86,11 +86,11 @@ QUnitChainer.init(Plan);
 function mockAdContent(URL, isGreyGif)
 {
    var ads = {
-      banlb: 'banlb-728x90.gif',
-      newssubs: 'newssubs-239x90.gif'
+      banlb: '../images/banlb-728x90.gif',
+      newssubs: '../images/newssubs-239x90.gif'
    };
    var pos = URL.match(/pos=(\w+);/)[1];
-   var image = isGreyGif ? '817-grey.gif' : ads[pos];
+   var image = isGreyGif ? '../images/817-grey.gif' : ads[pos];
    var html = [
       '<a target="_blank" href="http://ad.doubleclick.net/">',
       '<img src="' + image + '" alt="Markets" border="0">',
@@ -102,8 +102,8 @@ function mockAdContent(URL, isGreyGif)
 function mockNoAdContent(URL)
 {
    var ads = {
-      banlb: 'ft-no-ad-728x90.gif',
-      newssubs: 'ft-no-ad-239x90.gif'
+      banlb: '../images/ft-no-ad-728x90.gif',
+      newssubs: '../images/ft-no-ad-239x90.gif'
    };
    var pos = URL.match(/pos=(\w+);/)[1];
    var image = ads[pos];
@@ -118,8 +118,8 @@ function mockNoAdContent(URL)
 function mockNoAdInterstitialContent(URL)
 {
    var ads = {
-      banlb: 'ft-no-ad-728x90.gif',
-      newssubs: 'ft-no-ad-239x90.gif'
+      banlb: '../images/ft-no-ad-728x90.gif',
+      newssubs: '../images/ft-no-ad-239x90.gif'
    };
    var pos = URL.match(/pos=(\w+);/)[1];
    var image = ads[pos];
@@ -140,11 +140,11 @@ function mockNoAdInterstitialContent(URL)
 function mockAdInterstitialContent(URL, isGreyGif)
 {
    var ads = {
-      banlb: 'banlb-728x90.gif',
-      newssubs: 'newssubs-239x90.gif'
+      banlb: '../images/banlb-728x90.gif',
+      newssubs: '../images/newssubs-239x90.gif'
    };
    var pos = URL.match(/pos=(\w+);/)[1];
-   var image = isGreyGif ? '817-grey.gif' : ads[pos];
+   var image = isGreyGif ? '../images/817-grey.gif' : ads[pos];
    var html = [
       '<a target="_blank" href="http://ad.doubleclick.net/">',
       '<img src="' + image + '" alt="Markets" border="0">',
