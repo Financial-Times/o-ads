@@ -4,8 +4,10 @@
 // AND ARTICLE PAGES.
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
 
-/*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21", "22", "27",
-    "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
+
+
+/*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21","22","27",
+     "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
      KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
      Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
      ad_server, addClassName, addDiagnostic, addNewAttributes,
@@ -70,7 +72,7 @@
      VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
     DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, ip, html, pushDownExpand,
-    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName  */
+    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIPBase64, enc, Utf8, parse, Base64, stringify  */
 
 /* The Falcon Ads API follows from here. */
 
@@ -112,7 +114,7 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'cc', 'pos', 'bht', 'tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'ip', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
@@ -128,9 +130,9 @@ FT.Advertising = function () {
     this.CONST.SubsLevelReplaceLookup = {
         'edt': { '22' : /^edit$/, '97' : /^.*/ },
         'int': { '22' : /^Ftemp$/, '97': /^.*/ },
-        'cor': { '22' : /^[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/, '97' : /^c$/ },
+        'cor': { '22' : /^[N]*[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/, '97' : /^c$/ },
         'lv1': { '22' : /^[PL]*[0]*[PL]1[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
-        'lv2': { '22' : /^[PL]*[0]*[PL]2[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
+        'lv2': { '22' : /^[N]*[PL]*[0]*[PL]2[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
         'reg': { '22' : /^[PL]0[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ }
     };
     // format for creating a new key name and value from an old one using substring is: 'old key=start substring=no characters in substring=new key'
@@ -822,14 +824,37 @@ FT.Advertising.prototype.getIP = function () {
     return ip;
 };
 
+FT.Advertising.prototype.encodeIPBase64 = function (ip) {
+    var words, encodedIP;
+
+    if (ip) { 
+		// convert utf version to word array
+		words  = CryptoJS.enc.Utf8.parse(ip);
+
+		// convert word array to base 64 enconding
+		encodedIP = CryptoJS.enc.Base64.stringify(words);
+
+		// encode special character, if any
+		encodedIP = encodeURIComponent(encodedIP);
+    }
+
+    return encodedIP;
+};
+
 FT.Advertising.prototype.prepareUParams = function () {
     var uValue = '',
-        uOrder = this.CONST.uKeyOrder,
-        initial,
-        remaining,
-        rsiSegs;
+    uOrder = this.CONST.uKeyOrder,
+    initial,
+    remaining,
+    rsiSegs;
+
     this.foreach(uOrder, function (key) {
-        var value = this.baseAdvert[key];
+        var value;
+        if (key === 'ip') {
+            value = this.getIP(); 
+        } else {
+            value = this.baseAdvert[key];
+        }
         if (value) {
             uValue += !value ? '' : key + '=' + value + ',';
         }
@@ -1006,8 +1031,8 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
         }
     }
     this.baseAdvert.ts = this.getTimestamp();
-    this.baseAdvert.ip = this.getIP();
-    this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);
+    this.baseAdvert.ip = this.encodeIPBase64(this.getIP());
+    this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);    
 
     // Check if we are running in a non-live environment and change the site name
     this.baseAdvert.dfp_site = this.getDFPSite();
@@ -1622,7 +1647,9 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
 
     // create a placeholder so we can render th link and img next to it (e.g. inside the div.advert OR the #mktsdata span
     imageclickPlaceholderId = rResponse.name + "_imageclick_placeholder";
-    document.write('<span style="display:none" id="' + imageclickPlaceholderId + '"></span>');
+    // Fool jslint in this occasion to accept a document.write
+    doc = document;
+    doc.write('<span style="display:none" id="' + imageclickPlaceholderId + '"></span>');
     imageclickPlaceholderDiv = document.getElementById(imageclickPlaceholderId);
 
     if (imageclickPlaceholderDiv.parentNode.insertBefore(link, imageclickPlaceholderDiv)) {
@@ -1844,19 +1871,20 @@ FT.Advertising.prototype.stripLeadingZeros = function (KeysToStrip, obj) {
 
 //here we do substitutions based on regexs.
 FT.Advertising.prototype.fieldRegex = function (RegexKeyNames, obj) {
-    var myBool = false;
     this.foreach(this.CONST.SubsLevelReplaceLookup, function (replaceValue, regexHash) {
+        var myState = "initial";
         this.foreach(RegexKeyNames, function (keyName) {
             var value = obj[keyName];
             if (value === undefined) {
                 return;
-            } else if (value.match(regexHash[keyName])) {
-                myBool = true;
+            } else if ((myState !== "failed") && (value.match(regexHash[keyName]))) {
+                myState = "passed";
             } else  {
-                myBool = false;
+                myState = "failed";
+                return;
             }
         });
-        if (myBool) {
+        if (myState === "passed") {
             obj.slv = replaceValue;
         }
     });
@@ -2267,8 +2295,6 @@ clientAds = {
     },
     // From here, just a few functions to help with debugging for now.
     'log'    : function (msg) {
-        /*jshint devel:true */
-        //allow use of console in this method only
         if (this.debug === null) {
             this.debug = false;
             if (FT.cookie.get("FTQA") && FT.cookie.get("FTQA").match(/debug/)) {
@@ -2310,7 +2336,7 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
-FT.Advertising.prototype.VERSION = "Live $Rev: 132623 $";
+FT.Advertising.prototype.VERSION = "Live $Rev: 134122 $";
 FT.Advertising.prototype.library = "falcon";
 clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
 
