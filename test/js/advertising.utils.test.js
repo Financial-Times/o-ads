@@ -135,7 +135,7 @@
     function extendTests() {
         module('_ads Utilities extend method');
 
-        test("FT._ads.utils.extend(Object, Object)", function() {
+        test("extend method", function() {
             expect(27);
 
             var settings = { "xnumber1": 5, "xnumber2": 7, "xstring1": "peter", "xstring2": "pan" },
