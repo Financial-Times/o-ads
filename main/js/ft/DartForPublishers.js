@@ -71,7 +71,7 @@
      pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
      VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
     DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
-    pushDownExpandingAsset, getConsentValue, ad_network_code, cc, ip, html, pushDownExpand,
+    pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIPBase64, enc, Utf8, parse, Base64, stringify  */
 
 /* The Falcon Ads API follows from here. */
@@ -114,11 +114,11 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'ip', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
-    this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
+    this.CONST.uKeyOrder =  ['eid', 'loc', 'uuid', 'auuid', 'ts'];
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
@@ -850,7 +850,7 @@ FT.Advertising.prototype.prepareUParams = function () {
 
     this.foreach(uOrder, function (key) {
         var value;
-        if (key === 'ip') {
+        if (key === 'loc') {
             value = this.getIP(); 
         } else {
             value = this.baseAdvert[key];
@@ -1031,7 +1031,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
         }
     }
     this.baseAdvert.ts = this.getTimestamp();
-    this.baseAdvert.ip = this.encodeIPBase64(this.getIP());
+    this.baseAdvert.loc = this.encodeIPBase64(this.getIP());
     this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);    
 
     // Check if we are running in a non-live environment and change the site name
