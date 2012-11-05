@@ -172,7 +172,7 @@ TEST.AdPos = [
 // Documented in Targeting/KeyPriority.xls in DFP project share and on Twiki
 // http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Order_of_key_values_placed_into
 //TEST.KeyOrder = "sz,dcopt,07,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";  // TODO referrer, investor relations
-TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,ip,uuid,auuid,ts,cc,pos,bht,tile,ord";
+TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,loc,uuid,auuid,ts,cc,pos,bht,tile,ord";
 //TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";
 TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,uuid,ts,cc,pos,bht,tile,ord";
 //TEST.CompAudSciSplit = "sz,dcopt,07,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,a,a,pos,bht,tile,ord";
@@ -3150,42 +3150,42 @@ FT.$(document).ready(function (){
 		// test case 1
       mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
 		url = testBuildURL("Test 1: FTUserTrack with correct IP values 1");
-		matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';ip=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+		matches(url, ';u=loc=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+		matches(url, ';loc=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,dcopt,u,ip,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+		equal(order, 'sz,dcopt,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		// test case 2
 		mockCookies.FTUserTrack = "203.190.72.182.aaaa";
 		url = testBuildURL("Test 2: FTUserTrack with correct IP values 2");
-		matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';ip=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+		matches(url, ';u=loc=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+		matches(url, ';loc=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,u,ip,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		//test case 3
 		mockCookies.FTUserTrack = "203.190.72.18a.1344916650137365";
 		url = testBuildURL("Test 3: FTUserTrack with incorrect IP values 1");
-		matches(url, ';u=ip=203.190.72.18a,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';ip=MjAzLjE5MC43Mi4xOGE%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+		matches(url, ';u=loc=203.190.72.18a,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+		matches(url, ';loc=MjAzLjE5MC43Mi4xOGE%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,u,ip,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		//test case 4
 		mockCookies.FTUserTrack = "203.190.72.1811.1344916650137365";
 		url = testBuildURL("Test 4: FTUserTrack with incorrect IP values 2");
-		matches(url, ';u=ip=203.190.72.1811.1344916650137365,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';ip=MjAzLjE5MC43Mi4xODExLjEzNDQ5MTY2NTAxMzczNjU%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+		matches(url, ';u=loc=203.190.72.1811.1344916650137365,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+		matches(url, ';loc=MjAzLjE5MC43Mi4xODExLjEzNDQ5MTY2NTAxMzczNjU%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,u,ip,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		// Spec for max u= payload https://sites.google.com/a/google.com/ft-com---dfp/ad-tags
 		// u=XXXXXXXXXXXXXXXXXXX max 255
@@ -3198,19 +3198,19 @@ FT.$(document).ready(function (){
 		mockCookies.FTUserTrack = justRight + ".1234567890";
 		url = testBuildURL("Test 5: length limits reported - u= max length ok");
 
-		matches(url, ';u=ip=' + justRight + ".1234567890" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+		matches(url, ';u=loc=' + justRight + ".1234567890" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
 		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
 
 		mockCookies.FTUserTrack = justRight + ".1344916650137365";
 		url = testBuildURL("Test 6: u= length too long");
 
-		matches(url, ';u=ip=' + justRight + ".1344916650137365" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+		matches(url, ';u=loc=' + justRight + ".1344916650137365" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
 		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 258',	  "uParamSizeException raised and error message should be");
 
 		mockCookies.FTUserTrack = justRight + ".1234567890111111111111111";
 		url = testBuildURL("Test 7: u= length too long, param loss");
 
-		matches(url, ';u=ip=' + justRight + ".1234567890111111111111111" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+		matches(url, ';u=loc=' + justRight + ".1234567890111111111111111" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
 		params = extract_params(url);
 		uParams = extract_uParams(params.u);
 		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
