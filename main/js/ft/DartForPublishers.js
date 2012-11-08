@@ -1609,7 +1609,8 @@ FT.Advertising.prototype.startRefreshTimer = function (delay) {
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
-    /*jshint evil:true */
+    /*jshint evil:true */ 
+    // we have a document.write in this method so we tell jshint about it.
     var rDiv,
         link,
         img,
