@@ -1,7 +1,6 @@
-(function (win, doc, FT, $, undef) {
-    "use strict";
+(function (window, document, $, undefined) {
     function isTests() {
-        module('_ads Utilities is methods');
+        module('FT._ads.utils.isType methods');
 
         test('Utils object exists', function () {
             expect(1);
@@ -18,7 +17,7 @@
             ok(!FT._ads.utils.isArray(/hello/), 'Regex returns false');
             ok(!FT._ads.utils.isArray(1e6), 'Number returns false');
             ok(!FT._ads.utils.isArray(null), 'Null returns false');
-            ok(!FT._ads.utils.isArray(undef), 'Undefined returns false');
+            ok(!FT._ads.utils.isArray(undefined), 'Undefined returns false');
             ok(!FT._ads.utils.isArray(function () {}), 'Undefined returns false');
         });
 
@@ -31,7 +30,7 @@
             ok(!FT._ads.utils.isString(/hello/), 'Regex returns false');
             ok(!FT._ads.utils.isString(1e6), 'Number returns false');
             ok(!FT._ads.utils.isString(null), 'Null returns false');
-            ok(!FT._ads.utils.isString(undef), 'Undefined returns false');
+            ok(!FT._ads.utils.isString(undefined), 'Undefined returns false');
             ok(!FT._ads.utils.isString(function () {}), 'Function returns false');
         });
 
@@ -45,7 +44,7 @@
             ok(!FT._ads.utils.isFunction(/hello/), 'Regex returns false');
             ok(!FT._ads.utils.isFunction(1e6), 'Number returns false');
             ok(!FT._ads.utils.isFunction(null), 'Null returns false');
-            ok(!FT._ads.utils.isFunction(undef), 'Undefined returns false');
+            ok(!FT._ads.utils.isFunction(undefined), 'Undefined returns false');
         });
 
         test('isObject method', function () {
@@ -58,7 +57,7 @@
             ok(!FT._ads.utils.isObject(/hello/), 'Regex returns false');
             ok(!FT._ads.utils.isObject(1e6), 'Number returns false');
             ok(!FT._ads.utils.isObject(null), 'Null returns false');
-            ok(!FT._ads.utils.isObject(undef), 'Undefined returns false');
+            ok(!FT._ads.utils.isObject(undefined), 'Undefined returns false');
         });
 
         test("isWindow method", function() {
@@ -88,8 +87,8 @@
 
             // Not objects shouldn't be matched
             ok(!FT._ads.utils.isPlainObject(""), "string");
-            ok(!FT._ads.utils.isPlainObject(0) && !jQuery.isPlainObject(1), "number");
-            ok(!FT._ads.utils.isPlainObject(true) && !jQuery.isPlainObject(false), "boolean");
+            ok(!FT._ads.utils.isPlainObject(0) && !FT._ads.utils.isPlainObject(1), "number");
+            ok(!FT._ads.utils.isPlainObject(true) && !FT._ads.utils.isPlainObject(false), "boolean");
             ok(!FT._ads.utils.isPlainObject(null), "null");
             ok(!FT._ads.utils.isPlainObject(undefined), "undefined");
 
@@ -133,8 +132,7 @@
     }
 
     function extendTests() {
-        module('_ads Utilities extend method');
-
+        module('FT._ads.utils.extend');
         test("extend method", function() {
             expect(27);
 
@@ -163,7 +161,6 @@
             deepEqual( deep2["foo"], deep2copy["foo"], "Check if not deep2: options must not be modified" );
             ok( FT._ads.utils.extend(true, {}, nestedarray)["arr"] !== arr, "Deep extend of object must clone child array" );
 
-            // #5991
             ok( jQuery.isArray( FT._ads.utils.extend(true, { "arr": {} }, nestedarray)["arr"] ), "Cloned array have to be an Array" );
             ok( jQuery.isPlainObject( FT._ads.utils.extend(true, { "arr": arr }, { "arr": {} })["arr"] ), "Cloned object have to be an plain object" );
 
@@ -247,6 +244,6 @@
         isTests();
         extendTests();
     }
-
+    console.log(jQuery);
     $(runTests);
-}(window, document, FT, jQuery));
+}(window, document, jQuery));

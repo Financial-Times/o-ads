@@ -1,6 +1,6 @@
-(function (win, doc, FT, undef) {
+(function (win, doc, FT, undefined) {
   "use strict";
-  FT._ads = FT.advertising || {};
+  FT._ads = FT._ads || {};
   var utils = {};
 
   // Uses object prototype toString method to get at the type of object we are dealing,
