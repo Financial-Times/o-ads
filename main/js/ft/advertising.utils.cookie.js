@@ -10,67 +10,111 @@
  */
 (function (window, document, FT, undefined) {
 
-	var utils = {},
-		pluses = /\+/g;
+    var utils = {},
+        pluses = /\+/g;
 
-	function raw(s) {
-		return s;
-	}
+    function raw(s) {
+        return s;
+    }
 
-	function decoded(s) {
-		return decodeURIComponent(s.replace(pluses, ' '));
-	}
+    function decoded(s) {
+        return decodeURIComponent(s.replace(pluses, ' '));
+    }
 
-	var config = utils.cookie = function (key, value, options) {
+    var config = utils.cookie = function (key, value, options) {
 
-		// write
-		if (value !== undefined) {
-			options = FT._ads.utils.extend({}, config.defaults, options);
+        // write
+        if (value !== undefined) {
+            options = FT._ads.utils.extend({}, config.defaults, options);
 
-			if (value === null) {
-				options.expires = -1;
-			}
+            if (value === null) {
+                options.expires = -1;
+            }
 
-			if (typeof options.expires === 'number') {
-				var days = options.expires, t = options.expires = new Date();
-				t.setDate(t.getDate() + days);
-			}
+            if (typeof options.expires === 'number') {
+                var days = options.expires, t = options.expires = new Date();
+                t.setDate(t.getDate() + days);
+            }
 
-			value = config.json ? JSON.stringify(value) : String(value);
+            value = config.json ? JSON.stringify(value) : String(value);
 
-			return (document.cookie = [
-				encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
-				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-				options.path    ? '; path=' + options.path : '',
-				options.domain  ? '; domain=' + options.domain : '',
-				options.secure  ? '; secure' : ''
-			].join(''));
-		}
+            return (document.cookie = [
+                encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                options.path    ? '; path=' + options.path : '',
+                options.domain  ? '; domain=' + options.domain : '',
+                options.secure  ? '; secure' : ''
+            ].join(''));
+        }
 
-		// read
-		var decode = config.raw ? raw : decoded;
-		var cookies = document.cookie.split('; ');
-		for (var i = 0, l = cookies.length; i < l; i++) {
-			var parts = cookies[i].split('=');
-			if (decode(parts.shift()) === key) {
-				var cookie = decode(parts.join('='));
-				return config.json ? JSON.parse(cookie) : cookie;
-			}
-		}
+        // read
+        var decode = config.raw ? raw : decoded;
+        var cookies = document.cookie.split('; ');
+        for (var i = 0, l = cookies.length; i < l; i++) {
+            var parts = cookies[i].split('=');
+            if (decode(parts.shift()) === key) {
+                var cookie = decode(parts.join('='));
+                return config.json ? JSON.parse(cookie) : cookie;
+            }
+        }
 
-		return null;
-	};
+        return null;
+    };
 
-	config.defaults = {};
+    config.defaults = {};
 
-	utils.removeCookie = function (key, options) {
-		if (utils.cookie(key) !== null) {
-			utils.cookie(key, null, options);
-			return true;
-		}
-		return false;
-	};
+    utils.removeCookie = function (key, options) {
+        if (utils.cookie(key) !== null) {
+            utils.cookie(key, null, options);
+            return true;
+        }
+        return false;
+    };
 
-	FT._ads.utils.cookie = utils.cookie;
-	FT._ads.utils.removeCookie = utils.removeCookie;
+    function getRegExp(name, param) {
+        var re,
+        formats ={
+            "AYSC": "underscore",
+            "FT_U": "underscoreEquals",
+            "FT_Remember": "colonEquals",
+            "FT_User": "colonEquals",
+            "FTQA": "commaEquals"
+        };
+
+        switch (formats[name]) {
+        case "underscore":
+            re = '_' + param + '([^_]*)_';
+            break;
+        case "underscoreEquals":
+            re = '_' + param + '=([^_]*)_';
+            break;
+        case "colonEquals":
+            re = ':' + param + '=([^:]*)';
+            break;
+        case "commaEquals":
+            re = param + '=([^,]*)';
+            break;
+        default:
+            re = /((.|\n)*)/; // match everything
+            break;
+        }
+        return new RegExp(re);
+    }
+
+    /** Get a parameter from a named cookie
+     * @param {string} name The cookie's name
+     * @param {string} param The parameter's name
+     * @return {string|undefined}
+     */
+    utils.getCookieParam = function (name, param) {
+        var wholeValue = utils.cookie(name) || "", matches;
+        if (param) {
+            matches = wholeValue.match(getRegExp(name, param));
+        }
+        return (matches && matches.length) ? matches[1] : undefined;
+    };
+
+    FT._ads.utils.cookie = utils.cookie;
+    FT._ads.utils.removeCookie = utils.removeCookie;
+    FT._ads.utils.getCookieParam = utils.getCookieParam;
 })(window, document, FT);

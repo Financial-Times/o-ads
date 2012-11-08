@@ -170,6 +170,54 @@
             document.cookie = 'c=v';
             equal(FT._ads.utils.removeCookie('c'), true, 'should return true if the cookie was found');
         });
+
+        test("getCookieParam non-existent cookie", function() {
+            equal($.type(FT._ads.utils.getCookieParam("FT_U", "999")), "undefined");
+            equal($.type(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL")), "undefined");
+            equal($.type(FT._ads.utils.getCookieParam("FT_User", "EMAIL")), "undefined");
+            equal($.type(FT._ads.utils.getCookieParam("AYSC", "999")), "undefined");
+            equal($.type(FT._ads.utils.getCookieParam("FTQA", "fish")), "undefined");
+        });
+
+        test("getCookieParam non-existent param", function() {
+            document.cookie = "FT_U=_EID=75203762_PID=4075203762_TIME=%5BTue%2C+14-Feb-2012+11%3A14%3A43+GMT%5D_SKEY=PVedi41jJoMsqbaU%2B4BlyQ%3D%3D_RI=1_I=1_";
+            equal($.type(FT._ads.utils.getCookieParam("FT_U", "999")), "undefined");
+
+            document.cookie = "FT_U=_EID=75203762_PID=4075203762_TIME=%5BTue%2C+14-Feb-2012+11%3A14%3A43+GMT%5D_SKEY=PVedi41jJoMsqbaU%2B4BlyQ%3D%3D_RI=1_I=1_";
+            equal(FT._ads.utils.getCookieParam("FT_U", "EID"), "75203762");
+
+            document.cookie = "FT_Remember=3485306:TK5440152026926272944:FNAME=:LNAME=:";
+            equal($.type(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL")), "undefined");
+
+            document.cookie = "FT_User=USERID=4001448514:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:";
+            equal($.type(FT._ads.utils.getCookieParam("FT_User", "EMAIL")), "undefined");
+
+            document.cookie = "AYSC=_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            equal($.type(FT._ads.utils.getCookieParam("AYSC", "999")), "undefined");
+
+            document.cookie = "FTQA=debug=true,env=live,breakout=banlb";
+            equal($.type(FT._ads.utils.getCookieParam("FTQA", "fish")), "undefined");
+        });
+
+        test("getCookieParam existent param", function() {
+            document.cookie = "FT_Remember=3485306:TK5440152026926272944:FNAME=:LNAME=:EMAIL=dan.searle@ft.com";
+            equal(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL"), "dan.searle@ft.com");
+
+            document.cookie = "FT_User=USERID=4001448514:EMAIL=nick.hayes@ft.com:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:";
+            equal(FT._ads.utils.getCookieParam("FT_User", "EMAIL"), "nick.hayes@ft.com");
+
+            document.cookie = "AYSC=_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            equal(FT._ads.utils.getCookieParam("AYSC", "04"), "greater+london");
+
+            document.cookie = "AYSC=_04_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            equal(FT._ads.utils.getCookieParam("AYSC", "04"), "");
+
+            document.cookie = "AYSC=_0490_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            equal(FT._ads.utils.getCookieParam("AYSC", "04"), "90");
+
+            document.cookie = "FTQA=debug=true,env=live,breakout=banlb";
+            equal(FT._ads.utils.getCookieParam("FTQA", "debug"), "true");
+        });
     }
 
    $(cookieTests);
