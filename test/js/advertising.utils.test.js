@@ -244,6 +244,6 @@
         isTests();
         extendTests();
     }
-    console.log(jQuery);
+
     $(runTests);
 }(window, document, jQuery));
