@@ -72,7 +72,9 @@
      VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
     DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
-    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIPBase64, enc, Utf8, parse, Base64, stringify  */
+    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
+    enc, Utf8, parse, stringify  */
 
 /* The Falcon Ads API follows from here. */
 
@@ -118,7 +120,7 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
-    this.CONST.uKeyOrder =  ['eid', 'loc', 'uuid', 'auuid', 'ts'];
+    this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
@@ -158,6 +160,21 @@ FT.Advertising = function () {
     this.CONST.DFPPremiumCopyNetworkCode = '/N282450';
     this.CONST.DFPPremiumReadOnly = this.CONST.DFPPremiumCopy;
     this.CONST.DFPPremiumReadOnlyNetworkCode = this.CONST.DFPNetworkCode;
+
+    // DFPP encoding for IP
+    this.CONST.DFPPremiumIPReplaceLookup = {
+        '0' : {'replaceRegex' : /0/g, 'replaceValue' : 'a'},
+        '1' : {'replaceRegex' : /1/g, 'replaceValue' : 'b'},
+        '2' : {'replaceRegex' : /2/g, 'replaceValue' : 'c'},
+        '3' : {'replaceRegex' : /3/g, 'replaceValue' : 'd'},
+        '4' : {'replaceRegex' : /4/g, 'replaceValue' : 'e'},
+        '5' : {'replaceRegex' : /5/g, 'replaceValue' : 'f'},
+        '6' : {'replaceRegex' : /6/g, 'replaceValue' : 'g'},
+        '7' : {'replaceRegex' : /7/g, 'replaceValue' : 'h'},
+        '8' : {'replaceRegex' : /8/g, 'replaceValue' : 'i'},
+        '9' : {'replaceRegex' : /9/g, 'replaceValue' : 'j'},
+        '.' : {'replaceRegex' : /\./g, 'replaceValue' : 'z'}
+    };
 
     //variables we need to store between function calls
     this.VAR = {};
@@ -824,18 +841,14 @@ FT.Advertising.prototype.getIP = function () {
     return ip;
 };
 
-FT.Advertising.prototype.encodeIPBase64 = function (ip) {
-    var words, encodedIP;
+FT.Advertising.prototype.encodeIP = function (ip) {
+    var encodedIP, ipEncodingLookup = this.CONST.DFPPremiumIPReplaceLookup;
 
-    if (ip) { 
-		// convert utf version to word array
-		words  = CryptoJS.enc.Utf8.parse(ip);
-
-		// convert word array to base 64 enconding
-		encodedIP = CryptoJS.enc.Base64.stringify(words);
-
-		// encode special character, if any
-		encodedIP = encodeURIComponent(encodedIP);
+    if (ip) {
+        encodedIP = ip;
+        this.foreach(ipEncodingLookup, function (lookupKey) {
+            encodedIP = encodedIP.replace(new RegExp(ipEncodingLookup[lookupKey].replaceRegex), ipEncodingLookup[lookupKey].replaceValue);
+        });
     }
 
     return encodedIP;
@@ -850,7 +863,7 @@ FT.Advertising.prototype.prepareUParams = function () {
 
     this.foreach(uOrder, function (key) {
         var value;
-        if (key === 'loc') {
+        if (key === 'ip') {
             value = this.getIP(); 
         } else {
             value = this.baseAdvert[key];
@@ -1031,7 +1044,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
         }
     }
     this.baseAdvert.ts = this.getTimestamp();
-    this.baseAdvert.loc = this.encodeIPBase64(this.getIP());
+    this.baseAdvert.loc = this.encodeIP(this.getIP());
     this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);    
 
     // Check if we are running in a non-live environment and change the site name
