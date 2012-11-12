@@ -244,9 +244,17 @@
         });
     }
 
+    function writeScriptTests() {
+       test("writeScript method",function(){
+            expect(1);
+            ok($.type(FT._ads.utils.writeScript) === 'function', 'The function exists');
+        });
+    }
+
     function runTests() {
         isTests();
         extendTests();
+        writeScriptTests()
     }
 
     $(runTests);

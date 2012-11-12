@@ -91,7 +91,6 @@ FT.lib = {
         if (document.readyState !== "complete" || typeof QUnit === "object") {
             /*jshint evil:true*/
             document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
-            /*jshint evil:false*/
         }
     },
 

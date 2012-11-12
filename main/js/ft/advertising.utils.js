@@ -189,6 +189,14 @@
     return target;
   };
 
+  utils.writeScript = function (url) {
+    // Stop document.write() from happening after page load (unless QUnit is present)
+    if (document.readyState !== "complete" || typeof QUnit === "object") {
+      /*jshint evil:true*/
+      document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
+    }
+  };
+
   FT._ads.utils = utils;
   return utils;
 }(window, document, FT));
