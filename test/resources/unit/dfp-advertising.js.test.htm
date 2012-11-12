@@ -666,10 +666,10 @@ function testGetIP(message) {
 	return ip;
 }
 
-function testGetEncodedIPBase64(ip, message) {
-	var encodedIP = FT.ads.encodeIPBase64(ip);
-	ok(true, "== BEGIN: " + message);
-	return encodedIP;
+function testEncodeIP(ip, message) {
+    var encodedIP = FT.ads.encodeIP(ip);
+    ok(true, "== BEGIN: " + message);
+    return encodedIP;
 }
 
 function testHasAdClass(name, result, explanation){
@@ -3142,79 +3142,59 @@ FT.$(document).ready(function (){
    });
 
     test("FT.ads.buildURL (FTUserTrack cookie)", function () {
-		maybeInitFixture();
-		var url, params, order, uParams;
+        maybeInitFixture();
+        var url, params, order, uParams;
 
-		beginNewPage('buildURL FTUserTrack cookie with correct IP values 1');
+        beginNewPage('buildURL FTUserTrack cookie with correct IP values 1');
 
-		// test case 1
-      mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
-		url = testBuildURL("Test 1: FTUserTrack with correct IP values 1");
-		matches(url, ';u=loc=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';loc=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+        // test case 1
+        mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
+        url = testBuildURL("Test 1: FTUserTrack with correct IP values 1");
+        matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+        matches(url, ';loc=cadzbjazhczbic;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
-		params = extract_params(url);
-		order = params._order.join(',');
-		equal(order, 'sz,dcopt,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+        params = extract_params(url);
+        order = params._order.join(',');
+        equal(order, 'sz,dcopt,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
-		// test case 2
-		mockCookies.FTUserTrack = "203.190.72.182.aaaa";
-		url = testBuildURL("Test 2: FTUserTrack with correct IP values 2");
-		matches(url, ';u=loc=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';loc=MjAzLjE5MC43Mi4xODI%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+        // test case 2
+        mockCookies.FTUserTrack = "203.190.72.182.aaaa";
+        url = testBuildURL("Test 2: FTUserTrack with correct IP values 2");
+        matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
+        matches(url, ';loc=cadzbjazhczbic;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
-		params = extract_params(url);
-		order = params._order.join(',');
-		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+        params = extract_params(url);
+        order = params._order.join(',');
+        equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
-		//test case 3
-		mockCookies.FTUserTrack = "203.190.72.18a.1344916650137365";
-		url = testBuildURL("Test 3: FTUserTrack with incorrect IP values 1");
-		matches(url, ';u=loc=203.190.72.18a,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';loc=MjAzLjE5MC43Mi4xOGE%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+        // Spec for max u= payload https://sites.google.com/a/google.com/ft-com---dfp/ad-tags
+        // u=XXXXXXXXXXXXXXXXXXX max 255
+        // XXXXXXXXXXXXXXXXXXX	max 253
+        // ip=YYYYYYYYYYYYYYY	max 253
+        // YYYYYYYYYYYYYYY		max 250
+        var justRight = x('1234567890', 20);
+        equal(justRight.length, 200,	"checking length of payload for u= field");
 
-		params = extract_params(url);
-		order = params._order.join(',');
-		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+        mockCookies.FTUserTrack = justRight + ".1234567890";
+        url = testBuildURL("Test 3: length limits reported - u= max length ok");
 
-		//test case 4
-		mockCookies.FTUserTrack = "203.190.72.1811.1344916650137365";
-		url = testBuildURL("Test 4: FTUserTrack with incorrect IP values 2");
-		matches(url, ';u=loc=203.190.72.1811.1344916650137365,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
-		matches(url, ';loc=MjAzLjE5MC43Mi4xODExLjEzNDQ5MTY2NTAxMzczNjU%3D;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
+        matches(url, ';u=ip=' + justRight + ".1234567890" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+        equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
 
-		params = extract_params(url);
-		order = params._order.join(',');
-		equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+        mockCookies.FTUserTrack = justRight + ".134491665013736";
+        url = testBuildURL("Test 4: u= length too long");
 
-		// Spec for max u= payload https://sites.google.com/a/google.com/ft-com---dfp/ad-tags
-		// u=XXXXXXXXXXXXXXXXXXX max 255
-		// XXXXXXXXXXXXXXXXXXX	max 253
-		// ip=YYYYYYYYYYYYYYY	max 253
-		// YYYYYYYYYYYYYYY		max 250
-		var justRight = x('1234567890', 20);
-		equal(justRight.length, 200,	"checking length of payload for u= field");
+        matches(url, ';u=ip=' + justRight + ".134491665013736" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+        equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 257',	  "uParamSizeException raised and error message should be");
 
-		mockCookies.FTUserTrack = justRight + ".1234567890";
-		url = testBuildURL("Test 5: length limits reported - u= max length ok");
+        mockCookies.FTUserTrack = justRight + ".1234567890111111111111111";
+        url = testBuildURL("Test 5: u= length too long, param loss");
 
-		matches(url, ';u=loc=' + justRight + ".1234567890" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
-
-		mockCookies.FTUserTrack = justRight + ".1344916650137365";
-		url = testBuildURL("Test 6: u= length too long");
-
-		matches(url, ';u=loc=' + justRight + ".1344916650137365" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 258',	  "uParamSizeException raised and error message should be");
-
-		mockCookies.FTUserTrack = justRight + ".1234567890111111111111111";
-		url = testBuildURL("Test 7: u= length too long, param loss");
-
-		matches(url, ';u=loc=' + justRight + ".1234567890111111111111111" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
-	});
+        matches(url, ';u=ip=' + justRight + ".1234567890111111111111111" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
+        params = extract_params(url);
+        uParams = extract_uParams(params.u);
+        equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
+    });
 
 	test("FT.ads.toBase36 (for Audience Science cookie) - for task TA10281", function () {
 		maybeInitFixture();
@@ -3850,70 +3830,63 @@ FT.$(document).ready(function (){
     });
 
     test("FT.ads.getIP (FTUserTrack cookie)", function () {
-		var ip;
+        var ip;
 
-		beginNewPage('getIP FTUserTrack cookie 1');
-      mockCookies.FTUserTrack = "203.190.72.182";
-      ip = testGetIP("test with incomplete FTUserTrack cookie information " + mockCookies.FTUserTrack);
-		equal( ip, '203.190.72.182', "correct ip information retrieved");
+        beginNewPage('getIP FTUserTrack cookie 1');
+        mockCookies.FTUserTrack = "203.190.72.182";
+        ip = testGetIP("test with incomplete FTUserTrack cookie information " + mockCookies.FTUserTrack);
+        equal( ip, '203.190.72.182', "correct ip information retrieved");
 
-		beginNewPage('getIP FTUserTrack cookie 2');
-      mockCookies.FTUserTrack = "203.190.72.";
-      ip = testGetIP("test with incomplete FTUserTrack cookie information " + mockCookies.FTUserTrack);
-		equal( ip, '203.190.72.', "incorrect ip information retrieved");
+        beginNewPage('getIP FTUserTrack cookie 2');
+        mockCookies.FTUserTrack = "203.190.72.";
+        ip = testGetIP("test with incomplete FTUserTrack cookie information " + mockCookies.FTUserTrack);
+        equal( ip, '203.190.72.', "incorrect ip information retrieved");
 
-		beginNewPage('getIP FTUserTrack cookie 3');
-      mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
-		eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
-		equal( eid, '203.190.72.182', "correct ip information retrieved");
+        beginNewPage('getIP FTUserTrack cookie 3');
+        mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
+        eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
+        equal( eid, '203.190.72.182', "correct ip information retrieved");
 
-		beginNewPage('getIP FTUserTrack cookie 4');
-      mockCookies.FTUserTrack = "203.190.72.182.aaa";
-		eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
-		equal( eid, '203.190.72.182', "correct ip information retrieved");
+        beginNewPage('getIP FTUserTrack cookie 4');
+        mockCookies.FTUserTrack = "203.190.72.182.aaa";
+        eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
+        equal( eid, '203.190.72.182', "correct ip information retrieved");
 
-		beginNewPage('getIP FTUserTrack cookie 5');
-      mockCookies.FTUserTrack = "203.190.72.18a.1344916650137365";
-		eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
-		equal( eid, '203.190.72.18a', "incorrect ip information retrieved");
+        beginNewPage('getIP FTUserTrack cookie 5');
+        mockCookies.FTUserTrack = "203.190.72.18a.1344916650137365";
+        eid = testGetIP("test with complete FTUserTrack cookie information " + mockCookies.FTUserTrack);
+        equal( eid, '203.190.72.18a', "incorrect ip information retrieved");
 
-	});
-    
-    test("FT.ads.encodeIPBase64()", function () {
-    	var ip, encodedIP;
-		    	  
-      beginNewPage('getEncodedIPBase64 test 1 - complete FTUserTrack information');
-      mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
-      ip = FT.ads.getIP();		
-      encodedIP = testGetEncodedIPBase64(ip, "getEncodedIPBase64 test 1: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
-      equal( encodedIP, 'MjAzLjE5MC43Mi4xODI%3D', "crypto-js encoded IP matches with base64encode.org conversion");
-      
-      beginNewPage('getEncodedIPBase64 test 2 - incomplete FTUserTrack information');
-      mockCookies.FTUserTrack = "203.190.72.182";
-      ip = FT.ads.getIP();		
-      encodedIP = testGetEncodedIPBase64(ip, "getEncodedIPBase64 test 2: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
-      equal( encodedIP, 'MjAzLjE5MC43Mi4xODI%3D', "crypto-js encoded IP matches with base64encode.org conversion");
-      
-      beginNewPage('getEncodedIPBase64 test 3 - incomplete FTUserTrack information');
-      mockCookies.FTUserTrack = "203.190.72.";
-      ip = FT.ads.getIP();		
-      encodedIP = testGetEncodedIPBase64(ip, "getEncodedIPBase64 test 3: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
-      equal( encodedIP, 'MjAzLjE5MC43Mi4%3D', "crypto-js encoded IP matches with base64encode.org conversion");
-      
-      beginNewPage('getEncodedIPBase64 test 4 - incomplete FTUserTrack information');
-      mockCookies.FTUserTrack = "203.190.72.182.aaaaa";
-      ip = FT.ads.getIP();		
-      encodedIP = testGetEncodedIPBase64(ip, "getEncodedIPBase64 test 4: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
-      equal( encodedIP, 'MjAzLjE5MC43Mi4xODI%3D', "crypto-js encoded IP matches with base64encode.org conversion");
-      
-      beginNewPage('getEncodedIPBase64 test 5 - incomplete FTUserTrack information');
-      mockCookies.FTUserTrack = "203.190.72.18a.1344916650137365";
-      ip = FT.ads.getIP();		
-      encodedIP = testGetEncodedIPBase64(ip, "getEncodedIPBase64 test 5: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
-      equal( encodedIP, 'MjAzLjE5MC43Mi4xOGE%3D', "crypto-js encoded IP matches with base64encode.org conversion");
-      
-	   
-	}); 
+    });
+
+    test("FT.ads.encodeIP", function () {
+        var ip, encodedIP;
+
+        beginNewPage('encodeIP test 1 - complete FTUserTrack information');
+        mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
+        ip = FT.ads.getIP();
+        encodedIP = testEncodeIP(ip, "encodeIP test 1: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
+        equal( encodedIP, 'cadzbjazhczbic', "encoded IP matches");
+
+        beginNewPage('encodeIP test 2 - incomplete FTUserTrack information');
+        mockCookies.FTUserTrack = "203.190.72.182";
+        ip = FT.ads.getIP();
+        encodedIP = testEncodeIP(ip, "encodeIP test 2: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
+        equal( encodedIP, 'cadzbjazhczbic', "encoded IP matches");
+
+        beginNewPage('encodeIP test 3 - incomplete FTUserTrack information');
+        mockCookies.FTUserTrack = "203.190.72.";
+        ip = FT.ads.getIP();
+        encodedIP = testEncodeIP(ip, "encodeIP test 3: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
+        equal( encodedIP, 'cadzbjazhcz', "encoded IP matches");
+
+        beginNewPage('encodeIP test 4 - incomplete FTUserTrack information');
+        mockCookies.FTUserTrack = "203.190.72.182.aaaaa";
+        ip = FT.ads.getIP();
+        encodedIP = testEncodeIP(ip, "encodeIP test 4: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
+        equal( encodedIP, 'cadzbjazhczbic', "encoded IP matches");
+
+    });
 
 });
 
