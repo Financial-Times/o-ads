@@ -1,12 +1,28 @@
+/**
+ * @fileOverview
+ * Utility methods for the advertising library.
+ *
+ * @author Robin Marr, robin.marr@ft.com
+ */
+
 (function (win, doc, FT, undefined) {
   "use strict";
+
+  /**
+   * @namespace All public functions are stored in the FT._ads.utils object for global access.
+   */
   FT._ads = FT._ads || {};
   var utils = {};
 
-  // Uses object prototype toString method to get at the type of object we are dealing,
-  // IE returns [object Object] for null and undefined so we need to filter those
-  // http://es5.github.com/#x15.2.4.2
-  function is(object, className) {
+  /** 
+   * Uses object prototype toString method to get at the type of object we are dealing,
+   * IE returns [object Object] for null and undefined so we need to filter those
+   * http://es5.github.com/#x15.2.4.2
+   * @private 
+   * @param {object} Any javascript object
+   * @returns The type of the object e.g Array, String, Object
+   */
+  function is(object) {
     var type = Object.prototype.toString.call(object)
       .match(/^\[object\s(.*)\]$/)[1];
 
@@ -19,12 +35,26 @@
     }
   }
 
+  /**
+   * Creates a method for testing the type of an Object
+   * @private 
+   * @param {string} The name of the object type to be tested e.g. Array
+   * @returns a method that takes any javascript object and tests if it is of
+   * the supplied className
+   */
   function createIsTest(className){
     return function (obj) {
       return is(obj) === className;
     };
   }
 
+  /**
+   * Curries some useful is{ClassName}method into the supplied Object
+   * @private 
+   * @param {object} The object to add the methods too
+   * @param {array} A list of types to create methods for defaults to "Array", "Object", "String", "Function"
+   * @returns The object supplied in the first param with is{ClassName} Methods Added 
+   */
   function curryIsMethods(obj, classNames) {
     classNames = classNames || [
       "Array",
@@ -42,11 +72,23 @@
   }
 
   utils = curryIsMethods(utils);
-
+  
+  /**
+   * Test if an object is the global window object
+   * @param {object} The object to be tested
+   * @returns Boolean true if the object is the window obj false otherwise
+   */
   utils.isWindow = function (obj) {
     return obj && obj !== null && obj == obj.window;
   };
 
+  /**
+   * Test if an object inherits from any other objects, used to in extend 
+   * to protect against deep copies running out of memory and constructors 
+   * losing there prototypes when cloned
+   * @param {object} The object to be tested
+   * @returns Boolean true if the object is plain false otherwise
+   */
   utils.isPlainObject = function (obj) {
     var obj_hop = Object.prototype.hasOwnProperty;
     // Must be an Object.
@@ -77,6 +119,13 @@
     return key === undefined || obj_hop.call( obj, key );
   };
 
+  /**
+   * Used to merge or clone objects
+   * @param If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
+   * @param If deep copy true will be the target object of the copy
+   * @param All other params are objects to be merged into the target
+   * @returns The target object extended with the other params
+   */
   utils.extend = function extend() {
     var options, name, src, copy, copyIsArray, clone,
         target = arguments[0] || {},

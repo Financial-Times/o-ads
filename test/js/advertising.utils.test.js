@@ -8,7 +8,7 @@
         });
 
         test('isArray method', function () {
-            expect(10);
+            expect(11);
             ok($.type(FT._ads.utils.isArray) === 'function', 'The function exists');
             ok(FT._ads.utils.isArray([]), 'Array returns true');
             ok(!FT._ads.utils.isArray(arguments), 'Array like object returns false');
@@ -17,12 +17,13 @@
             ok(!FT._ads.utils.isArray(/hello/), 'Regex returns false');
             ok(!FT._ads.utils.isArray(1e6), 'Number returns false');
             ok(!FT._ads.utils.isArray(null), 'Null returns false');
+            ok(!FT._ads.utils.isArray(true), 'Boolean returns false');
             ok(!FT._ads.utils.isArray(undefined), 'Undefined returns false');
-            ok(!FT._ads.utils.isArray(function () {}), 'Undefined returns false');
+            ok(!FT._ads.utils.isArray(function () {}), 'Function returns false');
         });
 
         test('isString method', function () {
-            expect(9);
+            expect(10);
             ok($.type(FT._ads.utils.isString) === 'function', 'The function exists');
             ok(FT._ads.utils.isString("hello"), 'String returns true');
             ok(!FT._ads.utils.isString([]), 'Array returns false');
@@ -31,11 +32,12 @@
             ok(!FT._ads.utils.isString(1e6), 'Number returns false');
             ok(!FT._ads.utils.isString(null), 'Null returns false');
             ok(!FT._ads.utils.isString(undefined), 'Undefined returns false');
+            ok(!FT._ads.utils.isString(true), 'Boolean returns false');
             ok(!FT._ads.utils.isString(function () {}), 'Function returns false');
         });
 
         test('isFunction method', function () {
-            expect(9);
+            expect(10);
             ok($.type(FT._ads.utils.isFunction) === 'function', 'The function exists');
             ok(FT._ads.utils.isFunction(function () {}), 'Function returns true');
             ok(!FT._ads.utils.isFunction("hello"), 'String returns false');
@@ -45,10 +47,11 @@
             ok(!FT._ads.utils.isFunction(1e6), 'Number returns false');
             ok(!FT._ads.utils.isFunction(null), 'Null returns false');
             ok(!FT._ads.utils.isFunction(undefined), 'Undefined returns false');
+            ok(!FT._ads.utils.isFunction(true), 'Boolean returns false');
         });
 
         test('isObject method', function () {
-            expect(9);
+            expect(10);
             ok($.type(FT._ads.utils.isObject) === 'function', 'The function exists');
             ok(FT._ads.utils.isObject({}), 'Object returns true');
             ok(!FT._ads.utils.isObject(function () {}), 'Function returns false');
@@ -58,6 +61,7 @@
             ok(!FT._ads.utils.isObject(1e6), 'Number returns false');
             ok(!FT._ads.utils.isObject(null), 'Null returns false');
             ok(!FT._ads.utils.isObject(undefined), 'Undefined returns false');
+            ok(!FT._ads.utils.isObject(true), 'Boolean returns false');
         });
 
         test("isWindow method", function() {
