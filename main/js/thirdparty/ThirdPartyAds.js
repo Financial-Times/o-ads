@@ -168,6 +168,7 @@ FT.env =
    },
    'adCall':    function (pos)
    {
+      /*jshint evil:true */ 
       var tag = this.getTag(pos);
       if (tag)
       {
