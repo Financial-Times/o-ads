@@ -8,6 +8,14 @@
 (function (win, doc, FT, undefined) {
   "use strict";
 
+  // add an ECMAScript5 compliant trim to the String 
+  // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
+  if(!String.prototype.trim) {
+    String.prototype.trim = function () {
+      return this.replace(/^\s+|\s+$/g,'');
+    };
+  }
+
   /**
    * @namespace All public functions are stored in the FT._ads.utils object for global access.
    */
@@ -79,11 +87,11 @@
    * @returns Boolean true if the object is the window obj false otherwise
    */
   utils.isWindow = function (obj) {
-    return obj && obj !== null && obj == obj.window;
+    return obj && obj !== null && obj === window;
   };
 
   /**
-   * Test if an object inherits from any other objects, used to in extend 
+   * Test if an object inherits from any other objects, used in extend 
    * to protect against deep copies running out of memory and constructors 
    * losing there prototypes when cloned
    * @param {object} The object to be tested
@@ -189,12 +197,62 @@
     return target;
   };
 
+  utils.hasClass = function(ele, className){
+    if(ele.nodeType === 1){
+        return ele.className.split(' ').indexOf(className) > -1 ? true : false;
+    }
+    return false;
+  };
+
   utils.writeScript = function (url) {
     // Stop document.write() from happening after page load (unless QUnit is present)
     if (document.readyState !== "complete" || typeof QUnit === "object") {
       /*jshint evil:true*/
       document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
     }
+  };
+
+
+  /**
+   * Create an object hash from a delimited string
+   * Beware all properties on the resulting object will have  string values.
+   * @param {String}        str       The string to transform
+   * @param {String/RegExp} delimiter The character that delimits each name/value pair
+   * @param {String}        pairing   The character that separates the name from the value
+   * @return {object}
+   */
+  utils.hash = function (str, delimiter, pairing) {
+    var pair, value,
+      hash = {};
+    
+    str = str.split(delimiter);
+
+    while(value = str.pop()) {
+      pair = value.split(pairing);
+      if (pair.length > 1) { 
+        hash[pair[0].trim()] = pair.slice(1).join(pairing); 
+      }
+    }
+
+    return hash;
+  };
+
+  // nothing to see here.....
+  utils.oppaGangnamStyle = function (){
+    var audio = document.createElement('audio'),
+      img = document.createElement('img');
+
+    audio.src = 'http://static.echonest.com/InfiniteGangnamStyle/TRLRVJF13A79B07430.mp3';
+    img.src = 'http://25.media.tumblr.com/tumblr_mbsnozLHlt1rdnqx8o1_400.gif';
+    img.style.height ="100%";
+    img.style.position ="fixed";
+    img.style.top ="0";
+    img.style.right ="0";
+    document.body.appendChild(audio);
+    audio.play();
+    setTimeout(function () {
+      document.body.appendChild(img);
+    }, 7500);
   };
 
   FT._ads.utils = utils;

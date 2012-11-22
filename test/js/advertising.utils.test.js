@@ -1,5 +1,5 @@
 (function (window, document, $, undefined) {
-    function isTests() {
+    function runTests() {
         module('FT._ads.utils.isType methods');
 
         test('Utils object exists', function () {
@@ -133,9 +133,7 @@
                 ok( false, "Does not throw exceptions on host objects -- FAIL");
             }
         });
-    }
 
-    function extendTests() {
         module('FT._ads.utils.extend');
         test("extend method", function() {
             expect(27);
@@ -242,19 +240,19 @@
             deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
             deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
         });
-    }
 
-    function writeScriptTests() {
+        test("hash", function() {
+            var result, test = "a:1,b:2,c:3";
+            result = FT._ads.utils.hash( test, ",", ":" );
+
+            ok( FT._ads.utils.isObject( result ), "the result is an object" );
+            ok(  1 == result.a && 2 == result.b && 3 == result.c , "String properly hashed" );
+        });
+
        test("writeScript method",function(){
             expect(1);
             ok($.type(FT._ads.utils.writeScript) === 'function', 'The function exists');
         });
-    }
-
-    function runTests() {
-        isTests();
-        extendTests();
-        writeScriptTests()
     }
 
     $(runTests);
