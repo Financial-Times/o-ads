@@ -11,7 +11,8 @@
 (function (window, document, FT, undefined) {
 
     var utils = {},
-        pluses = /\+/g;
+        pluses = /\+/g,
+        today = new Date();
 
     function raw(s) {
         return s;
