@@ -644,3 +644,20 @@ function restoreCurrentDate() {
     Date = QUnitMockupResults.currentDate.originalClass;
     QUnitMockupResults.currentDate.lastDateCreated = undefined;
 }
+
+
+/**
+ *  Deletes all keys from the mock cookie object, essentially clearing all the cookies
+ *  @return {Boolean}  true if cookies were cleared false if the mockCookie object doesn't exist so can't be cleared 
+ */
+function clearMockCookies() {
+    if (mockCookies){
+        for(cookie in mockCookies) {
+            if(mockCookies.hasOwnProperty(cookie)){
+                delete mockCookies[cookie];
+            }
+        }
+        return true;
+    }
+    return false;
+}
