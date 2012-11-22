@@ -37,9 +37,15 @@
             }
 
             value = config.json ? JSON.stringify(value) : String(value);
+            value = config.raw ? value : encodeURIComponent(value);
+            if(!!options.expires && (options.expires.valueOf() - today.valueOf()) < 0) {
+                delete FT._ads.utils.cookies[encodeURIComponent(key)];
+            } else {
+                FT._ads.utils.cookies[encodeURIComponent(key)] = value; 
+            }
 
             return (document.cookie = [
-                encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                encodeURIComponent(key), '=', value,
                 options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
                 options.path    ? '; path=' + options.path : '',
                 options.domain  ? '; domain=' + options.domain : '',
@@ -49,15 +55,11 @@
 
         // read
         var decode = config.raw ? raw : decoded;
-        var cookies = document.cookie.split('; ');
-        for (var i = 0, l = cookies.length; i < l; i++) {
-            var parts = cookies[i].split('=');
-            if (decode(parts.shift()) === key) {
-                var cookie = decode(parts.join('='));
-                return config.json ? JSON.parse(cookie) : cookie;
-            }
-        }
-
+        var cookie = FT._ads.utils.cookies[encodeURIComponent(key)];
+        if (!!cookie || cookie === '') {
+            return config.json ? JSON.parse(decode(cookie)) : decode(cookie);
+        } 
+        
         return null;
     };
 
@@ -107,13 +109,15 @@
      * @return {string|undefined}
      */
     utils.getCookieParam = function (name, param) {
-        var wholeValue = utils.cookie(name) || "", matches;
+        var matches,
+            wholeValue = FT._ads.utils.cookie(name) || "";
         if (param) {
             matches = wholeValue.match(getRegExp(name, param));
         }
         return (matches && matches.length) ? matches[1] : undefined;
     };
 
+    FT._ads.utils.cookies = FT._ads.utils.hash(document.cookie, ';', '=');
     FT._ads.utils.cookie = utils.cookie;
     FT._ads.utils.removeCookie = utils.removeCookie;
     FT._ads.utils.getCookieParam = utils.getCookieParam;

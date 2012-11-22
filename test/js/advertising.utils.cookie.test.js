@@ -13,7 +13,7 @@
 
         test('read simple value', function () {
             expect(1);
-            document.cookie = 'c=v';
+            FT._ads.utils.cookie('c','v');
             equal(FT._ads.utils.cookie('c'), 'v', 'should return value');
         });
 
@@ -32,24 +32,24 @@
 
         test('read decode', function () {
             expect(1);
-            document.cookie = encodeURIComponent(' c') + '=' + encodeURIComponent(' v');
+            FT._ads.utils.cookie(' c',' v');
             equal(FT._ads.utils.cookie(' c'), ' v', 'should decode key and value');
         });
 
         test('read decode pluses to space for server side written cookie', 1, function () {
-            document.cookie = 'c=foo+bar'
+            FT._ads.utils.cookie('c','foo bar');
             equal(FT._ads.utils.cookie('c'), 'foo bar', 'should convert pluses back to space');
         });
 
         test('read [] used in name', 1, function () {
-            document.cookie = 'c[999]=foo';
+            FT._ads.utils.cookie('c[999]','foo');
             equal(FT._ads.utils.cookie('c[999]'), 'foo', 'should return value');
         });
 
         test('read raw: true', 2, function () {
             FT._ads.utils.cookie.raw = true;
 
-            document.cookie = 'c=%20v';
+            FT._ads.utils.cookie('c','%20v');
             equal(FT._ads.utils.cookie('c'), '%20v', 'should not decode value');
 
             // see https://github.com/carhartl/jquery-cookie/issues/50
@@ -61,7 +61,7 @@
             FT._ads.utils.cookie.json = true;
 
             if ('JSON' in window) {
-                document.cookie = 'c=' + JSON.stringify({ foo: 'bar' });
+                FT._ads.utils.cookie('c', { foo: 'bar' });
                 deepEqual(FT._ads.utils.cookie('c'), { foo: 'bar'}, 'should parse JSON');
             } else {
                 ok(true);
@@ -127,8 +127,8 @@
         test('write invalid expires option (in the past)', 1, function() {
             var yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
-            FT._ads.utils.cookie('c', 'v', { expires: yesterday });
-            equal(FT._ads.utils.cookie('c'), null, 'should not save already expired cookie');
+            FT._ads.utils.cookie('e', 'v', { expires: yesterday });
+            equal(FT._ads.utils.cookie('e'), null, 'should not save already expired cookie');
         });
 
         test('write return value', 1, function () {
@@ -158,7 +158,7 @@
         });
 
         test('removeCookie delete', 1, function() {
-            document.cookie = 'c=v';
+            FT._ads.utils.cookie('c','v');
             FT._ads.utils.removeCookie('c');
 
             equal(FT._ads.utils.cookie('c'), null,'should delete the cookie');
@@ -167,11 +167,16 @@
         test('removeCookie return', 2, function() {
             equal(FT._ads.utils.removeCookie('c'), false, "should return false if a cookie wasn't found");
 
-            document.cookie = 'c=v';
+            FT._ads.utils.cookie('c','v');
             equal(FT._ads.utils.removeCookie('c'), true, 'should return true if the cookie was found');
         });
 
         test("getCookieParam non-existent cookie", function() {
+            FT._ads.utils.removeCookie('FT_U');
+            FT._ads.utils.removeCookie('FT_Remember');
+            FT._ads.utils.removeCookie('FT_User');
+            FT._ads.utils.removeCookie('AYSC');
+            FT._ads.utils.removeCookie('FTQA');
             equal($.type(FT._ads.utils.getCookieParam("FT_U", "999")), "undefined");
             equal($.type(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL")), "undefined");
             equal($.type(FT._ads.utils.getCookieParam("FT_User", "EMAIL")), "undefined");
@@ -180,42 +185,42 @@
         });
 
         test("getCookieParam non-existent param", function() {
-            document.cookie = "FT_U=_EID=75203762_PID=4075203762_TIME=%5BTue%2C+14-Feb-2012+11%3A14%3A43+GMT%5D_SKEY=PVedi41jJoMsqbaU%2B4BlyQ%3D%3D_RI=1_I=1_";
+            FT._ads.utils.cookie.raw = true;
+            FT._ads.utils.cookie('FT_U','_EID=75203762_PID=4075203762_TIME=%5BTue%2C+14-Feb-2012+11%3A14%3A43+GMT%5D_SKEY=PVedi41jJoMsqbaU%2B4BlyQ%3D%3D_RI=1_I=1_');
             equal($.type(FT._ads.utils.getCookieParam("FT_U", "999")), "undefined");
-
-            document.cookie = "FT_U=_EID=75203762_PID=4075203762_TIME=%5BTue%2C+14-Feb-2012+11%3A14%3A43+GMT%5D_SKEY=PVedi41jJoMsqbaU%2B4BlyQ%3D%3D_RI=1_I=1_";
             equal(FT._ads.utils.getCookieParam("FT_U", "EID"), "75203762");
 
-            document.cookie = "FT_Remember=3485306:TK5440152026926272944:FNAME=:LNAME=:";
+            FT._ads.utils.cookie('FT_Remember','3485306:TK5440152026926272944:FNAME=:LNAME=:');
             equal($.type(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL")), "undefined");
 
-            document.cookie = "FT_User=USERID=4001448514:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:";
+            FT._ads.utils.cookie('FT_User','USERID=4001448514:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:');
             equal($.type(FT._ads.utils.getCookieParam("FT_User", "EMAIL")), "undefined");
 
-            document.cookie = "AYSC=_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            FT._ads.utils.cookie('AYSC','_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_');
             equal($.type(FT._ads.utils.getCookieParam("AYSC", "999")), "undefined");
 
-            document.cookie = "FTQA=debug=true,env=live,breakout=banlb";
+            FT._ads.utils.cookie('FTQA','debug=true,env=live,breakout=banlb');
             equal($.type(FT._ads.utils.getCookieParam("FTQA", "fish")), "undefined");
         });
 
         test("getCookieParam existent param", function() {
-            document.cookie = "FT_Remember=3485306:TK5440152026926272944:FNAME=:LNAME=:EMAIL=dan.searle@ft.com";
+            FT._ads.utils.cookie.raw = true;
+            FT._ads.utils.cookie('FT_Remember', '3485306:TK5440152026926272944:FNAME=:LNAME=:EMAIL=dan.searle@ft.com');
             equal(FT._ads.utils.getCookieParam("FT_Remember", "EMAIL"), "dan.searle@ft.com");
 
-            document.cookie = "FT_User=USERID=4001448514:EMAIL=nick.hayes@ft.com:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:";
+            FT._ads.utils.cookie('FT_User', 'USERID=4001448514:EMAIL=nick.hayes@ft.com:FNAME=Nick:LNAME=Hayes:TIME=[Sat, 06-Jun-2009 09:59:20 GMT]:USERNAME=conchango1:REMEMBER=_REMEMBER_:');
             equal(FT._ads.utils.getCookieParam("FT_User", "EMAIL"), "nick.hayes@ft.com");
 
-            document.cookie = "AYSC=_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
-            equal(FT._ads.utils.getCookieParam("AYSC", "04"), "greater+london");
+            FT._ads.utils.cookie('AYSC', '_04greater%2Blondon_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_');
+            equal(decodeURIComponent(FT._ads.utils.getCookieParam("AYSC", "04")), "greater+london");
 
-            document.cookie = "AYSC=_04_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            FT._ads.utils.cookie('AYSC', '_04_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_');
             equal(FT._ads.utils.getCookieParam("AYSC", "04"), "");
 
-            document.cookie = "AYSC=_0490_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_";
+            FT._ads.utils.cookie('AYSC', '_0490_13GBR_14GBR_15gb_17london_18islington_24europe_25PVT_26PVT_27PVT_96PVT_98PVT_');
             equal(FT._ads.utils.getCookieParam("AYSC", "04"), "90");
 
-            document.cookie = "FTQA=debug=true,env=live,breakout=banlb";
+            FT._ads.utils.cookie('FTQA', 'debug=true,env=live,breakout=banlb');
             equal(FT._ads.utils.getCookieParam("FTQA", "debug"), "true");
         });
     }
