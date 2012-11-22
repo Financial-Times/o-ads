@@ -19,28 +19,11 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     <script src="../js/util/test-helpers.html.js"></script>
     <script src="../js/util/page-helpers.html.js"></script>
     <script src="../lib/sinon/sinon-1.1.1.js"></script>
-    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
-
-    <style>
-    #banlb {
-        height: 100px;
-        width: 300px;
-        background-color: pink;
-        border: 1px solid black;
-    }
-
-    #mpu {
-        height: 200px;
-        width: 300px;
-        background-color: blue;
-        border: 1px solid black;
-    }
-
-    a img {
-        border: none;
-    }
-    </style>
-
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>    
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
 <script>
 
 /*jslint evil: true, white: true, browser: true, undef: true,
@@ -229,23 +212,9 @@ function getUUIDFromString(stringForExtractingUUID) {
 	return '';
 }
 
-var mockCookies = {}, mockCookieParams = {};
-var mockFTCookie = {
-    get: function(n) {
-        return mockCookies[n];
-    },
-    getParam: function(n, p) {
-        if ( mockCookieParams[n] && mockCookieParams[n][p] ) {
-            return mockCookieParams[n][p];
-        }
-    }
-};
-FT.cookie = mockFTCookie;
+var mockCookies = {};
 </script>
 
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
 <!-- crypto-js -->	 
 <script src="../js/lib/crypto-js/core-min.js"></script>
 <script src="../js/lib/crypto-js/enc-base64-min.js"></script>
@@ -594,7 +563,7 @@ function extract_params(url){
 function beginNewPage(message, Args) {
     Args = Args || {};
     Args.env = Args.env || {};
-    FT.env = FT.$.extend({}, {
+    FT.env = $.extend({}, {
         'dfp_site': 'test.5887.dev',
         'dfp_zone': 'build-url-test'
     }, Args.env);
@@ -648,7 +617,7 @@ function testValidSiteZone(result, message, pos){
 
 function testBuildURL(message, Args) {
     Args = Args || {};
-    Args = FT.$.extend({}, TEST.DefaultAdTag, Args);
+    Args = $.extend({}, TEST.DefaultAdTag, Args);
 	FT.ads.setInitialAdState(Args.pos);
 	var url = FT.ads.buildURL(Args.pos);
 	ok(true, "== BEGIN: " + message + " [" + url + "]");
@@ -782,10 +751,10 @@ function getCurrentYear() {
 function testCorpCookieMatchAndBuildAdURL(expectedUrl, expectedCorpMatch) {
     var htmlAds = new FT.HTMLAds();
     htmlAds.urlStem = '';
-    var AYSC97 = mockCookieParams.AYSC["97"] || "";
-    var AYSC98 = mockCookieParams.AYSC["98"] || "";
-    var AYSC22 = mockCookieParams.AYSC["22"] || "";
-    var AYSC27 = mockCookieParams.AYSC["27"] || "";
+    var AYSC97 = FT._ads.utils.getCookieParam('AYSC', "97") || "";
+    var AYSC98 = FT._ads.utils.getCookieParam('AYSC', "98") || "";
+    var AYSC22 = FT._ads.utils.getCookieParam('AYSC', "22") || "";
+    var AYSC27 = FT._ads.utils.getCookieParam('AYSC', "27") || "";
     var AYSC_OK = htmlAds.isCorporateUser(AYSC97, AYSC98, AYSC22, AYSC27, FT.ads.CONST.SubsLevelReplaceLookup);
     if (AYSC_OK == 1){
         var url = htmlAds.buildAdURL(AYSC98, AYSC22, AYSC27, FT.ads.CONST.SubsLevelReplaceLookup);
@@ -795,12 +764,11 @@ function testCorpCookieMatchAndBuildAdURL(expectedUrl, expectedCorpMatch) {
  }
 
 
-FT.$(document).ready(function (){
+$(document).ready(function (){
 	module("DartForPublishers", {
         setup: function() {
             mockCookies = {};
-            mockCookieParams = {};
-            FT.cookie = mockObject(mockFTCookie);
+            FT._ads.utils.cookies = mockObject(mockCookies);
             //clock = sinon.useFakeTimers();
         },
         teardown: function() {
@@ -810,7 +778,7 @@ FT.$(document).ready(function (){
 
 	test("getType() test helper", function (){
 		expect(1);
-		equal( FT.$.type(FT.ads), 'object',"getType(FT.ads)");
+		equal($.type(FT.ads), 'object',"getType(FT.ads)");
 	});
 
 	test("arrayLike() test helper", function (){
@@ -1362,7 +1330,9 @@ FT.$(document).ready(function (){
 			'ENV': release_env,
 			'env': TEST.DearLucy
 		});
-        mockCookies = {};
+
+        clearMockCookies();
+        FT.ads.getDFPSite()
 		equal(FT.ads.getDFPSite(), "test.5887.blogs", "Non-live environment no FTQA cookie");
 
         mockCookies.FTQA = "env=nolive";
@@ -1406,7 +1376,7 @@ FT.$(document).ready(function (){
             'ENV': release_env,
             'env': TEST.DearLucy
         });
-        mockCookies = {};
+        clearMockCookies();
         equal(FT.ads.getDFPSite(), "test.5887.blogs", "Non-live environment no FTQA cookie");
 
         //change to agreed premium value or partial regex
@@ -1935,7 +1905,7 @@ FT.$(document).ready(function (){
 			"asset"	 : "asset"
 		};
 
-        mockCookies.AYSC = "_02gender_04state_05industry_06responsibility_07position_14subCountry_17regionalArea_18city_19companySize_20personalInvestor_21companyListings_22subscriberInformation_24continent_25lineSpeed_26areaCode_27corporateAccessIDcode";
+        mockCookies.AYSC = "_02gender_04state_05industry_06responsibility_07position_14subCountry_17regionalArea_18city_19companySize_20personalInvestor_21companyListings_22subscriberInformation_24continent_25lineSpeed_26areaCode_27corporateAccessIDcode_";
 
 		FT.env = FT.ads.getAyscVars( FT.env );
 
@@ -2692,7 +2662,7 @@ FT.$(document).ready(function (){
 
 		beginNewPage('buildURL AYSC Cookie Remainder');
 
-        mockCookies.AYSC = "_00M__01M_02M_03M_04M_05M_06M_07M_08M_09M_10M_11M_12M_13M_14M_15M_16M_17M_18M_19M_20M_21M_22M_23M_24M_25M_26M_27M_28M_29M_30M__31M_32M_33M_34M_35M_36M_37M_38M_39M_40M_41M_42M_43M_44M_45M_46M_47M_48M_49M_50M_51M_52M_53M_54M_55M_56M_57M_58M_59M_60M";
+        mockCookies.AYSC = "_00M__01M_02M_03M_04M_05M_06M_07M_08M_09M_10M_11M_12M_13M_14M_15M_16M_17M_18M_19M_20M_21M_22M_23M_24M_25M_26M_27M_28M_29M_30M__31M_32M_33M_34M_35M_36M_37M_38M_39M_40M_41M_42M_43M_44M_45M_46M_47M_48M_49M_50M_51M_52M_53M_54M_55M_56M_57M_58M_59M_60M_";
 		url = testBuildURL("test AYSC remainder = not present in URL");
         for (idx = 0; idx < 100; ++idx) {
 			var field = idx < 10 ? '0' + idx : '' + idx;
@@ -2710,7 +2680,7 @@ FT.$(document).ready(function (){
 
 		beginNewPage('buildURL AYSC Cookie Remainder XXX');
 
-        mockCookies.AYSC = "_00XXX_01XXX_02XXX_03XXX_04XXX_05XXX_06XXX_07XXX_08XXX_09XXX_10XXX_11XXX_12XXX_13XXX_14XXX_15XXX_16XXX_17XXX_18XXX_19XXX_20XXX_21XXX_22XXX_23XXX_24XXX_25XXX_26XXX_27XXX_28XXX_29XXX_30XXX__31XXX_32XXX_33XXX_34XXX_35XXX_36XXX_37XXX_38XXX_39XXX_40XXX_41XXX_42XXX_43XXX_44XXX_45XXX_46XXX_47XXX_48XXX_49XXX_50XXX_51XXX_52XXX_53XXX_54XXX_55XXX_56XXX_57XXX_58XXX_59XXX_60XXX";
+        mockCookies.AYSC = "_00XXX_01XXX_02XXX_03XXX_04XXX_05XXX_06XXX_07XXX_08XXX_09XXX_10XXX_11XXX_12XXX_13XXX_14XXX_15XXX_16XXX_17XXX_18XXX_19XXX_20XXX_21XXX_22XXX_23XXX_24XXX_25XXX_26XXX_27XXX_28XXX_29XXX_30XXX__31XXX_32XXX_33XXX_34XXX_35XXX_36XXX_37XXX_38XXX_39XXX_40XXX_41XXX_42XXX_43XXX_44XXX_45XXX_46XXX_47XXX_48XXX_49XXX_50XXX_51XXX_52XXX_53XXX_54XXX_55XXX_56XXX_57XXX_58XXX_59XXX_60XXX_";
 		url = testBuildURL("test AYSC remainder = some not present in URL");
         for (idx = 0; idx < 100; ++idx) {
 			var field = idx < 10 ? '0' + idx : '' + idx;
@@ -2732,7 +2702,7 @@ FT.$(document).ready(function (){
 
 		beginNewPage('buildURL AYSC Cookie Remainder PVT');
 
-        mockCookies.AYSC = "_00PVT_01PVT_02PVT_03PVT_04PVT_05PVT_06PVT_07PVT_08PVT_09PVT_10PVT_11PVT_12PVT_13PVT_14PVT_15PVT_16PVT_17PVT_18PVT_19PVT_20PVT_21PVT_22PVT_23PVT_24PVT_25PVT_26PVT_27PVT_28PVT_29PVT_30PVT_31PVT_32PVT_33PVT_34PVT_35PVT_36PVT_37PVT_38PVT_39PVT_40PVT_41PVT_42PVT_43PVT_44PVT_45PVT_46PVT_47PVT_48PVT_49PVT_50PVT_51PVT_52PVT_53PVT_54PVT_55PVT_56PVT_57PVT_58PVT_59PVT_60PVT";
+        mockCookies.AYSC = "_00PVT_01PVT_02PVT_03PVT_04PVT_05PVT_06PVT_07PVT_08PVT_09PVT_10PVT_11PVT_12PVT_13PVT_14PVT_15PVT_16PVT_17PVT_18PVT_19PVT_20PVT_21PVT_22PVT_23PVT_24PVT_25PVT_26PVT_27PVT_28PVT_29PVT_30PVT_31PVT_32PVT_33PVT_34PVT_35PVT_36PVT_37PVT_38PVT_39PVT_40PVT_41PVT_42PVT_43PVT_44PVT_45PVT_46PVT_47PVT_48PVT_49PVT_50PVT_51PVT_52PVT_53PVT_54PVT_55PVT_56PVT_57PVT_58PVT_59PVT_60PVT_";
 		url = testBuildURL("test AYSC remainder = not present in URL");
         for (idx = 0; idx < 100; ++idx) {
 			var field = idx < 10 ? '0' + idx : '' + idx;
@@ -2752,7 +2722,7 @@ FT.$(document).ready(function (){
 		maybeInitFixture();
 
 		beginNewPage('buildURL AYSC Cookie Remainder RES');
-        mockCookies.AYSC = "_00RES_01RES_02RES_03RES_04RES_05RES_06RES_07RES_08RES_09RES_10RES_11RES_12RES_13RES_14RES_15RES_16RES_17RES_18RES_19RES_20RES_21RES_22RES_23RES_24RES_25RES_26RES_27RES_28RES_29RES_30RES_31RES_32RES_33RES_34RES_35RES_36RES_37RES_38RES_39RES_40RES_41RES_42RES_43RES_44RES_45RES_46RES_47RES_48RES_49RES_50RES_51RES_52RES_53RES_54RES_55RES_56RES_57RES_58RES_59RES_60RES";
+        mockCookies.AYSC = "_00RES_01RES_02RES_03RES_04RES_05RES_06RES_07RES_08RES_09RES_10RES_11RES_12RES_13RES_14RES_15RES_16RES_17RES_18RES_19RES_20RES_21RES_22RES_23RES_24RES_25RES_26RES_27RES_28RES_29RES_30RES_31RES_32RES_33RES_34RES_35RES_36RES_37RES_38RES_39RES_40RES_41RES_42RES_43RES_44RES_45RES_46RES_47RES_48RES_49RES_50RES_51RES_52RES_53RES_54RES_55RES_56RES_57RES_58RES_59RES_60RES_";
 		url = testBuildURL("test AYSC remainder = not present in URL");
         for (idx = 0; idx < 100; ++idx) {
 			var field = idx < 10 ? '0' + idx : '' + idx;
@@ -2777,21 +2747,18 @@ FT.$(document).ready(function (){
 		beginNewPage('buildURL FT_U Cookie 1');
 
         mockCookies.FT_U = "_EID=2548659_";
-        mockCookieParams.FT_U = { EID:"2548659" };
 		url = testBuildURL("test with FT_U cookie information");
 
 		matches(url, ';eid=2548659;', "Ad URL erights ID should appear in URL");
 		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_U = "_EID=0002659_";
-        mockCookieParams.FT_U = { EID:"0002659" };
 		url = testBuildURL("test with FT_U leading zeros removed");
 
 		matches(url, ';eid=2659;', "Ad URL erights ID appears in url");
 		matches(url, ';u=eid=2659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
-        mockCookieParams.FT_U = { EID:"4326601" };
 		url = testBuildURL("test with full FT_U cookie information");
 
 		matches(url, ';eid=4326601;', "Ad URL erights ID appears in url");
@@ -2814,21 +2781,18 @@ FT.$(document).ready(function (){
 		equal(justRight.length, 211,	"checking length of payload for u= field");
 
         mockCookies.FT_U = "_EID=" + justRight + "_";
-        mockCookieParams.FT_U = { EID:justRight };
 		url = testBuildURL("test length limits reported - u= max length ok");
 
 		matches(url, ';u=eid=' + justRight + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
 		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
 
         mockCookies.FT_U = "_EID=" + justRight + "0_";
-        mockCookieParams.FT_U = { EID:justRight + "0" };
 		url = testBuildURL("test length limits reported - u= length too long");
 
 		matches(url, ';u=eid=' + justRight + '0' + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture present");
 		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 254',	  "uParamSizeException raised and error message should be");
 
         mockCookies.FT_U = "_EID=" + justRight + "44335566778899_";
-        mockCookieParams.FT_U = { EID:justRight + "44335566778899" };
 		url = testBuildURL("test length limits reported - u= length too long");
 		params = extract_params(url);
 		uParams = extract_uParams(params.u);
@@ -2912,10 +2876,9 @@ FT.$(document).ready(function (){
 		equal(order, 'sz,dcopt,a,a,a,u,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains only five audience science cookie parameters in correct order");
 
 		beginNewPage('buildURL rsi_segs Split AudSci values around the u= parameter');
-        mockCookies = {};
+        clearMockCookies();
         mockCookies.rsi_segs = TEST.AudSci[0];
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
-        mockCookieParams.FT_U = { EID:"4326601" };
 		url = testBuildURL("test with rsi_segs cookie information");
 
 		Params = extract_params(url);
@@ -2940,7 +2903,6 @@ FT.$(document).ready(function (){
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
-		mockCookieParams.FT_U = { EID:"4326601" };
         var url = testBuildURL("test with all cookie information", { 'pos': 'banlb' });
 		var Params = extract_params(url);
 		var order = Params._order.join(',');
@@ -2965,8 +2927,8 @@ FT.$(document).ready(function (){
 		equal(order, TEST.CompAudSciSplit,	 "Ad URL contains parameters in correct order relative to the u parameter");
 
 		beginNewPage('buildURL Comprehensive with AudSci parameters split up and no u or eid param', { 'env':{ 'url_location': "http://www.ft.com/?q=cat+dog" } });
-        mockCookies = {};
-        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_97c";
+        clearMockCookies();
+        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_97c_";
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
 		url = testBuildURL("test with all cookie information", { 'pos': 'banlb' });
 
@@ -2987,7 +2949,6 @@ FT.$(document).ready(function (){
 
 		beginNewPage('build URL1');
         mockCookies.FT_U = "_EID=2548659_";
-        mockCookieParams.FT_U = { EID:"2548659" };
 		url = testBuildURL("build URL where pageUUID defined but w/o value");
 		params = extract_params(url);
 		uParams = extract_uParams(params.u);
@@ -3099,7 +3060,7 @@ FT.$(document).ready(function (){
 		equal(order, 'sz,eid,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		beginNewPage('buildURL FT_Remember Cookie 2');
-        mockCookies = {};
+        clearMockCookies();
 
 		// Construct maximum length U= payload of 249 characters
 		var justRight = x('1234567890', 21) + '1';
@@ -3273,7 +3234,6 @@ FT.$(document).ready(function (){
 		FT.ads.submitToTrack = false;
 
         mockCookies.FT_U = "_EID=12345_";
-        mockCookieParams.FT_U = { EID:"12345" };
 
 		equal(FT.ads.CONST.urlThreshold, 10000, "Check that FT.ads.CONST.urlThreshold is correct value");
 		equal(FT.ads.CONST.urlThresholdMax, 2000000, "Check that FT.ads.CONST.urlThresholdMax is correct value");
@@ -3297,7 +3257,6 @@ FT.$(document).ready(function (){
 		// Ensure flag is not stuck at true.
 		FT.ads.submitToTrack = false;
         mockCookies.FT_U = "_EID=12345_";
-        mockCookieParams.FT_U = { EID:"12345" };
 
 		equal(FT.ads.checkSubmitLongestUrl(), undefined, "When no ads have been requested FT.ads.checkSubmitLongestUrl returns");
 
@@ -3321,7 +3280,6 @@ FT.$(document).ready(function (){
 		beginNewPage('FT.ads.injectUrlTrackCall()');
 
         mockCookies.FT_U = "_EID=12345_";
-        mockCookieParams.FT_U = { EID:"12345" };
 
 		var saved_urlThreshold = FT.ads.CONST.urlThreshold;
 		var saved_urlThresholdMax = FT.ads.CONST.urlThresholdMax;
@@ -3410,7 +3368,6 @@ FT.$(document).ready(function (){
 
 		beginNewPage('build URL1');
         mockCookies.FT_U = "_EID=2548659_";
-        mockCookieParams.FT_U = { EID:"2548659" };
 		url = testBuildURL("build URL where pageUUID defined but w/o value");
 		params = extract_params(url);
 		uParams = extract_uParams(params.u);
@@ -3501,41 +3458,36 @@ FT.$(document).ready(function (){
 	});
 
 	test("FT.corppop AYSC 98 PVT", function () {
-        mockCookies.AYSC = "_2712345_98PVT";
-        mockCookieParams.AYSC = { "27":"12345", "98":"PVT" };
+        mockCookies.AYSC = "_2712345_98PVT_";
 		testCorpCookieMatchAndBuildAdURL('http://media.ft.com/adimages/banner/12345.js' , 1);
 	});
 
 	test("FT.corppop AYSC 98 IA", function () {
-        mockCookies.AYSC = "_2712345_98IA";
-        mockCookieParams.AYSC = { "27":"12345", "98":"IA" };
+        mockCookies.AYSC = "_2712345_98IA_";
+
 		testCorpCookieMatchAndBuildAdURL(null , 0);
 	});
 
 	test("FT.corppop AYSC 97  98 A", function () {
-        mockCookies.AYSC = "_22P2Tools_2712345_97c_98IA";
-        mockCookieParams.AYSC = { "22":"P2Tools", "27":"12345", "97":"c", "98":"IA" };
+        mockCookies.AYSC = "_22P2Tools_2712345_97c_98IA_";
 		testCorpCookieMatchAndBuildAdURL(null , 0);
 	});
 
 	test("FT.corppop AYSC 98 A anon", function () {
 		FT.Properties.CORPORATE_AMO_BASE = 'http://registration.ft.com/someurl/';
-        mockCookies.AYSC = "_2712345_98A";
-        mockCookieParams.AYSC = { "27":"12345", "98":"A" };
+        mockCookies.AYSC = "_2712345_98A_";
 		testCorpCookieMatchAndBuildAdURL(FT.Properties.CORPORATE_AMO_BASE + 'anon/12345' , 1);
 	});
 /** - failing test
 	test("FT.corppop AYSC 98 A registered", function () {
 		FT.Properties.CORPORATE_AMO_BASE = 'http://registration.ft.com/someurl/';
         mockCookies.AYSC = "_22P0Tools_2712345_98A";
-        mockCookieParams.AYSC = { "22":"P0Tools", "27":"12345", "98":"A" };
 		testCorpCookieMatchAndBuildAdURL(FT.Properties.CORPORATE_AMO_BASE + 'registered/12345', 1);
 	});
 */
 	test("FT.corppop AYSC 98 A subscribed", function () {
 		FT.Properties.CORPORATE_AMO_BASE = 'http://registration.ft.com/someurl/';
-        mockCookies.AYSC = "_22P2Tools_2712345_98A";
-        mockCookieParams.AYSC = { "22":"P2Tools", "27":"12345", "98":"A" };
+        mockCookies.AYSC = "_22P2Tools_2712345_98A_";
 		testCorpCookieMatchAndBuildAdURL(FT.Properties.CORPORATE_AMO_BASE + 'subscribed/12345', 1);
 	});
 
@@ -3561,7 +3513,7 @@ FT.$(document).ready(function (){
 		equal(order, 'sz,eid,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		beginNewPage('buildURL FT_Remember Cookie 2');
-        mockCookies = {};
+        clearMockCookies();
 
 		// Construct maximum length U= payload of 249 characters
 		var justRight = x('1234567890', 21) + '1';
@@ -3635,19 +3587,16 @@ FT.$(document).ready(function (){
 
 		beginNewPage('erightsID FT_U cookie 1');
         mockCookies.FT_U = "_EID=7038802_";
-        mockCookieParams.FT_U = { EID:"7038802" };
 		eid = testErightsID("test with FT_U cookie information");
 		equal( eid, '7038802', "correct eid information [" + eid + "] retrieved");
 
 		beginNewPage('erightsID FT_U cookie 2');
         mockCookies.FT_U = "_EID=0002659_";
-        mockCookieParams.FT_U = { EID:"0002659" };
 		eid = testErightsID("test with FT_U leading zeros removed");
 		equal( eid, '2659', "correct eid information retrieved, leading zeroes removed");
 
 		beginNewPage('erightsID FT_U cookie 3');
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
-        mockCookieParams.FT_U = { EID:"4326601" };
 		eid = testErightsID("test with full FT_U cookie information");
 		equal( eid, '4326601', "correct eid information retrieved");
 
@@ -3677,7 +3626,7 @@ FT.$(document).ready(function (){
 		var stub1 = sinon.stub(FT.ads,"request",func);
 		var stub2 = sinon.stub(FT.ads,"pushDownExpand",func2);
 
-		jQuery('#banlb').html("<img id='banlb_ad' src='banlb-728x90.gif' />");
+		jQuery('#banlb').html("<img id='banlb_ad' src='../images/banlb-728x90.gif' />");
 		FT.ads.requestNewssubs();
 
 		equal(FT.ads.request.calledWith("newssubs"),true,"newssubs position is called when ad is banlb");

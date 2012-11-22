@@ -74,7 +74,7 @@
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
-    enc, Utf8, parse, stringify  */
+    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop, splice  */
 
 /* The Falcon Ads API follows from here. */
 
@@ -153,7 +153,7 @@ FT.Advertising = function () {
     this.CONST.trackUrl = "http://track.ft.com/track/dfp_error.gif";
     this.CONST.cookieConsentName = 'cookieconsent';
     this.CONST.cookieConsentAcceptanceValue = 'accepted';
-    this.CONST.pushDownFormats = {'banlb': {'pos': 'banlb', 'width' : 970, 'height' : 90, 'animatedDivId' : 'header', 'animatedProperty': 'padding-top', 'expansionSubtrahend': 78 }};
+    this.CONST.pushDownFormats = {'banlb': {'pos': 'banlb', 'width' : 970, 'height' : 90, 'animatedDivId' : 'header', 'animatedProperty': 'paddingTop', 'expansionSubtrahend': 78 }};
 
     //DFP migration environments
     this.CONST.DFPPremiumCopy = "gdfp-testing-only.g.doubleclick.net";
@@ -182,9 +182,9 @@ FT.Advertising = function () {
     this.VAR.pushDownExpandingAsset = null;
 };
 
-if (FT.lib) {
-    FT.ads = new FT.Advertising();
-}
+
+FT.ads = new FT.Advertising();
+
 if (FT.HTMLAds) {
     FT.corppop = new FT.HTMLAds();
 }
@@ -268,10 +268,10 @@ FT.Advertising.prototype.requestDFP = function (pos) {
     var URL = '',
         cookieConsentName = FT.ads.CONST.cookieConsentName,
         cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue,
-        AYSC97 = FT.cookie.getParam("AYSC", "97") || "",
-        AYSC98 = FT.cookie.getParam("AYSC", "98") || "",
-        AYSC22 = FT.cookie.getParam("AYSC", "22") || "",
-        AYSC27 = FT.cookie.getParam("AYSC", "27") || "",
+        AYSC97 = FT._ads.utils.getCookieParam("AYSC", "97") || "",
+        AYSC98 = FT._ads.utils.getCookieParam("AYSC", "98") || "",
+        AYSC22 = FT._ads.utils.getCookieParam("AYSC", "22") || "",
+        AYSC27 = FT._ads.utils.getCookieParam("AYSC", "27") || "",
         location,
         AYSC_OK,
         TIME_OK,
@@ -280,13 +280,13 @@ FT.Advertising.prototype.requestDFP = function (pos) {
         self;
     if (pos === 'corppop') {
         location = document.location.href;
-        if (!location.match(/Authorised=false/) && (FT.cookie.get(cookieConsentName) === cookieConsentAcceptanceValue)) {
-            if ($.type(FT.cookie.get("AYSC")) !== "string") {
+        if (!location.match(/Authorised=false/) && (FT._ads.utils.cookie(cookieConsentName) === cookieConsentAcceptanceValue)) {
+            if (!FT._ads.utils.isString(FT._ads.utils.cookie("AYSC"))) {
                 AYSC_OK = 0;
             } else {
                 AYSC_OK = FT.corppop.isCorporateUser(AYSC97, AYSC98, AYSC22, AYSC27, FT.ads.CONST.SubsLevelReplaceLookup);
             }
-            TIME_OK = FT.corppop.timeOut(FT.cookie.get("FT_AM"), FT.cookie.get("CorpPopTimeout"));
+            TIME_OK = FT.corppop.timeOut(FT._ads.utils.cookie("FT_AM"), FT._ads.utils.cookie("CorpPopTimeout"));
             injectionPoint = (FT.env.isLegacyAPI) ? FT.corppop.HTMLAdData.injectionLegacyParentDiv : FT.corppop.HTMLAdData.injectionParentDiv;
             inj = document.getElementById(injectionPoint);
 
@@ -323,25 +323,22 @@ FT.Advertising.prototype.requestDFP = function (pos) {
 
 // TESTED in dfp-advertising.html
 FT.Advertising.prototype.foreach = function (obj, func) {
-    var idx, value, prop, l, what;
-    if (!obj || typeof obj === "function") {
+    var idx, value, prop, l;
+    if (!obj ||  FT._ads.utils.isFunction(obj)) {
         return;
     }
-    if ($.type(obj) === "array") {
+    if (FT._ads.utils.isArray(obj)) {
         for (idx = 0, l = obj.length; idx < l; idx++) {
-            value = typeof obj === "string" ? obj.charAt(idx) : obj[idx];
+            value = FT._ads.utils.isString(obj) ? obj.charAt(idx) : obj[idx];
             if (func.call(this, value, idx) === false) {
                 break;
             }
         }
     } else {
         for (prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                what = $.type(obj[prop]);
-                if (!what.match(/^function$/)) {
-                    if (func.call(this, prop, obj[prop]) === false) {
-                        break;
-                    }
+            if (obj.hasOwnProperty(prop) && !FT._ads.utils.isFunction(obj[prop])) {
+                if (func.call(this, prop, obj[prop]) === false) {
+                    break;
                 }
             }
         }
@@ -600,7 +597,7 @@ FT.Advertising.prototype.complete = function () {
 // Ad response callback
 // This method is only called when the adserver returns a json response
 FT.Advertising.prototype.callback = function (rResponse) {
-    if (!rResponse || typeof rResponse !== "object" || !rResponse.name) {
+    if (!rResponse || !FT._ads.utils.isObject(rResponse) || !rResponse.name) {
         clientAds.log("FT.Advertising.callback(" + rResponse + ") - improper");
         return false;
     }
@@ -654,10 +651,10 @@ FT.Advertising.prototype.callback = function (rResponse) {
 // Store response obj
 FT.Advertising.prototype.storeResponse = function (rResponse) {
     clientAds.log("FT.Advertising.storeResponse(" + [rResponse.name, rResponse.type, rResponse.adName].join(", ") + ")");
-    if ($.type(rResponse) !== "object") {
+    if (!FT._ads.utils.isObject(rResponse)) {
         return false;
     }
-    if ($.type(this.adverts[rResponse.name]) !== "object") {
+    if (!FT._ads.utils.isObject(this.adverts[rResponse.name])) {
         this.adverts[rResponse.name] = {};
     }
     this.adverts[rResponse.name].response = rResponse;
@@ -668,7 +665,7 @@ FT.Advertising.prototype.storeResponse = function (rResponse) {
 // TESTED in dfp-advertising.html
 FT.Advertising.prototype.getKeys = function (rResponse) {
     var Keys = [];
-    if ($.type(rResponse) === 'object') {
+    if (FT._ads.utils.isObject(rResponse)) {
         this.foreach(rResponse, function (prop) {
             Keys.push(prop);
         });
@@ -695,7 +692,7 @@ FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj) {
     if (!pos) {
         pos = '_anonymous';
     }
-    if ($.type(pos) !== "string" || $.type(rDiagObj) !== "object") {
+    if (!FT._ads.utils.isString(pos) || !FT._ads.utils.isObject(rDiagObj)) {
         return false;
     }
     clientAds.log("FT.Advertising.addDiagnostic(" + pos + ", " + this.getKeys(rDiagObj).join(", ") + ")");
@@ -704,13 +701,13 @@ FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj) {
             "diagnostics": {}
         };
     }
-    this.adverts[pos].diagnostics = $.extend({}, this.adverts[pos].diagnostics, rDiagObj);
+    this.adverts[pos].diagnostics = FT._ads.utils.extend({}, this.adverts[pos].diagnostics, rDiagObj);
 }; // addDiagnostic(pos, rDiagObj)
 
 // Extend base advert with nodes and values from advert json
 FT.Advertising.prototype.extendBaseAdvert = function (rResponse) {
     clientAds.log("FT.Advertising.extendBaseAdvert(" + rResponse + ")");
-    this.baseAdvert = $.extend({}, this.baseAdvert, rResponse);
+    this.baseAdvert = FT._ads.utils.extend({}, this.baseAdvert, rResponse);
 }; // extendBaseAdvert(rResponse)
 
 // Insert a new advert in the queue
@@ -812,10 +809,10 @@ FT.Advertising.prototype.prepareAdVars = function (AllVars) {
 
 FT.Advertising.prototype.erightsID = function () {
     var eid;
-    if (FT.cookie.get("FT_U")) {
-        eid = FT.cookie.getParam("FT_U", "EID").replace(/^0*/, "");
-    } else if (FT.cookie.get("FT_Remember")) {
-        eid = FT.cookie.get("FT_Remember").split(':'); // EID in the FT_Remember cookie does not have a param name
+    if (FT._ads.utils.cookie("FT_U")) {
+        eid = FT._ads.utils.getCookieParam("FT_U", "EID").replace(/^0*/, "");
+    } else if (FT._ads.utils.cookie("FT_Remember")) {
+        eid = FT._ads.utils.cookie("FT_Remember").split(':'); // EID in the FT_Remember cookie does not have a param name
         if (eid && eid.length > 0) {
             eid = eid[0];
         }
@@ -824,7 +821,7 @@ FT.Advertising.prototype.erightsID = function () {
 };
 
 FT.Advertising.prototype.getIP = function () {
-    var ip, tmp, ftUserTrackVal = FT.cookie.get('FTUserTrack'), ipTemp;
+    var ip, tmp, ftUserTrackVal = FT._ads.utils.cookie('FTUserTrack'), ipTemp;
 
     // sample FTUserTrackValue = 203.190.72.182.1344916650137365
     if (ftUserTrackVal) {
@@ -917,9 +914,9 @@ FT.Advertising.prototype.duplicateEID = function (eid) {
 };
 
 FT.Advertising.prototype.rsiSegs = function () {
-    if (!this.suppressAudSci && FT.cookie.get("rsi_segs")) {
+    if (!this.suppressAudSci && FT._ads.utils.cookie("rsi_segs")) {
         var results = [];
-        this.foreach(FT.cookie.get("rsi_segs").split('|'), function (value) {
+        this.foreach(FT._ads.utils.cookie("rsi_segs").split('|'), function (value) {
             results.push(this.encodeAudSci(value));
         });
         return results;
@@ -929,33 +926,31 @@ FT.Advertising.prototype.rsiSegs = function () {
 
 FT.Advertising.prototype.getAyscVars = function (obj) {
     var out = {},
-        q;
-    if (FT.cookie.get("AYSC")) {
-        q =  FT.cookie.get("AYSC").split("_");
-        $.each(q, function (i, item) {
-            // is this '!!item' an idiom to avoid having to say typeof item !== 'undefined' ?
-            // i.e. to avoid suffering a JS error in the browser whose name cannot be spoken?
-            if (!!item) {
-                // AYSC cookie is formatted as _NNdata_NNdata_NNdata_
-                // Where NN is two digit field number and data is anything except '_'
-                var m = item.match(/^(\d\d)([^_]+)/),
-                    key,
-                    val;
+        item, q;
+    if (FT._ads.utils.cookie("AYSC")) {
+        q =  FT._ads.utils.cookie("AYSC").split("_");
+
+        for(var i = 0, j = q.length; i < j; i++) {
+            item = q.pop();
+            if(!!item){
+                var key, val,
+                    m = item.match(/^(\d\d)([^_]+)/);
+                
                 if (m) {
                     key = m[1];
                     val = m[2];
                     out[key] = val;
                 }
             }
-        });
+        }
     }
-    return $.extend({}, obj, out);
+    return FT._ads.utils.extend({}, obj, out);
 };
 
 FT.Advertising.prototype.getConsentValue = function () {
     var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
 
-    if (FT.cookie.get(cookieConsentName) === cookieConsentAcceptanceValue) {
+    if (FT._ads.utils.cookie(cookieConsentName) === cookieConsentAcceptanceValue) {
         return "y"; //accepted
     } else {
         return "n"; //not seen widget or not accepted.
@@ -964,7 +959,7 @@ FT.Advertising.prototype.getConsentValue = function () {
 
 FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     // get AYSC cookie values to determine ad server
-    var AllVars = this.prepareAdVars(this.getAyscVars({})), cookie = FT.cookie.get("FTQA"),
+    var AllVars = this.prepareAdVars(this.getAyscVars({})), cookie = FT._ads.utils.cookie("FTQA"),
         rFormat,
         docUUID;
     this.baseAdvert.pos = pos;
@@ -1031,7 +1026,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
             this.baseAdvert.uuid = pageUUID;
         }
     } else {
-        if (typeof getUUIDFromString === 'function') { //check if common_raw.js is visible.
+        if (FT._ads.utils.isFunction(getUUIDFromString)) { //check if common_raw.js is visible.
             docUUID = getUUIDFromString(document.location.toString());
             if (docUUID !== null && docUUID !== '') {
                 this.baseAdvert.uuid = docUUID;
@@ -1320,7 +1315,7 @@ FT.Advertising.prototype.requestNewssubs = function () {
 
     for (j = 0; j < this.CONST.proxy_div_prefixes.length; j++) {
         tryBanlb = this.CONST.proxy_div_prefixes[j] + "banlb";
-        if ($('#' + tryBanlb).length > 0) {
+        if (!!document.getElementById(tryBanlb)) {
             banlbDiv = tryBanlb;
         }
     }
@@ -1329,7 +1324,7 @@ FT.Advertising.prototype.requestNewssubs = function () {
         why = "Can't detect a banlb div in DOM";
         clientAds.log("FT.Advertising.requestNewssubs()" + why);
     } else {
-        banlbInnerHTML = $('#' + banlbDiv).html();
+        banlbInnerHTML = document.getElementById(banlbDiv).innerHTML;
         clientAds.log("banlb ad state=" + banlbInnerHTML);
 
         //tests for assets within the div which indicate a billboard ad
@@ -1353,7 +1348,8 @@ FT.Advertising.prototype.requestNewssubs = function () {
 FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
     var why = zeroHeight ? "no ad booked but interstitial present" : "no ad booked",
         doCollapse,
-        adContainer;
+        adContainer,
+        bodyClasses = document.body.className.split(' ');
     why = this.adverts[pos].state.alwaysHide ? 'position is always hidden' : why;
     clientAds.log("FT.Advertising.collapse(" + pos + ", " + zeroHeight + ") - " + why);
 
@@ -1366,7 +1362,7 @@ FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
             } else {
                 adContainer.div.style.display = "none";
             }
-            $(document.body).addClass("no-" + adContainer.name);
+            document.body.className = bodyClasses.push(" no-" + adContainer.name).join(' ');
         }
     } else {
         why = "collapse prevented by legacy handler";
@@ -1505,13 +1501,19 @@ FT.Advertising.prototype.legacyAdFixup = function (pos, adContainer) {
 // TESTED in expand-collapse-test.html
 FT.Advertising.prototype.expand = function (pos) {
     clientAds.log("FT.Advertising.expand(" + pos + ")");
-    var adContainer = this.getAdContainer(pos);
+    var index,
+        adContainer = this.getAdContainer(pos),
+        bodyClasses = document.body.className.split(' ');
     if (adContainer.div) {
         this.legacyAdFixup(pos, adContainer);
         if (!adContainer.div.className.match(/\bhidden\b/)) {
             adContainer.div.style.display = "block";
         }
-        $(document.body).removeClass("no-" + adContainer.name);
+        index = bodyClasses.indexOf("no-" + adContainer.name);
+        if(index > -1){
+            bodyClasses.splice(index, 1);
+            document.body.className = bodyClasses.join(' ');
+        }
     }
 }; // expand(pos)
 
@@ -1532,7 +1534,7 @@ FT.Advertising.prototype.getNamedAdContainer = function (idDiv, pos) {
         ancestorCount = 0;
         el = rDiv;
         rOriginalDiv = rDiv;
-        while (ancestorCount <= ancestorLimit && typeof el.className === "string" && this.hasAdClass(el, pos) === false) {
+        while (ancestorCount <= ancestorLimit && FT._ads.utils.isString(el.className) && this.hasAdClass(el, pos) === false) {
             el = el.parentNode;
             ancestorCount++;
         }
@@ -1631,7 +1633,7 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
         doc,
         imageclickPlaceholderDiv;
     clientAds.log("FT.Advertising.renderImage(" + rResponse + ")");
-    if ($.type(rResponse) !== "object" || !rResponse.content || !rResponse.content.clickURL || !rResponse.content.imageURL) {
+    if (!FT._ads.utils.isObject(rResponse) || !rResponse.content || !rResponse.content.clickURL || !rResponse.content.imageURL) {
         this.addDiagnostic(rResponse.name, {
             "noImageClickContent": true
         });
@@ -1762,7 +1764,7 @@ FT.Advertising.prototype.beginNewPage = function (env) {
     this.suppressAudSci    = false;
 
     // Let the FTQA cookie value override the timeout, if present
-    cookie = FT.cookie.get("FTQA");
+    cookie = FT._ads.utils.cookie("FTQA");
     // For testing visit: http://admintools.internal.ft.com:86/adstools/html/FTQA.html
     // debug,timeout=2000,interval=100,longest_url=100-100 (100 out of 100)
     if (cookie) {
@@ -1838,8 +1840,8 @@ FT.Advertising.prototype.adServerCountry = function (code, pos) {
 
 //find out if we have an erights field and if so return as an object property
 FT.Advertising.prototype.detectERights = function (obj) {
-    if (FT.cookie.get("FT_U")) {
-        var erights = FT.cookie.get("FT_U").split("="),
+    if (FT._ads.utils.cookie("FT_U")) {
+        var erights = FT._ads.utils.cookie("FT_U").split("="),
             keyname = erights[0],
             val = erights[1];
         if ((keyname !== undefined) && (val === undefined)) {
@@ -1937,7 +1939,7 @@ FT.Advertising.prototype.getDFPSite = function () {
         cookie;
     if (FT.Properties && FT.Properties.ENV) {
         env = FT.Properties.ENV.toLowerCase();
-        cookie = FT.cookie.get("FTQA");
+        cookie = FT._ads.utils.cookie("FTQA");
         if (cookie) {
             cookie = cookie.replace(/%3D/g, "=");
             // FTQA cookie present, look for env=live or env=nolive
@@ -1971,14 +1973,14 @@ FT.Advertising.prototype.showDiagnostics = function (pos) {
             rDiagnostics,
             Topics,
             diagnosis;
-        if (typeof thisAdvert === 'object' && (!pos || adPos === pos)) {
+        if (FT._ads.utils.isObject(thisAdvert) && (!pos || adPos === pos)) {
             Diagnosis = [];
             if (thisAdvert.diagnostics) {
                 rDiagnostics = thisAdvert.diagnostics;
                 Topics = this.getKeys(rDiagnostics);
 
                 this.foreach(Topics, function (topic) {
-                    if (typeof rDiagnostics[topic] !== 'function') {
+                    if (!FT._ads.utils.isFunction(rDiagnostics[topic])) {
                         Diagnosis.push("    " + topic + ": " + rDiagnostics[topic]);
                     }
                 });
@@ -2005,7 +2007,7 @@ FT.Advertising.prototype.showDiagnostics = function (pos) {
 // an empty function if you absolutely must, but this is handy for diagnosing ads problems.
 FT.Advertising.prototype.breakout = function (rResponse) {
     var pause = true,
-        cookie = FT.cookie.get("FTQA"),
+        cookie = FT._ads.utils.cookie("FTQA"),
         break_if;
     if (cookie) {
         cookie = cookie.replace(/%3D/g, "=");
@@ -2077,7 +2079,7 @@ FT.Advertising.prototype.getLongestUrl = function () {
             rDiagnostics,
             requestUrl;
 
-        if (typeof thisAdvert === 'object') {
+        if (FT._ads.utils.isObject(thisAdvert)) {
             rDiagnostics = thisAdvert.diagnostics;
             if (rDiagnostics && rDiagnostics.requestUrl) {
                 requestUrl = rDiagnostics.requestUrl.replace(/^http:\/\/[^\/]+\.net/, '');
@@ -2116,23 +2118,25 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
 
     if (FT.ads.VAR.pushDownExpandingAsset === null) {
         //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
-        $('#' + pushDownDiv.pos).find('*').each(function () {
+        var node,
+            nodes  = document.getElementById(pushDownDiv.pos).getElementsByTagName('*');
+        nodes = Array.prototype.slice.call(nodes, 0);
+        while(node = nodes.pop()) {
             //div, img and object nodes are most likely candidates
-            if (this.nodeName.match(/DIV|IMG|OBJECT/)) {
-                clientHeight = this.clientHeight || this.offsetHeight || null;
-                clientWidth = this.clientWidth || null;
-                if ((typeof clientHeight !== "null") && (clientHeight > 0) && (clientWidth === pushDownDiv.width)) {
-                    if (typeof FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] === "undefined") {
+            if (node.nodeName.match(/DIV|IMG|OBJECT/)) {
+                clientHeight = node.clientHeight || node.offsetHeight || null;
+                clientWidth = node.clientWidth || null;
+                if ((clientHeight !== null) && (clientHeight > 0) && (clientWidth === pushDownDiv.width)) {
+                    if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] === undefined) {
                         //acquire the  initial height of each asset and preserve it in a data structure
-                        FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] = clientHeight;
-                    } else if (FT.ads.VAR.pushDownFullWidthAssetsHeights[this.id] < clientHeight) {
+                        FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] = clientHeight;
+                    } else if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] < clientHeight) {
                         //asset appears to be expanding in height - set as watched asset for expanding page
-                        FT.ads.VAR.pushDownExpandingAsset = this;
+                        FT.ads.VAR.pushDownExpandingAsset = node;
                     }
-
                 }
             }
-        });
+        }
     }
 
     //we think we know the expanding asset so reset relevant DOM element height
@@ -2140,9 +2144,7 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
         creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
 
         expandableHeight = creativeOffsetHeight - pushDownDiv.expansionSubtrahend;
-
-        $('#' + pushDownDiv.animatedDivId).css(pushDownDiv.animatedProperty, expandableHeight);
-
+        document.getElementById(pushDownDiv.animatedDivId).style[pushDownDiv.animatedProperty] = expandableHeight + 'px';
     }
 
     setTimeout(function () {FT.ads.pollAdHeightAndExpand(adFormat, pauseInMilliseconds); }, pauseInMilliseconds);
@@ -2311,7 +2313,7 @@ clientAds = {
         /*jshint devel:true */
         if (this.debug === null) {
             this.debug = false;
-            if (FT.cookie.get("FTQA") && FT.cookie.get("FTQA").match(/debug/)) {
+            if (FT._ads.utils.cookie("FTQA") && FT._ads.utils.cookie("FTQA").match(/debug/)) {
                 this.debug = true;
             }
         }
