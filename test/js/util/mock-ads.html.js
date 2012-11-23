@@ -220,7 +220,7 @@ var LegacyPlaceholders = {
 function unitOrIntegrationMode(FTQAcookie, insertCookie)
 {
    //FTQAcookie = 'integration';
-   if (FTQAcookie  === undefined) {
+   if (!FTQAcookie) {
       FTQAcookie = '';
    }
    var result = 'unit';
