@@ -8,9 +8,10 @@
         });
 
         test('isArray method', function () {
-            expect(11);
+            expect(12);
             ok($.type(FT._ads.utils.isArray) === 'function', 'The function exists');
             ok(FT._ads.utils.isArray([]), 'Array returns true');
+            ok(!FT._ads.utils.isArray(), 'Call with no args returns false');
             ok(!FT._ads.utils.isArray(arguments), 'Array like object returns false');
             ok(!FT._ads.utils.isArray({}), 'Object returns false');
             ok(!FT._ads.utils.isArray("hello"), 'String returns false');
@@ -23,9 +24,10 @@
         });
 
         test('isString method', function () {
-            expect(10);
+            expect(11);
             ok($.type(FT._ads.utils.isString) === 'function', 'The function exists');
             ok(FT._ads.utils.isString("hello"), 'String returns true');
+            ok(!FT._ads.utils.isString(), 'Call with no args returns false');
             ok(!FT._ads.utils.isString([]), 'Array returns false');
             ok(!FT._ads.utils.isString({}), 'Object returns false');
             ok(!FT._ads.utils.isString(/hello/), 'Regex returns false');
@@ -37,10 +39,11 @@
         });
 
         test('isFunction method', function () {
-            expect(10);
+            expect(11);
             ok($.type(FT._ads.utils.isFunction) === 'function', 'The function exists');
             ok(FT._ads.utils.isFunction(function () {}), 'Function returns true');
             ok(!FT._ads.utils.isFunction("hello"), 'String returns false');
+            ok(!FT._ads.utils.isFunction(), 'Call with no args returns false');
             ok(!FT._ads.utils.isFunction([]), 'Array returns false');
             ok(!FT._ads.utils.isFunction({}), 'Object returns false');
             ok(!FT._ads.utils.isFunction(/hello/), 'Regex returns false');
@@ -51,10 +54,11 @@
         });
 
         test('isObject method', function () {
-            expect(10);
+            expect(11);
             ok($.type(FT._ads.utils.isObject) === 'function', 'The function exists');
             ok(FT._ads.utils.isObject({}), 'Object returns true');
             ok(!FT._ads.utils.isObject(function () {}), 'Function returns false');
+            ok(!FT._ads.utils.isObject(), 'Call with no args returns false');
             ok(!FT._ads.utils.isObject("hello"), 'String returns false');
             ok(!FT._ads.utils.isObject([]), 'Array returns false');
             ok(!FT._ads.utils.isObject(/hello/), 'Regex returns false');
