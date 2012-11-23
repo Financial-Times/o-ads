@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Test expand / collapse logic</title>
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-<script>
+   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+   <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <title>Test expand / collapse logic</title>
+   <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+   <link rel="stylesheet" href="../css/tests.css" media="screen" />
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/jquery-ft-namespacing.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>  <script>
 
 /*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
     nomen: true, plusplus: false, eqeqeq: true, bitwise: true, regexp: true,
@@ -42,17 +51,11 @@ var CheckAds = ['banlb', 'newssubs'];
 //setCookies();
 </script>
 
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script>
-FT.$.cookie = function() {};
-</script>
-<script src="../js/util/cookie.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 /*
@@ -96,7 +99,7 @@ function mockAdContent(URL, isGreyGif)
       '<img src="' + image + '" alt="Markets" border="0">',
       '</a>'
    ].join('');
-   FT.$('#' + pos).append(html);
+   $('#' + pos).append(html);
 }
 
 function mockNoAdContent(URL)
@@ -112,7 +115,7 @@ function mockNoAdContent(URL)
       '<img src="' + image + '" alt="Markets" border="0">',
       '</a>'
    ].join('');
-   FT.$('#' + pos).append(html);
+   $('#' + pos).append(html);
 }
 
 function mockNoAdInterstitialContent(URL)
@@ -134,7 +137,7 @@ function mockNoAdInterstitialContent(URL)
       html = html + '<!-- Begin Interstitial Ad -->';
    }
 
-   FT.$('#' + pos).append(html);
+   $('#' + pos).append(html);
 }
 
 function mockAdInterstitialContent(URL, isGreyGif)
@@ -151,15 +154,15 @@ function mockAdInterstitialContent(URL, isGreyGif)
       '</a>',
       '<!-- Begin Interstitial Ad -->'
    ].join('');
-   FT.$('#' + pos).append(html);
+   $('#' + pos).append(html);
 }
 
 function resetFixtures(show)
 {
-   var fixtureNow = FT.$('#fixture').html();
-   FT.$('#fixture').html(fixture);
+   var fixtureNow = $('#fixture').html();
+   $('#fixture').html(fixture);
    FT.ads.initDFP();
-   var fixtureAfter = FT.$('#fixture').html();
+   var fixtureAfter = $('#fixture').html();
    if (show)
    {
       alert("Fixture: " + fixture + "\nFixture Now: " + fixtureNow + "\nFixture After: " + fixtureAfter);
@@ -177,12 +180,11 @@ test("position collapses when ad not returned in time", function ()
    // |   |         |             |            |
    //    Collapse  Test Results  Ads Arrive  timeIntervalTolerance
 
-   FT.lib.writeScript = function (URL)
-   {
+   FT._ads.utils.writeScript = function (URL){
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -193,8 +195,8 @@ test("position collapses when ad not returned in time", function ()
    FT.ads.collapsePositionIfNoAd("banlb");
    FT.ads.collapsePositionIfNoAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -210,13 +212,13 @@ test("position collapses when grey gif returned", function ()
    // |  |           |           |                 |
    //    Ads Arrive  Collapse?  Test Results     timeIntervalTolerance
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockAdContent(URL, true); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -227,8 +229,8 @@ test("position collapses when grey gif returned", function ()
    FT.ads.collapsePositionIfNoAd("banlb");
    FT.ads.collapsePositionIfNoAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -244,13 +246,13 @@ test("position collapses when ft-no-ad gif returned", function ()
    // |  |           |           |                 |
    //    Ads Arrive  Collapse?  Test Results     timeIntervalTolerance
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockNoAdContent(URL); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -261,8 +263,8 @@ test("position collapses when ft-no-ad gif returned", function ()
    FT.ads.collapsePositionIfNoAd("banlb");
    FT.ads.collapsePositionIfNoAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'timeout collapse should set banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -278,13 +280,13 @@ test("position does not expand for grey gif when returned before collapse", func
    // |  |           |           |                      |
    //    Ads Arrive  Collapse?  timeIntervalTolerance  Test Results
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockAdContent(URL, true); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;            // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.just_after_soon; // when to check to expand the position
@@ -298,8 +300,8 @@ test("position does not expand for grey gif when returned before collapse", func
    FT.ads.expandPositionIfAd("banlb");
    FT.ads.expandPositionIfAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -315,13 +317,13 @@ test("position does not expand for ft-no-ad gif when returned before collapse", 
    // |  |           |           |                      |
    //    Ads Arrive  Collapse?  timeIntervalTolerance  Test Results
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockNoAdContent(URL); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;            // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.just_after_soon; // when to check to expand the position
@@ -335,8 +337,8 @@ test("position does not expand for ft-no-ad gif when returned before collapse", 
    FT.ads.expandPositionIfAd("banlb");
    FT.ads.expandPositionIfAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -354,13 +356,13 @@ test("position does not expand for grey gif when returned after collapse", funct
    //              timeIntervalTolerance
 
    var SaveURL = [];
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       SaveURL.push(URL);
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;            // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.just_after_soon; // when to check to expand the position
@@ -379,8 +381,8 @@ test("position does not expand for grey gif when returned after collapse", funct
    FT.ads.expandPositionIfAd("banlb");
    FT.ads.expandPositionIfAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -398,13 +400,13 @@ test("position does not expand for ft-no-ad gif when returned after collapse", f
    //              timeIntervalTolerance
 
    var SaveURL = [];
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       SaveURL.push(URL);
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    FT.ads.timeoutTolerance      = TEST.soon;            // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.just_after_soon; // when to check to expand the position
@@ -423,8 +425,8 @@ test("position does not expand for ft-no-ad gif when returned after collapse", f
    FT.ads.expandPositionIfAd("banlb");
    FT.ads.expandPositionIfAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
+   equal($('#banlb').css('display'), 'none',                                                 'grey gif should leave banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'grey gif should leave newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -441,12 +443,12 @@ test("position expands if ad comes back after collapse", function ()
    //    Collapse  Ads Arrive       timeIntervalTolerance  Test Results
 
    var SaveURL = [];
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       SaveURL.push(URL);
    };
 
-   FT.$('#banlb, #newssubs').css('display', 'none');
+   $('#banlb, #newssubs').css('display', 'none');
 
    FT.ads.timeoutTolerance      = TEST.soon;       // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.after_soon; // when to check to expand the position
@@ -465,8 +467,8 @@ test("position expands if ad comes back after collapse", function ()
    FT.ads.expandPositionIfAd("banlb");
    FT.ads.expandPositionIfAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'interval expand should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'interval expand should set newssubs display:');
+   equal($('#banlb').css('display'), 'block',                                                'interval expand should set banlb display:');
+   equal($('#newssubs').css('display'), 'block',                                             'interval expand should set newssubs display:');
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
 });
@@ -482,22 +484,22 @@ test("position is not collapsed or zero height when there is an ad with an inter
    // |  |           |           |                 |
    //    Ads Arrive  Collapse?  Test Results     timeIntervalTolerance
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockAdInterstitialContent(URL); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    // These tests only while legacy pages still exist.
-   equal(FT.$('#ad-placeholder-banlb').css('display'), 'block',                                 'placeholder banlb should start with display:');
+   equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'placeholder banlb should start with display:');
    // IE returns padding 10px but firefox gives 10px 10px 10px 10px so we use a regex to handle both cases
-   matches(FT.$('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
-   differs(FT.$('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
-   equal(FT.$('#page-header-ad').css('display'), 'block',                                       'page-header-ad should start with display:');
-   matches(FT.$('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
-   differs(FT.$('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
+   matches($('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
+   differs($('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
+   equal($('#page-header-ad').css('display'), 'block',                                       'page-header-ad should start with display:');
+   matches($('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
+   differs($('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
 
    FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -510,18 +512,18 @@ test("position is not collapsed or zero height when there is an ad with an inter
    FT.ads.collapsePositionIfNoAd("banlb");
    FT.ads.collapsePositionIfNoAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'timeout collapse should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'timeout collapse should set newssubs display:');
+   equal($('#banlb').css('display'), 'block',                                                'timeout collapse should set banlb display:');
+   equal($('#newssubs').css('display'), 'block',                                             'timeout collapse should set newssubs display:');
 
    // These tests only while legacy pages still exist.
-   equal(FT.$('#ad-placeholder-banlb').css('display'), 'block',                                 'timeout collapse should set placeholder banlb display:');
+   equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'timeout collapse should set placeholder banlb display:');
    // IE returns padding 10px but firefox gives 10px 10px 10px 10px so we use a regex to handle both cases
-   matches(FT.$('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
-   differs(FT.$('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
+   matches($('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
+   differs($('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
 
-   equal(FT.$('#page-header-ad').css('display'), 'block',                                       'timeout collapse should set page-header-ad display:');
-   matches(FT.$('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
-   differs(FT.$('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
+   equal($('#page-header-ad').css('display'), 'block',                                       'timeout collapse should set page-header-ad display:');
+   matches($('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
+   differs($('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
 
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
@@ -538,21 +540,21 @@ test("position is zero height when there is no ad but an interstitial is present
    // |  |           |           |                 |
    //    Ads Arrive  Collapse?  Test Results     timeIntervalTolerance
 
-   FT.lib.writeScript = function (URL)
+   FT._ads.utils.writeScript = function (URL)
    {
       mockNoAdInterstitialContent(URL); // Ads injected immediately
    };
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'banlb should start with display:');
-   equal(FT.$('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
+   equal($('#banlb').css('display'), 'block',                                                'banlb should start with display:');
+   equal($('#newssubs').css('display'), 'block',                                             'newssubs should start with display:');
 
    // These tests only while legacy pages still exist.
-   equal(FT.$('#ad-placeholder-banlb').css('display'), 'block',                                 'placeholder banlb should start with display:');
-   matches(FT.$('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
-   differs(FT.$('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
-   equal(FT.$('#page-header-ad').css('display'), 'block',                                       'page-header-ad should start with display:');
-   matches(FT.$('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
-   differs(FT.$('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
+   equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'placeholder banlb should start with display:');
+   matches($('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
+   differs($('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
+   equal($('#page-header-ad').css('display'), 'block',                                       'page-header-ad should start with display:');
+   matches($('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
+   differs($('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
 
    FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
    FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -565,17 +567,17 @@ test("position is zero height when there is no ad but an interstitial is present
    FT.ads.collapsePositionIfNoAd("banlb");
    FT.ads.collapsePositionIfNoAd("newssubs");
 
-   equal(FT.$('#banlb').css('display'), 'block',                                                'timeout collapse should set banlb display:');
-   equal(FT.$('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
+   equal($('#banlb').css('display'), 'block',                                                'timeout collapse should set banlb display:');
+   equal($('#newssubs').css('display'), 'none',                                              'timeout collapse should set newssubs display:');
 
    // These tests only while legacy pages still exist.
-   equal(FT.$('#ad-placeholder-banlb').css('display'), 'block',                                 'timeout collapse should set placeholder banlb display:');
-   differs(FT.$('#ad-placeholder-banlb').css('padding'), /^(0px ?)*$/,                           'timeout collapse should set placeholder banlb padding');
-   equal(FT.$('#ad-placeholder-banlb').css('height'), '0px',                                    'timeout collapse should set placeholder banlb height');
+   equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'timeout collapse should set placeholder banlb display:');
+   differs($('#ad-placeholder-banlb').css('padding'), /^(0px ?)*$/,                           'timeout collapse should set placeholder banlb padding');
+   equal($('#ad-placeholder-banlb').css('height'), '0px',                                    'timeout collapse should set placeholder banlb height');
 
-   equal(FT.$('#page-header-ad').css('display'), 'block',                                       'timeout collapse should set page-header-ad display:');
-   differs(FT.$('#page-header-ad').css('padding'), /^(0px ?)*$/,                                 'timeout collapse should set page-header-ad padding');
-   equal(FT.$('#page-header-ad').css('height'), '0px',                                          'timeout collapse should set page-header-ad height');
+   equal($('#page-header-ad').css('display'), 'block',                                       'timeout collapse should set page-header-ad display:');
+   differs($('#page-header-ad').css('padding'), /^(0px ?)*$/,                                 'timeout collapse should set page-header-ad padding');
+   equal($('#page-header-ad').css('height'), '0px',                                          'timeout collapse should set page-header-ad height');
 
    FT.ads.clearAllTimeouts();
    FT.ads.clearAllIntervals();
@@ -625,7 +627,7 @@ document.write("Time Intervals: " + [TEST.soon, TEST.just_after_soon, TEST.after
 		<div class="advertising" id="refresh"></div>
 	</div>
 	<script>
-fixture = FT.$('#fixture').html();
+fixture = $('#fixture').html();
       </script>
 </body>
 </html>

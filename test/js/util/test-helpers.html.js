@@ -222,10 +222,10 @@ function debug(msg)
 function initCookies(FTQA)
 {
    FTQA = FTQA || "debug,dfp_ads,interval=25,timeout=20000";
-   FT.cookies.FTQA = FTQA;
-   FT.cookies.FT_U = undefined;
-   FT.cookies.AYSC = undefined;
-   FT.cookies.rsi_segs = undefined;
+   FT._ads.utils.cookies.FTQA = FTQA;
+   FT._ads.utils.FT_U = undefined;
+   FT._ads.utils.AYSC = undefined;
+   FT._ads.utils.rsi_segs = undefined;
 }
 
 function locateDiv(pos, prefix)

@@ -6,122 +6,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Corp Test DFP Ad on a page - corporate access popup</title>
     <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-    <style>
-    #banlb-not {
-        height: 100px;
-        width: 300px;
-        background-color: pink;
-        border: 1px solid black;
-    }
+    <link rel="stylesheet" href="../css/tests.css" media="screen" />
+    <script>
+        /*globals document, equal, expect, jQuery, ok, test,
+            testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
+            mockAdContent, MockSubdir
+        */
 
-    #mpu-not {
-        height: 200px;
-        width: 300px;
-        background-color: blue;
-        border: 1px solid black;
-    }
+        /*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+           banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+           hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+           refreshTimer, regex, request, requestNewssubs, response,
+           timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
+           writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
+        */
 
-    a img {
-        border: none;
-    }
+        var FT = FT || {};
+        FT.env = {
+           "dfp_site": "test.5887.dev",
+           "dfp_zone": "build-url-test",
+           "asset":    "page",
 
-    div {
-        border: 1px solid black;
-    }
+           // Override timeout values to ensure the ad calls have time to come back
+           // before the positions are collapsed. This is to ensure we can test the page successfully.
+           "timeoutTolerance": 1500000,
+           "timeIntervalTolerance": 3000000
+        };
+        // Mock the properties object so we are considered to be non-live
+        FT.Properties = { 'ENV': "ci" };
 
-    .advertising {
-        border: 1px solid red;
-    }
+        var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+        var MockSubdir = false;
+    </script>
 
-    .tempAds {
-        display: none;
-    }
-
-    .warning {
-        background-color: red;
-    }
-
-    #feedback {
-        border: none;
-    }
-
-    #xpopad {
-        display: none;
-    }
-</style>
-
-<script>
-
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3 */
-
-/*globals document, equal, expect, jQuery, ok, test,
-    testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
-    mockAdContent, MockSubdir
-*/
-
-/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
-   banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
-   hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
-   refreshTimer, regex, request, requestNewssubs, response,
-   timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
-   writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
-*/
-
-var FT = FT || {};
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "build-url-test",
-   "asset":    "page",
-
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-
-</script>
-
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script>
-//FT.$.cookie = function(){};
-</script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-
-<script>
-var MockSubdir = false;
-</script>
-
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/util/mock-ads.html.js"></script>
+    
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../js/util/jquery-ft-namespacing.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../js/util/Lib.js"></script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
 //initCookies();
 
 var Tests = {
-   'intro': TestMockAd.intro,
-   'banlb': TestMockAd.banlb3,
-   'newssubs': TestMockAd.newssubs2,
-   'tlbxrib': TestMockAd.tlbxrib,
-   'mktsdata': TestMockAd.mktsdata,
-   'hlfmpu': TestMockAd.hlfmpu,
-   'doublet': TestMockAd.doublet,
-   'refresh': TestMockAd.refresh
+   'intro': TestMockAd.intro,'banlb': TestMockAd.banlb3,'newssubs': TestMockAd.newssubs2,'tlbxrib': TestMockAd.tlbxrib,'mktsdata': TestMockAd.mktsdata,'hlfmpu': TestMockAd.hlfmpu,'doublet': TestMockAd.doublet,'refresh': TestMockAd.refresh
 };
 
 var Plan = {};
@@ -129,16 +69,14 @@ Plan.nextTestPlan =  'ad-on-a-page-legacy.js.test.htm';
 QUnitChainer.init(Plan);
 
 FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL){
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
-
 //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookie.get("FTQA"));
+var testMode = unitOrIntegrationMode(FT._ads.utils.cookie("FTQA"));
 
 if (testMode === 'unit') {
-   //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
+   //if unit test, then we override writeScript with the call to Mocking
+   FT._ads.utils.writeScript = function (URL){
+       mockAdContent(URL, Tests); // Ads injected immediately
+    };
  //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
    FT.corppop.HTMLAdData.urlStem = '../images/';
 }
@@ -147,60 +85,43 @@ if (testMode === 'unit') {
 initCookies();
 
 var mockCookies = {};
-var mockCookieParams = {};
-var mockFTCookie = {
-    get: function(n) {
-        return mockCookies[n];
-    },
-    getParam: function(n, p) {
-        if ( mockCookieParams[n] && mockCookieParams[n][p] ) {
-            return mockCookieParams[n][p];
-        }
-    }
-};
-
 //overrides the FTQA value but that doesn't
 //stop us from using this to define testing mode
 //prior to this point
 mockCookies.FTQA = "ord=123123123";
-mockCookieParams.FTQA = { ord : "123123123" };
 mockCookies.AYSC = '_22P0Tools_2712345_';
-mockCookieParams.AYSC = {22 : "P0Tools", 27 : "12345"};
 mockCookies.cookieconsent = "accepted";
-
-
-FT.cookie = mockFTCookie;
 
 module("Ads", {
     setup: function() {
-
+        FT._ads.utils.cookies = mockObject(mockCookies);
     }
 });
 
 test("Page Environment", function (){
-   ok(FT.env,                                                                                      "FT.env should be defined");
-   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
-   ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
+   ok(FT.env, "FT.env should be defined");
+   ok(FT.env.useDFP, "FT.env.useDFP should be set to true");
+   ok(!FT.env.isLegacyAPI, "legacy API should not be used");
 });
 
 test("intro", function ()
 {
    expect(1);
-   equal(FT.$('#intro_overlay').length, 1,                                                      'intro ad should be inserted into the DOM with count');
+   equal(FT.$('#intro_overlay').length, 1, 'intro ad should be inserted into the DOM with count');
 });
 
 test("banlb", function ()
 {
    expect(5);
-   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
+   ok(true, "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
    testImageAd('banlb', 3);
 });
 
 test("corppop off banlb", function ()
 {
    expect(2);
-   equal(FT.$('#corppop_overlay').length, 1,                                                    'div with #corppop #corpop_overlay should have count');
-   equal(FT.$('.corppop_single_occurence').length, 1,                                           'there should only be 1 corp pop ad');
+   equal(FT.$('#corppop_overlay').length, 1, 'div with #corppop #corpop_overlay should have count');
+   equal(FT.$('.corppop_single_occurence').length, 1, 'there should only be 1 corp pop ad');
 });
 
 test("newssubs", function ()
@@ -220,7 +141,7 @@ test('mktsdata', function ()
    expect(5);
    testImageAd('mktsdata');
    // test that we're getting the correct template-configured mktsdata ad back:
-   equal(FT.$('#mktsdata span.sponsor').length, 1,                                              'should have a span.sponsor with count');
+   equal(FT.$('#mktsdata span.sponsor').length, 1, 'should have a span.sponsor with count');
 });
 
 test("hlfmpu", function ()
@@ -232,16 +153,16 @@ test("hlfmpu", function ()
 test("doublet", function ()
 {
    expect(2);
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').length, 1,                             'doublet_first should occur with count');
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1,     'doublet_last should be next with count');
+   equal(FT.$('#doublet .doublet-wrapper.doublet_first').length, 1, 'doublet_first should occur with count');
+   equal(FT.$('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1, 'doublet_last should be next with count');
 });
 
 test("refresh", function ()
 {
    expect(9);
    testRefreshAd('refresh',undefined);
-   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767',                      'refresh should correctly store obj value as');
-   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000,                                  'refresh should correctly store refreshTimer value as');
+   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767', 'refresh should correctly store obj value as');
+   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000, 'refresh should correctly store refreshTimer value as');
 });
 
       </script>
@@ -366,7 +287,7 @@ FT.ads.request("tlbxrib");
 								<script>
 FT.ads.request("mktsdata");
                         </script>
-								<!--- </span> --->
+								 </span> -->
 							</div>
 						</div>
 					</div>

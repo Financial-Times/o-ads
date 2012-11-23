@@ -6,45 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>No ads Test DFP Ad on a page</title>
 <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-<style>
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
-
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
-
-a img {
-	border: none;
-}
-
-div {
-	border: 1px solid black;
-}
-
-.advertising {
-	border: 1px solid red;
-}
-
-.tempAds {
-	display: none;
-}
-
-.warning {
-	background-color: red;
-}
-
-#feedback {
-	border: none;
-}
-</style>
+<link rel="stylesheet" href="../css/tests.css" media="screen" />
 
 <script>
 
@@ -84,27 +46,27 @@ var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', '
 
       </script>
 
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script>
-FT.$.cookie = function() {};
-</script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/jquery-ft-namespacing.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>  
 
-<script>
-//cookies can now be passed within a  get string to the page
-setCookies();
-var MockSubdir = false;
-</script>
-
-<script src="../js/util/cookie.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/util/mock-ads.html.js"></script>
+    <script>
+    //cookies can now be passed within a  get string to the page
+    setCookies();
+    var MockSubdir = false;
+    </script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
@@ -129,17 +91,14 @@ QUnitChainer.init(Plan);
 
 
 FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL)
-{
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
-
 //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookie.get("FTQA"));
+var testMode = unitOrIntegrationMode(FT._ads.utils.cookie("FTQA"));
 
 if (testMode === 'unit') {
    //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
+   FT._ads.utils.writeScript = function (URL) {
+       mockAdContent(URL, Tests); // Ads injected immediately
+    };
 }
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
@@ -149,7 +108,7 @@ var mockCookies = {};
 
 module("Ads", {
     setup: function() {
-        mockCookies = {};
+        FT._ads.utils.cookies = mockObject(mockCookies);
     }
 });
 
@@ -180,8 +139,8 @@ test("interstitial off banlb when no ads targeted", function ()
 test("corppop off banlb when no ads targeted", function ()
 {
    expect(2);
-   equal(FT.$('#corppop_overlay').length, 0,                                                    '#corpop_overlay should not be in the DOM');
-   equal(FT.$('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
+   equal($('#corppop_overlay').length, 0,                                                    '#corpop_overlay should not be in the DOM');
+   equal($('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
 });
 
 test("companion newssubs for banlb when no ads targeted", function ()

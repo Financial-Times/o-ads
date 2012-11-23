@@ -7,49 +7,7 @@
 <title>Test Ad on a page - Locally served corporate access
 	popup with no DFP ads booked</title>
 <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-<style>
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
-
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
-
-a img {
-	border: none;
-}
-
-div {
-	border: 1px solid black;
-}
-
-.advertising {
-	border: 1px solid red;
-}
-
-.tempAds {
-	display: none;
-}
-
-.warning {
-	background-color: red;
-}
-
-#feedback {
-	border: none;
-}
-
-#xpopad {
-	display: none;
-}
-</style>
+<link rel="stylesheet" href="../css/tests.css" media="screen" />
 
 <script>
 
@@ -92,9 +50,6 @@ var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', '
 <script src="../js/util/page-helpers.html.js"></script>
 <script src="../lib/jquery/jquery-1.7.2.js"></script>
 <script src="../js/util/jquery-ft-namespacing.js"></script>
-<script>
-FT.$.cookie = function() {};
-</script>
 <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
 <script src="../js/util/qunitMock.lib.js"></script>
 
@@ -106,11 +61,11 @@ var MockSubdir = false;
 createConsentCookie();
 </script>
 
-<script src="../js/util/cookie.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/util/mock-ads.html.js"></script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
@@ -132,16 +87,15 @@ Plan.nextTestPlan =  'ad-on-a-page-localcorpop-amo2.js.test.htm';
 QUnitChainer.init(Plan);
 
 FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL) {
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
 
 //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookie.get("FTQA"));
+var testMode = unitOrIntegrationMode(FT._ads.utils.cookie("FTQA"));
 
 if (testMode === 'unit') {
    //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
+   FT._ads.utils.writeScript = function (URL) {
+       mockAdContent(URL, Tests); // Ads injected immediately
+    };
    //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
    FT.corppop.HTMLAdData.urlStem = '';
 }
@@ -150,18 +104,10 @@ if (testMode === 'unit') {
 //initCookies();
 
 var mockCookies = {};
-function mock$cookie(n, v) {
-    if ( FT.$.type(n) !== "undefined" && FT.$.type(v) === "undefined" ) {
-        return mockCookies[n];
-    } else {
-        mockCookies[n] = v;
-    }
-}
-
 module("Ads", {
     setup: function() {
-        mockCookies = {};
-        FT.$.cookie = mockFunction(mock$cookie);
+        clearMockCookies();
+        FT._ads.utils.cookies = mockObject(mockCookies);
     }
 });
 
@@ -187,19 +133,19 @@ test("interstitial off banlb", function (){
    //the decoupling of corppop from the adserver means that we will no longer be able to detect corpops via the adserver logic
    //and therefore whether interstitial ads should be served or not.
    //consequently interstitials AND corppops may appear, though the number of interstitials should never be more than 1
-   var numberInterstitials = FT.$('#interstitial_overlay').length;
+   var numberInterstitials = $('#interstitial_overlay').length;
    ok(numberInterstitials < 2, 'no more than one interstitial ad should not be present in DOM');
 
-   var totalPopAds = FT.$('#popad').length;
-   var totalPopAdsinCorpClass = FT.$('.corpSignPopad').length;
+   var totalPopAds = $('#popad').length;
+   var totalPopAdsinCorpClass = $('.corpSignPopad').length;
 
    testPopAds (totalPopAds,totalPopAdsinCorpClass);
 
 });
 
 //test("corppop html ad injected into banlb", function () {
-//    equal(FT.$('#corppop_overlay').length, 1, 'div with #corppop #corppop_overlay should have count');
-//    equal(FT.$('.corpSignPopad').length, 1, 'there should only be 1 corp pop ad');
+//    equal($('#corppop_overlay').length, 1, 'div with #corppop #corppop_overlay should have count');
+//    equal($('.corpSignPopad').length, 1, 'there should only be 1 corp pop ad');
 //
 //    mockCookies.AYSC = "_22PL0AAAAA_2712345_";
 //    testAYSC22(FT.cookie.get("AYSC"),FT.ads.CONST.SubsLevelReplaceLookup);
