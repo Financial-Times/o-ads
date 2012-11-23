@@ -11,32 +11,13 @@
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+<link rel="stylesheet" href="../css/tests.css" media="screen" />
 <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
 <script src="../js/util/QUnitChainer.js"></script>
 <script src="../js/util/qunitMock.lib.js"></script>
 <script src="../lib/jquery/jquery-1.7.2.js"></script>
 <script src="../lib/jquery/jquery.cookie.js"></script>
 <script src="../js/util/jquery-ft-namespacing.js"></script>
-
-<style>
-#banlb {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
-
-#mpu {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
-
-a img {
-	border: none;
-}
-</style>
 
 <script>
 
@@ -221,28 +202,18 @@ function getUUIDFromString(stringForExtractingUUID) {
 	return '';
 }
 
-var mockCookies = {}, mockCookieParams = {};
-var mockFTCookie = {
-    get: function(n) {
-        return mockCookies[n];
-    },
-    getParam: function(n, p) {
-        if ( mockCookieParams[n] && mockCookieParams[n][p] ) {
-            return mockCookieParams[n][p];
-        }
-    }
-};
-FT.cookie = mockFTCookie;
+var mockCookies = {};
 </script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script>
-// TODO mock a referring url
-//FT.ads.baseAdvert['referrer'] = "http://www.ft.com/home/uk" ;
-// mock keywords
-//FT.ads.baseAdvert['keyword'] = "ivi/lon" ;
-</script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+  <script>
+    // TODO mock a referring url
+    //FT.ads.baseAdvert['referrer'] = "http://www.ft.com/home/uk" ;
+    // mock keywords
+    //FT.ads.baseAdvert['keyword'] = "ivi/lon" ;
+  </script>
 </head>
 <body>
 	<h1 id="qunit-header">DartForPublishers.js - URL has valid UUID.</h1>
@@ -254,7 +225,7 @@ FT.cookie = mockFTCookie;
 function beginNewPage(message, Args) {
     Args = Args || {};
     Args.env = Args.env || {};
-    FT.env = FT.$.extend({}, {
+    FT.env = $.extend({}, {
         'dfp_site': 'test.5887.dev',
         'dfp_zone': 'build-url-test'
     }, Args.env);
@@ -274,7 +245,7 @@ function maybeInitFixture() {
 
 function testBuildURL(message, Args) {
     Args = Args || {};
-    Args = FT.$.extend({}, TEST.DefaultAdTag, Args);
+    Args = $.extend({}, TEST.DefaultAdTag, Args);
 	FT.ads.setInitialAdState(Args.pos);
 	var url = FT.ads.buildURL(Args.pos);
 	ok(true, "== BEGIN: " + message + " [" + url + "]");
@@ -286,11 +257,10 @@ function getCurrentYear() {
     return currDate.getFullYear();
 }
 
-FT.$(document).ready(function () {
+$(document).ready(function () {
    module("DartForPublishers", {
        setup: function() {
-           mockCookies = {};
-           FT.cookie = mockObject(mockFTCookie);
+           FT._ads.utils.cookies = mockObject(mockCookies);
        }
    });
 
@@ -311,14 +281,12 @@ FT.$(document).ready(function () {
 
 	   beginNewPage('build URL1' );
        mockCookies.FT_U = "_EID=2548659_";
-       mockCookieParams.FT_U = { EID:"2548659" };
 	   url = testBuildURL("both pageUUID and getUUIDFromString defined. pageUUID is empty, url has uuid.");
 	   matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 	   pageUUID = undefined;
 	   beginNewPage('build URL2' );
        mockCookies.FT_U = "_EID=2548659_";
-       mockCookieParams.FT_U = { EID:"2548659" };
 	   url = testBuildURL("pageUUID undefined, getUUIDFromString defined. URL contains UUID.");
 	   matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL contains uuid coming from the URL. It also contains timestamp.");
    });

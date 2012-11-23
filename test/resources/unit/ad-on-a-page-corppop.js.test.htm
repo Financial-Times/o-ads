@@ -83,20 +83,16 @@ if (testMode === 'unit') {
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
 initCookies();
-
-var mockCookies = {};
 //overrides the FTQA value but that doesn't
 //stop us from using this to define testing mode
 //prior to this point
+var mockCookies = {};
 mockCookies.FTQA = "ord=123123123";
 mockCookies.AYSC = '_22P0Tools_2712345_';
 mockCookies.cookieconsent = "accepted";
+FT._ads.utils.cookies = mockObject(mockCookies);
 
-module("Ads", {
-    setup: function() {
-        FT._ads.utils.cookies = mockObject(mockCookies);
-    }
-});
+module("Ads");
 
 test("Page Environment", function (){
    ok(FT.env, "FT.env should be defined");
@@ -107,7 +103,7 @@ test("Page Environment", function (){
 test("intro", function ()
 {
    expect(1);
-   equal(FT.$('#intro_overlay').length, 1, 'intro ad should be inserted into the DOM with count');
+   equal($('#intro_overlay').length, 1, 'intro ad should be inserted into the DOM with count');
 });
 
 test("banlb", function ()
@@ -120,8 +116,8 @@ test("banlb", function ()
 test("corppop off banlb", function ()
 {
    expect(2);
-   equal(FT.$('#corppop_overlay').length, 1, 'div with #corppop #corpop_overlay should have count');
-   equal(FT.$('.corppop_single_occurence').length, 1, 'there should only be 1 corp pop ad');
+   equal($('#corppop_overlay').length, 1, 'div with #corppop #corpop_overlay should have count');
+   equal($('.corppop_single_occurence').length, 1, 'there should only be 1 corp pop ad');
 });
 
 test("newssubs", function ()
@@ -141,7 +137,7 @@ test('mktsdata', function ()
    expect(5);
    testImageAd('mktsdata');
    // test that we're getting the correct template-configured mktsdata ad back:
-   equal(FT.$('#mktsdata span.sponsor').length, 1, 'should have a span.sponsor with count');
+   equal($('#mktsdata span.sponsor').length, 1, 'should have a span.sponsor with count');
 });
 
 test("hlfmpu", function ()
@@ -153,8 +149,8 @@ test("hlfmpu", function ()
 test("doublet", function ()
 {
    expect(2);
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').length, 1, 'doublet_first should occur with count');
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1, 'doublet_last should be next with count');
+   equal($('#doublet .doublet-wrapper.doublet_first').length, 1, 'doublet_first should occur with count');
+   equal($('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1, 'doublet_last should be next with count');
 });
 
 test("refresh", function ()

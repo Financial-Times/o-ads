@@ -1,4 +1,3 @@
-
 /*members HTMLAds, HTMLAdData, urlStem, injectionDiv, injectionClass,
 prototype, buildAdURL, match, urlStem, getHTMLAd, open, setRequestHeader,
 userAgent, send, status, responseText, getElementById, createElement,
@@ -6,7 +5,7 @@ isCorporateUser, match, cor, lv1, lv2, setAttribute, className, innerHTML,
 appendChild, timeOut, setTime, getTime, toGMTString, cookie, location, hostname,
 timeOutCookieName,timeOutCookieVal, timeOutCookieLife, log, createCorppopCookie,
 type, src, style, display, injectionParentDiv, injectionLegacyParentDiv, toUpperCase,
-urlStemClassicAMO, Properties, CORPORATE_AMO_BASE, reg */
+urlStemClassicAMO, Properties, CORPORATE_AMO_BASE, reg, _ads, utils, expires */
 
 FT.HTMLAds = function () {
 
@@ -133,11 +132,8 @@ FT.HTMLAds.prototype.createCorppopCookie = function (timeoutTime) {
 	name = this.HTMLAdData.timeOutCookieName;
 	val = this.HTMLAdData.timeOutCookieVal;
 	date = new Date();
-
 	date.setTime(date.getTime() + (timeoutTime));
-	expires = "; expires=" + date.toGMTString();
-	document.cookie = name + "=" + val + expires + "; domain=.ft.com; path=/";
-
+    FT._ads.utils.cookie(name, val, {expires: date});
 };
 
 //only show the ad if the Corppop cookie has timed out and has been deleted
