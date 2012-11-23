@@ -74,7 +74,8 @@
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
-    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop, splice  */
+    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop, 
+    splice, getUUIDFromString  */
 
 /* The Falcon Ads API follows from here. */
 
