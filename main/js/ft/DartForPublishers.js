@@ -1362,7 +1362,7 @@ FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
             } else {
                 adContainer.div.style.display = "none";
             }
-            bodyClasses.push(" no-" + adContainer.name)
+            bodyClasses.push(" no-" + adContainer.name);
             document.body.className = bodyClasses.join(' ');
         }
     } else {
