@@ -304,7 +304,7 @@ FT.Advertising.prototype.requestDFP = function (pos) {
         URL = this.buildURL(pos);
         if (URL) {
             self = this;
-            FT.lib.writeScript(URL);
+            FT._ads.utils.writeScript(URL);
             if (this.adverts[pos].state.alwaysHide) {
                 this.collapse(pos);
             } else {
@@ -1026,7 +1026,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
             this.baseAdvert.uuid = pageUUID;
         }
     } else {
-        if (FT._ads.utils.isFunction(getUUIDFromString)) { //check if common_raw.js is visible.
+        if (FT._ads.utils.isFunction(window.getUUIDFromString)) { //check if common_raw.js is visible.
             docUUID = getUUIDFromString(document.location.toString());
             if (docUUID !== null && docUUID !== '') {
                 this.baseAdvert.uuid = docUUID;
@@ -1362,7 +1362,8 @@ FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
             } else {
                 adContainer.div.style.display = "none";
             }
-            document.body.className = bodyClasses.push(" no-" + adContainer.name).join(' ');
+            bodyClasses.push(" no-" + adContainer.name)
+            document.body.className = bodyClasses.join(' ');
         }
     } else {
         why = "collapse prevented by legacy handler";
