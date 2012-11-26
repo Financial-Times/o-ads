@@ -12,45 +12,34 @@
     <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
     <script src="../js/util/QUnitChainer.js"></script>
     <script src="../js/util/qunitMock.lib.js"></script>
-    <script src="../js/util/jquery-ft-namespacing.js"></script>
     <script src="../js/util/test-helpers.html.js"></script>
     <script src="../js/util/page-helpers.html.js"></script>
     <script src="../lib/sinon/sinon-1.1.1.js"></script>
-    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>  <script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>  
+    <script>
+   /*globals asyncTest, equal, expect, initCookies, jQuery, mockAdContent,
+       resetFixtures, setTimeout, start, xasyncTest, test, differs, matches
+   */
 
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: false, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3
-*/
+   /*members ENV, Properties, ads, append, banlb, clearAllIntervals,
+       clearAllTimeouts, css, dfp_site, dfp_zone, env, html, initDFP, join, lib,
+       match, newssubs, request, timeIntervalTolerance, timeoutTolerance,
+       writeScript, lengthen, soon, floor, just_after_soon, after_soon, later,
+       too_long, never, write, collapsePositionIfNoAd, expandPositionIfAd,
+       push, length, isLegacyAPI
+   */
 
-/*globals asyncTest, equal, expect, initCookies, jQuery, mockAdContent,
-    resetFixtures, setTimeout, start, xasyncTest, test, differs, matches
-*/
+   var FT = {};
+   FT.env = {
+      "dfp_site": "test.5887.dev",
+      "dfp_zone": "build-url-test"
+   };
 
-/*members ENV, Properties, ads, append, banlb, clearAllIntervals,
-    clearAllTimeouts, css, dfp_site, dfp_zone, env, html, initDFP, join, lib,
-    match, newssubs, request, timeIntervalTolerance, timeoutTolerance,
-    writeScript, lengthen, soon, floor, just_after_soon, after_soon, later,
-    too_long, never, write, collapsePositionIfNoAd, expandPositionIfAd,
-    push, length, isLegacyAPI
-*/
+   // Mock the properties object so we are considered to be non-live
+   FT.Properties = { 'ENV': "ci" };
+   var CheckAds = ['banlb', 'newssubs'];
 
-var FT = {};
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "build-url-test"
-};
-
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['banlb', 'newssubs'];
-
-</script>
-<script>
-//cookies can now be passed within a  get string to the page
-//setCookies();
-</script>
-
+   </script>
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
     <script src="../js/ft/HTMLAds.js"></script>

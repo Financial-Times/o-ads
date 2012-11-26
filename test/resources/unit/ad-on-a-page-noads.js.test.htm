@@ -1,67 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>No ads Test DFP Ad on a page</title>
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-<link rel="stylesheet" href="../css/tests.css" media="screen" />
-
-<script>
-
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3 */
-
-/*globals RegExp, equal, expect, initTest, jQuery, locateDiv, matches,
-   ok, test, testNoAd, initCookies, testNoIntro, testNoInterstitial,
-   testNoDoublet,unitOrIntegrationMessage, unitOrIntegrationMode,
-   TestMockNoAd, TestMockAd, mockAdContent, MockSubdir
-*/
-
-/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, attr, banlb,
-   constructor, cookies, corppop, css, description, dfp_site, dfp_zone, div,
-   doublet, env, find, hlfmpu, img, intro, isLegacyAPI, length, mktsdata,
-   name, newssubs, oob, refresh, refreshTimer, regex, request,
-   requestNewssubs, response, siblings, test, timeIntervalTolerance,
-   timeoutTolerance, tlbxrib, type, useDFP, writeScript, writeScriptMock,
-   FTQA, initDFP, lib
-*/
-
-var FT = FT || {};
-
-FT.env =
-{
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "no-ads-targeted-here",
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 150000,
-   "timeIntervalTolerance": 300000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-
-      </script>
-
-    <script type="text/javascript" src="../lib/jquery/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="../lib/jquery/jquery.cookie.js"></script>
-    <script type="text/javascript" src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>No ads Test DFP Ad on a page</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+    <link rel="stylesheet" href="../css/tests.css" media="screen" />
     <script src="../js/util/QUnitChainer.js"></script>
-    <script src="../js/util/qunitMock.lib.js"></script>
-    <script src="../js/util/jquery-ft-namespacing.js"></script>
     <script src="../js/util/test-helpers.html.js"></script>
     <script src="../js/util/page-helpers.html.js"></script>
-    <script src="../lib/sinon/sinon-1.1.1.js"></script>
-    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>  
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
 
     <script>
+
+    /*globals RegExp, equal, expect, initTest, jQuery, locateDiv, matches,
+       ok, test, testNoAd, initCookies, testNoIntro, testNoInterstitial,
+       testNoDoublet,unitOrIntegrationMessage, unitOrIntegrationMode,
+       TestMockNoAd, TestMockAd, mockAdContent, MockSubdir
+    */
+
+    /*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, attr, banlb,
+       constructor, cookies, corppop, css, description, dfp_site, dfp_zone, div,
+       doublet, env, find, hlfmpu, img, intro, isLegacyAPI, length, mktsdata,
+       name, newssubs, oob, refresh, refreshTimer, regex, request,
+       requestNewssubs, response, siblings, test, timeIntervalTolerance,
+       timeoutTolerance, tlbxrib, type, useDFP, writeScript, writeScriptMock,
+       FTQA, initDFP, lib
+    */
+
+    var FT = FT || {};
+
+    FT.env =
+    {
+       "dfp_site": "test.5887.dev",
+       "dfp_zone": "no-ads-targeted-here",
+       // Override timeout values to ensure the ad calls have time to come back
+       // before the positions are collapsed. This is to ensure we can test the page successfully.
+       "timeoutTolerance": 150000,
+       "timeIntervalTolerance": 300000
+    };
+    // Mock the properties object so we are considered to be non-live
+    FT.Properties = { 'ENV': "ci" };
+    var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+    
     //cookies can now be passed within a  get string to the page
     setCookies();
     var MockSubdir = false;
     </script>
+
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
     <script src="../js/ft/HTMLAds.js"></script>

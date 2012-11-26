@@ -2145,7 +2145,7 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
     if (FT.ads.VAR.pushDownExpandingAsset !== null) {
         creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
 
-        expandableHeight = creativeOffsetHeight - pushDownDiv.expansionSubtrahend;
+        expandableHeight = Math.floor(creativeOffsetHeight - pushDownDiv.expansionSubtrahend);
         document.getElementById(pushDownDiv.animatedDivId).style[pushDownDiv.animatedProperty] = expandableHeight + 'px';
     }
 

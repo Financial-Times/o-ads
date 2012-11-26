@@ -7,59 +7,50 @@
       <title>Test Ad on a page - Locally served corporate access popup</title>
       <link rel="stylesheet" href="../css/qunit-1.10.0pre.css"/>
       <link rel="stylesheet" href="../css/tests.css"/>
+      <script src="../js/util/QUnitChainer.js"></script>
+      <script src="../js/util/test-helpers.html.js"></script>
+      <script src="../js/util/page-helpers.html.js"></script>
+      <script src="../lib/jquery/jquery-1.7.2.js"></script>
+      <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+      <script src="../js/util/qunitMock.lib.js"></script>
       <script>
+         /*globals document, equal, expect, jQuery, ok, test,
+             testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
+             mockAdContent, MockSubdir
+         */
 
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3 */
+         /*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+            banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+            hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+            refreshTimer, regex, request, requestNewssubs, response,
+            timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
+            writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
+         */
 
-/*globals document, equal, expect, jQuery, ok, test,
-    testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
-    mockAdContent, MockSubdir
-*/
+         var FT = FT || {};
+         FT.env = {
+            "dfp_site": "test.5887.dev",
+            "dfp_zone": "build-url-test",
+            "asset":    "page",
 
-/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
-   banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
-   hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
-   refreshTimer, regex, request, requestNewssubs, response,
-   timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
-   writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
-*/
-
-var FT = FT || {};
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "build-url-test",
-   "asset":    "page",
-
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-
+            // Override timeout values to ensure the ad calls have time to come back
+            // before the positions are collapsed. This is to ensure we can test the page successfully.
+            "timeoutTolerance": 1500000,
+            "timeIntervalTolerance": 3000000
+         };
+         // Mock the properties object so we are considered to be non-live
+         FT.Properties = { 'ENV': "ci" };
+         var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+         var MockSubdir = false;
+         // cookie consent is required for corporate popup to function
+         createConsentCookie();
       </script>
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="../js/util/qunitMock.lib.js"></script>
-<script>
-var MockSubdir = false;
-// cookie consent is required for corporate popup to function
-createConsentCookie();
-</script>
 
-<script src="../js/ft/advertising.utils.js"></script>
-<script src="../js/ft/advertising.utils.cookie.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-<script src="../js/util/mock-ads.html.js"></script>
+   <script src="../js/ft/advertising.utils.js"></script>
+   <script src="../js/ft/advertising.utils.cookie.js"></script>
+   <script src="../js/ft/HTMLAds.js"></script>
+   <script src="../js/ft/DartForPublishers.js"></script>
+   <script src="../js/util/mock-ads.html.js"></script>
 <script>
 
 // Clear the cookies which cause values to be inserted into the Ad calls.

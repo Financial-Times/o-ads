@@ -7,6 +7,12 @@
     <title>Legacy NoAd Test DFP No Ads on a page with legacy API</title>
     <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
     <link rel="stylesheet" href="../css/tests.css" media="screen" />
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
     <script>
     /*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
         nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
@@ -46,19 +52,11 @@
     // Mock the properties object so we are considered to be non-live
     FT.Properties = { 'ENV': "ci" };
     var CheckAds = ['banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'mpu', 'doublet', 'oob', 'corppop', 'refresh'];
-      </script>
 
-    <script src="../js/util/QUnitChainer.js"></script>
-    <script src="../js/util/test-helpers.html.js"></script>
-    <script src="../js/util/page-helpers.html.js"></script>
-    <script src="../lib/jquery/jquery-1.7.2.js"></script>
-    <script src="../js/util/jquery-ft-namespacing.js"></script>
-    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-<script>
-//cookies can now be passed within a  get string to the page
-setCookies();
-var MockSubdir = false;
-</script>
+    //cookies can now be passed within a  get string to the page
+    setCookies();
+    var MockSubdir = false;
+    </script>
 
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
@@ -761,8 +759,5 @@ clientAds.render();
 			onclick='stopTimer()' alt='stop the interval timer'>
 	</form>
 	<hr>
-	<script
-		src="../js/util/test-helpers.html.js"></script>
-
 </body>
 </html>

@@ -1,188 +1,176 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Test Ad on a page - Locally served corporate access
-	popup with no DFP ads booked</title>
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
-<link rel="stylesheet" href="../css/tests.css" media="screen" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Ad on a page - Locally served corporate access popup with no DFP ads booked</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
+    <link rel="stylesheet" href="../css/tests.css"/>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script>
+    /*globals document, equal, expect, jQuery, ok, test,
+        testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
+        mockAdContent, MockSubdir
+    */
 
-<script>
+    /*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+       banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+       hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+       refreshTimer, regex, request, requestNewssubs, response,
+       timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
+       writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
+    */
 
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3 */
+    var FT = FT || {};
+    FT.env = {
+       "dfp_site": "test.5887.dev",
+       "dfp_zone": "no-ads-targeted-here",
+       "asset":    "page",
 
-/*globals document, equal, expect, jQuery, ok, test,
-    testImageAd, testRefreshAd, initCookies, unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
-    mockAdContent, MockSubdir
-*/
+       // Override timeout values to ensure the ad calls have time to come back
+       // before the positions are collapsed. This is to ensure we can test the page successfully.
+       "timeoutTolerance": 1500000,
+       "timeIntervalTolerance": 3000000
+    };
+    // Mock the properties object so we are considered to be non-live
+    FT.Properties = { 'ENV': "ci" };
+    var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
 
-/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
-   banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
-   hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
-   refreshTimer, regex, request, requestNewssubs, response,
-   timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
-   writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
-*/
-
-var FT = FT || {};
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "no-ads-targeted-here",
-   "asset":    "page",
-
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-
-</script>
-
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="../js/util/qunitMock.lib.js"></script>
-
-<script>
-//cookies can now be passed within a  get string to the page
-//setCookies();
-var MockSubdir = false;
-// cookie consent is required for corporate popup to function
-createConsentCookie();
-</script>
+    //cookies can now be passed within a  get string to the page
+    //setCookies();
+    var MockSubdir = false;
+    // cookie consent is required for corporate popup to function
+    createConsentCookie();
+    </script>
 
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
     <script src="../js/ft/HTMLAds.js"></script>
     <script src="../js/ft/DartForPublishers.js"></script>
     <script src="../js/util/mock-ads.html.js"></script>
-<script>
+    <script>
 
-// Clear the cookies which cause values to be inserted into the Ad calls.
-//initCookies();
+    // Clear the cookies which cause values to be inserted into the Ad calls.
+    //initCookies();
 
-var Tests = {
-   'intro': TestMockNoAd.intro,
-   'banlb': TestMockNoAd.banlb,
-   'newssubs': TestMockNoAd.newssubs,
-   'tlbxrib': TestMockNoAd.tlbxrib,
-   'mktsdata': TestMockNoAd.mktsdata,
-   'hlfmpu': TestMockNoAd.hlfmpu,
-   'doublet': TestMockNoAd.doublet,
-   'refresh': TestMockNoAd.refresh
-};
-
-var Plan = {};
-Plan.nextTestPlan =  'ad-on-a-page-localcorpop-amo2.js.test.htm';
-QUnitChainer.init(Plan);
-
-FT.ads.initDFP();
-
-//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT._ads.utils.cookie("FTQA"));
-
-if (testMode === 'unit') {
-   //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT._ads.utils.writeScript = function (URL) {
-       mockAdContent(URL, Tests); // Ads injected immediately
+    var Tests = {
+       'intro': TestMockNoAd.intro,
+       'banlb': TestMockNoAd.banlb,
+       'newssubs': TestMockNoAd.newssubs,
+       'tlbxrib': TestMockNoAd.tlbxrib,
+       'mktsdata': TestMockNoAd.mktsdata,
+       'hlfmpu': TestMockNoAd.hlfmpu,
+       'doublet': TestMockNoAd.doublet,
+       'refresh': TestMockNoAd.refresh
     };
-   //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
-   FT.corppop.HTMLAdData.urlStem = '';
-}
 
-// Clear the cookies which cause values to be inserted into the Ad calls.
-//initCookies();
+    var Plan = {};
+    Plan.nextTestPlan =  'ad-on-a-page-localcorpop-amo2.js.test.htm';
+    QUnitChainer.init(Plan);
 
-var mockCookies = {};
-module("Ads", {
-    setup: function() {
-        clearMockCookies();
-        FT._ads.utils.cookies = mockObject(mockCookies);
+    FT.ads.initDFP();
+
+    //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+    var testMode = unitOrIntegrationMode(FT._ads.utils.cookie("FTQA"));
+
+    if (testMode === 'unit') {
+       //if unit test, then we override FT.lib.writeScript with the call to Mocking
+       FT._ads.utils.writeScript = function (URL) {
+           mockAdContent(URL, Tests); // Ads injected immediately
+        };
+       //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
+       FT.corppop.HTMLAdData.urlStem = '';
     }
-});
 
-test("Page Environment", function () {
-   ok(FT.env,                                                                                      "FT.env should be defined");
-   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
-   ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
-});
+    // Clear the cookies which cause values to be inserted into the Ad calls.
+    //initCookies();
 
-test("intro when no ads targeted", function (){
-	expect(7);
-	testNoIntro();
-});
+    var mockCookies = {};
+    module("Ads", {
+        setup: function() {
+            clearMockCookies();
+            FT._ads.utils.cookies = mockObject(mockCookies);
+        }
+    });
 
-//test("banlb when no ads targeted", function (){
-//	expect(7);
-//	testNoAd('banlb', undefined, undefined, 2, undefined, 'yes');
-//});
+    test("Page Environment", function () {
+       ok(FT.env,                                                                                      "FT.env should be defined");
+       ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
+       ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
+    });
 
-test("interstitial off banlb", function (){
-   expect(2);
+    test("intro when no ads targeted", function (){
+    	expect(7);
+    	testNoIntro();
+    });
 
-   //the decoupling of corppop from the adserver means that we will no longer be able to detect corpops via the adserver logic
-   //and therefore whether interstitial ads should be served or not.
-   //consequently interstitials AND corppops may appear, though the number of interstitials should never be more than 1
-   var numberInterstitials = $('#interstitial_overlay').length;
-   ok(numberInterstitials < 2, 'no more than one interstitial ad should not be present in DOM');
+    //test("banlb when no ads targeted", function (){
+    //	expect(7);
+    //	testNoAd('banlb', undefined, undefined, 2, undefined, 'yes');
+    //});
 
-   var totalPopAds = $('#popad').length;
-   var totalPopAdsinCorpClass = $('.corpSignPopad').length;
+    test("interstitial off banlb", function (){
+       expect(2);
 
-   testPopAds (totalPopAds,totalPopAdsinCorpClass);
+       //the decoupling of corppop from the adserver means that we will no longer be able to detect corpops via the adserver logic
+       //and therefore whether interstitial ads should be served or not.
+       //consequently interstitials AND corppops may appear, though the number of interstitials should never be more than 1
+       var numberInterstitials = $('#interstitial_overlay').length;
+       ok(numberInterstitials < 2, 'no more than one interstitial ad should not be present in DOM');
 
-});
+       var totalPopAds = $('#popad').length;
+       var totalPopAdsinCorpClass = $('.corpSignPopad').length;
 
-//test("corppop html ad injected into banlb", function () {
-//    equal($('#corppop_overlay').length, 1, 'div with #corppop #corppop_overlay should have count');
-//    equal($('.corpSignPopad').length, 1, 'there should only be 1 corp pop ad');
-//
-//    mockCookies.AYSC = "_22PL0AAAAA_2712345_";
-//    testAYSC22(FT.cookie.get("AYSC"),FT.ads.CONST.SubsLevelReplaceLookup);
-//});
+       testPopAds (totalPopAds,totalPopAdsinCorpClass);
 
-test("companion newssubs for banlb when no ads targeted", function (){
-	expect(7);
-	testNoAd('newssubs');
-});
+    });
 
-test("tlbxrib when no ads targeted", function (){
-	expect(7);
-	testNoAd('tlbxrib');
-});
+    //test("corppop html ad injected into banlb", function () {
+    //    equal($('#corppop_overlay').length, 1, 'div with #corppop #corppop_overlay should have count');
+    //    equal($('.corpSignPopad').length, 1, 'there should only be 1 corp pop ad');
+    //
+    //    mockCookies.AYSC = "_22PL0AAAAA_2712345_";
+    //    testAYSC22(FT.cookie.get("AYSC"),FT.ads.CONST.SubsLevelReplaceLookup);
+    //});
 
-test("mktsdata when no ads targeted", function (){
-	expect(7);
-	testNoAd('mktsdata');
-});
+    test("companion newssubs for banlb when no ads targeted", function (){
+    	expect(7);
+    	testNoAd('newssubs');
+    });
 
-test("hlfmpu when no ads targeted", function (){
-	expect(7);
-	testNoAd('hlfmpu');
-});
+    test("tlbxrib when no ads targeted", function (){
+    	expect(7);
+    	testNoAd('tlbxrib');
+    });
 
-test("doublet when no ads targeted", function (){
-	expect(8);
-	testNoDoublet();
-});
+    test("mktsdata when no ads targeted", function (){
+    	expect(7);
+    	testNoAd('mktsdata');
+    });
 
-test("refresh ad when no ads targeted", function () {
-	expect(8);
-	testNoAd('refresh',undefined);
-	if (FT.ads.adverts.refresh.response) {
-		equal(FT.ads.adverts.refresh.response.refreshTimer, undefined,                              'refresh object refreshTimer should be');
-	}
-});
+    test("hlfmpu when no ads targeted", function (){
+    	expect(7);
+    	testNoAd('hlfmpu');
+    });
+
+    test("doublet when no ads targeted", function (){
+    	expect(8);
+    	testNoDoublet();
+    });
+
+    test("refresh ad when no ads targeted", function () {
+    	expect(8);
+    	testNoAd('refresh',undefined);
+    	if (FT.ads.adverts.refresh.response) {
+    		equal(FT.ads.adverts.refresh.response.refreshTimer, undefined,                              'refresh object refreshTimer should be');
+    	}
+    });
 
       </script>
 </head>

@@ -7,61 +7,50 @@
     <title>Test Locally Served Corppop Ad on a page with legacy API</title>
     <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" media="screen" />
     <link rel="stylesheet" href="../css/tests.css" media="screen" />
-<script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script>
 
-/*jslint evil: true, white: true, browser: true, onevar: false, undef: true,
-    nomen: true, plusplus: true, eqeqeq: true, bitwise: true, regexp: true,
-    newcap: true, immed: true, maxerr: 1000, indent: 3
-*/
+        /*globals AD_BANLB, AD_CORPPOP, AD_MPU, AD_NEWSSUBS, AD_OOB, Advert,
+           jQuery, beginNewPage, clientAds, defaults, document, equal, expect,
+           initTest, locateDiv, matches, ok, test, testBuildURL, testImageAd,
+           testRefreshAd, testRichMediaAd, initCookies, AD_REFRESH,
+           unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
+           mockAdContent, MockSubdir
+        */
 
-/*globals AD_BANLB, AD_CORPPOP, AD_MPU, AD_NEWSSUBS, AD_OOB, Advert,
-   jQuery, beginNewPage, clientAds, defaults, document, equal, expect,
-   initTest, locateDiv, matches, ok, test, testBuildURL, testImageAd,
-   testRefreshAd, testRichMediaAd, initCookies, AD_REFRESH,
-   unitOrIntegrationMessage, unitOrIntegrationMode, TestMockNoAd, TestMockAd,
-   mockAdContent, MockSubdir
-*/
+        /*members AYSC, CONST, DefaultAdTag, ENV, FT_U, Properties, adName, ads,
+           adverts, asset, attr, banlb, beginNewPage, buildURL, cookies, corppop,
+           css, description, dfp_site, dfp_zone, doublet, env, fetch, find,
+           getElementById, getLongestUrl, hasCalledInitDFP, hashCookies, mpu, init,
+           initDFP, injectUrlTrackCall, isLegacyAPI, length, lib, mktsdata, name,
+           newssubs, next, nextAll, oob, pos, refresh, refreshTimer, regex, render,
+           response, slice, src, timeIntervalTolerance, timeoutTolerance, tlbxrib,
+           trackUrl, type, urlThreshold, urlThresholdMax, useDFP, write, writeScript,
+           writeScriptMock, FTQA, banlb3, newssubs2, corppop2
+        */
 
-/*members AYSC, CONST, DefaultAdTag, ENV, FT_U, Properties, adName, ads,
-   adverts, asset, attr, banlb, beginNewPage, buildURL, cookies, corppop,
-   css, description, dfp_site, dfp_zone, doublet, env, fetch, find,
-   getElementById, getLongestUrl, hasCalledInitDFP, hashCookies, mpu, init,
-   initDFP, injectUrlTrackCall, isLegacyAPI, length, lib, mktsdata, name,
-   newssubs, next, nextAll, oob, pos, refresh, refreshTimer, regex, render,
-   response, slice, src, timeIntervalTolerance, timeoutTolerance, tlbxrib,
-   trackUrl, type, urlThreshold, urlThresholdMax, useDFP, write, writeScript,
-   writeScriptMock, FTQA, banlb3, newssubs2, corppop2
-*/
+        var FT = FT || {};
+        FT.env = {
+           "dfp_site": "test.5887.dev",
+           "dfp_zone": "build-url-test",
+           "asset":    "page",
 
-var FT = FT || {};
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "build-url-test",
-   "asset":    "page",
+           // Override timeout values to ensure the ad calls have time to come back
+           // before the positions are collapsed. This is to ensure we can test the page successfully.
+           "timeoutTolerance": 1500000,
+           "timeIntervalTolerance": 3000000
+        };
+        // Mock the properties object so we are considered to be non-live
+        FT.Properties = { 'ENV': "ci" };
+        var CheckAds = ['banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'mpu', 'doublet', 'oob', 'corppop', 'refresh'];
 
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'mpu', 'doublet', 'oob', 'corppop', 'refresh'];
-      </script>
-
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-<script src="../js/util/qunitMock.lib.js"></script>
-
-<script>
-//cookies can now be passed within a  get string to the page
-//setCookies();
-var MockSubdir = false;
-</script>
+        var MockSubdir = false;
+    </script>
 
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
@@ -177,7 +166,7 @@ test("refresh", function (){
 	</p>
 	<p>
 		And are targeted to DFP site/zone<b> <script>
-document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
+    document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
       </script>
 		</b>
 	</p>
@@ -767,8 +756,5 @@ clientAds.render();
 			onclick='stopTimer()' alt='stop the interval timer'>
 	</form>
 	<hr>
-	<script
-		src="../js/util/test-helpers.html.js"></script>
-
 </body>
 </html>
