@@ -2122,8 +2122,9 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
         //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
         var node,
             nodes  = document.getElementById(pushDownDiv.pos).getElementsByTagName('*');
-        nodes = Array.prototype.slice.call(nodes, 0);
-        while(node = nodes.pop()) {
+
+        for(var i = 0, j = nodes.length; i < j; i++) {
+            node = nodes[i];
             //div, img and object nodes are most likely candidates
             if (node.nodeName.match(/DIV|IMG|OBJECT/)) {
                 clientHeight = node.clientHeight || node.offsetHeight || null;
