@@ -85,7 +85,7 @@
                 }
             });
             iframeSrc.pop(); //remove the current file name from the location
-            iframeSrc.push('cookie-iframe.html'); // add the file name of our iframe doc
+            iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
             iframe.src = iframeSrc.join('/');
             document.body.appendChild(iframe);
         });
