@@ -256,12 +256,13 @@
    * @return {object}
    */
   utils.hash = function (str, delimiter, pairing) {
-    var pair, value,
+    var pair, value, idx, len,
       hash = {};
     
     str = str.split(delimiter);
 
-    while(value = str.pop()) {
+    for (idx = 0, len = str.length; idx < len; idx += 1) {
+      value = str[idx];
       pair = value.split(pairing);
       if (pair.length > 1) { 
         hash[pair[0].trim()] = pair.slice(1).join(pairing); 

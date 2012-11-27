@@ -76,7 +76,7 @@
             $(iframe).load(function() {
                 start();
                 if (iframe.contentWindow.loaded) {
-                    equal(iframe.contentWindow.testValue, 'two', 'reads all cookie values, skipping duplicate occurences of "; "');
+                    equal(iframe.contentWindow.testValue, '2nd', 'reads all cookie values, skipping duplicate occurences of "; " and preserving the last value of any duplicated keys');
                 } else {
                     // Skip the test where we can't stub document.cookie using
                     // Object.defineProperty. Seems to work fine in

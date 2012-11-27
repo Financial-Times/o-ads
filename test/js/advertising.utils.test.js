@@ -246,11 +246,17 @@
         });
 
         test("hash", function() {
-            var result, test = "a:1,b:2,c:3";
+            var result, test = "a:1,b:2,c:3,a:12";
+            expect(4);
             result = FT._ads.utils.hash( test, ",", ":" );
 
             ok( FT._ads.utils.isObject( result ), "the result is an object" );
-            ok(  1 == result.a && 2 == result.b && 3 == result.c , "String properly hashed" );
+
+            // Better to test each case individually so if one fails you can see expected vs actual right in the test page output.
+            deepEqual( result.b, '2', "Key b properly hashed (as string data)" );
+            deepEqual( result.c, '3', "Key c properly hashed" );
+            deepEqual( result.a, '12', "Duplicate keys properly hashed" );
+            //ok(  12 == result.a && 2 == result.b && 3 == result.c , "String properly hashed" );
         });
 
        test("writeScript method",function(){

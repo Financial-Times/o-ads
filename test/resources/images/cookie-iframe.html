@@ -11,7 +11,7 @@
     	<script src="../js/ft/advertising.utils.cookie.js"></script>
 		<script>
 			try {
-				Object.defineProperty(document, "cookie", { get: function() { return "first=one; ; second=two"; } });
+				Object.defineProperty(document, "cookie", { get: function() { return "first=one; ; second=two; second=2nd"; } });
     			FT._ads.utils.cookies = FT._ads.utils.hash(document.cookie, ';', '=')
 				window.testValue = FT._ads.utils.cookie("second");
 				window.loaded = true;
@@ -21,5 +21,6 @@
 		</script>
 	</head>
 	<body>
+		cookie-iframe.html - this iframe used for FT._ads.utils.cookies read malformed cookie value in IE
 	</body>
 </html>
