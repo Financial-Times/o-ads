@@ -1,111 +1,58 @@
 <!DOCTYPE html><html><head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Test DFP Cognitive Match Ad on a page</title>
-<!-- <link rel="stylesheet" -->
-<!-- 	href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" -->
-<!-- 	type="text/css" media="screen" /> -->
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css">
-<style type="text/css">
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
+   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+   <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+   <title>Test DFP Cognitive Match Ad on a page</title>
+   <link rel="stylesheet" href="../css/qunit-1.10.0pre.css">
+   <link rel="stylesheet" href="../css/tests.css">
+   <script src="../js/util/QUnitChainer.js"></script>
+   <script src="../js/util/test-helpers.html.js"></script>
+   <script src="../js/util/page-helpers.html.js"></script>
+   <script src="../lib/jquery/jquery-1.7.2.js"></script>
+   <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+   <script src="../js/util/qunitMock.lib.js"></script>
+   <script src="../lib/jquery/jquery.cookie.js"></script>
+    
+   <script type="text/javascript">
 
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
+   /*members AYSC, CONST, ENV, FT_U, FTQA, Properties, adName, ads, adverts,
+      asset, banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet,
+      env, getElementById, getLongestUrl, hlfmpu, injectUrlTrackCall, intro,
+      isLegacyAPI, length, mktsdata, newssubs, next, oob, refresh, refreshTimer,
+      regex, request, requestNewssubs, response, src, timeIntervalTolerance,
+      timeoutTolerance, tlbxrib, trackUrl, urlThreshold, urlThresholdMax,
+      useDFP, write, writeScript, writeScriptMock, FTQA, initDFP, lib, banlb3,
+      newssubs2, corppop2
+   */
 
-a img {
-	border: none;
-}
+   var FT = FT || {};
+   FT.env =
+   {
+      "dfp_site": "test.5887.dev",
+      "dfp_zone": "cognitive-match-test",
+      "dfp_targeting": "XXXX",
+      "asset":    "page",
 
-div {
-	border: 1px solid black;
-}
-
-.advertising {
-	border: 1px solid red;
-}
-
-.tempAds {
-	display: none;
-}
-
-.warning {
-	background-color: red;
-}
-
-#feedback {
-	border: none;
-}
-
-#xpopad {
-	display: none;
-}
-</style>
-
-<script type="text/javascript">
-
-
-
-
-
-/*members AYSC, CONST, ENV, FT_U, FTQA, Properties, adName, ads, adverts,
-   asset, banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet,
-   env, getElementById, getLongestUrl, hlfmpu, injectUrlTrackCall, intro,
-   isLegacyAPI, length, mktsdata, newssubs, next, oob, refresh, refreshTimer,
-   regex, request, requestNewssubs, response, src, timeIntervalTolerance,
-   timeoutTolerance, tlbxrib, trackUrl, urlThreshold, urlThresholdMax,
-   useDFP, write, writeScript, writeScriptMock, FTQA, initDFP, lib, banlb3,
-   newssubs2, corppop2
-*/
-
-var FT = FT || {};
-FT.env =
-{
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "cognitive-match-test",
-   "dfp_targeting": "XXXX",
-   "asset":    "page",
-
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-//FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-var MockSubdir = true;
-</script>
-
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
-
-<script src="../../../../../../../main/webapp/media/js/lib/HeadCoreBundle/aop.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
+      // Override timeout values to ensure the ad calls have time to come back
+      // before the positions are collapsed. This is to ensure we can test the page successfully.
+      "timeoutTolerance": 1500000,
+      "timeIntervalTolerance": 3000000
+   };
+   // Mock the properties object so we are considered to be non-live
+   //FT.Properties = { 'ENV': "ci" };
+   var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+   var MockSubdir = true;
+   </script>
+<!-- <script src="../../../../../../../main/webapp/media/js/lib/HeadCoreBundle/aop.js"></script>
 <script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties.js"></script>
 <script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties-int.js"></script>
 <script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Namespaces.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/util/cookie.js"></script>
 <script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/pre-init.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-
-<script src="../js/util/mock-ads.html.js"></script>
+ -->
+   <script src="../js/ft/advertising.utils.js"></script>
+   <script src="../js/ft/advertising.utils.cookie.js"></script>
+   <script src="../js/ft/HTMLAds.js"></script>
+   <script src="../js/ft/DartForPublishers.js"></script>
+   <script src="../js/util/mock-ads.html.js"></script>
 <script type="text/javascript">
 
 var Tests = {
@@ -128,18 +75,15 @@ Plan.nextTestPlan =  'ad-on-a-page-flash.html';
 QUnitChainer.init(Plan);
 
 FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL)
-{
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
-
 //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookies.FTQA);
-
+//var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 if (testMode === 'unit')
 {
    //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
+   FT._ads.utils.writeScript = function (URL){
+      mockAdContent(URL, Tests); // Ads injected immediately
+   };
 }
 
 // Clear the cookies which cause values to be inserted into the Ad calls.
@@ -149,40 +93,40 @@ test("Page Environment", function ()
 {
    expect(6);
 
-   ok(FT.env,                                                                                      "FT.env should be defined");
-   ok(FT.cookies,                                                                                  "FT.cookies should be defined");
-   equal(FT.cookies.FT_U, undefined,                                                              "FT.cookies.FT_U should be ");
-   equal(FT.cookies.AYSC, undefined,                                                              "FT.cookies.AYSC should be ");
-   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
-   ok(!FT.env.isLegacyAPI,                                                                         "Legacy API should not be used");
+   ok(FT.env, "FT.env should be defined");
+   ok(FT._ads.utils.cookies, "FT.cookies should be defined");
+   equal(FT._ads.utils.cookies.FT_U, undefined, "FT_U cookie should be ");
+   equal(FT._ads.utils.cookies.AYSC, undefined, "AYSC cookie should be ");
+   ok(FT.env.useDFP, "FT.env.useDFP should be set to true");
+   ok(!FT.env.isLegacyAPI, "Legacy API should not be used");
 });
 
 test("intro", function ()
 {
    expect(1);
-   equal(FT.$('#intro_overlay').length, 1,                                                      'intro ad should be inserted into the DOM with count');
+   equal($('#intro_overlay').length, 1, 'intro ad should be inserted into the DOM with count');
 });
 
 test("banlb", function ()
 {
    expect(5);
-   ok(true,                                                                                        "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
+   ok(true, "occasionally fails due to receipt of collapsed banlb master for 728x90 despite also getting a valid image -- investigate");
    testImageAd('banlb', 2);
 });
 
 test("interstitial off banlb", function ()
 {
    expect(2);
-   equal(FT.$('#interstitial_overlay').length, 1,                                               'interstitial ad should be inserted into the DOM with count');
+   equal($('#interstitial_overlay').length, 1, 'interstitial ad should be inserted into the DOM with count');
    // the following check is in to check for interstitial corppop regression:
-   equal(FT.$('#popad').length, 0,                                                              '#popad should not be present');
+   equal($('#popad').length, 0, '#popad should not be present');
 });
 
 test("corppop off banlb", function ()
 {
    expect(2);
-   equal(FT.$('#corppop_overlay').length, 0,                                                    'div with #corpop_overlay should have count');
-   equal(FT.$('.corppop_single_occurence').length, 0,                                           'there should no corp pop ad');
+   equal($('#corppop_overlay').length, 0, 'div with #corpop_overlay should have count');
+   equal($('.corppop_single_occurence').length, 0, 'there should no corp pop ad');
 });
 
 test("newssubs", function ()
@@ -202,7 +146,7 @@ test('mktsdata', function ()
    expect(5);
    testImageAd('mktsdata');
    // test that we're getting the correct template-configured mktsdata ad back:
-   equal(FT.$('#mktsdata span.sponsor').length, 1,                                              'should have a span.sponsor with count');
+   equal($('#mktsdata span.sponsor').length, 1, 'should have a span.sponsor with count');
 });
 
 test("hlfmpu", function ()
@@ -214,16 +158,16 @@ test("hlfmpu", function ()
 test("doublet", function ()
 {
    expect(2);
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').length, 1,                             'doublet_first should occur with count');
-   equal(FT.$('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1,     'doublet_last should be next with count');
+   equal($('#doublet .doublet-wrapper.doublet_first').length, 1, 'doublet_first should occur with count');
+   equal($('#doublet .doublet-wrapper.doublet_first').next('.doublet-wrapper.doublet_last').length, 1, 'doublet_last should be next with count');
 });
 
 test("refresh", function ()
 {
    expect(9);
    testRefreshAd('refresh');
-   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767',                      'refresh should correctly store obj value as');
-   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000,                                  'refresh should correctly store refreshTimer value as');
+   equal(FT.ads.adverts.refresh.response.adName, 'refresh adjustment 32767', 'refresh should correctly store obj value as');
+   equal(FT.ads.adverts.refresh.response.refreshTimer, 32767000, 'refresh should correctly store refreshTimer value as');
 });
 
 test("FT.ads.injectUrlTrackCall() - for Task TA13272", function ()
@@ -240,8 +184,8 @@ test("FT.ads.injectUrlTrackCall() - for Task TA13272", function ()
    // check that injected image exists
    var injectUrlTrackCallImage = document.getElementById("injectUrlTrackCall");
 
-   ok(injectUrlTrackCallImage !== null,                                                            "injectUrlTrackCall image exists");
-   equal(injectUrlTrackCallImage.src, FT.ads.CONST.trackUrl + "?long_url=" + FT.ads.getLongestUrl(),     "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
+   ok(injectUrlTrackCallImage !== null, "injectUrlTrackCall image exists");
+   equal(injectUrlTrackCallImage.src, FT.ads.CONST.trackUrl + "?long_url=" + FT.ads.getLongestUrl(), "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
 
    // restore original value
    FT.ads.CONST.urlThreshold = saved_urlThreshold;
@@ -314,9 +258,9 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 	<div id="father-of-intro">
 		<div id="fullpage-container">Ad request fullpage-container</div>
 		<script type="text/javascript">
-FT.cookies.FTQA = "ord=123123123";
-FT.ads.request('intro');
-</script>
+      FT._ads.utils.cookie('FTQA', "ord=123123123");
+      FT.ads.request('intro');
+      </script>
 <!-- ad ID: 219975130 creative ID: 34492273 -->
 <style type="text/css">
    #intro_overlay {
@@ -446,12 +390,12 @@ FT.ads.request("tlbxrib");
 							Ad request wsodHomePageModuleContent
 							<div class="advertising" id="mktsdata">
 								Ad request mktsdata
-								<!--  <span class="advert" style="width: 75px; height: 25px; margin-top: -3px;"> --->
+								<!--  <span class="advert" style="width: 75px; height: 25px; margin-top: -3px;"> -->
 								<script type="text/javascript">
 FT.ads.request("mktsdata");
                         </script>
 <span class="sponsor" style="margin: 2px 0pt 0pt -75px; position: absolute;">Sponsored by</span><a target="_blank" href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a03/3/0/%2a/v%3B219975169%3B0-0%3B1%3B40911646%3B486-75/25%3B34598218/34616096/1%3B%3B%7Esscs%3D%3fhttp://www.ft.com"><img width="75" height="25" border="0" src="../images/mktsdata-75x25.gif"></a>
-								<!--  </span> --->
+								<!--  </span> -->
 							</div>
 						</div>
 					</div>
@@ -496,7 +440,7 @@ FT.ads.request('oob');
 				Ad request corppop
 				<script type="text/javascript">
 //make sure no local corppop ads are served by setting the cookie
-FT.cookies.CorpPopTimeout = 'set';
+FT._ads.utils.cookies.CorpPopTimeout = 'set';
 FT.ads.request('corppop');
 // Clear the cookies which cause values to be inserted into the Ad calls.
 initCookies();
