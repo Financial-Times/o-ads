@@ -223,9 +223,9 @@ function initCookies(FTQA)
 {
    FTQA = FTQA || "debug,dfp_ads,interval=25,timeout=20000";
    FT._ads.utils.cookies.FTQA = FTQA;
-   FT._ads.utils.FT_U = undefined;
-   FT._ads.utils.AYSC = undefined;
-   FT._ads.utils.rsi_segs = undefined;
+   FT._ads.utils.removeCookie('FT_U');
+   FT._ads.utils.removeCookie('AYSC');
+   FT._ads.utils.removeCookie('rsi_segs')
 }
 
 function locateDiv(pos, prefix)
