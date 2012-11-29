@@ -17,12 +17,13 @@
     $('#cookies').on('click', '.delete', function(ev){
       var row = $(this).parents('tr'),
         name = $(this).parent().next().text().trim();
+      
       $('[name="domain"] option').each(function(index,item){
         if (index !== 0) { 
-          $.removeCookie(name, {domain: $(item).val()});
+          $.removeCookie(name, {path: '/', domain: $(item).val()});
         }
       });
-      name, $.removeCookie(name);
+      $.removeCookie(name, {path: '/'});
       row.remove();
     });
 
@@ -118,6 +119,7 @@
 <hr>
 <section id="cookies">
   <h2>All Cookies</h2>
+  <span class="help-block">Only cookies with a path of <code>/</code> can be deleted from here.</span>
   <table>
     <thead>
       <th colspan="2">Name</th>
