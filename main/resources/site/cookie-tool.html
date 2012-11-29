@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ads Enabling Team Cookie Tool</title>
+  <script src="../test-classes/lib/jquery/jquery-1.7.2.js"></script>
+  <script src="../test-classes/lib/jquery/jquery.cookie.js"></script>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/cookie-tool.css" rel="stylesheet" />
+  <script>
+  $(function(){
+
+    var cookiesSec = $('#cookies'),
+      examplesSec = $('#exmaples'),
+      form = $('form[name="cookie-setter"]');
+    
+    $('#cookies').on('click', '.delete', function(ev){
+      var row = $(this).parents('tr'),
+        name = $(this).parent().next().text().trim();
+      $('[name="domain"] option').each(function(index,item){
+        if (index !== 0) { 
+          $.removeCookie(name, {domain: $(item).val()});
+        }
+      });
+      name, $.removeCookie(name);
+      row.remove();
+    });
+
+    form.submit(function() {
+      var defaults = { expires: 'Expires', path: '', domain: 'Domain' },
+        values = { expires: 7, path: '/', domain: '.ft.com', secure: false };
+
+      $('input, select').each(function (index, item) {
+        var key = item.name,
+          value = $(item).val();
+
+        if(defaults[key] !== value) {
+          values[key] = $(item).val();
+        }
+      });
+
+      if (!values.name) {
+        form.find('.alert-message').remove();
+        form.prepend('<p class="alert-message error">cookie not set: no name supplied</p>');
+        return false;
+      }
+        
+      $.cookie(values.name, values.value, values);
+      return true;
+    });
+
+    form.find('select[name="domain"]')
+      .append('<option>' + document.location.hostname + '</option>');
+
+    var hash = {};
+
+    location.search.slice(1).split('&').forEach(
+      function(item){
+        item  = item.split('=');
+        hash[item[0]] = item[1];
+      }
+    );
+
+    if(hash.name && hash.value) {
+      form.prepend('<p class="alert-message success">cookie set: name ' + hash.name + ' value ' + hash.value + '</p>');
+    }
+
+    if(document.cookie === '') {
+      cookiesSec.find('table').remove();
+      cookiesSec.append('<p class="alert-message">No cookies set.</p>');
+    } else {
+      var table = cookiesSec.find('table tbody');
+      document.cookie.split(';').forEach(
+        function(item){
+          item  = item.split('=');
+          table.append('<tr><td><span class="delete">&times;</span><td>' + item[0] +'</td><td>'+ item[1] + '</td></tr>');
+        }
+      );
+    }
+  });
+  </script>
+</head>
+<body>
+<h1>Ads Enabling Team Cookie Tool</h1>
+<section>
+  <h2>Set Cookie</h2>
+  <form name="cookie-setter" class="form-inline">
+    <fieldset>
+      <input type="text" name="name" class="input-small" placeholder="Name" value="FTQA">
+      <input type="text" name="value" placeholder="Value">
+      <button type="submit" class="btn btn-primary">Set</button>
+      <span class="help-block">Example: name <code>FTQA</code> value <code>debug,timeout=2000,interval=100</code></span>
+    </fieldset>
+    <fieldset>
+      <input type="text" name="path" class="input-small" placeholder="Path">
+
+      <select name="domain" class="input-small">
+        <option>Domain</option>
+        <option>.ft.com</option>
+        <option>www.ft.com</option>
+      </select>
+
+      <select name="expires" class="input-small">
+        <option>Expires</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>365</option>
+      </select>
+      <span class="help-block">Path will default to <code>/</code> Expires will default to <code>7</code> Domain will default to <code>.ft.com</code></span>
+    </fieldset>
+  </form>
+</section>
+<hr>
+<section id="cookies">
+  <h2>All Cookies</h2>
+  <table>
+    <thead>
+      <th colspan="2">Name</th>
+      <th>Value</th>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</section>
+
+<hr>
+<section id="examples">
+  <h2>Examples</h2>
+   <table border="1">
+       <thead>
+         <tr><th>Where *</th><th>Key/Value</th><th>Purpose</th></tr>
+       </thead>
+       <tbody>
+         <tr><td>WA/FT</td><td>debug</td><td>turn on debugging messages in the console log for ads.</td></tr>
+         <tr><td>WA</td><td>ghostbug=0 or 1</td><td>display ghostwriter specific debugging messages.</td></tr>
+         <tr><td>WA</td><td>remotedebug=host:port</td><td>specify a host/port for remote debugging on device with <a href="http://people.apache.org/~pmuellr/weinre/docs/latest/">Weinre</a>.</td></tr>
+         <tr><td>FT</td><td>breakout=banlb</td><td>cause a javascript breakpoint when the banlb ad position returns (only for custom template ads)</td></tr>
+         <tr><td>WA</td><td>break=setup,adcall,etc</td><td>cause a breakpoint in the adCall method of the ad library.</td></tr>
+         <tr><td>WA/FT</td><td>env=live or nolive (or test for WA)</td><td>simulate live or non-live environment to show ads from Live or Test</td></tr>
+         <tr><td>FT</td><td>env=premiumcopy</td><td>Creates DFP urls to access DFP Premium Copy Network. Note that this will work with a 'live' or 'nolive' prefix</td></tr>
+         <tr><td>FT</td><td>env=premiumreadonly</td><td>Creates DFP urls to access DFP Premium Read Only Network. Note that this will work with a 'live' or 'nolive' prefix</td></tr>
+         <tr><td>WA</td><td>site=sitename</td><td>override the DFP site used in ad calls.</td></tr>
+         <tr><td>WA</td><td>zone=zonename</td><td>override the DFP zone used in ad calls.</td></tr>
+         <tr><td>WA</td><td>platform=ios or an, pb, bb, wm</td><td>override the device platform.</td></tr>
+         <tr><td>WA</td><td>screenmode=largewide or large, medium, small</td><td>override the device screen mode.</td></tr>
+         <tr><td>WA</td><td>fullpage= 0=off, L=landscape P=portrait</td><td>force full page ad mode.</td></tr>
+         <tr><td>WA</td><td>eid=7234</td><td>override the user erights ID in the ad calls.</td></tr>
+         <tr><td>WA</td><td>slow=0 to 1</td><td>override the slow connection parameter in ad calls.</td></tr>
+         <tr><td>WA</td><td>ghost=0 or 1</td><td>override the use of ghostwriter in the ad library.</td></tr>
+         <tr><td>WA</td><td>timings=0 or 1</td><td>display timing information on the ads.</td></tr>
+         <tr><td>FT</td><td>longest_url=0-0 (never) 10-100 (10% chance) or 100-100 (always)</td><td>set the % ratio for reporting unclassified pages and long ad call URL's to track.ft.com</td></tr>
+         <tr><td>FT</td><td>timeout=100</td><td>milliseconds timeout to collapse ad position if ad call fails to return</td></tr>
+         <tr><td>FT</td><td>interval=300</td><td>millisecond period to check ad positions to see if an ad has come back and needs to be made visible</td></tr>
+         <tr><td>WA/FT</td><td>ord=123123123</td><td>set a specific ord value for ad calls. useful when intercepting ad calls with a web proxy</td></tr>
+         <tr><td>WA/FT</td><td>noaudsci</td><td>omit Audience Science values from ad call. useful when intercepting ad calls with a web proxy</td></tr>
+         <tr><td>FT</td><td>setxy=150,120</td><td>Change XY position of diagnostics dialog box</td></tr>
+       </tbody>
+   </table>
+</section>
+</body>
+</html>
