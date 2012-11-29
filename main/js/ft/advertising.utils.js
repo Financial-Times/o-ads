@@ -53,6 +53,11 @@
   /**
    * @namespace All public functions are stored in the FT._ads.utils object for global access.
    */
+  FT = FT || {};
+  
+  /**
+   * @namespace All public functions are stored in the FT._ads.utils object for global access.
+   */
   FT._ads = FT._ads || {};
   var utils = {};
 

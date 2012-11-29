@@ -9,6 +9,15 @@
  * http://www.opensource.org/licenses/GPL-2.0
  */
 (function (window, document, FT, undefined) {
+    /**
+     * @namespace All public functions are stored in the FT._ads.utils object for global access.
+     */
+    FT = FT || {};
+
+    /**
+     * @namespace All public functions are stored in the FT._ads.utils object for global access.
+     */
+    FT._ads = FT._ads || {};
 
     var utils = {},
         pluses = /\+/g,

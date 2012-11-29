@@ -4,8 +4,6 @@
 // AND ARTICLE PAGES.
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
 
-
-
 /*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21","22","27",
      "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
      KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
@@ -78,6 +76,8 @@
     splice, getUUIDFromString  */
 
 /* The Falcon Ads API follows from here. */
+//Setup the FT namespace if it doesn't already exist
+FT = FT || {};
 
 FT.Advertising = function () {
     this.baseAdvert = {};

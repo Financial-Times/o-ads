@@ -7,6 +7,9 @@ timeOutCookieName,timeOutCookieVal, timeOutCookieLife, log, createCorppopCookie,
 type, src, style, display, injectionParentDiv, injectionLegacyParentDiv, toUpperCase,
 urlStemClassicAMO, Properties, CORPORATE_AMO_BASE, reg, _ads, utils, expires */
 
+//Setup the FT namespace if it doesn't already exist
+FT = FT || {};
+
 FT.HTMLAds = function () {
 
 	this.HTMLAdData = {
