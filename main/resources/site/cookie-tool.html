@@ -12,24 +12,13 @@
 
     var cookiesSec = $('#cookies'),
       examplesSec = $('#exmaples'),
+      prepopulaters = $('#prepopulaters'),
       form = $('form[name="cookie-setter"]');
-    
-    $('#cookies').on('click', '.delete', function(ev){
-      var row = $(this).parents('tr'),
-        name = $(this).parent().next().text().trim();
-      
-      $('[name="domain"] option').each(function(index,item){
-        if (index !== 0) { 
-          $.removeCookie(name, {path: '/', domain: $(item).val()});
-        }
-      });
-      $.removeCookie(name, {path: '/'});
-      row.remove();
-    });
+      defaultCookieOptions = { expires: 7, path: '/', domain: '.ft.com', secure: false };
 
     form.submit(function() {
       var defaults = { expires: 'Expires', path: '', domain: 'Domain' },
-        values = { expires: 7, path: '/', domain: '.ft.com', secure: false };
+        values = $.extend({}, defaultCookieOptions);
 
       $('input, select').each(function (index, item) {
         var key = item.name,
@@ -53,6 +42,42 @@
     form.find('select[name="domain"]')
       .append('<option>' + document.location.hostname + '</option>');
 
+    $('#cookies').on('click', '.delete', function(ev){
+      var row = $(this).parents('tr'),
+        name = $(this).parent().next().text().trim();
+      
+      $('[name="domain"] option').each(function(index,item){
+        if (index !== 0) { 
+          $.removeCookie(name, {path: '/', domain: $(item).val()});
+        }
+      });
+      $.removeCookie(name, {path: '/'});
+      row.remove();
+    });
+
+    prepopulaters.on('click', 'button', function(ev){
+        var name, value, values, cookie,
+          cookies = $(this).data('cookies');
+        while(cookie = cookies.pop()) {
+            $.cookie(cookie.name, cookie.value, defaultCookieOptions);
+        }
+        document.location.reload();
+    });
+
+    cookiesSec.on('click', '.delete', function(ev){
+      var row = $(this).parents('tr'),
+        name = $(this).parent().next().text().trim();
+      
+      $('[name="domain"] option').each(function(index,item){
+        if (index !== 0) { 
+          $.removeCookie(name, {path: '/', domain: $(item).val()});
+        }
+      });
+      $.removeCookie(name, {path: '/'});
+      row.remove();
+    });
+
+
     var hash = {};
 
     location.search.slice(1).split('&').forEach(
@@ -74,7 +99,7 @@
       document.cookie.split(';').forEach(
         function(item){
           item  = item.split('=');
-          table.append('<tr><td><span class="delete">&times;</span><td>' + item[0] +'</td><td>'+ item[1] + '</td></tr>');
+          table.append('<tr><td><span class="delete">&times;</span><td>' + item[0] +'</td><td>'+ decodeURIComponent(item[1]) + '</td></tr>');
         }
       );
     }
@@ -115,6 +140,13 @@
       <span class="help-block">Path will default to <code>/</code> Expires will default to <code>7</code> Domain will default to <code>.ft.com</code></span>
     </fieldset>
   </form>
+  <div id="prepopulaters" class="btn-group">
+      <h3>Predefined cookie values</h3>
+      <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,env=test,screenmode=large,eid=rockabox-eval,ord=123123"}]'>FTQA for Rockabox​</button>​
+      <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,env=test,screenmode=large,eid=medialets-eval,ord=123123"}]'>​FTQA for Medialets​</button>​
+      <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,ghostbug=1,env=test,ghost=1,zone=fullpage-test,eid=fullpage-ipad,screenmode=large"}]'>FTQA for fullscreen iPad​</button>​
+      <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,ghostbug=1,env=test,ghost=1,zone=fullpage-test,eid=fp-perf-1.6mb,screenmode=large"}]'>​FTQA for slow fullscreen​</button>​
+  </div>
 </section>
 <hr>
 <section id="cookies">
