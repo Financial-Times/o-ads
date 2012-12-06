@@ -10269,6 +10269,69 @@ code {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+.alert-message ul {
+  list-style-type: none;
+  border-radius: 4px;
+  margin-left: 1em;
+  color: #eee;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.alert-message li {
+  padding: 0.3em 0.5em;
+}
+
+.alert-message li:first-of-type{
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.alert-message li:last-of-type{
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+}
+
+.alert-message li::before {
+  margin-right: 0.5em;
+}
+
+.alert-message li.success {
+  margin-right: 0.5em;
+  background-color: #57a957;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#62c462), to(#57a957));
+  background-image: -moz-linear-gradient(top, #62c462, #57a957);
+  background-image: -ms-linear-gradient(top, #62c462, #57a957);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #62c462), color-stop(100%, #57a957));
+  background-image: -webkit-linear-gradient(top, #62c462, #57a957);
+  background-image: -o-linear-gradient(top, #62c462, #57a957);
+  background-image: linear-gradient(top, #62c462, #57a957);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
+}
+
+.alert-message li.success::before {
+  content: "✔";
+}
+
+.alert-message li.error{
+  background-color: #C43C35;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#EE5F5B), to(#C43C35));
+  background-image: -moz-linear-gradient(top, #EE5F5B, #C43C35);
+  background-image: -ms-linear-gradient(top, #EE5F5B, #C43C35);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #EE5F5B), color-stop(100%, #C43C35));
+  background-image: -webkit-linear-gradient(top, #EE5F5B, #C43C35);
+  background-image: -o-linear-gradient(top, #EE5F5B, #C43C35);
+  background-image: linear-gradient(top, #EE5F5B, #C43C35);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
+}
+
+.alert-message li.error::before {
+  content: "✘";
+}
+
 #ipad-prepopulaters {
   display: none;
 }
@@ -10296,15 +10359,57 @@ code {
     line-height: 36px;
   }
 }
+
+
 </style>
   <script>
-  $(function(){
+    function encode(str) {
+      return encodeURIComponent(str);
+    }
 
-    var cookiesSec = $('#cookies'),
+    function decode(str) {
+      return decodeURIComponent(str);
+    }
+
+    hashes = {
+        cookies: function() {
+          var hash = {};
+          document.cookie.split('; ').forEach(
+          function(item){
+              item  = item.split('=');
+              hash[item[0]] = item[1];
+            }
+          );
+          return hash;
+        }(),
+        hash: function () {
+          var hash = {};
+          location.hash.slice(1).split('&').forEach(
+          function(item){
+              item  = item.split('=');
+              hash[decode(item[0])] = decode(item[1]);
+            }
+          );
+          return hash;
+        }()
+      };
+
+  $(function(){
+    var header = $('h1'),
+      cookiesSec = $('#cookies'),
       examplesSec = $('#exmaples'),
       prepopulaters = $('#prepopulaters'),
-      form = $('form[name="cookie-setter"]');
+      form = $('form[name="cookie-setter"]'),
+            defaultLocation = document.location.protocol + '//' + document.location.host + document.location.pathname,
       defaultCookieOptions = { expires: 7, path: '/', domain: '.ft.com', secure: false };
+
+
+    function renderMessage(msg, type) {
+      type = type ? ' ' + type : '';
+      $('.alert-message').remove();
+      $('<p class="alert-message' + type + '"></p>').append(msg).insertAfter(header);
+      return true;
+    }
 
     form.submit(function() {
       var defaults = { expires: 'Expires', path: '', domain: 'Domain' },
@@ -10320,13 +10425,14 @@ code {
       });
 
       if (!values.name) {
-        form.find('.alert-message').remove();
-        form.prepend('<p class="alert-message error">cookie not set: no name supplied</p>');
+        renderMessage('cookie not set: no name supplied', 'error');
         return false;
       }
-        
+
       $.cookie(values.name, values.value, values);
-      return true;
+      document.location.hash = '#action=set&name=' + encode(values.name) + '&value=' + decode(values.value);
+      document.location.reload();
+      return false;
     });
 
     form.find('select[name="domain"]')
@@ -10335,9 +10441,9 @@ code {
     $('#cookies').on('click', '.delete', function(ev){
       var row = $(this).parents('tr'),
         name = $(this).parent().next().text().trim();
-      
+
       $('[name="domain"] option').each(function(index,item){
-        if (index !== 0) { 
+        if (index !== 0) {
           $.removeCookie(name, {path: '/', domain: $(item).val()});
         }
       });
@@ -10347,9 +10453,16 @@ code {
 
     prepopulaters.on('click', 'button', function(ev){
         var name, value, values, cookie,
-          cookies = $(this).data('cookies');
-        while(cookie = cookies.pop()) {
+          i = 0,
+          cookies =  $(this).data('cookies');
+        for(;i < cookies.length; i++) {
+            cookie = cookies[i];
             $.cookie(cookie.name, cookie.value, defaultCookieOptions);
+        }
+        if(cookies.length === 1) {
+          document.location.hash = '#action=set&name=' + encode(cookies[0].name) + '&value=' + encode(cookies[0].value);
+        } else {
+          document.location.hash = '#action=multiset&cookies=' + encode(JSON.stringify(cookies));
         }
         document.location.reload();
     });
@@ -10357,41 +10470,82 @@ code {
     cookiesSec.on('click', '.delete', function(ev){
       var row = $(this).parents('tr'),
         name = $(this).parent().next().text().trim();
-      
+
       $('[name="domain"] option').each(function(index,item){
-        if (index !== 0) { 
+        if (index !== 0) {
           $.removeCookie(name, {path: '/', domain: $(item).val()});
         }
       });
       $.removeCookie(name, {path: '/'});
       row.remove();
+      document.location.hash = '#action=remove&name=' + encode(name);
+      document.location.reload();
     });
 
+    function handleEvents(){
+      var hash = hashes.hash,
+        cookies = hashes.cookies,
+        actions = {
+        set: function () {
+          if(hash.name in cookies) {
+            renderMessage('cookie set: name ' + hash.name + ' value ' + hash.value, 'success');
+          } else {
+            renderMessage('sorry, failed to set cookie: name ' + hash.name, 'error');
+          }
+        },
+        multiset: function() {
+          var cookie,
+            msg = '<ul>',
+            setCookies = JSON.parse(hash.cookies),
+            passed = 0,
+            failed = 0;
+          while(cookie = setCookies.pop()) {
+            if(cookie.name in cookies) {
+              passed++;
+              msg += '<li class="success">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+            } else {
+              failed++;
+              msg += '<li class="error">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+            }
+          }
+          msg += '</ul>';
 
-    var hash = {};
-
-    location.search.slice(1).split('&').forEach(
-      function(item){
-        item  = item.split('=');
-        hash[item[0]] = item[1];
+          msg = passed + ' cookies set ' + failed + ' cookies failed!' + msg;
+          renderMessage(msg);
+        },
+        remove: function () {
+          if(!(hash.name in cookies)) {
+            renderMessage('cookie removed: name ' + hash.name, 'success');
+          } else {
+            renderMessage('sorry, failed to remove cookie: name ' + hash.name, 'error');
+          }
+        },
+        default: function (){
+          renderMessage('ya\'ll dont be fiddlin wit ma cookie tool!!');
+        }
       }
-    );
 
-    if(hash.name && hash.value) {
-      form.prepend('<p class="alert-message success">cookie set: name ' + hash.name + ' value ' + hash.value + '</p>');
+      if(hash.action in actions){
+        actions[hash.action]();
+      } else if (hash.action){
+        actions['default']();
+      }
+      document.location.hash = '';
     }
+
+    handleEvents(hashes.hash);
 
     if(document.cookie === '') {
       cookiesSec.find('table').remove();
       cookiesSec.append('<p class="alert-message">No cookies set.</p>');
     } else {
-      var table = cookiesSec.find('table tbody');
-      document.cookie.split(';').forEach(
-        function(item){
-          item  = item.split('=');
-          table.append('<tr><td><span class="delete">&times;</span><td>' + item[0] +'</td><td>'+ decodeURIComponent(item[1]) + '</td></tr>');
-        }
-      );
+      var name, value,
+        table = cookiesSec.find('table tbody');
+
+      for(name in hashes.cookies){
+        value = hashes.cookies[name];
+        table.append('<tr><td><span class="delete" data-cookie-name="' + name + '">&times;</span><td>' + decode(name) +'</td><td>'+ decode(value) + '</td></tr>');
+      }
     }
   });
   </script>
@@ -10432,7 +10586,7 @@ code {
   </form>
   <section id="prepopulaters">
     <div id="testing-prepopulaters" class="btn-group">
-        <h3>Predefined cookie values for testing</h3>
+        <h3>Predefined cookie values for Testing</h3>
         <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "env=test"}]'>Show test ads</button>​
         <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "env=live"}]'>​Show live ads</button>​
     </div>
