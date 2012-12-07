@@ -1,26 +1,23 @@
-<!DOCTYPE html><html><head>
-<title>Test Plan DartForPublishers.js - Test DFP with referring
-	page</title>
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
-
-
-<script type="text/javascript">
-			function redirectPage() {
-				location.href="dfp-advertising-test-referrer.html";
-			}
-		</script>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Plan DartForPublishers.js - Test DFP with referring page</title>
+	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+	<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+	<script type="text/javascript">
+		function redirectPage() {
+			location.href="dfp-advertising-test-referrer.js.test.html";
+		}
+	</script>
 </head>
 <body onload="redirectPage();">
 	<h1 id="qunit-header">DartForPublishers.js - Refer to a test plan</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
+	<h2 id="mode"></h2>
 
 	<ol id="qunit-tests"></ol>
 	<hr>
 	This will be redirected to the actual test plan.
-	
-
-
-
-</body></html>
+	</body>
+</html>

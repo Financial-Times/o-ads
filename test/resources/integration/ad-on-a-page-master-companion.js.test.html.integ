@@ -1,4 +1,5 @@
-<!DOCTYPE html><!--
+<!DOCTYPE html>
+<!--
 Details about the ads in this test within DFP.
 
 We will target it here:
@@ -10,210 +11,157 @@ Advertiser: 2389285, FT DFP Test 1 Account Order: 3903162, Ongoing Test Ad( 1 of
 The companion ad is:
 Advertiser: 2389285, FT DFP Test 1 Account Order: 3903162, Ongoing Test Ad( 2 of 14 ): 219337406, Ongoing newssubs companion test
 
---><html><head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Test DFP Ad on a page - master / companion</title>
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
-<style type="text/css">
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+    <title>Test DFP Ad on a page - master / companion</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen">
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
 
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
+    <script type="text/javascript">
+        /*members AYSC, ENV, FT_U, Properties, ads, attr, cookies, css, dfp_site,
+            dfp_zone, env, eq, find, isLegacyAPI, length, match, request,
+            requestNewssubs, timeIntervalTolerance, timeoutTolerance, useDFP, write,
+            intro, banlb, banlbmaster, newssubs, newssubscompanion, tlbxrib, mktsdata,
+            hlfmpu, hlfmpucompanion, doublet, doubletcompanion, refresh, initDFP,
+            lib, writeScriptMock, FTQA, writeScript
+        */
 
-a img {
-	border: none;
-}
+        var FT = FT || {};
 
-div {
-	border: 1px solid black;
-}
+        FT.env = {
+           "dfp_site": "test.5887.dev",
+           "dfp_zone": "master-companion-test",
+           // Override timeout values to ensure the ad calls have time to come back
+           // before the positions are collapsed. This is to ensure we can test the page successfully.
+           "timeoutTolerance": 1500000,
+           "timeIntervalTolerance": 3000000
+        };
 
-.advertising {
-	border: 1px solid red;
-}
+        // Mock the properties object so we are considered to be non-live
+        FT.Properties = { 'ENV': "ci" };
+        var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+        var MockSubdir = true;
+    </script>
 
-.tempAds {
-	display: none;
-}
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 
-.warning {
-	background-color: red;
-}
+    <script type="text/javascript">
 
-#feedback {
-	border: none;
-}
-</style>
+        // Clear the cookies which cause values to be inserted into the Ad calls.
+        //initCookies();
+        var Tests = {
+           'intro': TestMockNoAd.intro,
+           'banlb': TestMockAd.banlbmaster,
+           'newssubs': TestMockAd.newssubscompanion,
+           'tlbxrib': TestMockNoAd.tlbxrib,
+           'mktsdata': TestMockNoAd.mktsdata,
+           'hlfmpu': TestMockAd.hlfmpucompanion,
+           'doublet': TestMockAd.doubletcompanion,
+           'refresh': TestMockNoAd.refresh
+        };
 
-<script type="text/javascript">
+        var Plan = {};
+        Plan.nextTestPlan =  'ad-on-a-page-cognitivematch.html';
+        QUnitChainer.init(Plan);
 
+        FT.ads.initDFP();
 
+        //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
-/*members AYSC, ENV, FT_U, Properties, ads, attr, cookies, css, dfp_site,
-    dfp_zone, env, eq, find, isLegacyAPI, length, match, request,
-    requestNewssubs, timeIntervalTolerance, timeoutTolerance, useDFP, write,
-    intro, banlb, banlbmaster, newssubs, newssubscompanion, tlbxrib, mktsdata,
-    hlfmpu, hlfmpucompanion, doublet, doubletcompanion, refresh, initDFP,
-    lib, writeScriptMock, FTQA, writeScript
-*/
+        if (testMode === 'unit')
+        {
+           //if unit test, then we override FT.lib.writeScript with the call to Mocking
+           FT._ads.utils.writeScript = function (URL) {
+               mockAdContent(URL, Tests); // Ads injected immediately
+            };
+        }
 
+        // Clear the cookies which cause values to be inserted into the Ad calls.
+        initCookies();
 
+        test("environment", function ()
+        {
+           expect(4);
 
-var FT = FT || {};
+           ok(FT.env, "FT.env should be defined");
+           ok(FT._ads.utils.cookies, "FT._ads.utils.cookies should be defined");
+           ok(FT.env.useDFP, "FT.env.useDFP should be set to true");
+           ok(!FT.env.isLegacyAPI, "legacy API should not be used");
+        });
 
-FT.env = {
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "master-companion-test",
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
+        test("banlb master", function ()
+        {
+           expect(5);
+           var banlb = $("div#banlb.advertising");
+           //equal(banlb.css("display"), "block", "banlb div should have display");
 
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+           var banlbLink = banlb.find("a");
+           equal(banlbLink.length, 1, "banlb div should contain 'a' tags total");
 
-      </script>
+           var banlbImg = banlbLink.find("img");
 
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+           testImageAd("banlb", 1);
 
-<script type="text/javascript">
-//cookies can now be passed within a  get string to the page
-setCookies();
-var MockSubdir = true;
-</script>
+           //equal(banlbImg.length, 1, "banlb div should contain 'img' tags total");
+           //ok(banlbImg.attr("src").match(/3-banlb-master-728x90\.GIF$/i), "banlb img tag should have source 3-banlb-master-728x90.GIF");
+        });
 
-<script src="../../../../../../../main/webapp/media/js/lib/HeadCoreBundle/aop.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties-int.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Namespaces.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/pre-init.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
+        test("newssubs companion", function ()
+        {
+           expect(4);
+           var newssubs = $("div#newssubs.advertising");
+           equal(newssubs.css("display"), "block", "newssubs div should have display");
 
-<script src="../js/util/mock-ads.html.js"></script>
-<script type="text/javascript">
+           var newssubsLink = newssubs.find("a");
+           equal(newssubsLink.length, 1, "newssubs div should contain 'a' tags total");
 
-// Clear the cookies which cause values to be inserted into the Ad calls.
-//initCookies();
-var Tests = {
-   'intro': TestMockNoAd.intro,
-   'banlb': TestMockAd.banlbmaster,
-   'newssubs': TestMockAd.newssubscompanion,
-   'tlbxrib': TestMockNoAd.tlbxrib,
-   'mktsdata': TestMockNoAd.mktsdata,
-   'hlfmpu': TestMockAd.hlfmpucompanion,
-   'doublet': TestMockAd.doubletcompanion,
-   'refresh': TestMockNoAd.refresh
-};
+           var newssubsImg = newssubsLink.find("img");
+           equal(newssubsImg.length, 1, "newssubs div should contain 'img' tags total");
+           ok(newssubsImg.attr("src").match(/1-newssubs-companion-239x90\.GIF$/i), "newssubs img tag should have source 1-newssubs-companion-239x90.GIF");
+        });
 
-var Plan = {};
-Plan.nextTestPlan =  'ad-on-a-page-cognitivematch.html';
-QUnitChainer.init(Plan);
+        test("doublet companion", function ()
+        {
+           expect(5);
+           var doublet = $("div#doublet");
+           equal(doublet.css("display"), "block", "doublet div should have display");
 
-FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL)
-{
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
+           var doubletLink = doublet.find("a");
+           equal(doubletLink.length, 6, "doublet div should contain 'a' tags total");
 
-//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookies.FTQA);
+           var doubletImg = doubletLink.find("img");
+           equal(doubletImg.length, 2, "doublet div should contain 'img' tags total");
 
-if (testMode === 'unit')
-{
-   //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
-}
-
-// Clear the cookies which cause values to be inserted into the Ad calls.
-initCookies();
-
-test("environment", function ()
-{
-   expect(4);
-
-   ok(FT.env,                                                                                      "FT.env should be defined");
-   ok(FT.cookies,                                                                                  "FT.cookies should be defined");
-   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
-   ok(!FT.env.isLegacyAPI,                                                                         "legacy API should not be used");
-});
-
-test("banlb master", function ()
-{
-   expect(5);
-   var banlb = FT.$("div#banlb.advertising");
-   //equal(banlb.css("display"), "block",                                                           "banlb div should have display");
-
-   var banlbLink = banlb.find("a");
-   equal(banlbLink.length, 1,                                                                     "banlb div should contain 'a' tags total");
-
-   var banlbImg = banlbLink.find("img");
-   
-   testImageAd("banlb", 1);
-   
-   //equal(banlbImg.length, 1,                                                                      "banlb div should contain 'img' tags total");
-   //ok(banlbImg.attr("src").match(/3-banlb-master-728x90\.GIF$/i),                                  "banlb img tag should have source 3-banlb-master-728x90.GIF");
-});
-
-test("newssubs companion", function ()
-{
-   expect(4);
-   var newssubs = FT.$("div#newssubs.advertising");
-   equal(newssubs.css("display"), "block",                                                        "newssubs div should have display");
-
-   var newssubsLink = newssubs.find("a");
-   equal(newssubsLink.length, 1,                                                                  "newssubs div should contain 'a' tags total");
-
-   var newssubsImg = newssubsLink.find("img");
-   equal(newssubsImg.length, 1,                                                                   "newssubs div should contain 'img' tags total");
-   ok(newssubsImg.attr("src").match(/1-newssubs-companion-239x90\.GIF$/i),                         "newssubs img tag should have source 1-newssubs-companion-239x90.GIF");
-});
-
-test("doublet companion", function ()
-{
-   expect(5);
-   var doublet = FT.$("div#doublet");
-   equal(doublet.css("display"), "block",                                                         "doublet div should have display");
-
-   var doubletLink = doublet.find("a");
-   equal(doubletLink.length, 6,                                                                   "doublet div should contain 'a' tags total");
-
-   var doubletImg = doubletLink.find("img");
-   equal(doubletImg.length, 2,                                                                    "doublet div should contain 'img' tags total");
-
-   ok(doubletImg.eq(0).attr("src").match(/doublet-companion-1-167x96\.jpg$/i),                     "doublet img tag should have source doublet-companion-1-167x96.jpg");
-   ok(doubletImg.eq(1).attr("src").match(/doublet-companion-2-167x96\.jpg$/i),                     "doublet img tag should have source doublet-companion-2-167x96.jpg");
-});
-
-      </script>
+           ok(doubletImg.eq(0).attr("src").match(/doublet-companion-1-167x96\.jpg$/i), "doublet img tag should have source doublet-companion-1-167x96.jpg");
+           ok(doubletImg.eq(1).attr("src").match(/doublet-companion-2-167x96\.jpg$/i), "doublet img tag should have source doublet-companion-2-167x96.jpg");
+        });
+    </script>
 </head>
 
 <body class="no-tlbxrib no-mktsdata no-refresh">
-	<h1 id="qunit-header"><a href="/~robinmarr/ft/svn/online/website/ft-cmsWeb/src/test/js/qunit/FT/RenderHeadBundle/Advertising/integration/ad-on-a-page-master-companion.html">Test DFP Ad on a page - master / companion</a> </h1>
-	<h2 id="qunit-banner" class=""></h2>
-	<h2 id="qunit-userAgent">Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.7.0 Safari/534.34</h2>
+  <h1 id="qunit-header">DartForPublishers.js</h1>
+  <h2 id="qunit-banner"></h2>
+  <h2 id="qunit-userAgent"></h2>
+  <h2 id="mode"></h2>
+
+  <ol id="qunit-tests"></ol>
 
 	<p>
 		The purpose of this page is to see the Falcon FT.ads library working
@@ -227,19 +175,20 @@ test("doublet companion", function ()
 	<p>The ads are booked under
 	</p><ol>
 		<li>Advertiser:<a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;advertiserid=2389285">2389285</a><a>
-					FT DFP Test 1 Account 
+					FT DFP Test 1 Account
 		</a></li><a>
 		</a><li><a>Order:</a><a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;orderid=3903162">3903162</a><a>
-					Ongoing Test 
+					Ongoing Test
 		</a></li><a>
 		</a><li><a>Ad: Ongoing banlb master test ID: </a><a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;&amp;adid=219337529">219337529</a>
 			and others.</li>
 	</ol>
 	<p></p>
 	<p>
-		And are targeted to DFP site/zone<b> <script type="text/javascript">
-document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
-      </script>test.5887.dev/master-companion-test
+		And are targeted to DFP site/zone<b>
+        <script type="text/javascript">
+            document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
+        </script>
 		</b>
 	</p>
 	<p>
@@ -258,8 +207,7 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 	</form>
 	<hr>
 
-	<div id="mode">You are in UNIT TEST MODE. Set cookie FTQA=integration to switch to integration test mode.</div>
-	<p id="qunit-testresult" class="result">Running...<br>&nbsp;</p><ol id="qunit-tests"></ol>
+
 	<div id="main"></div>
 	<!-- if in integration mode, make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
 	<div id="dccookie" style="display: none">
@@ -274,8 +222,8 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 
 	<div id="fullpage-container">Ad request fullpage-container</div>
 	<script type="text/javascript">
-FT.ads.request('intro');
-</script>
+        FT.ads.request('intro');
+    </script>
 	<div class="clearfix container">
 		clearfix container
 		<div class="master-column middleSection" data-zone="middleSection">
@@ -285,18 +233,14 @@ FT.ads.request('intro');
 				<div id="banlb" class="advertising">
 					Ad request banlb
 					<script type="text/javascript">
-FT.ads.request("banlb");
-            </script>
-<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/i;219337529;0-0;9;42538302;3454-728/90;34066927/34084808/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/3-banlb-master-728x90.GIF" border="0" alt="FT.com Test Ads DEV"></a>
+                        FT.ads.request("banlb");
+                    </script>
 				</div>
 				<div id="newssubs" class="advertising">
 					Ad request newssubs
 					<script>
-
-FT.ads.requestNewssubs();
-
-            </script>
-<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/g;219337406;0-0;9;42538302;19263-239/90;34024806/34042684/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/1-newssubs-companion-239x90.GIF" border="0" alt="FT.com Test Ads DEV"></a>
+                        FT.ads.requestNewssubs();
+                    </script>
 				</div>
 			</div>
 			<div class="master-row railSection" data-zone="railSection">
@@ -304,10 +248,8 @@ FT.ads.requestNewssubs();
 				<div id="tlbxrib" class="advertising" style="display: none; ">
 					Ad request tlbxrib
 					<script type="text/javascript">
-FT.ads.request("tlbxrib");
-            </script>
-
-<img src="../images/ft-no-ad-336x60.gif">
+                        FT.ads.request("tlbxrib");
+                    </script>
 				</div>
 				<div class="freestyle">
 					freestyle
@@ -319,10 +261,8 @@ FT.ads.request("tlbxrib");
 								Ad request mktsdata
 								<!--  <span class="advert" style="width: 75px; height: 25px; margin-top: -3px;"> - -->
 								<script type="text/javascript">
-FT.ads.request("mktsdata");
-                        </script>
-
-<img src="../images/ft-no-ad-75x25.gif">
+                                    FT.ads.request("mktsdata");
+                                </script>
 								<!--   </span> - -->
 							</div>
 						</div>
@@ -332,9 +272,8 @@ FT.ads.request("mktsdata");
 				<div id="hlfmpu" class="advertising">
 					Ad request hlfmpu
 					<script type="text/javascript">
-FT.ads.request("hlfmpu");
-            </script>
-<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/x;219471237;0-0;9;42538302;4252-336/280;34088404/34106285/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/mpu-336x280-companion.GIF" border="0" alt="FT.com Test Ads DEV"></a>
+                        FT.ads.request("hlfmpu");
+                    </script>
 				</div>
 				<div class="railComponent togglable maximised advertising">
 					railComponent togglable maximised advertising <span class="toggleButton"> </span>
@@ -346,14 +285,11 @@ FT.ads.request("hlfmpu");
 						<div id="doublet">
 							Ad request doublet
 							<script type="text/javascript">
-FT.ads.request("doublet");
-                  </script>
-[<div class="doublet"><h3>DOUBLET COMPANION</h3><div class="doublet-wrapper doublet_first"><div class="doublet-content"><h4><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://politicalhumor.about.com/od/barackobama/ig/Barack-Obama-Cartoons/">ADVERT 1</a></h4><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://politicalhumor.about.com/od/barackobama/ig/Barack-Obama-Cartoons/"><img src="../images/doublet-companion-1-167x96.jpg" alt="Ad 2 Alt Text"></a><p><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://politicalhumor.about.com/od/barackobama/ig/Barack-Obama-Cartoons/">Ad 1 Subheading</a></p></div></div><div class="doublet-wrapper doublet_last"><div class="doublet-content"><h4><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://xkcd.com/">ADVERT 2</a></h4><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://xkcd.com/"><img src="../images/doublet-companion-2-167x96.jpg" alt="Ad 2 Alt Text"></a><p><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/3/0/%2a/v%3B220013387%3B0-0%3B9%3B42538302%3B16843-342/200%3B34472542/34490420/1%3B%3B%7Esscs%3D%3fhttp://xkcd.com/">Ad 2 Subheading</a></p></div></div></div>].join("
-")
+                                FT.ads.request("doublet");
+                            </script>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 		<div class="adRequests">
@@ -361,24 +297,21 @@ FT.ads.request("doublet");
 			<div id="oob">
 				Ad request oob
 				<script type="text/javascript">
-FT.ads.request('oob');
-         </script>
+                    FT.ads.request('oob');
+                </script>
 			</div>
 			<div id="corppop">
 				Ad request corppop
 				<script type="text/javascript">
-FT.ads.request('corppop');
-         </script>
+                    FT.ads.request('corppop');
+                </script>
 			</div>
 			<div id="refresh" class="advertising" style="display: none; ">
 				Ad request refresh
 				<script type="text/javascript">
-FT.ads.request('refresh');
-         </script>
-
-<img src="../images/ft-no-ad-1x1-refresh.gif">
+                    FT.ads.request('refresh');
+                </script>
 			</div>
-
 		</div>
 	</div>
 
@@ -388,4 +321,5 @@ FT.ads.request('refresh');
 	</form>
 	<hr>
 
-</body></html>
+</body>
+</html>

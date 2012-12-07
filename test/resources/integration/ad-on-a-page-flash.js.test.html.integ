@@ -1,194 +1,144 @@
-<!DOCTYPE html><html><head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Test DFP Ad on a page with dynamic/flash ads</title>
-<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
-<style type="text/css">
-#banlb-not {
-	height: 100px;
-	width: 300px;
-	background-color: pink;
-	border: 1px solid black;
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+    <title>Test DFP Ad on a page with dynamic/flash ads</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen">
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
 
-#mpu-not {
-	height: 200px;
-	width: 300px;
-	background-color: blue;
-	border: 1px solid black;
-}
+    <script type="text/javascript">
 
-a img {
-	border: none;
-}
+        /*members AYSC, CONST, ENV, FT_U, Properties, adName, ads, adverts,
+            asset, banlb, cookies, corppop, description, dfp_site, dfp_zone,
+            doublet, env, getElementById, getLongestUrl, hlfmpu, injectUrlTrackCall,
+            intro, isLegacyAPI, length, mktsdata, newssubs, next, oob, refresh,
+            refreshTimer, regex, request, requestNewssubs, response, src,
+            timeIntervalTolerance, timeoutTolerance, tlbxrib, trackUrl,
+            urlThreshold, urlThresholdMax, useDFP, write, browser, opera, safari,
+            chrome, banlbflash, hlfmpuflash, initDFP, lib writeScriptMock, FTQA,
+            writeScript
+        */
 
-div {
-	border: 1px solid black;
-}
+        var FT = FT || {};
+        FT.env =
+        {
+           "dfp_site": "test.5887.dev",
+           "dfp_zone": "dynamic-ad-test",
+           "asset":    "page",
 
-.advertising {
-	border: 1px solid red;
-}
+           // Override timeout values to ensure the ad calls have time to come back
+           // before the positions are collapsed. This is to ensure we can test the page successfully.
+           "timeoutTolerance": 1500000,
+           "timeIntervalTolerance": 3000000
+        };
+        // Mock the properties object so we are considered to be non-live
+        FT.Properties = { 'ENV': "ci" };
+        var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
 
-.tempAds {
-	display: none;
-}
+        //cookies can now be passed within a  get string to the page
+        setCookies();
+        var MockSubdir = true;
 
-.warning {
-	background-color: red;
-}
+    </script>
 
-#feedback {
-	border: none;
-}
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 
-#xpopad {
-	display: none;
-}
-</style>
+    <script type="text/javascript">
+        // Clear the cookies which cause values to be inserted into the Ad calls.
+        //initCookies();
 
-<script type="text/javascript">
+        var Tests = {
+           'banlb': TestMockAd.banlbflash,
+           'hlfmpu': TestMockAd.hlfmpuflash
+        };
 
+        var Plan = {};
+        Plan.nextTestPlan =  'ad-on-a-page-interstitial.html';
+        QUnitChainer.init(Plan);
 
+        FT.ads.initDFP();
 
+        //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
+        if (testMode === 'unit')
+        {
+            //if unit test, then we override FT.lib.writeScript with the call to Mocking
+            FT._ads.utils.writeScript = function (URL){
+               mockAdContent(URL, Tests); // Ads injected immediately
+            };
+        }
 
-/*members AYSC, CONST, ENV, FT_U, Properties, adName, ads, adverts,
-    asset, banlb, cookies, corppop, description, dfp_site, dfp_zone,
-    doublet, env, getElementById, getLongestUrl, hlfmpu, injectUrlTrackCall,
-    intro, isLegacyAPI, length, mktsdata, newssubs, next, oob, refresh,
-    refreshTimer, regex, request, requestNewssubs, response, src,
-    timeIntervalTolerance, timeoutTolerance, tlbxrib, trackUrl,
-    urlThreshold, urlThresholdMax, useDFP, write, browser, opera, safari,
-    chrome, banlbflash, hlfmpuflash, initDFP, lib writeScriptMock, FTQA,
-    writeScript
-*/
+        // Clear the cookies which cause values to be inserted into the Ad calls.
+        initCookies();
 
-var FT = FT || {};
-FT.env =
-{
-   "dfp_site": "test.5887.dev",
-   "dfp_zone": "dynamic-ad-test",
-   "asset":    "page",
+        test("Page Environment", function ()
+        {
+           expect(6);
 
-   // Override timeout values to ensure the ad calls have time to come back
-   // before the positions are collapsed. This is to ensure we can test the page successfully.
-   "timeoutTolerance": 1500000,
-   "timeIntervalTolerance": 3000000
-};
-// Mock the properties object so we are considered to be non-live
-FT.Properties = { 'ENV': "ci" };
-var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-      </script>
+           ok(FT.env, "FT.env should be defined");
+           ok(FT._ads.utils.cookies, "FT._ads.utils.cookies should be defined");
+           equal(FT._ads.utils.cookies.FT_U, undefined, "FT._ads.utils.cookies.FT_U should be ");
+           equal(FT._ads.utils.cookies.AYSC, undefined, "FT._ads.utils.cookies.AYSC should be ");
+           ok(FT.env.useDFP, "FT.env.useDFP should be set to true");
+           ok(!FT.env.isLegacyAPI, "Legacy API should not be used");
+        });
 
-<script src="../js/util/QUnitChainer.js"></script>
-<script src="../js/util/test-helpers.html.js"></script>
-<script src="../js/util/page-helpers.html.js"></script>
-<script src="../lib/jquery/jquery-1.7.2.js"></script>
-<script src="../js/util/jquery-ft-namespacing.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+        function maybe_pending(tests)
+        {
+           var result;
+           if ($.browser.opera || $.browser.safari || $.browser.chrome)
+           {
+              result = pending(tests);
+           }
+           return result;
+        }
 
-<script type="text/javascript">
-//cookies can now be passed within a  get string to the page
-setCookies();
-var MockSubdir = true;
-</script>
+        test("banlb", function ()
+        {
+           expect(5);
+           // Flash objects do not embed in Safari, Opera and GoogleChrome so cannot propertly test there.
+           if (maybe_pending(5))
+           {
+              return;
+           }
+           testFlashAd('banlb');
+        });
 
-<script src="../../../../../../../main/webapp/media/js/lib/HeadCoreBundle/aop.js"></script>
-<script src="../lib/jquery/jquery.cookie.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/Properties/Properties-int.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Namespaces.js"></script>
-<script src="../js/util/Lib.js"></script>
-<script src="../js/util/cookie.js"></script>
-<script src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/pre-init.js"></script>
-<script src="../js/ft/HTMLAds.js"></script>
-<script src="../js/ft/DartForPublishers.js"></script>
-
-<script src="../js/util/mock-ads.html.js"></script>
-<script type="text/javascript">
-// Clear the cookies which cause values to be inserted into the Ad calls.
-//initCookies();
-
-var Tests = {
-   'banlb': TestMockAd.banlbflash,
-   'hlfmpu': TestMockAd.hlfmpuflash
-};
-
-var Plan = {};
-Plan.nextTestPlan =  'ad-on-a-page-interstitial.html';
-QUnitChainer.init(Plan);
-
-FT.ads.initDFP();
-FT.lib.writeScriptMock = function (URL)
-{
-   mockAdContent(URL, Tests); // Ads injected immediately
-};
-
-//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-var testMode = unitOrIntegrationMode(FT.cookies.FTQA);
-
-if (testMode === 'unit')
-{
-   //if unit test, then we override FT.lib.writeScript with the call to Mocking
-   FT.lib.writeScript = FT.lib.writeScriptMock;
-}
-
-// Clear the cookies which cause values to be inserted into the Ad calls.
-initCookies();
-
-test("Page Environment", function ()
-{
-   expect(6);
-
-   ok(FT.env,                                                                                      "FT.env should be defined");
-   ok(FT.cookies,                                                                                  "FT.cookies should be defined");
-   equal(FT.cookies.FT_U, undefined,                                                              "FT.cookies.FT_U should be ");
-   equal(FT.cookies.AYSC, undefined,                                                              "FT.cookies.AYSC should be ");
-   ok(FT.env.useDFP,                                                                               "FT.env.useDFP should be set to true");
-   ok(!FT.env.isLegacyAPI,                                                                         "Legacy API should not be used");
-});
-
-function maybe_pending(tests)
-{
-   var result;
-   if (FT.$.browser.opera || FT.$.browser.safari || FT.$.browser.chrome)
-   {
-      result = pending(tests);
-   }
-   return result;
-}
-
-test("banlb", function ()
-{
-   expect(5);
-   // Flash objects do not embed in Safari, Opera and GoogleChrome so cannot propertly test there.
-   if (maybe_pending(5))
-   {
-      return;
-   }
-   testFlashAd('banlb');
-});
-
-test("hlfmpu", function ()
-{
-   expect(5);
-   // Flash objects do not embed in Safari, Opera and GoogleChrome so cannot propertly test there.
-   if (maybe_pending(5))
-   {
-      return;
-   }
-   testFlashAd('hlfmpu');
-});
-      </script>
+        test("hlfmpu", function ()
+        {
+           expect(5);
+           // Flash objects do not embed in Safari, Opera and GoogleChrome so cannot propertly test there.
+           if (maybe_pending(5))
+           {
+              return;
+           }
+           testFlashAd('hlfmpu');
+        });
+    </script>
 </head>
 
 <body>
 	<h1 id="qunit-header"><a href="/~robinmarr/ft/svn/online/website/ft-cmsWeb/src/test/js/qunit/FT/RenderHeadBundle/Advertising/integration/ad-on-a-page-flash.html">Test DFP Ad on a page with dynamic/flash ads</a> </h1>
-	<h2 id="qunit-banner" class=""></h2>
-	<h2 id="qunit-userAgent">Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.7.0 Safari/534.34</h2>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+    <h2 id="mode"></h2>
+
+    <ol id="qunit-tests"></ol>
 	<p>The purpose of this page is to see the Falcon FT.ads library
 		working with Dart for Publishers using dynamic flash ads</p>
 	<p>
@@ -198,19 +148,20 @@ test("hlfmpu", function ()
 	<p>The ads are booked under
 	</p><ol>
 		<li>Advertiser: ID: <a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;advertiserid=2389285">2389285</a><a>
-					FT DFP Test 1 Account 
+					FT DFP Test 1 Account
 		</a></li><a>
 		</a><li><a>Order: ID: </a><a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;orderid=4142558">4142558</a><a>
-					Homepage testing ads on ... 
+					Homepage testing ads on ...
 		</a></li><a>
 		</a><li><a>Ad: ID: </a><a title="Must use IE for this link" href="http://dfp.doubleclick.net/sso?useSso=true&amp;networkid=5887&amp;&amp;adid=220558144">220558144</a>UK,
 			US, Test banlb 728x90 and others.</li>
 	</ol>
 	<p></p>
 	<p>
-		And are targeted to DFP site/zone<b> <script type="text/javascript">
-document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
-      </script>test.5887.dev/dynamic-ad-test
+		And are targeted to DFP site/zone<b>
+        <script type="text/javascript">
+            document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
+        </script>
 		</b>
 	</p>
 	<p>
@@ -228,10 +179,7 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 	</form>
 	<hr>
 
-	<div id="mode">You are in UNIT TEST MODE. Set cookie FTQA=integration to switch to integration test mode.</div>
 	<p id="qunit-testresult" class="result">Running...<br>&nbsp;</p><ol id="qunit-tests"></ol>
-
-	<div id="main"></div>
 
 	<div id="main"></div>
 	<!-- if in integration mode, make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
@@ -247,8 +195,8 @@ document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);
 
 	<div id="fullpage-container">Ad request fullpage-container</div>
 	<script type="text/javascript">
-FT.ads.request('intro');
-</script>
+        FT.ads.request('intro');
+    </script>
 	<div class="clearfix container">
 		clearfix container
 		<div class="master-column middleSection" data-zone="middleSection">
@@ -258,16 +206,14 @@ FT.ads.request('intro');
 				<div id="banlb" class="advertising">
 					Ad request banlb
 					<script type="text/javascript">
-FT.ads.request("banlb");
-            </script><a target="_blank" href="http://ad.doubleclick.net/"><img src="../images/ft-no-ad-728x90.gif" alt="Regression Test" border="0"></a>
+                        FT.ads.request("banlb");
+                    </script>
 				</div>
 				<div id="newssubs" class="advertising">
 					Ad request newssubs
 					<script>
-
-//FT.ads.requestNewssubs();
-
-            </script>
+                        //FT.ads.requestNewssubs();
+                    </script>
 				</div>
 			</div>
 			<div class="master-row railSection" data-zone="railSection">
@@ -275,8 +221,8 @@ FT.ads.request("banlb");
 				<div id="tlbxrib" class="advertising">
 					Ad request tlbxrib
 					<script type="text/javascript">
-//FT.ads.request("tlbxrib");
-            </script>
+                        //FT.ads.request("tlbxrib");
+                    </script>
 				</div>
 				<div class="freestyle">
 					freestyle
@@ -285,9 +231,12 @@ FT.ads.request("banlb");
 						<div id="wsodHomePageModuleContent">
 							Ad request wsodHomePageModuleContent
 							<div class="advertising" id="mktsdata">
-								Ad request mktsdata <span class="advert" style="width: 75px; height: 25px; margin-top: -3px;"> <script type="text/javascript">
-//FT.ads.request("mktsdata");
-                     </script> </span>
+								Ad request mktsdata
+                                <span class="advert" style="width: 75px; height: 25px; margin-top: -3px;">
+                                    <script type="text/javascript">
+                                        //FT.ads.request("mktsdata");
+                                    </script>
+                                </span>
 							</div>
 						</div>
 					</div>
@@ -296,8 +245,8 @@ FT.ads.request("banlb");
 				<div id="hlfmpu" class="advertising">
 					Ad request hlfmpu
 					<script type="text/javascript">
-FT.ads.request("hlfmpu");
-            </script><a target="_blank" href="http://ad.doubleclick.net/"><img src="../images/ft-no-ad-0x0.gif" alt="Regression Test" border="0"></a>
+                        FT.ads.request("hlfmpu");
+                    </script>
 				</div>
 				<div class="railComponent togglable maximised advertising">
 					railComponent togglable maximised advertising <span class="toggleButton"> </span>
@@ -309,12 +258,11 @@ FT.ads.request("hlfmpu");
 						<div id="doublet">
 							Ad request doublet
 							<script type="text/javascript">
-//FT.ads.request("doublet");
-                  </script>
+                                //FT.ads.request("doublet");
+                            </script>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 		<div class="adRequests">
@@ -322,22 +270,21 @@ FT.ads.request("hlfmpu");
 			<div id="oob">
 				Ad request oob
 				<script type="text/javascript">
-//FT.ads.request('oob');
-         </script>
+                    //FT.ads.request('oob');
+                </script>
 			</div>
 			<div id="corppop">
 				Ad request corppop
 				<script type="text/javascript">
-//FT.ads.request('corppop');
-         </script>
+                    //FT.ads.request('corppop');
+                </script>
 			</div>
 			<div id="refresh" class="advertising">
 				Ad request refresh
 				<script type="text/javascript">
-//FT.ads.request('refresh');
-         </script>
+                    //FT.ads.request('refresh');
+                </script>
 			</div>
-
 		</div>
 	</div>
 
@@ -346,7 +293,5 @@ FT.ads.request("hlfmpu");
 		<input type="button" name="expand" value="expand" onclick="expandAll()" alt="show all Ad divs on the page"> <input type="button" name="diagnose" value="diagnose" onclick="showDiagnosis()" alt="display Ad diagnostics"> <input type="button" name="stop timer" value="stop timer" onclick="stopTimer()" alt="stop the interval timer">
 	</form>
 	<hr>
-	<script type="text/javascript" src="../js/util/test-helpers.html.js"></script>
-
-
-</body></html>
+</body>
+</html>
