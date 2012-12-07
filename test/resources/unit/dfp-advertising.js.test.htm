@@ -18,7 +18,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     <script src="../js/util/test-helpers.html.js"></script>
     <script src="../js/util/page-helpers.html.js"></script>
     <script src="../lib/sinon/sinon-1.1.1.js"></script>
-    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>    
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
 	<script>
 
 	/*jslint evil: true, white: true, browser: true, undef: true,
@@ -216,13 +216,19 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
 
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
-    <script src="../js/ft/DartForPublishers.js"></script>
     <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
+    <script>
+    	var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+    </script>
 </head>
 <body>
 	<h1 id="qunit-header">DartForPublishers.js</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
+	<h2 id="mode"></h2>
+
 
 	<ol id="qunit-tests"></ol>
 
@@ -2302,7 +2308,7 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);		
+		uParams = extract_uParams(Params.u);
 		matches(url, ';key=value;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ";uuid=" + Params.uuid + ";ts=" + Params.ts + ';cc=n;pos=banlb',	 "Ad URL key parameter present in ad call with leading semicolon handled ok" + url);
 		equal(order, 'sz,dcopt,key,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
 
@@ -3835,6 +3841,8 @@ $(document).ready(function (){
 });
 
 </script>
-
+	<div id="dccookie" style="display: none">
+      <script>unitOrIntegrationMessage(testMode);</script>
+   </div>
 </body>
 </html>

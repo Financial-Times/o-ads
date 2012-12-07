@@ -198,8 +198,10 @@
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
     <script src="../js/ft/DartForPublishers.js"></script>
-    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
+
   <script>
+     var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
     // TODO mock a referring url
     //FT.ads.baseAdvert['referrer'] = "http://www.ft.com/home/uk" ;
     // mock keywords
@@ -210,6 +212,8 @@
 	<h1 id="qunit-header">DartForPublishers.js - URL has valid UUID.</h1>
 	<h2 id="qunit-banner"></h2>
 	<h2 id="qunit-userAgent"></h2>
+  <h2 id="mode"></h2>
+
 	<ol id="qunit-tests"></ol>
 
 <script>
@@ -287,5 +291,9 @@ var Plan = {};
 Plan.nextTestPlan =  'expand-collapse.js.test.htm';
 QUnitChainer.init(Plan);
 </script>
+
+  <div id="dccookie" style="display: none">
+      <script>unitOrIntegrationMessage(testMode);</script>
+   </div>
 </body>
 </html>

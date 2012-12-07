@@ -217,34 +217,28 @@ var LegacyPlaceholders = {
 // Functions to mock ad content from the server
 //=========================================================================
 
-function unitOrIntegrationMode(FTQAcookie, insertCookie)
-{
+function unitOrIntegrationMode(FTQAcookie, insertCookie) {
    //FTQAcookie = 'integration';
    if (!FTQAcookie) {
       FTQAcookie = '';
    }
    var result = 'unit';
    var Match = FTQAcookie.match(/integration/);
-   if (Match)
-   {
+   if (Match) {
       result = (insertCookie === 'no') ? 'int_nocookieurl': 'integration';
    }
    return result;
 }
 
-function unitOrIntegrationMessage(testMode)
-{
+function unitOrIntegrationMessage(testMode) {
+   var msg = '',
+      dcCookieDiv = document.getElementById("dccookie");
 
-   var modeDiv = document.getElementById("mode");
-   var dcCookieDiv = document.getElementById("dccookie");
-
-   if ((testMode === 'integration') || (testMode === 'int_nocookieurl'))
-   {
-      modeDiv.appendChild(document.createTextNode("You are in INTEGRATION MODE. Set cookie FTQA=unit to return to unit test mode."));
+   if ((testMode === 'integration') || (testMode === 'int_nocookieurl')) {
+      msg = "INTEGRATION MODE";
    }
 
-   if (testMode === 'integration')
-   {
+   if (testMode === 'integration' && dcCookieDiv) {
 
       var dcCookieURLScript1 = document.createElement('script');
       dcCookieURLScript1.type = 'text/javascript';
@@ -258,9 +252,10 @@ function unitOrIntegrationMessage(testMode)
       dcCookieDiv.appendChild(dcCookieURLScript2);
 
    } else {
-      modeDiv.appendChild(document.createTextNode("You are in UNIT TEST MODE. Set cookie FTQA=integration to switch to integration test mode."));
+      msg = "UNIT MODE";
    }
 
+   $('#mode').addClass(testMode).append(msg);
 }
 
 function mockAdContent(URL, Tests, LegacyBoolean)
