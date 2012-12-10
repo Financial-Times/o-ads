@@ -2,8 +2,15 @@
 <html>
 <head>
   <title>Ads Lib Reporting</title>
+  <script>
+    var FT = FT || {};
+  </script>
   <script src="test-classes/lib/jquery/jquery-1.7.2.js"></script>
   <script src="site/js/bootstrap.min.js"></script>
+  <script src="test-classes/js/ft/advertising.utils.js"></script>
+  <script src="test-classes/js/ft/advertising.utils.cookie.js"></script>
+  <script src="test-classes/js/util/mock-ads.html.js"></script>
+
   <link href="site/css/bootstrap.min.css" rel="stylesheet">
   <!--link href="site/css/bootstrap-responsive.min.css" rel="stylesheet" -->
   <link href="site/css/custom.css" rel="stylesheet">
@@ -34,8 +41,7 @@
         <li>
             <a href="site/jshint/jshint.html" target="content">JSHint</a>
         </li>
-        <li>
-            <li class="dropdown">
+        <li class="dropdown">
               <a href="#" id="drop1" class="dropdown-toggle" data-toggle="dropdown">Tools <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li>
@@ -49,14 +55,24 @@
                   <a tabindex="-1" href="http://ahp.svc.ft.com/tasks/project/ProjectTasks/viewDashboard?projectId=648" target="_blank">AHP</a>
                 </li>
                 <li>
+                  <a tabindex="-1" href="https://www.google.com/dfp" target="_blank">DFP</a>
+                </li>
+                <li>
                   <a tabindex="-1" href="http://git.svc.ft.com/summary/modules%2Fadvertising.git" target="content">Git Blit</a>
                 </li>
                 <!-- <li><a tabindex="-1" href="#">Something else here</a></li>
                 <li class="divider"></li>
                 <li><a tabindex="-1" href="#">Separated link</a></li> -->
               </ul>
-            </li>
             <!-- <a href="site/cookie-tool.html" target="content">Cookie Tool</a> -->
+        </li>
+      </ul>
+      <ul class="nav pull-right" id="testMode">
+        <li class="dropdown"><a href="#" id="drop2" class="dropdown-toggle" data-toggle="dropdown">Unit <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="#">unit</a></li>
+            <li><a tabindex="-1" href="#">integration</a></li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -97,14 +113,34 @@
         }
       }
 
+      function testModeInit() {
+        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA),
+           dropDown = $('#testMode');
+           mainLink = $('#drop2');
+        function changeTestMode(testMode) {
+          mainLink.text(testMode).append('<b class="caret"></b>');
+          dropDown.removeClass().addClass('nav pull-right ' + testMode);
+        }
+
+        dropDown.on('click', 'ul.dropdown-menu a', function(){
+          var testMode = $(this).text().trim();
+          changeTestMode(testMode);
+          FT._ads.utils.cookie('FTQA', testMode);
+          if(!!iframe.contentWindow.location.href.match('test-classes')) {
+            iframe.contentWindow.location.reload();
+          }
+        });
+        changeTestMode(testMode);
+      }
+
       function onReady() {
         iframe = d.querySelector('iframe');
         validateDomain();
         validateMenuLinks();
         reloadLocation();
+        testModeInit();
         $(w).unload(rememberCurrentLocation);
       }
-
       $(onReady);
     }(window, document, jQuery));
   </script>
