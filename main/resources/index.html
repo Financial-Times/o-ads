@@ -7,6 +7,7 @@
   </script>
   <script src="test-classes/lib/jquery/jquery-1.7.2.js"></script>
   <script src="site/js/bootstrap.min.js"></script>
+  <script src="site/js/socket.io.js"></script>
   <script src="test-classes/js/ft/advertising.utils.js"></script>
   <script src="test-classes/js/ft/advertising.utils.cookie.js"></script>
   <script src="test-classes/js/util/mock-ads.html.js"></script>
@@ -38,8 +39,8 @@
         <li>
             <a href="surefire-reports/html" target="content">QUnit Report</a>
         </li>
-        <li>
-            <a href="site/jshint/jshint.html" target="content">JSHint</a>
+        <li id="jshint">
+            <a href="site/jshint/jshint.html" target="content">JSHint <span class="badge badge-important"></span></a>
         </li>
         <li class="dropdown">
               <a href="#" id="drop1" class="dropdown-toggle" data-toggle="dropdown">Tools <b class="caret"></b></a>
@@ -60,11 +61,10 @@
                 <li>
                   <a tabindex="-1" href="http://git.svc.ft.com/summary/modules%2Fadvertising.git" target="content">Git Blit</a>
                 </li>
-                <!-- <li><a tabindex="-1" href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a tabindex="-1" href="#">Separated link</a></li> -->
+                <li>
+                  <a href="http://admintools.internal.ft.com:86/adstools/index.html" target="content">AdsInfoDFP</a></li>
+                </li>
               </ul>
-            <!-- <a href="site/cookie-tool.html" target="content">Cookie Tool</a> -->
         </li>
       </ul>
       <ul class="nav pull-right" id="testMode">
@@ -82,9 +82,23 @@
     <h1>hi there</h1>
     <p>please pick an option from the top</p>
   </iframe>
+  <ul id="test-results">
+    <li class="chrome">
+      Chrome <span class="badge badge-success">6</span>
+    </li>
+    <li class="firefox">
+      Firefox <span class="badge badge-success">6</span>
+    </li>
+    <li class="canary">
+      Canary <span class="badge badge-important">6</span>
+    </li>
+    <li class="safari">
+      Safari <span class="badge badge-important">6</span>
+    </li>
+  </ul>
   <script>
     (function (w, d, $, u) {
-      var iframe;
+      var iframe, iframeDoc;
 
       function validateDomain() {
         if(location.hostname.match(/ft\.com$/) === null) {
@@ -117,15 +131,16 @@
         var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA),
            dropDown = $('#testMode');
            mainLink = $('#drop2');
+
         function changeTestMode(testMode) {
           mainLink.text(testMode).append('<b class="caret"></b>');
           dropDown.removeClass().addClass('nav pull-right ' + testMode);
+          FT._ads.utils.cookie('FTQA', testMode);
         }
 
         dropDown.on('click', 'ul.dropdown-menu a', function(){
           var testMode = $(this).text().trim();
           changeTestMode(testMode);
-          FT._ads.utils.cookie('FTQA', testMode);
           if(!!iframe.contentWindow.location.href.match('test-classes')) {
             iframe.contentWindow.location.reload();
           }
@@ -134,13 +149,16 @@
       }
 
       function onReady() {
-        iframe = d.querySelector('iframe');
+        iframe = d.querySelector('iframe'),
+        iFrameDoc = iframe.contentWindow.document;
+        w.iframe = iframe;
         validateDomain();
         validateMenuLinks();
         reloadLocation();
         testModeInit();
         $(w).unload(rememberCurrentLocation);
       }
+
       $(onReady);
     }(window, document, jQuery));
   </script>
