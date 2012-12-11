@@ -117,7 +117,7 @@ var TestMockAd = {
       'payload': mockFalconAd('banlb', '', '220435672', '34653048', '', '<img src="../images/banlb-728x90.gif" border=0 alt="Markets"><!-- ad ID: 220435672  creative ID: 34653048 -->\n      <style type=\"text/css\">\n         #interstitial_overlay {\n            position: absolute; \n            top: 20px; \n            left: 100px; \n            width: 500px; \n            height: 300px;\n            border: 4px solid red;\n            padding: 4px;\n            background: black;\n            color:white;\n            font-family: verdana, arial, helvetica, sans-serif;\n            z-index: 100000;\n         }\n         #interstitial_overlay a {\n            text-decoration: none;\n         }\n         #interstitial_overlay a:hover {\n            text-decoration: underline;\n         }\n         #interstitial_overlay .close_button {\n            float: right;\n            margin: 5px 10px 0 0;\n            font-weight: bold;\n         }\n         #interstitial_overlay .logo {\n            float: left;\n            margin: 5px 10px 0 0;\n            font-weight: bold;\n         }\n      </style>\n      <div id=\"interstitial_overlay\" class=\"new_interstitial\">\n         <!-- The percent i macro below records the interstitial impression when served -->\n         <div class=\"logo\"><img src=\"../images/favicon.ico\" width=\"64\" height=\"64\"></div>\n         <div class=\"close_button\" onclick=\"javascript: this.parentNode.style.display=\'none\';\">\n            <a href=\"#\">X</a>\n         </div>\n         <h2>interstitial</h2>\n         <!-- The percent u macro below inserts the click through URL -->\n         <h3><a href=\"http://ad.doubleclick.net/click%3Bh%3Dv8/3a06/2/0/%2a/v%3B220435672%3B0-0%3B0%3B40911646%3B255-0/0%3B34653048/34670926/1%3B%3B%7Esscs%3D%3fhttp://www.ft.com\">1x1</a></h3>\n      </div>\n')
    },
    'banlbmaster': {
-     'regex' : /3-banlb-master-728x90\.GIF$/i,
+     'regex' : /3-banlb-master-728x90\.GIF$|simgad\/13903942554398247333$/i,
       'payload': mockFalconAd('banlb', '', '', '', '', '<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/i;219337529;0-0;9;42538302;3454-728/90;34066927/34084808/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/3-banlb-master-728x90.GIF" border=0 alt="FT.com Test Ads DEV"></a>')
    },
    'banlbflash': {
@@ -137,6 +137,8 @@ var TestMockAd = {
       'payload': mockFalconAd('newssubs', '', '', '', '', '<img src="../images/3-newssubs-239x90.GIF" border=0 alt="FT.com Test Ads DEV">')
    },
    'newssubscompanion': {
+      'regex': /1-newssubs-companion-239x90\.GIF$|simgad\/12561756974682088744$/i,
+      'description': '1-newssubs-companion-239x90.gif',
       'payload': mockFalconAd('newssubs', '', '', '', '', '<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/g;219337406;0-0;9;42538302;19263-239/90;34024806/34042684/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/1-newssubs-companion-239x90.GIF" border=0 alt="FT.com Test Ads DEV"></a>')
    },
    'tlbxrib': {
@@ -158,8 +160,9 @@ var TestMockAd = {
       'payload': mockFalconAd('hlfmpu', '', '', '', '', '<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a06/0/0/%2a/x;219471237;0-0;9;42538302;4252-336/280;34088404/34106285/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/mpu-336x280-companion.GIF" border=0 alt="FT.com Test Ads DEV"></a>')
    },
    'hlfmpuflash': {
-      'regex': /flashfirebug\d|eb(Reporting|Banner)Flash(_1_)?/i,
-      'description': 'flash ad ebBannerFlash_1_*'
+      'regex': /FLASH_AD/i,
+      'description': 'flash ad FLASH_AD',
+      'payload': mockFalconAd('hlfmpu', 'flash')
    },
    'doublet': {
       'regex': /something/i,
@@ -330,7 +333,7 @@ function mockFalconAd(name, type, flight, adId, adName, more)
 
    var ad = '';
    if (type === 'flash') {
-
+      ad = '<object id="FLASH_AD"><embed /></object>';
       //at the moment cant find a way of running flash ads in unit test mode
    }
    else if (name === 'refresh') {

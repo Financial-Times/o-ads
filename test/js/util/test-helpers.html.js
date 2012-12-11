@@ -9,13 +9,14 @@
     regexp: false, newcap: true, immed: true, maxerr: 1000, indent: 3
 */
 
-/*globals FT, CheckAds, doit, ok, equal, jQuery, window, alert, env,
+/*globals FT, CheckAds, doit, ok, equal, context.$, window, alert, env,
     dfp_site, asset, timeoutTolerance
 */
 
 // We used to have a pending() method added to qunit which would allow selenium
 // tests to pass the test plan even though some tests would expectedly fail
 // This was useful for TODO items.
+//var context = context || window;
 if (!window.pending)
 {
    window.pending =
@@ -28,7 +29,7 @@ if (!window.pending)
       return true;
    };
    // Enable this line to execute pending tests and thus cause them to fail.
-   //window.pending = function () {};
+   //context.pending = function () {};
 }
 
 //=========================================================================
@@ -205,13 +206,13 @@ function flatten(obj) {
 function debug(msg)
 {
    // Cross brower console.log support.
-   if (window.console && window.console.log)
+   if (context.console && context.console.log)
    {
-      window.console.log(msg);
+      context.console.log(msg);
    }
-   else if (window.opera)
+   else if (context.opera)
    {
-      window.opera.postError(msg);
+      context.opera.postError(msg);
    }
 }
 
@@ -223,9 +224,9 @@ function initCookies(FTQA)
 {
    FTQA = FTQA || "debug,dfp_ads,interval=25,timeout=20000";
    FT._ads.utils.cookies.FTQA = FTQA;
-   FT._ads.utils.removeCookie('FT_U');
-   FT._ads.utils.removeCookie('AYSC');
-   FT._ads.utils.removeCookie('rsi_segs')
+   FT._ads.utils.removeCookie('FT_U', {path: '/', domain: '.ft.com'});
+   FT._ads.utils.removeCookie('AYSC', {path: '/', domain: '.ft.com'});
+   FT._ads.utils.removeCookie('rsi_segs', {path: '/', domain: '.ft.com'})
 }
 
 function locateDiv(pos, prefix)
@@ -234,13 +235,13 @@ function locateDiv(pos, prefix)
    {
       prefix = '';
    }
-   var rDiv = jQuery(null);
+   var rDiv = context.$(null);
    var AdContainers = FT.ads.getAdContainers(pos);
    for (var idx = 0; idx < AdContainers.length; ++idx)
    {
       if (AdContainers[idx].name === prefix + pos)
       {
-         rDiv = jQuery(AdContainers[idx].div);
+         rDiv = context.$(AdContainers[idx].div);
       }
    }
    var id = rDiv.attr('id');
@@ -249,7 +250,7 @@ function locateDiv(pos, prefix)
       rDiv = rDiv.find('#' + pos);
    }
    id = id || pos;
-   equal(rDiv.length, 1, "'" + id + "' div exists within the document");
+   equal(rDiv.length, 1, "'" + id + "' div exists within the context.document");
    return rDiv;
 }
 
@@ -281,10 +282,10 @@ function get_diagnostic(pos, diag)
 }
 
 function getParams() {
-  var idx = document.URL.indexOf('?');
+  var idx = context.document.URL.indexOf('?');
   var params = new Array();
 	if (idx != -1) {
-	  var pairs = document.URL.substring(idx+1, document.URL.length).split('&');
+	  var pairs = context.document.URL.substring(idx+1, context.document.URL.length).split('&');
 	  for (var i=0; i<pairs.length; i++) {
 		nameVal = pairs[i].split('=');
 		params[nameVal[0]] = nameVal[1];
@@ -296,26 +297,26 @@ function getParams() {
 function setCookies() {
    var params = getParams();
    var cookie_string = '';
-   document.cookie = '';
+   context.document.cookie = '';
 
    for (var key in params) {
       var values = params[key].split(':');
       var value = values[0];
       var expiry = values[1];
       var domain = values[2];
-  
+
       var date = new Date();
       var timeOut = expiry * 1000;
-  
+
        //of course timeout should be properly set but anyway
       if (value === "undef"){
         //delete cookie by setting timeout in the past
         timeOut = -1;
-      } 
+      }
       date.setTime(date.getTime() + (timeOut));
       var expires = "; expires=" + date.toGMTString();
       cookie_string = key + "=" + value + expires + "; domain=" + domain + "; path=/";
-      document.cookie = cookie_string;
+      context.document.cookie = cookie_string;
    }
 }
 
@@ -331,12 +332,12 @@ function createCookie(name,value,days) {
 		var expires = "; expires="+date.toGMTString();
 	}
 	else var expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
+	context.document.cookie = name+"="+value+expires+"; path=/";
 }
 
 function readCookie(name) {
 	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
+	var ca = context.document.cookie.split(';');
 	for(var i=0;i < ca.length;i++) {
 		var c = ca[i];
 		while (c.charAt(0)==' ') c = c.substring(1,c.length);

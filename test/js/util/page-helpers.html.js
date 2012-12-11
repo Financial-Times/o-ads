@@ -17,6 +17,8 @@
 // Ad on a page test plan helpers
 //=========================================================================
 
+var context = context || window;
+
 function initTest(pos)
 {
    if (!Tests[pos])
@@ -39,7 +41,7 @@ function checkImagesInAd(pos, rDiv, display, totalImagesExpected, srcMatch, rImg
 
    var idx = 0;
    var validImages = 0;
-   
+
    for (idx = 0;idx < rImg.length;idx++)
    {
       var imgSrc = rImg[idx].src;
@@ -55,10 +57,10 @@ function checkImagesInAd(pos, rDiv, display, totalImagesExpected, srcMatch, rImg
 
    if (display)
    {
-      equal(rDiv.css("display"),                                                              display, cssSel + " should have display");
+      equal(rDiv.css("display"), display, cssSel + " should have display");
    }
-   equal(validImages, totalImagesExpected,                                                    "div#" + pos + " should contain img tags totalling");
-   matches(firstImgSrc, srcMatch,                                                              "img src should match " + Tests[pos].description);
+   equal(validImages, totalImagesExpected, "div#" + pos + " should contain img tags totalling");
+   matches(firstImgSrc, srcMatch, "img src should match " + Tests[pos].description);
 }
 
 function testNoAd(pos, args, prefix, totalImagesExpected, visible,localcorppop)
@@ -80,9 +82,9 @@ function testNoAd(pos, args, prefix, totalImagesExpected, visible,localcorppop)
    }
 
    var expected;
-   
+
    var expected = pos === 'intro' ? 'block' : visible;
-   
+
    //special case if we have a locally served corppop
    if ((localcorppop === 'yes') && (pos === 'banlb')){
 	   expected = 'block';
@@ -111,8 +113,8 @@ function testNoIntro()
 {
    // Intro ad doesn't have an advertising class wrapped around it.
    var id = 'fullpage-container';
-   var rDiv = jQuery(document.getElementById(id));
-   equal(rDiv.length, 1, "'" + id + "' div exists within the document");
+   var rDiv = context.$(context.document.getElementById(id));
+   equal(rDiv.length, 1, "'" + id + "' div exists within the context.document");
    var rImg = rDiv.siblings("img:first");
 
    testNoAd('intro', {div: rDiv, img: rImg});
@@ -123,8 +125,8 @@ function testNoDoublet()
    // Doublet ad doesn't have an advertising class around the div that is hidden.
    // The hlfmpu div immediately precedes the doublet's containing div.
    var id = 'hlfmpu';
-   var rDiv = jQuery(document.getElementById(id)).next("div");
-   equal(rDiv.length, 1, "'doublet' containing div exists within the document");
+   var rDiv = context.$(context.document.getElementById(id)).next("div");
+   equal(rDiv.length, 1, "'doublet' containing div exists within the context.document");
    var rDoublet = rDiv.find("#doublet");
    equal(rDoublet.length, 1, "'doublet' div is contained in sibling of " + id);
    var rImg = rDoublet.find("img:first");
@@ -134,9 +136,9 @@ function testNoDoublet()
 
 function testNoInterstitial()
 {
-   equal(jQuery('#interstitial_overlay').length, 0,                                               'interstitial ad should not be present in DOM');
+   equal(context.$('#interstitial_overlay').length, 0,                                               'interstitial ad should not be present in DOM');
    // the following check is in to check for interstitial corppop regression:
-   equal(jQuery('#popad').length, 0,                                                              '#popad should not be present');
+   equal(context.$('#popad').length, 0,                                                              '#popad should not be present');
 }
 
 function testImageAd(pos, totalImagesExpected, prefix)
@@ -206,33 +208,33 @@ function testFlashAd(pos, prefix)
       }
    }
 
-   matches(tag, /^embed|object$/i,                                           "tag name should");
-   equal(css,                                                            "block", cssSel + " should have display");
-   ok(length !== 0,                                           "div#" + pos + " should contain some embed tags");
-   matches(id, Tests[pos].regex,                                            "first embed id should match " + Tests[pos].description);
+   matches(tag, /^embed|object$/i, "tag name should");
+   equal(css, "block", cssSel + " should have display");
+   ok(length !== 0, "div#" + pos + " should contain some embed tags");
+   matches(id, Tests[pos].regex, "first embed id should match " + Tests[pos].description);
 }
 
 function testRefreshAd(pos,containsCode)
 {
    initTest(pos);
-   
+
    //default
    var adResponseName = "refresh adjustment 32767";
-   
+
    //some refresh ads now contain injection code and have different properties
    if ((typeof(containsCode) !== "undefined") &&  (containsCode === "contains_trovus")){
-	   adResponseName = "refresh plus trovus company by IP tracking";   
+	   adResponseName = "refresh plus trovus company by IP tracking";
    }
 
    var rDiv;
    var AdContainers = FT.ads.getAdContainers(pos);
-   differs(AdContainers.length, 0, pos + " div exists within the document");
+   differs(AdContainers.length, 0, pos + " div exists within the context.document");
    var scripts = 0;
    var scriptsExpected = AdContainers.length === 2 ? 3 : 2;
    var rImg;
    for (var idx = 0; idx < AdContainers.length; ++idx)
    {
-      rDiv = jQuery(AdContainers[idx].div);
+      rDiv = context.$(AdContainers[idx].div);
       equal(rDiv.css("display"),                                                            "none", AdContainers[idx].name + " should have display");
       var rScript = rDiv.find("script");
       scripts += rScript.length;
@@ -249,42 +251,42 @@ function testRefreshAd(pos,containsCode)
    equal(FT.ads.adverts[pos].response.name,                                              "refresh", pos + "response object name property should be ");
    equal(FT.ads.adverts[pos].response.type,                                              "empty", pos + "response object type property should be ");
    equal(FT.ads.adverts[pos].response.adName,                                            adResponseName, pos + "response object adName property should be ");
-   matches(rImg.attr('src'), Tests[pos].regex,                                            "document written img tag should match " + Tests[pos].description);
+   matches(rImg.attr('src'), Tests[pos].regex,                                            "context.document written img tag should match " + Tests[pos].description);
 }
 
 function testAYSC22(AYSC, regex) {
-	
+
    var m = AYSC.match(/^(_22)([^_]+)/);
    var val = '';
    var flag = 'true';
-	  
+
    if (m) {
       val = m[2];
    }
-      
+
 	if ((val.match(regex.cor)) || (val.match(regex.lv1)) || (val.match(regex.lv2))) {
 	   //corppop should not be served
 	   flag = 'false';
 	}
- 
+
 	equal(flag, 'true',																			"corpop ad should only be served depending on AYSC field 22 settings");
 }
 
 //html ads are injected within div #popads and class ..corpSignPopad
 //we should not expect popads elsewhere
 function testPopAds(totalPopAds, totalPopAdsinCorpClass) {
-	
+
 	var flag = 'true';
 	if (totalPopAds > totalPopAdsinCorpClass) {
 		flag = 'false';
 	}
-	
+
 	equal(flag, 'true',																			"no popads served within div of popads except with a class of .corpSignPopad");
 }
 
 function testObjectParam(oId,paramName,expectedValue)   {
 
-    var objt = document.getElementById(oId);
+    var objt = context.document.getElementById(oId);
 
     //var param =  objt[paramName];
     //var actualParamValue = param.value;
