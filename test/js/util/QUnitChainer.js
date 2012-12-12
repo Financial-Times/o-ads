@@ -69,7 +69,6 @@ var QUnitChainer = {
    skey:    'QUnitChainer',  // which key name to store the test results in the storage
    sskey:   '',              // which key name to store the settings in the storage
    hskey:   '',              // which key name to store the test plan history list in
-
    bIsControlPage:  false,   // flag set when in control page mode
    bHasHandlers:    false,   // flag set when QUnit handlers are installed
    bAlertStorage:   false,   // flag set if alert boxes with browser storage should be displayed when storage is manipulated
@@ -118,6 +117,7 @@ var QUnitChainer = {
       this.nextTestPlan   = rParams.nextTestPlan || false;
 
       this.initBrowser();
+      this.getBrowser();
 
       this.storage    = rParams.storage || this.storage;
       this.skey       = rParams.skey || this.skey;
@@ -186,6 +186,44 @@ var QUnitChainer = {
       }
       return this.bIsFF;
    },
+
+
+   /*
+    * QUnitChainer.getBrowser()
+    *
+    * Initialise the browser detection properties.
+    * Needed because jasmine testing framework is very strange in the order it executes
+    * beforeEach(), and it() functions
+    */
+
+    getBrowser: function() {
+      var browser,
+        ua = navigator.userAgent;
+      switch(true) {
+        case !!(browser = ua.match(/msie\s\d+/i)):
+            browser[0] = browser[0].replace(' ', '/');
+        break;
+        case !!(browser = ua.match(/chrome\/\d{3}/i)):
+          browser[0] = browser[0].replace(/chrome/i, 'canary');
+        break;
+        case !!(browser = ua.match(/chrome\/\d{2}\./i)):
+          browser[0] = browser[0].slice(0, -1);
+        break;
+        case !!(browser = ua.match(/safari\/\d+/i)):
+        break;
+        case !!(browser = ua.match(/opera\/\d+/i)):
+        break;
+        case !!(browser = ua.match(/firefox\/\d+/i)):
+        break;
+        default:
+          browser = 'unknown/0';
+        break;
+      }
+      browser = browser[0].split('/');
+      this.browser = {name: browser[0].toLowerCase(), version: browser[1]};
+
+      return this.browser;
+    },
 
    /*
     * QUnitChainer.initBrowser()
@@ -618,7 +656,7 @@ var QUnitChainer = {
 
       self.Tests.userAgent = jQuery('#qunit-userAgent').text();
 
-      document.title = self.Tests.header;
+      document.title = self.Tests.header
 
       self.trace({ 'in': 'QUC.begin()', 'self.Tests': self.Tests});
    },
@@ -684,7 +722,7 @@ var QUnitChainer = {
             self.showControlPage(self.jqInjectAt);
          }
       }
-
+      parent.window.FT.socket.emit('results', {browser: self.browser, result: result});
    },
 
    /*

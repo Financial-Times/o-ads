@@ -72,12 +72,12 @@
     pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
-    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop, 
+    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
     splice, getUUIDFromString  */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
-FT = FT || {};
+//FT = FT || {};
 
 FT.Advertising = function () {
     this.baseAdvert = {};
@@ -862,7 +862,7 @@ FT.Advertising.prototype.prepareUParams = function () {
     this.foreach(uOrder, function (key) {
         var value;
         if (key === 'ip') {
-            value = this.getIP(); 
+            value = this.getIP();
         } else {
             value = this.baseAdvert[key];
         }
@@ -936,7 +936,7 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
             if(!!item){
                 var key, val,
                     m = item.match(/^(\d\d)([^_]+)/);
-                
+
                 if (m) {
                     key = m[1];
                     val = m[2];
@@ -1041,7 +1041,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     }
     this.baseAdvert.ts = this.getTimestamp();
     this.baseAdvert.loc = this.encodeIP(this.getIP());
-    this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);    
+    this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);
 
     // Check if we are running in a non-live environment and change the site name
     this.baseAdvert.dfp_site = this.getDFPSite();
@@ -1626,7 +1626,7 @@ FT.Advertising.prototype.startRefreshTimer = function (delay) {
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
-    /*jshint evil:true */ 
+    /*jshint evil:true */
     // we have a document.write in this method so we tell jshint about it.
     var rDiv,
         link,

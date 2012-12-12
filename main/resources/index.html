@@ -5,8 +5,10 @@
   <script>
     var FT = FT || {};
   </script>
+  <script src="site/js/JSON2.min.js"></script>
   <script src="test-classes/lib/jquery/jquery-1.7.2.js"></script>
   <script src="site/js/bootstrap.min.js"></script>
+  <script src="site/js/jstorage.min.js"></script>
   <script src="site/js/socket.io.js"></script>
   <script src="test-classes/js/ft/advertising.utils.js"></script>
   <script src="test-classes/js/ft/advertising.utils.cookie.js"></script>
@@ -83,80 +85,124 @@
     <p>please pick an option from the top</p>
   </iframe>
   <ul id="test-results">
-    <li class="chrome">
+    <!-- <li data-browser-name="chrome" data-browser-version="23">
       Chrome <span class="badge badge-success">6</span>
     </li>
-    <li class="firefox">
+    <li data-browser-name="firefox" data-browser-version="16">
       Firefox <span class="badge badge-success">6</span>
     </li>
-    <li class="canary">
+    <li data-browser-name="canary" data-browser-version="18">
       Canary <span class="badge badge-important">6</span>
     </li>
-    <li class="safari">
+    <li data-browser-name="safari" data-browser-version="6">
       Safari <span class="badge badge-important">6</span>
     </li>
+    <li data-browser-name="opera" data-browser-version="9">
+        opera 9 <span class="badge badge-success">30</span>
+    </li>
+    <li data-browser-name="msie" data-browser-version="6">
+        msie 6 <span class="badge badge-success">30</span>
+    </li>
+    <li data-browser-name="msie" data-browser-version="7">
+        msie 7 <span class="badge badge-success">30</span>
+    </li>
+    <li data-browser-name="msie" data-browser-version="8">
+        msie 8 <span class="badge badge-success">30</span>
+    </li>
+    <li data-browser-name="msie" data-browser-version="9">
+        msie 9 <span class="badge badge-success">30</span>
+    </li>
+    <li data-browser-name="msie" data-browser-version="10">
+        msie 10 <span class="badge badge-success">30</span>
+    </li> -->
   </ul>
   <script>
     (function (w, d, $, u) {
-      var iframe, iframeDoc;
+      if(!window.location.origin){
+        window.location.origin = window.location.protocol + '//'+ window.location.hostname
+        window.location.origin += location.port ? ':' + location.port : '';
+      }
+
 
       function validateDomain() {
-        if(location.hostname.match(/ft\.com$/) === null) {
+        if(!/ft\.com$/.test(location.hostname)) {
           alert("Warning: Not viewing this site on an ft.com domain will cause some tests to fail!");
         }
       }
 
       function validateMenuLinks() {
         function each(index, item) {
-          $.ajax(item.href).success(function () {
-            $(item).parents('li').show();
-          });
+          locationExp = RegExp('^' + window.location.origin);
+          if(locationExp.test(item.href)){
+            $.ajax(item.href).success(function () {
+              $(item).parents('li').show();
+            });
+          }
         }
         $('.nav a').each(each);
       }
 
-      function rememberCurrentLocation(ev) {
-        var current = iframe.contentWindow.location.href;
-        localStorage.setItem('location', current);
+
+      function rememberCurrentLocation() {
+        function saveLocation(ev) {
+          localStorage.setItem('location', this.href);
+        }
+
+        $('body').on('click', 'a[target="content"]', saveLocation);
+
+        FT.iframe.load(function () {
+            var iframe$;
+            try{
+                iframe$ = FT.iframeWindow.$;
+            }
+            catch(err){
+
+            }
+
+            if(iframe$){
+                FT.iframeWindow.$('body').on('click', 'a', saveLocation);
+            }
+        });
       }
 
       function reloadLocation() {
         var old = localStorage.getItem('location');
         if(!!old) {
-          iframe.src = old;
+          FT.iframe.attr('src', old);
         }
+      }
+
+      FT.changeTestMode = function (testMode) {
+          FT.testModeLink.text(testMode).append('<b class="caret"></b>');
+          FT.testModeDD.removeClass().addClass('nav pull-right ' + testMode);
+          FT._ads.utils.cookie('FTQA', testMode);
+
+          if(!!FT.iframeWindow.location.href.match('test-classes')) {
+            FT.iframeWindow.location.reload();
+          }
       }
 
       function testModeInit() {
-        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA),
-           dropDown = $('#testMode');
-           mainLink = $('#drop2');
+        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+           FT.testModeDD = $('#testMode');
+           FT.testModeLink = $('#drop2');
 
-        function changeTestMode(testMode) {
-          mainLink.text(testMode).append('<b class="caret"></b>');
-          dropDown.removeClass().addClass('nav pull-right ' + testMode);
-          FT._ads.utils.cookie('FTQA', testMode);
-        }
-
-        dropDown.on('click', 'ul.dropdown-menu a', function(){
+        FT.testModeDD.on('click', 'ul.dropdown-menu a', function(){
           var testMode = $(this).text().trim();
-          changeTestMode(testMode);
-          if(!!iframe.contentWindow.location.href.match('test-classes')) {
-            iframe.contentWindow.location.reload();
-          }
+          FT.changeTestMode(testMode);
         });
-        changeTestMode(testMode);
+        FT.changeTestMode(testMode);
       }
 
       function onReady() {
-        iframe = d.querySelector('iframe'),
-        iFrameDoc = iframe.contentWindow.document;
-        w.iframe = iframe;
+        FT.iframe = $('iframe'),
+        FT.iframeWindow = FT.iframe.prop('contentWindow'),
+        FT.iframeDoc = FT.iframeWindow.document;
         validateDomain();
         validateMenuLinks();
+        rememberCurrentLocation();
         reloadLocation();
         testModeInit();
-        $(w).unload(rememberCurrentLocation);
       }
 
       $(onReady);
