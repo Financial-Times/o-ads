@@ -1,0 +1,498 @@
+<!DOCTYPE html><html><head><script async="" src="http://es.optimost.com/es/553/c/81/u/track.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<title>Test DFP Miniplayer</title>
+<link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+<link rel="stylesheet" type="text/css" media="all" href="http://s1.ft-static.com/m/style/N1177735297/bundles/user.css">
+
+<style>
+iframe {
+	padding: 0;
+	margin: 0;
+	border: 3px solid red;
+	overflow: hidden;
+}
+</style>
+<script type="text/javascript">
+
+
+
+
+
+/*members AYSC, ENV, FT_U, Properties, ad_server,
+    additionalAdTargetingParams, adpos, ads, adverts, attr, banlb, baseAdvert,
+    beginVideo, buildURLForVideo, cookies, dfp_site, dfp_zone, endVideo, env,
+    hasCalledInitDFP, mpu, register, request, requestVideoSync, tile, urlStem,
+    videoAdverts, getVideoSyncAdverts, getVideoAdverts, getNormalAdverts, newssubs,
+    diagnostics, requestUrl, length, resetLibrary
+*/
+
+var FT = FT || {};
+
+FT.Video = {};
+
+FT.env = {// Falcon Settings
+		"dfp_site": "test.5887.video",
+		"dfp_zone": "mini-hub",
+		"dfp_targeting": "XXXX",
+		"ad_server_url": "",
+		"allow_pre_roll": ""
+		// Legacy Settings
+		
+		};// These global vars are required for FTTrack2.js
+		
+		FTSection = FT.env.sec;
+		FTPage = FT.env.page;
+		FTSite = FT.env.site;
+		var AssetType = FT.env.asset;
+		var showAd = 1;
+		var FTIndices = "XXXX"
+		var FTSectors = "XXXX";
+		var FTSubjects = "CN,CN04,CN06,MN,MN02,CN25";
+
+
+
+// Mock the properties object so we are considered to be non-live
+FT.Properties = { 'ENV': "ci" };
+var CheckAds = ['banlb', 'mpu'];
+
+      </script>
+<!--  google tag lib - needed for video-helpers -->
+<script language="javascript" src="http://www.googletagservices.com/tag/static/google_services.js"></script>
+
+<script src="../js/util/QUnitChainer.js"></script>
+<script type="text/javascript" src="../js/util/test-helpers.html.js"></script>
+<!-- <script -->
+<!-- 	src="../../../lib/Advertising/video-helpers.html.js"></script> -->
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
+<script src="../js/util/jquery-ft-namespacing.js"></script>
+<script src="../lib/jquery/jquery.cookie.js"></script>
+<script src="../js/util/cookie.js"></script>
+<script type="text/javascript" src="../lib/qunit/qunit-1.10.0pre.js"></script>
+<script type="text/javascript">
+      //cookies can now be passed within a  get string to the page
+      setCookies();
+      var MockSubdir = true;
+      </script>
+<script type="text/javascript" src="../js/util/Lib.js"></script>
+<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/RenderHeadBundle/pre-init.js"></script>
+<script type="text/javascript" src="../js/ft/HTMLAds.js"></script>
+<script type="text/javascript" src="../js/ft/DartForPublishers.js"></script>
+
+
+<script language="javascript" src="http://media.ft.com/j/optimost-page-code.js" type="text/javascript"></script>
+<script language="javascript" src="http://media.ft.com/j/optimost-global.js" type="text/javascript"></script><script type="text/javascript" src="http://es.optimost.com/es/553/c/31/u/FT_live.js"></script><script type="text/javascript" src="http://es.optimost.com/es/553/c/31/u/FT_author_live.js"></script>
+
+
+
+<!-- used for unit testing -->
+<script type="text/javascript" src="../js/util/mock-ads.html.js"></script>
+
+
+<script type="text/javascript">
+    	//var $j = jQuery.noConflict();
+
+    	//if (FT.Properties.ENV === 'p'){
+        //FT.Properties.ENV = 'live';
+    	//}
+	   </script>
+
+<script type="text/javascript">
+
+// Clear the cookies which cause values to be inserted into the Ad calls.
+//initCookies();
+var Tests = {
+   'banlb': TestMockAd.banlb2,
+   'newssubs': TestMockAd.newssubs2,
+   'mpu': TestMockAd.mpu
+};
+
+var Plan = {};
+Plan.nextTestPlan =  '0-test-ftcom-ads-video-end.html'
+QUnitChainer.init(Plan);
+
+FT.lib.writeScriptMock = function (URL)
+{
+   mockAdContent(URL, Tests); // Ads injected immediately
+};
+
+//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+var testMode = unitOrIntegrationMode(FT.cookies.FTQA);
+
+if (testMode === 'unit')
+{
+	alert("sorry, you can not run this test plan in Unit test mode.\nPlease change your FTQA cookie to 'integration' to run as integration tests");
+   //if unit test, then we override FT.lib.writeScript with the call to Mocking
+   FT.lib.writeScript = FT.lib.writeScriptMock;
+}
+
+// Clear the cookies which cause values to be inserted into the Ad calls.
+initCookies();
+
+function testBeginVideo()
+{
+	//debugger;
+   FT.ads.beginVideo();
+
+   //initVidCompanions(CheckAds);
+                      
+   deepEqual(FT.ads.getVideoAdverts().length, 0,                                                        'getVideoAdverts() should be');
+   deepEqual(FT.ads.getVideoSyncAdverts().length, 0,                                                    'getVideoSyncAdverts() should be');
+   deepEqual(FT.ads.getNormalAdverts(), [],                                                   'getNormalAdverts() should be');
+   equal(FT.ads.baseAdvert.ad_server, undefined,                                                  'ad_server should be reset to');
+   equal(FT.ads.baseAdvert.dfp_site, undefined,                                                   'dfp_site should be reset to');
+   equal(FT.ads.baseAdvert.dfp_zone, undefined,                                                   'dfp_zone should be reset to');
+}
+
+function testAfterError()
+{
+   deepEqual(FT.ads.getVideoAdverts().length, 1,                                                        'getVideoAdverts() should be');
+   deepEqual(FT.ads.getVideoSyncAdverts().length, 0,                                                    'getVideoSyncAdverts() should be');
+   deepEqual(FT.ads.getNormalAdverts(), [],                                                   'getNormalAdverts() should be');
+}
+
+function testAfterBuild()
+{
+   deepEqual(FT.ads.getVideoAdverts(), ['minivid'],                                                       'getVideoAdverts() should be');
+   deepEqual(FT.ads.getVideoSyncAdverts().length, 0,                                                    'getVideoSyncAdverts() should be');
+   deepEqual(FT.ads.getNormalAdverts(), [],                                                   'getNormalAdverts() should be');
+}
+
+test('register()', function ()
+{
+	expect(4);
+	// First verify the ad calls embedded in the page recorded properly.
+	deepEqual(FT.ads.getVideoAdverts().length, 0,                                                        'getVideoAdverts() should be');
+	deepEqual(FT.ads.getVideoSyncAdverts(), [],                                            'getVideoSyncAdverts() should be');
+	deepEqual(FT.ads.getNormalAdverts(), ["banlb","newssubs","mpu","refresh","oob"],                                                   'getNormalAdverts() should be');
+	matches(FT.ads.adverts.newssubs.diagnostics.requestUrl, /^http:/,                               'newssubs data is present');
+});
+
+test('buildURLForVideo - error cases', function ()
+{
+		   expect(16);
+		   var site = FT.env.dfp_site;
+		   var zone = FT.env.dfp_zone;
+		   testBeginVideo();
+
+		   equal(FT.ads.buildURLForVideo(undefined,'minivid').urlStem, 'http://ad.doubleclick.net/pfadx/test.5887.unclassified/unclassified;sz=400x225;pos=minivid',     'given undefined arguments, uses default site/zone should return');
+		   equal(get_diagnostic('minivid', 'checkSiteZone'), 'dfp_site/zone are invalid',                   "diagnostic for invalid zone should be");
+		   testAfterError();
+		   // Restore site/zone
+		   FT.env.dfp_site = site;
+		   FT.env.dfp_zone = zone;
+
+		   // Ensure video ad position exists so a call to beginVideo will not delete the newssubs position
+		   var result = FT.ads.buildURLForVideo('build-url-test');
+
+		   FT.ads.beginVideo();
+		   equal(FT.ads.buildURLForVideo(null,'minivid').urlStem, 'http://ad.doubleclick.net/pfadx/test.5887.unclassified/unclassified;sz=400x225;pos=minivid',     'given null arguments, uses default site/zone should return');
+		   equal(get_diagnostic('minivid', 'checkSiteZone'), 'dfp_site/zone are invalid',                   "diagnostic for invalid zone should be");
+		   testAfterError();
+		   // Ensure video ad position exists so a call to beingVideo will not delete the newssubs position
+		   result = FT.ads.buildURLForVideo('build-url-test');
+		   // Restore site/zone
+		   FT.env.dfp_site = site;
+		   FT.env.dfp_zone = zone;
+		});
+
+		test('buildURLForVideo - basic', function ()
+		{
+		   expect(24);
+		   testBeginVideo();
+
+		   var result = FT.ads.buildURLForVideo('zone','minivid');
+		   equal(result.urlStem, 'http://ad.doubleclick.net/pfadx/test.5887.video/zone;sz=400x225;pos=minivid',     'urlStem should be');
+
+		   matches(result.additionalAdTargetingParams, 'u=uuid=zone,ts=\\d{14}',                                                  'additionalAdTargetingParams for no cookies should be');
+		   equal(get_diagnostic('minivid', 'urlStem'), result.urlStem,                                      "diagnostic for urlStem should be");
+		   matches(get_diagnostic('minivid', 'additionalAdTargetingParams'), 'u=uuid=zone,ts=\\d{14}',                       "diagnostic for additionalAdTargetingParams should match");
+
+		   equal(FT.ads.baseAdvert.ad_server, 'ad.doubleclick.net',                                       'ad_server should be reset to');
+		   equal(FT.ads.baseAdvert.dfp_site, 'test.5887.video',                                             'dfp_site should be reset to');
+		   equal(FT.ads.baseAdvert.dfp_zone, 'zone',                                                      'dfp_zone should be reset to');
+		   equal(FT.env.dfp_zone, 'zone',                                                                 'FT.env.dfp_zone should be changed to');
+
+		   testAfterBuild();
+
+		   testBeginVideo();
+		   equal(FT.env.dfp_zone, 'zone',                                                                 'FT.env.dfp_zone should be remain as');
+		   // Ensure video ad position exists so a call to beingVideo will not delete the newssubs position
+		   result = FT.ads.buildURLForVideo('build-url-test');
+		});
+
+		test('buildURLForVideo - AYSC', function ()
+		{
+		   expect(15);
+		   testBeginVideo();
+		   equal(FT.env.dfp_zone, 'build-url-test',                                                       'FT.env.dfp_zone should be remain as');
+
+		   FT.cookies.AYSC = '_02F_05ITT_06RET_07RX_13GBR_14USA__15GB__191945_20N_218_';
+		   var result = FT.ads.buildURLForVideo('zone1','minivid');
+
+		   equal(result.urlStem, 'http://ad.uk.doubleclick.net/pfadx/test.5887.video/zone1;sz=400x225;pos=minivid',     'urlStem for uk targeting should be');
+		   matches(result.additionalAdTargetingParams, '07=rx;06=ret;05=itt;19=1945;21=8;20=n;02=f;14=usa;u=uuid=zone1,ts=\\d{14}', 'additionalAdTargetingParams should be');
+		   equal(get_diagnostic('minivid', 'urlStem'), result.urlStem,                                      "diagnostic for urlStem should be");
+		   matches(get_diagnostic('minivid', 'additionalAdTargetingParams'), '07=rx;06=ret;05=itt;19=1945;21=8;20=n;02=f;14=usa;u=uuid=zone1,ts=\\d{14}',     "diagnostic for additionalAdTargetingParams should be");
+		   equal(FT.env.dfp_zone, 'zone1',                                                                'FT.env.dfp_zone should be changed to');
+
+		   testAfterBuild();
+		   FT.env.dfp_zone = "build-url-test";
+		});
+
+		test('buildURLForVideo - FT_U and AYSC', function ()
+		{
+		   expect(14);
+		   testBeginVideo();
+
+		   FT.cookies.AYSC = '_02F_05ITT_06RET_07RX_13USA_14USA__15US__191945_20N_218_';
+		   FT.cookies.FT_U = '_EID=2548659_';
+		   var result = FT.ads.buildURLForVideo('zone2','minivid');
+
+		   equal(result.urlStem, 'http://ad.us.doubleclick.net/pfadx/test.5887.video/zone2;sz=400x225;pos=minivid',     'urlStem for us targeting should be');
+		   matches(result.additionalAdTargetingParams, '07=rx;06=ret;eid=2548659;05=itt;19=1945;21=8;20=n;02=f;14=usa;u=eid=2548659,uuid=zone2,ts=\\d{14}',     'additionalAdTargetingParams should be');
+		   equal(get_diagnostic('minivid', 'urlStem'), result.urlStem,                                      "diagnostic for urlStem should be");
+		   matches(get_diagnostic('minivid', 'additionalAdTargetingParams'), '07=rx;06=ret;eid=2548659;05=itt;19=1945;21=8;20=n;02=f;14=usa;u=eid=2548659,uuid=zone2,ts=\\d{14}',     "diagnostic for additionalAdTargetingParams should be");
+		   equal(FT.env.dfp_zone, 'zone2',                                                                'FT.env.dfp_zone should be changed to');
+
+		   testAfterBuild();
+		});
+
+		test('buildURLForVideo - No AYSC - yes FT_U', function ()
+		{
+		   expect(14);
+		   testBeginVideo();
+
+		   FT.cookies.AYSC = '';
+		   FT.cookies.FT_U = '_EID=2548659_';
+		   var result = FT.ads.buildURLForVideo('zone3','minivid');
+
+		   equal(result.urlStem, 'http://ad.doubleclick.net/pfadx/test.5887.video/zone3;sz=400x225;pos=minivid',     'urlStem for unknown targeting should be');
+		   matches(result.additionalAdTargetingParams, 'eid=2548659;u=eid=2548659',                         'additionalAdTargetingParams should be');
+		   equal(get_diagnostic('minivid', 'urlStem'), result.urlStem,                                      "diagnostic for urlStem should be");
+		   matches(get_diagnostic('minivid', 'additionalAdTargetingParams'), 'eid=2548659;u=eid=2548659',     "diagnostic for additionalAdTargetingParams should be");
+		   equal(FT.env.dfp_zone, 'zone3',                                                                'FT.env.dfp_zone should be changed to');
+
+		   testAfterBuild();
+		});
+
+		test('buildURLForVideo (optional position name)', function ()
+		{
+		   expect(14);
+
+		   // TODO impelement optional position name  - should default to video
+		   if (pending(14))
+		   {
+		      return;
+		   }
+		   testBeginVideo();
+
+		   FT.cookies.AYSC = '';
+		   FT.cookies.FT_U = '';
+		   var result = FT.ads.buildURLForVideo('zone');
+		   result = result || {'urlStem': 'ERROR', 'additionalAdTargetingParams': 'ERROR'};
+
+		   equal(result.urlStem, 'http://ad.doubleclick.net/pfadx/test.5887.video/zone;sz=1x1;pos=video', 'urlStem for mini player should be');
+		   equal(result.additionalAdTargetingParams, '',                                                   'additionalAdTargetingParams should be');
+		   equal(get_diagnostic('minivid', 'urlStem'), result.urlStem,                                    "diagnostic for urlStem should be");
+		   equal(get_diagnostic('minivid', 'additionalAdTargetingParams'), 'eid=2548659;u=eid=2548659',   "diagnostic for additionalAdTargetingParams should be");
+		   equal(FT.env.dfp_zone, 'zone',                                                                 'FT.env.dfp_zone should be changed to');
+
+		   testAfterBuild();
+
+		   // Ensure video ad position exists so a call to beingVideo will not delete the newssubs position
+		   result = FT.ads.buildURLForVideo('build-url-test');
+
+		});
+
+test('endVideo', function ()
+{
+   expect(1);
+   equal(FT.ads.endVideo(), undefined,                                                            'endVideo() should return');
+});
+//make sure site and zone restored for loading of pre-roll....destroy cookies
+
+FT.env.dfp_site = 'test.5887.video';
+FT.env.dfp_zone = 'mini-hub';
+FT.cookies.AYSC = '';
+FT.cookies.FT_U = '';
+
+      </script>
+<script src="http://by.optimost.com/counter/553/-/193/event.js?D_ts=1351093347&amp;D_tzo=-60&amp;D_loc=http%3A//localhost/%7Erobinmarr/ft/svn/online/website/ft-cmsWeb/src/test/js/qunit/FT/RenderHeadBundle/Advertising/video/preroll_disabled_miniplayer_test.html"></script></head>
+
+<body class="no-refresh">
+	<h1 id="qunit-header">Test DFP MiniPlayer</h1>
+	<h2 id="qunit-banner"></h2>
+	<h2 id="qunit-userAgent"></h2>
+
+	<hr>
+	<form>
+		<input type="button" name="expand" value="expand" onclick="expandAll()" alt="show all Ad divs on the page"> <input type="button" name="diagnose" value="diagnose" onclick="showDiagnosis()" alt="display Ad diagnostics"> <input type="button" name="stop timer" value="stop timer" onclick="stopTimer()" alt="stop the interval timer">
+	</form>
+	<hr>
+	<div id="mode">You are in UNIT TEST MODE. Set cookie FTQA=integration to switch to integration test mode.</div>
+	<ol id="qunit-tests">
+		<li></li>
+	</ol>
+	<div id="main"></div>
+	<!-- if in integration mode, make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
+	<div id="dccookie" style="display: none">
+		<script>unitOrIntegrationMessage(testMode);</script>
+	</div>
+	<div>
+
+		<div id="banlb" class="advertising" width="728" height="90" style="display: block; ">
+			<script type="text/javascript">FT.ads.request('banlb');</script>
+<img src="../images/banlb-728x90.gif" border="0" alt="Markets"><!-- Begin Interstitial Ad --><!-- Begin Interstitial Ad -->
+<!-- ad ID: 220442740  creative ID: 34653879 -->
+<style type="text/css">
+   #corppop_overlay {
+      position: absolute; 
+      top: 420px; 
+      left: 680px; 
+      width: 400px; 
+      height: 250px;
+      border: 4px solid green;
+      padding: 4px;
+      background: blue;
+      color:white;
+      font-family: verdana, arial, helvetica, sans-serif;
+      z-index: 120000;
+   }
+   #corppop_overlay a {
+      text-decoration: none;
+   }
+   #corppop_overlay a:hover {
+      text-decoration: underline;
+   }
+   #corppop_overlay .close_button {
+      float: right;
+      margin: 5px 10px 0 0;
+      font-weight: bold;
+   }
+   #corppop_overlay .logo {
+      float: left;
+      margin: 5px 10px 0 0;
+      font-weight: bold;
+   }
+</style>
+<div id="corppop_overlay" class="corppop_single_occurence">
+   <!-- The percent i macro below records the interstitial impression when served -->
+   <div class="logo"><img src="../images/favicon.ico" width="64" height="64"></div>
+   <div class="close_button" onclick="javascript: this.parentNode.style.display='none';">
+      <a href="#">X</a>
+   </div>
+   <h2>corppop</h2>
+   <!-- The percent u macro below inserts the click through URL percent c allows DFP to track the click itself -->
+   <h3><a href="http://ad.doubleclick.net/click%3Bh%3Dv8/3a03/2/0/%2a/l%3B220442740%3B0-0%3B1%3B40911646%3B255-0/0%3B34653879/34671757/1%3B%3B%7Esscs%3D%3fhttp://www.ft.com">interstitial (dcopt=ist)</a></h3>
+   <h3>AYSC 27=gggggg</h3>
+</div>
+		</div>
+
+		<div id="newssubs" class="advertising" width="728" height="90" style="display: block; ">
+			<script type="text/javascript">
+		FT.ads.request('newssubs');
+            </script>
+<img src="../images/3-newssubs-239x90.GIF" border="0" alt="FT.com Test Ads DEV">
+		</div>
+		<div id="mpu" class="advertising" width="336" height="280" style="display: block; ">
+			<script type="text/javascript">FT.ads.request('mpu');</script>
+<a target="_blank" href="http://ad.doubleclick.net/click;h=v8/3a08/0/0/%2a/h;219980817;0-0;1;40911646;4252-336/280;34558440/34576318/1;;~sscs=%3fhttp://www.ft.com"><img src="../images/4-mpu-336x280.GIF" border="0" alt="FT.com Test Ads DEV"></a>
+		</div>
+		<div class="ft-story-body">
+
+			<div id="railminivideo" class="railminivideo">
+				<p>
+					<font color="red">No preroll shown here</font>
+				</p><p>
+					<!-- Start of Brightcove Player -->
+				</p><div style="display: none"></div>
+
+				<span style="display: block; " id="_containermyExperience"><a href="http://www.adobe.com/go/getflash/" target="_blank"><img src="http://admin.brightcove.com/viewer/upgrade_flash_player2.gif" alt="Get Flash Player" width="314" height="200" border="0"></a></span>
+
+				<!---just load manually for now -->
+				<script src="http://admin.brightcove.com/js/BrightcoveExperiences_all.js" language="JavaScript">
+
+
+			<br/>
+			<span class="mini-ftvideoplayer-info">
+				<span class="mini-ftvideoplayer-morelink">
+					<a href="http://video.ft.com">More FT video</a>
+				</span>
+			</span>
+
+		<br/>
+		</center>
+		
+		<p>paragraph</p>
+		
+		</div>
+		</div>
+
+         
+</div>
+      <div class="master-row bottomSection " data-zone="bottomSection">
+      <div class="freestyle" >
+      <div id="footer">
+      <div id="content">
+      <ul class="gen-freestyle-ul">
+      <li><a href="http://www.ft.com/help">Help</a></li>
+      <li>&bull;<a href="http://www.ft.com/aboutus">About us</a></li>
+      <li>&bull;<a href="http://www.ft.com/sitemap">Sitemap</a></li>
+      <li>&bull;<a href="http://www.ft.com/advertising">Advertise with the FT</a></li>
+      <li>&bull;<a href="http://www.ft.com/servicestools/help/terms">Terms &amp; Conditions</a></li>
+
+      <li>&bull;<a href="http://www.ft.com/servicestools/help/privacy">Privacy Policy</a></li>
+      <li>&bull;<a href="http://www.ft.com/servicestools/help/copyright">Copyright</a></li>
+      </ul>
+      <p><span class="copyright"><strong>&copy; The Financial Times Ltd 2010</strong></span>
+      <span><acronym title="Financial Times">FT</acronym> and 'Financial Times' are trademarks of The Financial Times Ltd.</span>
+      </p>
+      </div></div>
+      </div>
+      </div>
+      <div class="adRequests">
+
+      <div id="corppop">
+      <script type="text/javascript">
+      FT.ads.request('corppop');
+      </script>
+			</div>
+			<div id="refresh" style="display: none; ">
+				<script type="text/javascript">
+      FT.ads.request('refresh');
+      </script><a target="_blank" href="http://ad.doubleclick.net/"><img src="../images/ft-no-ad-0x0.gif" alt="Regression Test" border="0"></a>
+			</div>
+		</div>
+	</div>
+	<div id="oob">
+		<script type="text/javascript">
+      FT.ads.request('oob');
+      </script>
+	</div>
+
+        <script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonHeadBundle/Namespaces.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/Page.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/Lib.Render.js"></script>
+<!-- 	<script -->
+<!-- 		src="../../../../../../main/webapp/media/js/FT/CommonFootBundle/login.js"></script> -->
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/EditionChanger.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/ArticleFootBundle/ExpandablePicture.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/ArticleFootBundle/FlashManager.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/JobsBox.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/Navigation.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/Optimost.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/Page.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/ArticleFootBundle/Podcast.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/ArticleFootBundle/Promobox.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/ArticleFootBundle/Pullquote.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/SiteSearch.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/StoryTools.js"></script>
+	<script type="text/javascript" src="../../../../../../../main/webapp/media/js/FT/CommonFootBundle/brightcove.js"></script>
+	<!---<script src="../../../../../../main/webapp/media/js/FT/CommonFootBundle/init-core.js"></script> --->
+	<!---<script src="../../../../../../main/webapp/media/js/FT/CommonFootBundle/Conker.js"></script>  --->
+
+
+
+
+</body></html>
