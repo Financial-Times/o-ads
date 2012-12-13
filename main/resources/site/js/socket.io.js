@@ -53,7 +53,8 @@
 
     function testModeEvent() {
         var testMode = $('#testMode');
-        testMode.on('click', 'a', function (){
+        testMode.on('click', '.dropdown-menu a', function (){
+            console.log('testMode');
             FT.socket.emit('testModeChange', $(this).text().trim());
         });
     }
