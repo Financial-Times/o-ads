@@ -8,7 +8,7 @@
 (function (win, doc, FT, undefined) {
   "use strict";
 
-  // add an ECMAScript5 compliant trim to String 
+  // add an ECMAScript5 compliant trim to String
   // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
   if(!String.prototype.trim) {
     String.prototype.trim = function () {
@@ -16,7 +16,7 @@
     };
   }
 
-  // add an ECMAScript5 compliant indexOf to Array 
+  // add an ECMAScript5 compliant indexOf to Array
   // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
   if (!Array.prototype.indexOf) {
       Array.prototype.indexOf = function (searchElement, fromIndex) {
@@ -54,18 +54,19 @@
    * @namespace All public functions are stored in the FT._ads.utils object for global access.
    */
   FT = FT || {};
-  
+
   /**
    * @namespace All public functions are stored in the FT._ads.utils object for global access.
    */
   FT._ads = FT._ads || {};
+  FT._ads.utils = FT._ads.utils || {};
   var utils = {};
 
-  /** 
+  /**
    * Uses object prototype toString method to get at the type of object we are dealing,
    * IE returns [object Object] for null and undefined so we need to filter those
    * http://es5.github.com/#x15.2.4.2
-   * @private 
+   * @private
    * @param {object} Any javascript object
    * @returns The type of the object e.g Array, String, Object
    */
@@ -84,7 +85,7 @@
 
   /**
    * Creates a method for testing the type of an Object
-   * @private 
+   * @private
    * @param {string} The name of the object type to be tested e.g. Array
    * @returns a method that takes any javascript object and tests if it is of
    * the supplied className
@@ -97,10 +98,10 @@
 
   /**
    * Curries some useful is{ClassName}method into the supplied Object
-   * @private 
+   * @private
    * @param {object} The object to add the methods too
    * @param {array} A list of types to create methods for defaults to "Array", "Object", "String", "Function"
-   * @returns The object supplied in the first param with is{ClassName} Methods Added 
+   * @returns The object supplied in the first param with is{ClassName} Methods Added
    */
   function curryIsMethods(obj, classNames) {
     classNames = classNames || [
@@ -119,7 +120,7 @@
   }
 
   utils = curryIsMethods(utils);
-  
+
   /**
    * Test if an object is the global window object
    * @param {object} The object to be tested
@@ -130,8 +131,8 @@
   };
 
   /**
-   * Test if an object inherits from any other objects, used in extend 
-   * to protect against deep copies running out of memory and constructors 
+   * Test if an object inherits from any other objects, used in extend
+   * to protect against deep copies running out of memory and constructors
    * losing there prototypes when cloned
    * @param {object} The object to be tested
    * @returns Boolean true if the object is plain false otherwise
@@ -263,18 +264,22 @@
   utils.hash = function (str, delimiter, pairing) {
     var pair, value, idx, len,
       hash = {};
-    
+
     str = str.split(delimiter);
 
     for (idx = 0, len = str.length; idx < len; idx += 1) {
       value = str[idx];
       pair = value.split(pairing);
-      if (pair.length > 1) { 
-        hash[pair[0].trim()] = pair.slice(1).join(pairing); 
+      if (pair.length > 1) {
+        hash[pair[0].trim()] = pair.slice(1).join(pairing);
       }
     }
 
     return hash;
+  };
+
+  utils.init = function () {
+     this.cookies = FT._ads.utils.hash(document.cookie, ';', '=');
   };
 
   // nothing to see here.....
@@ -295,6 +300,7 @@
     }, 7500);
   };
 
-  FT._ads.utils = utils;
+  FT._ads.utils = utils.extend(FT._ads.utils, utils);
+  FT._ads.utils.init();
   return utils;
 }(window, document, FT));

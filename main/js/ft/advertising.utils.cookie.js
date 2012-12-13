@@ -19,6 +19,11 @@
      */
     FT._ads = FT._ads || {};
 
+    /**
+     * @namespace All public functions are stored in the FT._ads.utils object for global access.
+     */
+    FT._ads.utils = FT._ads.utils || {};
+
     var utils = {},
         pluses = /\+/g,
         today = new Date();
@@ -51,7 +56,7 @@
             if(!!options.expires && (options.expires.valueOf() - today.valueOf()) < 0) {
                 delete FT._ads.utils.cookies[encodeURIComponent(key)];
             } else {
-                FT._ads.utils.cookies[encodeURIComponent(key)] = value; 
+                FT._ads.utils.cookies[encodeURIComponent(key)] = value;
             }
 
             return (document.cookie = [
@@ -68,8 +73,8 @@
         var cookie = FT._ads.utils.cookies[encodeURIComponent(key)];
         if (!!cookie || cookie === '') {
             return config.json ? JSON.parse(decode(cookie)) : decode(cookie);
-        } 
-        
+        }
+
         return null;
     };
 
@@ -127,7 +132,7 @@
         return (matches && matches.length) ? matches[1] : undefined;
     };
 
-    FT._ads.utils.cookies = FT._ads.utils.hash(document.cookie, ';', '=');
+   //
     FT._ads.utils.cookie = utils.cookie;
     FT._ads.utils.removeCookie = utils.removeCookie;
     FT._ads.utils.getCookieParam = utils.getCookieParam;
