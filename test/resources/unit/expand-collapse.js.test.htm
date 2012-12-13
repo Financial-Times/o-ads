@@ -542,10 +542,10 @@
             // These tests only while legacy pages still exist.
             equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'placeholder banlb should start with display:');
             matches($('#ad-placeholder-banlb').css('padding'), /^(10px ?)*$/,                          'placeholder banlb should start with padding');
-            differs($('#ad-placeholder-banlb').css('height'), '0px',                                   'placeholder banlb should start with some height');
+            differs($('#ad-placeholder-banlb').height(), 0, 'placeholder banlb should start with some height');
             equal($('#page-header-ad').css('display'), 'block',                                       'page-header-ad should start with display:');
             matches($('#page-header-ad').css('padding'), /^(5px ?)*$/,                                 'page-header-ad should start with padding');
-            differs($('#page-header-ad').css('height'), '0px',                                         'page-header-ad should start with some height');
+            differs($('#page-header-ad').height(), 0, 'page-header-ad should start with some height');
 
             FT.ads.timeoutTolerance      = TEST.soon;  // when to collapse the position
             FT.ads.timeIntervalTolerance = TEST.never; // when to check to expand the position
@@ -564,11 +564,11 @@
             // These tests only while legacy pages still exist.
             equal($('#ad-placeholder-banlb').css('display'), 'block',                                 'timeout collapse should set placeholder banlb display:');
             differs($('#ad-placeholder-banlb').css('padding'), /^(0px ?)*$/,                           'timeout collapse should set placeholder banlb padding');
-            equal($('#ad-placeholder-banlb').css('height'), '0px',                                    'timeout collapse should set placeholder banlb height');
+            equal($('#ad-placeholder-banlb').height(), 0, 'timeout collapse should set placeholder banlb height');
 
             equal($('#page-header-ad').css('display'), 'block',                                       'timeout collapse should set page-header-ad display:');
             differs($('#page-header-ad').css('padding'), /^(0px ?)*$/,                                 'timeout collapse should set page-header-ad padding');
-            equal($('#page-header-ad').css('height'), '0px',                                          'timeout collapse should set page-header-ad height');
+            equal($('#page-header-ad').height(), 0, 'timeout collapse should set page-header-ad height');
 
             FT.ads.clearAllTimeouts();
             FT.ads.clearAllIntervals();
@@ -610,9 +610,9 @@ document.write("Time Intervals: " + [TEST.soon, TEST.just_after_soon, TEST.after
 
 	<div id="fixture">
 		<div id="page-header-ad"
-			style="height: 90; padding: 5px; border: 1px solid blue">
+			style="height: 90; padding: 5px; border: none;">
 			<div id="ad-placeholder-banlb"
-				style="height: 90; padding: 10px; border: 1px solid blue">
+				style="height: 90; padding: 10px; border: none;">
 				These Div's are for Legacy Page Style and Ad API</div>
 		</div>
 		<div class="advertising" id="banlb"></div>
