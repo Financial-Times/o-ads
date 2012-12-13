@@ -722,7 +722,9 @@ var QUnitChainer = {
             self.showControlPage(self.jqInjectAt);
          }
       }
-      parent.window.FT.socket.emit('results', {browser: self.browser, result: result});
+      if (parent.window.FT.socket) {
+        parent.window.FT.socket.emit('results', {browser: self.browser, result: result});
+      }
    },
 
    /*
