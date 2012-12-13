@@ -2316,9 +2316,9 @@ clientAds = {
         /*jshint devel:true */
         if (this.debug === null) {
             this.debug = false;
-            if (FT._ads.utils.cookie("FTQA") && FT._ads.utils.cookie("FTQA").match(/debug/)) {
-                this.debug = true;
-            }
+            // if (FT._ads.utils.cookie("FTQA") && FT._ads.utils.cookie("FTQA").match(/debug/)) {
+            //     this.debug = true;
+            // }
         }
         if (this.debug) {
             if (window.console && window.console.log) {
