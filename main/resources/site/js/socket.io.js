@@ -18,7 +18,7 @@
             FT.changeTestMode(data);
         },
         iframeChange: function (data) {
-            FT.iframe.attr('src', decodeURI(data));
+            FT.iframe.attr('src', decodeURI(location.origin + data));
         },
         jshint : function (data) {
             var badge = jshintMenu.find('.badge');
@@ -61,7 +61,9 @@
 
     function iframeChangeEvent() {
         function emitChangeEvent(ev) {
-            return FT.socket.emit('iframeChange', ev.currentTarget.href);
+            var url = ev.currentTarget.href.replace(location.origin, '');
+
+            return FT.socket.emit('iframeChange', url);
         }
 
         $('body').on('click', 'a[target="content"]', emitChangeEvent);
