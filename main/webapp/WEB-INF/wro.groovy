@@ -5,7 +5,10 @@ groups {
     }
 
     "advertising-latest" {
-        js(minimize: false, "/js/ft/**.js")
+        js(minimize: false, "/js/ft/advertising.utils.js")
+        js(minimize: false, "/js/ft/advertising.utils.cookie.js")
+        js(minimize: false, "/js/ft/HTMLAds.js")
+        js(minimize: false, "/js/ft/DartForPublishers.js")
 //        js(minimize: false,"/js/thirdparty/**.js")
 //        js(minimize: false,"/js/lib/**.js")
         css(minimize: false, "/css/ft/**.css")
@@ -20,8 +23,11 @@ groups {
     }
 
     "advertising-latest.min" {
-        js "/js/ft/**.js"
- //       js "/js/thirdparty/**.js"
+        js "/js/ft/advertising.utils.js"
+        js "/js/ft/advertising.utils.cookie.js"
+        js "/js/ft/HTMLAds.js"
+        js "/js/ft/DartForPublishers.js"
+//       js "/js/thirdparty/**.js
  //       js "/js/lib/**.js"
         css "/css/ft/**.css"
     }
