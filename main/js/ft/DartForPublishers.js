@@ -2355,7 +2355,7 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
-FT.Advertising.prototype.VERSION = "Live $Rev: 134122 $";
+FT.Advertising.prototype.VERSION = "${buildLifeId}";
 FT.Advertising.prototype.library = "falcon";
 clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
 
