@@ -73,7 +73,7 @@
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
-    splice, getUUIDFromString  */
+    splice, getUUIDFromString, buildLifeId, buildLifeDate, buildLifeVersion, gitRev  */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -2355,7 +2355,15 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
-FT.Advertising.prototype.VERSION = "${buildLifeId}";
+FT.Advertising.prototype.VERSION = {
+    buildLifeId: "${buildLifeId}",
+    buildLifeDate: "${buildLifeDate}",
+    buildLifeVersion: "${buildLifeVersion}",
+    gitRev: "${gitRev}",
+    toString : function () {
+        return "id: " + this.buildLifeId + " date: " + this.buildLifeDate + " version: " + this.buildLifeVersion + " git revision: " + this.gitRev;
+    }
+};
 FT.Advertising.prototype.library = "falcon";
 clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
 
