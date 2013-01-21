@@ -73,7 +73,7 @@
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
-    splice, getUUIDFromString, buildLifeId, buildLifeDate, buildLifeVersion, gitRev  */
+    splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev  */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -2356,6 +2356,7 @@ function Advert(pos) {
     return obj;
 }
 FT.Advertising.prototype.VERSION = {
+    artifactVersion: "${project.version}",
     buildLifeId: "${buildLifeId}",
     buildLifeDate: "${buildLifeDate}",
     buildLifeVersion: "${buildLifeVersion}",
