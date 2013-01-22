@@ -103,9 +103,10 @@
 }
 
 #diagnostic-modal-id table td {
-   border-top:1px dashed #FFFFFF;
    color:#F6E9D8;
    padding:8px;
+   word-wrap: break-word;
+   max-width: 25em;
 }
 
 #diagnostic-modal-id img {
