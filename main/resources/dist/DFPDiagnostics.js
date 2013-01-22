@@ -43,7 +43,7 @@ The clever bit of javascript to bookmark is:
 
 javascript:var%20e=document.createElement('script');
 e.setAttribute('language','javascript');
-e.setAttribute('src','http://anthill.svc.ft.com/viewvc/repo/online/website/commons/trunk/javascript/ft-advertising/src/main/webapp/media/js/DFPDiagnostics.js?revision=37684');
+e.setAttribute('src','http://www.ft.com/m/advertising/DFPDiagnostics.js');
 document.body.appendChild(e);
 void(0);
 
@@ -80,7 +80,7 @@ var FTDiag =
 
    // Some constants.
    "VERSION":           "Sprint18 $Rev: 64620 $",
-   "URL_ASSETS":        "http://admintools.internal.ft.com:86/adstools",
+   "URL_ASSETS":        FT.Properties.ADVERTISING_BASE || "//www.ft.com/m/advertising/",
    "STYLE":             "/css/Diagnostics.css",
    "STYLE_LOCAL":       "/css/Diagnostics.css",        // TODO make this work
    "STYLE_LATEST":      "/css/Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
