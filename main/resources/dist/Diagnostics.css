@@ -75,13 +75,14 @@
    color:#4781AA;
    margin: 0px 0px 0px 0px;
    padding: 0px 0px 0px 0px;
+   word-wrap: break-word;
 }
 #diagnostic-modal-id ul,
 #diagnostic-modal-id li,
 #diagnostic-modal-id strong,
 #diagnostic-modal-id th,
 #diagnostic-modal-id td {
-	   font-size:16px;
+      font-size:16px;
 }
 
 #diagnostic-modal-id table {
@@ -121,6 +122,16 @@
    width:95px;
 }
 
+#diagnostic-modal-id td:last-of-type a {
+   display: inline-block;
+   border: 1px solid black;
+   border-radius: 4px;
+   width: 1em;
+   text-align: center;
+   margin: 0.3em;
+   color: black;
+}
+
 #diagnostic-modal-id .icons {
    text-align:right
 }
@@ -140,4 +151,3 @@
 div.diagnostics {
    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
-

@@ -68,6 +68,10 @@ FTQA=setxy=150,120;       Change XY position of diagnostics dialog box
 var FTDiag =
 {
    // Values taken from page metadata
+   "opentag_version": "Unknown",
+   "ADVERTISING_BASE": "Unknown",
+   "lib_version": "Unknown",
+   "lib_url": "Unknown",
    "dfp_zone":      "Unknown",
    "dfp_site":      "Unknown",
    "dfp_targeting": "",
@@ -81,9 +85,9 @@ var FTDiag =
    // Some constants.
    "VERSION":           "Sprint18 $Rev: 64620 $",
    "URL_ASSETS":        FT.Properties.ADVERTISING_BASE || "//www.ft.com/m/advertising/",
-   "STYLE":             "/css/Diagnostics.css",
-   "STYLE_LOCAL":       "/css/Diagnostics.css",        // TODO make this work
-   "STYLE_LATEST":      "/css/Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
+   "STYLE":             "Diagnostics.css",
+   "STYLE_LOCAL":       "Diagnostics.css",        // TODO make this work
+   "STYLE_LATEST":      "Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
    "URL_LOCAL":         "http://admintools.internal.ft.com:86/adstools",
 //      "URL_LOCAL":         "http://falcon.ft.com/test",
    "URL_DFP":           "http://dfp.doubleclick.net",
@@ -152,18 +156,31 @@ var FTDiag =
       // Pull Ad Targeting values from the hosting page (IE safe)
       FTDiag.setValue("FTSection", window.FTSection);
       FTDiag.setValue("FTPage", window.FTPage);
-      if (typeof FT !== "undefined" && typeof FT.env !== "undefined")
-      {
-         FTDiag.setValue("dfp_site", FT.env.dfp_site);
-         FTDiag.setValue("dfp_zone", FT.env.dfp_zone);
-         FTDiag.setValue("dfp_targeting", FT.env.dfp_targeting);
-         FTDiag.setValue("dfp_targeting", FT.env.targeting);
-         FTDiag.setValue("video_pre_roll_ads_server_url", FT.env.video_pre_roll_ads_server_url);
-         FTDiag.setValue("video_pre_roll_ads_allowed", FT.env.video_pre_roll_ads_allowed);
-         FTDiag.setValue("video_pre_roll_ads_api_enabled", FT.env.video_pre_roll_ads_api_enabled);
-         FTDiag.setValue("video_pre_roll_ads_player_id", FT.env.video_pre_roll_ads_player_id);
+      if (window.FT) {
+         if(FT.env){
+            FTDiag.setValue("dfp_site", FT.env.dfp_site);
+            FTDiag.setValue("dfp_zone", FT.env.dfp_zone);
+            FTDiag.setValue("opentag_version", FT.env.advertising);
+            FTDiag.setValue("dfp_targeting", FT.env.dfp_targeting);
+            FTDiag.setValue("dfp_targeting", FT.env.targeting);
+            FTDiag.setValue("video_pre_roll_ads_server_url", FT.env.video_pre_roll_ads_server_url);
+            FTDiag.setValue("video_pre_roll_ads_allowed", FT.env.video_pre_roll_ads_allowed);
+            FTDiag.setValue("video_pre_roll_ads_api_enabled", FT.env.video_pre_roll_ads_api_enabled);
+            FTDiag.setValue("video_pre_roll_ads_player_id", FT.env.video_pre_roll_ads_player_id);
+         }
+
+         if (FT.ads) {
+            FTDiag.setValue("lib_version", FT.ads.VERSION.toString());
+         }
+
+         if (FT.Properties && FT.Properties.ADVERTISING_BASE) {
+            FTDiag.setValue("ADVERTISING_BASE", FT.Properties.ADVERTISING_BASE);
+         }
       }
 
+      if (jQuery) {
+         FTDiag.setValue("lib_url", jQuery('script[src*="advertising-"]').attr('src'));
+      }
       // Delete the modal window div from the page if it already exists.
       FTDiag.removeDialog();
    },
@@ -206,7 +223,11 @@ var FTDiag =
             "<li>URL: <strong>" + FTDiag.URL + "</strong></li>" +
             "<li>DFP Site: <strong>" + FTDiag.dfp_site + "</strong></li>" +
             "<li>DFP Zone: <strong>" + FTDiag.dfp_zone + "</strong></li>" +
-            "<li>DFP Targeting: <strong>" + FTDiag.dfp_targeting + "</strong></li>";
+            "<li>DFP Targeting: <strong>" + FTDiag.dfp_targeting + "</strong></li>" +
+            "<li>Base URL: <strong>" + FTDiag.ADVERTISING_BASE + "</strong></li>" +
+            "<li>Opentag Version: <strong>" + FTDiag.opentag_version + "</strong></li>" +
+            "<li>Lib URL: <strong>" + FTDiag.lib_url + "</strong></li>" +
+            "<li>Lib Version: <strong>" + FTDiag.lib_version + "</strong></li>";
 
          // Add legacy DE targeting values if present
          if (FTDiag.FTSection !== "Unknown" || FTDiag.FTPage !== "Unknown")
@@ -417,14 +438,16 @@ var FTDiag =
    "addIconLink": function (rCell, rLinkInfo)
    {
       var rLink;
-      if (rLinkInfo.img)
+      if (rLinkInfo.content)
       {
          rLink = document.createElement("a");
+         rLink.innerHTML = rLinkInfo.content;
          FTDiag.setLink(rLink, rLinkInfo.url, rLinkInfo.help, rLinkInfo.target);
          rLinkInfo.addOnClick(rLink);
-         var rImg = document.createElement("img");
-         rImg.src = FTDiag.URL_ICON + rLinkInfo.img;
-         rLink.appendChild(rImg);
+
+         // var rImg = document.createElement("img");
+         // rImg.src = FTDiag.URL_ICON + rLinkInfo.img;
+         // rLink.appendChild(rImg);
          rLinkInfo.link = rLink;
          rCell.appendChild(rLink);
       }
@@ -461,7 +484,7 @@ var FTDiag =
          LinkInfo.url        = FTDiag.makeTroubleshootURL(FTDiag.AdInfoTable[row].requestURL);
          LinkInfo.help       = "Troubleshoot this ad position";
          LinkInfo.target     = "DFPDashboard";
-         LinkInfo.img        = "/img/t.png";
+         LinkInfo.content    = "t";
          LinkInfo.addOnClick = function () {};
       }
       if (type === "position" && FTDiag.AdInfoTable[row].adType === "interstitial")
@@ -471,7 +494,7 @@ var FTDiag =
          LinkInfo.url        = FTDiag.makeInterstitialTroubleshootURL(FTDiag.AdInfoTable[row].requestURL);
          LinkInfo.help       = "Troubleshoot interstitial ads in this position";
          LinkInfo.target     = "DFPDashboard";
-         LinkInfo.img        = "/img/t.png";
+         LinkInfo.content    = "t";
          LinkInfo.addOnClick = function () {};
       }
       else if (type === "information")
@@ -507,7 +530,7 @@ var FTDiag =
          LinkInfo.url        = FTDiag.URL_IDLINK + "&adid=" + FTDiag.AdInfoTable[row].adId;
          LinkInfo.help       = "Show ad " + FTDiag.AdInfoTable[row].adId + " in DFP";
          LinkInfo.target     = "dfp";
-         LinkInfo.img        = "/img/i.png";
+         LinkInfo.content    = "i";
          LinkInfo.addOnClick = function () {};
       }
       else if (type === "editcreative" && FTDiag.AdInfoTable[row].creativeId !== 0)
@@ -517,7 +540,7 @@ var FTDiag =
          LinkInfo.url        = FTDiag.URL_IDLINK + "&creativeid=" + FTDiag.AdInfoTable[row].creativeId;
          LinkInfo.help       = "Show creative " + FTDiag.AdInfoTable[row].creativeId + " in DFP";
          LinkInfo.target     = "dfp";
-         LinkInfo.img        = "/img/c.png";
+         LinkInfo.content    = "c";
          LinkInfo.addOnClick = function () {};
       }
       else if (type === "adcode")
@@ -527,7 +550,7 @@ var FTDiag =
          LinkInfo.url        = "alert";
          LinkInfo.help       = "Show ad HTML";
          LinkInfo.target     = "";
-         LinkInfo.img        = "/img/h.png";
+         LinkInfo.content    = "h";
          if (text && text.match(/^Unknown/))
          {
             LinkInfo.text = "[simple image or identity <span> missing from ad]";
