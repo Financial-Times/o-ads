@@ -8,7 +8,7 @@
 /*members "-", AD_CODE_NOT_FOUND, AD_DIV_PREFIXES, AdInfoTable,
     AdPositions, body, FTPage, FTSection, Requests, STYLE, STYLE_LATEST,
     STYLE_LOCAL, URL, URL_ASSETS, URL_DASHBOARD, URL_DFP, URL_ICON,
-    URL_IDLINK, URL_LOCAL, URL_LOOKUP, URL_LOOKUP_IST, URL_TWIKI, VERSION, adCodeHTML, adId,
+    URL_CREATIVELOOKUP, URL_LINEITEMLOOKUP, URL_LOCAL, URL_LOOKUP, URL_LOOKUP_IST, URL_TWIKI, VERSION, adCodeHTML, adId,
     adName, adType, addAlertOnClick, addDiagnosticsOnClick, addIconLink,
     addOnClick, addRemoveDialogOnClick, addTableCell, ads, advertiserId,
     adverts, appendChild, buildDiagnosticsInfo, buildTable, buildTableBody,
@@ -90,14 +90,17 @@ var FTDiag =
    "STYLE_LATEST":      "Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
    "URL_LOCAL":         "http://admintools.internal.ft.com:86/adstools",
 //      "URL_LOCAL":         "http://falcon.ft.com/test",
-   "URL_DFP":           "http://dfp.doubleclick.net",
-   "URL_IDLINK":        "http://dfp.doubleclick.net/sso?useSso=true&networkid=5887",
-   "URL_LOOKUP":        "http://dfp.doubleclick.net/dfp6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Tag=[REPLACE]&ShowSummaries=true&ShowAdDetails=false&ShowCreatives=false&PageSize=50&SearchTypeIndex=1",
-   "URL_LOOKUP_IST":    "http://dfp.doubleclick.net/DFP6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Site=[SITE]&Zone=[ZONE]&AdSizes=[SIZE];&KeyValues=[KEYVALUES];dcopt=1_ist;&AdServerName=[ADSERVER]&ShowSummaries=true&ShowAdDetails=true&ShowCreatives=true&PageSize=50&SearchTypeIndex=2&SearchTypeIndexForAd=0",
-   "URL_DASHBOARD":     "https://www.google.com/dfp",
+   "URL_DFP":           "http://www.google.com/dfp",
+//   "URL_IDLINK":        "http://dfp.doubleclick.net/sso?useSso=true&networkid=5887",
+   "URL_CREATIVELOOKUP":        "https://www.google.com/dfp/5887#delivery/CreativeDetail/creativeId=",
+   "URL_LINEITEMLOOKUP":        "https://www.google.com/dfp/5887#delivery/LineItemDetail/lineItemId=",
+   "URL_LOOKUP":        "https://www.google.com/dfp/5887#inventory/diagnostics/base_url=[REPLACE]",
+//   "URL_LOOKUP_IST":    "http://dfp.doubleclick.net/DFP6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Site=[SITE]&Zone=[ZONE]&AdSizes=[SIZE];&KeyValues=[KEYVALUES];dcopt=1_ist;&AdServerName=[ADSERVER]&ShowSummaries=true&ShowAdDetails=true&ShowCreatives=true&PageSize=50&SearchTypeIndex=2&SearchTypeIndexForAd=0",
+   "URL_DASHBOARD":     "http://tagshooter.com",
    "URL_TWIKI":         "http://admintools.internal.ft.com:86/adstools/",
    "AD_DIV_PREFIXES":   ["", "ad-placeholder-", "ad-container-"],
    "AD_CODE_NOT_FOUND": "unable to find",
+
 
    // Internal staging area for diagnostics dialog contents.
    "mode":        "none",
@@ -526,9 +529,9 @@ var FTDiag =
       }
       else if (type === "editad" && FTDiag.AdInfoTable[row].adId !== 0)
       {
-         // Create link to edit an ad
+         // Create link to edit an ad (updated to reference line item in DFP_P)
          LinkInfo.type       = type;
-         LinkInfo.url        = FTDiag.URL_IDLINK + "&adid=" + FTDiag.AdInfoTable[row].adId;
+         LinkInfo.url        = FTDiag.URL_LINEITEMLOOKUP + FTDiag.AdInfoTable[row].adId;
          LinkInfo.help       = "Show ad " + FTDiag.AdInfoTable[row].adId + " in DFP";
          LinkInfo.target     = "dfp";
          LinkInfo.content    = "i";
@@ -538,7 +541,7 @@ var FTDiag =
       {
          // Create link to edit an ad creative
          LinkInfo.type       = type;
-         LinkInfo.url        = FTDiag.URL_IDLINK + "&creativeid=" + FTDiag.AdInfoTable[row].creativeId;
+         LinkInfo.url        = FTDiag.URL_CREATIVELOOKUP + FTDiag.AdInfoTable[row].creativeId;
          LinkInfo.help       = "Show creative " + FTDiag.AdInfoTable[row].creativeId + " in DFP";
          LinkInfo.target     = "dfp";
          LinkInfo.content    = "c";
@@ -654,20 +657,38 @@ var FTDiag =
          }
       }
    },
+   "wierdGoogleEncodeForTroubleShooting": function (requestURL)
+   {
+       var adcallstring = requestURL;
 
+	//get portion to encode
+	var keyvalues = adcallstring.match(/;.*/);
+	var toencode = adcallstring.replace(keyvalues, "");
+        var deregionalized = toencode.replace(/ad\.([a-zA-Z]{0,3})\./,"ad.");
+
+	//encode portion of url
+	var encoded = encodeURIComponent(deregionalized);
+
+	//append stuff
+	return encoded + keyvalues;
+   },
    // Make a DFP Dashboard Troubleshooting URL to lookup a specific ad position
    "makeTroubleshootURL": function (requestURL)
    {
       var url = FTDiag.URL_LOOKUP;
-      url = url.replace(/\[REPLACE\]/, escape(requestURL));
+      //url = url.replace("/5887#", "/320448#");
+      //requestURL = requestURL.replace("N5887", "N320448");
+      url = url.replace(/\[REPLACE\]/, this.wierdGoogleEncodeForTroubleShooting(requestURL));
       return url;
    },
-
    // Make a DFP Dashboard Troubleshooting URL to lookup only interstitial ads in a specific ad position
    "makeInterstitialTroubleshootURL": function (requestURL)
    {
       // We need to parse out portions of the request URL for substitution into
       // the troubleshooting ad call for interstitial ads.
+
+      //Interstitual ad lookup ... not sure how this works in dfp_p.. therefore return tagshooter!
+      /*
       var url;
       requestURL = requestURL.replace(/;tile=\d+/, "");
       requestURL = requestURL.replace(/;ord=.*$/, "");
@@ -688,8 +709,9 @@ var FTDiag =
          url = url.replace(/\[KEYVALUES\]/, keyValues);
          url = url.replace(/\[ADSERVER\]/, adServer);
       }
-
       return url;
+      */
+     return URL_DASHBOARD;
    },
 
    // Remove an element from the document, given the element ID
@@ -825,7 +847,7 @@ var FTDiag =
          else if (FT.ads && FT.ads.adverts)
          {
             FTDiag.mode  = "falcon";
-            FTDiag.title = "FT Falcon Ad Diagnosis";
+            FTDiag.title = "FT Ad Diagnosis";
             Requests = FT.ads.adverts;
          }
          else if (FTDiag.FTSection !== "Unknown" || FTDiag.FTPage !== "Unknown" || FTDiag.dfp_site !== "Unknown" || FTDiag.dfp_zone !== "Unknown")
