@@ -2362,7 +2362,7 @@ FT.Advertising.prototype.VERSION = {
     buildLifeDate: "${buildLifeDate}",
     gitRev: "${buildNumber}",
     toString : function () {
-        return " version: " + this.artifactVersion + "id: " + this.buildLifeId + " date: " + this.buildLifeDate + " git revision: " + this.gitRev;
+        return " version: " + this.artifactVersion + " Build life id: " + this.buildLifeId + " Build date: " + this.buildLifeDate + " git revision: " + this.gitRev;
     }
 };
 FT.Advertising.prototype.library = "falcon";
