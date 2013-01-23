@@ -2355,18 +2355,18 @@ function Advert(pos) {
     // Return an object which can immediately have .init() called on it.
     return obj;
 }
+
 FT.Advertising.prototype.VERSION = {
     artifactVersion: "${project.version}",
     buildLifeId: "${buildLifeId}",
     buildLifeDate: "${buildLifeDate}",
-    buildLifeVersion: "${buildLifeVersion}",
-    gitRev: "${gitRev}",
+    gitRev: "${buildNumber}",
     toString : function () {
-        return "id: " + this.buildLifeId + " date: " + this.buildLifeDate + " version: " + this.buildLifeVersion + " git revision: " + this.gitRev;
+        return " version: " + this.artifactVersion + "id: " + this.buildLifeId + " date: " + this.buildLifeDate + " git revision: " + this.gitRev;
     }
 };
 FT.Advertising.prototype.library = "falcon";
-clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION);
+clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " " + FT.Advertising.prototype.VERSION.toString());
 
 /*  Functions with no direct test cases yet
 

@@ -68,8 +68,8 @@ FTQA=setxy=150,120;       Change XY position of diagnostics dialog box
 var FTDiag =
 {
    // Values taken from page metadata
-   "opentag_version": "Unknown",
-   "ADVERTISING_BASE": "Unknown",
+   "opentag_version": "Not set",
+   "ADVERTISING_BASE": "Not set",
    "lib_version": "Unknown",
    "lib_url": "Unknown",
    "dfp_zone":      "Unknown",
@@ -94,7 +94,7 @@ var FTDiag =
    "URL_IDLINK":        "http://dfp.doubleclick.net/sso?useSso=true&networkid=5887",
    "URL_LOOKUP":        "http://dfp.doubleclick.net/dfp6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Tag=[REPLACE]&ShowSummaries=true&ShowAdDetails=false&ShowCreatives=false&PageSize=50&SearchTypeIndex=1",
    "URL_LOOKUP_IST":    "http://dfp.doubleclick.net/DFP6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Site=[SITE]&Zone=[ZONE]&AdSizes=[SIZE];&KeyValues=[KEYVALUES];dcopt=1_ist;&AdServerName=[ADSERVER]&ShowSummaries=true&ShowAdDetails=true&ShowCreatives=true&PageSize=50&SearchTypeIndex=2&SearchTypeIndexForAd=0",
-   "URL_DASHBOARD":     "http://dfp.doubleclick.net/dfp6/dashboard.aspx",
+   "URL_DASHBOARD":     "https://www.google.com/dfp",
    "URL_TWIKI":         "http://admintools.internal.ft.com:86/adstools/",
    "AD_DIV_PREFIXES":   ["", "ad-placeholder-", "ad-container-"],
    "AD_CODE_NOT_FOUND": "unable to find",
@@ -298,6 +298,7 @@ var FTDiag =
 
       var rCloseButton = document.createElement("a");
       rCloseButton.className = "diagnostic-close-window";
+      rCloseButton.innerHTML = "&times;";
       FTDiag.addRemoveDialogOnClick(rCloseButton, "close");
 
       rDialog.innerHTML = contents;

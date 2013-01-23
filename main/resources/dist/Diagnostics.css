@@ -16,16 +16,17 @@
    z-index:999999;
 }
 
-.diagnostic-close-window {
-   background:transparent url(http://admintools.internal.ft.com:86/adstools/img/close-button.png) no-repeat scroll right top;
-   cursor:pointer;
-   height:18px;
-   position:absolute;
-   right:5px;
-   text-indent:-99999px;
-   top:-10px;
-   width:17px;
+#diagnostic-modal-id .diagnostic-close-window {
+   cursor: pointer;
+   position: absolute;
+   right: 2px;
+   top: -20px;
+   font-size: 2em;
+   font-weight: bold;
+   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+   color: red;
 }
+
 .diagnostic-modal-window {
    background:#FFF1E0 none repeat scroll 0 0;
    border:8px solid #000000;
@@ -137,7 +138,6 @@
 }
 
 #diagnostic-modal-id a {
-   font-family:arial;
    font-size:16px;
    font-weight:normal;
    margin: 1em 0;
