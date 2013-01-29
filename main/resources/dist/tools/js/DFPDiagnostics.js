@@ -97,6 +97,8 @@ var FTDiag =
    "URL_LOOKUP":        "https://www.google.com/dfp/5887#inventory/diagnostics/base_url=[REPLACE]",
 //   "URL_LOOKUP_IST":    "http://dfp.doubleclick.net/DFP6/Widgets/TroubleshootingToolsWidget/AdInfo.aspx?Site=[SITE]&Zone=[ZONE]&AdSizes=[SIZE];&KeyValues=[KEYVALUES];dcopt=1_ist;&AdServerName=[ADSERVER]&ShowSummaries=true&ShowAdDetails=true&ShowCreatives=true&PageSize=50&SearchTypeIndex=2&SearchTypeIndexForAd=0",
    "URL_DASHBOARD":     "http://tagshooter.com",
+   "URL_AHP_BUILDLIFE":     "http://ahp.svc.ft.com/tasks/project/BuildLifeTasks/viewBuildLife?buildLifeId=",
+   "URL_GIT_REV":     "http://git.svc.ft.com/commit/modules%2Fadvertising.git/",
    "URL_TWIKI":         "http://admintools.internal.ft.com:86/adstools/",
    "AD_DIV_PREFIXES":   ["", "ad-placeholder-", "ad-container-"],
    "AD_CODE_NOT_FOUND": "unable to find",
@@ -173,7 +175,7 @@ var FTDiag =
          }
 
          if (FT.ads) {
-            FTDiag.setValue("lib_version", FT.ads.VERSION.toString());
+            FTDiag.setValue("lib_version", FT.ads.VERSION);
          }
 
          if (FT.Properties && FT.Properties.ADVERTISING_BASE) {
@@ -230,7 +232,7 @@ var FTDiag =
             "<li>Base URL: <strong>" + FTDiag.ADVERTISING_BASE + "</strong></li>" +
             "<li>Opentag Version: <strong>" + FTDiag.opentag_version + "</strong></li>" +
             "<li>Lib URL: <strong>" + FTDiag.lib_url + "</strong></li>" +
-            "<li>Lib Version: <strong>" + FTDiag.lib_version + "</strong></li>";
+            "<li>Lib Version: <strong>" + FTDiag.prepareVersionOutput(FTDiag.lib_version) + "</strong></li>";
 
          // Add legacy DE targeting values if present
          if (FTDiag.FTSection !== "Unknown" || FTDiag.FTPage !== "Unknown")
@@ -448,10 +450,6 @@ var FTDiag =
          rLink.innerHTML = rLinkInfo.content;
          FTDiag.setLink(rLink, rLinkInfo.url, rLinkInfo.help, rLinkInfo.target);
          rLinkInfo.addOnClick(rLink);
-
-         // var rImg = document.createElement("img");
-         // rImg.src = FTDiag.URL_ICON + rLinkInfo.img;
-         // rLink.appendChild(rImg);
          rLinkInfo.link = rLink;
          rCell.appendChild(rLink);
       }
@@ -823,7 +821,15 @@ var FTDiag =
       };
       return AdInfo;
    },
+   // Prepare the version information, linking ID to relevant tools
+   "prepareVersionOutput": function(){
+      var versionString = FTDiag.lib_version.toString(),
+         buildLifeURL = FTDiag.URL_AHP_BUILDLIFE + FTDiag.lib_version.buildLifeId,
+         gitURL = FTDiag.URL_GIT_REV + FTDiag.lib_version.gitRev;
 
+      return versionString.replace(FTDiag.lib_version.gitRev, '<a href="' + gitURL + '" target="_blank">' + FTDiag.lib_version.gitRev + '</a>')
+         .replace(FTDiag.lib_version.buildLifeId, '<a href="' + buildLifeURL + '" target="_blank">' + FTDiag.lib_version.buildLifeId + '</a>');;
+   },
    // Prepare all Ad information in a structure which the view will display from.
    "prepareAdModel": function ()
    {

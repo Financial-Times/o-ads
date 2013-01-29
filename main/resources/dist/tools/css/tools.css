@@ -1,0 +1,17 @@
+html, body, iframe {
+  height: 100%;
+}
+
+body {
+  padding-top: 40px;
+  padding-bottom: 25px;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+iframe {
+  width: 100%;
+  border: 0;
+}
