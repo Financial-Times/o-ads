@@ -85,9 +85,9 @@ var FTDiag =
    // Some constants.
    "VERSION":           "Sprint18 $Rev: 64620 $",
    "URL_ASSETS":        FT.Properties.ADVERTISING_BASE || "//www.ft.com/m/advertising/",
-   "STYLE":             "Diagnostics.css",
-   "STYLE_LOCAL":       "Diagnostics.css",        // TODO make this work
-   "STYLE_LATEST":      "Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
+   "STYLE":             "tools/css/Diagnostics.css",
+   "STYLE_LOCAL":       "tools/css/Diagnostics.css",        // TODO make this work
+   "STYLE_LATEST":      "tools/css/Diagnostics.css",        // TODO Use the latest checked in versino of the style sheet (for developemnt)
    "URL_LOCAL":         "http://admintools.internal.ft.com:86/adstools",
 //      "URL_LOCAL":         "http://falcon.ft.com/test",
    "URL_DFP":           "http://www.google.com/dfp",
