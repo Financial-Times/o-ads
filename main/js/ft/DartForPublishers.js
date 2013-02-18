@@ -45,7 +45,7 @@
      resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
      setDefaultSiteZone, setInitialAdState, shift,
      shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
-     split, src, startRefreshTimer, state, storeResponse, stripLeadingZeros,
+     split, src, startRefreshTimer, stopRefreshTimer, state, storeResponse, stripLeadingZeros,
      style, submitToTrack, substr_key_names, substring, sz, target, test,
      tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
      toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, u,
@@ -617,10 +617,8 @@ FT.Advertising.prototype.callback = function (rResponse) {
         this.insertNewAd(rResponse.insertAdRequest);
     }
 
-    var radix; // to satisfy jslint
-    if (parseInt(rResponse.refreshTimer, radix) > 0) {
-        this.startRefreshTimer(rResponse.refreshTimer);
-    }
+
+    this.startRefreshTimer(rResponse.refreshTimer);
 
     // Handle ad types
     if (rResponse.type) {
@@ -1617,11 +1615,23 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
 
 FT.Advertising.prototype.startRefreshTimer = function (delay) {
     clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
-    // call doTrackRefresh from Track.js
-    this.refreshTimer = setTimeout(function () {
-        clientAds.log("refreshTimer callback()");
-        doTrackRefresh(delay);
-    }, delay);
+    var radix = 10; // to satisfy jslint
+    delay = parseInt(delay, radix);
+    if (delay > 0) {
+        // call doTrackRefresh from Track.js
+        this.refreshTimer = setTimeout(function () {
+            clientAds.log("refreshTimer callback()");
+            doTrackRefresh(delay);
+        }, delay);
+    }
+};
+
+FT.Advertising.prototype.stopRefreshTimer = function () {
+    clientAds.log("FT.Advertising.stopRefreshTimer()");
+    if (this.refreshTimer) {
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = null;
+    }
 };
 
 // Create a linked image in the DOM

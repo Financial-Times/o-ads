@@ -2,7 +2,7 @@
   "use strict";
   FT._ads = FT._ads || {};
   var registrationWidget = FT._ads.registrationWidget = {
-      config: {
+      defaults: {
           clickUrl: false,
           submitUrl: 'https://registration.ft.com/youraccount/updatePosition?erightsid=',
           parentSelector: '#navigation',
@@ -101,6 +101,8 @@
                           .removeClass('saving')
                           .addClass('saved');
                       self.saveText.text(config.savedText);
+                      FT.ads.handleRefreshLogic(config.adObj, config.refreshTimeout);
+                      FT.ads.startRefreshTimer(config.refreshTimeout);
                       setTimeout(self.destroy, config.collapseTimeout);
                   });
                   return false;
@@ -159,7 +161,7 @@
         }
 
         if (FT.$.isPlainObject(config)) {
-          FT.$.extend(true, this.config, config);
+          this.config = FT.$.extend(true, {}, this.defaults, config);
         }
 
         if (!this.container) {

@@ -19,6 +19,7 @@
     display: table-cell;
     vertical-align: middle;
     height: 75px;
+    line-height: 22px;
 }
 
 .msie6 #registrationWidget h5,
@@ -34,7 +35,6 @@
 #registrationWidget h5 {
     width: 225px;
     font-size: 18px;
-    line-height: 26px;
 }
 
 .msie6 #registrationWidget h5,
@@ -45,7 +45,6 @@
 
 #registrationWidget p {
     font-size: 14px;
-    line-height: 18px;
     width: 359px;
 }
 
