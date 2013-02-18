@@ -122,6 +122,7 @@
                 if(registrationWidget.select.val() !== '-1') {
                   registrationWidget.save.removeClass('disabled');
                 } else {
+                  FT.ads.stopRefreshTimer();
                   if(!registrationWidget.save.hasClass('disabled')) {
                     registrationWidget.save.addClass('disabled');
                   }
