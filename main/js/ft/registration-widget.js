@@ -12,29 +12,30 @@
           paragraph: "Keep informed on the subjects most important to you with article recommendations and special report notices.",
           saveText: "Save",
           savingText: "Saving",
-          savedText: "\u2714 Thank you"
+          savedText: "Thank you"
           //name: 'position',
           //options: [{"val":"-1","name":"Select your position"},{"val":"25","name":"Analyst"},{"val":"24","name":"Associate"},{"val":"19","name":"Business School Academic"},{"val":"2","name":"CEO/president/Chairman"},{"val":"11","name":"Consultant"},{"val":"7","name":"Exec Mgmt (EVP/SVP/MD)"},{"val":"18","name":"MBA Student"},{"val":"6","name":"Manager/Supervisor"},{"val":"3","name":"Other C Level (CFO/COO/CIO/CMO)"},{"val":"1","name":"Owner/Partner/Proprietor"},{"val":"12","name":"Professional"},{"val":"23","name":"Programme/Project Manager"},{"val":"14","name":"Secretary/Treasurer"},{"val":"15","name":"Senior Manager/Dept Head"},{"val":"8","name":"Technical/Business Specialist"},{"val":"5","name":"VP/Director"}]
       },
       ammendWidget: function () {
         var config = this.config;
 
-        this.header.text(config.header);
-        this.paragraph.text(config.paragraph);
-        this.saveText.text(config.saveText);
-        this.select.attr('name', config.name);
+        this.dom.header.text(config.header);
+        this.dom.paragraph.text(config.paragraph);
+        this.dom.saveText.text(config.saveText);
+        this.dom.select.attr('name', config.name);
         this.addOptions(config.options);
         return true;
       },
       buildWidget: function () {
         var config = this.config,
-          container = this.container = FT.$('<div id="registrationWidget" class="clearfix"></div>'),
-          form = this.form = FT.$('<form name="registration-widget"></form>'),
-          header = this.header = FT.$('<h5>' + config.header + '</h5>'),
-          paragraph = this.paragraph = FT.$('<p>' + config.paragraph + '</p>'),
+          dom = this.dom = {},
+          container = this.dom.container = FT.$('<div id="registrationWidget" class="clearfix"></div>'),
+          form = this.dom.form = FT.$('<form name="registration-widget"></form>'),
+          header = this.dom.header = FT.$('<h5>' + config.header + '</h5>'),
+          paragraph = this.dom.paragraph = FT.$('<p>' + config.paragraph + '</p>'),
           fieldset = FT.$('<fieldset>'),
-          select = this.select = FT.$('<select name="' + config.name + '"></select>'),
-          save = this.save = FT.$('<button type="submit" class="standardImage disabled"><span><span>' + config.saveText + '</span></span></button>'),
+          select = this.dom.select = FT.$('<select name="' + config.name + '"></select>'),
+          save = this.dom.save = FT.$('<button type="submit" class="linkButton medium disabled"><span><span>' + config.saveText + '</span></span></button>'),
           close = FT.$('<a href="#" title="close" class="close">&times;</a>');
 
         container.append(form);
@@ -46,12 +47,12 @@
           .append(save);
 
         this.addOptions(config.options);
-        this.saveText = this.save.find('span span');
+        this.dom.saveText = this.dom.save.find('span span');
         return true;
       },
       addOptions: function (options) {
           var option,
-          select = this.select;
+          select = this.dom.select;
 
           select.empty();
           while(option = options.shift()){
@@ -59,8 +60,10 @@
           }
       },
       destroy: function () {
-        registrationWidget.container.slideUp(registrationWidget.config.animationTime, function (){
-            registrationWidget.container.remove();
+        registrationWidget.dom.container.slideUp(registrationWidget.config.animationTime, function (){
+            registrationWidget.dom.container.remove();
+            delete registrationWidget.dom;
+            delete registrationWidget.config;
         });
       },
       events: [
@@ -68,8 +71,8 @@
               name: 'click',
               selector: '[title="close"]',
               handler: function (){
-                  registrationWidget.container.slideUp(registrationWidget.config.animationTime, function (){
-                      registrationWidget.container.remove();
+                  registrationWidget.dom.container.slideUp(registrationWidget.config.animationTime, function (){
+                      registrationWidget.dom.container.remove();
                   });
                   return false;
               }
@@ -80,7 +83,7 @@
                   var self = registrationWidget,
                     config = self.config,
                     eid = FT.cookie.getParam('FT_U', 'EID'),
-                    selected = self.select.find(':selected'),
+                    selected = self.dom.select.find(':selected'),
                     name = config.name,
                     value = selected.val(),
                     text =  selected.text(),
@@ -88,8 +91,10 @@
 
                   data[name] = {id: value, name: text};
 
-                  self.save.addClass('saving');
-                  self.saveText.text(config.savingText);
+                  setTimeout(self.destroy, config.collapseTimeout);
+
+                  // self.dom.save.addClass('saving');
+                  // self.dom.saveText.text(config.savingText);
 
                   if (config.clickUrl) {
                     FT.$.get(config.clickUrl);
@@ -97,13 +102,14 @@
 
                   FT.$.post(config.submitUrl + eid, data)
                     .complete(function(response) {
-                      self.save
-                          .removeClass('saving')
-                          .addClass('saved');
-                      self.saveText.text(config.savedText);
-                      FT.ads.handleRefreshLogic(config.adObj, config.refreshTimeout);
-                      FT.ads.startRefreshTimer(config.refreshTimeout);
-                      setTimeout(self.destroy, config.collapseTimeout);
+                      // self.dom.save
+                      //     .removeClass('saving')
+                      //     .addClass('saved');
+                      // self.dom.saveText.text(config.savedText);
+                      if (config.adObj) {
+                        FT.ads.handleRefreshLogic(config.adObj, config.refreshTimeout);
+                        FT.ads.startRefreshTimer(config.refreshTimeout);
+                      }
                   });
                   return false;
               }
@@ -119,12 +125,12 @@
               name: 'change',
               selector: 'select',
               handler: function (){
-                if(registrationWidget.select.val() !== '-1') {
-                  registrationWidget.save.removeClass('disabled');
+                if(registrationWidget.dom.select.val() !== '-1') {
+                  registrationWidget.dom.save.removeClass('disabled');
                 } else {
                   FT.ads.stopRefreshTimer();
-                  if(!registrationWidget.save.hasClass('disabled')) {
-                    registrationWidget.save.addClass('disabled');
+                  if(!registrationWidget.dom.save.hasClass('disabled')) {
+                    registrationWidget.dom.save.addClass('disabled');
                   }
                 }
                 return true;
@@ -132,22 +138,22 @@
           }
       ],
       attachWidget: function() {
-        return this.container
+        return this.dom.container
           .hide()
           .insertAfter(this.config.parentSelector)
           .slideDown(this.config.animationTime);
       },
       attachEvents: function () {
-          if (!this.form || !this.events) {
+          if (!this.dom.form || !this.events) {
               return false;
           }
           var event,
-              events = this.events;
+              events = Array.prototype.slice.call(this.events, 0);
           while(event = events.pop()){
               if (event.selector) {
-                  this.form.on(event.name, event.selector, event.handler);
+                  this.dom.form.on(event.name, event.selector, event.handler);
               } else {
-                  this.form.on(event.name, event.handler);
+                  this.dom.form.on(event.name, event.handler);
               }
           }
       },
@@ -165,7 +171,7 @@
           this.config = FT.$.extend(true, {}, this.defaults, config);
         }
 
-        if (!this.container) {
+        if (!this.dom) {
           this.buildWidget();
           this.attachEvents();
           this.attachWidget();
