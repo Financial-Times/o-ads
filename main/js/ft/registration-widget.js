@@ -97,7 +97,7 @@
                   // self.dom.saveText.text(config.savingText);
 
                   if (config.clickUrl) {
-                    FT.$.get(config.clickUrl);
+                    //FT.$.get(config.clickUrl);
                   }
 
                   FT.$.post(config.submitUrl + eid, data)

@@ -58,6 +58,7 @@
     height: auto;
     padding: 25px 0 0 30px;
     width: 330px;
+    vertical-align: top;
 }
 
 #registrationWidget fieldset select {
