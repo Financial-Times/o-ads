@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <title>Test Ad on a page - Locally served corporate access popup Cookie testing</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen" />
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/QUnitChainer.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
+    <style type="text/css">
+        iframe {
+            position: fixed;
+            top: 0;
+            right:0;
+            background:#FFF;
+        }
+    </style>
+<script>
+/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+   banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+   hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+   refreshTimer, regex, request, requestNewssubs, response,
+   timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
+   writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
+*/
+QUnit.config.autostart = false;
+
+var FT = FT || {};
+FT.env =
+{
+   "asset":    "page",
+
+   // Override timeout values to ensure the ad calls have time to come back
+   // before the positions are collapsed. This is to ensure we can test the page successfully.
+   "timeoutTolerance": 1500000,
+   "timeIntervalTolerance": 3000000
+};
+// Mock the properties object so we are considered to be non-live
+FT.Properties = { 'ENV': "ci" };
+var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
+var variants =  {
+            "z89"  :   [
+                            {"name" : "AYSC", "type" : "cookie", "value" : "" },
+                            {"name" : "FTQA", "type" : "cookie", "value" : "integration;dfp_site=ftcom.5887.comment;dfp_zone=comment-index" }
+                        ],
+            "z92"  :    [
+                            {"name": "AYSC", "type": "cookie", "value": "" },
+                            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.world;dfp_zone=asia-pacific-india" }
+
+                       ],
+            "z94" :    [    {"name": "AYSC", "type": "cookie", "value": "" },
+                            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.lex;dfp_zone=lex-index" }
+                        ],
+            "z724" :    [
+                            {"name": "AYSC", "type": "cookie", "value": "" },
+                            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.in-depth;dfp_zone=in-depth-wr-deal-makers" }
+                        ]
+
+};
+
+</script>
+    <!--old code -- comment out / remove after migration-->
+
+
+
+    <!--end of old code-->
+
+    <!--new code -- add new scripts as required-->
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
+    <!--end new code -->
+
+<script>
+
+var Tests = {
+   'intro': TestMockAd.intro,
+   'banlb': TestMockAd.banlb3,
+   'newssubs': TestMockAd.newssubs2,
+   'tlbxrib': TestMockAd.tlbxrib,
+   'mktsdata': TestMockAd.mktsdata,
+   'hlfmpu': TestMockAd.hlfmpu,
+   'doublet': TestMockAd.doublet,
+   'refresh': TestMockAd.refresh
+};
+
+var testSegment;
+
+FT.ads.initDFP();
+//now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+
+function adURLContainsSegment(pos,seg) {
+
+    var i, j, k, regexp1, regexp2, scriptTag, scriptTags = context.document.getElementById(pos).getElementsByTagName('script'), posNameVal = "pos=" + pos, segNameVal = "a=" + seg;
+
+    regexp1 = new RegExp(posNameVal);
+    regexp2 = new RegExp(segNameVal);
+
+    for(i = 0, j = scriptTags.length; i < j; i++) {
+        scriptTag = scriptTags[i];
+        console.log(scriptTag);
+        if (regexp1.test(scriptTag.src) && regexp2.test(scriptTag.src)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function audienceScienceAssertions(seg) {
+
+    if (testMode === 'unit'){
+       //if unit test, then we override FT.lib.writeScript with the call to Mocking
+       FT._ads.utils.writeScript = function (URL){
+           mockAdContent(URL, Tests); // Ads injected immediately
+       };
+    }
+
+    window.context = iframe.contentWindow;
+
+    ok(context.FT.env, "FT.env should be defined");
+    ok(context.FT._ads.utils.cookies, "FT._ads.utils.cookies should be defined");
+    equal(context.FT._ads.utils.cookies.FT_U, undefined, "FT.cookies.FT_U should be ");
+    ok(context.FT.env.useDFP, "FT.env.useDFP should be set to true");
+    ok(!context.FT.env.isLegacyAPI, "legacy API should not be used");
+    ok(adURLContainsSegment('banlb',seg),"audience science segment should be present within the ad URL");
+
+}
+
+$(function() {
+    iframe = document.createElement('iframe');
+
+    initCookies(FT._ads.utils.cookie('FTQA'));
+    var i, j, cookies, cookie, cookieValues, dataValues,
+        iframeSrc = location.href.split('/');
+
+    iframe.src = '../images/audiencescience-iframe.html';
+
+    var initialLoad = false;
+    QUnit.start();
+
+    for (testSegment in variants) {
+
+        asyncTest("Audience Science tests:" + dataValues, function () {
+          expect(6);
+
+            for (k=0; k < variants[testSegment].length; k++ ) {
+                dataValues += ' ' + variants[testSegment][k].name + ': ' + variants[testSegment][k].value;
+                FT._ads.utils.cookie(variants[testSegment][k].name, variants[testSegment][k].value, {path: '/', domain: '.ft.com'});
+            }
+
+            console.log("Audience Science tests:" + dataValues);
+            if (initialLoad === false ) {
+                $(iframe).load();
+                initialLoad = true;
+             } else {
+                iframe.contentDocument.location.reload(true);
+             }
+            setTimeout(function() {
+                audienceScienceAssertions(testSegment);
+                QUnit.start();
+            }, 1000)
+
+        });
+
+        cookieValues = '';
+        dataValues = "";
+    }
+
+
+    document.body.appendChild(iframe);
+});
+</script>
+</head>
+
+<body>
+	<h1 id="qunit-header">Test Ad on a page - Locally served corporate
+		access popup</h1>
+	<h2 id="qunit-banner"></h2>
+	<h2 id="qunit-userAgent"></h2>
+    <div id="mode"></div>
+    <div id="dccookie">
+        <script>unitOrIntegrationMessage(testMode);</script>
+    </div>
+
+	<p>
+		The purpose of this page is to see the Falcon FT.ads library working
+		with Dart for Publishers using the deepEqual page structure that is in use
+		on the Falcon home pages i.e. <a href="http://www.ft.com/home/uk">http://www.ft.com/home/uk</a>
+	</p>
+	<p>
+		<b>This page tests with targeting settings chosen to deliver ads
+			and the corporate popup as an interstitial.</b>
+	</p>
+	<P>
+		<b>The page has been modified to allow testing against variable
+			cookie settings</b>
+	</P>
+	<p>The ads are booked under
+	<ol>
+		<li>Advertiser:<a title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&advertiserid=2389285'>2389285</a>
+					FT DFP Test 1 Account </li>
+		<li>Order:<a title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&orderid=3903162'>3903162</a>
+					Ongoing Test </li>
+		<li>Ad: Ongoing banlb 468x60 ID: <a
+			title="Must use IE for this link"
+			href='http://dfp.doubleclick.net/sso?useSso=true&networkid=5887&&adid=217726086'>217726086</a>
+			and others.</li>
+	</ol>
+	</p>
+	<p>
+		And are targeted to DFP site/zone<b>
+        <script>document.write(FT.env.dfp_site + '/' + FT.env.dfp_zone);</script>
+		</b>
+	</p>
+	<hr>
+	<B>AYSC Cookie: <script>document.write( FT._ads.utils.cookies.AYSC );</script>
+	</B>
+	<br>
+	<B>FT MetaData: <script>//put some func here</script>
+	</B>
+	<hr>
+	<form>
+		<input type='button' name='expand' value='expand'
+			onclick='expandAll()' alt='show all Ad divs on the page'> <input
+			type='button' name='diagnose' value='diagnose'
+			onclick='showDiagnosis()' alt='display Ad diagnostics'> <input
+			type='button' name='stop timer' value='stop timer'
+			onclick='stopTimer()' alt='stop the interval timer'>
+	</form>
+	<hr>
+	<div id="mode"></div>
+	<ol id="qunit-tests">
+		<li></li>
+	</ol>
+</body>
+</html>
