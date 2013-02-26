@@ -38,7 +38,9 @@
 }
 
 .msie6 #registrationWidget h5,
-.msie7 #registrationWidget h5 {
+.msie7 #registrationWidget h5,
+.msie6 #registrationWidget p,
+.msie7 #registrationWidget p {
     height: auto;
     padding-top: 11px;
 }
@@ -46,12 +48,6 @@
 #registrationWidget p {
     font-size: 14px;
     width: 359px;
-}
-
-.msie6 #registrationWidget p,
-.msie7 #registrationWidget p {
-    height: auto;
-    padding-top: 26px;
 }
 
 #registrationWidget fieldset {
