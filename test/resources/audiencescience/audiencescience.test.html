@@ -103,14 +103,17 @@ testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
 function adURLContainsSegment(pos,seg) {
 
-    var i, j, k, regexp1, regexp2, scriptTag, scriptTags = context.document.getElementById(pos).getElementsByTagName('script'), posNameVal = "pos=" + pos, segNameVal = "a=" + seg;
+    var i, j, k, regexp1, regexp2, scriptTag,
+        scriptTags = context.document.getElementById(pos).getElementsByTagName('script'),
+        posNameVal = "pos=" + pos,
+        segNameVal = "a=" + seg;
 
     regexp1 = new RegExp(posNameVal);
     regexp2 = new RegExp(segNameVal);
 
     for(i = 0, j = scriptTags.length; i < j; i++) {
         scriptTag = scriptTags[i];
-        console.log(scriptTag);
+        //console.log(scriptTag);
         if (regexp1.test(scriptTag.src) && regexp2.test(scriptTag.src)) {
             return true;
         }
@@ -147,32 +150,33 @@ $(function() {
 
     iframe.src = '../images/audiencescience-iframe.html';
 
-    var initialLoad = false;
-    QUnit.start();
+    var initialLoad = true;
+    $(iframe).load(function (){
+        if(!initialLoad) {
+            QUnit.start();
+            audienceScienceAssertions(testSegment);
+            QUnit.stop();
+        } else {
+            QUnit.start();
+            initialLoad = false;
+        }
+    });
 
     for (testSegment in variants) {
+        asyncTest("Audience Science tests: " + testSegment, function (testSegment) {
+            return function () {
+                expect(6);
+                var dataValues = '';
 
-        asyncTest("Audience Science tests:" + dataValues, function () {
-          expect(6);
+                for (k=0; k < variants[testSegment].length; k++ ) {
+                    dataValues += ' ' + variants[testSegment][k].name + ': ' + variants[testSegment][k].value;
+                    FT._ads.utils.cookie(variants[testSegment][k].name, variants[testSegment][k].value, {path: '/', domain: '.ft.com'});
+                }
 
-            for (k=0; k < variants[testSegment].length; k++ ) {
-                dataValues += ' ' + variants[testSegment][k].name + ': ' + variants[testSegment][k].value;
-                FT._ads.utils.cookie(variants[testSegment][k].name, variants[testSegment][k].value, {path: '/', domain: '.ft.com'});
-            }
-
-            console.log("Audience Science tests:" + dataValues);
-            if (initialLoad === false ) {
-                $(iframe).load();
-                initialLoad = true;
-             } else {
+                console.log("Audience Science tests:" + testSegment + ' ' + dataValues);
                 iframe.contentDocument.location.reload(true);
-             }
-            setTimeout(function() {
-                audienceScienceAssertions(testSegment);
-                QUnit.start();
-            }, 1000)
-
-        });
+            }
+        }(testSegment));
 
         cookieValues = '';
         dataValues = "";

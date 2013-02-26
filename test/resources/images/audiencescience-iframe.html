@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <link rel="stylesheet" href="../../../../target/test-classes/css/tests.css" type="text/css" media="screen" />
-    <script src="../../../../target/test-classes/lib/jquery/jquery-1.7.2.js"></script>
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen" />
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
 
 <script>
 
@@ -42,14 +42,14 @@ FT.env = FT.env || {};
         asi_addElem(asi_makeJS('' + location.protocol + '//ads.revsci.net/adserver/ako?activate&csid=J07717'));
    </script>
 
-    <script src="../../../../../ft-cms/ft-cmsWeb/src/main/webapp/media/js/FT/CommonHeadBundle/Analytics/tracking.js"></script>
+    <script src="http://dev.media.ft.com/m/scripts/media/js/FT/CommonHeadBundle/Analytics/tracking.js"></script>
     <script src="../../../../../ft-cms/ft-cmsWeb/src/main/webapp/media/js/FT/Render/Track.js"></script>
     <!-- added code - strip out -->
-    <script src="../../../../target/test-classes/js/ft/advertising.utils.js"></script>
-    <script src="../../../../target/test-classes/js/ft/advertising.utils.cookie.js"></script>
-    <script src="../../../../target/test-classes/js/ft/HTMLAds.js"></script>
-    <script src="../../../../target/test-classes/js/ft/DartForPublishers.js"></script>
-    <script src="../../../../target/test-classes/js/util/mock-ads.html.js"></script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 
 
 <script>
@@ -67,7 +67,8 @@ FT.env = FT.env || {};
 
     FT.ads.initDFP();
 
-    var j, re = new RegExp("%3D");
+    var j, debugStr = '',
+        re = new RegExp("%3D");
 
     envVars = FT._ads.utils.cookies.FTQA.split("%3B");
 
@@ -75,6 +76,7 @@ FT.env = FT.env || {};
         if (re.test(envVars[j])) {
             nameAndValue = envVars[j].split("%3D");
             FT.env[nameAndValue[0]] = nameAndValue[1];
+            debugStr += nameAndValue[0] + ' = ' + nameAndValue[1] + ' ';
         }
     }
 
@@ -95,7 +97,7 @@ FT.env = FT.env || {};
 
 <body>
     <script>
-        document.write('<p>CorpPopTimeout: ' + FT._ads.utils.cookie('CorpPopTimeout') + ' FT_AM: ' + FT._ads.utils.cookie('FT_AM') + ' AYSC: ' + FT._ads.utils.cookie('AYSC') + ' FT Site ' + FT.env.dfp_site + ' FT Zone ' + FT.env.dfp_zone + '</p>');
+        document.write('<p>' + debugStr + '</p>');
     </script>
 	<p>From here down the page's div structure resembles the home page
 		structure. Div's to hold the final ad location are just below.</p>
