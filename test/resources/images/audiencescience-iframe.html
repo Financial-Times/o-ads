@@ -1,187 +1,188 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen" />
-    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen" />
+<script src="../lib/jquery/jquery-1.7.2.js"></script>
 
 <script>
 
-/*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
-   banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
-   hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
-   refreshTimer, regex, request, requestNewssubs, response,
-   timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
-   writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
-*/
+    /*members AYSC, ENV, FT_U, Properties, adName, ads, adverts, asset,
+     banlb, cookies, corppop, description, dfp_site, dfp_zone, doublet, env,
+     hlfmpu, intro, isLegacyAPI, length, mktsdata, newssubs, next, refresh,
+     refreshTimer, regex, request, requestNewssubs, response,
+     timeIntervalTolerance, timeoutTolerance, tlbxrib, useDFP, write,
+     writeScript, writeScriptMock, FTQA, banlb2, newssubs2, initDFP, lib
+     */
 
-var FT = FT || {};
-//added for Track.js
-FT.$ = $;
-FT.env = FT.env || {};
+    var FT = FT || {};
+    //added for Track.js
+    FT.$ = $;
+    FT.env = FT.env || {};
+
+    var j, debugStr = '',
+            re = new RegExp("%3D"), testMode = "integration";
 
 </script>
-    <!--added code - strip out again -->
 
-    <!--<script src="../../../../ft-cms/ft-cmsWeb/src/main/webapp/media/js/lib/RenderHeadBundle/revenue-science/revenue-science.js"></script>-->
-
-    <!--make sure aud sci functins present on page-->
-    <script>
-        //AG-develop 13.01.24-242 (2013-01-24 10:04:33 CET)
-        var rsi_now= new Date();
-        var rsi_csid= 'J07717';if(typeof(csids)=="undefined"){var csids=[rsi_csid];}else{csids.push(rsi_csid);};function rsiClient(Da){this._rsiaa=Da;this._rsiba=1;this._rsica=1;this._rsida=0;this._rsiea=0;this._rsifa=0;this._rsiga="1008211";this._rsiha="pix04.revsci.net";this._rsiia="js";this._rsija="b";this._rsika="3";this._rsila=3;this._rsima=1;this._rsina=new Array();this._rsioa=0;this._rsipa=null;this._rsiqa=null;this._rsira=null;this._rsisa=null;this._rsita=null;this._rsiua=null;this._rsiva=0;this.DM_cat=function(Ea){this._rsipa=Ea;};this.DM_name=function(Fa){this._rsiqa=Fa;};this.DM_keywords=function(st){this._rsira=st;};this.DM_event=function(Ga){this._rsisa=Ga;};this.DM_addToLoc=function(n,v){this._rsita=_rsiwa(this._rsita,n,v);};this.DM_addEncToLoc=function(n,v){this.DM_addToLoc(_rsixa(n),_rsixa(v));};this.DM_setLoc=function(u){this._rsita=u;};this.rsi_c=function(Da){this._rsiaa=Da;};this.rsi_ral=function(Ha){this._rsiba=Ha;};this.rsi_riu=function(Ia){this._rsica=Ia;};this.rsi_tiu=function(Ja){this._rsida=Ja;};this.rsi_m=function(Ka){this._rsiea=Ka;};this.rsi_dw=function(La){this._rsifa=La;};this.rsi_s=function(Ma){this._rsiha=Ma;};this.rsi_t=function(Na){this._rsiia=Na;};this.rsi_en=function(Oa){this._rsija=Oa;};this.rsi_cn=function(Pa){this._rsika=Pa;};this.rsi_us=function(Qa){this._rsila=Qa;};this.rsi_ra=function(ra){this._rsima=ra;};this.DM_tag=function(){var Ra;if(this._rsioa==0||this._rsiea==1){if(typeof(DM_prepClient)=="function"){DM_prepClient(this._rsiaa,this);}var Sa=this._rsiya();if(this._rsiia=="gif"){Ra=new Image(2,3);Ra.src=Sa;this._rsina[this._rsina.length]=Ra;}else if(this._rsiia=="js"){if(this._rsifa==1){document.write("<script language=\"JavaScript\" type=\"text/javascript\" src=\""+Sa+"\"><"+"/script>");}else{var Ta=document.createElement("script");Ta.language="JavaScript";Ta.type="text/javascript";Ta.src=Sa;var Ua=(document.body==null)?document.getElementsByTagName("head")[0]:document.body;Ua.insertBefore(Ta,Ua.firstChild);Ra=Ta;}}this._rsioa=1;}this.rsi_r();return Ra;};this._rsiya=function(){var Va="";this.DM_addEncToLoc("_rsiL",this._rsiva);Va="DM_LOC="+_rsixa(this._rsita);if(this._rsipa){Va+="&DM_CAT="+_rsixa(this._rsipa);}if(this._rsisa){Va+="&DM_EVT="+_rsixa(this._rsisa);}if(this._rsira){Va+="&DM_KYW="+_rsixa(this._rsira);}if(this._rsica==1&&this._rsiua){Va+="&DM_REF="+_rsixa(this._rsiua);}if(this._rsida==1){Va+="&DM_TIT="+_rsixa(document.title);}if(this._rsiqa){Va+="&DM_NAM="+_rsixa(this._rsiqa);}Va+="&DM_EOM=1";var Wa="http"+(location.protocol=="https:"?"s":"")+"://";var Xa="/"+this._rsiaa+"/"+this._rsija+this._rsika+"/0/"+this._rsila+"/"+this._rsiga+"/";var Ya=Math.floor(Math.random()*1000000000)+"."+this._rsiia;var Za=Wa+this._rsiha+Xa+Ya+"?D="+_rsixa(Va)+"&C="+_rsixa(csids);var $a=Za.length;if($a>=2000){if(Za.charAt(1998)=='%'){Za=Za.substr(0,1998);}else if(Za.charAt(1999)=='%'){Za=Za.substr(0,1999);}else{Za=Za.substr(0,2000);}if(Za.charAt(Za.length-3)=='%'&&Za.charAt(Za.length-2)=='2'&&Za.charAt(Za.length-1)=='5'){Za=Za.substr(0,Za.length-3);}}return Za;};this.rsi_r=function(){var ab;var bb;var cb=0;var db=0;if(this._rsiba==1){var eb=window;while(true){try{ab=eb.document.location;bb=eb.document.referrer;cb=db;}catch(notAllowed){}if(eb==window.top||eb==eb.parent){break;}eb=eb.parent;db++;}}else{ab=window.document.location;bb=window.document.referrer;}this._rsiva=db-cb;this._rsiua=this._rsima?_rsiza(bb.toString()):bb.toString();if(this._rsiva==0){this._rsita=(this._rsima)?_rsiza(ab.href):ab.href;}else{this._rsita=this._rsiua;}this._rsipa=null;this._rsiqa=null;this._rsira=null;this._rsisa=null;};this.rsi_r();}var _rsixa;if(typeof(encodeURIComponent)=="function"){_rsixa=encodeURIComponent;}else{var _rsiAa=new RegExp("[\x00-\x20]|[\x22-\x26]|[\x2B-\x2C]|\x2F|[\x3A-\x40]|[\x5B-\x5E]|\x60|[\x7B-\x7D]|[\x7F-\uFFFF]","g");_rsixa=function(v){return v.toString().replace(_rsiAa,_rsiBa);}}function _rsiwa(u,n,v){return u+(u.indexOf("?")==-1?"?":"&")+n+"="+v;}function _rsiza(u){var i=u.indexOf('#');return(i>=0)?u.substr(0,i):u;}function _rsiCa(i){var fb=i.toString(16).toUpperCase();return fb.length<2?"0"+fb:fb;}function _rsiBa(c){var i=c.charCodeAt(0);if(isNaN(i))return "";if(i<128)return "%"+_rsiCa(i);if(i<2048)return "%"+_rsiCa(0xC0+(i>>6))+"%"+_rsiCa(0x80+(i&0x3F));if(i<65536)return "%"+_rsiCa(0xE0+(i>>12))+"%"+_rsiCa(0x80+(i>>6&0x3F))+"%"+_rsiCa(0x80+(i&0x3F));return "%"+_rsiCa(0xF0+(i>>18))+"%"+_rsiCa(0x80+(i>>12&0x3F))+"%"+_rsiCa(0x80+(i>>6&0x3F))+"%"+_rsiCa(0x80+(i&0x3F));}window[rsi_csid]=new rsiClient(rsi_csid);
-        function DM_cat(aa){window[rsi_csid].DM_cat(aa);}function DM_name(ba){window[rsi_csid].DM_name(ba);}function DM_keywords(kw){window[rsi_csid].DM_keywords(kw);}function DM_event(ca){window[rsi_csid].DM_event(ca);}function DM_addToLoc(n,v){window[rsi_csid].DM_addToLoc(n,v);}function DM_addEncToLoc(n,v){window[rsi_csid].DM_addEncToLoc(n,v);}function DM_setLoc(u){window[rsi_csid].DM_setLoc(u);}function DM_tag(){window[rsi_csid].DM_tag();}
-        if(window[rsi_csid])window[rsi_csid].rsi_m(1);else rsi_m(1);
-        function asi_addElem(e){var p=document.body==null?document.getElementsByTagName('head')[0]:document.body;p.insertBefore(e,p.firstChild);}
-        function asi_makeIFrame(u,h,w){var e=document.createElement("iframe");e.height=h?h:0;e.width=w?w:0;e.frameBorder=0;e.src=u;return e;}
-        function asi_makeJS(u){var e=document.createElement("script");e.language="JavaScript";e.type="text/javascript";e.src=u;return e;}
-        function asi_makeGIF(u){var i=new Image(2,2);i.src=u;return i;}
-        function asi_scheme(){return "http"+(location.protocol=="https:"?"s":"");}
-        function asi_addOnSegs(wa){var xa=DM_onSegsAvailable;var ya=rsi_csid.toLowerCase();return function(za,Aa){wa(za,Aa);if(typeof(xa)=="function"&&Aa==ya){xa(za,Aa);}};}
-
-        asi_addElem(asi_makeJS('' + location.protocol + '//ads.revsci.net/adserver/ako?activate&csid=J07717'));
-   </script>
-
-    <script src="http://dev.media.ft.com/m/scripts/media/js/FT/CommonHeadBundle/Analytics/tracking.js"></script>
-    <script src="../../../../../ft-cms/ft-cmsWeb/src/main/webapp/media/js/FT/Render/Track.js"></script>
-    <!-- added code - strip out -->
-    <script src="../js/ft/advertising.utils.js"></script>
-    <script src="../js/ft/advertising.utils.cookie.js"></script>
-    <script src="../js/ft/HTMLAds.js"></script>
-    <script src="../js/ft/DartForPublishers.js"></script>
-    <script src="../js/util/mock-ads.html.js"></script>
-
-
+<script src="../js/ft/advertising.utils.js"></script>
+<script src="../js/ft/advertising.utils.cookie.js"></script>
+<script src="../js/ft/HTMLAds.js"></script>
+<script src="../js/ft/DartForPublishers.js"></script>
+<script src="../js/util/mock-ads.html.js"></script>
+<script src="../lib/sinon/sinon-1.1.1.js"></script>
+<script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
 <script>
-
-    var Tests = {
-       'intro': TestMockAd.intro,
-       'banlb': TestMockAd.banlb3,
-       'newssubs': TestMockAd.newssubs2,
-       'tlbxrib': TestMockAd.tlbxrib,
-       'mktsdata': TestMockAd.mktsdata,
-       'hlfmpu': TestMockAd.hlfmpu,
-       'doublet': TestMockAd.doublet,
-       'refresh': TestMockAd.refresh
-    };
 
     FT.ads.initDFP();
 
-    var j, debugStr = '',
-        re = new RegExp("%3D");
 
-    envVars = FT._ads.utils.cookies.FTQA.split("%3B");
+    if (typeof(FT._ads.utils.cookies.FTQA) !== "undefined" ) {
 
-    for (j=0;j<envVars.length;j++) {
-        if (re.test(envVars[j])) {
-            nameAndValue = envVars[j].split("%3D");
-            FT.env[nameAndValue[0]] = nameAndValue[1];
-            debugStr += nameAndValue[0] + ' = ' + nameAndValue[1] + ' ';
+        envVars = FT._ads.utils.cookies.FTQA.split("%3B");
+
+        for (j=0;j<envVars.length;j++) {
+            if (re.test(envVars[j])) {
+                nameAndValue = envVars[j].split("%3D");
+                FT.env[nameAndValue[0]] = nameAndValue[1];
+                debugStr += nameAndValue[0] + ' = ' + nameAndValue[1] + ' ';
+            }
         }
-    }
 
-    //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-    var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+        //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
+        testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
-    if (testMode === 'unit')
-    {
-       //if unit test, then we override FT.lib.writeScript with the call to Mocking
-       FT._ads.utils.writeScript = function (URL){
-           mockAdContent(URL, Tests); // Ads injected immediately
-        };
-       //HTML Ad call for new Corppops: in unit test mode  we override the urlstem so we can serve the html locally
-       FT.corppop.HTMLAdData.urlStem = '';
+        if (testMode === 'unit')
+        {
+            //if unit test, then we override FT.lib.writeScript with the call to Mocking
+            FT._ads.utils.writeScript = function (URL){
+                mockAdContent(URL, Tests); // Ads injected immediately
+            };
+
+            var Tests = {
+                'intro': TestMockAd.intro,
+                'banlb': TestMockAd.banlb3,
+                'newssubs': TestMockAd.newssubs2,
+                'tlbxrib': TestMockAd.tlbxrib,
+                'mktsdata': TestMockAd.mktsdata,
+                'hlfmpu': TestMockAd.hlfmpu,
+                'doublet': TestMockAd.doublet,
+                'refresh': TestMockAd.refresh
+            };
+        }
+
     }
-    </script>
+</script>
+
+<script src="../js/ft/audienceScienceFacade.js"></script>
+
+<!-- not acceptable as synchronous loading of third party scripts is dangerous-->
+<script src="http://js.revsci.net/gateway/gw.js?csid=J07717"></script>
+
+<!-- asynschronous loading via jQuery of initial rev sci code-->
+<!-- issue wth race condition needs resolving -->
+<!--<script src="../js/ft/revenue-science.js"></script>-->
+
+<script>
+    //set up test spies
+    FT.test = {};
+    FT.test.spyFacadeAddEncToLoc = sinon.spy(FT.analytics.audienceScience, "addEncToLoc");
+    FT.test.spyFacadeTag = sinon.spy(FT.analytics.audienceScience, "tag");
+    FT.test.spyWindowJ07717DM_addEncToLoc = sinon.spy(window.J07717,"DM_addEncToLoc");
+    FT.test.spyWindowJ07717DM_tag = sinon.spy(window.J07717,"DM_tag");
+
+</script>
+<script src="../js/ft/audienceScience.js"></script>
+
 </head>
 
 <body>
+<script>
+    document.write('<p>' + debugStr + '</p>');
+</script>
+<p>From here down the page's div structure resembles the home page
+    structure. Div's to hold the final ad location are just below.</p>
+<p>If no ads show, then there is something wrong with the code or
+    with the ad targeting.</p>
+<div id='father-of-intro'>
+    <div id="fullpage-container">Ad request fullpage-container</div>
     <script>
-        document.write('<p>' + debugStr + '</p>');
+        FT._ads.utils.cookies.FTQA = "ord=123123123";
+        FT.ads.request('intro');
     </script>
-	<p>From here down the page's div structure resembles the home page
-		structure. Div's to hold the final ad location are just below.</p>
-	<p>If no ads show, then there is something wrong with the code or
-		with the ad targeting.</p>
-	<div id='father-of-intro'>
-		<div id="fullpage-container">Ad request fullpage-container</div>
-		<script>
-            FT._ads.utils.cookies.FTQA = "ord=123123123";
-            FT.ads.request('intro');
-        </script>
-	</div>
-	<div class="clearfix container">
-		clearfix container
-		<div class="master-column middleSection" data-zone="middleSection">
-			master-column middleSection
-			<div class="master-row topAds">
-				master-row topAds
-				<div id="banlb" class="advertising">
-					Ad request banlb
-					<script>FT.ads.request("banlb");</script>
-				</div>
-				<div id="newssubs" class="advertising">
-					Ad request newssubs
-					<script>FT.ads.requestNewssubs();</script>
-				</div>
-			</div>
-			<div class="master-row railSection" data-zone="railSection">
-				master-row railSection
-				<div id="tlbxrib" class="advertising">
-					Ad request tlbxrib
-					<script>FT.ads.request("tlbxrib");</script>
-				</div>
-				<div class="freestyle">
-					freestyle
-					<div id="wsodHomePageModule" class="rightRailComponent">
-						Ad request wsodHomePageModule
-						<div id="wsodHomePageModuleContent">
-							Ad request wsodHomePageModuleContent
-							<div class="advertising" id="mktsdata">
-								Ad request mktsdata
-								<script>FT.ads.request("mktsdata");</script>
-							</div>
-						</div>
-					</div>
-				</div>
+</div>
+<div class="clearfix container">
+    clearfix container
+    <div class="master-column middleSection" data-zone="middleSection">
+        master-column middleSection
+        <div class="master-row topAds">
+            master-row topAds
+            <div id="banlb" class="advertising">
+                Ad request banlb
+                <script>FT.ads.request("banlb");</script>
+            </div>
+            <div id="newssubs" class="advertising">
+                Ad request newssubs
+                <script>FT.ads.requestNewssubs();</script>
+            </div>
+        </div>
+        <div class="master-row railSection" data-zone="railSection">
+            master-row railSection
+            <div id="tlbxrib" class="advertising">
+                Ad request tlbxrib
+                <script>FT.ads.request("tlbxrib");</script>
+            </div>
+            <div class="freestyle">
+                freestyle
+                <div id="wsodHomePageModule" class="rightRailComponent">
+                    Ad request wsodHomePageModule
+                    <div id="wsodHomePageModuleContent">
+                        Ad request wsodHomePageModuleContent
+                        <div class="advertising" id="mktsdata">
+                            Ad request mktsdata
+                            <script>FT.ads.request("mktsdata");</script>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-				<div id="hlfmpu" class="advertising">
-					Ad request hlfmpu
-					<script>FT.ads.request("hlfmpu");</script>
-				</div>
-				<div class="railComponent togglable maximised advertising">
-					railComponent togglable maximised advertising <span
-						class="toggleButton"> </span>
-					<h3 class="">
-						<span class="railComponentHeading"> Highlights </span>
-					</h3>
-					<div class="toggleContent">
-						toggleContent
-						<div id="doublet">
-							Ad request doublet
-							<script>FT.ads.request("doublet");</script>
-						</div>
-					</div>
-				</div>
+            <div id="hlfmpu" class="advertising">
+                Ad request hlfmpu
+                <script>FT.ads.request("hlfmpu");</script>
+            </div>
+            <div class="railComponent togglable maximised advertising">
+                railComponent togglable maximised advertising <span
+                    class="toggleButton"> </span>
+                <h3 class="">
+                    <span class="railComponentHeading"> Highlights </span>
+                </h3>
+                <div class="toggleContent">
+                    toggleContent
+                    <div id="doublet">
+                        Ad request doublet
+                        <script>FT.ads.request("doublet");</script>
+                    </div>
+                </div>
+            </div>
 
-			</div>
-		</div>
-		<div class="adRequests">
-			adRequests
-			<div id="oob">
-				Ad request oob
-				<script>FT.ads.request('oob');</script>
-			</div>
-			<div id="corppop">
-				Ad request corppop
-				<script>FT.ads.request('corppop');</script>
-			</div>
-			<div id="refresh" class="advertising">
-				Ad request refresh
-				<script>FT.ads.request('refresh');</script>
-			</div>
+        </div>
+    </div>
+    <div class="adRequests">
+        adRequests
+        <div id="oob">
+            Ad request oob
+            <script>FT.ads.request('oob');</script>
+        </div>
+        <div id="corppop">
+            Ad request corppop
+            <script>FT.ads.request('corppop');</script>
+        </div>
+        <div id="refresh" class="advertising">
+            Ad request refresh
+            <script>FT.ads.request('refresh');</script>
+        </div>
 
-		</div>
-	</div>
+    </div>
+</div>
 </body>
 </html>
