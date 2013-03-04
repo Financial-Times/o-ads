@@ -1,4 +1,4 @@
-(function(w, d, FT, u){
+(function(w, d, FT, $, u){
   "use strict";
   FT._ads = FT._ads || {};
   var registrationWidget = FT._ads.registrationWidget = {
@@ -29,14 +29,14 @@
       buildWidget: function () {
         var config = this.config,
           dom = this.dom = {},
-          container = this.dom.container = FT.$('<div id="registrationWidget" class="clearfix"></div>'),
-          form = this.dom.form = FT.$('<form name="registration-widget"></form>'),
-          header = this.dom.header = FT.$('<h5>' + config.header + '</h5>'),
-          paragraph = this.dom.paragraph = FT.$('<p>' + config.paragraph + '</p>'),
-          fieldset = FT.$('<fieldset>'),
-          select = this.dom.select = FT.$('<select name="' + config.name + '"></select>'),
-          save = this.dom.save = FT.$('<button type="submit" class="linkButton medium disabled"><span><span>' + config.saveText + '</span></span></button>'),
-          close = FT.$('<a href="#" title="close" class="close">&times;</a>');
+          container = this.dom.container = $('<div id="registrationWidget" class="clearfix"></div>'),
+          form = this.dom.form = $('<form name="registration-widget"></form>'),
+          header = this.dom.header = $('<h5>' + config.header + '</h5>'),
+          paragraph = this.dom.paragraph = $('<p>' + config.paragraph + '</p>'),
+          fieldset = $('<fieldset>'),
+          select = this.dom.select = $('<select name="' + config.name + '"></select>'),
+          save = this.dom.save = $('<button type="submit" class="linkButton medium disabled"><span><span>' + config.saveText + '</span></span></button>'),
+          close = $('<a href="#" title="close" class="close">&times;</a>');
 
         container.append(form);
         form.append(header)
@@ -97,11 +97,15 @@
                   // self.dom.saveText.text(config.savingText);
 
                   if (config.clickUrl) {
-                    //FT.$.get(config.clickUrl);
+                    $.getScript(config.clickUrl);
                   }
 
-                  FT.$.post(config.submitUrl + eid, data)
-                    .complete(function(response) {
+                  $.ajax({
+                      url: config.submitUrl + eid,
+                      data: data,
+                      type : 'post',
+                      contentType: "text/plain; charset=UTF-8"
+                    }).complete(function(response) {
                       // self.dom.save
                       //     .removeClass('saving')
                       //     .addClass('saved');
@@ -167,8 +171,8 @@
           }
         }
 
-        if (FT.$.isPlainObject(config)) {
-          this.config = FT.$.extend(true, {}, this.defaults, config);
+        if ($.isPlainObject(config)) {
+          this.config = $.extend(true, {}, this.defaults, config);
         }
 
         if (!this.dom) {
