@@ -4,7 +4,7 @@
   var registrationWidget = FT._ads.registrationWidget = {
       defaults: {
           clickUrl: false,
-          submitUrl: 'https://registration.ft.com/youraccount/updatePosition?erightsid=',
+          submitUrl: 'http://www.ft.com/m/reg_s/youraccount/updatePosition?erightsid=',
           parentSelector: '#navigation',
           collapseTimeout: 1500,
           animationTime: 'slow',
@@ -102,7 +102,7 @@
 
                   $.ajax({
                       url: config.submitUrl + eid,
-                      data: data,
+                      data: JSON.stringify(data),
                       type : 'post',
                       contentType: "text/plain; charset=UTF-8"
                     }).complete(function(response) {
@@ -163,6 +163,7 @@
       },
       init: function (config) {
         var prop;
+
         // If a value in the config object supplied is false remove it,
         // this is to stop empty strings overriding the defaults.
         for (prop in config) {
@@ -171,9 +172,19 @@
           }
         }
 
-        if ($.isPlainObject(config)) {
-          this.config = $.extend(true, {}, this.defaults, config);
+        if (!$) {
+          throw new Error("jQuery is not defined on this page.");
         }
+
+        if (!config.name) {
+          throw new Error("The config.name parameter is required and should be passed to this method.");
+        }
+
+        if (!config.options) {
+          throw new Error("The config.options parameter is required and should be passed to this method.");
+        }
+
+        config = this.config = $.extend(true, {}, this.defaults, config);
 
         if (!this.dom) {
           this.buildWidget();
@@ -186,7 +197,7 @@
         return this;
       }
   };
-}(window, document, FT));
+}(window, document, FT, FT.$ || $));
 
 /* Initialization: */
 /* the code below is served as an advert from DFP to initialize the widget, the select options and field name are set here */
