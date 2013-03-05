@@ -9,6 +9,9 @@ groups {
         js(minimize: false, "/js/ft/advertising.utils.cookie.js")
         js(minimize: false, "/js/ft/HTMLAds.js")
         js(minimize: false, "/js/ft/DartForPublishers.js")
+        js(minimize: false, "js/ft/audienceFacade.js")
+        js(minimize: false, "js/ft/revenue-science.js")
+        js(minimize: false, "js/ft/audienceScience.js")
 //        js(minimize: false,"/js/thirdparty/**.js")
 //        js(minimize: false,"/js/lib/**.js")
         css(minimize: false, "/css/ft/**.css")
@@ -27,6 +30,9 @@ groups {
         js "/js/ft/advertising.utils.cookie.js"
         js "/js/ft/HTMLAds.js"
         js "/js/ft/DartForPublishers.js"
+        js "js/ft/audienceFacade.js"
+        js "js/ft/revenue-science.js"
+        js "js/ft/audienceScience.js"
 //       js "/js/thirdparty/**.js
  //       js "/js/lib/**.js"
         css "/css/ft/**.css"

@@ -57,7 +57,8 @@
             {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.world;dfp_zone=asia-pacific-india" }
 
         ],
-        "z94" :    [    {"name": "AYSC", "type": "cookie", "value": "" },
+        "z94" :    [
+            {"name": "AYSC", "type": "cookie", "value": "" },
             {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.lex;dfp_zone=lex-index" }
         ],
         "z724" :    [
@@ -108,7 +109,6 @@
 
         for(i = 0, j = scriptTags.length; i < j; i++) {
             scriptTag = scriptTags[i];
-            //console.log(scriptTag);
             if (regexp1.test(scriptTag.src) && regexp2.test(scriptTag.src)) {
                 return true;
             }
