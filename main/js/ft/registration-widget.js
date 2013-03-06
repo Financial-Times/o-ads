@@ -87,9 +87,7 @@
                     name = config.name,
                     value = selected.val(),
                     text =  selected.text(),
-                    data = {};
-
-                  data[name] = {id: value, name: text};
+                    data = '{"' + name + '":{"id":"' + id + '","name":"' + text + '"}}';
 
                   setTimeout(self.destroy, config.collapseTimeout);
 
