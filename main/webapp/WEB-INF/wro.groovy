@@ -12,6 +12,7 @@ groups {
         js(minimize: false, "/js/ft/DartForPublishers.js")
         js(minimize: false, "/js/ft/audienceScienceFacade.js")
         js(minimize: false, "/js/ft/audienceScience.js")
+        js(minimize: false, "/js/ft/registration-widget.js")
 //        js(minimize: false,"/js/thirdparty/**.js")
 //        js(minimize: false,"/js/lib/**.js")
         css(minimize: false, "/css/ft/**.css")
@@ -33,6 +34,7 @@ groups {
         js "/js/ft/DartForPublishers.js"
         js "/js/ft/audienceScienceFacade.js"
         js "/js/ft/audienceScience.js"
+        js "/js/ft/registration-widget.js"
 //       js "/js/thirdparty/**.js
  //       js "/js/lib/**.js"
         css "/css/ft/**.css"

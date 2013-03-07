@@ -64,7 +64,7 @@
      injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid, prepareUParams,
      uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
      getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
-     exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, addClass,
+     exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
      removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
      pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
      VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
@@ -117,7 +117,7 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts','tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
@@ -1021,6 +1021,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     this.baseAdvert.uuid = FT.env.dfp_zone; //initialize
     this.baseAdvert.auuid = false;
     this.baseAdvert.bht = this.behaviouralFlag();
+    this.baseAdvert.fts = this.isLoggedIn();
 
     if (typeof pageUUID !== 'undefined') {
         if (pageUUID !== null && pageUUID !== '') {
@@ -1858,6 +1859,19 @@ FT.Advertising.prototype.detectERights = function (obj) {
 FT.Advertising.prototype.behaviouralFlag = function () {
     var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
     return flag;
+};
+
+
+// set the value of the fts - user must have FTsession not just erightsId and slv
+FT.Advertising.prototype.isLoggedIn = function () {
+    var eid = this.erightsID();
+    var sessionId = null;
+    if(eid !== null && eid !== undefined){
+        return FT._ads.utils.cookie("FTSession") !== null;
+    }
+    else{
+        return false;
+    }
 };
 
 // exclude fields on either key or val criteria

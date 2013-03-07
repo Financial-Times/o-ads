@@ -151,7 +151,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
 	// Documented in Targeting/KeyPriority.xls in DFP project share and on Twiki
 	// http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Order_of_key_values_placed_into
 	//TEST.KeyOrder = "sz,dcopt,07,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";  // TODO referrer, investor relations
-	TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,loc,uuid,auuid,ts,cc,pos,bht,tile,ord";
+	TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,loc,uuid,auuid,ts,cc,pos,bht,fts,tile,ord";
 	//TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";
 	TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,uuid,ts,cc,pos,bht,tile,ord";
 	//TEST.CompAudSciSplit = "sz,dcopt,07,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,a,a,pos,bht,tile,ord";
@@ -634,6 +634,14 @@ function testErightsID(message) {
 	ok(true, "== BEGIN: " + message);
 	return eid;
 }
+
+
+function testIsLoggedIn(message) {
+	var isLoggedIn = FT.ads.isLoggedIn();
+	ok(true, "== BEGIN: " + message);
+	return isLoggedIn;
+}
+
 
 function testGetIP(message) {
 	var ip = FT.ads.getIP();
@@ -2804,6 +2812,32 @@ $(document).ready(function (){
 		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
 	});
 
+    test("FT.ads.buildURL (FTSession cookie)", function () {
+    		maybeInitFixture();
+    		var url, params, order, uParams;
+
+    		beginNewPage('buildURL FT_U Cookie 1');
+
+            mockCookies.FT_U = "_EID=2548659_";
+    		url = testBuildURL("test with FT_U cookie information");
+
+    		matches(url, ';eid=2548659;', "Ad URL erights ID should appear in URL");
+    		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
+            notmatches(url, ';fts=false', "Logged in flag set to ad call");
+
+
+            mockCookies.FT_U = "_EID=0002659_";
+            mockCookies.FTSession = "1234567890";
+    		url = testBuildURL("test with FT_U leading zeros removed");
+
+    		matches(url, ';eid=2659;', "Ad URL erights ID appears in url");
+    		matches(url, ';u=eid=2659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
+    		matches(url, ';fts=true', "Logged in flag set to ad call");
+
+    	});
+
+
+
 	test("FT.ads.toBase36 (for Audience Science cookie) - for task TA10281", function () {
 		maybeInitFixture();
 		var idx;
@@ -3162,6 +3196,8 @@ $(document).ready(function (){
         uParams = extract_uParams(params.u);
         equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
     });
+
+
 
 	test("FT.ads.toBase36 (for Audience Science cookie) - for task TA10281", function () {
 		maybeInitFixture();
@@ -3621,6 +3657,45 @@ $(document).ready(function (){
 		equal( eid, '7038802', "correct eid information retrieved");
 
 	});
+
+
+    test("FT.ads.isLoggedIn (FTSession cookie - logged in)", function () {
+   		var isLoggedIn;
+   		beginNewPage('isLoggedIn FTSession cookie');
+           mockCookies.FTSession = "someSessionId";
+           mockCookies.FT_U = "_EID=0002659_";
+        isLoggedIn = testIsLoggedIn("test with FTSession & FT_U cookie information");
+   		equal( isLoggedIn, true, "User should be logged in ");
+
+   	});
+
+    test("FT.ads.isLoggedIn (FTSession cookie 2 - no FT_U)", function () {
+        var eid;
+        beginNewPage('isLoggedIn FTSession cookie');
+        beginNewPage('erightsID FT_U cookie 1');
+        mockCookies.FT_U = null;
+        eid = testErightsID("test with FT_U cookie information");
+        equal( eid, undefined , "correct eid information [" + eid + "] retrieved");
+
+        var isLoggedIn;
+        mockCookies.FTSession = "someSessionId";
+        isLoggedIn = testIsLoggedIn("test with FTSession cookie and no FT_U information");
+        equal( isLoggedIn, false, "User has FTSession but is NOT logged in  + " + eid);
+
+
+    });
+
+    test("FT.ads.isLoggedIn (FTSession cookie 3 - no FTSession)", function () {
+        var isLoggedIn;
+
+        beginNewPage('isLoggedIn FTSession cookie');
+        mockCookies.FTSession = null;
+        mockCookies.FT_U = "_EID=0002659_";
+        isLoggedIn = testIsLoggedIn("test with no FTSession cookie information");
+        equal( isLoggedIn, false, "User had not FTSession");
+
+    });
+
 
 	test("FT.ads.requestNewssubs() - check if should serve newssubs depending on ad dimensions in banlb slot", function (){
 
