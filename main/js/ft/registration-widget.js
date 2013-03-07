@@ -100,7 +100,7 @@
 
                   $.ajax({
                       url: config.submitUrl + eid,
-                      data: JSON.stringify(data),
+                      data: data,
                       type : 'post',
                       contentType: "text/plain; charset=UTF-8"
                     }).complete(function(response) {
