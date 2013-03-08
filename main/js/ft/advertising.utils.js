@@ -282,24 +282,6 @@
      this.cookies = FT._ads.utils.hash(document.cookie, ';', '=');
   };
 
-  // nothing to see here.....
-  utils.oppaGangnamStyle = function (){
-    var audio = document.createElement('audio'),
-      img = document.createElement('img');
-
-    audio.src = 'http://static.echonest.com/InfiniteGangnamStyle/TRLRVJF13A79B07430.mp3';
-    img.src = 'http://25.media.tumblr.com/tumblr_mbsnozLHlt1rdnqx8o1_400.gif';
-    img.style.height ="100%";
-    img.style.position ="fixed";
-    img.style.top ="0";
-    img.style.right ="0";
-    document.body.appendChild(audio);
-    audio.play();
-    setTimeout(function () {
-      document.body.appendChild(img);
-    }, 7500);
-  };
-
   FT._ads.utils = utils.extend(FT._ads.utils, utils);
   FT._ads.utils.init();
   return utils;
