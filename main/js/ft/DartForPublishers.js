@@ -1865,7 +1865,6 @@ FT.Advertising.prototype.behaviouralFlag = function () {
 // set the value of the fts - user must have FTsession not just erightsId and slv
 FT.Advertising.prototype.isLoggedIn = function () {
     var eid = this.erightsID();
-    var sessionId = null;
     if(eid !== null && eid !== undefined){
         return FT._ads.utils.cookie("FTSession") !== null;
     }
