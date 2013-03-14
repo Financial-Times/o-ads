@@ -102,7 +102,7 @@
                       url: config.submitUrl + eid,
                       data: data,
                       type : 'post',
-                      contentType: "text/plain; charset=UTF-8"
+                      contentType: "text/xml; charset=UTF-8"
                     }).complete(function(response) {
                       // self.dom.save
                       //     .removeClass('saving')
