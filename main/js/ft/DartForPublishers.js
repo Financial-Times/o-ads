@@ -102,7 +102,7 @@ FT.Advertising = function () {
         'lhn':             { 'sz': '136x64' },
         'tradcent':      { 'sz': '336x260' },
         'mktsdata':      { 'sz': '88x31,75x25' }, // also matches mktsdata2 and mktsdata3
-        'hlfmpu':         { 'sz': '300x600,336x850,300x250,336x280' },
+        'hlfmpu':         { 'sz': '300x600,336x850,300x250,336x280,300x1050' },
         'doublet':        { 'sz': '342x200' },
         'refresh':        { 'sz': '1x1' },
         'mpu':             { 'sz': '300x250,336x280' },
