@@ -25,14 +25,14 @@
      exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
      fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
      getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
-     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
-     handleRefreshLogic, hasAdClass, hasCalledInitDFP, hasClassName, hasDiv,
-     hasInterstitial, hasOwnProperty, height, hlfmpu, href, id, imageURL,
-     indexOf, init, initDFP, initialHTML, injectUnclassifiedTrackCall,
-     injectUrlTrackCall, innerHTML, inputUrl, insertAdIntoIFrame,
-     insertAdRequest, insertBefore, insertNewAd, inserted, int, intervals,
-     intro, isLegacyAPI, isSystemDefault, isUnclassified,
+     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
+     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts, pageRefresh,
+     userInteracting, userInteractionTimer, handleRefreshLogic, hasAdClass,
+     hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
+     height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
+     injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
+     insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
+     int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
      join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
      marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
      noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
@@ -1616,12 +1616,25 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     return false;
 };
 
+FT.Advertising.prototype.pageRefresh = function(delay) {
+    var self = this;
+    if (!self.userInteracting) {
+        document.cookie = "TRK_REF=" + window.location.href;
+        setTimeout(function () {window.location.reload(false); }, 2000);
+    } else {
+        // Kick page refresh timer off again
+        self.userInteractionTimer = setTimeout(function () {
+            self.pageRefresh(delay);
+        }, delay);
+    }
+};
+
 FT.Advertising.prototype.startRefreshTimer = function (delay) {
+    var self = this;
     clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
-    // call doTrackRefresh from Track.js
-    this.refreshTimer = setTimeout(function () {
+    self.refreshTimer = setTimeout(function () {
         clientAds.log("refreshTimer callback()");
-        doTrackRefresh(delay);
+        self.pageRefresh(delay);
     }, delay);
 };
 
