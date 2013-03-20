@@ -1,4 +1,11 @@
 //check that the audience code hasn't already been downloaded and executed
 if (typeof window.J07717 === "undefined") {
-    jQuery.getScript("//js.revsci.net/gateway/gw.js?csid=J07717");
+
+    //from Mathias Bynens, js performance guru
+    (function(d, t, src) {
+        var g = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        g.src = src;
+        s.parentNode.insertBefore(g, s);
+    }(document, 'script','//js.revsci.net/gateway/gw.js?csid=J07717'));
 }
