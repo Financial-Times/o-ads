@@ -49,28 +49,6 @@
             }
         }
 
-        //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-        testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-
-        if (testMode === 'unit')
-        {
-            //if unit test, then we override FT.lib.writeScript with the call to Mocking
-            FT._ads.utils.writeScript = function (URL){
-                mockAdContent(URL, Tests); // Ads injected immediately
-            };
-
-            var Tests = {
-                'intro': TestMockAd.intro,
-                'banlb': TestMockAd.banlb3,
-                'newssubs': TestMockAd.newssubs2,
-                'tlbxrib': TestMockAd.tlbxrib,
-                'mktsdata': TestMockAd.mktsdata,
-                'hlfmpu': TestMockAd.hlfmpu,
-                'doublet': TestMockAd.doublet,
-                'refresh': TestMockAd.refresh
-            };
-        }
-
     }
 </script>
 
@@ -78,16 +56,20 @@
 
 <script>
 
-    var pollAudSciObjectsCounter = 0, pollSciObjectsMaxCount = 10, pollSciObjectsInterval = 30;
+
     //set up test spies
-    FT.test = {};
+    FT.test = FT.test || {};
     FT.test.spyFacadeAddEncToLoc = {};
     FT.test.spyFacadeTag = {};
     FT.test.spyWindowJ07717DM_addEncToLoc = {};
     FT.test.spyWindowJ07717DM_tag = {};
 
+    FT.test.pollAudSciObjectsCounter = 0;
+    FT.test.pollSciObjectsMaxCount = 15;
+    FT.test.pollSciObjectsInterval = 30;
+
     function pollAudSciObjects () {
-        pollAudSciObjectsCounter ++;
+        FT.test.pollAudSciObjectsCounter ++;
         //have to wait to make sure objects are set up before setting up spies
         if ((typeof window.J07717 !== "undefined") && (typeof FT.analytics.audienceScience !== "undefined")) {
 
@@ -97,9 +79,9 @@
             FT.test.spyWindowJ07717DM_tag = sinon.spy(window.J07717,"DM_tag");
         }
 
-        else if (pollAudSciObjectsCounter < pollSciObjectsMaxCount) {
+        else if (FT.test.pollAudSciObjectsCounter < FT.test.pollSciObjectsMaxCount) {
             //count limit not reached yet, so poll after timeout
-            setTimeout(pollAudSciObjects,pollSciObjectsInterval);
+            setTimeout(pollAudSciObjects,FT.test.pollSciObjectsInterval);
         }
     }
 

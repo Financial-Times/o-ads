@@ -47,34 +47,7 @@
     // Mock the properties object so we are considered to be non-live
     FT.Properties = { 'ENV': "ci" };
     var CheckAds = ['intro', 'banlb', 'newssubs', 'tlbxrib', 'mktsdata', 'hlfmpu', 'doublet', 'oob', 'corppop', 'refresh'];
-    var variants =  {
-        "z89"  :   [
-            {"name" : "AYSC", "type" : "cookie", "value" : "" },
-            {"name" : "FTQA", "type" : "cookie", "value" : "integration;dfp_site=ftcom.5887.comment;dfp_zone=comment-index" }
-        ],
-        "z92"  :    [
-            {"name": "AYSC", "type": "cookie", "value": "" },
-            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.world;dfp_zone=asia-pacific-india" }
 
-        ],
-        "z94" :    [
-            {"name": "AYSC", "type": "cookie", "value": "" },
-            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.lex;dfp_zone=lex-index" }
-        ],
-        "z724" :    [
-            {"name": "AYSC", "type": "cookie", "value": "" },
-            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.in-depth;dfp_zone=in-depth-wr-deal-makers" }
-        ],
-        "z97" :    [
-            {"name": "AYSC", "type": "cookie", "value": "" },
-            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.management;dfp_zone=management-index" }
-        ],
-        "z158" :    [
-            {"name": "AYSC", "type": "cookie", "value": "" },
-            {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.alphaville;dfp_zone=alphaville-index" }
-        ]
-
-    };
 
 </script>
 
@@ -84,7 +57,7 @@
 <script src="../js/ft/DartForPublishers.js"></script>
 <script src="../js/util/mock-ads.html.js"></script>
 
-<!--unit test functions -->
+<!--integration test functions -->
 <script src="../js/audience.science.test.js"></script>
 
 </head>
@@ -96,7 +69,7 @@
 <h2 id="qunit-userAgent"></h2>
 <div id="mode"></div>
 <div id="dccookie">
-    <script>unitOrIntegrationMessage(testMode);</script>
+    This test can only be run in Integration Mode
 </div>
 
 <p>
