@@ -1,13 +1,25 @@
 /* jshint strict: false */
 
-/*globals $,ok,equal,console,QUnit,iframe,initCookies,asyncTest,expect */
+/*globals $,ok,equal,console,QUnit,initCookies,asyncTest,expect */
 
 var FT = FT || {};
 FT.test = FT.test || {};
+FT.test.iframe = {};
 
 FT.test.pollSpyObjectsCounter = 0;
 FT.test.pollSpyMaximumCount = 10;
 FT.test.pollSpyCountInterval = 30;
+
+//define test spies
+FT.test = FT.test || {};
+FT.test.spyFacadeAddEncToLoc = {};
+FT.test.spyFacadeTag = {};
+FT.test.spyWindowJ07717DM_addEncToLoc = {};
+FT.test.spyWindowJ07717DM_tag = {};
+
+FT.test.pollAudSciObjectsCounter = 0;
+FT.test.pollSciObjectsMaxCount = 15;
+FT.test.pollSciObjectsInterval = 30;
 
 var variants =  {
     "z89"  :   [
@@ -38,6 +50,27 @@ var variants =  {
 
 };
 
+function pollAudSciObjects () {
+
+    FT.test.pollAudSciObjectsCounter ++;
+    //have to wait to make sure objects are set up before setting up spies
+    if ((typeof window.J07717 !== "undefined") && (typeof FT.analytics.audienceScience !== "undefined")) {
+
+        FT.test.spyFacadeAddEncToLoc = sinon.spy(FT.analytics.audienceScience, "addEncToLoc");
+        FT.test.spyFacadeTag = sinon.spy(FT.analytics.audienceScience, "tag");
+        FT.test.spyWindowJ07717DM_addEncToLoc = sinon.spy(window.J07717,"DM_addEncToLoc");
+        FT.test.spyWindowJ07717DM_tag = sinon.spy(window.J07717,"DM_tag");
+    }
+
+    else if (FT.test.pollAudSciObjectsCounter < FT.test.pollSciObjectsMaxCount) {
+        //count limit not reached yet, so poll after timeout
+        setTimeout(pollAudSciObjects,FT.test.pollSciObjectsInterval);
+    }
+};
+
+pollAudSciObjects();
+
+
 function matchTags(obj) {
 
     var i, j, scriptTag, scriptTags = obj.scriptTags, regexp1 = new RegExp(obj.regexVal1), regexp2 = new RegExp(obj.regexVal2);
@@ -58,7 +91,7 @@ function adURLContainsSegment(pos) {
 
     obj.scriptTags = window.context.document.getElementById(pos).getElementsByTagName('script');
     obj.regexVal1 = "pos=" + pos;
-    obj.regexVal2 = "a=z(\\d+);";
+    obj.regexVal2 = "a=([a-z])(\\d+);";
 
     return matchTags(obj);
 
@@ -103,7 +136,7 @@ function audienceScienceAssertions() {
 //have to wait to make sure objects are set up before running tests on spies
 function pollSpyObjects () {
 
-    window.context = iframe.contentWindow;
+    window.context = FT.test.iframe.contentWindow;
 
     FT.test.pollSpyObjectsCounter ++;
     if ((typeof window.context.FT.test !== "undefined") && (typeof window.context.FT.test.spyFacadeAddEncToLoc !== "undefined") && (typeof window.context.FT.test.spyFacadeAddEncToLoc.calledWith !== "undefined") && (typeof window.context.FT.test.spyWindowJ07717DM_addEncToLoc !== "undefined") && (typeof window.context.FT.test.spyWindowJ07717DM_addEncToLoc.calledWith !== "undefined")) {
@@ -119,14 +152,14 @@ function pollSpyObjects () {
 $(function() {
 
     var cookieValues, dataValues;
-    iframe = document.createElement('iframe');
+    FT.test.iframe = document.createElement('iframe');
 
-    initCookies(FT._ads.utils.cookie('FTQA'));
+    //initCookies(FT._ads.utils.cookie('FTQA'));
 
-    iframe.src = '../images/audiencescience-iframe.html';
+    FT.test.iframe.src = '../images/audiencescience-iframe.html';
 
     var initialLoad = true;
-    $(iframe).load(function (){
+    $(FT.test.iframe).load(function (){
     if(!initialLoad) {
         FT.test.pollSpyObjectsCounter = 0;
         pollSpyObjects();
@@ -147,7 +180,7 @@ for (var testSegment in variants) {
             }
 
             console.log("Audience Science tests:" + testSeg + ' ' + dataValues);
-            iframe.contentDocument.location.reload(true);
+            FT.test.iframe.contentDocument.location.reload(true);
         };
     }(testSegment));
 
@@ -156,5 +189,5 @@ dataValues = "";
 }
 
 
-document.body.appendChild(iframe);
+document.body.appendChild(FT.test.iframe);
 });

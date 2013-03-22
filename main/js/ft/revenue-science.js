@@ -2,6 +2,7 @@
 if (typeof window.J07717 === "undefined") {
 
     //from Mathias Bynens, js performance guru
+    // replacement for jQuery for asynchronous downloading revenue science code
     (function(d, t, src) {
         var g = d.createElement(t),
             s = d.getElementsByTagName(t)[0];
