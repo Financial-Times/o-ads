@@ -25,14 +25,14 @@
      exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
      fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
      getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
-     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
-     handleRefreshLogic, hasAdClass, hasCalledInitDFP, hasClassName, hasDiv,
-     hasInterstitial, hasOwnProperty, height, hlfmpu, href, id, imageURL,
-     indexOf, init, initDFP, initialHTML, injectUnclassifiedTrackCall,
-     injectUrlTrackCall, innerHTML, inputUrl, insertAdIntoIFrame,
-     insertAdRequest, insertBefore, insertNewAd, inserted, int, intervals,
-     intro, isLegacyAPI, isSystemDefault, isUnclassified,
+     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
+     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts, pageRefresh,
+     userInteracting, userInteractionTimer, handleRefreshLogic, hasAdClass,
+     hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
+     height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
+     injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
+     insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
+     int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
      join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
      marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
      noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
@@ -73,7 +73,8 @@
     pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
-    splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev  */
+    splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
+    refreshDelayMs*/
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -147,6 +148,8 @@ FT.Advertising = function () {
     this.CONST.audSciInitial = 20;
     this.CONST.uParamMax = 253;
     this.CONST.urlMax = 511;
+
+    this.CONST.refreshDelayMs = 2000;
 
     // required for checkSubmitLongestUrl function
     this.CONST.urlThresholdMax = 2000000;
@@ -1616,12 +1619,30 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     return false;
 };
 
+FT.Advertising.prototype.pageRefresh = function(delay) {
+    var self = this;
+    if (!FT.userInteracting) {
+        document.cookie = "TRK_REF=" + window.location.href;
+        setTimeout(function () { self.reloadWindow(false); }, this.CONST.refreshDelayMs);
+    } else {
+        // Kick page refresh timer off again
+        self.userInteractionTimer = setTimeout(function () {
+            self.pageRefresh(delay);
+        }, delay);
+    }
+};
+
+FT.Advertising.prototype.reloadWindow = function(b) {
+     window.location.reload(b);
+};
+
+
 FT.Advertising.prototype.startRefreshTimer = function (delay) {
+    var self = this;
     clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
-    // call doTrackRefresh from Track.js
-    this.refreshTimer = setTimeout(function () {
+    self.refreshTimer = setTimeout(function () {
         clientAds.log("refreshTimer callback()");
-        doTrackRefresh(delay);
+        self.pageRefresh(delay);
     }, delay);
 };
 
