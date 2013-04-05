@@ -472,14 +472,15 @@ FT.Advertising.prototype.endVideo = function () {
     return;
 };
 
-FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout) {
-    clientAds.log("FT.Advertising.prototype.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
-    // TODO: no test case for this yet.
-    timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
-    if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
-        obj.refreshTimer = timeout;
-    }
-};
+//deprecated as xferred to FT.Refresh logic
+//FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout) {
+//    clientAds.log("FT.Advertising.prototype.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
+//    // TODO: no test case for this yet.
+//    timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
+//    if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
+//        obj.refreshTimer = timeout;
+//    }
+//};
 
 // TESTED in dfp-advertising.html
 FT.Advertising.prototype.checkAdState = function (pos) {
@@ -1616,14 +1617,14 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     return false;
 };
 
-FT.Advertising.prototype.startRefreshTimer = function (delay) {
-    clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
-    // call doTrackRefresh from Track.js
-    this.refreshTimer = setTimeout(function () {
-        clientAds.log("refreshTimer callback()");
-        doTrackRefresh(delay);
-    }, delay);
-};
+//FT.Advertising.prototype.startRefreshTimer = function (delay) {
+//    clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
+//    // call doTrackRefresh from Track.js
+//    this.refreshTimer = setTimeout(function () {
+//        clientAds.log("refreshTimer callback()");
+//        doTrackRefresh(delay);
+//    }, delay);
+//};
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
@@ -1760,7 +1761,7 @@ FT.Advertising.prototype.beginNewPage = function (env) {
     this.timeouts            = {};
     this.intervals          = {};
     this.runinterval        = undefined;
-    this.refreshTimer      = null; // timer for refreshing the page
+    //this.refreshTimer      = null; // timer for refreshing the page
 
     this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
     this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
