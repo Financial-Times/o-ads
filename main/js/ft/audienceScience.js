@@ -4,6 +4,9 @@
  */
 
 FT.analytics.audSciPollCount = 0;
+FT.analytics.maxAudSciPollCount = 10;
+FT.analytics.audSciPollCountInterval = 30; //milliseconds
+
 FT.analytics.populateAudSci = function () {
     var rsiAYSC = document.cookie.match(/AYSC=([^;]*)/) ? RegExp.$1 : "", rsiPos = rsiAYSC.match(/_07([^_]*)/) ? RegExp.$1 : null, rsiResp = rsiAYSC.match(/_06([^_]*)/) ? RegExp.$1 : null, rsiInd = rsiAYSC.match(/_05([^_]*)/) ? RegExp.$1 : null, rsiCoun = rsiAYSC.match(/_14([^_]*)/) ? RegExp.$1 : null, rsiCompSize = rsiAYSC.match(/_19([^_]*)/) ? RegExp.$1 : null, temppos = typeof rsiPos !== "undefined" ? rsiPos : "undefined", tempresp = typeof rsiResp !== "undefined" ? rsiResp : "undefined", tempind = typeof rsiInd !== "undefined" ? rsiInd : "undefined", tempcountry = typeof rsiCoun !== "undefined" ? rsiCoun : "undefined", tempcompsize = typeof rsiCompSize !== "undefined" ? rsiCompSize : "undefined", rsi_call = "<script type=\"text\/javascript\">", tempsec = typeof FTSection !== "undefined" ? FTSection : "undefined", temppage = typeof FTPage !== "undefined" ? FTPage : "undefined";
     FT.analytics.audienceScience.addEncToLoc("FTSectionCode", tempsec);
@@ -27,11 +30,9 @@ FT.analytics.pollAudSci = function() {
         //ok, global objects present - now we can call the facade methods and then call the tag
         FT.analytics.populateAudSci();
     }
-    else if (FT.analytics.audSciPollCount < 10) {
+    else if (FT.analytics.audSciPollCount < FT.analytics.maxAudSciPollCount) {
         //count limit not reached yet, so poll after timeout
-        setTimeout(function(){
-            FT.analytics.pollAudSci();
-        }, 30);
+        setTimeout(FT.analytics.pollAudSci,FT.analytics.audSciPollCountInterval);
     }
 };
 

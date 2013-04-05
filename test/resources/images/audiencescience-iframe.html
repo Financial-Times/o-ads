@@ -49,42 +49,13 @@
             }
         }
 
-        //now we find what test mode we are in and either call DFP (Integration) or Mock the ad call (unit)
-        testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-
-        if (testMode === 'unit')
-        {
-            //if unit test, then we override FT.lib.writeScript with the call to Mocking
-            FT._ads.utils.writeScript = function (URL){
-                mockAdContent(URL, Tests); // Ads injected immediately
-            };
-
-            var Tests = {
-                'intro': TestMockAd.intro,
-                'banlb': TestMockAd.banlb3,
-                'newssubs': TestMockAd.newssubs2,
-                'tlbxrib': TestMockAd.tlbxrib,
-                'mktsdata': TestMockAd.mktsdata,
-                'hlfmpu': TestMockAd.hlfmpu,
-                'doublet': TestMockAd.doublet,
-                'refresh': TestMockAd.refresh
-            };
-        }
-
     }
 </script>
 
 <script src="../js/ft/audienceScienceFacade.js"></script>
 
-<script>
-    //set up test spies
-    FT.test = {};
-    FT.test.spyFacadeAddEncToLoc = sinon.spy(FT.analytics.audienceScience, "addEncToLoc");
-    FT.test.spyFacadeTag = sinon.spy(FT.analytics.audienceScience, "tag");
-    FT.test.spyWindowJ07717DM_addEncToLoc = sinon.spy(window.J07717,"DM_addEncToLoc");
-    FT.test.spyWindowJ07717DM_tag = sinon.spy(window.J07717,"DM_tag");
+<script src="js/audience.science.iframe.test.js"></script>
 
-</script>
 <script src="../js/ft/audienceScience.js"></script>
 
 </head>
