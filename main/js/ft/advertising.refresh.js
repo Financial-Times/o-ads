@@ -22,7 +22,8 @@
  event, isVisible, type, addEventListener, onblur, onfocus, onfocusin,
  onfocusout, hasOwnProperty, detectPageVisibility, Refresh, refreshTime, runningTimer, log,
   startRefreshTimer, handleW3CVisibility, handleAlentyVisibility, getElementById, innerHTML,
-  env,asset, handleRefreshLogic, origOnFocusIn, origOnFocusOut, origOnFocus, origOnBlur, name
+  env,asset, handleRefreshLogic, origOnFocusIn, origOnFocusOut, origOnFocus, origOnBlur, name,
+ pageVisibilityScope
  */
 
 FT.Refresh = (function () {
@@ -77,28 +78,35 @@ FT.Refresh = (function () {
          */
         onVisibilityChange: function (evt) {
             evt = evt || window.event;
+
+            if (typeof window.pageVisibilityScope !== "undefined")  {
+                scope = window.pageVisibilityScope;
+            }  else {
+                scope = this;
+            }
+
             if (pvFlag === true) {
-                this.isVisible = !document[hiddenPropName];
+                scope.isVisible = !document[hiddenPropName];
             } else {
                 if (evt.type === "focus" || evt.type === "focusin") {
-                    this.isVisible = true;
+                    scope.isVisible = true;
                 } else if (evt.type === "blur" || evt.type === "focusout") {
-                    this.isVisible = false;
+                    scope.isVisible = false;
                 }
             }
 
-            if (!this.isVisible) {
+            if (!scope.isVisible) {
                 //now we stop the timer if it is running down
-                if (this.runningTimer !== null){
-                    clearTimeout(this.runningTimer);
+                if (scope.runningTimer !== null){
+                    clearTimeout(scope.runningTimer);
                 }
-                this.log('The page has lost visibility.');
+                scope.log('The page has lost visibility.');
             } else {
                 //restart the timer when visibility is regained
-                if (this.refreshTime !== null)  {
-                    this.startRefreshTimer(this.refreshTime);
+                if (scope.refreshTime !== null)  {
+                    scope.startRefreshTimer(scope.refreshTime);
                 }
-                this.log('The page has gained visibility.');
+                scope.log('The page has gained visibility.');
             }
 
         },
@@ -155,6 +163,9 @@ FT.Refresh = (function () {
          * flag = alenty: use alenty standards to detect page visibility
          */
         detectPageVisibility: function(flag) {
+
+            //preserve scope for window events
+            window.pageVisibilityScope = this;
 
             hasPageVisibilityAPI();
 
@@ -216,8 +227,9 @@ FT.Refresh = (function () {
         startRefreshTimer: function (delay) {
             this.log("FT.Refresh.startRefreshTimer(" + delay + ")");
             // call doTrackRefresh from Track.js
+            var preservedScope = this;
             this.runningTimer = setTimeout(function () {
-                this.log("refreshTimer callback()");
+                preservedScope.log("refreshTimer callback()");
                 doTrackRefresh(delay);
             }, delay);
         }
