@@ -22,28 +22,20 @@
  event, isVisible, type, addEventListener, onblur, onfocus, onfocusin,
  onfocusout, hasOwnProperty, detectPageVisibility, Refresh, refreshTime, runningTimer, log,
   startRefreshTimer, handleW3CVisibility, handleAlentyVisibility, getElementById, innerHTML,
-  env,asset, handleRefreshLogic, origOnFocusIn, origOnFocusOut, origOnFocus, origOnBlur, name,
- pageVisibilityScope
+  env,asset, handleRefreshLogic, name, pageVisibilityScope,decorateHandler, pageVisibilityScope
  */
 
 FT.Refresh = (function () {
 
     var browserPrefixes = ['', 'moz', 'ms', 'o', 'webkit'],
-    // event name which varies per browser (mozvisibilitychange, webkitvisibilitychange, msvisibilitychange, visibilitychange)
+        // event name which varies per browser (mozvisibilitychange, webkitvisibilitychange, msvisibilitychange, visibilitychange)
         eventName = 'visibilitychange',
-    // the hidden property name which varies per browser (hidden, mozHidden, webkitHidden, msHidden)
+        // the hidden property name which varies per browser (hidden, mozHidden, webkitHidden, msHidden)
         hiddenPropName,
-    // boolean if the browser supports page visibility api or not
-        pvFlag = false;
-
-    /*commented to satsfy jshint..... */
-        //origOnFocusIn = document.onfocusin,
-
-        //origOnFocusOut = document.onfocusout,
-
-       // origOnFocus = window.onfocus,
-
-        //origOnBlur = window.onblur;
+        // boolean if the browser supports page visibility api or not
+        pvFlag = false,
+        //variable for preserving scope for event handlers
+        preservedScope = "pageVisibilityScope";
 
     /**
      * This function checks if the browser has support for Page Visibility API.
@@ -63,6 +55,18 @@ FT.Refresh = (function () {
         }
     }
 
+    function returnPreservedScope () {
+        if (typeof window[preservedScope] !== "undefined")  {
+            return window[preservedScope];
+        }  else {
+            return null;
+        }
+    }
+
+    function createReference (context, prop) {
+        return function () { return context[prop]; };
+    }
+
     return {
 
         /**
@@ -72,6 +76,22 @@ FT.Refresh = (function () {
         refreshTime: null,
         runningTimer: null,
 
+        //function to preserve any events prevously attached to the document.onfocusin + document.onfocusout or window.onfocus +  window.onblur objects.
+        decorateHandler: function (documentOrWindowProperty,func) {
+
+            var existingHandler = documentOrWindowProperty || null;
+
+            if (typeof existingHandler !== null) {
+                return function () {
+                    existingHandler();
+                    func();
+                    return;
+                };
+            }   else {
+                return func;
+            }
+        },
+
         /**
          * This function handles the visibility change, setting the appropriate
          * isVisible value
@@ -79,11 +99,7 @@ FT.Refresh = (function () {
         onVisibilityChange: function (evt) {
             evt = evt || window.event;
 
-            if (typeof window.pageVisibilityScope !== "undefined")  {
-                scope = window.pageVisibilityScope;
-            }  else {
-                scope = this;
-            }
+            var scope = returnPreservedScope() || this;
 
             if (pvFlag === true) {
                 scope.isVisible = !document[hiddenPropName];
@@ -116,42 +132,19 @@ FT.Refresh = (function () {
          * attaching onVisibilityChange() from onfocusin/onfocusout (for IE 9 lower)
          * or onfocus/onblur
          *
-         * TODO: decorator pattern
          */
 
         enableVisibilitySupportForOlderBrowsers: function () {
-            // IE9 and lower:
+
+            //event handlers properties document.onfocusin is for IE9 and lower
             if ('onfocusin' in document) {
-                /*
-                 document.onfocusin = function() {
-                 //origOnFocusIn();
-                 onVisibilityChange();
-                 return;
-                 }
-
-                 document.onfocusout = function () {
-                 //origOnFocusOut();
-                 onVisibilityChange();
-                 return;
-                 }*/
-
-                document.onfocusin = document.onfocusout = this.onVisibilityChange;
+                document.onfocusin = this.decorateHandler(document.onfocusin,this.onVisibilityChange);
+                document.onfocusout = this.decorateHandler(document.onfocusout,this.onVisibilityChange);
             } else {
-                /*
-                 window.onfocus = function() {
-                 // origOnFocus();
-                 onVisibilityChange();
-                 return;
-                 }
-
-                 window.onblur = function() {
-                 // origOnBlur();
-                 onVisibilityChange();
-                 return;
-                 }
-                 */
-                window.onfocus = window.onblur = this.onVisibilityChange;
+                window.onfocus =  this.decorateHandler(window.onfocus,this.onVisibilityChange);
+                window.onblur =  this.decorateHandler(window.onblur,this.onVisibilityChange);
             }
+
         },
 
         /**
@@ -165,7 +158,11 @@ FT.Refresh = (function () {
         detectPageVisibility: function(flag) {
 
             //preserve scope for window events
-            window.pageVisibilityScope = this;
+            window[preservedScope] = this;
+
+            //purely for decorator testing  - uncomment and amend as necessary
+            window.onfocus = function () { window.pageVisibilityScope.log("decorated onfocus event"); };
+            window.onblur = function () { window.pageVisibilityScope.log("decorated onblur event"); };
 
             hasPageVisibilityAPI();
 
@@ -203,9 +200,11 @@ FT.Refresh = (function () {
          * - pages that do not have the focus (invisible pages)
          * - pages that are visible but no one is using the computer (no mouse-keyboard activity in the last minute for instance)
          */
+        //removed from scope for US28820 - implement later
         handleAlentyVisibility: function () {
-            pvFlag = false;
-            this.enableVisibilitySupportForOlderBrowsers();
+            //pvFlag = false;
+            //this.enableVisibilitySupportForOlderBrowsers();
+
         },
 
         log: function(text) {
@@ -226,17 +225,14 @@ FT.Refresh = (function () {
         /** startRefreshTimer logic transferred from FT.advertising namespace */
         startRefreshTimer: function (delay) {
             this.log("FT.Refresh.startRefreshTimer(" + delay + ")");
-            // call doTrackRefresh from Track.js
-            var preservedScope = this;
+            var scope = returnPreservedScope() || this;
+
             this.runningTimer = setTimeout(function () {
-                preservedScope.log("refreshTimer callback()");
+                // call doTrackRefresh from Track.js
+                scope.log("refreshTimer callback()");
                 doTrackRefresh(delay);
             }, delay);
         }
 
-
-
     };
 }());
-
-//FT.Refresh.detectPageVisibility('w3c');
