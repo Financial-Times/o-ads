@@ -83,7 +83,9 @@ FT.Refresh = (function () {
 
             if (typeof existingHandler !== null) {
                 return function () {
-                    existingHandler();
+                	if (typeof existingHandler === 'function' ) {
+                       existingHandler();
+                	}
                     func();
                     return;
                 };
