@@ -619,8 +619,8 @@ FT.Advertising.prototype.callback = function (rResponse) {
     }
 
     var radix; // to satisfy jslint
-    if (parseInt(rResponse.refreshTimer, radix) > 0) {
-        this.startRefreshTimer(rResponse.refreshTimer);
+    if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
+        FT.Refresh.startRefreshTimer(rResponse.refreshTimer);
     }
 
     // Handle ad types
