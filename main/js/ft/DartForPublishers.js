@@ -472,10 +472,10 @@ FT.Advertising.prototype.endVideo = function () {
     return;
 };
 
-//deprecated as xferred to FT.Refresh logic
+//migrated to FT.Refresh logic
 //FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout) {
 //    clientAds.log("FT.Advertising.prototype.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
-//    // TODO: no test case for this yet.
+//    TODO: no test case for this yet.
 //    timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
 //    if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
 //        obj.refreshTimer = timeout;
@@ -618,10 +618,11 @@ FT.Advertising.prototype.callback = function (rResponse) {
         this.insertNewAd(rResponse.insertAdRequest);
     }
 
-    var radix; // to satisfy jslint
-    if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
-        FT.Refresh.startRefreshTimer(FT.Refresh.refreshTime);
-    }
+ // migrated as migrated to FT.Refresh
+ //   var radix; // to satisfy jslint
+ //  if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
+ //      FT.Refresh.startRefreshTimer(FT.Refresh.refreshTime);
+ //   }
 
     // Handle ad types
     if (rResponse.type) {
@@ -1617,6 +1618,7 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     return false;
 };
 
+//migrated to Ft.Refresh.
 //FT.Advertising.prototype.startRefreshTimer = function (delay) {
 //    clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
 //    // call doTrackRefresh from Track.js

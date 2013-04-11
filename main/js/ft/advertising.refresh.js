@@ -16,7 +16,7 @@
 
 /*jshint strict: false */
 
-/*globals FT, doTrackRefresh */
+/*globals FT, doTrackRefresh,ClientAds */
 
 /*members onVisibilityChange, enableVisibilitySupportForOlderBrowsers, pop,
  event, isVisible, type, addEventListener, onblur, onfocus, onfocusin,
@@ -63,10 +63,6 @@ FT.Refresh = (function () {
         }
     }
 
-    function createReference (context, prop) {
-        return function () { return context[prop]; };
-    }
-
     return {
 
         /**
@@ -83,12 +79,12 @@ FT.Refresh = (function () {
 
             if (typeof existingHandler !== null) {
                 return function () {
-                	if (typeof existingHandler === 'function' ) {
+                    if (typeof existingHandler === 'function' ) {
                        existingHandler();
-                	}
+                    }
                     func();
                     return;
-                };
+                    };
             }   else {
                 return func;
             }
@@ -118,13 +114,13 @@ FT.Refresh = (function () {
                 if (scope.runningTimer !== null){
                     clearTimeout(scope.runningTimer);
                 }
-                clientAds.log('The page has lost visibility.');
+                scope.log('The page has lost visibility.');
             } else {
                 //restart the timer when visibility is regained
                 if (scope.refreshTime !== null)  {
                     scope.startRefreshTimer(scope.refreshTime);
                 }
-                clientAds.log('The page has gained visibility.');
+                scope.log('The page has gained visibility.');
             }
 
         },
@@ -209,15 +205,16 @@ FT.Refresh = (function () {
 
         },
 
-        /*
         log: function(text) {
-            var div = document.getElementById('fullpage-container');
-            div.innerHTML = div.innerHTML + text + '<br>';
-        },*/
+            //refactor this at some stage - put logs under utils?
+            if ((typeof ClientAds !== "undefined") && typeof ClientAds.log !== "undefined") {
+                ClientAds.log(text);
+            }
+        },
 
         /** handle refresh logic migrated from FT.advertising */
         handleRefreshLogic: function (obj, timeout) {
-        	clientAds.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
+            this.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
             // TODO: no test case for this yet.
             timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
             if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
@@ -227,12 +224,12 @@ FT.Refresh = (function () {
 
         /** startRefreshTimer logic transferred from FT.advertising namespace */
         startRefreshTimer: function (delay) {
-            clientAds.log("FT.Refresh.startRefreshTimer(" + delay + ")");
+            this.log("FT.Refresh.startRefreshTimer(" + delay + ")");
             var scope = returnPreservedScope() || this;
 
             this.runningTimer = setTimeout(function () {
                 // call doTrackRefresh from Track.js
-            	clientAds.log("refreshTimer callback()");
+                scope.log("refreshTimer callback()");
                 doTrackRefresh(delay);
             }, delay);
         }
