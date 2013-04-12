@@ -16,14 +16,15 @@
 
 /*jshint strict: false */
 
-/*globals FT, doTrackRefresh,ClientAds */
+/*globals FT, clientAds */
 
 /*members onVisibilityChange, enableVisibilitySupportForOlderBrowsers, pop,
  event, isVisible, type, addEventListener, onblur, onfocus, onfocusin,
  onfocusout, hasOwnProperty, detectPageVisibility, Refresh, refreshTime, runningTimer, log,
   startRefreshTimer, handleW3CVisibility, handleAlentyVisibility, getElementById, innerHTML,
-  env,asset, handleRefreshLogic, name, pageVisibilityScope,decorateHandler, pageVisibilityScope
- */
+  env,asset, handleRefreshLogic, name, pageVisibilityScope,decorateHandler, pageVisibilityScope,
+ refreshDelayMs,pageRefresh,userInteracting,cookie, location,href,reloadWindow,userInteractionTimer,
+ reload */
 
 FT.Refresh = (function () {
 
@@ -71,6 +72,7 @@ FT.Refresh = (function () {
         isVisible: true,
         refreshTime: null,
         runningTimer: null,
+        refreshDelayMs: 2000,
 
         //function to preserve any events prevously attached to the document.onfocusin + document.onfocusout or window.onfocus +  window.onblur objects.
         decorateHandler: function (documentOrWindowProperty,func) {
@@ -208,7 +210,7 @@ FT.Refresh = (function () {
         log: function(text) {
             //refactor this at some stage - put logs under utils?
             if ((typeof clientAds !== "undefined") && typeof clientAds.log !== "undefined") {
-            	clientAds.log(text);
+                clientAds.log(text);
             }
         },
 
@@ -230,9 +232,31 @@ FT.Refresh = (function () {
             this.runningTimer = setTimeout(function () {
                 // call doTrackRefresh from Track.js
                 scope.log("refreshTimer callback()");
-                doTrackRefresh(delay);
+                scope.pageRefresh(delay);
             }, delay);
+        },
+
+        /** pageRefresh logic transferred from FT.advertising namespace */
+        pageRefresh: function(delay) {
+            var scope = returnPreservedScope() || this;
+            if (!FT.userInteracting) {
+                document.cookie = "TRK_REF=" + window.location.href;
+                setTimeout(function () { scope.reloadWindow(false); }, this.refreshDelayMs);
+            } else {
+                // Kick page refresh timer off again
+                scope.userInteractionTimer = setTimeout(function () {
+                    scope.pageRefresh(delay);
+                }, delay);
+
+            }
+
+        },
+
+        /** reloadWindow logic transferred from FT.advertising namespace */
+        reloadWindow: function(b) {
+            window.location.reload(b);
         }
 
     };
+
 }());

@@ -1621,22 +1621,24 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     return false;
 };
 
-FT.Advertising.prototype.pageRefresh = function(delay) {
-    var self = this;
-    if (!FT.userInteracting) {
-        document.cookie = "TRK_REF=" + window.location.href;
-        setTimeout(function () { self.reloadWindow(false); }, this.CONST.refreshDelayMs);
-    } else {
-        // Kick page refresh timer off again
-        self.userInteractionTimer = setTimeout(function () {
-            self.pageRefresh(delay);
-        }, delay);
-    }
-};
 
-FT.Advertising.prototype.reloadWindow = function(b) {
-     window.location.reload(b);
-};
+// migrated to FT.Refresh namespace in advertising.refresh.js
+//FT.Advertising.prototype.pageRefresh = function(delay) {
+//    var self = this;
+//    if (!FT.userInteracting) {
+//        document.cookie = "TRK_REF=" + window.location.href;
+//        setTimeout(function () { self.reloadWindow(false); }, this.CONST.refreshDelayMs);
+//    } else {
+//        // Kick page refresh timer off again
+//        self.userInteractionTimer = setTimeout(function () {
+//            self.pageRefresh(delay);
+//        }, delay);
+//    }
+//};
+//
+//FT.Advertising.prototype.reloadWindow = function(b) {
+//     window.location.reload(b);
+//};
 
 
 //FT.Advertising.prototype.startRefreshTimer = function (delay) {
