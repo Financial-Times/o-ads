@@ -18,6 +18,11 @@
 #mpu, #mpu2, #mpu3,
 #hlfmpu, #hlfmpu2, #hlfmpu3   { margin:0 0 32px 0 ; width:352px ; min-height:250px ; text-align:center ; }
 
+#mpu *, #mpu2 *, #mpu3 *,
+#hlfmpu *, #hlfmpu2 *, #hlfmpu3 * {
+    margin: 0 auto;
+}
+
 .msie6 #hlfmpu { height:250px ; }
 
 /* To align the expanding Ads in right rails */

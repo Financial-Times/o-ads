@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test plan for Ads Refresh</title>
+    <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen">
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script>
+        var FT = FT || {};
+        //added for Track.js
+        FT.$ = $;
+        FT.env = FT.env || {};
+
+//        var j, debugStr = '',
+//        re = new RegExp("%3D")
+    </script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/HTMLAds.js"></script>
+    <script src="../js/ft/DartForPublishers.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script>
+        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+    </script>
+
+
+    <script src="../js/ads.refresh.test.js"></script>
+</head>
+<body>
+<h1 id="qunit-header">Test plan for Ads Refresh</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+
+<h2 id="mode"></h2>
+
+<!-- if in integration mode, make two calls to the adserver in order to correctly set the cookie for master / companion tracking -->
+<div id="dccookie" style="display: none">
+    <script>unitOrIntegrationMessage(testMode);</script>
+</div>
+<ol id="qunit-tests">
+</ol>
+</body>
+</html>
