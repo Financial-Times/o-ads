@@ -207,8 +207,8 @@ FT.Refresh = (function () {
 
         log: function(text) {
             //refactor this at some stage - put logs under utils?
-            if ((typeof ClientAds !== "undefined") && typeof ClientAds.log !== "undefined") {
-                ClientAds.log(text);
+            if ((typeof clientAds !== "undefined") && typeof clientAds.log !== "undefined") {
+            	clientAds.log(text);
             }
         },
 
