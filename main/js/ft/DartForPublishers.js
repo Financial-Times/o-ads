@@ -74,7 +74,7 @@
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
     splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refreshDelayMs, DfpSpecialChars, DfpSpecialChars2 */
+    refreshDelayMs, DfpSpecialChars */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -123,7 +123,7 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-    this.CONST.DfpSpecialChars2 = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~]/g;
+    this.CONST.DfpSpecialChars = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~]/g;
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
@@ -1077,11 +1077,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
         targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
         if (targeting !== '' && !/^x+$/.test(targeting)) {
 
-//            this.foreach(this.CONST.DfpSpecialChars, function (key) {
-//                targeting = targeting.replace(key, '');
-//            });
-
-            targeting = targeting.replace(this.CONST.DfpSpecialChars2,'');
+            targeting = targeting.replace(this.CONST.DfpSpecialChars,'');
             dfpTargeting = encodeURI(targeting);
         }
     }
