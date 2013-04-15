@@ -26,8 +26,8 @@
      fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
      getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
      getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts, pageRefresh,
-     userInteracting, userInteractionTimer, handleRefreshLogic, hasAdClass,
+     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts, 
+     userInteracting, userInteractionTimer, hasAdClass,
      hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
      height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
      injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
@@ -37,7 +37,7 @@
      marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
      noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
      pos, postError, prepareAdVars, prepareBaseAdvert, prototype,
-     proxy_div_prefixes, push, random, refresh, refreshTimer, reg,
+     proxy_div_prefixes, push, random, reg,
      regex_key_names, register, removeChild, removeClassName,
      remove_exes, remove_res_pvt, render, renderImage,
      rendered, replace, request, requestDFP, requestInsertedAds,
@@ -45,7 +45,7 @@
      resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
      setDefaultSiteZone, setInitialAdState, shift,
      shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
-     split, src, startRefreshTimer, state, storeResponse, stripLeadingZeros,
+     split, src, state, storeResponse, stripLeadingZeros,
      style, submitToTrack, substr_key_names, substring, sz, target, test,
      tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
      toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, u,
@@ -74,7 +74,7 @@
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
     splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refreshDelayMs*/
+    */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -148,8 +148,6 @@ FT.Advertising = function () {
     this.CONST.audSciInitial = 20;
     this.CONST.uParamMax = 253;
     this.CONST.urlMax = 511;
-
-    //this.CONST.refreshDelayMs = 2000;
 
     // required for checkSubmitLongestUrl function
     this.CONST.urlThresholdMax = 2000000;
@@ -620,12 +618,6 @@ FT.Advertising.prototype.callback = function (rResponse) {
     if (rResponse.insertAdRequest) {
         this.insertNewAd(rResponse.insertAdRequest);
     }
-
- // migrated as migrated to FT.Refresh
- //   var radix; // to satisfy jslint
- //  if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
- //      FT.Refresh.startRefreshTimer(FT.Refresh.refreshTime);
- //   }
 
     // Handle ad types
     if (rResponse.type) {
@@ -1620,35 +1612,6 @@ FT.Advertising.prototype.hasAdClass = function (rElement, pos) {
     }
     return false;
 };
-
-
-// migrated to FT.Refresh namespace in advertising.refresh.js
-//FT.Advertising.prototype.pageRefresh = function(delay) {
-//    var self = this;
-//    if (!FT.userInteracting) {
-//        document.cookie = "TRK_REF=" + window.location.href;
-//        setTimeout(function () { self.reloadWindow(false); }, this.CONST.refreshDelayMs);
-//    } else {
-//        // Kick page refresh timer off again
-//        self.userInteractionTimer = setTimeout(function () {
-//            self.pageRefresh(delay);
-//        }, delay);
-//    }
-//};
-//
-//FT.Advertising.prototype.reloadWindow = function(b) {
-//     window.location.reload(b);
-//};
-
-
-//FT.Advertising.prototype.startRefreshTimer = function (delay) {
-//    var self = this;
-//    clientAds.log("FT.Advertising.startRefreshTimer(" + delay + ")");
-//   self.refreshTimer = setTimeout(function () {
-//        clientAds.log("refreshTimer callback()");
-//        self.pageRefresh(delay);
-//    }, delay);
-//};
 
 // Create a linked image in the DOM
 FT.Advertising.prototype.renderImage = function (rResponse) {
