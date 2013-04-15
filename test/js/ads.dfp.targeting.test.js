@@ -57,6 +57,26 @@ function tests() {
 
     });
 
+    test("test getDFPTargeting unencoded remove special chars < >", function () {
+        FT.env.dfp_targeting = "peo=<Yahoo>, <Google>;pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        ok(targetingValue === 'peo=yahoo%20google;pt=ind', 'does not match');
+
+    });
+
+    test("test getDFPTargeting unencoded remove special chars '", function () {
+        FT.env.dfp_targeting = "peo='Yahoo' 'Google';pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        ok(targetingValue === 'peo=yahoo%20google;pt=ind', 'does not match');
+
+    });
+
+    test("test getDFPTargeting unencoded remove special chars \"", function () {
+        FT.env.dfp_targeting = 'peo="Yahoo" "Google";pt=ind';
+        var targetingValue = FT.ads.getDFPTargeting();
+        ok(targetingValue === 'peo=yahoo%20google;pt=ind', 'does not match');
+
+    });
 
     test("test getDFPTargeting unencoded remove special chars ()", function () {
             FT.env.dfp_targeting = "peo=Andy Murray(Tennis Player) Athlete;pt=ind";
@@ -98,7 +118,6 @@ function tests() {
         ok(targetingValue === 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars [] does not match');
 
     });
-
 
 }
 

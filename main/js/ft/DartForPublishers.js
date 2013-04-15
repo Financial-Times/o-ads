@@ -123,7 +123,8 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-    this.CONST.DfpSpecialChars = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~]/g;
+    this.CONST.DfpSpecialChars = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]/g; // no not remove ; or =
+
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
