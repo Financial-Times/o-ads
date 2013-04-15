@@ -123,7 +123,6 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-//    this.CONST.DfpSpecialChars =  [ /,/g , /!/g, /~/g, /\(/g, /\)/g, /\[/g, /\]/g]; // there are more...
     this.CONST.DfpSpecialChars2 = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~]/g;
 
     // filter constants for AYSC cookies
