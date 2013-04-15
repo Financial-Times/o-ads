@@ -149,7 +149,7 @@ FT.Advertising = function () {
     this.CONST.uParamMax = 253;
     this.CONST.urlMax = 511;
 
-    this.CONST.refreshDelayMs = 2000;
+    //this.CONST.refreshDelayMs = 2000;
 
     // required for checkSubmitLongestUrl function
     this.CONST.urlThresholdMax = 2000000;

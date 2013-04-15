@@ -37,7 +37,7 @@ function tests() {
 
         FT.Refresh.startRefreshTimer(FT.test.delay);
 
-        FT.test.clock.tick(FT.test.delay + FT.Refresh.CONST.refreshDelayMs +  1000);
+        FT.test.clock.tick(FT.test.delay + FT.Refresh.refreshDelayMs +  1000);
         deepEqual(FT.test.spyPageRefresh.callCount, 1, "Number of times spyPageRefresh() function should be called");
         deepEqual(FT.test.stubReloadWindow.callCount, 1, "Number of times stubReloadWindow() function should be called");
     });
