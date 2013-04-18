@@ -116,13 +116,13 @@ FT.Refresh = (function () {
                 if (scope.runningTimer !== null){
                     clearTimeout(scope.runningTimer);
                 }
-                scope.log('The page has lost visibility.');
+                clientAds.log('The page has lost visibility.');
             } else {
                 //restart the timer when visibility is regained
                 if (scope.refreshTime !== null)  {
                     scope.startRefreshTimer(scope.refreshTime);
                 }
-                scope.log('The page has gained visibility.');
+                clientAds.log('The page has gained visibility.');
             }
 
         },
@@ -207,16 +207,17 @@ FT.Refresh = (function () {
 
         },
 
+        /*
         log: function(text) {
             //refactor this at some stage - put logs under utils?
             if ((typeof clientAds !== "undefined") && typeof clientAds.log !== "undefined") {
                 clientAds.log(text);
             }
-        },
+        },*/
 
         /** handle refresh logic migrated from FT.advertising */
         handleRefreshLogic: function (obj, timeout) {
-            this.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
+        	clientAds.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
             // TODO: no test case for this yet.
             timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
             if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
@@ -226,12 +227,12 @@ FT.Refresh = (function () {
 
         /** startRefreshTimer logic transferred from FT.advertising namespace */
         startRefreshTimer: function (delay) {
-            this.log("FT.Refresh.startRefreshTimer(" + delay + ")");
+        	clientAds.log("FT.Refresh.startRefreshTimer(" + delay + ")");
             var scope = returnPreservedScope() || this;
 
             this.runningTimer = setTimeout(function () {
                 // call doTrackRefresh from Track.js
-                scope.log("refreshTimer callback()");
+                clientAds.log("refreshTimer callback()");
                 scope.pageRefresh(delay);
             }, delay);
         },
