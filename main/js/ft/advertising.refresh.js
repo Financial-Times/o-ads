@@ -217,7 +217,7 @@ FT.Refresh = (function () {
 
         /** handle refresh logic migrated from FT.advertising */
         handleRefreshLogic: function (obj, timeout) {
-        	clientAds.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
+            clientAds.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
             // TODO: no test case for this yet.
             timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
             if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
@@ -227,7 +227,7 @@ FT.Refresh = (function () {
 
         /** startRefreshTimer logic transferred from FT.advertising namespace */
         startRefreshTimer: function (delay) {
-        	clientAds.log("FT.Refresh.startRefreshTimer(" + delay + ")");
+            clientAds.log("FT.Refresh.startRefreshTimer(" + delay + ")");
             var scope = returnPreservedScope() || this;
 
             this.runningTimer = setTimeout(function () {
