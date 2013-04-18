@@ -74,7 +74,7 @@
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
     splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refreshDelayMs, DfpSpecialChars */
+    refreshDelayMs,  cleanDfpTargeting */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -123,7 +123,7 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-    this.CONST.DfpSpecialChars = /[\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]/g; // no not remove ; or =
+    this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;+(?=;))|(;$)|([\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
 
 
     // filter constants for AYSC cookies
@@ -1069,18 +1069,13 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
 
 FT.Advertising.prototype.getDFPTargeting = function () {
     var dfpTargeting = '',
-        targeting,
         referrer;
     //Handle the per-page custom targeting value from dfp_targeting.
     //By default Methode metadata puts XXXX in this field so we ignore that
     // and fix up any semicolons at the start and end of the field
     if (typeof FT.env.dfp_targeting !== 'undefined') {
-        targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
-        if (targeting !== '' && !/^x+$/.test(targeting)) {
-
-            targeting = targeting.replace(this.CONST.DfpSpecialChars,'');
-            dfpTargeting = encodeURI(targeting);
-        }
+        dfpTargeting = FT.env.dfp_targeting.toLowerCase();
+        dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting,''));
     }
 
     //if current page is an article assign referrer and append pt to dfpTargeting if necessary
