@@ -2289,7 +2289,7 @@ var AD_CURRCON    = "deadV";
 var AD_CURRBOX    = "deadW";
 
 clientAds = {
-    'debug' : null,
+    'debug' : true,
     'render': function (pos) {
         if (pos) {
             this.log('clientAds.render(' + pos + ') = NOP');
