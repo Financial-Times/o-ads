@@ -473,16 +473,6 @@ FT.Advertising.prototype.endVideo = function () {
     return;
 };
 
-//migrated to FT.Refresh logic
-//FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout) {
-//    clientAds.log("FT.Advertising.prototype.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
-//    TODO: no test case for this yet.
-//    timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
-//    if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
-//        obj.refreshTimer = timeout;
-//    }
-//};
-
 // TESTED in dfp-advertising.html
 FT.Advertising.prototype.checkAdState = function (pos) {
     clientAds.log("FT.Advertising.prototype.checkAdState(" + pos + ")");
@@ -2299,7 +2289,7 @@ var AD_CURRCON    = "deadV";
 var AD_CURRBOX    = "deadW";
 
 clientAds = {
-    'debug' : true,
+    'debug' : null,
     'render': function (pos) {
         if (pos) {
             this.log('clientAds.render(' + pos + ') = NOP');
