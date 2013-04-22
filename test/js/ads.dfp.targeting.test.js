@@ -10,7 +10,7 @@ FT.test = {};
 
 function tests() {
 
-    module("test-helpers", {
+    module("dfp_targeting", {
         setup: function () {
         },
         teardown: function () {
@@ -20,14 +20,14 @@ function tests() {
     test("test getDFPTargeting FT.env.dfp_targeting undefined", function () {
         FT.env.dfp_targeting = undefined;
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, undefined, 'targetingValue  is not undefined');
+        deepEqual(targetingValue, undefined, 'targetingValue is not undefined');
 
     });
 
     test("test getDFPTargeting unencoded to encoded", function () {
         FT.env.dfp_targeting = "peo=françois hollande:Bashar al-Assad;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'targetingValue  is ok');
+        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'targetingValue is ok');
     });
 
     test("test getDFPTargeting unencoded remove special chars !", function () {
@@ -93,7 +93,7 @@ function tests() {
     test("test getDFPTargeting encoded to doubleEndcoded", function () {
         FT.env.dfp_targeting = "peo=fran%C3%A7ois%20hollande:Bashar%20al-Assad";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'targetingValue  does not match');
+        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'targetingValue does not match');
 
     });
 
