@@ -138,13 +138,11 @@ FT.Refresh = (function () {
 
             //event handlers properties document.onfocusin is for IE9 and lower
             if ('onfocusin' in document) {
-                //document.onfocusin = this.decorateHandler(document.onfocusin,this.onVisibilityChange);
-                //document.onfocusout = this.decorateHandler(document.onfocusout,this.onVisibilityChange);
-                document.onfocusin = document.onfocusout = this.onVisibilityChange;
+                document.onfocusin = this.decorateHandler(document.onfocusin,this.onVisibilityChange);
+                document.onfocusout = this.decorateHandler(document.onfocusout,this.onVisibilityChange);
             } else {
-                //window.onfocus =  this.decorateHandler(window.onfocus,this.onVisibilityChange);
-                //window.onblur =  this.decorateHandler(window.onblur,this.onVisibilityChange);
-                window.onfocus = window.onblur = this.onVisibilityChange;
+                window.onfocus =  this.decorateHandler(window.onfocus,this.onVisibilityChange);
+                window.onblur =  this.decorateHandler(window.onblur,this.onVisibilityChange);
             }
 
         },
