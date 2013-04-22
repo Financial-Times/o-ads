@@ -144,7 +144,7 @@ FT.Refresh = (function () {
             } else {
                 //window.onfocus =  this.decorateHandler(window.onfocus,this.onVisibilityChange);
                 //window.onblur =  this.decorateHandler(window.onblur,this.onVisibilityChange);
-            	window.onfocus = window.onblur = this.onVisibilityChange;
+                window.onfocus = window.onblur = this.onVisibilityChange;
             }
 
         },
