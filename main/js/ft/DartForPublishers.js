@@ -74,7 +74,7 @@
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
     enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
     splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refresh, refreshTime, Refresh */
+    refresh, refreshTime, Refresh, startRefreshTimer */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
