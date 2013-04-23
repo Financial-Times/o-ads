@@ -1,5 +1,5 @@
 FT.PageVisibility = (function () {
-	
+
 	// browser prefixes
     var browserPrefixes = ['', 'moz', 'ms', 'o', 'webkit'],
     // event name which varies per browser (mozvisibilitychange, webkitvisibilitychange, msvisibilitychange, visibilitychange)
@@ -26,7 +26,7 @@ FT.PageVisibility = (function () {
             }
         }
     }
-    
+
     function returnPreservedScope () {
         if (typeof FT.preservedScope !== "undefined")  {
             return FT.preservedScope;
@@ -34,14 +34,14 @@ FT.PageVisibility = (function () {
             return null;
         }
     }
-    
+
     return {
-    	
+
         /**
          * Boolean if page is visible or not, defaults to true
          */
         isVisible: true,
-        
+
         /**
          * This function handles the visibility change, setting the appropriate
          * isVisible value
@@ -62,7 +62,7 @@ FT.PageVisibility = (function () {
             }
 
         },
-        
+
         //function to preserve any events prevously attached to the document.onfocusin + document.onfocusout or window.onfocus +  window.onblur objects.
         decorateHandler: function (documentOrWindowProperty,func) {
 
@@ -80,7 +80,7 @@ FT.PageVisibility = (function () {
                 return func;
             }
         },
-        
+
         /**
          * This function enables visibility detection for older browsers by
          * attaching onVisibilityChange() from onfocusin/onfocusout (for IE 9 lower)
@@ -100,7 +100,7 @@ FT.PageVisibility = (function () {
             }
 
         },
-        
+
         /**
          * W3C's definition of page visibility: http://www.w3.org/TR/page-visibility/
          * Non-visible (Inactive)
@@ -122,7 +122,7 @@ FT.PageVisibility = (function () {
                 this.enableVisibilitySupportForOlderBrowsers();
             }
         },
-        
+
         /**
          * This function handles page visibility detection. It sets isVisible and
          * attach the proper event handlers.
@@ -139,10 +139,13 @@ FT.PageVisibility = (function () {
 
             if (flag === "w3c") {
                 this.handleW3CVisibility();
-            } 
+            }
         }
-    	
-    }
-	
-	
+
+        isPageVisible: function(){
+
+            var scope = returnPreservedScope() || this;
+            return scope.isVisible || null;
+        }
 }());
+
