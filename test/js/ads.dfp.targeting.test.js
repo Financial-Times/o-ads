@@ -24,10 +24,16 @@ function tests() {
 
     });
 
-    test("test getDFPTargeting unencoded to encoded", function () {
+    test("test getDFPTargeting unencoded to encoded ç ", function () {
         FT.env.dfp_targeting = "peo=françois hollande:Bashar al-Assad;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'unencoded to encoded : ' + targetingValue );
+        deepEqual(targetingValue, 'peo=fran%C3%A7ois%20hollande:bashar%20al-assad;pt=ind', 'unencoded to encoded : ' + targetingValue );
+    });
+
+    test("test getDFPTargeting unencoded to encoded é", function () {
+        FT.env.dfp_targeting = "peo=beauté;pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        deepEqual(targetingValue, 'peo=beaut%C3%A9;pt=ind', 'unencoded to encoded : ' + targetingValue );
     });
 
     test("test getDFPTargeting unencoded remove special chars !", function () {
@@ -94,7 +100,6 @@ function tests() {
         FT.env.dfp_targeting = "peo=fran%C3%A7ois%20hollande:Bashar%20al-Assad";
         var targetingValue = FT.ads.getDFPTargeting();
         deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'targetingValue does not match: ' + targetingValue );
-
     });
 
     test("test getDFPTargeting encoded to doubleEndcoded remove special chars !", function () {
