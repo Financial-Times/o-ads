@@ -24,16 +24,16 @@ function tests() {
 
     });
 
-//    test("test getDFPTargeting unencoded to encoded", function () {
-//        FT.env.dfp_targeting = "peo=françois hollande:Bashar al-Assad;pt=ind";
-//        var targetingValue = FT.ads.getDFPTargeting();
-//        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'targetingValue is ok');
-//    });
+    test("test getDFPTargeting unencoded to encoded", function () {
+        FT.env.dfp_targeting = "peo=françois hollande:Bashar al-Assad;pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'targetingValue is ok');
+    });
 
     test("test getDFPTargeting unencoded remove special chars !", function () {
         FT.env.dfp_targeting = "peo=Yahoo!, Google!;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars: does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=indwhat', 'remove special chars: does not match');
 
     });
 
