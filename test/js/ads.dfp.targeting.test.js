@@ -10,7 +10,7 @@ FT.test = {};
 
 function tests() {
 
-    module("dfp_targeting 1", {
+    module("dfp_targeting 2", {
         setup: function () {
         },
         teardown: function () {
@@ -27,87 +27,87 @@ function tests() {
     test("test getDFPTargeting unencoded to encoded", function () {
         FT.env.dfp_targeting = "peo=françois hollande:Bashar al-Assad;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'targetingValue is ok');
+        deepEqual(targetingValue, 'peo=fran%C3%A3%C2%A7ois%20hollande:bashar%20al-assad;pt=ind', 'unencoded to encoded : ' + targetingValue );
     });
 
     test("test getDFPTargeting unencoded remove special chars !", function () {
         FT.env.dfp_targeting = "peo=Yahoo!, Google!;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars!: does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars!: ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars *", function () {
         FT.env.dfp_targeting = "peo=Yahoo!*, Google!*;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars *: does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars *: ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars ~", function () {
         FT.env.dfp_targeting = "peo=~Yahoo~ ~Google~;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind',  'remove special chars ~:does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind',  'remove special chars ~: ' + targetingValue);
     });
 
     test("test getDFPTargeting unencoded remove special chars ^", function () {
         FT.env.dfp_targeting = "peo=^Yahoo^, ^Google^;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars ^ does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars ^: ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars < >", function () {
         FT.env.dfp_targeting = "peo=<Yahoo>, <Google>;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars <> does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars <> : ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars '", function () {
         FT.env.dfp_targeting = "peo='Yahoo' 'Google';pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars \' does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars single quote : ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars \"", function () {
         FT.env.dfp_targeting = 'peo="Yahoo" "Google";pt=ind';
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars \" does not match');
+        deepEqual(targetingValue, 'peo=yahoo%20google;pt=ind', 'remove special chars double quote: ' + targetingValue );
 
     });
 
     test("test getDFPTargeting unencoded remove special chars ()", function () {
             FT.env.dfp_targeting = "peo=Andy Murray(Tennis Player) Athlete;pt=ind";
             var targetingValue = FT.ads.getDFPTargeting();
-            deepEqual(targetingValue, 'peo=andy%20murraytennis%20player%20athlete;pt=ind', 'remove special chars (): does not match');
+            deepEqual(targetingValue, 'peo=andy%20murraytennis%20player%20athlete;pt=ind', 'remove special chars (): ' + targetingValue );
     });
 
     test("test getDFPTargeting unencoded remove special chars []", function () {
         FT.env.dfp_targeting = "peo=Andy Murray[Tennis Player] Athlete;pt=ind";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=andy%20murraytennis%20player%20athlete;pt=ind', 'remove special chars []: does not match');
+        deepEqual(targetingValue, 'peo=andy%20murraytennis%20player%20athlete;pt=ind', 'remove special chars []: ' + targetingValue );
     });
 
     test("test getDFPTargeting encoded to doubleEndcoded", function () {
         FT.env.dfp_targeting = "peo=fran%C3%A7ois%20hollande:Bashar%20al-Assad";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'targetingValue does not match');
+        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'targetingValue does not match: ' + targetingValue );
 
     });
 
     test("test getDFPTargeting encoded to doubleEndcoded remove special chars !", function () {
         FT.env.dfp_targeting = "peo=fran%C3%A7ois%20!hollande:Bashar%20al-Assad";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars ! does not match');
+        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars !: ' + targetingValue);
 
     });
 
     test("test getDFPTargeting encoded to doubleEndcoded remove special chars () !", function () {
         FT.env.dfp_targeting = "peo=(fran%C3%A7ois%20hollande!:Bashar%20al-Assad)";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars () ! does not match');
+        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars (): ' + targetingValue );
 
     });
 
@@ -115,7 +115,7 @@ function tests() {
     test("test getDFPTargeting encoded to doubleEndcoded remove special chars []", function () {
         FT.env.dfp_targeting = "peo=fran%C3%A7ois%20hollande:[Bashar%20al-Assad]";
         var targetingValue = FT.ads.getDFPTargeting();
-        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars [] does not match');
+        deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars []: ' + targetingValue );
 
     });
 
