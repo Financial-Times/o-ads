@@ -608,6 +608,11 @@ FT.Advertising.prototype.callback = function (rResponse) {
     if (rResponse.insertAdRequest) {
         this.insertNewAd(rResponse.insertAdRequest);
     }
+    
+    var radix; // to satisfy jslint
+    if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
+        FT.Refresh.startRefreshTimer(FT.Refresh.refreshTime);
+    }
 
     // Handle ad types
     if (rResponse.type) {
