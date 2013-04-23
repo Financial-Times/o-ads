@@ -123,7 +123,7 @@ FT.Advertising = function () {
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-    this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;+(?=;))|(;$)|([\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
+    this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;$)|([\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
 
 
     // filter constants for AYSC cookies
@@ -1075,7 +1075,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
     // and fix up any semicolons at the start and end of the field
     if (typeof FT.env.dfp_targeting !== 'undefined') {
         dfpTargeting = FT.env.dfp_targeting.toLowerCase();
-        dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting,''));
+        dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting,'').replace(/;;+/g, ';'));
     }
 
     //if current page is an article assign referrer and append pt to dfpTargeting if necessary
