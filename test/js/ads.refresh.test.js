@@ -19,7 +19,7 @@ FT.test.stubReloadWindow = sinon.stub(FT.ads, "reloadWindow");
 
 function tests() {
 
-    module("test-helpers", {
+    module("refresh", {
         setup: function () {
             FT.test.clock = sinon.useFakeTimers();
             FT.test.delay = 720 * 1000;
