@@ -77,7 +77,7 @@ FT.PageVisibility = (function () {
             }
             
             if (typeof FT.PageVisibility.additionalVisibilityChangeFn !== null && 
-                    typeof FT.PageVisibility.additionalVisibilityChangeFn === ' function') {
+                    typeof FT.PageVisibility.additionalVisibilityChangeFn === 'function') {
                 FT.PageVisibility.additionalVisibilityChangeFn();
             }
         },
