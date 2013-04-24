@@ -6,14 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-/**
- * Created with JetBrains WebStorm.
- * User: andrew.tekle-cadman
- * Date: 25/03/13
- * Time: 11:12
- * To change this template use File | Settings | File Templates.
- */
-
 /*jshint strict: false */
 
 /*globals FT, clientAds */
@@ -24,9 +16,18 @@
   startRefreshTimer, handleW3CVisibility, handleAlentyVisibility, getElementById, innerHTML,
   env,asset, handleRefreshLogic, name, pageVisibilityScope,decorateHandler, pageVisibilityScope,
  refreshDelayMs,pageRefresh,userInteracting,cookie, location,href,reloadWindow,userInteractionTimer,
- reload */
+ reload, PageVisibility, isPageVisible, refreshOnVisibilityChange, preservedRefreshScope */
 
 FT.Refresh = (function () {
+	
+    function returnPreservedScope () {
+        if (typeof FT.preservedRefreshScope !== "undefined")  {
+            return FT.preservedRefreshScope;
+        }  else {
+            return null;
+        }
+    }
+	
     return {
 
         refreshTime: null,
@@ -36,6 +37,7 @@ FT.Refresh = (function () {
         /** handle refresh logic migrated from FT.advertising */
         handleRefreshLogic: function (obj, timeout) {
             clientAds.log("FT.Refresh.handleRefreshLogic(" + obj.name + ", " + timeout + ")");
+            FT.preservedRefreshScope = this;
             // TODO: no test case for this yet.
             timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
             if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
@@ -76,24 +78,26 @@ FT.Refresh = (function () {
         /** reloadWindow logic transferred from FT.advertising namespace */
         reloadWindow: function(b) {
             window.location.reload(b);
+        },
+        
+        /** handles refresh when visibility changes */
+        refreshOnVisibilityChange: function() {
+            var scope = returnPreservedScope() || this;
+            if (FT.PageVisibility.isPageVisible) {
+                //now we stop the timer if it is running down
+                if (scope.runningTimer !== null){
+                    clearTimeout(scope.runningTimer);
+                }
+                clientAds.log('The page has lost visibility.');
+            } else {
+                //restart the timer when visibility is regained
+                if (scope.refreshTime !== null)  {
+                    scope.startRefreshTimer(scope.refreshTime);
+                }
+                clientAds.log('The page has gained visibility.');
+             }
         }
 
     };
 
 }());
-
-
-            // var scope = returnPreservedScope() || this;
-            // if (FT.PageVisibility.isPageVisible) {
-            //     //now we stop the timer if it is running down
-            //     if (scope.runningTimer !== null){
-            //         clearTimeout(scope.runningTimer);
-            //     }
-            //     clientAds.log('The page has lost visibility.');
-            // } else {
-            //     //restart the timer when visibility is regained
-            //     if (scope.refreshTime !== null)  {
-            //         scope.startRefreshTimer(scope.refreshTime);
-            //     }
-            //     clientAds.log('The page has gained visibility.');
-            // }

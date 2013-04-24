@@ -1,3 +1,13 @@
+/*jshint strict: false */
+
+/*globals FT */
+
+/*members  browserPrefixes, eventName, hiddenPropName, pvFlag, hasPageVisibilityAPI,
+  returnPreservedScope, isVisible, additionalVisibilityChangeFn, onVisibilityChange,
+  decorateHandler, enableVisibilitySupportForOlderBrowsers, handleW3CVisibility,
+  detectPageVisibility, isPageVisible, setAddlFuncOnVisibilityChange, PageVisibility,
+  pop, preservedVisibilityScope, event, type, onfocusin, onfocusout, onfocus, onblur, addEventListener,
+  */
 FT.PageVisibility = (function () {
 
 	// browser prefixes
@@ -28,8 +38,8 @@ FT.PageVisibility = (function () {
     }
 
     function returnPreservedScope () {
-        if (typeof FT.preservedScope !== "undefined")  {
-            return FT.preservedScope;
+        if (typeof FT.preservedVisibilityScope !== "undefined")  {
+            return FT.preservedVisibilityScope;
         }  else {
             return null;
         }
@@ -41,6 +51,11 @@ FT.PageVisibility = (function () {
          * Boolean if page is visible or not, defaults to true
          */
         isVisible: true,
+        
+        /**
+         * additional function to be called when visibility changes
+         */
+        additionalVisibilityChangeFn : null,        
 
         /**
          * This function handles the visibility change, setting the appropriate
@@ -60,10 +75,14 @@ FT.PageVisibility = (function () {
                     scope.isVisible = false;
                 }
             }
-
+            
+            if (typeof FT.PageVisibility.additionalVisibilityChangeFn !== null && 
+                    typeof FT.PageVisibility.additionalVisibilityChangeFn === ' function') {
+                FT.PageVisibility.additionalVisibilityChangeFn();
+            }
         },
 
-        //function to preserve any events prevously attached to the document.onfocusin + document.onfocusout or window.onfocus +  window.onblur objects.
+        /** function to preserve any events prevously attached to the document.onfocusin + document.onfocusout or window.onfocus +  window.onblur objects. */
         decorateHandler: function (documentOrWindowProperty,func) {
 
             var existingHandler = documentOrWindowProperty || null;
@@ -133,19 +152,32 @@ FT.PageVisibility = (function () {
         detectPageVisibility: function(flag) {
 
             //preserve scope for window events
-            FT.preservedScope = this;
+            FT.preservedVisibilityScope = this;
 
             hasPageVisibilityAPI();
 
             if (flag === "w3c") {
                 this.handleW3CVisibility();
             }
-        }
+        },
 
+        /**
+         * returns if the page is visible or not
+         */
         isPageVisible: function(){
 
             var scope = returnPreservedScope() || this;
             return scope.isVisible || null;
-        }
-}());
+        },
 
+        /**
+         * sets additional function to be called when visibility changes
+         */
+        setAddlFuncOnVisibilityChange: function(func) {
+           FT.PageVisibility.additionalVisibilityChangeFn = func;
+        }
+
+    };
+
+}());
+FT.PageVisibility.detectPageVisibility('w3c');
