@@ -32,6 +32,7 @@ function tests() {
 
     test("test startRefreshTimer userInteracting = false", function () {
         FT.userInteracting = false;
+        FT.PageVisibility.isPageVisible = true;
         FT.test.spyPageRefresh.reset();
         FT.test.stubReloadWindow.reset();
 
