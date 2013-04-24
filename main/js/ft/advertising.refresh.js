@@ -83,7 +83,7 @@ FT.Refresh = (function () {
         /** handles refresh when visibility changes */
         refreshOnVisibilityChange: function() {
             var scope = returnPreservedScope() || this;
-            if (FT.PageVisibility.isPageVisible) {
+            if (!FT.PageVisibility.isPageVisible()) {
                 //now we stop the timer if it is running down
                 if (scope.runningTimer !== null){
                     clearTimeout(scope.runningTimer);
