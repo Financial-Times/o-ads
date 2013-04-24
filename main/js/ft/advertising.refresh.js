@@ -19,7 +19,7 @@
  reload, PageVisibility, isPageVisible, refreshOnVisibilityChange, preservedRefreshScope */
 
 FT.Refresh = (function () {
-	
+
     function returnPreservedScope () {
         if (typeof FT.preservedRefreshScope !== "undefined")  {
             return FT.preservedRefreshScope;
@@ -27,7 +27,7 @@ FT.Refresh = (function () {
             return null;
         }
     }
-	
+
     return {
 
         refreshTime: null,
@@ -79,7 +79,7 @@ FT.Refresh = (function () {
         reloadWindow: function(b) {
             window.location.reload(b);
         },
-        
+
         /** handles refresh when visibility changes */
         refreshOnVisibilityChange: function() {
             var scope = returnPreservedScope() || this;
@@ -101,3 +101,28 @@ FT.Refresh = (function () {
     };
 
 }());
+
+
+
+/**
+ * Refresh position creative template
+ * https://www.google.com/dfp/5887#delivery/CreateCreativeTemplate/creativeTemplateId=10030129
+ *
+<script type='text/javascript'>
+var obj = {
+    "name": "%kpos=!;",
+    "type": "empty",
+    "flight": "%eaid!", // ad ID
+    "adId": "%ecid!", // creative ID
+    "adName": "refresh adjustment [%Timeout%]"
+};
+
+if (window.FT && window.FT.ads && window.FT.ads.callback && window.FT.ads.breakout && window.FT.Refresh && window.FT.Refresh.handleRefreshLogic && window.FT.Refresh.refreshOnVisibilityChange && window.FT.PageVisibility && window.FT.PageVisibility.setAddlFuncOnVisibilityChange)
+{
+   FT.ads.breakout(obj);
+   FT.Refresh.handleRefreshLogic(obj, [%Timeout%] * 1000);
+   FT.PageVisibility.setAddlFuncOnVisibilityChange(FT.Refresh.refreshOnVisibilityChange);
+   FT.ads.callback(obj);}
+</script>
+<img src="[%Image%]">
+ */
