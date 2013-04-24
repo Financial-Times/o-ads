@@ -174,7 +174,7 @@ FT.PageVisibility = (function () {
          * sets additional function to be called when visibility changes
          */
         setAddlFuncOnVisibilityChange: function(func) {
-           FT.PageVisibility.additionalVisibilityChangeFn = func;
+           FT.PageVisibility.additionalVisibilityChangeFn = this.decorateHandler(FT.PageVisibility.additionalVisibilityChangeFn, func);
         }
 
     };
