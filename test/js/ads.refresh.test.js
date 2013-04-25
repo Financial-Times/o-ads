@@ -9,13 +9,13 @@
 */
 
 
-FT.ads.initDFP();
+//FT.Refresh.initDFP();
 
 //set up test spies
 FT.env.asset = "page";
 FT.test = {};
-FT.test.spyPageRefresh = sinon.spy(FT.ads, "pageRefresh");
-FT.test.stubReloadWindow = sinon.stub(FT.ads, "reloadWindow");
+FT.test.spyPageRefresh = sinon.spy(FT.Refresh, "pageRefresh");
+FT.test.stubReloadWindow = sinon.stub(FT.Refresh, "reloadWindow");
 
 function tests() {
 
@@ -32,12 +32,13 @@ function tests() {
 
     test("test startRefreshTimer userInteracting = false", function () {
         FT.userInteracting = false;
+        FT.PageVisibility.isVisible = true;
         FT.test.spyPageRefresh.reset();
         FT.test.stubReloadWindow.reset();
 
-        FT.ads.startRefreshTimer(FT.test.delay);
+        FT.Refresh.startRefreshTimer(FT.test.delay);
 
-        FT.test.clock.tick(FT.test.delay + FT.ads.CONST.refreshDelayMs +  1000);
+        FT.test.clock.tick(FT.test.delay + FT.Refresh.refreshDelayMs +  1000);
         deepEqual(FT.test.spyPageRefresh.callCount, 1, "Number of times spyPageRefresh() function should be called");
         deepEqual(FT.test.stubReloadWindow.callCount, 1, "Number of times stubReloadWindow() function should be called");
     });
@@ -48,7 +49,7 @@ function tests() {
         FT.test.spyPageRefresh.reset();
         FT.test.stubReloadWindow.reset();
 
-        FT.ads.startRefreshTimer(FT.test.delay);
+        FT.Refresh.startRefreshTimer(FT.test.delay);
 
         FT.test.clock.tick(FT.test.delay * 2);
         deepEqual(FT.test.spyPageRefresh.callCount, 2, "Number of times spyPageRefresh() function should be called");
