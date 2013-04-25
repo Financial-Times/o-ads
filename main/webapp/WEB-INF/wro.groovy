@@ -5,13 +5,13 @@ groups {
     }
 
     "advertising-latest" {
-//        js(minimize: false, "/js/ft/revenue-science.js")
+        js(minimize: false, "/js/ft/revenue-science.js")
         js(minimize: false, "/js/ft/advertising.utils.js")
         js(minimize: false, "/js/ft/advertising.utils.cookie.js")
         js(minimize: false, "/js/ft/HTMLAds.js")
         js(minimize: false, "/js/ft/DartForPublishers.js")
-//        js(minimize: false, "/js/ft/audienceScienceFacade.js")
-//        js(minimize: false, "/js/ft/audienceScience.js")
+        js(minimize: false, "/js/ft/audienceScienceFacade.js")
+        js(minimize: false, "/js/ft/audienceScience.js")
         js(minimize: false, "/js/ft/registration-widget.js")
 //        js(minimize: false,"/js/thirdparty/**.js")
 //        js(minimize: false,"/js/lib/**.js")
