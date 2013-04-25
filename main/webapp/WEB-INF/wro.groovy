@@ -27,13 +27,13 @@ groups {
     }
 
     "advertising-latest.min" {
-//        js "/js/ft/revenue-science.js"
+        js "/js/ft/revenue-science.js"
         js "/js/ft/advertising.utils.js"
         js "/js/ft/advertising.utils.cookie.js"
         js "/js/ft/HTMLAds.js"
         js "/js/ft/DartForPublishers.js"
-//        js "/js/ft/audienceScienceFacade.js"
-//        js "/js/ft/audienceScience.js"
+        js "/js/ft/audienceScienceFacade.js"
+        js "/js/ft/audienceScience.js"
         js "/js/ft/registration-widget.js"
 //       js "/js/thirdparty/**.js
  //       js "/js/lib/**.js"
