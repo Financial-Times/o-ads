@@ -25,13 +25,13 @@
          file is important. The entire run will be as slow as the longest <test> Tests will be run on the specified browser for each test.
      -->
 
-    <test name="iexplore8-windows">
-        <parameter name="browser" value="iexplore8-windows" />
-        <parameter name="include" value=".*\.test\.htm(l)?" />
-        <classes>
-            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
-        </classes>
-    </test>
+    <!--<test name="iexplore8-windows">-->
+        <!--<parameter name="browser" value="iexplore8-windows" />-->
+        <!--<parameter name="include" value=".*\.test\.htm(l)?" />-->
+        <!--<classes>-->
+            <!--<class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />-->
+        <!--</classes>-->
+    <!--</test>-->
 
     <test name="iexplore9-win7-x86">
         <parameter name="browser" value="iexplore9-win7-x86" />
