@@ -10,7 +10,7 @@ FT.test = {};
 
 function tests() {
 
-    module("dfp_targeting 2", {
+    module("dfp_targeting 3", {
         setup: function () {
         },
         teardown: function () {
