@@ -68,35 +68,6 @@
     width: 113px;
 }
 
-/*
-#registrationWidget .standardImage span {
-  width: 95px;
-}
-
-#registrationWidget .standardImage.disabled span {
-    background: #BBBBBB url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALEAAAAeCAYAAABjY//+AAAA3klEQVR42u3czQmDQBRF4dd/JyYaFZUE/xUEN26swEX6uCGBFHHhPPgaGA6zmBkm1nUV4OQ4Dr3fb/0nlmUR4GjfdyKGv+u6FPM8C3C1bZtimiYBzogY/hGP4yjAWQzDIMAZEcM/4r7vBTiLrusEOIu2bQU4i9frJcBZPJ9PAc6IGP4RN00jwFnUdS3AWVRVJcAZEcM/4rIsBTgjYvhHXBSFAGeR57kAZ/F4PAQ4iyzLBDiLNE0FOIv7/S7A1e90goWAs/M8FbfbTYCj723d7xurJEkEOPm+XPvuwP/5ADbS63oYOX0gAAAAAElFTkSuQmCC) center right no-repeat;
-}
-
-#registrationWidget .standardImage.disabled span > span {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAApklEQVR42m3SSQqEQBBE0bj/TZxnLJx1IW7ceATxHiHVdAtGV8LbfKhFJQl+57ou7vvOZVkIG7Zt4zzPD5zn+QqfuK4rp2l6wTiOVO44DAMV+r6ncseu66jQti0VmqahgjGGCnVdU7ljVVVUKMuSCkVRULljlmVU7pimKRWSJKFCHMdUiKKICmEYUiHPcwZB8ILjOP6jPRv7C9/3H/gdmH1hN+R5Hm8luNy5/SOYaQAAAABJRU5ErkJggg==) center left no-repeat;
-}
-
-#registrationWidget .standardImage.saving span {
-    background: #51A44F url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALEAAAAeCAYAAABjY//+AAAA/UlEQVR42u3czUoCARTF8fs8MtPolIuW0a4WvVmr2vQ+FiJiUZajMslUpPRhglBRcBqIeocD/wu/y32Aw12eWJeJACdf833p+0h/E+uyIcDRx/0OIYY/fR4qVvUBuFpX24rltCHAWaymiQBn8TZJBTiL5TgR4Cxei1SAs3gZJQKcxfNNKsBZPF2nApzFYpgJcBbzqw0BzuLxMhPgLB4uMgHOojpvCnAWd4OmAGcxqxfgLGb9XIAzQgz/EN/2WgKcRdnLBTiLSTcX4CzG3ZYAZ1GctQU4i+J0S4CraW+XEMPb++JYMeq0BTgq+3u/NVbDzqYAJ9XgoP7AJ/+Fgj+zPiiM4s8UhQAAAABJRU5ErkJggg==) center right no-repeat;
-}
-
-#registrationWidget .standardImage.saving span > span {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAz0lEQVR42m3SX0vCABQF8PN5ZGs621svQU/54GcL8qXvs0JkWNTU/WnJprTRHxMKo4LTJkzcqQu/yz3n+YL1/JzzO+/xPTGIKn8ujsvQ2gG/zhrFtvzIjrguj31YxS0qrGODCm+RSYVVaFDhNTCp8DIzqPA8NanwNDGpUPgWFfK7Ayo83lpUWN5YVEiv21TIxm0qzMulMPdsqv/Lh1GHCsnIpkI0tKkQDjtUCK4cKtx7JwwuDxuwKQZ/y+ptEu+UM9fZQf1fm+KC6bhP3+3yF6d/vJCMdLvVAAAAAElFTkSuQmCC) center left no-repeat;
-    font-size: 14px;
-}
-
-#registrationWidget .standardImage.saved span {
-    background: #51A44F url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALEAAAAeCAYAAABjY//+AAABDklEQVR42u3cO0pDURSF4T04Y3JvkpubqBBBbMR5iCJCokTjExXfGIyFExAciE1Q0CIWOgGXB2ex4C++zTr9X5+YG7UFOFl9WtHgpa+f9y9p+qvojEoBjpYfl/Q5eSNieOs9byna96UAV4sPXUV51xLgLNrpAM6ifZsGYCzKm0KAsyiv0wCMReuqKcBZtC7TAIxFcdEQ4CyK8zQAY9E8qwtwFs3TNABj0TjJBTiL+nEuwFnUjzIBziI/zAQ4i3y/JsAZEcM/4mxYFeAssr00AGNRG8wKcBbVdABnUdtJNQPGorpdEeCq3C2IGN42xmsp4n56AIbmhx19vE4Uld6MACfdgwVtjtf1PZn+fyj4B405WKJhSov0AAAAAElFTkSuQmCC) center right no-repeat;
-}
-
-#registrationWidget .standardImage.saved span > span {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAA3UlEQVR42m3SS0rDUBjF8bM407ya5N5qQVSciPsQxYFtpZjWByq+sRAHrkBciJOAIkgd6AY8fjoo5Ojg9/Hn3OkFp1/8fH7n8LHP9fs1zk888Va/cPVuhZ2Jm8HgYacx/I7L1RL9rWuAuymo4O0o+GsLAXeVU8FdWggUFxkVinMLgfysTYX81EIgO0mpkB1bCLSPEiqkhwkV0oOYCsl+TIVkFFH9P8ZlSIV4z0IgGraoENpRiHbtVcCXjuEgaMBWtfF3fH2quVB2GPaDGfx8sI96yu1qk4vjLoPeHL8Bu6RUIUxV0EMAAAAASUVORK5CYII=) center left no-repeat;
-} */
 
 #registrationWidget a.close {
     position: absolute;
@@ -117,11 +88,13 @@
 
 
 /* Button styles */
-.linkButton {
+#registrationWidget .linkButton {
     white-space: nowrap;
 }
 
-div.linkButton, button.linkButton,  span.submitBtn input {
+#registrationWidget div.linkButton,
+#registrationWidget button.linkButton,
+#registrationWidget span.submitBtn input {
     position: relative;
     display: inline-block;
     height: 30px;
@@ -151,24 +124,33 @@ div.linkButton, button.linkButton,  span.submitBtn input {
     cursor: pointer;
 }
 
-div.linkButton a {
+#registrationWidget div.linkButton a {
     text-decoration: none;
     color: #FFF;
 }
 
-div.medium, a.medium,  button.medium,  span.medium input {
+#registrationWidget div.medium,
+#registrationWidget a.medium,
+#registrationWidget button.medium,
+#registrationWidget span.medium input {
     height: 24px;
     line-height: 24px;
     font-size: 14px;
 }
 
-div.small, a.small,  button.small,  span.small input {
+#registrationWidget div.small,
+#registrationWidget a.small,
+#registrationWidget button.small,
+#registrationWidget span.small input {
     height: 16px;
     line-height: 16px;
     font-size: 12px;
 }
 
-div.red, a.red,  button.red,  span.red input {
+#registrationWidget div.red,
+#registrationWidget a.red,
+#registrationWidget button.red,
+#registrationWidget span.red input {
     background: #b7315c;
     background: -webkit-gradient(linear,  left top,  left bottom,  from(#cc3366),  to(#9f2f50));
     background: -moz-linear-gradient(#cc3366,  #9f2f50);
@@ -179,8 +161,14 @@ div.red, a.red,  button.red,  span.red input {
     -webkit-box-shadow: inset 0 1px 0 #D89AAD;
 }
 
-div.grey, a.grey,  button.grey,  span.grey input,
-div.disabled, a.disabled,  button.disabled,  span.disabled input {
+#registrationWidget div.grey,
+#registrationWidget a.grey,
+#registrationWidget button.grey,
+#registrationWidget span.grey input,
+#registrationWidget div.disabled,
+#registrationWidget a.disabled,
+#registrationWidget button.disabled,
+#registrationWidget span.disabled input {
     background: #acacac;
     background: -webkit-gradient(linear,  left top,  left bottom,  from(#b5b5b5),  to(#a5a5a5));
     background: -moz-linear-gradient(#b5b5b5,  #a5a5a5);
@@ -191,11 +179,15 @@ div.disabled, a.disabled,  button.disabled,  span.disabled input {
     -webkit-box-shadow: inset 0 1px 0 #a5a5a5;
 }
 
-.linkButton:hover, .linkButton a:hover,  .submitBtn input:hover {
+#registrationWidget .linkButton:hover,
+#registrationWidget .linkButton a:hover,
+#registrationWidget .submitBtn input:hover {
     color: #dddddd;
 }
 
-.disabled.linkButton,  .disabled.linkButton a:hover,  .disabled.linkButton input:hover {
+#registrationWidget .disabled.linkButton,
+#registrationWidget .disabled.linkButton a:hover,
+#registrationWidget .disabled.linkButton input:hover {
     cursor: default;
     color: #fff;
 }
