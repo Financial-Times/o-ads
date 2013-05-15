@@ -3,12 +3,15 @@
     <meta charset="UTF-8">
     <title>Advertising Enablement Team - Wassup</title>
     <script src="js/lib/jquery-1.7.2.js"></script>
-    <script src="js/lib/jquery.cookie.js"></script>
-    <script src="js/cookie-tool.js"></script>
 
-    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
-      <link href="css/cookie-tool.css" rel="stylesheet" />
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/cookie-tool.css" rel="stylesheet" />
+
     <style>
+        tr td:nth-child(2) {
+            text-align: center;
+        }
+
         td.waiting {
             background: url('data:image/gif;base64,R0lGODlhEAAQAPYAAP///4iIiPz8/MvLy8fHx/b29uTk5Ozs7NHR0YiIiMnJyePj45+fn66urvX19dXV1czMzPj4+MTExJWVldra2tTU1M/Pz/n5+fv7+9bW1ufn56enp42NjbS0tO/v7/Pz89/f35ubm6GhoaioqOrq6uPj46Ojo6ysrKSkpKmpqejo6OXl5bGxsdvb2/T09Ly8vNfX193d3d7e3rOzs7KysrW1tcbGxvDw8MLCwv39/dPT05OTk5ycnK+vr4mJia2trebm5qKiorCwsJSUlPf39+vr69DQ0PDw8PLy8qWlpdbW1piYmJaWltjY2Ly8vKqqqqCgoLm5uenp6eHh4ZmZmcHBwaampq+vr4yMjIuLi9nZ2fHx8aurq/r6+tzc3Le3t7i4uO7u7tLS0pCQkJeXlwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCAAAACwAAAAAEAAQAAAHaIAAgoMgIiYlg4kACxIaACEJCSiKggYMCRselwkpghGJBJEcFgsjJyoAGBmfggcNEx0flBiKDhQFlIoCCA+5lAORFb4AJIihCRbDxQAFChAXw9HSqb60iREZ1omqrIPdJCTe0SWI09GBACH5BAkIAAAALAAAAAAQABAAAAdrgACCgwc0NTeDiYozCQkvOTo9GTmDKy8aFy+NOBA7CTswgywJDTIuEjYFIY0JNYMtKTEFiRU8Pjwygy4ws4owPyCKwsMAJSTEgiQlgsbIAMrO0dKDGMTViREZ14kYGRGK38nHguHEJcvTyIEAIfkECQgAAAAsAAAAABAAEAAAB2iAAIKDAggPg4iJAAMJCRUAJRIqiRGCBI0WQEEJJkWDERkYAAUKEBc4Po1GiKKJHkJDNEeKig4URLS0ICImJZAkuQAhjSi/wQyNKcGDCyMnk8u5rYrTgqDVghgZlYjcACTA1sslvtHRgQAh+QQJCAAAACwAAAAAEAAQAAAHZ4AAgoOEhYaCJSWHgxGDJCQARAtOUoQRGRiFD0kJUYWZhUhKT1OLhR8wBaaFBzQ1NwAlkIszCQkvsbOHL7Y4q4IuEjaqq0ZQD5+GEEsJTDCMmIUhtgk1lo6QFUwJVDKLiYJNUd6/hoEAIfkECQgAAAAsAAAAABAAEAAAB2iAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4ICCA+IkIsDCQkVACWmhwSpFqAABQoQF6ALTkWFnYMrVlhWvIKTlSAiJiVVPqlGhJkhqShHV1lCW4cMqSkAR1ofiwsjJyqGgQAh+QQJCAAAACwAAAAAEAAQAAAHZ4AAgoOEhYaCJSWHgxGDJCSMhREZGIYYGY2ElYebi56fhyWQniSKAKKfpaCLFlAPhl0gXYNGEwkhGYREUywag1wJwSkHNDU3D0kJYIMZQwk8MjPBLx9eXwuETVEyAC/BOKsuEjYFhoEAIfkECQgAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4ueICImip6CIQkJKJ4kigynKaqKCyMnKqSEK05StgAGQRxPYZaENqccFgIID4KXmQBhXFkzDgOnFYLNgltaSAAEpxa7BQoQF4aBACH5BAkIAAAALAAAAAAQABAAAAdogACCg4SFggJiPUqCJSWGgkZjCUwZACQkgxGEXAmdT4UYGZqCGWQ+IjKGGIUwPzGPhAc0NTewhDOdL7Ykji+dOLuOLhI2BbaFETICx4MlQitdqoUsCQ2vhKGjglNfU0SWmILaj43M5oEAOwAAAAAAAAAAAA==') center center no-repeat;
         }
@@ -30,6 +33,7 @@
             <tr>
                 <th>Version</th>
                 <th>Availability</th>
+                <th>Information</th>
             </tr>
         </thead>
         <tbody>
