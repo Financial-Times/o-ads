@@ -46,7 +46,6 @@
     $.get(advertisingBase + version + '.js')
       .always(function (response) {
         if (response.status === 200) {
-          console.log(response);
           updateVersionAvailability('success', version, response.responseText);
         } else {
           updateVersionAvailability('fail', version);
