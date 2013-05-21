@@ -10,7 +10,7 @@
     <parameter name="majorBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
-    <parameter name="localBrowsers" value="*safari,*firefox,*googlechrome" />
+    <parameter name="localBrowsers" value="*firefox,*googlechrome" />
 
     <parameter name="testRoot" value="target/test-classes" />
 
@@ -33,13 +33,13 @@
         </classes>
     </test>
 
-    <test name="Safari">
+<!--     <test name="Safari">
         <parameter name="browser" value="*safari" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
             <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
-    </test>
+    </test> -->
 
     <test name="Chrome">
         <parameter name="browser" value="*googlechrome" />
