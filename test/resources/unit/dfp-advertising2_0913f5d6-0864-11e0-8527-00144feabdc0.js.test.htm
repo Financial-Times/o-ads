@@ -261,7 +261,7 @@ $(document).ready(function () {
 
    test("FT.ads.buildURL (new parameters ts and uuid)  - for Task TA27559", function() {
 	   var url;
-	   expect(5);
+	   expect(3);
 	   maybeInitFixture();
 
 	   pageUUID = '';
@@ -277,13 +277,11 @@ $(document).ready(function () {
 	   beginNewPage('build URL1' );
        mockCookies.FT_U = "_EID=2548659_";
 	   url = testBuildURL("both pageUUID and getUUIDFromString defined. pageUUID is empty, url has uuid.");
-	   matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 	   pageUUID = undefined;
 	   beginNewPage('build URL2' );
        mockCookies.FT_U = "_EID=2548659_";
 	   url = testBuildURL("pageUUID undefined, getUUIDFromString defined. URL contains UUID.");
-	   matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL contains uuid coming from the URL. It also contains timestamp.");
    });
 });
 

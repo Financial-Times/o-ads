@@ -33,7 +33,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
 
 	/*members "01", AYSC, AdFormat, AdPos, AdServerCodes, Advertising,
 		AudSci, AudSciResult, AudSciResultShort, AudSciResultSplit, Base36,
-		Base36Result, CONST, CompAudSciSplit, Comprehensive, DearLucy,
+		Base36Result, CONST, Comprehensive, DearLucy,
 		rLucyNonLive, DefaultAdTag, ENV, FTQA, FT_U, ISOGoodMap, ISOInvalid,
 		InvalidISO2Codes, KeyOrder, MaxAYSCFields, OmitPVTRES, OmitXXX,
 		Properties, RSI_SEGS, SlvCorp, SlvLv1, SlvLv2, SlvNope, SlvReg, TEST,
@@ -151,11 +151,9 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
 	// Documented in Targeting/KeyPriority.xls in DFP project share and on Twiki
 	// http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Order_of_key_values_placed_into
 	//TEST.KeyOrder = "sz,dcopt,07,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";  // TODO referrer, investor relations
-	TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,loc,uuid,auuid,ts,cc,pos,bht,fts,tile,ord";
+	TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,loc,uuid,auuid,ts,cc,pos,bht,fts,tile,ord";
 	//TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";
-	TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,uuid,ts,cc,pos,bht,tile,ord";
-	//TEST.CompAudSciSplit = "sz,dcopt,07,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,a,a,pos,bht,tile,ord";
-	TEST.CompAudSciSplit = "sz,dcopt,07,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,a,a,uuid,ts,cc,pos,bht,tile,ord";
+	TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,tile,ord";
 
 	// AYSC values which should not appear in the Ad call URL
 	TEST.MaxAYSCFields = 60;
@@ -196,8 +194,8 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
 	TEST.AudSciResultShort2 = ';a=z98;a=z236';
 	TEST.AudSciResultShort3 = 'a=h6fna7;a=z576;a=z89';
 	TEST.AudSciResultShort4 = ';a=z502;a=z236';
-	TEST.AudSciResultSplit1 = 'a=h6fna7;a=z89;a=z97;eid=4326601;u=eid=4326601';
-	TEST.AudSciResultSplit2 = ';a=z98;a=z236';
+	TEST.AudSciResultSplit1 = 'a=h6fna7;a=z89;a=z97;a=z98;a=z236;eid=4326601';
+	TEST.AudSciResultSplit2 = '';
 
 	TEST.AdStateKeysInit	 = "alwaysHide, hasDiv, hasInterstitial, initialHTML, isEmptyAd, isSystemDefault, requestsInterstitial, state";
 	TEST.AdStateKeysChanged = "alwaysHide, hasDiv, hasInterstitial, initialHTML, innerHTML, isEmptyAd, isSystemDefault, requestsInterstitial, state";
@@ -736,24 +734,6 @@ function testAdState(pos, rResult, what, callType){
 			}
 		}
 	}
-}
-
-function extract_uParams(uKey) {
-	var Order = [];
-	var uParams = { '_order': Order };
-	var SplitUParams = uKey.split(',');
-	for (var idx = 0; idx < SplitUParams.length; ++idx) {
-		var Parts = SplitUParams[idx].split('=');
-		var key = Parts.shift();
-		var value = Parts.join('=');
-		Order.push(key);
-		if (uParams[key]) {
-			uParams[key] = uParams[key] + ";" + value;
-		} else {
-			uParams[key] = value;
-		}
-	}
-	return uParams;
 }
 
 function getCurrentYear() {
@@ -1960,7 +1940,7 @@ $(document).ready(function (){
 		matches(url, ';ord=\\d{1,16}\\?$', "Ad URL last parameter is up to 16 digit ord");
 		matches(url, ';tile=\\d+;ord=', "Ad URL tile parameter is numerical and is before ord");
 		matches(url, ';pos=banlb;bht=false;tile=',"Ad URL ad position appears before tile (for reference)");
-		equal(order, 'sz,dcopt,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains only non-cookie parameters");
+		equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains only non-cookie parameters");
 
 		// Test that baseAdvert reflects the values used from the last buildURL call
 		// baseAdvert is used as a staging area for assembling the key values before
@@ -2289,13 +2269,13 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 		matches(url, ';dcopt=ist;',	  "Ad URL dcopt=ist is present in the url to request the interstitial");
-		equal(order, 'sz,dcopt,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL order of parameters is correct");
+		equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,tile,ord', "Ad URL order of parameters is correct");
 
 		url = testBuildURL("test another interstitial on deepsame page");
 		Params = extract_params(url);
 		order = Params._order.join(',');
 		matches(url, ';dcopt=ist;',	  "Ad URL dcopt=ist is NOT present in the url", false);
-		equal(order, 'sz,u,uuid,ts,cc,pos,bht,tile,ord',"Ad URL order of parameters omits dcopt.");
+		equal(order, 'sz,uuid,ts,cc,pos,bht,tile,ord',"Ad URL order of parameters omits dcopt.");
 		var result = 'multiple interstitials on page, ignoring banlb';
 		equal(get_diagnostic('banlb', 'buildURLIst'), result, "Diagnostic recorded about multiple interstitials");
 	});
@@ -2312,7 +2292,7 @@ $(document).ready(function (){
 		order = Params._order.join(',');
 
 		matches(url, 'xXxx',"Ad URL default xxxx NOT present in ad call", false);
-		equal(order, 'sz,dcopt,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL no xxxx parameter");
+		equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,tile,ord', "Ad URL no xxxx parameter");
 
 		beginNewPage('buildURL 1', {
 			'env':	  { 'dfp_targeting': ";key=value" }
@@ -2321,9 +2301,8 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);
-		matches(url, ';key=value;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ";uuid=" + Params.uuid + ";ts=" + Params.ts + ';cc=n;pos=banlb',	 "Ad URL key parameter present in ad call with leading semicolon handled ok" + url);
-		equal(order, 'sz,dcopt,key,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
+		matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb',	 'Ad URL key parameter present in ad call with leading semicolon handled ok ');
+		equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
 
 		beginNewPage('buildURL 1', {
 			'env':	  { 'dfp_targeting': "key=value;" }
@@ -2332,9 +2311,8 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);
-		matches(url, ';key=value;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ";uuid=" + Params.uuid + ";ts=" + Params.ts + ';cc=n;pos=banlb',  "Ad URL key parameter present in ad call with trailing semicolon handled ok");
-		equal(order, 'sz,dcopt,key,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
+		matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb',  "Ad URL key parameter present in ad call with trailing semicolon handled ok");
+		equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
 
 		beginNewPage('buildURL 1', {
 			'env':	  { 'dfp_targeting': "key=value" }
@@ -2343,9 +2321,8 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);
-		matches(url, ';key=value;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ";uuid=" + Params.uuid + ";ts=" + Params.ts + ';cc=n;pos=banlb',  "Ad URL key parameter present in ad call with semicolon's ok");
-		equal(order, 'sz,dcopt,key,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
+		matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb',  "Ad URL key parameter present in ad call with semicolon's ok");
+		equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,tile,ord', "Ad URL position of key parameter is correct");
 
 		beginNewPage('buildURL 1', {
 			'env':	  { 'dfp_targeting': "key=value;;;;door=locked" }
@@ -2354,9 +2331,8 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);
-		matches(url, ';key=value;door=locked;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ";uuid=" + Params.uuid + ";ts=" + Params.ts + ';cc=n;pos=banlb', "Ad URL key and door parameters present in ad call");
-		equal(order, 'sz,dcopt,key,door,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of key and door parameters are correct");
+		matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;door=locked;pos=banlb', "Ad URL key and door parameters present in ad call");
+		equal(order, 'sz,dcopt,uuid,ts,cc,key,door,pos,bht,tile,ord', "Ad URL position of key and door parameters are correct");
 
 	});
 
@@ -2371,9 +2347,8 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 
-		uParams = extract_uParams(Params.u);
-		matches(url, ';kw=cat%20dog;u=uuid=build-url-test' + ',' + 'ts=' + uParams.ts + ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb', "Ad URL kw parameter present in ad call");
-		equal(order, 'sz,dcopt,kw,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of kw parameter is correct");
+		matches(url, ';kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb', "Ad URL kw parameter present in ad call");
+		equal(order, 'sz,dcopt,kw,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of kw parameter is correct");
 	});
 
 	test("FT.ads.buildURL (AYSC cookie 13) - for task TA10282", function () {
@@ -2389,7 +2364,7 @@ $(document).ready(function (){
 		Params = extract_params(url);
 		order = Params._order.join(',');
 		matches(url, '^http://ad\\.uk\\.doubleclick\\.net/',	"Ad URL closest ad server selected from AYSC value");
-		equal(order, 'sz,dcopt,14,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL AYSC field 13 is not in Ad url but 14 is.");
+		equal(order, 'sz,dcopt,14,uuid,ts,cc,pos,bht,tile,ord', "Ad URL AYSC field 13 is not in Ad url but 14 is.");
 
         mockCookies.AYSC = "_13ZMB_14USA_15ZM_";
 		url = testBuildURL("test AYSC 13 = country code for unsupported ad server selection");
@@ -2532,7 +2507,7 @@ $(document).ready(function (){
 		url = testBuildURL("test AYSC 02,05,06,07,19,20,21 order");
 		Params = extract_params(url);
 		order = Params._order.join(',');
-		equal(order, 'sz,07,06,05,19,20,21,02,u,uuid,ts,cc,pos,bht,tile,ord',  "Ad URL AYSC fields in correct order");
+		equal(order, 'sz,07,06,05,19,20,21,02,uuid,ts,cc,pos,bht,tile,ord',  "Ad URL AYSC fields in correct order");
 	});
 
 	test("FT.ads.buildURL (AYSC cookie 14) - if value is PVT or RES we omit from url - for task TA10282", function () {
@@ -2763,78 +2738,45 @@ $(document).ready(function (){
 		url = testBuildURL("test with FT_U cookie information");
 
 		matches(url, ';eid=2548659;', "Ad URL erights ID should appear in URL");
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_U = "_EID=0002659_";
 		url = testBuildURL("test with FT_U leading zeros removed");
 
 		matches(url, ';eid=2659;', "Ad URL erights ID appears in url");
-		matches(url, ';u=eid=2659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
 		url = testBuildURL("test with full FT_U cookie information");
 
 		matches(url, ';eid=4326601;', "Ad URL erights ID appears in url");
-		matches(url, ';u=eid=4326601,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,eid,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
+		equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 		beginNewPage('buildURL FT_U Cookie 2');
-
-		// Spec for max u= payload https://sites.google.com/a/google.com/ft-com---dfp/ad-tags
-		// u=XXXXXXXXXXXXXXXXXXX max 255
-		// XXXXXXXXXXXXXXXXXXX	max 253
-		// eid=YYYYYYYYYYYYYYY	max 253
-		// YYYYYYYYYYYYYYY		 max 249
-
-		// Construct maximum length U= payload of 249 characters
-		var justRight = x('1234567890', 21) + '1';
-		equal(justRight.length, 211,	"checking length of payload for u= field");
-
-        mockCookies.FT_U = "_EID=" + justRight + "_";
-		url = testBuildURL("test length limits reported - u= max length ok");
-
-		matches(url, ';u=eid=' + justRight + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
-
-        mockCookies.FT_U = "_EID=" + justRight + "0_";
-		url = testBuildURL("test length limits reported - u= length too long");
-
-		matches(url, ';u=eid=' + justRight + '0' + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture present");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 254',	  "uParamSizeException raised and error message should be");
-
-        mockCookies.FT_U = "_EID=" + justRight + "44335566778899_";
-		url = testBuildURL("test length limits reported - u= length too long");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
 	});
 
     test("FT.ads.buildURL (FTSession cookie)", function () {
-    		maybeInitFixture();
-    		var url, params, order, uParams;
+		maybeInitFixture();
+		var url, params, order, uParams;
 
-    		beginNewPage('buildURL FT_U Cookie 1');
+		beginNewPage('buildURL FT_U Cookie 1');
 
-            mockCookies.FT_U = "_EID=2548659_";
-    		url = testBuildURL("test with FT_U cookie information");
+        mockCookies.FT_U = "_EID=2548659_";
+		url = testBuildURL("test with FT_U cookie information");
 
-    		matches(url, ';eid=2548659;', "Ad URL erights ID should appear in URL");
-    		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
-            notmatches(url, ';fts=false', "Logged in flag set to ad call");
+		matches(url, ';eid=2548659;', "Ad URL erights ID should appear in URL");
+        notmatches(url, ';fts=false', "Logged in flag set to ad call");
 
 
-            mockCookies.FT_U = "_EID=0002659_";
-            mockCookies.FTSession = "1234567890";
-    		url = testBuildURL("test with FT_U leading zeros removed");
+        mockCookies.FT_U = "_EID=0002659_";
+        mockCookies.FTSession = "1234567890";
+		url = testBuildURL("test with FT_U leading zeros removed");
 
-    		matches(url, ';eid=2659;', "Ad URL erights ID appears in url");
-    		matches(url, ';u=eid=2659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
-    		matches(url, ';fts=true', "Logged in flag set to ad call");
+		matches(url, ';eid=2659;', "Ad URL erights ID appears in url");
+		matches(url, ';fts=true', "Logged in flag set to ad call");
 
-    	});
+    });
 
 
 
@@ -2869,9 +2811,7 @@ $(document).ready(function (){
 
 	test("FT.ads.buildURL (Audience Science cookie) - for task TA10281 and TA13255 and story US17759", function () {
 		maybeInitFixture();
-
 		equal(FT.ads.CONST.audSciMax, 20, "Maximum number of AudSci parameters to use should be");
-		equal(FT.ads.CONST.audSciInitial, 20, "Maximum number of AudSci parameters to use before the u= parameter should be");
 
 		beginNewPage('buildURL rsi_segs All AudSci values included');
         mockCookies.rsi_segs = TEST.AudSci[0];
@@ -2880,39 +2820,27 @@ $(document).ready(function (){
 		var maxUrlLength = 1000;
 		var maxUPramLength = 511;
 		var pars = extract_params(url);
-		var upar = extract_uParams(pars.u);
-		var ulen = 0;
-
-		for (var key in upar) {
-	 		var val = upar[key];
-	 		ulen += (key.length + val.length);
-	 	}
 
 		equal(url.length < maxUrlLength, true, 'The URL should be <= ' + maxUrlLength + ' characters. URL length is ' + url.length);
-		equal(ulen < maxUPramLength, true, 'The u-param should be <= ' + maxUPramLength + ' characters. And it is in fact ' + ulen);
 
 		var Params = extract_params(url);
 		var order = Params._order.join(',');
 		matches(url, ';' + TEST.AudSciResult[0] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
-		equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,u,uuid,ts,cc,pos,bht,tile,ord',	 "Ad URL contains audience science cookie parameters in correct order");
+		equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,tile,ord',	 "Ad URL contains audience science cookie parameters in correct order");
 
 		var saveMax = FT.ads.CONST.audSciMax;
-		var saveInitial = FT.ads.CONST.audSciInitial;
 		FT.ads.CONST.audSciMax = 5;
-		FT.ads.CONST.audSciInitial = 3;
 		equal(FT.ads.CONST.audSciMax, 5, "Maximum number of AudSci parameters to use should be");
-		equal(FT.ads.CONST.audSciInitial, 3,  "Maximum number of AudSci parameters to use before the u= parameter should be");
 
 		beginNewPage('buildURL rsi_segs Limit the number of AudSci values included');
         mockCookies.rsi_segs = TEST.AudSci[0];
 		url = testBuildURL("test with rsi_segs cookie information");
 		Params = extract_params(url);
 		order = Params._order.join(',');
-		var uParams = extract_uParams(Params.u);
-		//matches(url, ';' + TEST.AudSciResultShort1 + ';u=uuid=build-url-test' + ',ts=' + uParams.ts + TEST.AudSciResultShort2, "Ad URL audience science encoded values appear in url encoded correctly");
-		matches(url, ';' + TEST.AudSciResultShort1 + ';u=uuid=build-url-test' + ',ts=' + uParams.ts + ',' + TEST.AudSciResultShort1.replace(/;/g, ',') + TEST.AudSciResultShort2.replace(/;/g, ',') + TEST.AudSciResultShort2, "Ad URL audience science encoded values appear in url encoded correctly");
-		equal(order, 'sz,dcopt,a,a,a,u,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains only five audience science cookie parameters in correct order");
+
+		matches(url, ';' + TEST.AudSciResultShort1 + TEST.AudSciResultShort2, "Ad URL audience science encoded values appear in url encoded correctly");
+		equal(order, 'sz,dcopt,a,a,a,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains only five audience science cookie parameters in correct order");
 
 		beginNewPage('buildURL rsi_segs Split AudSci values around the u= parameter');
         clearMockCookies();
@@ -2922,22 +2850,15 @@ $(document).ready(function (){
 
 		Params = extract_params(url);
 		order = Params._order.join(',');
-		uParams = extract_uParams(Params.u);
 
-		matches(url, ';' + TEST.AudSciResultSplit1 + ',uuid=build-url-test,ts=' + getCurrentYear(),	 "Ad URL audience science encoded values appear in url encoded correctly");
-		equal(order, 'sz,dcopt,a,a,a,eid,u,a,a,uuid,ts,cc,pos,bht,tile,ord',	"Ad URL contains three audience science cookie parameters before the u= param and two after in correct order");
+		matches(url, ';' + TEST.AudSciResultSplit1 + ';uuid=build-url-test;ts=' + getCurrentYear(),	 "Ad URL audience science encoded values appear in url encoded correctly");
 
 		// Restore the default values of AudSci Limits
-		FT.ads.CONST.audSciMax	  = saveMax;
-		FT.ads.CONST.audSciInitial = saveInitial;
+		FT.ads.CONST.audSciMax = saveMax;
 	});
 
 	test("FT.ads.buildURL (Comprehensive cookie) - TA13255", function (){
 		maybeInitFixture();
-
-		equal(FT.ads.CONST.audSciMax, 20, "Maximum number of AudSci parameters to use should be");
-		equal(FT.ads.CONST.audSciInitial, 20, "Maximum number of AudSci parameters to use before the u= parameter should be");
-
 		beginNewPage('buildURL Comprehensive All AudSci', { 'env': { 'url_location': "http://www.ft.com/?q=cat+dog" } });
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
@@ -2945,25 +2866,11 @@ $(document).ready(function (){
         var url = testBuildURL("test with all cookie information", { 'pos': 'banlb' });
 		var Params = extract_params(url);
 		var order = Params._order.join(',');
-		equal(order, TEST.Comprehensive, "Ad URL contains parameters in correct order relative to the u parameter");
+		equal(order, TEST.Comprehensive, "Ad URL contains parameters in correct order");
 
 		var saveMax = FT.ads.CONST.audSciMax;
-		var saveInitial = FT.ads.CONST.audSciInitial;
 		FT.ads.CONST.audSciMax = 5;
-		FT.ads.CONST.audSciInitial = 3;
 		equal(FT.ads.CONST.audSciMax, 5, "Maximum number of AudSci parameters to use should be");
-		equal(FT.ads.CONST.audSciInitial, 3,  "Maximum number of AudSci parameters to use before the u= parameter should be");
-
-		beginNewPage('buildURL Comprehensive with AudSci parameters split up', {
-			'env':	  { 'url_location': "http://www.ft.com/?q=cat+dog" }
-		});
-        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
-        mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
-        mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
-		url = testBuildURL("test with all cookie information", { 'pos': 'banlb' });
-		Params = extract_params(url);
-		order = Params._order.join(',');
-		equal(order, TEST.CompAudSciSplit,	 "Ad URL contains parameters in correct order relative to the u parameter");
 
 		beginNewPage('buildURL Comprehensive with AudSci parameters split up and no u or eid param', { 'env':{ 'url_location': "http://www.ft.com/?q=cat+dog" } });
         clearMockCookies();
@@ -2973,108 +2880,11 @@ $(document).ready(function (){
 
 		Params = extract_params(url);
 		order = Params._order.join(',');
-		equal(order, 'sz,dcopt,07,a,a,a,06,05,27,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,u,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains parameters in correct order relative to the u parameter");
-		var uParams = extract_uParams(Params.u);
-		matches(url, ';sz=468x60,728x90,970x90;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;06=tec;05=itt;27=3f5a2e;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=cor;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;u=uuid=build-url-test' + ',ts=' + uParams.ts + ',' + TEST.AudSciResultShort3.replace(/;/g, ',') + TEST.AudSciResultShort4.replace(/;/g, ',') + ';a=z502;a=z236;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb;bht=true;tile=1;',	  'url parameters correctly substituted in correct order without u param');
+		equal(order, 'sz,dcopt,07,a,a,a,a,a,06,05,27,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains parameters in correct order");
+		matches(url, ';sz=468x60,728x90,970x90;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;06=tec;05=itt;27=3f5a2e;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=cor;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb;bht=true;tile=1;',	  'url parameters correctly substituted in correct order');
 
 		// Restore the default values of AudSci Limits
 		FT.ads.CONST.audSciMax	  = saveMax;
-		FT.ads.CONST.audSciInitial = saveInitial;
-	});
-
-	test("FT.ads.buildURL (new non targetting params ts and uuid)  - for Task TA27559", function()  {
-		var url, params, uParams;
-		maybeInitFixture();
-
-		beginNewPage('build URL1');
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("build URL where pageUUID defined but w/o value");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
-
-		beginNewPage('set non-empty dfp zone', {
-             'env': {
-                'dfp_site': 'test.5887.dev',
-                'dfp_zone': 'test-new-zone'
-             }
-         });
-        mockCookies.FT_U = "_EID=2548659_";
-		url  = testBuildURL("buildURL where non-empty dfp_zone is set.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=test-new-zone,ts=' + getCurrentYear(), "Ad URL uuid must default to the set dfp zone. It also contains timestamp.");
-
-		beginNewPage('set empty dfp zone', {
-            'env': {
-                'dfp_site': 'test.5887.dev',
-                'dfp_zone': ''
-            }
-        });
-		url  = testBuildURL("buildURL where empty dfp_zone is set, both pageUUID and getUUIDFromString are invalid.", {'cookies': 'FT_U=_EID=2548659_'});
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=unclassified,ts=' + getCurrentYear(), "Ad URL uuid must be unclassified. It also contains timestamp.");
-
-		pageUUID = '0913f5d6-0864-11e0-8527-00144feabdc0';
-		beginNewPage('build URL2');
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("build URL where pageUUID defined and with value");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL contains uuid coming from pageUUID. It also contains timestamp.");
-
-		getUUIDFromString = function(stringForExtractingUUID) {
-			 var safeStringForMatch = stringForExtractingUUID.toString();
-			 var articleId = safeStringForMatch.match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/);
-			 if (articleId) {
-				  return articleId.toString();
-			 }
-			 return null;
-		};
-
-		beginNewPage('build URL3' );
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString defined.  pageUUID is valid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL must get uuid from pageUUID instead of the URL. It also contains timestamp.");
-
-		pageUUID = '';
-		beginNewPage('build URL4' );
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString defined. pageUUID = '', url has no uuid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
-
-		pageUUID = undefined;
-		beginNewPage('build URL5' );
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("buildURL where pageUUID undefined, getUUIDFromString defined. URL does not contain UUID.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
-
-		getUUIDFromString = function(stringForExtractingUUID) {
-			 return '';
-		};
-
-		beginNewPage('build URL6' );
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("buildURL where pageUUID undefined, getUUIDFromString returns empty uuid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
-
-		getUUIDFromString = undefined;
-		beginNewPage('build URL7' );
-        mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString are undefined.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to dfp zone.");
-
 	});
 
 	test("FT.ads.buildURL (FT_Remember cookie) for US18551", function () {
@@ -3086,43 +2896,14 @@ $(document).ready(function (){
 		url = testBuildURL("test with FT_Remember cookie information");
 
 		matches(url, ';eid=7038802;', "Ad URL erights ID should appear in URL");
-		matches(url, ';u=eid=7038802,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_Remember = "7038802:TK3673275680330534570:FNAME=April:LNAME=Mateo:EMAIL=april.mateo@ft.com";
 		url = testBuildURL("test with full FT_Remember cookie information");
 
 		matches(url, ';eid=7038802;', "Ad URL erights ID appears in url");
-		matches(url, ';u=eid=7038802,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
-
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,eid,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
-
-		beginNewPage('buildURL FT_Remember Cookie 2');
-        clearMockCookies();
-
-		// Construct maximum length U= payload of 249 characters
-		var justRight = x('1234567890', 21) + '1';
-		equal(justRight.length, 211,	"checking length of payload for u= field");
-
-        mockCookies.FT_Remember = justRight + ':';
-		url = testBuildURL("test length limits reported - u= max length ok");
-
-		matches(url, ';u=eid=' + justRight + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
-
-        mockCookies.FT_Remember = justRight + '0:';
-		url = testBuildURL("test length limits reported - u= length too long");
-
-		matches(url, ';u=eid=' + justRight + '0' + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture present");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 254', "uParamSizeException raised and error message should be");
-
-        mockCookies.FT_Remember = justRight + '44335566778899:';
-		url = testBuildURL("test length limits reported - u= length too long");
-
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
+		equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 	});
 
@@ -3144,57 +2925,20 @@ $(document).ready(function (){
 
     test("FT.ads.buildURL (FTUserTrack cookie)", function () {
         maybeInitFixture();
-        var url, params, order, uParams;
+        var url, params, order;
 
         beginNewPage('buildURL FTUserTrack cookie with correct IP values 1');
 
         // test case 1
         mockCookies.FTUserTrack = "203.190.72.182.1344916650137365";
         url = testBuildURL("Test 1: FTUserTrack with correct IP values 1");
-        matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
         matches(url, ';loc=cadzbjazhczbic;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
-
-        params = extract_params(url);
-        order = params._order.join(',');
-        equal(order, 'sz,dcopt,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
         // test case 2
         mockCookies.FTUserTrack = "203.190.72.182.aaaa";
         url = testBuildURL("Test 2: FTUserTrack with correct IP values 2");
-        matches(url, ';u=ip=203.190.72.182,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL not encoded IP appears the u= field for data capture");
         matches(url, ';loc=cadzbjazhczbic;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
-        params = extract_params(url);
-        order = params._order.join(',');
-        equal(order, 'sz,u,loc,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
-
-        // Spec for max u= payload https://sites.google.com/a/google.com/ft-com---dfp/ad-tags
-        // u=XXXXXXXXXXXXXXXXXXX max 255
-        // XXXXXXXXXXXXXXXXXXX	max 253
-        // ip=YYYYYYYYYYYYYYY	max 253
-        // YYYYYYYYYYYYYYY		max 250
-        var justRight = x('1234567890', 20);
-        equal(justRight.length, 200,	"checking length of payload for u= field");
-
-        mockCookies.FTUserTrack = justRight + ".1234567890";
-        url = testBuildURL("Test 3: length limits reported - u= max length ok");
-
-        matches(url, ';u=ip=' + justRight + ".1234567890" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-        equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
-
-        mockCookies.FTUserTrack = justRight + ".134491665013736";
-        url = testBuildURL("Test 4: u= length too long");
-
-        matches(url, ';u=ip=' + justRight + ".134491665013736" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-        equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 257',	  "uParamSizeException raised and error message should be");
-
-        mockCookies.FTUserTrack = justRight + ".1234567890111111111111111";
-        url = testBuildURL("Test 5: u= length too long, param loss");
-
-        matches(url, ';u=ip=' + justRight + ".1234567890111111111111111" + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-        params = extract_params(url);
-        uParams = extract_uParams(params.u);
-        equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
     });
 
 
@@ -3403,16 +3147,13 @@ $(document).ready(function (){
 		FT.env.dfp_zone = zone;
 	});
 
-	test("FT.ads.buildURL (new non targetting params ts and uuid)  - for Task TA27559", function()  {
-		var url, params, uParams;
+	test("FT.ads.buildURL (non targetting params ts and uuid)  - for Task TA27559", function()  {
+		var url, params;
 		maybeInitFixture();
 
 		beginNewPage('build URL1');
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("build URL where pageUUID defined but w/o value");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 		beginNewPage('set non-empty dfp zone', {
              'env': {
@@ -3422,9 +3163,6 @@ $(document).ready(function (){
          });
         mockCookies.FT_U = "_EID=2548659_";
 		url  = testBuildURL("buildURL where non-empty dfp_zone is set.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=test-new-zone,ts=' + getCurrentYear(), "Ad URL uuid must default to the set dfp zone. It also contains timestamp.");
 
 		beginNewPage('set empty dfp zone', {
             'env': {
@@ -3433,17 +3171,10 @@ $(document).ready(function (){
             }
         });
 		url  = testBuildURL("buildURL where empty dfp_zone is set, both pageUUID and getUUIDFromString are invalid.", {'cookies': 'FT_U=_EID=2548659_'});
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=unclassified,ts=' + getCurrentYear(), "Ad URL uuid must be unclassified. It also contains timestamp.");
 
 		pageUUID = '0913f5d6-0864-11e0-8527-00144feabdc0';
 		beginNewPage('build URL2');
         mockCookies.FT_U = "_EID=2548659_";
-		url = testBuildURL("build URL where pageUUID defined and with value");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL contains uuid coming from pageUUID. It also contains timestamp.");
 
 		getUUIDFromString = function(stringForExtractingUUID) {
 			 var safeStringForMatch = stringForExtractingUUID.toString();
@@ -3457,25 +3188,16 @@ $(document).ready(function (){
 		beginNewPage('build URL3' );
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString defined.  pageUUID is valid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=0913f5d6-0864-11e0-8527-00144feabdc0,ts=' + getCurrentYear(), "Ad URL must get uuid from pageUUID instead of the URL. It also contains timestamp.");
 
 		pageUUID = '';
 		beginNewPage('build URL4' );
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString defined. pageUUID = '', url has no uuid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 		pageUUID = undefined;
 		beginNewPage('build URL5' );
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("buildURL where pageUUID undefined, getUUIDFromString defined. URL does not contain UUID.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 		getUUIDFromString = function(stringForExtractingUUID) {
 			 return '';
@@ -3484,18 +3206,11 @@ $(document).ready(function (){
 		beginNewPage('build URL6' );
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("buildURL where pageUUID undefined, getUUIDFromString returns empty uuid.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to the dfp zone. It also contains timestamp.");
 
 		getUUIDFromString = undefined;
 		beginNewPage('build URL7' );
         mockCookies.FT_U = "_EID=2548659_";
 		url = testBuildURL("buildURL where both pageUUID and getUUIDFromString are undefined.");
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		matches(url, ';u=eid=2548659,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL uuid must default to dfp zone.");
-
 	});
 
 	test("FT.corppop AYSC 98 PVT", function () {
@@ -3541,50 +3256,22 @@ $(document).ready(function (){
 		url = testBuildURL("test with FT_Remember cookie information");
 
 		matches(url, ';eid=7038802;', "Ad URL erights ID should appear in URL");
-		matches(url, ';u=eid=7038802,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
         mockCookies.FT_Remember = "7038802:TK3673275680330534570:FNAME=April:LNAME=Mateo:EMAIL=april.mateo@ft.com";
 		url = testBuildURL("test with full FT_Remember cookie information");
 
 		matches(url, ';eid=7038802;', "Ad URL erights ID appears in url");
-		matches(url, ';u=eid=7038802,uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL erights ID also appears the u= field for data capture");
 
 		params = extract_params(url);
 		order = params._order.join(',');
-		equal(order, 'sz,eid,u,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
-
-		beginNewPage('buildURL FT_Remember Cookie 2');
-        clearMockCookies();
-
-		// Construct maximum length U= payload of 249 characters
-		var justRight = x('1234567890', 21) + '1';
-		equal(justRight.length, 211,	"checking length of payload for u= field");
-
-        mockCookies.FT_Remember = justRight + ':';
-		url = testBuildURL("test length limits reported - u= max length ok");
-
-		matches(url, ';u=eid=' + justRight + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture max length ok");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), undefined,	"No Diagnostic recorded for size of U parameter");
-
-        mockCookies.FT_Remember = justRight + '0:';
-		url = testBuildURL("test length limits reported - u= length too long");
-
-		matches(url, ';u=eid=' + justRight + '0' + ',uuid=build-url-test,ts=' + getCurrentYear(), "Ad URL u= field for data capture present");
-		equal(get_diagnostic('banlb', 'uParamSizeException'), 'Maximum length of u (253) exceeded. Got 254', "uParamSizeException raised and error message should be");
-
-        mockCookies.FT_Remember = justRight + '44335566778899:';
-		url = testBuildURL("test length limits reported - u= length too long");
-
-		params = extract_params(url);
-		uParams = extract_uParams(params.u);
-		equal(get_diagnostic('banlb', 'uParamDataLoss'), 'u parameter data loss [' + uParams.ts + ']', "uParamDataLoss diagnostic should be");
+		equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
 	});
 
 
-        //TEST for US23911 - add a cc=[y|n] key=value for targeting cookie consent widget
-        test("FT.ads.getConsentValue() for US23911", function () {
-                var consent;
+    //TEST for US23911 - add a cc=[y|n] key=value for targeting cookie consent widget
+    test("FT.ads.getConsentValue() for US23911", function () {
+        var consent;
 		beginNewPage('No Consent Cookie');
 		consent = FT.ads.getConsentValue();
 		equal( consent, "n", "n should be set if consent cookie is not present");
@@ -3600,7 +3287,7 @@ $(document).ready(function (){
 		equal( consent, "n", "n should be set if consent cookie is set to seen");
 	});
 
-        test("FT.ads.buildURL () should include values from FT.ads.getConsentValue() with cc=n cc=y for US23911", function () {
+    test("FT.ads.buildURL () should include values from FT.ads.getConsentValue() with cc=n cc=y for US23911", function () {
 		maybeInitFixture();
 		var url;
 
@@ -3614,7 +3301,7 @@ $(document).ready(function (){
 		url = testBuildURL("cc=n");
                 matches(url, "cc=n", "consent cookie not present and cc=n should be present");
 
-        });
+    });
 
 	test("FT.ads.erightsID (no cookie)", function () {
 		var eid;
