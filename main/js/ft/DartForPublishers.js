@@ -26,7 +26,7 @@
      fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
      getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
      getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts, 
+     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
      userInteracting, userInteractionTimer, hasAdClass,
      hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
      height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
@@ -48,8 +48,7 @@
      split, src, state, storeResponse, stripLeadingZeros,
      style, submitToTrack, substr_key_names, substring, sz, target, test,
      tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
-     toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, u,
-     uParamDataLoss, uParamMax, uParamSizeException, unshift, urlMax,
+     toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, unshift, urlMax,
      urlStem, urlThreshold, urlThresholdMax, useDFP, verticallyAligned,
      video, videoAdverts, watchAdPosition, wdesky, width, write, writeScript,
      cleanKeywords, getKeywordsParam, prepareKeywordsParam, url_location, kw,
@@ -61,7 +60,7 @@
      legacyEnableFetch, clientWidth, legacyWatchAdPosition, legacyClearInterval,
      legacyStopInterval, legacyConWidth, suppressAudSci, AYSC, iterator, HTMLAds,
      corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
-     injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid, prepareUParams,
+     injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
      uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
      getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
      exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
@@ -118,9 +117,9 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'u', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts','tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts','tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
-    this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'u'];
+    this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
     this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
     this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;$)|([\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
@@ -148,7 +147,6 @@ FT.Advertising = function () {
 
     this.CONST.audSciMax = 20;
     this.CONST.audSciInitial = 20;
-    this.CONST.uParamMax = 253;
     this.CONST.urlMax = 511;
 
     // required for checkSubmitLongestUrl function
@@ -610,7 +608,7 @@ FT.Advertising.prototype.callback = function (rResponse) {
     if (rResponse.insertAdRequest) {
         this.insertNewAd(rResponse.insertAdRequest);
     }
-    
+
     var radix; // to satisfy jslint
     if (parseInt(FT.Refresh.refreshTime, radix) > 0) {
         FT.Refresh.startRefreshTimer(FT.Refresh.refreshTime);
@@ -846,68 +844,6 @@ FT.Advertising.prototype.encodeIP = function (ip) {
     return encodedIP;
 };
 
-FT.Advertising.prototype.prepareUParams = function () {
-    var uValue = '',
-    uOrder = this.CONST.uKeyOrder,
-    initial,
-    remaining,
-    rsiSegs;
-
-    this.foreach(uOrder, function (key) {
-        var value;
-        if (key === 'ip') {
-            value = this.getIP();
-        } else {
-            value = this.baseAdvert[key];
-        }
-        if (value) {
-            uValue += !value ? '' : key + '=' + value + ',';
-        }
-    });
-
-    // code added for story US17759
-    rsiSegs = this.baseAdvert.a;
-    if (rsiSegs) {
-        initial = 'a=' + rsiSegs.slice(0, this.CONST.audSciInitial).join(',a=') + ',';
-        remaining = rsiSegs.slice(this.CONST.audSciInitial, this.CONST.audSciMax);
-        uValue += initial;
-        if (remaining.length) {
-            remaining = 'a=' + remaining.join(',a=') + ',';
-            uValue += remaining;
-        }
-    }
-    // end of US17759 code
-    if (uValue !== '') {
-        uValue = uValue.slice(0, -1);
-        if (uValue.length > this.CONST.uParamMax) {
-            this.addDiagnostic(this.baseAdvert.pos, {
-                'uParamSizeException': 'Maximum length of u (' + this.CONST.uParamMax + ') exceeded. Got ' + uValue.length
-            });
-            this.addDiagnostic(this.baseAdvert.pos, {
-                'uParamDataLoss': 'u parameter data loss [' + uValue.slice(this.CONST.uParamMax) + ']'
-            });
-        }
-        return uValue;
-    }
-    return undefined;
-};
-
-FT.Advertising.prototype.duplicateEID = function (eid) {
-    if (eid) {
-        var u = "eid=" + eid;
-        if (u.length > this.CONST.uParamMax) {
-            this.addDiagnostic(this.baseAdvert.pos, {
-                'uParamSizeException': 'Maximum length of u (' + this.CONST.uParamMax + ') exceeded. Got ' + u.length
-            });
-            this.addDiagnostic(this.baseAdvert.pos, {
-                'uParamDataLoss': 'u parameter data loss [' + u.slice(this.CONST.uParamMax) + ']'
-            });
-        }
-        return "eid=" + eid;
-    }
-    return undefined;
-};
-
 FT.Advertising.prototype.rsiSegs = function () {
     if (!this.suppressAudSci && FT._ads.utils.cookie("rsi_segs")) {
         var results = [];
@@ -1036,7 +972,6 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     }
     this.baseAdvert.ts = this.getTimestamp();
     this.baseAdvert.loc = this.encodeIP(this.getIP());
-    this.baseAdvert.u = this.prepareUParams();//this.duplicateEID(this.baseAdvert.eid);
 
     // Check if we are running in a non-live environment and change the site name
     this.baseAdvert.dfp_site = this.getDFPSite();
@@ -1153,16 +1088,10 @@ FT.Advertising.prototype.prepareKeywordsParam = function () {
 };
 
 FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode, vidKV) {
-    var results = '', initial, remaining,
+    var results = '',
+        dfp_targeting = this.baseAdvert.dfp_targeting,
         rsiSegs = this.baseAdvert.a,
         Order;
-    if (rsiSegs) {
-        initial = 'a=' + rsiSegs.slice(0, this.CONST.audSciInitial).join(';a=');
-        remaining = rsiSegs.slice(this.CONST.audSciInitial, this.CONST.audSciMax);
-        if (remaining.length) {
-            remaining = 'a=' + remaining.join(';a=');
-        }
-    }
 
     Order = this.CONST.KeyOrder;
     if (mode === 'video') {
@@ -1172,25 +1101,24 @@ FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode, vidKV) {
     } else if (mode === 'videoSync') {
         Order = this.CONST.KeyOrderVideoSync;
     }
+
     this.foreach(Order, function (key) {
         var value;
         if (typeof this.baseAdvert[key] !== 'undefined') {
-            value =    this.baseAdvert[key];
+            value = this.baseAdvert[key];
         } else if (typeof vidKV !== 'undefined' && (typeof vidKV[key] !== 'undefined')) {
             value =  vidKV[key];
         }
-        if (key === 'u' && this.baseAdvert.dfp_targeting) {
-            // insert the dfp_targeting values just before the u parameter
-            results += this.baseAdvert.dfp_targeting + ';';
+
+        if (key === 'pos' && dfp_targeting) {
+            results += dfp_targeting + ';';
         }
-        if (rsiSegs && key === 'a') {
-            results += initial + ';';
-        } else {
-            results += !value ? '' : key + '=' + value + ';';
-            if (rsiSegs && key === 'u' && remaining.length) {
-                results += remaining + ';';
-            }
+
+        if (key === 'a' && rsiSegs) {
+            value = rsiSegs.slice(0, this.CONST.audSciMax).join(';a=');
         }
+
+        results += !value ? '' : key + '=' + value + ';';
     });
     return results.replace(/;$/, '');
 };
