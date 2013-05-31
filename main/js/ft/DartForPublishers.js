@@ -1759,7 +1759,6 @@ FT.Advertising.prototype.detectERights = function (obj) {
             val = erights[1];
         if ((keyname !== undefined) && (val === undefined)) {
             obj[keyname] = val;
-            obj.u = erights;
         }
     }
     return obj;
