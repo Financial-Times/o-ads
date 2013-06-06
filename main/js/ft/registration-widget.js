@@ -7,6 +7,7 @@
           submitUrl: 'http://www.ft.com/m/reg_s/youraccount/updatePosition?erightsid=',
           parentSelector: '#navigation',
           collapseTimeout: 1500,
+          closeTimeout: 20, //in minutes
           animationTime: 'slow',
           header:"Help us enhance your FT.com experience",
           paragraph: "Keep informed on the subjects most important to you with article recommendations and special report notices.",
@@ -66,6 +67,15 @@
             delete registrationWidget.config;
         });
       },
+      closeWidgetAfterTimeout: function () {
+        var self = this,
+          config = self.config,
+        timeout = config.closeTimeout * 60 * 1000; // convert minutes to millis
+
+        self.closeTimer = setTimeout(function () {
+          self.destroy();
+        }, timeout);
+      },
       events: [
           {
               name: 'click',
@@ -109,8 +119,8 @@
                       //     .addClass('saved');
                       // self.dom.saveText.text(config.savedText);
                       if (config.adObj) {
-                        FT.Refresh.handleRefreshLogic(config.adObj, config.refreshTimeout);
-                        FT.Refresh.startRefreshTimer(config.refreshTimeout);
+                        FT.ads.handleRefreshLogic(config.adObj, config.refreshTimeout);
+                        FT.ads.startRefreshTimer(config.refreshTimeout);
                       }
                   });
                   return false;
@@ -130,7 +140,7 @@
                 if(registrationWidget.dom.select.val() !== '-1') {
                   registrationWidget.dom.save.removeClass('disabled');
                 } else {
-                  FT.ads.stopRefreshTimer();
+                  //FT.ads.stopRefreshTimer();
                   if(!registrationWidget.dom.save.hasClass('disabled')) {
                     registrationWidget.dom.save.addClass('disabled');
                   }
@@ -192,6 +202,7 @@
           this.ammendWidget();
         }
 
+        this.closeWidgetAfterTimeout();
         return this;
       }
   };
