@@ -62,7 +62,7 @@ FT.Refresh = (function () {
         /** pageRefresh logic transferred from FT.advertising namespace */
         pageRefresh: function(delay) {
             var scope = returnPreservedScope() || this;
-            if (!FT.userInteracting && FT.PageVisibility.isPageVisible()) {
+            if (!FT.userInteracting) {
                 document.cookie = "TRK_REF=" + window.location.href;
                 setTimeout(function () { scope.reloadWindow(false); }, this.refreshDelayMs);
             } else {
