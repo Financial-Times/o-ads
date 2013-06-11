@@ -170,7 +170,7 @@ FT.PageVisibility = (function () {
 
             var scope = returnPreservedScope() || this;
             if (FT.PageVisibility.additionalVisibilityChangeFn === null) {
-            	scope.isVisible = true;
+                scope.isVisible = true;
             } 
             return scope.isVisible || null;
         },
