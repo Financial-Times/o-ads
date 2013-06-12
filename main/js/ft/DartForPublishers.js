@@ -5,75 +5,76 @@
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
 
 /*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21","22","27",
-     "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
-     KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
-     Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
-     ad_server, addClassName, addDiagnostic, addNewAttributes,
-     additionalAdTargetingParams, ads, adverts, alt, altText, appendChild,
-     asset, audSciInitial, audSciMax, banlb, baseAdvert, beginNewPage,
-     beginVideo, body, breakout, buildURL, buildURLForVideo,
-     buildURLFromBaseAdvert, buildURLIst, call, callType, callback, charAt,
-     checkAdServerCountry, checkAdState, checkSiteZone,
-     checkSubmitLongestUrl, className, clearAllIntervals, clearAllTimeouts,
-     clearBaseAdvert, clearTimer, clickURL, clientHeight, clientWidth, cn,
-     collapse, collapsePositionIfNoAd, collapsed, complete, console,
-     constructor, content, cookie, cookies, cor, createAdRequestFromVideoUrl,
-     createElement, dcopt, debug, decodeAudSci, detectAdMode,
-     detectDFPTargeting, detectERights, dfp_site, dfp_zone, diagnostics,
-     display, div, doublet, duplicateEID, edt, eid, encodeAudSci,
-     encodeBaseAdvertProperties, endVideo, env, erightsID, excludeFields,
-     exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
-     fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
-     getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
-     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
-     userInteracting, userInteractionTimer, hasAdClass,
-     hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
-     height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
-     injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
-     insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
-     int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
-     join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
-     marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
-     noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
-     pos, postError, prepareAdVars, prepareBaseAdvert, prototype,
-     proxy_div_prefixes, push, random, reg,
-     regex_key_names, register, removeChild, removeClassName,
-     remove_exes, remove_res_pvt, render, renderImage,
-     rendered, replace, request, requestDFP, requestInsertedAds,
-     requestNewssubs, requestUrl, requestVideoSync, requestsInterstitial,
-     resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
-     setDefaultSiteZone, setInitialAdState, shift,
-     shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
-     split, src, state, storeResponse, stripLeadingZeros,
-     style, submitToTrack, substr_key_names, substring, sz, target, test,
-     tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
-     toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, unshift, urlMax,
-     urlStem, urlThreshold, urlThresholdMax, useDFP, verticallyAligned,
-     video, videoAdverts, watchAdPosition, wdesky, width, write, writeScript,
-     cleanKeywords, getKeywordsParam, prepareKeywordsParam, url_location, kw,
-     dfp_targeting, search, vidbut1, vidbut2, vidbut3, isComplete, isEmptyAd,
-     isAdStateEmpty, marketingrib, lhn, tradcent, expandPositionIfAd,
-     setZeroHeight, legacyAdCollapse, legacyAdFixup, shouldAdBeZeroHeight,
-     padding, library, marginBottom, marginLeft, paddingLeft, border, alwaysHide,
-     getAdInnerHTML, getAdContainers, legacyAdCalls, legacyFetchIsAllowed,
-     legacyEnableFetch, clientWidth, legacyWatchAdPosition, legacyClearInterval,
-     legacyStopInterval, legacyConWidth, suppressAudSci, AYSC, iterator, HTMLAds,
-     corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
-     injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
-     uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
-     getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
-     exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
-     removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
-     pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
-     VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
-    DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
-    pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
-    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
-    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
-    splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting */
+ "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
+ KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
+ Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
+ ad_server, addClassName, addDiagnostic, addNewAttributes,
+ additionalAdTargetingParams, ads, adverts, alt, altText, appendChild,
+ asset, audSciInitial, audSciMax, banlb, baseAdvert, beginNewPage,
+ beginVideo, body, breakout, buildURL, buildURLForVideo,
+ buildURLFromBaseAdvert, buildURLIst, call, callType, callback, charAt,
+ checkAdServerCountry, checkAdState, checkSiteZone,
+ checkSubmitLongestUrl, className, clearAllIntervals, clearAllTimeouts,
+ clearBaseAdvert, clearTimer, clickURL, clientHeight, clientWidth, cn,
+ collapse, collapsePositionIfNoAd, collapsed, complete, console,
+ constructor, content, cookie, cookies, cor, createAdRequestFromVideoUrl,
+ createElement, dcopt, debug, decodeAudSci, detectAdMode,
+ detectDFPTargeting, detectERights, dfp_site, dfp_zone, diagnostics,
+ display, div, doublet, duplicateEID, edt, eid, encodeAudSci,
+ encodeBaseAdvertProperties, endVideo, env, erightsID, excludeFields,
+ exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
+ fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
+ getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
+ getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
+ getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
+ userInteracting, userInteractionTimer, hasAdClass,
+ hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
+ height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
+ injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
+ insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
+ int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
+ join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
+ marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
+ noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
+ pos, postError, prepareAdVars, prepareBaseAdvert, prototype,
+ proxy_div_prefixes, push, random, reg,
+ regex_key_names, register, removeChild, removeClassName,
+ remove_exes, remove_res_pvt, render, renderImage,
+ rendered, replace, request, requestDFP, requestInsertedAds,
+ requestNewssubs, requestUrl, requestVideoSync, requestsInterstitial,
+ resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
+ setDefaultSiteZone, setInitialAdState, shift,
+ shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
+ split, src, state, storeResponse, stripLeadingZeros,
+ style, submitToTrack, substr_key_names, substring, sz, target, test,
+ tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
+ toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, unshift, urlMax,
+ urlStem, urlThreshold, urlThresholdMax, useDFP, verticallyAligned,
+ video, videoAdverts, watchAdPosition, wdesky, width, write, writeScript,
+ cleanKeywords, getKeywordsParam, prepareKeywordsParam, url_location, kw,
+ dfp_targeting, search, vidbut1, vidbut2, vidbut3, isComplete, isEmptyAd,
+ isAdStateEmpty, marketingrib, lhn, tradcent, expandPositionIfAd,
+ setZeroHeight, legacyAdCollapse, legacyAdFixup, shouldAdBeZeroHeight,
+ padding, library, marginBottom, marginLeft, paddingLeft, border, alwaysHide,
+ getAdInnerHTML, getAdContainers, legacyAdCalls, legacyFetchIsAllowed,
+ legacyEnableFetch, clientWidth, legacyWatchAdPosition, legacyClearInterval,
+ legacyStopInterval, legacyConWidth, suppressAudSci, AYSC, iterator, HTMLAds,
+ corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
+ injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
+ uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
+ getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer,mapReferrerName, isArticle, referrer,
+ exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
+ removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
+ pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
+ VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
+ DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
+ pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
+ pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
+ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup,SocialReferrerLookup, socref,
+ "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, encode,
+ socialReferrer, enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
+ splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -117,7 +118,7 @@ FT.Advertising = function () {
         '-':                {}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts','tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref','tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
     this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
@@ -182,6 +183,14 @@ FT.Advertising = function () {
     this.VAR = {};
     this.VAR.pushDownFullWidthAssetsHeights = {};
     this.VAR.pushDownExpandingAsset = null;
+
+    this.CONST.SocialReferrerLookup = {
+        't.co' : 'twi',
+        'facebook.com' : 'fac',
+        'linkedin.com' : 'lin',
+        'drudgereport.com' : 'dru'
+    };
+
 };
 
 
@@ -952,6 +961,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     this.baseAdvert.auuid = false;
     this.baseAdvert.bht = this.behaviouralFlag();
     this.baseAdvert.fts = this.isLoggedIn();
+    this.baseAdvert.socref = this.socialReferrer();
 
     if (typeof pageUUID !== 'undefined') {
         if (pageUUID !== null && pageUUID !== '') {
@@ -982,12 +992,12 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     // By default Methode metadata puts XXXX in this field so we ignore that
     // and fix up any semicolons at the start and end of the field
     /*if (typeof FT.env.dfp_targeting !== 'undefined')
-    {
-        var targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
-        if (targeting !== '' && ! /^x+$/.test(targeting)) {
-            this.baseAdvert.dfp_targeting = targeting;
-        }
-    }*/
+     {
+     var targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
+     if (targeting !== '' && ! /^x+$/.test(targeting)) {
+     this.baseAdvert.dfp_targeting = targeting;
+     }
+     }*/
     this.baseAdvert.dfp_targeting = this.getDFPTargeting();
 };
 
@@ -1016,6 +1026,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
         }
     }
 
+
     //return valid dfpTargeting else undefined.
     if (dfpTargeting !== '') {
         return dfpTargeting;
@@ -1025,7 +1036,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
 
 FT.Advertising.prototype.getReferrer = function () {
     var match = null,
-        referrer = document.referrer,
+        referrer = this.getDocReferrer(),
         hostRegex;
     //referrer is not article
     if (referrer !== '') {
@@ -1035,6 +1046,43 @@ FT.Advertising.prototype.getReferrer = function () {
     }
     if (match !== null) {
         return match.substring(1);
+    }
+    return undefined;
+};
+
+FT.Advertising.prototype.getDocReferrer = function (){
+   return document.referrer;
+};
+
+FT.Advertising.prototype.getSocialReferrer = function () {
+   var referrer, codedValue, breakFromLoop = false,
+   primaryRegexStart = '^http(|s)://(www.)*(',
+   primaryRegexEnd = ')/',
+   secondaryRegexStart = '_i_referer=http(|s)(:|%3A)(\/|%2F)(\/|%2F)(www.)*(',
+   secondaryRegexEnd = ')(\/|%2F)';
+
+
+   referrer = this.getDocReferrer();
+
+   if(referrer !== undefined){
+      this.foreach(FT.ads.CONST.SocialReferrerLookup, function(keyName){
+             var primaryFullExp = new RegExp(primaryRegexStart + keyName + primaryRegexEnd);
+             var secondaryFullExp = new RegExp(secondaryRegexStart + keyName + secondaryRegexEnd);
+             if(!breakFromLoop && keyName !== undefined ){
+                if(primaryFullExp.test(referrer) || secondaryFullExp.test(referrer)){
+                   codedValue = FT.ads.CONST.SocialReferrerLookup[keyName];
+                   breakFromLoop = true;
+                }
+             }
+          }
+      );
+   }
+   return codedValue;
+};
+
+FT.Advertising.prototype.mapReferrerName = function (referrerKey) {
+    if(referrerKey !== undefined && referrerKey !== ''){
+        return FT.ads.CONST.SocialReferrerLookup[referrerKey];
     }
     return undefined;
 };
@@ -1773,13 +1821,22 @@ FT.Advertising.prototype.behaviouralFlag = function () {
 
 // set the value of the fts - user must have FTsession not just erightsId and slv
 FT.Advertising.prototype.isLoggedIn = function () {
-    var eid = this.erightsID();
-    if(eid !== null && eid !== undefined){
-        return FT._ads.utils.cookie("FTSession") !== null;
-    }
-    else{
-        return false;
-    }
+   var eid = this.erightsID();
+   if(eid !== null && eid !== undefined){
+      return FT._ads.utils.cookie("FTSession") !== null;
+   }
+   else{
+      return false;
+   }
+};
+
+// set the value of the socref value
+FT.Advertising.prototype.socialReferrer = function () {
+   var socref = this.getSocialReferrer();
+   if(socref !== undefined){
+      return socref;
+   }
+   return null;
 };
 
 // exclude fields on either key or val criteria
