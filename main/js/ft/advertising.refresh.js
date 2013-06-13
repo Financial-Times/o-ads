@@ -117,12 +117,26 @@ var obj = {
     "adName": "refresh adjustment [%Timeout%]"
 };
 
-if (window.FT && window.FT.ads && window.FT.ads.callback && window.FT.ads.breakout && window.FT.Refresh && window.FT.Refresh.handleRefreshLogic && window.FT.Refresh.refreshOnVisibilityChange && window.FT.PageVisibility && window.FT.PageVisibility.setAddlFuncOnVisibilityChange)
-{
-   FT.ads.breakout(obj);
-   FT.Refresh.handleRefreshLogic(obj, [%Timeout%] * 1000);
-   FT.PageVisibility.setAddlFuncOnVisibilityChange(FT.Refresh.refreshOnVisibilityChange);
-   FT.ads.callback(obj);}
+if (window.FT && window.FT.ads) {
+    if (FT.ads.breakout) {
+        FT.ads.breakout(obj);
+    }
+
+    if (window.FT.ads.handleRefreshLogic) {
+        FT.ads.handleRefreshLogic(obj, [%Timeout%] * 1000);
+    } else if (window.FT.Refresh) {
+        FT.Refresh.handleRefreshLogic(obj, [%Timeout%] * 1000);
+
+        // Uncomment the below to turn on refresh when page is visible 
+        if (window.FT.PageVisibility) {
+            FT.PageVisibility.setAddlFuncOnVisibilityChange(FT.Refresh.refreshOnVisibilityChange);
+        }
+    }
+
+    if (window.FT.ads.callback) {
+       FT.ads.callback(obj);
+    }
+}
 </script>
 <img src="[%Image%]">
  */

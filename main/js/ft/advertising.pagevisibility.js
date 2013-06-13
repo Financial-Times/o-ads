@@ -51,11 +51,11 @@ FT.PageVisibility = (function () {
          * Boolean if page is visible or not, defaults to true
          */
         isVisible: true,
-        
+                
         /**
          * additional function to be called when visibility changes
          */
-        additionalVisibilityChangeFn : null,        
+        additionalVisibilityChangeFn : null,   
 
         /**
          * This function handles the visibility change, setting the appropriate
@@ -153,7 +153,7 @@ FT.PageVisibility = (function () {
 
             //preserve scope for window events
             FT.preservedVisibilityScope = this;
-
+            
             hasPageVisibilityAPI();
 
             if (flag === "w3c") {
@@ -163,10 +163,15 @@ FT.PageVisibility = (function () {
 
         /**
          * returns if the page is visible or not
+         * if there are no additional visibility handler defined on the page,
+         * then this will return always true
          */
         isPageVisible: function(){
 
             var scope = returnPreservedScope() || this;
+            if (FT.PageVisibility.additionalVisibilityChangeFn === null) {
+                scope.isVisible = true;
+            } 
             return scope.isVisible || null;
         },
 
