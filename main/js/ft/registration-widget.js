@@ -119,8 +119,8 @@
                       //     .addClass('saved');
                       // self.dom.saveText.text(config.savedText);
                       if (config.adObj) {
-                        FT.ads.handleRefreshLogic(config.adObj, config.refreshTimeout);
-                        FT.ads.startRefreshTimer(config.refreshTimeout);
+                        FT.Refresh.handleRefreshLogic(config.adObj, config.refreshTimeout);
+                        FT.Refresh.startRefreshTimer(config.refreshTimeout);
                       }
                   });
                   return false;
