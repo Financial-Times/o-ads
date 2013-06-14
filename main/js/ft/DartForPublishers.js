@@ -1055,24 +1055,15 @@ FT.Advertising.prototype.getDocReferrer = function (){
 };
 
 FT.Advertising.prototype.getSocialReferrer = function () {
-   var referrer, codedValue, breakFromLoop = false,
-   primaryRegexStart = '^http(|s)://(www.)*(',
-   primaryRegexEnd = ')/',
-   secondaryRegexStart = '_i_referer=http(|s)(:|%3A)(\/|%2F)(\/|%2F)(www.)*(',
-   secondaryRegexEnd = ')(\/|%2F)';
-
-
-   referrer = this.getDocReferrer();
+   var referrer = this.getDocReferrer(), codedValue, breakFromLoop = false,
+      refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
 
    if(referrer !== undefined){
       this.foreach(FT.ads.CONST.SocialReferrerLookup, function(keyName){
-             var primaryFullExp = new RegExp(primaryRegexStart + keyName + primaryRegexEnd);
-             var secondaryFullExp = new RegExp(secondaryRegexStart + keyName + secondaryRegexEnd);
-             if(!breakFromLoop && keyName !== undefined ){
-                if(primaryFullExp.test(referrer) || secondaryFullExp.test(referrer)){
+             var refererRegex =  new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g,keyName));
+             if (!breakFromLoop && keyName !== undefined && refererRegex.test(referrer)){
                    codedValue = FT.ads.CONST.SocialReferrerLookup[keyName];
                    breakFromLoop = true;
-                }
              }
           }
       );
