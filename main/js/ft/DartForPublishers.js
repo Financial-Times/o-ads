@@ -5,75 +5,75 @@
 //     http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Legacy_Ads_Libraries_FTCOMBASE_a
 
 /*members "-", "02", "05", "06", "07", "14", "15", "19", "20", "21","22","27",
-     "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
-     KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
-     Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
-     ad_server, addClassName, addDiagnostic, addNewAttributes,
-     additionalAdTargetingParams, ads, adverts, alt, altText, appendChild,
-     asset, audSciInitial, audSciMax, banlb, baseAdvert, beginNewPage,
-     beginVideo, body, breakout, buildURL, buildURLForVideo,
-     buildURLFromBaseAdvert, buildURLIst, call, callType, callback, charAt,
-     checkAdServerCountry, checkAdState, checkSiteZone,
-     checkSubmitLongestUrl, className, clearAllIntervals, clearAllTimeouts,
-     clearBaseAdvert, clearTimer, clickURL, clientHeight, clientWidth, cn,
-     collapse, collapsePositionIfNoAd, collapsed, complete, console,
-     constructor, content, cookie, cookies, cor, createAdRequestFromVideoUrl,
-     createElement, dcopt, debug, decodeAudSci, detectAdMode,
-     detectDFPTargeting, detectERights, dfp_site, dfp_zone, diagnostics,
-     display, div, doublet, duplicateEID, edt, eid, encodeAudSci,
-     encodeBaseAdvertProperties, endVideo, env, erightsID, excludeFields,
-     exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
-     fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
-     getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
-     getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
-     getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
-     userInteracting, userInteractionTimer, hasAdClass,
-     hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
-     height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
-     injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
-     insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
-     int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
-     join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
-     marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
-     noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
-     pos, postError, prepareAdVars, prepareBaseAdvert, prototype,
-     proxy_div_prefixes, push, random, reg,
-     regex_key_names, register, removeChild, removeClassName,
-     remove_exes, remove_res_pvt, render, renderImage,
-     rendered, replace, request, requestDFP, requestInsertedAds,
-     requestNewssubs, requestUrl, requestVideoSync, requestsInterstitial,
-     resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
-     setDefaultSiteZone, setInitialAdState, shift,
-     shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
-     split, src, state, storeResponse, stripLeadingZeros,
-     style, submitToTrack, substr_key_names, substring, sz, target, test,
-     tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
-     toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, unshift, urlMax,
-     urlStem, urlThreshold, urlThresholdMax, useDFP, verticallyAligned,
-     video, videoAdverts, watchAdPosition, wdesky, width, write, writeScript,
-     cleanKeywords, getKeywordsParam, prepareKeywordsParam, url_location, kw,
-     dfp_targeting, search, vidbut1, vidbut2, vidbut3, isComplete, isEmptyAd,
-     isAdStateEmpty, marketingrib, lhn, tradcent, expandPositionIfAd,
-     setZeroHeight, legacyAdCollapse, legacyAdFixup, shouldAdBeZeroHeight,
-     padding, library, marginBottom, marginLeft, paddingLeft, border, alwaysHide,
-     getAdInnerHTML, getAdContainers, legacyAdCalls, legacyFetchIsAllowed,
-     legacyEnableFetch, clientWidth, legacyWatchAdPosition, legacyClearInterval,
-     legacyStopInterval, legacyConWidth, suppressAudSci, AYSC, iterator, HTMLAds,
-     corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
-     injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
-     uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
-     getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
-     exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
-     removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
-     pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
-     VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
-    DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
-    pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
-    pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
-    enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
-    splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
-    refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting */
+ "97", AD_SERVERS, AdFormat, Advertising, CONST, ENV, FTQA, FT_U,
+ KeyOrder, KeyOrderVideo, KeyOrderVideoExtra, KeyOrderVideoSync,
+ Properties, SubsLevelReplaceLookup, VERSION, a, adName, adServerCountry,
+ ad_server, addClassName, addDiagnostic, addNewAttributes,
+ additionalAdTargetingParams, ads, adverts, alt, altText, appendChild,
+ asset, audSciInitial, audSciMax, banlb, baseAdvert, beginNewPage,
+ beginVideo, body, breakout, buildURL, buildURLForVideo,
+ buildURLFromBaseAdvert, buildURLIst, call, callType, callback, charAt,
+ checkAdServerCountry, checkAdState, checkSiteZone,
+ checkSubmitLongestUrl, className, clearAllIntervals, clearAllTimeouts,
+ clearBaseAdvert, clearTimer, clickURL, clientHeight, clientWidth, cn,
+ collapse, collapsePositionIfNoAd, collapsed, complete, console,
+ constructor, content, cookie, cookies, cor, createAdRequestFromVideoUrl,
+ createElement, dcopt, debug, decodeAudSci, detectAdMode,
+ detectDFPTargeting, detectERights, dfp_site, dfp_zone, diagnostics,
+ display, div, doublet, duplicateEID, edt, eid, encodeAudSci,
+ encodeBaseAdvertProperties, endVideo, env, erightsID, excludeFields,
+ exclusions, expand, extend, extendBaseAdvert, extraAds, fetch,
+ fieldRegex, fieldSubstr, floor, foreach, fromBase36, getAdContainer,
+ getAdFormat, getAyscVars, getCookie, getDFPSite, getElementById,
+ getElementsByTagName, getKeys, getLongestUrl, getNamedAdContainer, reload,
+ getNormalAdverts, getVideoAdverts, getVideoSyncAdverts,
+ userInteracting, userInteractionTimer, hasAdClass,
+ hasCalledInitDFP, hasClassName, hasDiv, hasInterstitial, hasOwnProperty,
+ height, hlfmpu, href, id, imageURL, indexOf, init, initDFP, initialHTML,
+ injectUnclassifiedTrackCall, injectUrlTrackCall, innerHTML, inputUrl,
+ insertAdIntoIFrame, insertAdRequest, insertBefore, insertNewAd, inserted,
+ int, intervals, intro, isLegacyAPI, isSystemDefault, isUnclassified,
+ join, leading_zero_key_names, length, lib, location, log, lv1, lv2,
+ marginTop, match, minHeight, mktsdata, mpu, mpusky, name, newssubs,
+ noImageClickContent, noTargetDiv, offsetHeight, opera, ord, parentNode,
+ pos, postError, prepareAdVars, prepareBaseAdvert, prototype,
+ proxy_div_prefixes, push, random, reg,
+ regex_key_names, register, removeChild, removeClassName,
+ remove_exes, remove_res_pvt, render, renderImage,
+ rendered, replace, request, requestDFP, requestInsertedAds,
+ requestNewssubs, requestUrl, requestVideoSync, requestsInterstitial,
+ resetLibrary, response, rsiSegs, rsi_segs, runinterval, setAttribute,
+ setDefaultSiteZone, setInitialAdState, shift,
+ shouldSubmitToTrack, showCookies, showDiagnostics, slice, slv, sort,
+ split, src, state, storeResponse, stripLeadingZeros,
+ style, submitToTrack, substr_key_names, substring, sz, target, test,
+ tile, timeIntervalTolerance, timeoutTolerance, timeouts, tlbxrib,
+ toBase36, toLowerCase, toString, toUpperCase, trackUrl, type, unshift, urlMax,
+ urlStem, urlThreshold, urlThresholdMax, useDFP, verticallyAligned,
+ video, videoAdverts, watchAdPosition, wdesky, width, write, writeScript,
+ cleanKeywords, getKeywordsParam, prepareKeywordsParam, url_location, kw,
+ dfp_targeting, search, vidbut1, vidbut2, vidbut3, isComplete, isEmptyAd,
+ isAdStateEmpty, marketingrib, lhn, tradcent, expandPositionIfAd,
+ setZeroHeight, legacyAdCollapse, legacyAdFixup, shouldAdBeZeroHeight,
+ padding, library, marginBottom, marginLeft, paddingLeft, border, alwaysHide,
+ getAdInnerHTML, getAdContainers, legacyAdCalls, legacyFetchIsAllowed,
+ legacyEnableFetch, clientWidth, legacyWatchAdPosition, legacyClearInterval,
+ legacyStopInterval, legacyConWidth, suppressAudSci, AYSC, iterator, HTMLAds,
+ corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
+ injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
+ uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
+ getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
+ exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
+ removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
+ pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
+ VAR, pushDownImg, getIP, DFPNetworkCode, animatedDivId, animatedProperty, DFPPremiumCopy,
+ DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
+ pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
+ pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
+ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
+ enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
+ splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -94,58 +94,58 @@ FT.Advertising = function () {
     // dcopt= doubleclick options. ist means interstitial ad - only one allowed per page
     // You can omit subsequently numbered positions if they match the formatting of the unnumbered ad position.
     this.CONST.AdFormat = {
-        'intro':          { 'sz': '1x1' },
-        'banlb':          { 'sz': '468x60,728x90,970x90', 'dcopt': 'ist' },
-        'newssubs':      { 'sz': '239x90' },
-        'tlbxrib':        { 'sz': '336x60' },
-        'marketingrib': { 'sz': '336x60' },
-        'lhn':             { 'sz': '136x64' },
-        'tradcent':      { 'sz': '336x260' },
-        'mktsdata':      { 'sz': '88x31,75x25' }, // also matches mktsdata2 and mktsdata3
-        'hlfmpu':         { 'sz': '300x600,336x850,300x250,336x280,300x1050' },
-        'doublet':        { 'sz': '342x200' },
-        'refresh':        { 'sz': '1x1' },
-        'mpu':             { 'sz': '300x250,336x280' },
-        'mpusky':         { 'sz': '300x250,336x280,160x60' },
-        'wdesky':         { 'sz': '160x600' },
-        'video':          { 'sz': '592x333' },
-        'minivid':        { 'sz': '400x225' },
-        'vidbut1':        { 'sz': '120x29' }, // each vidbut is a different size so needs
-        'vidbut2':        { 'sz': '100x50' }, // its own entry in the table.
-        'vidbut3':        { 'sz': '200x50' },
-        'searchbox':    { 'sz': '200x28'},
-        '-':                {}
+        'intro':{ 'sz':'1x1' },
+        'banlb':{ 'sz':'468x60,728x90,970x90', 'dcopt':'ist' },
+        'newssubs':{ 'sz':'239x90' },
+        'tlbxrib':{ 'sz':'336x60' },
+        'marketingrib':{ 'sz':'336x60' },
+        'lhn':{ 'sz':'136x64' },
+        'tradcent':{ 'sz':'336x260' },
+        'mktsdata':{ 'sz':'88x31,75x25' }, // also matches mktsdata2 and mktsdata3
+        'hlfmpu':{ 'sz':'300x600,336x850,300x250,336x280,300x1050' },
+        'doublet':{ 'sz':'342x200' },
+        'refresh':{ 'sz':'1x1' },
+        'mpu':{ 'sz':'300x250,336x280' },
+        'mpusky':{ 'sz':'300x250,336x280,160x60' },
+        'wdesky':{ 'sz':'160x600' },
+        'video':{ 'sz':'592x333' },
+        'minivid':{ 'sz':'400x225' },
+        'vidbut1':{ 'sz':'120x29' }, // each vidbut is a different size so needs
+        'vidbut2':{ 'sz':'100x50' }, // its own entry in the table.
+        'vidbut3':{ 'sz':'200x50' },
+        'searchbox':{ 'sz':'200x28'},
+        '-':{}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts','tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
-    this.CONST.KeyOrderVideoSync =  ['sz', 'dcopt'];
-    this.CONST.uKeyOrder =  ['eid', 'ip', 'uuid', 'auuid', 'ts'];
+    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
+    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
     this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;$)|([\[\]\/\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
 
 
     // filter constants for AYSC cookies
     this.CONST.exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30'];
     this.CONST.leading_zero_key_names = [ '19', '21' ];
-    this.CONST.remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1,  '20': 1, '21': 1};
-    this.CONST.remove_res_pvt = {'14': 1, 'cn': 1, '27' : 1};
-    this.CONST.regex_key_names = ['22','97'];
+    this.CONST.remove_exes = {'02':1, '05':1, '06':1, '07':1, '19':1, '20':1, '21':1};
+    this.CONST.remove_res_pvt = {'14':1, 'cn':1, '27':1};
+    this.CONST.regex_key_names = ['22', '97'];
 
     this.CONST.SubsLevelReplaceLookup = {
-        'edt': { '22' : /^edit$/, '97' : /^.*/ },
-        'int': { '22' : /^Ftemp$/, '97': /^.*/ },
-        'cor': { '22' : /^[N]*[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/, '97' : /^c$/ },
-        'lv1': { '22' : /^[PL]*[0]*[PL]1[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
-        'lv2': { '22' : /^[N]*[PL]*[0]*[PL]2[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ },
-        'reg': { '22' : /^[PL]0[A-Za-z][A-Za-z]/, '97' : /^[^c]$/ }
+        'edt':{ '22':/^edit$/, '97':/^.*/ },
+        'int':{ '22':/^Ftemp$/, '97':/^.*/ },
+        'cor':{ '22':/^[N]*[PL][01][PL]*[1]*[PL][12][A-Za-z][A-Za-z]/, '97':/^c$/ },
+        'lv1':{ '22':/^[PL]*[0]*[PL]1[A-Za-z][A-Za-z]/, '97':/^[^c]$/ },
+        'lv2':{ '22':/^[N]*[PL]*[0]*[PL]2[A-Za-z][A-Za-z]/, '97':/^[^c]$/ },
+        'reg':{ '22':/^[PL]0[A-Za-z][A-Za-z]/, '97':/^[^c]$/ }
     };
     // format for creating a new key name and value from an old one using substring is: 'old key=start substring=no characters in substring=new key'
     this.CONST.substr_key_names = ['24=0=3=cn'];
     // proxy names for ad divs
     this.CONST.proxy_div_prefixes = ['', 'ad-placeholder-', 'ad-container-'];
 
-    this.CONST.audSciMax = 20;
+    this.CONST.audSciMax = 35;
     this.CONST.audSciInitial = 20;
     this.CONST.urlMax = 511;
 
@@ -155,7 +155,7 @@ FT.Advertising = function () {
     this.CONST.trackUrl = "http://track.ft.com/track/dfp_error.gif";
     this.CONST.cookieConsentName = 'cookieconsent';
     this.CONST.cookieConsentAcceptanceValue = 'accepted';
-    this.CONST.pushDownFormats = {'banlb': {'pos': 'banlb', 'width' : 970, 'height' : 90, 'animatedDivId' : 'header', 'animatedProperty': 'paddingTop', 'expansionSubtrahend': 78 }};
+    this.CONST.pushDownFormats = {'banlb':{'pos':'banlb', 'width':970, 'height':90, 'animatedDivId':'header', 'animatedProperty':'paddingTop', 'expansionSubtrahend':78 }};
 
     //DFP migration environments
     this.CONST.DFPPremiumCopy = "gdfp-testing-only.g.doubleclick.net";
@@ -165,17 +165,17 @@ FT.Advertising = function () {
 
     // DFPP encoding for IP
     this.CONST.DFPPremiumIPReplaceLookup = {
-        '0' : {'replaceRegex' : /0/g, 'replaceValue' : 'a'},
-        '1' : {'replaceRegex' : /1/g, 'replaceValue' : 'b'},
-        '2' : {'replaceRegex' : /2/g, 'replaceValue' : 'c'},
-        '3' : {'replaceRegex' : /3/g, 'replaceValue' : 'd'},
-        '4' : {'replaceRegex' : /4/g, 'replaceValue' : 'e'},
-        '5' : {'replaceRegex' : /5/g, 'replaceValue' : 'f'},
-        '6' : {'replaceRegex' : /6/g, 'replaceValue' : 'g'},
-        '7' : {'replaceRegex' : /7/g, 'replaceValue' : 'h'},
-        '8' : {'replaceRegex' : /8/g, 'replaceValue' : 'i'},
-        '9' : {'replaceRegex' : /9/g, 'replaceValue' : 'j'},
-        '.' : {'replaceRegex' : /\./g, 'replaceValue' : 'z'}
+        '0':{'replaceRegex':/0/g, 'replaceValue':'a'},
+        '1':{'replaceRegex':/1/g, 'replaceValue':'b'},
+        '2':{'replaceRegex':/2/g, 'replaceValue':'c'},
+        '3':{'replaceRegex':/3/g, 'replaceValue':'d'},
+        '4':{'replaceRegex':/4/g, 'replaceValue':'e'},
+        '5':{'replaceRegex':/5/g, 'replaceValue':'f'},
+        '6':{'replaceRegex':/6/g, 'replaceValue':'g'},
+        '7':{'replaceRegex':/7/g, 'replaceValue':'h'},
+        '8':{'replaceRegex':/8/g, 'replaceValue':'i'},
+        '9':{'replaceRegex':/9/g, 'replaceValue':'j'},
+        '.':{'replaceRegex':/\./g, 'replaceValue':'z'}
     };
 
     //variables we need to store between function calls
@@ -192,8 +192,8 @@ if (FT.HTMLAds) {
 }
 
 /*  Override the FT.ads.request() call so we can detect if we are on a Falcon
-    page which does not use the legacy API. The first call on a page is either
-    new Advert() [legacy API] or FT.ads.request() [Falcon API]*/
+ page which does not use the legacy API. The first call on a page is either
+ new Advert() [legacy API] or FT.ads.request() [Falcon API]*/
 
 // TESTED in expand-collapse-test.html
 // This can be replaced by requestDFP() once the legacy AD API is removed. (BSAC 09/2010)
@@ -210,7 +210,7 @@ FT.Advertising.prototype.request = function (pos) {
 FT.Advertising.prototype.getVideoAdverts = function () {
     var Ads = [];
     this.foreach(this.adverts, function (pos) {
-        if ((this.adverts[pos].callType === 'video')  || (this.adverts[pos].callType === 'minivid')) {
+        if ((this.adverts[pos].callType === 'video') || (this.adverts[pos].callType === 'minivid')) {
             Ads.push(pos);
         }
     });
@@ -292,9 +292,9 @@ FT.Advertising.prototype.requestDFP = function (pos) {
             injectionPoint = (FT.env.isLegacyAPI) ? FT.corppop.HTMLAdData.injectionLegacyParentDiv : FT.corppop.HTMLAdData.injectionParentDiv;
             inj = document.getElementById(injectionPoint);
 
-          //we only call the corppop ad based on the AYSC field _22 and _27 values,
-          //if the FT_AM (+/- CorppopTimeout) cookie has expired,
-          //and a banlb div is present on the page
+            //we only call the corppop ad based on the AYSC field _22 and _27 values,
+            //if the FT_AM (+/- CorppopTimeout) cookie has expired,
+            //and a banlb div is present on the page
             if ((AYSC_OK) && (TIME_OK) && (inj !== null)) {
                 URL = FT.corppop.buildAdURL(AYSC98, AYSC22, AYSC27, FT.ads.CONST.SubsLevelReplaceLookup);
                 FT.corppop.getHTMLAd(pos, inj, URL);
@@ -320,13 +320,13 @@ FT.Advertising.prototype.requestDFP = function (pos) {
 
     }
 
-    this.addDiagnostic(pos, { "requestUrl": URL });
+    this.addDiagnostic(pos, { "requestUrl":URL });
 }; // requestDFP(pos)
 
 // TESTED in dfp-advertising.html
 FT.Advertising.prototype.foreach = function (obj, func) {
     var idx, value, prop, l;
-    if (!obj ||  FT._ads.utils.isFunction(obj)) {
+    if (!obj || FT._ads.utils.isFunction(obj)) {
         return;
     }
     if (FT._ads.utils.isArray(obj)) {
@@ -371,14 +371,14 @@ FT.Advertising.prototype.setInitialAdState = function (pos, callType) {
     this.adverts[pos] = this.adverts[pos] || {};
     this.adverts[pos].callType = callType;
     this.adverts[pos].state = {
-        'state':                'init',
-        'hasDiv':                false,
-        'alwaysHide':            false,
-        'requestsInterstitial': false,
-        'hasInterstitial':      false,
-        'isSystemDefault':      false,
-        'isEmptyAd':            false,
-        'initialHTML':            ''
+        'state':'init',
+        'hasDiv':false,
+        'alwaysHide':false,
+        'requestsInterstitial':false,
+        'hasInterstitial':false,
+        'isSystemDefault':false,
+        'isEmptyAd':false,
+        'initialHTML':''
     };
 
     if (pos === 'refresh') {
@@ -448,7 +448,7 @@ FT.Advertising.prototype.insertAdIntoIFrame = function (pos, requestURL) {
 FT.Advertising.prototype.requestVideoSync = function (pos, url) {
     if (!this.getAdFormat(pos)) {
         this.addDiagnostic(pos, {
-            'requestVideoSync': 'ad position not valid'
+            'requestVideoSync':'ad position not valid'
         });
         return undefined;
     }
@@ -457,8 +457,8 @@ FT.Advertising.prototype.requestVideoSync = function (pos, url) {
     var requestURL = this.createAdRequestFromVideoUrl(pos, url);
     this.adverts[pos].callType = 'videoSync';
     this.addDiagnostic(pos, {
-        inputUrl: url,
-        requestUrl: requestURL
+        inputUrl:url,
+        requestUrl:requestURL
     });
 
     this.insertAdIntoIFrame(pos, requestURL);
@@ -477,7 +477,7 @@ FT.Advertising.prototype.endVideo = function () {
 FT.Advertising.prototype.checkAdState = function (pos) {
     clientAds.log("FT.Advertising.prototype.checkAdState(" + pos + ")");
     //TODO how are we getting here without having the .state defined???
-    this.adverts[pos] = this.adverts[pos] || { 'state': {} };
+    this.adverts[pos] = this.adverts[pos] || { 'state':{} };
     var rState = this.adverts[pos].state,
         adHTML = this.getAdInnerHTML(pos),
         rRegex;
@@ -617,26 +617,26 @@ FT.Advertising.prototype.callback = function (rResponse) {
     // Handle ad types
     if (rResponse.type) {
         switch (rResponse.type) {
-        case "empty":
-            if (!this.adverts[rResponse.name].state.requestsInterstitial) {
-                // An ad position which requests an intersitial must be monitored for
-                // a while longer to see if the interstitial comes along.
-                clientAds.log("anon_timeout(" + rResponse.name + ") is being cancelled");
-                clearTimeout(this.timeouts[rResponse.name]);
-            }
-            this.collapse(rResponse.name);
-            this.addDiagnostic(rResponse.name, {
-                "collapsed": "emptyAd"
-            });
-            break;
-        case "imageclick":
-            // I Don't think this type of ad is booked anywhere any more. this
-            // can perhaps be removed. (BSAC 09/2010)
-            this.renderImage(rResponse);
-            break;
-        default:
-            // Ad content is outside of response and is in page
-            break;
+            case "empty":
+                if (!this.adverts[rResponse.name].state.requestsInterstitial) {
+                    // An ad position which requests an intersitial must be monitored for
+                    // a while longer to see if the interstitial comes along.
+                    clientAds.log("anon_timeout(" + rResponse.name + ") is being cancelled");
+                    clearTimeout(this.timeouts[rResponse.name]);
+                }
+                this.collapse(rResponse.name);
+                this.addDiagnostic(rResponse.name, {
+                    "collapsed":"emptyAd"
+                });
+                break;
+            case "imageclick":
+                // I Don't think this type of ad is booked anywhere any more. this
+                // can perhaps be removed. (BSAC 09/2010)
+                this.renderImage(rResponse);
+                break;
+            default:
+                // Ad content is outside of response and is in page
+                break;
         }
     }
 }; // callback(rResponse)
@@ -691,7 +691,7 @@ FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj) {
     clientAds.log("FT.Advertising.addDiagnostic(" + pos + ", " + this.getKeys(rDiagObj).join(", ") + ")");
     if (!this.adverts[pos]) {
         this.adverts[pos] = {
-            "diagnostics": {}
+            "diagnostics":{}
         };
     }
     this.adverts[pos].diagnostics = FT._ads.utils.extend({}, this.adverts[pos].diagnostics, rDiagObj);
@@ -708,7 +708,7 @@ FT.Advertising.prototype.insertNewAd = function (pos) {
     clientAds.log("FT.Advertising.insertNewAd(" + pos + ")");
     this.extraAds.unshift(pos);
     this.addDiagnostic(pos, {
-        "inserted": true
+        "inserted":true
     });
 }; // insertNewAd(pos)
 
@@ -737,7 +737,7 @@ FT.Advertising.prototype.checkSiteZone = function (pos) {
     var ok = 'default',
         fix = true,
         reason_why,
-        rFormat  = this.getAdFormat(pos),
+        rFormat = this.getAdFormat(pos),
         site = this.getDFPSite();
     if (!rFormat) {
         reason_why = "invalid ad slot name";
@@ -761,7 +761,7 @@ FT.Advertising.prototype.checkSiteZone = function (pos) {
         fix = false;
     }
     if (ok !== 'ok') {
-        this.addDiagnostic(pos, { "checkSiteZone": reason_why });
+        this.addDiagnostic(pos, { "checkSiteZone":reason_why });
     }
     if (fix) {
         // No valid DFP targeting, use the unclassified site/zone so we can detect this in Ad reports
@@ -859,11 +859,11 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
     var out = {},
         item, q;
     if (FT._ads.utils.cookie("AYSC")) {
-        q =  FT._ads.utils.cookie("AYSC").split("_");
+        q = FT._ads.utils.cookie("AYSC").split("_");
 
-        for(var i = 0, j = q.length; i < j; i++) {
+        for (var i = 0, j = q.length; i < j; i++) {
             item = q.pop();
-            if(!!item){
+            if (!!item) {
                 var key, val,
                     m = item.match(/^(\d\d)([^_]+)/);
 
@@ -932,13 +932,13 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
 
     this.baseAdvert.cc = this.getConsentValue();
 
-    rFormat  = this.getAdFormat(pos);
+    rFormat = this.getAdFormat(pos);
     this.baseAdvert.sz = rFormat.sz;
     // Check whether we need to add the interstitial dcopt parameter for this ad format
     if (rFormat.dcopt) {
         if (this.baseAdvert.hasInterstitial) {
             this.addDiagnostic(pos, {
-                "buildURLIst": "multiple interstitials on page, ignoring " + pos
+                "buildURLIst":"multiple interstitials on page, ignoring " + pos
             });
         } else {
             // We add the interstitial setting only if we've not seen one before on the page
@@ -982,12 +982,12 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     // By default Methode metadata puts XXXX in this field so we ignore that
     // and fix up any semicolons at the start and end of the field
     /*if (typeof FT.env.dfp_targeting !== 'undefined')
-    {
-        var targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
-        if (targeting !== '' && ! /^x+$/.test(targeting)) {
-            this.baseAdvert.dfp_targeting = targeting;
-        }
-    }*/
+     {
+     var targeting = FT.env.dfp_targeting.replace(/^;/, '').replace(/;$/, '').replace(/;;+/, ';').toLowerCase();
+     if (targeting !== '' && ! /^x+$/.test(targeting)) {
+     this.baseAdvert.dfp_targeting = targeting;
+     }
+     }*/
     this.baseAdvert.dfp_targeting = this.getDFPTargeting();
 };
 
@@ -999,7 +999,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
     // and fix up any semicolons at the start and end of the field
     if (typeof FT.env.dfp_targeting !== 'undefined') {
         dfpTargeting = FT.env.dfp_targeting.toLowerCase();
-        dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting,'').replace(/;;+/g, ';'));
+        dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting, '').replace(/;;+/g, ';'));
     }
 
     //if current page is an article assign referrer and append pt to dfpTargeting if necessary
@@ -1107,7 +1107,7 @@ FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode, vidKV) {
         if (typeof this.baseAdvert[key] !== 'undefined') {
             value = this.baseAdvert[key];
         } else if (typeof vidKV !== 'undefined' && (typeof vidKV[key] !== 'undefined')) {
-            value =  vidKV[key];
+            value = vidKV[key];
         }
 
         if (key === 'pos' && dfp_targeting) {
@@ -1163,7 +1163,7 @@ FT.Advertising.prototype.buildURLFromBaseAdvert = function (mode) {
         URL = URL + '?';
         if (this.baseAdvert.tile > 16) {
             this.addDiagnostic(this.baseAdvert.pos, {
-                "buildURLFromBaseAdvert": "too many ads, exceeds maximum tile"
+                "buildURLFromBaseAdvert":"too many ads, exceeds maximum tile"
             });
             URL = undefined;
         }
@@ -1209,8 +1209,8 @@ FT.Advertising.prototype.buildURLForVideo = function (zone, pos, vidKV) {
     URL = this.buildURLFromBaseAdvert(mode);
 
     result = {
-        urlStem: URL,
-        additionalAdTargetingParams: this.encodeBaseAdvertProperties('videoExtra', vidKV)
+        urlStem:URL,
+        additionalAdTargetingParams:this.encodeBaseAdvertProperties('videoExtra', vidKV)
     };
 
     this.addDiagnostic(pos, result);
@@ -1290,7 +1290,7 @@ FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
         why = "collapse prevented by legacy handler";
     }
     this.addDiagnostic(pos, {
-        "collapsed": why
+        "collapsed":why
     });
 }; // collapse(pos)
 
@@ -1300,12 +1300,12 @@ FT.Advertising.prototype.collapse = function (pos, zeroHeight) {
 FT.Advertising.prototype.setZeroHeight = function (pos, id) {
     var rDiv = document.getElementById(id);
     if (rDiv) {
-        rDiv.style.height  = 0;
+        rDiv.style.height = 0;
         rDiv.style.padding = 0;
     } else {
         clientAds.log("FT.Advertising.setZeroHeight(" + id + ") - div not found");
         this.addDiagnostic(pos, {
-            "setZeroHeight": "div not found: " + id
+            "setZeroHeight":"div not found: " + id
         });
     }
 }; // setZeroHeight()
@@ -1373,9 +1373,9 @@ FT.Advertising.prototype.legacyAdFixup = function (pos, adContainer) {
 
         clientAds.log("FT.Advertising.legacyAdFixup(" + pos + ", " + adContainer.div.id + ") for " + this.library);
         // This horrible hack should be temporary until Falcon has re-styled the Article and Markets Data Pages
-        adContainer.div.style.padding        = "14px 0 14px 0";
+        adContainer.div.style.padding = "14px 0 14px 0";
         adContainer.div.style.marginBottom = 15 + "px";
-        adContainer.div.style.border         = "solid 1px #999";
+        adContainer.div.style.border = "solid 1px #999";
     }
     if (this.library === 'phoenix' && adContainer.div.id === 'ad-placeholder-hlfmpu') {
         // Half MPU ad position on Markets Data pages using PHOENIX library we need to
@@ -1385,7 +1385,7 @@ FT.Advertising.prototype.legacyAdFixup = function (pos, adContainer) {
 
         clientAds.log("FT.Advertising.legacyAdFixup(" + pos + ", " + adContainer.div.id + ") for " + this.library);
         // This horrible hack should be temporary until Falcon has re-styled the Article and Markets Data Pages
-        adContainer.div.style.padding        = "14px 0 14px 0";
+        adContainer.div.style.padding = "14px 0 14px 0";
         adContainer.div.style.marginBottom = 15 + "px";
         adContainer.div.style.marginLeft = 0;
         adContainer.div.style.paddingLeft = 0;
@@ -1432,7 +1432,7 @@ FT.Advertising.prototype.expand = function (pos) {
             adContainer.div.style.display = "block";
         }
         index = bodyClasses.indexOf("no-" + adContainer.name);
-        if(index > -1){
+        if (index > -1) {
             bodyClasses.splice(index, 1);
             document.body.className = bodyClasses.join(' ');
         }
@@ -1469,8 +1469,10 @@ FT.Advertising.prototype.getNamedAdContainer = function (idDiv, pos) {
 FT.Advertising.prototype.getAdContainer = function (pos) {
     var AdContainers = this.getAdContainers(pos);
     if (AdContainers.length === 0) {
-        this.addDiagnostic(pos, { "getAdContainer": 'div not found' });
-        AdContainers = [{'div': null, 'name': null}];
+        this.addDiagnostic(pos, { "getAdContainer":'div not found' });
+        AdContainers = [
+            {'div':null, 'name':null}
+        ];
     }
     return AdContainers[0];
 };
@@ -1494,7 +1496,7 @@ FT.Advertising.prototype.getAdContainers = function (pos) {
         if (!(FT.env.isLegacyAPI && idDiv === 'lhn')) {
             adElement = this.getNamedAdContainer(idDiv, pos);
             if (adElement) {
-                AdContainers.push({'div': adElement, 'name': idDiv});
+                AdContainers.push({'div':adElement, 'name':idDiv});
             }
         }
     }
@@ -1514,7 +1516,7 @@ FT.Advertising.prototype.getAdInnerHTML = function (pos) {
             html = html + "<!-- " + rAdContainer.name + " -->\n" + rAdContainer.div.innerHTML;
         });
     } else {
-        this.addDiagnostic(pos, { "getAdInnerHTML": 'div not found' });
+        this.addDiagnostic(pos, { "getAdInnerHTML":'div not found' });
     }
     return html;
 };
@@ -1548,14 +1550,14 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
     clientAds.log("FT.Advertising.renderImage(" + rResponse + ")");
     if (!FT._ads.utils.isObject(rResponse) || !rResponse.content || !rResponse.content.clickURL || !rResponse.content.imageURL) {
         this.addDiagnostic(rResponse.name, {
-            "noImageClickContent": true
+            "noImageClickContent":true
         });
         return false;
     }
     rDiv = document.getElementById(rResponse.name);
     if (!rDiv) {
         this.addDiagnostic(rResponse.name, {
-            "noTargetDiv": true
+            "noTargetDiv":true
         });
         return false;
     }
@@ -1582,7 +1584,7 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
 
     if (imageclickPlaceholderDiv.parentNode.insertBefore(link, imageclickPlaceholderDiv)) {
         this.addDiagnostic(rResponse.name, {
-            "rendered": "fromJSON"
+            "rendered":"fromJSON"
         });
     }
 
@@ -1593,7 +1595,7 @@ FT.Advertising.prototype.renderImage = function (rResponse) {
         link.style.marginTop = ((rDiv.offsetHeight - img.height) / 2) + "px";
         link.style.display = "block";
         this.addDiagnostic(rResponse.name, {
-            "verticallyAligned": true
+            "verticallyAligned":true
         });
     }
     this.expand(rResponse.name);
@@ -1646,10 +1648,10 @@ FT.Advertising.prototype.beginNewPage = function (env) {
     clientAds.log("FT.Advertising.beginNewPage()");
     env = env || FT.env;
 
-    this.baseAdvert         = {};
-    this.baseAdvert.ord    = Math.floor(Math.random() * 1E16); // 16 digit random number
-    this.baseAdvert.tile  = 1; // tile = 1 .. 16 only
-    this.extraAds            = [];
+    this.baseAdvert = {};
+    this.baseAdvert.ord = Math.floor(Math.random() * 1E16); // 16 digit random number
+    this.baseAdvert.tile = 1; // tile = 1 .. 16 only
+    this.extraAds = [];
 
     var VideoAds = this.getVideoAdverts(),
         VideoSyncAds = this.getVideoSyncAdverts(),
@@ -1666,15 +1668,15 @@ FT.Advertising.prototype.beginNewPage = function (env) {
         this.adverts = {};
     }
 
-    this.isComplete         = false;
-    this.timeouts            = {};
-    this.intervals          = {};
-    this.runinterval        = undefined;
+    this.isComplete = false;
+    this.timeouts = {};
+    this.intervals = {};
+    this.runinterval = undefined;
     //this.refreshTimer      = null; // timer for refreshing the page
 
     this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
     this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
-    this.suppressAudSci    = false;
+    this.suppressAudSci = false;
 
     // Let the FTQA cookie value override the timeout, if present
     cookie = FT._ads.utils.cookie("FTQA");
@@ -1711,11 +1713,11 @@ FT.Advertising.prototype.beginNewPage = function (env) {
         clientAds.log("noaudsci: " + this.suppressAudSci);
     }
 
-    this.baseAdvert.hasInterstitial  = false; // flag set if an interstitial ad has been requested - only one per page allowed
-    this.submitToTrack     = false;
-    this.useDFP             = true;
-    this.library        = "falcon";
-    env.useDFP            = true;
+    this.baseAdvert.hasInterstitial = false; // flag set if an interstitial ad has been requested - only one per page allowed
+    this.submitToTrack = false;
+    this.useDFP = true;
+    this.library = "falcon";
+    env.useDFP = true;
 };
 
 // Reset the library completely as if there are no ad calls
@@ -1744,7 +1746,7 @@ FT.Advertising.prototype.adServerCountry = function (code, pos) {
             server = 'uk.';
         } else {
             this.addDiagnostic(pos, {
-                "adServerCountry": "Unsupported ad server: " + code
+                "adServerCountry":"Unsupported ad server: " + code
             });
         }
     }
@@ -1774,10 +1776,10 @@ FT.Advertising.prototype.behaviouralFlag = function () {
 // set the value of the fts - user must have FTsession not just erightsId and slv
 FT.Advertising.prototype.isLoggedIn = function () {
     var eid = this.erightsID();
-    if(eid !== null && eid !== undefined){
+    if (eid !== null && eid !== undefined) {
         return FT._ads.utils.cookie("FTSession") !== null;
     }
-    else{
+    else {
         return false;
     }
 };
@@ -1818,7 +1820,7 @@ FT.Advertising.prototype.fieldRegex = function (RegexKeyNames, obj) {
                 return;
             } else if ((myState !== "failed") && (value.match(regexHash[keyName]))) {
                 myState = "passed";
-            } else  {
+            } else {
                 myState = "failed";
                 return;
             }
@@ -1870,12 +1872,12 @@ FT.Advertising.prototype.getDFPSite = function () {
             if (cookie.match(/env=live/)) {
                 env = 'live';
                 clientAds.log("FTQA cookie has set ads from live environment");
-                this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from live environment" });
+                this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite":"using FTQA cookie to set ads from live environment" });
             }
             if (cookie.match(/env=nolive/)) {
                 env = 'ci';
                 clientAds.log("using FTQA cookie has set ads from non-live environment");
-                this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from non-live environment" });
+                this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite":"using FTQA cookie to set ads from non-live environment" });
             }
         }
         if (env !== 'p' && !env.match(/^live/)) {
@@ -2019,7 +2021,7 @@ FT.Advertising.prototype.getLongestUrl = function () {
 
 // Function to perform the pushdown of FT.com content on billboard Ad expansion. Accepts Ad position parameter like banlb and pause value in seconds
 // Tested in dfp-advertising.html
-FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMilliseconds,  func) {
+FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMilliseconds, func) {
 
     var timeoutVal;
 
@@ -2028,7 +2030,9 @@ FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMillisecond
         return;
     }
 
-    timeoutVal = setTimeout(function () {func(adFormat, pauseInMilliseconds); }, pauseInMilliseconds);
+    timeoutVal = setTimeout(function () {
+        func(adFormat, pauseInMilliseconds);
+    }, pauseInMilliseconds);
 
     return timeoutVal;
 };
@@ -2043,9 +2047,9 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
     if (FT.ads.VAR.pushDownExpandingAsset === null) {
         //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
         var node,
-            nodes  = document.getElementById(pushDownDiv.pos).getElementsByTagName('*');
+            nodes = document.getElementById(pushDownDiv.pos).getElementsByTagName('*');
 
-        for(var i = 0, j = nodes.length; i < j; i++) {
+        for (var i = 0, j = nodes.length; i < j; i++) {
             node = nodes[i];
             //div, img and object nodes are most likely candidates
             if (node.nodeName.match(/DIV|IMG|OBJECT/)) {
@@ -2072,7 +2076,9 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
         document.getElementById(pushDownDiv.animatedDivId).style[pushDownDiv.animatedProperty] = expandableHeight + 'px';
     }
 
-    setTimeout(function () {FT.ads.pollAdHeightAndExpand(adFormat, pauseInMilliseconds); }, pauseInMilliseconds);
+    setTimeout(function () {
+        FT.ads.pollAdHeightAndExpand(adFormat, pauseInMilliseconds);
+    }, pauseInMilliseconds);
 
 };
 
@@ -2136,92 +2142,92 @@ FT.Advertising.prototype.injectUnclassifiedTrackCall = function () {
 };
 
 /*
-    Implement a legacy ads interface to invoke Falcon ad calls when old ad
-    calls happen on the page.  The legacy system calls functions in the
-    following order:
+ Implement a legacy ads interface to invoke Falcon ad calls when old ad
+ calls happen on the page.  The legacy system calls functions in the
+ following order:
 
-    var banlb = new Advert(AD_BANLB);
-    banlb.init();
+ var banlb = new Advert(AD_BANLB);
+ banlb.init();
 
-    clientAds.fetch(AD_BANLB);
-    clientAds.render(AD_BANLB);
+ clientAds.fetch(AD_BANLB);
+ clientAds.render(AD_BANLB);
 
-    clientAds.render();  (after all ad calls)
+ clientAds.render();  (after all ad calls)
 
-    The falcon system calls functions in the following order:
-    FT.ads.request('banlb');
+ The falcon system calls functions in the following order:
+ FT.ads.request('banlb');
 
-    FT.ads.requestInsertedAds();  (after all .request calls)
-    FT.ads.complete()                 (in page foot.js)
+ FT.ads.requestInsertedAds();  (after all .request calls)
+ FT.ads.complete()                 (in page foot.js)
 
-    To keep compatible we have the first call to Advert() detect whether we
-    want DE or DFP ads.  When banlb.init() is called, FT.ads.request() will
-    be called.  The clientAds.fetch() and .render(AD_BANLB) calls will do
-    nothing.  The final render() call is detected because undefined is
-    passed in for pos.  We will actually call FT.ads.requestInsertedAds().
-    The FT.ads.complete() is normally called for each .togglable item on
-    the page.
+ To keep compatible we have the first call to Advert() detect whether we
+ want DE or DFP ads.  When banlb.init() is called, FT.ads.request() will
+ be called.  The clientAds.fetch() and .render(AD_BANLB) calls will do
+ nothing.  The final render() call is detected because undefined is
+ passed in for pos.  We will actually call FT.ads.requestInsertedAds().
+ The FT.ads.complete() is normally called for each .togglable item on
+ the page.
 
-    On the Falcon home page, the Advert() call will not happen.
-    FT.ads.request() will be the first opportunity to detect whether DE/DFP
-    should be used.  So we initially override FT.Advertising.request(),
-    save a copy of the existing .request() handler as .requestDE() and if
-    our handler gets called, we detect DFP and then restore all overrides
-    as needed.  We ensure we call the correct .request() so the first ad
-    call doesn't get lost.
+ On the Falcon home page, the Advert() call will not happen.
+ FT.ads.request() will be the first opportunity to detect whether DE/DFP
+ should be used.  So we initially override FT.Advertising.request(),
+ save a copy of the existing .request() handler as .requestDE() and if
+ our handler gets called, we detect DFP and then restore all overrides
+ as needed.  We ensure we call the correct .request() so the first ad
+ call doesn't get lost.
 
-    This API compatibility means we do not have to stale the entire FT
-    Cache when we implement the DFP ads across the site.  New falcon pages
-    can be authored using the new API and existing pages will still be
-    supported until they have been migrated to the Falcon way.
+ This API compatibility means we do not have to stale the entire FT
+ Cache when we implement the DFP ads across the site.  New falcon pages
+ can be authored using the new API and existing pages will still be
+ supported until they have been migrated to the Falcon way.
 
-*/
+ */
 
 // These ones are valid
-var AD_BANLB      = 'banlb';
-var AD_NEWSSUBS  = 'newssubs';
-var AD_MPU         = 'mpu';
-var AD_HLFMPU     = "hlfmpu";
-var AD_MPUSKY     = "mpusky";         // AD_MPU Box/Sky        300x250, 336x280, 160x600, 120x600, collapsible
-var AD_OOB         = 'oob';
-var AD_CORPPOP    = 'corppop';
-var AD_REFRESH    = 'refresh';
-var AD_TLBXRIB    = "tlbxrib";
+var AD_BANLB = 'banlb';
+var AD_NEWSSUBS = 'newssubs';
+var AD_MPU = 'mpu';
+var AD_HLFMPU = "hlfmpu";
+var AD_MPUSKY = "mpusky";         // AD_MPU Box/Sky        300x250, 336x280, 160x600, 120x600, collapsible
+var AD_OOB = 'oob';
+var AD_CORPPOP = 'corppop';
+var AD_REFRESH = 'refresh';
+var AD_TLBXRIB = "tlbxrib";
 var AD_MARKETINGRIB = "marketingrib";
-var AD_INTRO      = "intro";
-var AD_TRADCENT  = "tradcent";
-var AD_DOUBLET    = "doublet";
-var AD_WDESKY     = "wdesky";         // Sky/Wide Sky
-var AD_LHN         = "lhn";             // Left Hand Nav Sky
+var AD_INTRO = "intro";
+var AD_TRADCENT = "tradcent";
+var AD_DOUBLET = "doublet";
+var AD_WDESKY = "wdesky";         // Sky/Wide Sky
+var AD_LHN = "lhn";             // Left Hand Nav Sky
 
 // These ones - are all deprecated
-var AD_MACROAD    = "deadA";
-var AD_HMMPU      = "deadB";
+var AD_MACROAD = "deadA";
+var AD_HMMPU = "deadB";
 var AD_MARKETING = "deadC";
-var AD_NRWSKY     = "deadD";
-var AD_ARTBOX     = "deadE";
-var AD_FTHBOX     = "deadF";
-var AD_TLBX        = "deadG";
-var AD_FMBUT2     = "deadH";
-var AD_MKTBX      = "deadI";
-var AD_POP         = "deadJ";
-var AD_BXBAR      = "deadK";
-var AD_DKTALRT    = "deadL";
-var AD_DSKTICK    = "deadM";
-var AD_PRNT        = "deadN";
-var AD_INV         = "deadO";
-var AD_MBATOP     = "deadP";
-var AD_MBABOT     = "deadQ";
-var AD_MBALINK    = "deadR";
-var AD_SBHEAD     = "deadS";
-var AD_FTNT        = "deadT";
-var AD_1x1         = "deadU";
-var AD_CURRCON    = "deadV";
-var AD_CURRBOX    = "deadW";
+var AD_NRWSKY = "deadD";
+var AD_ARTBOX = "deadE";
+var AD_FTHBOX = "deadF";
+var AD_TLBX = "deadG";
+var AD_FMBUT2 = "deadH";
+var AD_MKTBX = "deadI";
+var AD_POP = "deadJ";
+var AD_BXBAR = "deadK";
+var AD_DKTALRT = "deadL";
+var AD_DSKTICK = "deadM";
+var AD_PRNT = "deadN";
+var AD_INV = "deadO";
+var AD_MBATOP = "deadP";
+var AD_MBABOT = "deadQ";
+var AD_MBALINK = "deadR";
+var AD_SBHEAD = "deadS";
+var AD_FTNT = "deadT";
+var AD_1x1 = "deadU";
+var AD_CURRCON = "deadV";
+var AD_CURRBOX = "deadW";
 
 clientAds = {
-    'debug' : null,
-    'render': function (pos) {
+    'debug':null,
+    'render':function (pos) {
         if (pos) {
             this.log('clientAds.render(' + pos + ') = NOP');
         } else {
@@ -2230,11 +2236,11 @@ clientAds = {
             FT.ads.complete();
         }
     },
-    'fetch' : function (pos) {
-        this.log('clientAds.fetch('  + pos + ') = NOP');
+    'fetch':function (pos) {
+        this.log('clientAds.fetch(' + pos + ') = NOP');
     },
     // From here, just a few functions to help with debugging for now.
-    'log'    : function (msg) {
+    'log':function (msg) {
         /*jshint devel:true */
         if (this.debug === null) {
             this.debug = false;
@@ -2250,21 +2256,21 @@ clientAds = {
             }
         }
     },
-    'showCookies' : function (reKeys) {
+    'showCookies':function (reKeys) {
         return "Cookies:\n" + document.cookie.split(';').sort().join(";\n");
     }
 };
 
 // Legacy ads interface to invoke Falcon ad calls when old ad calls seen on the page.
 function Advert(pos) {
-    clientAds.log('new Advert('  + pos + ')');
+    clientAds.log('new Advert(' + pos + ')');
     // If this ever gets called, we know we are using the Legacy API
     FT.env.isLegacyAPI = true;
 
     // Return an object which can immediately have .init() called on it.
     var obj = {
-        'name'  : pos,
-        'init' : function () {
+        'name':pos,
+        'init':function () {
             clientAds.log('Advert.init(' + this.name + ') = FT.ads.request(' + this.name + ') ' + (FT.env.useDFP ? '[DFP]' : '[DE]'));
             FT.ads.request(this.name);
         }
@@ -2279,11 +2285,11 @@ function Advert(pos) {
 }
 
 FT.Advertising.prototype.VERSION = {
-    artifactVersion: "${project.version}",
-    buildLifeId: "${buildLifeId}",
-    buildLifeDate: "${buildLifeDate}",
-    gitRev: "${buildNumber}",
-    toString : function () {
+    artifactVersion:"${project.version}",
+    buildLifeId:"${buildLifeId}",
+    buildLifeDate:"${buildLifeDate}",
+    gitRev:"${buildNumber}",
+    toString:function () {
         return " version: " + this.artifactVersion + " Build life id: " + this.buildLifeId + " Build date: " + this.buildLifeDate + " git revision: " + this.gitRev;
     }
 };
@@ -2292,35 +2298,35 @@ clientAds.log("DFP Ads: " + FT.Advertising.prototype.library.toUpperCase() + " "
 
 /*  Functions with no direct test cases yet
 
-FT.Advertising.prototype.createAdRequestFromVideoUrl = function (pos, url)
-FT.Advertising.prototype.insertAdIntoIFrame = function (pos, requestURL)
+ FT.Advertising.prototype.createAdRequestFromVideoUrl = function (pos, url)
+ FT.Advertising.prototype.insertAdIntoIFrame = function (pos, requestURL)
 
-FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout)
-FT.Advertising.prototype.clearTimer = function ()
-FT.Advertising.prototype.complete = function ()
-FT.Advertising.prototype.callback = function (rResponse)
-FT.Advertising.prototype.storeResponse = function (rResponse)
-FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj)
-FT.Advertising.prototype.extendBaseAdvert = function (rResponse)
-FT.Advertising.prototype.insertNewAd = function (pos)
-FT.Advertising.prototype.clearBaseAdvert = function ()
-FT.Advertising.prototype.prepareAdVars = function (AllVars)
-FT.Advertising.prototype.erightsID = function ()
-FT.Advertising.prototype.duplicateEID = function (eid)
-FT.Advertising.prototype.rsiSegs = function () {
-FT.Advertising.prototype.prepareBaseAdvert = function (pos)
-FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode)
-FT.Advertising.prototype.buildURLFromBaseAdvert = function (mode)
-FT.Advertising.prototype.requestInsertedAds = function ()
-FT.Advertising.prototype.startRefreshTimer = function (delay)
-FT.Advertising.prototype.renderImage = function (rResponse)
-FT.Advertising.prototype.detectERights = function (obj)
-FT.Advertising.prototype.excludeFields = function (exclusions, obj)
-FT.Advertising.prototype.stripLeadingZeros = function (KeysToStrip, obj)
-FT.Advertising.prototype.fieldRegex = function (RegexKeyNames, obj)
-FT.Advertising.prototype.fieldSubstr = function (SubStrKeyNames, obj)
-FT.Advertising.prototype.showDiagnostics = function (pos)
-FT.Advertising.prototype.breakout = function (rResponse)
-FT.Advertising.prototype.removeDEMethods = function () {
+ FT.Advertising.prototype.handleRefreshLogic = function (obj, timeout)
+ FT.Advertising.prototype.clearTimer = function ()
+ FT.Advertising.prototype.complete = function ()
+ FT.Advertising.prototype.callback = function (rResponse)
+ FT.Advertising.prototype.storeResponse = function (rResponse)
+ FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj)
+ FT.Advertising.prototype.extendBaseAdvert = function (rResponse)
+ FT.Advertising.prototype.insertNewAd = function (pos)
+ FT.Advertising.prototype.clearBaseAdvert = function ()
+ FT.Advertising.prototype.prepareAdVars = function (AllVars)
+ FT.Advertising.prototype.erightsID = function ()
+ FT.Advertising.prototype.duplicateEID = function (eid)
+ FT.Advertising.prototype.rsiSegs = function () {
+ FT.Advertising.prototype.prepareBaseAdvert = function (pos)
+ FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode)
+ FT.Advertising.prototype.buildURLFromBaseAdvert = function (mode)
+ FT.Advertising.prototype.requestInsertedAds = function ()
+ FT.Advertising.prototype.startRefreshTimer = function (delay)
+ FT.Advertising.prototype.renderImage = function (rResponse)
+ FT.Advertising.prototype.detectERights = function (obj)
+ FT.Advertising.prototype.excludeFields = function (exclusions, obj)
+ FT.Advertising.prototype.stripLeadingZeros = function (KeysToStrip, obj)
+ FT.Advertising.prototype.fieldRegex = function (RegexKeyNames, obj)
+ FT.Advertising.prototype.fieldSubstr = function (SubStrKeyNames, obj)
+ FT.Advertising.prototype.showDiagnostics = function (pos)
+ FT.Advertising.prototype.breakout = function (rResponse)
+ FT.Advertising.prototype.removeDEMethods = function () {
 
-*/
+ */
