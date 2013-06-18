@@ -2837,11 +2837,10 @@ $(document).ready(function () {
         mockCookies.rsi_segs = TEST.AudSci[0];
         var url = testBuildURL("test with rsi_segs cookie information");
 
-        var maxUrlLength = 1000;
         var maxUPramLength = 511;
         var pars = extract_params(url);
 
-        equal(url.length < maxUrlLength, true, 'The URL should be <= ' + maxUrlLength + ' characters. URL length is ' + url.length);
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
 
         var Params = extract_params(url);
         var order = Params._order.join(',');
@@ -2885,10 +2884,9 @@ $(document).ready(function () {
         mockCookies.rsi_segs = TEST.AudSci[3];
         var url = testBuildURL("test with rsi_segs cookie information");
 
-        var maxUrlLength = 2083;
         var pars = extract_params(url);
 
-        equal(url.length < maxUrlLength, true, 'The URL should be <= ' + maxUrlLength + ' characters. URL length is ' + url.length);
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
 
         var Params = extract_params(url);
         var order = Params._order.join(',');
@@ -2902,7 +2900,7 @@ $(document).ready(function () {
         var url = testBuildURL("test with rsi_segs cookie information");
         pars = extract_params(url);
 
-        equal(url.length < maxUrlLength, true, 'The URL should be <= ' + maxUrlLength + ' characters. URL length is ' + url.length);
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
 
         Params = extract_params(url);
         order = Params._order.join(',');

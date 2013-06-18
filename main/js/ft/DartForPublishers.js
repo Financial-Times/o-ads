@@ -146,8 +146,9 @@ FT.Advertising = function () {
     this.CONST.proxy_div_prefixes = ['', 'ad-placeholder-', 'ad-container-'];
 
     this.CONST.audSciMax = 35;
-    this.CONST.audSciInitial = 20;
-    this.CONST.urlMax = 511;
+    this.CONST.audSciInitial = 35;
+    // maximum ad url length allowable in the DFP Premium as of Dec 2012
+    this.CONST.urlMax = 2083;
 
     // required for checkSubmitLongestUrl function
     this.CONST.urlThresholdMax = 2000000;
