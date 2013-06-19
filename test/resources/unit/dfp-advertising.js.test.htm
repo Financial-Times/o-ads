@@ -2799,7 +2799,6 @@ $(document).ready(function () {
 
     });
 
-
     test("FT.ads.toBase36 (for Audience Science cookie) - for task TA10281", function () {
         maybeInitFixture();
         var idx;
@@ -2941,6 +2940,33 @@ $(document).ready(function () {
         FT.ads.CONST.audSciMax = saveMax;
     });
 
+    test("FT.ads.buildURL (test for max length of ad calls)", function () {
+        maybeInitFixture();
+        beginNewPage('buildURL Comprehensive Cookie', { 'env':{ 'url_location':"http://www.ft.com/?q=cat+dog" } });
+
+        // set dfp_site to max length = 31
+        FT.env.dfp_site = "test.5887.dfpsitemaxlengthtests";
+        // set dfp_zone to max length = 32
+        FT.env.dfp_zone = "dfp-zone-max-length-ad-call-test";
+        // set dfp_targeting (with topics)
+        FT.env.dfp_targeting = "pt=art;org=mondelez international inc formerly kraft foods inc;peo=abu musab al-zarqawi"
+
+        mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
+        mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
+        // rsi_segs with 35 segments
+        mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|J07717_10224|J07717_10225|J07717_10226|J07717_10233|J07717_10236|J07717_10281|J07717_10286|J07717_10287|J07717_10288|J07717_10289|J07717_10294|J07717_10295|J07717_10296|J07717_10297|J07717_10298|H07711_10127";
+
+        var url = testBuildURL("test with all cookie information", { 'pos':'banlb' });
+        var Params = extract_params(url);
+        var order = Params._order.join(',');
+
+        equal(order, "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pt,org,peo,pos,bht,tile,ord", "Ad URL contains parameters in correct order");
+        matches(url, ';sz=468x60,728x90,970x90;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;a=z286;a=z288;a=z295;a=z299;a=z301;a=z322;a=z344;a=z345;a=z357;a=z369;a=z530;a=z555;a=z545;a=z221;a=z224;a=z225;a=z226;a=z233;a=z236;a=z281;a=z286;a=z287;a=z288;a=z289;a=z294;a=z295;a=z296;a=z297;a=z298;a=h7kdbz;06=tec;05=itt;27=3f5a2e;eid=4326601;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=lv2;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pt=art;org=mondelez%20international%20inc%20formerly%20kraft%20foods%20inc;peo=abu%20musab%20al-zarqawi;pos=banlb;bht=true;tile=1;', 'url parameters correctly substituted in correct order');
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
+
+        clearMockCookies();
+    });
+
     test("FT.ads.buildURL (FT_Remember cookie) for US18551", function () {
         maybeInitFixture();
         var url, params, order, uParams;
@@ -2994,7 +3020,6 @@ $(document).ready(function () {
         matches(url, ';loc=cadzbjazhczbic;uuid=build-url-test;ts=' + getCurrentYear(), "Ad URL encoded IP appears before uuid");
 
     });
-
 
     test("FT.ads.toBase36 (for Audience Science cookie) - for task TA10281", function () {
         maybeInitFixture();
