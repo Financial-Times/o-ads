@@ -151,7 +151,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     // Documented in Targeting/KeyPriority.xls in DFP project share and on Twiki
     // http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Order_of_key_values_placed_into
     //TEST.KeyOrder = "sz,dcopt,07,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";  // TODO referrer, investor relations
-    TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,loc,uuid,auuid,ts,cc,pos,bht,fts,tile,ord";
+    TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,loc,uuid,auuid,ts,cc,pos,bht,fts,socref,tile,ord";
     //TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";
     TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,tile,ord";
 
@@ -3682,6 +3682,28 @@ $(document).ready(function () {
         encodedIP = testEncodeIP(ip, "encodeIP test 4: FTUserTrack = " + mockCookies.FTUserTrack + " and extracted IP is = " + ip);
         equal(encodedIP, 'cadzbjazhczbic', "encoded IP matches");
 
+    });
+
+    test("FT.ads.buildURL (Social Referrer)", function () {
+        maybeInitFixture();
+        var url, params, order, uParams,
+                docReferrerStub = sinon.stub(FT.ads, "getDocReferrer");
+
+        beginNewPage('buildURL Social Referrer');
+        docReferrerStub.returns(null);
+        url = testBuildURL("test with no referral");
+        notmatches(url, ';socref=', "no social referrer should appear in the URL");
+        docReferrerStub.reset();
+        docReferrerStub.returns("http://t.co/cjPOFshzk2");
+        url = testBuildURL("test with direct referral (ie already logged in when referred)");
+
+        matches(url, ';socref=twi', "twi referral should appear in the URL");
+        docReferrerStub.reset();
+        docReferrerStub.returns("http://www.ft.com/cms/s/ed72d2ac-cf4e-11e2-be7b-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Fed72d2ac-cf4e-11e2-be7b-00144feab7de.html&_i_referer=http%3A%2F%2Ft.co%2F9So3Xw9qFH");
+        url = testBuildURL("test with secondary referral (ie had to log in when referred)");
+
+        matches(url, ';socref=twi', "twi referral should appear in the URL");
+        docReferrerStub.reset();
     });
 
 });

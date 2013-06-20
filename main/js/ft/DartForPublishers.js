@@ -62,7 +62,7 @@
  corppop, isCorporateUser, timeOut, CorpPopTimeout, buildAdURL, getHTMLAd,
  injectionLegacyParentDiv, injectionParentDiv, HTMLAdData, FT_AM, minivid,
  uKeyOrder, uuid, ts, getTimestamp, getMonth, getDate, getHours, getMinutes,
- getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, isArticle, referrer,
+ getSeconds, getFullYear, searchbox, getDFPTargeting, getReferrer, mapReferrerName, isArticle, referrer,
  exec,bht, EUQuovaCountryCodes, hashCookies, FT_Remember, auuid, behaviouralFlag, fts, isLoggedIn, addClass,
  removeClass, cookieConsentName, cookieConsentAcceptanceValue, get, getParam, each,
  pushDownFormats, divId, aminatedProperty, expansionSubtrahend,
@@ -70,7 +70,8 @@
  DFPPremiumCopyNetworkCode, DFPPremiumReadOnly, pushDownFullWidthAssetsHeights,
  pushDownExpandingAsset, getConsentValue, ad_network_code, cc, loc, html, pushDownExpand,
  pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
- 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, encode,
+ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, SocialReferrerLookup, socref,
+ "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting */
@@ -117,7 +118,7 @@ FT.Advertising = function () {
         '-':{}
     };
 
-    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'tile', 'ord'];
+    this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref','tile', 'ord'];
     this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
     this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
     this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
@@ -183,8 +184,15 @@ FT.Advertising = function () {
     this.VAR = {};
     this.VAR.pushDownFullWidthAssetsHeights = {};
     this.VAR.pushDownExpandingAsset = null;
-};
 
+    this.CONST.SocialReferrerLookup = {
+        't.co' : 'twi',
+        'facebook.com' : 'fac',
+        'linkedin.com' : 'lin',
+        'drudgereport.com' : 'dru'
+    };
+
+};
 
 FT.ads = new FT.Advertising();
 
@@ -953,6 +961,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     this.baseAdvert.auuid = false;
     this.baseAdvert.bht = this.behaviouralFlag();
     this.baseAdvert.fts = this.isLoggedIn();
+    this.baseAdvert.socref = this.socialReferrer();
 
     if (typeof pageUUID !== 'undefined') {
         if (pageUUID !== null && pageUUID !== '') {
@@ -1026,7 +1035,7 @@ FT.Advertising.prototype.getDFPTargeting = function () {
 
 FT.Advertising.prototype.getReferrer = function () {
     var match = null,
-        referrer = document.referrer,
+        referrer = this.getDocReferrer(),
         hostRegex;
     //referrer is not article
     if (referrer !== '') {
@@ -1036,6 +1045,34 @@ FT.Advertising.prototype.getReferrer = function () {
     }
     if (match !== null) {
         return match.substring(1);
+    }
+    return undefined;
+};
+
+FT.Advertising.prototype.getDocReferrer = function (){
+   return document.referrer;
+};
+
+FT.Advertising.prototype.getSocialReferrer = function () {
+   var referrer = this.getDocReferrer(), codedValue, breakFromLoop = false,
+      refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
+
+   if(referrer !== undefined){
+      this.foreach(FT.ads.CONST.SocialReferrerLookup, function(keyName){
+             var refererRegex =  new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g,keyName));
+             if (!breakFromLoop && keyName !== undefined && refererRegex.test(referrer)){
+                   codedValue = FT.ads.CONST.SocialReferrerLookup[keyName];
+                   breakFromLoop = true;
+             }
+          }
+      );
+   }
+   return codedValue;
+};
+
+FT.Advertising.prototype.mapReferrerName = function (referrerKey) {
+    if(referrerKey !== undefined && referrerKey !== ''){
+        return FT.ads.CONST.SocialReferrerLookup[referrerKey];
     }
     return undefined;
 };
@@ -1776,13 +1813,22 @@ FT.Advertising.prototype.behaviouralFlag = function () {
 
 // set the value of the fts - user must have FTsession not just erightsId and slv
 FT.Advertising.prototype.isLoggedIn = function () {
-    var eid = this.erightsID();
+   var eid = this.erightsID();
     if (eid !== null && eid !== undefined) {
-        return FT._ads.utils.cookie("FTSession") !== null;
-    }
+      return FT._ads.utils.cookie("FTSession") !== null;
+   }
     else {
-        return false;
-    }
+      return false;
+   }
+};
+
+// set the value of the socref value
+FT.Advertising.prototype.socialReferrer = function () {
+   var socref = this.getSocialReferrer();
+   if(socref !== undefined){
+      return socref;
+   }
+   return null;
 };
 
 // exclude fields on either key or val criteria
