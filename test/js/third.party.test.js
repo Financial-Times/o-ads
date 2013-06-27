@@ -1,6 +1,7 @@
-(function (window, document, $, undefined) {
-    window.testMode  = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-    console.log(testMode, FT._ads.utils.cookies.FTQA);
+(function (win, doc, $, undefined) {
+    "use strict";
+    win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+
     function runTests() {
         module('Third Party');
         // Clear the Audience Science cookie value so real cookies are ignored in the test plan
@@ -122,22 +123,16 @@
 
         });
 
-        if (testMode === 'integration') {
-            test("adCall", function () {
-                expect(6);
+       test("adCall", function () {
+            expect(5);
 
-                var Positions = [ 'banlb', 'newssubs', 'hlfmpu', 'mpu', 'mpusky' ];
-                for (var idx = 0; idx < Positions.length; ++idx)
-                {
-                    var ist = Positions[idx] === 'banlb' ? ';dcopt=ist' : '';
-                    var url = '^' + urlPrefix + '\\d+x\\d+(,\\d+x\\d+)*' + ist + ';pos=' + Positions[idx] + ';key=value;tile=' + (idx + 1) + ';ord=' + FT.env.ord + '\\?$';
-                    var rRegex = new RegExp(url);
-                    matches(FT.env.Requests[Positions[idx]], rRegex, Positions[idx] + " Ad call URL");
-                }
-                var rDiv = $('#adCalls').find('script');
-                equal(rDiv.length, 2 * Positions.length + 1, "2 script tags injected per valid call to adCall()");
-            });
-        }
+            equal($('#banlb script[src*="pos=banlb;"][src^="' + urlPrefix + '"]').size(), 1, "the banlb tag has been written to the banlb div");
+            equal($('#newssubs script[src*="pos=newssubs;"][src^="' + urlPrefix + '"]').size(), 1, "the newssubs tag has been written to the newssubs div");
+            equal($('#hlfmpu script[src*="pos=hlfmpu;"][src^="' + urlPrefix + '"]').size(), 1, "the hlfmpu tag has been written to the hlfmpu div");
+            equal($('#mpu script[src*="pos=mpu;"][src^="' + urlPrefix + '"]').size(), 1, "the mpu tag has been written to the mpu div");
+            equal($('#mpusky script[src*="pos=mpusky;"][src^="' + urlPrefix + '"]').size(), 1, "the mpusky tag has been written to the mpusky div");
+
+        });
     }
 
     $(runTests);
