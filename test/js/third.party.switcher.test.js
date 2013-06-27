@@ -4,7 +4,7 @@
 
         test('true is not false', function () {
             expect(1);
-            ok(true === false, false, 'phew!');
+            deepEqual(true === false, false, 'phew!');
         });
     }
 

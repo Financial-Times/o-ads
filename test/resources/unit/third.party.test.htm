@@ -8,6 +8,12 @@
     <script src="../lib/jquery/jquery-1.7.2.js"></script>
     <script src="../lib/jquery/jquery.cookie.js"></script>
     <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
+    <script src="../js/util/qunitMock.lib.js"></script>
+    <script src="../js/util/test-helpers.html.js"></script>
+    <script src="../js/util/page-helpers.html.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
+    <script src="../js/util/mock-ads.html.js"></script>
 
     <!-- the code -->
     <script>
@@ -15,16 +21,18 @@
     </script>
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/thirdparty/third.party.switcher.js"></script>
+    <script src="../js/thirdparty/third.party.gpt.js"></script>
+    <script src="../js/thirdparty/ThirdPartyAds.js"></script>
+
+
     <!-- tests -->
-    <script src="../js/advertising.utils.test.js"></script>
-    <script src="../js/advertising.utils.cookie.test.js"></script>
-    <script src="../js/util/mock-ads.html.js"></script>
-    <script>
-        var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-    </script>
+    <script src="../js/third.party.test.js"></script>
+    <script src="../js/third.party.gpt.test.js"></script>
+    <script src="../js/third.party.switcher.test.js"></script>
   </head>
   <body>
-    <h1 id="qunit-header">Test plan for FT.advertising.utils</h1>
+    <h1 id="qunit-header">Test plan for the third party library</h1>
     <h2 id="qunit-banner"></h2>
     <div id="qunit-testrunner-toolbar"></div>
     <h2 id="qunit-userAgent"></h2>
@@ -36,5 +44,43 @@
    </div>
     <ol id="qunit-tests">
     </ol>
+
+
+    <div id="adCalls">
+        <div>
+            <h2>banlb</h2>
+            <script>
+            FT.env.adCall('banlb');
+            </script>
+        </div>
+        <div>
+            <h2>newssubs</h2>
+            <script>
+            FT.env.adCall('newssubs');
+            </script>
+        </div>
+        <div>
+            <h2>hlfmpu</h2>
+            <script>
+            FT.env.adCall('hlfmpu');
+            </script>
+        <div>
+            <h2>mpu</h2>
+            <script>
+            FT.env.adCall('mpu');
+            </script>
+        </div>
+        <div>
+            <h2>mpusky</h2>
+            <script>
+            FT.env.adCall('mpusky');
+            </script>
+        <div>
+            <h2>invalidpos</h2>
+            <script>
+            FT.env.adCall('invalidpos');
+            </script>
+        </div>
+    </div>
   </body>
 </html>
