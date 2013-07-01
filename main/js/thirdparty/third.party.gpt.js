@@ -22,11 +22,13 @@
             results = {},
             metas = doc.getElementsByTagName('meta');
 
-        while (meta = metas.pop()) {
+        for (var i= 0; i < metas.length; i++) {
+            meta = metas[i];
             if (meta.name) {
-                results[meta.name] = meta.content;
+               results[meta.name] = meta.content;
             }
         }
+
         return results;
     };
 
