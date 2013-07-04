@@ -3,6 +3,7 @@
         module('Third party config', {
             teardown: function () {
                 FT.ads.config.clear();
+                delete FT.env;
             }
         });
 
@@ -92,7 +93,41 @@
                     envParam1: 'envValue1',
                     envParam2: 'envValue2'
                 };
+
             deepEqual(result, expected, 'return an object of global values.');
+        });
+
+        test('Config init', function () {
+
+            FT.env = {
+                envParam1: 'envValue1',
+                envParam2: 'envValue2',
+                overlapParam: 'envValue3'
+            };
+
+            var meta1 = $('<meta name="metaParam1" content="metaValue1">').appendTo('head'),
+                meta2 = $('<meta name="metaParam2" content="metaValue2">').appendTo('head'),
+                meta3 = $('<meta name="overlapParam" content="metaValue3">').appendTo('head'),
+                result - FT.ads.config.init(),
+                expected = {
+                    metaParam1: 'metaValue1',
+                    metaParam2: 'metaValue2',
+                    envParam1: 'envValue1',
+                    envParam2: 'envValue2',
+                    overlapParam: 'envValue3'
+                };
+
+            expect(3);
+
+            deepEqual(FT.ads.config.store, expected, 'the store is now populated with meta and global values');
+            deepEqual(FT.ads.config.get(), expected, 'get a previously set value returns undefined');
+            deepEqual(FT.ads.config.get('metaParam1'), 'metaValue1', 'get a meta value');
+            deepEqual(FT.ads.config.get('envParam1'), 'envValue1', 'get a global value');
+            deepEqual(FT.ads.config.get('overlapParam'), 'envValue3', 'get a global values override meta values');
+
+            meta1.remove();
+            meta2.remove();
+            meta3.remove();
         });
     }
 

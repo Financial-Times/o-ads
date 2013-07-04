@@ -9,12 +9,13 @@
     "use strict";
 
     function Config() {
-        var self = this,
-            defaults = {};
+        var self = this;
 
-        this.store = FT._ads.utils.extend({}, this.fetchMetaConfig(), this.fetchGlobalConfig());
+        self.defaults = {};
+        self.store = {};
+        self.init();
 
-        return this;
+        return self;
     }
 
     Config.prototype.fetchMetaConfig = function() {
@@ -57,8 +58,12 @@
         return result;
     };
 
-    Config.prototype.clear = function clear(key, value) {
+    Config.prototype.clear = function clear() {
         this.store = {};
+    };
+
+    Config.prototype.init = function init() {
+        this.store = FT._ads.utils.extend(this.defaults, this.fetchMetaConfig(), this.fetchGlobalConfig());
     };
 
     if (!FT) {
