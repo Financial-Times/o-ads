@@ -3,7 +3,6 @@
         module('Third party config', {
             teardown: function () {
                 FT.ads.config.clear();
-                delete FT.env;
             }
         });
 
@@ -62,7 +61,7 @@
 
         test('Config fetchMetaConfig', function () {
 
-           expect(2);
+           expect(1);
 
             // add a couple of meta tags to the page
             var meta1 = $('<meta name="metaParam1" content="metaValue1">').appendTo('head'),
@@ -108,7 +107,7 @@
             var meta1 = $('<meta name="metaParam1" content="metaValue1">').appendTo('head'),
                 meta2 = $('<meta name="metaParam2" content="metaValue2">').appendTo('head'),
                 meta3 = $('<meta name="overlapParam" content="metaValue3">').appendTo('head'),
-                result - FT.ads.config.init(),
+                result = FT.ads.config.init(),
                 expected = {
                     metaParam1: 'metaValue1',
                     metaParam2: 'metaValue2',
@@ -117,13 +116,13 @@
                     overlapParam: 'envValue3'
                 };
 
-            expect(3);
+            expect(5);
 
             deepEqual(FT.ads.config.store, expected, 'the store is now populated with meta and global values');
-            deepEqual(FT.ads.config.get(), expected, 'get a previously set value returns undefined');
+            deepEqual(FT.ads.config.get(), expected, 'get a returns all expected values');
             deepEqual(FT.ads.config.get('metaParam1'), 'metaValue1', 'get a meta value');
             deepEqual(FT.ads.config.get('envParam1'), 'envValue1', 'get a global value');
-            deepEqual(FT.ads.config.get('overlapParam'), 'envValue3', 'get a global values override meta values');
+            deepEqual(FT.ads.config.get('overlapParam'), 'envValue3', 'global values override meta values');
 
             meta1.remove();
             meta2.remove();

@@ -63,7 +63,7 @@
     };
 
     Config.prototype.init = function init() {
-        this.store = FT._ads.utils.extend(this.defaults, this.fetchMetaConfig(), this.fetchGlobalConfig());
+        this.store = FT._ads.utils.extend({}, this.defaults, this.fetchMetaConfig(), this.fetchGlobalConfig());
     };
 
     if (!FT) {
