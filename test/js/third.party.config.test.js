@@ -1,6 +1,10 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Third party config');
+        module('Third party config', {
+            teardown: function () {
+                FT.ads.config.clear();
+            }
+        });
 
         test('Config get/set', function () {
             var result, obj,
@@ -41,6 +45,20 @@
             deepEqual(result, value2, 'get returns the new value.');
         });
 
+        test('Config clear', function () {
+            FT.ads.config.store = {
+                some: 'data',
+                more: 'data'
+            };
+
+            FT.ads.config.clear();
+            expect(3);
+
+            deepEqual(FT.ads.config.store, {}, 'the store is an empty object');
+            deepEqual(FT.ads.config.get(), {}, 'get returns an empty object');
+            deepEqual(FT.ads.config.get('some'), undefined, 'get a previously set value returns undefined');
+        });
+
         test('Config fetchMetaConfig', function () {
 
            expect(2);
@@ -54,7 +72,6 @@
                     metaParam2: 'metaValue2'
                 };
 
-            notEqual(FT.ads.config, undefined, 'Config object is not undefined');
             deepEqual(result, expected, 'return an object of meta values.');
 
             meta1.remove();
@@ -63,7 +80,7 @@
 
         test('Config fetchGlobalConfig', function () {
 
-           expect(2);
+           expect(1);
 
             FT.env = {
                 envParam1: 'envValue1',
@@ -75,7 +92,6 @@
                     envParam1: 'envValue1',
                     envParam2: 'envValue2'
                 };
-            notEqual(FT.ads.config, undefined, 'Config object is not undefined');
             deepEqual(result, expected, 'return an object of global values.');
         });
     }

@@ -57,6 +57,10 @@
         return result;
     };
 
+    Config.prototype.clear = function clear(key, value) {
+        this.store = {};
+    };
+
     if (!FT) {
         FT = win.FT = {};
     }
