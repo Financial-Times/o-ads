@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Third party gpt');
+        module('Third party aud sci');
 
         test('true is not false', function () {
             expect(1);

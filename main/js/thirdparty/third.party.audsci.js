@@ -8,7 +8,7 @@
 (function (win, doc, undefined) {
     "use strict";
 
-    function GPT() {
+    function AudSci() {
         var self = this;
 
         return this;
@@ -22,5 +22,5 @@
         FT.ads = {};
     }
 
-    FT._ads.utils.extend(FT.ads, {gpt: new GPT()});
+    FT._ads.utils.extend(FT.ads, {audsci: new AudSci()});
 }(window, document));
