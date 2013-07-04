@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Third party gpt');
+        module('Third party config');
 
         test('Config get/set', function () {
             var result, obj,
@@ -46,8 +46,8 @@
            expect(2);
 
             // add a couple of meta tags to the page
-            var meta1 = $('body').append('<meta name="metaParam1" content="metaValue1">'),
-                meta2 = $('body').append('<meta name="metaParam2" content="metaValue2">'),
+            var meta1 = $('<meta name="metaParam1" content="metaValue1">').appendTo('head'),
+                meta2 = $('<meta name="metaParam2" content="metaValue2">').appendTo('head'),
                 result = FT.ads.config.fetchMetaConfig(),
                 expected = {
                     metaParam1: 'metaValue1',

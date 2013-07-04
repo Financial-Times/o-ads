@@ -39,9 +39,9 @@
     Config.prototype.get = function get(key) {
         var result;
         if (key) {
-            result = this[key];
+            result = this.store[key];
         } else {
-            result = this;
+            result = this.store;
         }
 
         return result;
@@ -50,7 +50,7 @@
     Config.prototype.set = function set(key, value) {
         var result;
         if (value) {
-            this[key] = value;
+            this.store[key] = value;
             result = value;
         }
 
