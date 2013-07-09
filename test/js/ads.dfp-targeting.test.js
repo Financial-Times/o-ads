@@ -77,6 +77,41 @@ function tests() {
 
     });
 
+   test("test getDFPTargeting unencoded remove special chars ", function () {
+        FT.env.dfp_targeting = "peo=Robert &#039;Rob&#039; Jones Portman;pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        deepEqual(targetingValue, 'peo=robert%20rob%20jones%20portman;pt=ind', 'remove special chars single quote : ' + targetingValue );
+
+    });
+
+   test("test getDFPTargeting unencoded remove special chars ", function () {
+        FT.env.dfp_targeting = "peo=Robert &#034;Rob&#034; Jones Portman;pt=ind";
+        var targetingValue = FT.ads.getDFPTargeting();
+        deepEqual(targetingValue, 'peo=robert%20rob%20jones%20portman;pt=ind', 'remove special chars double quote : ' + targetingValue );
+
+    });
+
+   test("test getDFPTargeting unencoded remove special chars ", function () {
+      FT.env.dfp_targeting = "peo=Robert &#060;Rob&#062; Jones Portman;pt=ind";
+      var targetingValue = FT.ads.getDFPTargeting();
+      deepEqual(targetingValue, 'peo=robert%20rob%20jones%20portman;pt=ind', 'remove special chars < > : ' + targetingValue );
+
+   });
+
+   test("test getDFPTargeting unencoded remove special chars ", function () {
+      FT.env.dfp_targeting = "peo=Bill &#038; Ted;pt=ind";
+      var targetingValue = FT.ads.getDFPTargeting();
+      deepEqual(targetingValue, 'peo=bill%20%20ted;pt=ind', 'remove special chars & : ' + targetingValue );
+
+   });
+
+   test("test getDFPTargeting unencoded remove special chars ", function () {
+      FT.env.dfp_targeting = "peo=Robert &#039;Rob&#039; Jones Portman;pt=ind";
+      var targetingValue = FT.ads.getDFPTargeting();
+      deepEqual(targetingValue, 'peo=robert%20rob%20jones%20portman;pt=ind', 'remove special chars single quote : ' + targetingValue );
+
+   });
+
     test("test getDFPTargeting unencoded remove special chars \"", function () {
         FT.env.dfp_targeting = 'peo="Yahoo" "Google";pt=ind';
         var targetingValue = FT.ads.getDFPTargeting();
@@ -123,6 +158,7 @@ function tests() {
         deepEqual(targetingValue, 'peo=fran%25c3%25a7ois%2520hollande:bashar%2520al-assad', 'doubleEndcoded remove special chars []: ' + targetingValue );
 
     });
+
 
 }
 
