@@ -66,8 +66,9 @@
         this.store = FT._ads.utils.extend({}, this.defaults, this.fetchMetaConfig(), this.fetchGlobalConfig());
     };
 
-    if (!FT) {
+    if (!win.FT && FT._ads.utils.isObject(win.FT)) {
         FT = win.FT = {};
+
     }
 
     if (!FT.ads) {

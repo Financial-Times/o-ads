@@ -8,23 +8,14 @@
 (function (win, doc, FT, undefined) {
     "use strict";
 
-    function switchAdLibrary(mode) {
-       if (mode !== 'gpt') {
-          FT.env.adCall = function () {};
-          FT.env.getAudSci = function() {};
-          FT.env.getURL = function() {};
-          FT.env.getTag = function() {};
-       } else {
-
-
-       }
+    function switcher() {
+      var mode = FT.ads.config.get('ftads:mode');
+      if (mode === 'gpt') {
+          FT.env.adCall = function () {
+            return false;
+          };
+      }
     }
 
-    if (document.readyState === 'complete') {
-        // get switch mode from metadata
-        var mode = FT.ads.config.get("adLibMode");
-
-        switchAdLibrary(mode);
-    }
-
+    switcher();
 }(window, document, FT || {}));
