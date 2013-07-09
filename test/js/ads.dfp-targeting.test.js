@@ -101,7 +101,7 @@ function tests() {
    test("test getDFPTargeting unencoded remove special chars ", function () {
       FT.env.dfp_targeting = "peo=Bill &#038; Ted;pt=ind";
       var targetingValue = FT.ads.getDFPTargeting();
-      deepEqual(targetingValue, 'peo=bill%20%20ted;pt=ind', 'remove special chars & : ' + targetingValue );
+      deepEqual(targetingValue, 'peo=bill%20&%20ted;pt=ind', 'remove special chars & : ' + targetingValue );
 
    });
 

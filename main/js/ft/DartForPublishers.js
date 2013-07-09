@@ -74,7 +74,7 @@
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
- refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, specialXmlEncodedChars */
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting  */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -123,8 +123,11 @@ FT.Advertising = function () {
    this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
-   this.CONST.specialXmlEncodedChars = /(&#039;)|(&#038;)|(&#034;)|(&#060;)|(&#062;)+/g;
-   this.CONST.cleanDfpTargeting = /(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g; //this regex explained http://regex101.com/r/yY5mH2
+   this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
+                                    [/(&#038;)/,'&'],
+                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
+                                    [/;;+/g, ';' ]
+                                    ];
 
 
    // filter constants for AYSC cookies
@@ -1023,9 +1026,12 @@ FT.Advertising.prototype.getDFPTargeting = function () {
          dfpTargeting += (dfpTargeting !== '') ? ';rf=' + referrer : 'rf=' + referrer;
       }
    }
+
       dfpTargeting = dfpTargeting.toLowerCase();
-      dfpTargeting = dfpTargeting.replace(this.CONST.specialXmlEncodedChars, '');
-      dfpTargeting = encodeURI(dfpTargeting.replace(this.CONST.cleanDfpTargeting, '').replace(/;;+/g, ';'));
+      for (var i=0; i < this.CONST.cleanDfpTargeting.length ; i++){
+         dfpTargeting = dfpTargeting.replace(this.CONST.cleanDfpTargeting[i][0], this.CONST.cleanDfpTargeting[i][1]) ;
+      }
+      dfpTargeting = encodeURI(dfpTargeting);
    }
    //return valid dfpTargeting else undefined.
    if (dfpTargeting !== '') {
