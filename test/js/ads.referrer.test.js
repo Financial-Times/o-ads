@@ -20,7 +20,7 @@ function tests() {
    module("Referrer rf ", {
    });
 
-   test("test rf should return correctly for article", function () {
+   test("test rf should return correctly for article with query string", function () {
       FT.env.dfp_targeting = ";pt=art";
       FT.test.spyDocumentReferrer.returns("http://www.ft.com/cms/s/cece477a-ceca-11e2-8e16-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Fcece477a-ceca-11e2-8e16-00144feab7de.html&_i_referer=http%3A%2F%2Fwww.facebook.com%2Fl.php%3Fu%3Dhttp%253A%252F%252Fon.ft.com%252FZSTiyP%26h%3DLAQGl0DzT%26s%3D1");
       var dfpTargeting = FT.ads.getDFPTargeting();
@@ -30,13 +30,13 @@ function tests() {
 
    });
 
-   test("test rf should return correctly for article", function () {
+   test("test rf should return correctly for article without the query string", function () {
       FT.env.dfp_targeting = ";pt=art";
       FT.test.spyDocumentReferrer.returns("http://www.ft.com/something/here/to/target");
       var dfpTargeting = FT.ads.getDFPTargeting();
 
       var referrer = (/rf=([^;]*)/).exec(dfpTargeting)[1];
-      deepEqual(referrer, "something/here/to/target", "should return cms/s/cece477a-ceca-11e2-8e16-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Fcece477a-ceca-11e2-8e16-00144feab7de.html&_i_referer=http%3A%2F%2Fwww.facebook.com%2Fl.php%3Fu%3Dhttp%253A%252F%252Fon.ft.com%252FZSTiyP%26h%3DLAQGl0DzT%26s%3D1");
+      deepEqual(referrer, "something/here/to/target", "should return something/here/to/target", "should return the same");
 
    });
 
@@ -49,7 +49,7 @@ function tests() {
       deepEqual(referrer, null, "dfpTargeting should be undefined");
    });
 
-   test("test rf should return correctly for article", function () {
+   test("test rf should return correctly for article with !", function () {
       FT.env.dfp_targeting = ";pt=art";
       FT.test.spyDocumentReferrer.returns("http://blogs.ft.com/topics/organisation/Yahoo!_Inc");
       var dfpTargeting = FT.ads.getDFPTargeting();
@@ -58,16 +58,8 @@ function tests() {
       deepEqual(referrer, "topics/organisation/yahoo_inc", "should return topics/organisation/yahoo_inc");
    });
 
-   test("test rf should return correctly for article", function () {
-      FT.env.dfp_targeting = ";pt=art";
-      FT.test.spyDocumentReferrer.returns("http://blogs.ft.com/topics/organisation/Yahoo!_Inc");
-      var dfpTargeting = FT.ads.getDFPTargeting();
 
-      var referrer = (/rf=([^;]*)/).exec(dfpTargeting)[1];
-      deepEqual(referrer, "topics/organisation/yahoo_inc", "should return topics/organisation/yahoo_inc");
-   });
-
-   test("test rf should return correctly for article", function () {
+   test("test rf should return correctly for article with ()", function () {
       FT.env.dfp_targeting = ";pt=art";
       FT.test.spyDocumentReferrer.returns("http://www.ft.com/topics/people/David_Axelrod_(Political_Consultant)");
       var dfpTargeting = FT.ads.getDFPTargeting();
