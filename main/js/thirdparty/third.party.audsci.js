@@ -23,9 +23,9 @@
                 found = [],
                 result = '';
             if (max) {
-                    while(match = exp.exec(segs)) {
+                 while(match = exp.exec(segs)) {
                     found.push(match[1]);
-                    }
+                }
             if (found.length) {
                     result = prefix  + found.slice(0, max).join(prefix);
                 }
@@ -33,7 +33,7 @@
             return result;
         }
 
-        audsciCookie = cookie === undefined ? document.cookie : cookie;
+        audsciCookie = ((typeof cookie) !== "string") ? document.cookie : cookie;
         rsiSegs = audsciCookie.replace(/^.*\brsi_segs=([^;]*).*$/, '$1');
         return parseSegs(rsiSegs, FT.ads.config.audSciLimit);
     };
