@@ -8,23 +8,20 @@
         });
 
         test('return value', function () {
-            FT.ads.config.audSciLimit = 2;
             var realCookie = 'cookies=true; TRK_REF=null; GZIP=1; FTUserTrack=10.116.140.74.131941244638466718; __utma=138983524.2281482980145567500.1247646493.1247646493.1247646493.1; __utma=37533111.2274214351443377200.1249906596.1250598929.1250611539.9; __utmz=37533111.1249906596.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); ebNewBandWidth_.falcon.ft.com=36%3A1256046918783; rsi_segs=J07717_10089|J07717_10236|J07717_10288|J07717_10295|J07717_10299|J07717_10369|J07717_10555|J07717_10545|J07717_10633|J07717_10644|J07717_10645; VWCUK200=L102309/Q29326_5050_1128_102309_4_123109_117695x117675x102309x1x1_117693x117673x102309x3x3; AYSC=_011967_02X_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_17london_18london_19xxxx_20n_22P0P2Tools_24europe_25PVT_26PVT_27PVT_; ft_ncookie=1; rsi_ct=2009_11_17:84; FTMD=qv%2Ctw; JSESSIONID=SXLqKBNHThDJDYR5sMPqSBHJdtJMWLVR91TGWnKWnSc84Q1J5qjD!897560414; FT_s=sc=16_pr=P0P2Tools; __utmc=138983524; ft_ccookie=1; FTSession=-5953344332261857739; FT_P=exp=1241704665098&prod=71; FT_User=USERID=4004326601:EMAIL=brent.cowgill@ft.com:FNAME=:LNAME=:TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D:USERNAME=brent.cowgill@ft.com:REMEMBER=_REMEMBER_:GROUPS=_UK_:RESOURCES=_nbe_countedcount_fttools_ftalert_portfolio_extelapp_:PRODUCTS=_P0_Tools_:ERIGHTSID=4326601:X=MCwCFB8ulocZZdc1uxPKmPysIxRTFkh4AhR6K9K38pcAen6z3ogTVcFVESeQ8A%3D%3D; FT_U=_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_; FTQA=debug%2Cinterval%3D25%2Ctimeout%3D300%2Cqunit%3Dexpand';
             var resultWithCookie = FT.ads.audsci.getAudSci(realCookie);
             var resultWithNoParams = FT.ads.audsci.getAudSci();
             var realAudSci = ';a=z89;a=z236';
 
             expect(5);
-
+            FT.ads.config.audSciLimit = 2;
             strictEqual(typeof resultWithCookie, "string", "result is a string");
             strictEqual(resultWithNoParams, '', "result with no params passed should be empty string");
-
             strictEqual(resultWithCookie, realAudSci, "While the audSciLimit is 2, there should be only 2 segments in the results");
 
             FT.ads.config.audSciLimit = 10;
             resultWithCookie = FT.ads.audsci.getAudSci(realCookie);
             realAudSci = ';a=z89;a=z236;a=z288;a=z295;a=z299;a=z369;a=z555;a=z545;a=z633;a=z644';
-
             strictEqual(resultWithCookie, realAudSci, "While the audSciLimit is 10, there should be 10 segments in the results");
 
             FT.ads.config.audSciLimit = 15;
