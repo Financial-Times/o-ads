@@ -1,7 +1,7 @@
 (function (window, document, $, undefined) {
     function runTests() {
         module('Third party config', {
-            teardown: function () {
+            setup: function () {
                 FT.ads.config.clear();
             }
         });
@@ -113,7 +113,18 @@
                     metaParam2: 'metaValue2',
                     envParam1: 'envValue1',
                     envParam2: 'envValue2',
-                    overlapParam: 'envValue3'
+                    overlapParam: 'envValue3',
+                    formats:  {
+                        banlb: [[728,90], [468,60], [970,90]],
+                        mpu: [[300,250],[336,280]],
+                        doublet: [[342,200]],
+                        hlfmpu: [[300,600],[336,850],[300,250],[336,280]],
+                        intro: [[1,1]],
+                        newssubs: [[239,90]],
+                        refresh: [[1,1]],
+                        searchbox: [[200,28]],
+                        tlbxrib: [[336,60]]
+                    }
                 };
 
             expect(5);
