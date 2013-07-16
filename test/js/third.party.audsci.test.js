@@ -12,7 +12,6 @@
             var rsi_segs = 'J07717_10089|J07717_10236|J07717_10288|J07717_10295|J07717_10299|J07717_10369|J07717_10555|J07717_10545|J07717_10633|J07717_10644|J07717_10645';
             var resultWithCookie = FT.ads.audsci.getAudSci(rsi_segs);
             var resultWithNoParams = FT.ads.audsci.getAudSci();
-            console.log(resultWithCookie);
             var realAudSci = {'a' : ['z89', 'z236']};
             expect(5);
 
