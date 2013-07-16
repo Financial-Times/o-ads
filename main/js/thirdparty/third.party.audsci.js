@@ -13,29 +13,24 @@
         return this;
     }
 
-    AudSci.prototype.getAudSci = function(cookie){
-        var audsciCookie,
-            rsiSegs;
-       function parseSegs(segs, max) {
+    AudSci.prototype.getAudSci = function(rsiSegs){
+
+        function parseSegs(segs, max) {
             var match,
                 exp = /J07717_10*([^|]*)/g,
-                prefix = ';a=z',
                 found = [],
-                result = '';
-            if (max) {
-                 while(match = exp.exec(segs)) {
-                    found.push(match[1]);
-                }
-            if (found.length) {
-                    result = prefix  + found.slice(0, max).join(prefix);
+                result;
+            if (max && segs) {
+                while((match = exp.exec(segs)) && (found.length < max)){
+                    found.push('z'+match[1]);
                 }
             }
+
+            result = (found.length) ? {a : found} : {};
             return result;
         }
-
-        audsciCookie = ((typeof cookie) !== "string") ? document.cookie : cookie;
-        rsiSegs = audsciCookie.replace(/^.*\brsi_segs=([^;]*).*$/, '$1');
-        return parseSegs(rsiSegs, FT.ads.config.audSciLimit);
+        if (typeof rsiSegs === "undefined") {rsiSegs = FT._ads.utils.cookie('rsi_segs');}
+        return parseSegs(rsiSegs, FT.ads.config.get('audSciLimit'));
     };
 
     if (!win.FT ) {
@@ -48,3 +43,4 @@
 
     FT._ads.utils.extend(FT.ads, {audsci: new AudSci()});
 }(window, document));
+
