@@ -109,6 +109,8 @@
                 meta3 = $('<meta name="overlapParam" content="metaValue3">').appendTo('head'),
                 result = FT.ads.config.init(),
                 expected = {
+                    audSciLimit: 2,
+                    network: '15887',
                     metaParam1: 'metaValue1',
                     metaParam2: 'metaValue2',
                     envParam1: 'envValue1',
