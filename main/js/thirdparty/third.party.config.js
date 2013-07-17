@@ -12,6 +12,7 @@
         var self = this;
 
         self.defaults = {
+          network: '15887',
           formats:  {
                 banlb: [[728,90], [468,60], [970,90]],
                 mpu: [[300,250],[336,280]],
@@ -22,7 +23,8 @@
                 refresh: [[1,1]],
                 searchbox: [[200,28]],
                 tlbxrib: [[336,60]]
-          }
+          },
+          audSciLimit : 2
         };
 
         self.store = {};
