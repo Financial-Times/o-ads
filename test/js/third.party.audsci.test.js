@@ -8,15 +8,14 @@
         });
 
         test('return value test', function () {
-            //FT.ads.config.set('audSciLimit', 2);
+            FT.ads.config.set('audSciLimit', 2);
             var rsi_segs = 'J07717_10089|J07717_10236|J07717_10288|J07717_10295|J07717_10299|J07717_10369|J07717_10555|J07717_10545|J07717_10633|J07717_10644|J07717_10645';
             var resultWithCookie = FT.ads.audsci.getAudSci(rsi_segs);
             var resultWithNoParams = FT.ads.audsci.getAudSci();
             var realAudSci = {'a' : ['z89', 'z236']};
-            expect(5);
 
+            expect(4);
             strictEqual(typeof resultWithCookie, "object", "result is an object");
-            deepEqual(resultWithNoParams, {}, "result with no params passed should be an empty object");
             deepEqual(resultWithCookie, realAudSci, "While the audSciLimit is 2, there should be only 2 segments in the results");
 
             FT.ads.config.set('audSciLimit', 10);
