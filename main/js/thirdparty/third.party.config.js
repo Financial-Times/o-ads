@@ -11,7 +11,7 @@
     function Config() {
 
         this.defaults = {
-          network: '15887',
+          network: '5887',
           collapseEmpty: true,
           formats:  {
                 banlb: [[728,90], [468,60], [970,90]],

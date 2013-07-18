@@ -141,7 +141,7 @@
         var slotName;
 
         this.attach();
-        this.unitName = FT.ads.config.get('network') + '/' + FT.ads.config.get('dfp_site') + '/' + FT.ads.config.get('dfp_zone');
+        this.unitName = [FT.ads.config.get('network'), FT.ads.config.get('dfp_site'), FT.ads.config.get('dfp_zone')].join('/');
         this.setPageTargeting();
         this.fetchPageSlots();
 
