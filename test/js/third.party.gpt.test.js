@@ -12,7 +12,36 @@
                 for (var spy in sinon.spies) {
                     sinon.spies[spy].reset();
                 }
+
+                googletag.cmd = [];
             }
+        });
+
+        test('set page targeting with config', function () {
+            expect(1);
+            FT.ads.config.clear();
+            FT.ads.config.set('dfp_targeting', ';some=test;targeting=params');
+
+            var result = FT.ads.gpt.setPageTargeting(),
+                expected = {some: 'test', targeting: 'params'};
+
+            deepEqual(result, expected, 'setting dfp_targeting in config works');
+            //ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
+        });
+
+        test('set page targeting with meta', function () {
+            expect(1);
+            FT._ads.utils.cookies.rsi_segs = '';
+            // add meta config and fetch it
+            var meta1 = $('<meta name="dfp_targeting" content=";targetKey1=targetValue1;targetKey2=targetValue2">').appendTo('head');
+            FT.ads.config.init();
+
+            var result = FT.ads.gpt.setPageTargeting(),
+                expected =  { "targetKey1": "targetValue1", "targetKey2": "targetValue2" };
+
+                deepEqual(result, expected, 'settting dfp_targeting in meta');
+            //ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
+            meta1.remove();
         });
 
         test('Attach GPT library to page', function () {
@@ -43,32 +72,6 @@
                         QUnit.start();
                     }
                 }, interval);
-        });
-
-        test('set page targetting with config', function () {
-            expect(2);
-
-            FT.ads.config.set('dfp_targeting', ';some=test;targeting=params');
-
-            var result = FT.ads.gpt.setPageTargeting(),
-                expected = {some: 'test', targeting: 'params'};
-
-            deepEqual(result, expected, 'settting dfp_targeting in config works');
-            ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
-        });
-
-        test('set page targeting with meta', function () {
-            expect(2);
-            // add meta config and fetch it
-            var meta1 = $('<meta name="dfp_targeting" content=";targetKey1=targetValue1;targetKey2=targetValue2">').appendTo('head');
-            FT.ads.config.init();
-
-                var result = FT.ads.gpt.setPageTargeting(),
-                    expected =  { "targetKey1": "targetValue1", "targetKey2": "targetValue2" };
-
-                deepEqual(result, expected, 'settting dfp_targeting in meta');
-            //ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
-            meta1.remove();
         });
 
     }
