@@ -97,6 +97,9 @@
         });
 
         test('Config init', function () {
+            // remove defaults
+            var oldDefaults = FT.ads.config.defaults;
+            FT.ads.config.defaults = {};
 
             FT.env = {
                 envParam1: 'envValue1',
@@ -109,24 +112,11 @@
                 meta3 = $('<meta name="overlapParam" content="metaValue3">').appendTo('head'),
                 result = FT.ads.config.init(),
                 expected = {
-                    audSciLimit: 2,
-                    network: '15887',
                     metaParam1: 'metaValue1',
                     metaParam2: 'metaValue2',
                     envParam1: 'envValue1',
                     envParam2: 'envValue2',
-                    overlapParam: 'envValue3',
-                    formats:  {
-                        banlb: [[728,90], [468,60], [970,90]],
-                        mpu: [[300,250],[336,280]],
-                        doublet: [[342,200]],
-                        hlfmpu: [[300,600],[336,850],[300,250],[336,280]],
-                        intro: [[1,1]],
-                        newssubs: [[239,90]],
-                        refresh: [[1,1]],
-                        searchbox: [[200,28]],
-                        tlbxrib: [[336,60]]
-                    }
+                    overlapParam: 'envValue3'
                 };
 
             expect(5);
@@ -140,6 +130,7 @@
             meta1.remove();
             meta2.remove();
             meta3.remove();
+            FT.ads.config.defaults = oldDefaults;
         });
     }
 

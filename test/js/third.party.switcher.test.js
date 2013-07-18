@@ -8,7 +8,7 @@
                 win.iframe = $('<iframe>').appendTo('body');
             },
             teardown: function () {
-                win.iframe.remove();
+                //win.iframe.remove();
             }
         });
 

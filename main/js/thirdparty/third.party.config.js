@@ -9,10 +9,10 @@
     "use strict";
 
     function Config() {
-        var self = this;
 
-        self.defaults = {
+        this.defaults = {
           network: '15887',
+          collapseEmpty: true,
           formats:  {
                 banlb: [[728,90], [468,60], [970,90]],
                 mpu: [[300,250],[336,280]],
@@ -27,10 +27,10 @@
           audSciLimit : 2
         };
 
-        self.store = {};
-        self.init();
+        this.store = {};
+        this.init();
 
-        return self;
+        return this;
     }
 
     Config.prototype.fetchMetaConfig = function() {
