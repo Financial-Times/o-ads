@@ -21,10 +21,14 @@ groups {
     }
 
     "third-party-latest" {
+        js(minimize: false, "/js/ft/advertising.utils.js")
+        js(minimize: false, "/js/ft/advertising.utils.cookie.js")
         js(minimize: false,"/js/thirdparty/**.js")
     }
 
     "third-party-latest.min" {
+        js("/js/ft/advertising.utils.js")
+        js("/js/ft/advertising.utils.cookie.js")
         js "/js/thirdparty/**.js"
     }
 
