@@ -2,23 +2,27 @@
     win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
     sinon.spies = {
-        gptCmdPush: sinon.spy(googletag.cmd, 'push')
+        gptCmdPush: sinon.spy(googletag.cmd, 'push'),
+        fetchPageSlots: sinon.spy(FT.ads.gpt, 'fetchPageSlots'),
+        fetchAdContainer: sinon.spy(FT.ads.gpt, 'fetchAdContainer'),
+        fetchSlotConfig: sinon.spy(FT.ads.gpt, 'fetchSlotConfig')
     };
 
     function runTests() {
 
         module('Third party gpt',  {
-            teardown: function () {
+            setup: function () {
+
+                // reset all spies between test
+                // this fails if you do it in teardown for some reason.
                 for (var spy in sinon.spies) {
                     sinon.spies[spy].reset();
                 }
-
-                googletag.cmd = [];
             }
         });
 
         test('set page targeting with config', function () {
-            expect(1);
+            expect(2);
             FT.ads.config.clear();
             FT.ads.config.set('dfp_targeting', ';some=test;targeting=params');
 
@@ -26,11 +30,11 @@
                 expected = {some: 'test', targeting: 'params'};
 
             deepEqual(result, expected, 'setting dfp_targeting in config works');
-            //ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
+            ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
         });
 
         test('set page targeting with meta', function () {
-            expect(1);
+            expect(2);
             FT._ads.utils.cookies.rsi_segs = '';
             // add meta config and fetch it
             var meta1 = $('<meta name="dfp_targeting" content=";targetKey1=targetValue1;targetKey2=targetValue2">').appendTo('head');
@@ -39,9 +43,28 @@
             var result = FT.ads.gpt.setPageTargeting(),
                 expected =  { "targetKey1": "targetValue1", "targetKey2": "targetValue2" };
 
-                deepEqual(result, expected, 'settting dfp_targeting in meta');
-            //ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
+            deepEqual(result, expected, 'settting dfp_targeting in meta');
+            console.dir(sinon.spies.gptCmdPush);
+            ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
             meta1.remove();
+        });
+
+        test('set fetch page slots', function () {
+           expect(8);
+
+            var result = FT.ads.gpt.fetchPageSlots();
+
+            ok(sinon.spies.fetchAdContainer.calledWith('banlb'), 'search for banlb container');
+            ok(sinon.spies.fetchAdContainer.calledWith('hlfmpu'), 'search for hlfmpu container');
+            ok(sinon.spies.fetchAdContainer.calledWith('mpu'), 'search for mpu container');
+
+            ok(sinon.spies.fetchSlotConfig.calledWith(doc.getElementById('banlb'), [[728,90], [468,60], [970,90]]), 'Fetch add slot config is called correctly for the banlb');
+            ok(sinon.spies.fetchSlotConfig.calledWith(doc.getElementById('mpu'), [[300,250],[336,280]]), 'Fetch add slot config is called correctly for the mpu');
+            ok(sinon.spies.fetchSlotConfig.calledWith(doc.getElementById('hlfmpu'), [[300,600],[336,850],[300,250],[336,280]]), 'Fetch add slot config is called correctly for the hlfmpu');
+
+            deepEqual(sinon.spies.fetchSlotConfig.returnValues[0], { sizes: [[728,90], [468,60], [970,90]] }, 'Fetch add slot config returns sizes from config.formats for banlb');
+            deepEqual(sinon.spies.fetchSlotConfig.returnValues[2], { sizes: [[300,600]] }, 'Fetch add slot config returns sizes from data attribute for hlfmpu');
+
         });
 
         test('Attach GPT library to page', function () {
@@ -51,7 +74,7 @@
             var initialScripts = $('script').size();
 
             FT.ads.gpt.attach();
-            deepEqual($('script').size() - initialScripts, 1, 'a new async script tag has been added to the page.' );
+            deepEqual($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.' );
 
             // wait for a maximum of 5 seconds for the google code to load
             // the display methods is tested to see if the lib is available
@@ -76,8 +99,11 @@
 
     }
 
-    $(runTests);
+    //$(runTests);
+
     $(function() {
+        FT.ads.config.set('dfp_site', "test.5887.dev");
+        FT.ads.config.set('dfp_zone', "master-companion-test");
         FT.ads.config.set('dfp_site', "test.5887.dev");
         FT.ads.config.set('dfp_zone', "master-companion-test");
         FT.ads.gpt.init();
