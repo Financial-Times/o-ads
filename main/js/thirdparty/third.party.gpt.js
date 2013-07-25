@@ -18,7 +18,6 @@
         // executed when GPT code is available, if GPT is available they will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
 
-
         return this;
     }
 
@@ -59,18 +58,9 @@
         return targeting;
     };
 
-    proto.fetchAdContainer = function (slotId) {
-        var container = doc.getElementById(slotId);
+    proto.fetchAdContainer = function (slotName) {
+        var container = doc.getElementById(slotName);
         if (container) {
-            // if the ID is on a script tag
-            // traverse the DOM for a suitable element to attach it to (anything but a script tag)
-            while (container.tagName === 'SCRIPT') {
-                container.removeAttribute('id');
-                container = container.parentNode;
-            }
-
-            container.setAttribute('id', slotId);
-
             return container;
         }
         return false;
@@ -79,11 +69,18 @@
 
 
     proto.fetchSlotConfig = function  (container, sizes) {
+        var sizesString;
         sizes = container.getAttribute('data-ad-size') || sizes || [1,1];
 
         if (FT._ads.utils.isString(sizes)) {
-            sizes = sizes.split(/x/);
+            sizesString = sizes;
+            sizes = [];
+            sizesString.replace(/(\d+)x(\d+)/g, function (match, width, height) {
+              sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
+            });
         }
+
+        //TODO add more slot level options targeting would be a good start
 
         return {
             sizes: sizes
@@ -91,18 +88,33 @@
     };
 
     proto.fetchPageSlots = function () {
-        var slotName, container,
+        var slotName, container, config,
             formats = FT.ads.config.get('formats');
 
         // Find ad slots marked up by ID
         for (slotName in formats) {
             if (container = this.fetchAdContainer(slotName)) {
+                config = this.fetchSlotConfig(container, formats[slotName]);
+
+                // this code is pretty much for HTSI only
+                // if the ID is on a script tag
+                // traverse the DOM for a suitable element to attach it to (anything but a script tag)
+                while (container.tagName === 'SCRIPT') {
+                    if (container.id === slotName) {
+                        container.removeAttribute('id');
+                    }
+                    container = container.parentNode;
+                }
+
+                container.setAttribute('id', slotName);
+
                 this.slots[slotName] = {
                     container: container,
-                    config: this.fetchSlotConfig(container, formats[slotName])
+                    config: config
                 };
             }
         }
+        return this.slots;
     };
 
     proto.configureSlot = function (id, slot) {
@@ -141,7 +153,7 @@
         var slotName;
 
         this.attach();
-        this.unitName = FT.ads.config.get('network') + '/' + FT.ads.config.get('dfp_site') + '/' + FT.ads.config.get('dfp_zone');
+        this.unitName = [FT.ads.config.get('network'), FT.ads.config.get('dfp_site'), FT.ads.config.get('dfp_zone')].join('/');
         this.setPageTargeting();
         this.fetchPageSlots();
 
@@ -150,16 +162,16 @@
         }
 
         googletag.cmd.push( function () {
+            //this.collapseEmpty();
             googletag.pubads().enableAsyncRendering();
-        googletag.enableServices();
-
+            googletag.enableServices();
         });
 
         for (slotName in this.slots) {
             this.displaySlot(slotName);
         }
 
-
+        return this.slots;
     };
 
     if (!FT) {
