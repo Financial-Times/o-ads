@@ -19,7 +19,7 @@
                 var win = this.contentWindow,
                     FT = win.FT;
 
-                deepEqual(FT.ads.config.get('ftads:mode'), 'gpt', 'Library is configured for GPT');
+                deepEqual(FT.ads.config('ftads:mode'), 'gpt', 'Library is configured for GPT');
                 ok(FT.spies.adCallSpy.called, 'adCall method is still called (for backwards compatability)');
                 ok(!FT.spies.getTagSpy.called, 'getTag method is no longer called');
                 ok(!FT.spies.getAudSciSpy.called, 'getAudSci method is no longer called');
@@ -36,7 +36,7 @@
                     FT = win.FT;
 
                 deepEqual(win.$('meta[name="ftads:mode"]').attr('content'), 'gpt', 'the meta configuration is present');
-                deepEqual(FT.ads.config.get('ftads:mode'), 'gpt', 'Library is configured for GPT');
+                deepEqual(FT.ads.config('ftads:mode'), 'gpt', 'Library is configured for GPT');
 
                 ok(FT.spies.adCallSpy.called, 'adCall method is called (for backwards compatability)');
                 ok(!FT.spies.getTagSpy.called, 'getTag method is no longer called');
@@ -53,7 +53,7 @@
                 var win = this.contentWindow,
                     FT = win.FT;
 
-                deepEqual(FT.ads.config.get('ftads:mode'), undefined, 'Library is not configured for GPT');
+                deepEqual(FT.ads.config('ftads:mode'), undefined, 'Library is not configured for GPT');
 
                 ok(FT.spies.adCallSpy.called, 'adCall method is called');
                 ok(FT.spies.getTagSpy.called, 'getTag method is called');

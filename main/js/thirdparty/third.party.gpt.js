@@ -36,7 +36,7 @@
     proto.setPageTargeting = function () {
         var param,
             targeting = {},
-            base = FT.ads.config.get('dfp_targeting'),
+            base = FT.ads.config('dfp_targeting'),
             audsci = FT.ads.audsci.getAudSci();
 
         // Convert ;key=val strings to objects { key: value }
@@ -89,7 +89,7 @@
 
     proto.fetchPageSlots = function () {
         var slotName, container, config,
-            formats = FT.ads.config.get('formats');
+            formats = FT.ads.config('formats');
 
         // Find ad slots marked up by ID
         for (slotName in formats) {
@@ -141,7 +141,7 @@
     };
 
     proto.collapseEmpty = function () {
-        if (FT.ads.config.get('collapseEmpty')) {
+        if (FT.ads.config('collapseEmpty')) {
             googletag.cmd.push( function () {
                  googletag.pubads().collapseEmptyDivs();
             });
@@ -153,7 +153,7 @@
         var slotName;
 
         this.attach();
-        this.unitName = [FT.ads.config.get('network'), FT.ads.config.get('dfp_site'), FT.ads.config.get('dfp_zone')].join('/');
+        this.unitName = [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         this.setPageTargeting();
         this.fetchPageSlots();
 

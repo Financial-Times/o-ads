@@ -30,7 +30,7 @@
             return result;
         }
         if (typeof rsiSegs === "undefined") {rsiSegs = FT._ads.utils.cookie('rsi_segs');}
-        return parseSegs(rsiSegs, FT.ads.config.get('audSciLimit'));
+        return parseSegs(rsiSegs, FT.ads.config('audSciLimit'));
     };
 
     if (!win.FT ) {

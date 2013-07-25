@@ -23,8 +23,8 @@
 
         test('set page targeting with config', function () {
             expect(2);
-            FT.ads.config.clear();
-            FT.ads.config.set('dfp_targeting', ';some=test;targeting=params');
+            FT.ads.config('clear');
+            FT.ads.config('dfp_targeting', ';some=test;targeting=params');
 
             var result = FT.ads.gpt.setPageTargeting(),
                 expected = {some: 'test', targeting: 'params'};
@@ -38,7 +38,7 @@
             FT._ads.utils.cookies.rsi_segs = '';
             // add meta config and fetch it
             var meta1 = $('<meta name="dfp_targeting" content=";targetKey1=targetValue1;targetKey2=targetValue2">').appendTo('head');
-            FT.ads.config.init();
+           // FT.ads.config.init();
 
             var result = FT.ads.gpt.setPageTargeting(),
                 expected =  { "targetKey1": "targetValue1", "targetKey2": "targetValue2" };
@@ -102,10 +102,10 @@
     //$(runTests);
 
     $(function() {
-        FT.ads.config.set('dfp_site', "test.5887.dev");
-        FT.ads.config.set('dfp_zone', "master-companion-test");
-        FT.ads.config.set('dfp_site', "test.5887.dev");
-        FT.ads.config.set('dfp_zone', "master-companion-test");
+        FT.ads.config('dfp_site', "test.5887.dev");
+        FT.ads.config('dfp_zone', "master-companion-test");
+        FT.ads.config('dfp_site', "test.5887.dev");
+        FT.ads.config('dfp_zone', "master-companion-test");
         FT.ads.gpt.init();
     });
 }(window, document, jQuery));
