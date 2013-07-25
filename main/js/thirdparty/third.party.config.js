@@ -9,12 +9,7 @@
     "use strict";
 
     function Config() {
-
-<<<<<<< HEAD
         var defaults = {
-=======
-        this.defaults = {
->>>>>>> efd686c4e4c864b08ccd5953d37c319b45a194b0
           network: '5887',
           collapseEmpty: true,
           formats:  {
