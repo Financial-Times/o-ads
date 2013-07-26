@@ -87,6 +87,20 @@
         };
     };
 
+    proto.fixContainer = function(container) {
+        // this code is pretty much for HTSI only
+        // if the ID is on a script tag
+        // traverse the DOM for a suitable element to attach it to (anything but a script tag)
+        var slotName = container.id;
+        while (container.tagName === 'SCRIPT') {
+            if (container.id === slotName) {
+                container.removeAttribute('id');
+            }
+            container = container.parentNode;
+        }
+        container.setAttribute('id', slotName);
+    };
+
     proto.fetchPageSlots = function () {
         var slotName, container, config,
             formats = FT.ads.config('formats');
@@ -95,18 +109,7 @@
         for (slotName in formats) {
             if (container = this.fetchAdContainer(slotName)) {
                 config = this.fetchSlotConfig(container, formats[slotName]);
-
-                // this code is pretty much for HTSI only
-                // if the ID is on a script tag
-                // traverse the DOM for a suitable element to attach it to (anything but a script tag)
-                while (container.tagName === 'SCRIPT') {
-                    if (container.id === slotName) {
-                        container.removeAttribute('id');
-                    }
-                    container = container.parentNode;
-                }
-
-                container.setAttribute('id', slotName);
+                this.fixContainer(container);
 
                 this.slots[slotName] = {
                     container: container,
@@ -117,33 +120,57 @@
         return this.slots;
     };
 
-    proto.configureSlot = function (id, slot) {
+    proto.configureSlot = function (slotName, slot) {
         // TODO slot level config/targeting via data attrs on the container.
 
-        var unitName = this.unitName + '/' + id;
-
-        function createSlot(unitName, sizes) {
-            return function() {
-               var slot = googletag.defineSlot(unitName, sizes, id);
-
-                slot.addService(googletag.pubads())
-                    .setTargeting('pos', id);
-            };
-        }
-
-        googletag.cmd.push(createSlot(unitName, slot.config.sizes));
+        var unitName = this.getUnitName(slotName);
+        googletag.cmd.push(this.createSlot(unitName, slot.config.sizes, slotName));
     };
 
-    proto.displaySlot = function (id) {
+    proto.createSlot = function (unitName, sizes, slotName) {
+        return function() {
+           var slot = googletag.defineSlot(unitName, sizes, slotName);
+
+            slot.addService(googletag.pubads())
+                .setTargeting('pos', slotName);
+        };
+    };
+
+    proto.getUnitName = function (slotName) {
+        return this.unitName + '/' + slotName;
+    };
+
+    proto.displaySlot = function (slotName) {
+        var unitName, config, container, formats;
+
+        if (FT.ads.config('fetchSlots') !== false) {
+            if (container = this.fetchAdContainer(slotName)) {
+                formats = FT.ads.config('formats');
+                unitName = this.getUnitName(slotName);
+                config = this.fetchSlotConfig(container, formats[slotName]);
+
+                this.fixContainer(container);
+
+                this.slots[slotName] = {
+                    container: container,
+                    config: config
+                };
+
+                googletag.cmd.push(this.createSlot(unitName, config.sizes, slotName));
+            }
+        }
+
         googletag.cmd.push( function () {
-            googletag.display(id);
+            googletag.display(slotName);
         });
     };
 
     proto.collapseEmpty = function () {
-        if (FT.ads.config('collapseEmpty')) {
+        var mode = FT.ads.config('collapseEmpty');
+        if (FT.ads.config('collapseEmpty') !== false) {
+            mode = mode === 'before' ? true : undefined;
             googletag.cmd.push( function () {
-                 googletag.pubads().collapseEmptyDivs();
+                 googletag.pubads().collapseEmptyDivs(mode);
             });
         }
     };
@@ -155,14 +182,17 @@
         this.attach();
         this.unitName = [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         this.setPageTargeting();
-        this.fetchPageSlots();
 
-        for (slotName in this.slots) {
-            this.configureSlot(slotName, this.slots[slotName]);
+        if (FT.ads.config('fetchSlots') === false) {
+            this.fetchPageSlots();
+            for (slotName in this.slots) {
+                this.configureSlot(slotName, this.slots[slotName]);
+            }
         }
 
+        this.collapseEmpty();
+
         googletag.cmd.push( function () {
-            //this.collapseEmpty();
             googletag.pubads().enableAsyncRendering();
             googletag.enableServices();
         });
@@ -183,4 +213,4 @@
     }
 
     FT._ads.utils.extend(FT.ads, {gpt: new GPT()});
-}(window, document));
+} (window, document));
