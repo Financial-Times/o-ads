@@ -3,10 +3,10 @@
         module('Third party config', {
             setup: function () {
                 FT.ads.config('clear');
-                window.iframe2 = $('<iframe>').appendTo('body');
+                window.iframe = $('<iframe>').appendTo('body');
             },
             teardown: function () {
-                window.iframe2.remove();
+                window.iframe.remove();
             }
         });
 
@@ -44,59 +44,28 @@
 
     test('Config fetchMetaConfig', function () {
         QUnit.stop();
-        iframe2.load(function () {
+        iframe.load(function () {
 
                 // Use the iframe context for our assertions
                  expect(1);
                 var win = this.contentWindow;
                 var FT = win.FT;
                 var result =  FT.ads.config();
-                var expected = {
-                    'network': '5887',
-                    'collapseEmpty': true,
-                    'formats':  {
-                        banlb: [[728,90], [468,60], [970,90]],
-                        mpu: [[300,250],[336,280]],
-                        doublet: [[342,200]],
-                        hlfmpu: [[300,600],[336,850],[300,250],[336,280]],
-                        intro: [[1,1]],
-                        newssubs: [[239,90]],
-                        refresh: [[1,1]],
-                        searchbox: [[200,28]],
-                        tlbxrib: [[336,60]]
-                    },
-                    'audSciLimit' : 2,
-                    'metaParam1': 'metaValue1',
-                    'ftads:mode': 'gpt'
-                };
 
-            ok(hasOwnProperty('metaParam1'), 'return an object of meta values.');
+            ok(result.hasOwnProperty('metaParam1'), 'meta value has been added to config');
             QUnit.start();
           });
-          iframe2.attr('src', '../iframes/third.party.switcher.meta.html');
+          iframe.attr('src', '../iframes/third.party.switcher.meta.html');
          });
+
+
     }
+
 
     $(runTests);
 }(window, document, jQuery));
 /*
-        test('Config fetchGlobalConfig', function () {
 
-           expect(1);
-
-            FT.env = {
-                envParam1: 'envValue1',
-                envParam2: 'envValue2'
-            };
-
-            var result = FT.ads.config.fetchGlobalConfig(),
-                expected = {
-                    envParam1: 'envValue1',
-                    envParam2: 'envValue2'
-                };
-
-            deepEqual(result, expected, 'return an object of global values.');
-        });
 
         test('Config init', function () {
             // remove defaults

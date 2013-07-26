@@ -11,7 +11,6 @@
     function Config() {
         var defaults = {
           network: '5887',
-          collapseEmpty: true,
           formats:  {
                 banlb: [[728,90], [468,60], [970,90]],
                 mpu: [[300,250],[336,280]],
@@ -48,6 +47,11 @@
         return FT._ads.utils.isObject(FT.env) ? FT.env : {};
     };
 
+    var fetchCookieConfig = function(){
+        return FT._ads.utils.cookies;
+
+    };
+
     var access= function(k,v){
         var result;
         if (typeof v==="undefined") {
@@ -74,7 +78,8 @@
     };
 
     var init = function() {
-        store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
+
+        store = FT._ads.utils.extend({}, fetchCookieConfig, defaults, fetchMetaConfig(), fetchGlobalConfig());
     };
 
    init();
