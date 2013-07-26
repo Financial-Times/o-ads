@@ -3,10 +3,10 @@
         module('Third party config', {
             setup: function () {
                 FT.ads.config('clear');
-                window.iframe = $('<iframe>').appendTo('body');
+                window.iframe2 = $('<iframe>').appendTo('body');
             },
             teardown: function () {
-                window.iframe.remove();
+                window.iframe2.remove();
             }
         });
 
@@ -44,20 +44,19 @@
 
     test('Config fetchMetaConfig', function () {
         QUnit.stop();
-        iframe.load(function () {
+        iframe2.load(function () {
 
                 // Use the iframe context for our assertions
                  expect(1);
                 var win = this.contentWindow;
                 var FT = win.FT;
-                var result = FT.ads.config();
+                var result =  FT.ads.config();
                 var expected = {
                     'network': '5887',
                     'collapseEmpty': true,
                     'formats':  {
                         banlb: [[728,90], [468,60], [970,90]],
                         mpu: [[300,250],[336,280]],
-                        mpu2: [[300,250],[336,280]],
                         doublet: [[342,200]],
                         hlfmpu: [[300,600],[336,850],[300,250],[336,280]],
                         intro: [[1,1]],
@@ -70,10 +69,11 @@
                     'metaParam1': 'metaValue1',
                     'ftads:mode': 'gpt'
                 };
-            deepEqual(result, expected, 'return an object of meta values.');
+
+            ok(hasOwnProperty('metaParam1'), 'return an object of meta values.');
             QUnit.start();
           });
-          iframe.attr('src', '../iframes/third.party.switcher.meta.html');
+          iframe2.attr('src', '../iframes/third.party.switcher.meta.html');
          });
     }
 
