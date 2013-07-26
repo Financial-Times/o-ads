@@ -124,6 +124,7 @@ FT.Advertising = function () {
    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
+                                    [/(%27)|(%22)+/g,''], //hex encoding special characters occurs for referring urls in some browsers (e.g. Firefox)
                                     [/(&#038;)/,'&'],
                                     [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
                                     [/;;+/g, ';' ]

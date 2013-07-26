@@ -94,5 +94,24 @@ function tests() {
       var referrer = (/rf=([^;]*)/).exec(dfpTargeting)[1];
       deepEqual(referrer, "reports/new-demographics", "should return reports/new-demographics");
    });
+
+    test("test rf should strip out document.referrer hex encoding of special characters (' hex encoded to %27)", function () {
+        FT.env.dfp_targeting = ";pt=art";
+        FT.test.spyDocumentReferrer.returns("http://www.ft.com/topics/people/Michael_O%27Leary");
+        var dfpTargeting = FT.ads.getDFPTargeting();
+
+        var referrer = (/rf=([^;]*)/).exec(dfpTargeting)[1];
+        deepEqual(referrer, "topics/people/michael_oleary", "topics/people/michael_oleary");
+    });
+
+    test("test rf should strip out document.referrer hex encoding of special characters (\" hex encoded to %22)", function () {
+        FT.env.dfp_targeting = ";pt=art";
+        FT.test.spyDocumentReferrer.returns("http://www.ft.com/topics/people/Michael_O%22Leary");
+        var dfpTargeting = FT.ads.getDFPTargeting();
+
+        var referrer = (/rf=([^;]*)/).exec(dfpTargeting)[1];
+        deepEqual(referrer, "topics/people/michael_oleary", "topics/people/michael_oleary");
+    });
+
 }
 $(tests);
