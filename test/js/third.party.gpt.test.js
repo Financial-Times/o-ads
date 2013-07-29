@@ -23,7 +23,7 @@
 
         test('set page targeting with config', function () {
             expect(2);
-            FT.ads.config('clear');
+            FT.ads.config.clear();
             FT.ads.config('dfp_targeting', ';some=test;targeting=params');
 
             var result = FT.ads.gpt.setPageTargeting(),
@@ -99,7 +99,7 @@
 
     }
 
-    //$(runTests);
+    $(runTests);
 
     $(function() {
         FT.ads.config('dfp_site', "test.5887.dev");
