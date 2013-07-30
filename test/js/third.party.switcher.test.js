@@ -6,7 +6,6 @@
         module('Third party switcher', {
             setup: function () {
                 win.iframe = $('<iframe>').appendTo('body');
-                win.iframe3= $('<iframe>').appendTo('body');
             },
             teardown: function () {
                 //win.iframe.remove();
@@ -31,25 +30,19 @@
 
         test( "meta switch", function() {
             QUnit.stop();
-            iframe3.load(function () {
+            iframe.load(function () {
                 // Use the iframe context for our assertions
                 var win = this.contentWindow,
                     FT = win.FT;
 
                 deepEqual(win.$('meta[name="ftads:mode"]').attr('content'), 'gpt', 'the meta configuration is present');
                 deepEqual(FT.ads.config('ftads:mode'), 'gpt', 'Library is configured for GPT');
-
                 ok(FT.spies.adCallSpy.called, 'adCall method is called (for backwards compatability)');
-                // ok(!FT.spies.getTagSpy.called, 'getTag method is no longer called');
-                // ok(!FT.spies.getAudSciSpy.called, 'getAudSci method is no longer called');
-
-
-                //ok(true, 'adCall method is called (for backwards compatability)');
-                ok(true, 'getTag method is no longer called');
-                ok(true, 'getAudSci method is no longer called');
+                ok(!FT.spies.getTagSpy.called, 'getTag method is no longer called');
+                ok(!FT.spies.getAudSciSpy.called, 'getAudSci method is no longer called');
                 QUnit.start();
             });
-            iframe3.attr('src', '../iframes/third.party.switcher.meta.html');
+            iframe.attr('src', '../iframes/third.party.switcher.meta.html');
         });
 
         test( "switch off", function() {
