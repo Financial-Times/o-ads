@@ -64,7 +64,7 @@
         access.clear = function(){
             store={};
         };
-        store = FT._ads.utils.extend({}, fetchCookieConfig(), access.defaults, fetchMetaConfig(), fetchGlobalConfig());
+        store = FT._ads.utils.extend({}, fetchCookieConfig(), defaults, fetchMetaConfig(), fetchGlobalConfig());
         return access;
     }
 

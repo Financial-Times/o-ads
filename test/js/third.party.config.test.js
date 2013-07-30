@@ -87,6 +87,20 @@
               iframe.attr('src', '../iframes/third.party.switcher.global.html');
         });
 
+        test('Config defaults', function () {
+            QUnit.stop();
+            iframe.load(function () {
+            // Use the iframe context for our assertions
+                expect(1);
+                var win = this.contentWindow;
+                var FT = win.FT;
+                var result =  FT.ads.config();
+                ok(result.hasOwnProperty('network'), 'default properties have been added to config');
+                QUnit.start();
+              });
+              iframe.attr('src', '../iframes/third.party.switcher.global.html');
+        });
+
     }
     $(runTests);
 }(window, document, jQuery));
