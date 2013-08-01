@@ -5,14 +5,27 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 
-(function (win, doc, undefined) {
-    "use strict";
 
+/**
+ * FT.ads.audsci is an object providing properties and methods for accessing Audience Science Targetting segments and passing them into DFP
+ * @name audsci
+ * @memberof FT.ads
+ * @class
+*/
+(function (win, doc, undefined) {
+ "use strict";
+/**
+ * @constructor
+*/
     function AudSci() {
         var self = this;
         return this;
     }
-
+/**
+ * getAudSci takes an rsiSegs string and returns an DFP targetting object
+ * @lends audsci
+ * @function
+*/
     AudSci.prototype.getAudSci = function(rsiSegs){
 
         function parseSegs(segs, max) {
@@ -40,7 +53,6 @@
     if (!FT.ads) {
         FT.ads = {};
     }
-
     FT._ads.utils.extend(FT.ads, {audsci: new AudSci()});
 }(window, document));
 

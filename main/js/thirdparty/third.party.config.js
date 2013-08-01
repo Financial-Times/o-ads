@@ -7,8 +7,15 @@
 
 (function (win, doc, undefined) {
     "use strict";
-
+/**
+ * @class
+ * @constructor
+ * Config defines an object which holds the confiuration properties for an FT.ads.gpt instance
+ * There are four tiers of configuration; cookie level config, default config (set within the constructor), meta-tag config and global (env) config.
+ * Global config, set in the page FT.env ojbect takes priority over meta, default and cookie config in that order.
+*/
     function Config() {
+
         var defaults =  {
             network: '5887',
             formats:  {
@@ -35,7 +42,7 @@
                         results[meta.name] = meta.content;
                     }
                 }
-        return results;
+            return results;
         };
         var fetchGlobalConfig = function() {
             return FT._ads.utils.isObject(FT.env) ? FT.env : {};
@@ -48,14 +55,12 @@
         var access= function(k,v){
             var result;
             if (typeof v==="undefined") {
-            //the getter
                 if (typeof k ==="undefined"){result = store;}
                 else {
                     result = store[k];
                 }
             }
             if (typeof v !== "undefined"){
-            //the setter
                 store[k] = v;
                 result = v;
             }
@@ -64,7 +69,15 @@
         access.clear = function(){
             store={};
         };
-        store = FT._ads.utils.extend({}, fetchCookieConfig(), defaults, fetchMetaConfig(), fetchGlobalConfig());
+
+        if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
+            if (FT._ads.utils.cookie('ftads:mode_t')==="testuser"){
+                store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+            }
+        }
+       else {
+            store = FT._ads.utils.extend({}, fetchCookieConfig(), defaults, fetchMetaConfig(), fetchGlobalConfig());
+        }
         return access;
     }
 
