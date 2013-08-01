@@ -6,7 +6,7 @@
                     window.iframe = $('<iframe>').appendTo('body');
                 },
                 teardown: function () {
-                   //window.iframe.remove();
+                   window.iframe.remove();
                 }
             });
 
