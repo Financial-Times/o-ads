@@ -10,11 +10,12 @@
  * FT.ads.audsci is an object providing properties and methods for accessing Audience Science Targetting segments and passing them into DFP
  * @name audsci
  * @memberof FT.ads
- * @class
 */
 (function (win, doc, undefined) {
  "use strict";
 /**
+ * The Audsci class defines an FT.ads.audsci instance
+ * @class
  * @constructor
 */
     function AudSci() {
@@ -22,12 +23,14 @@
         return this;
     }
 /**
- * getAudSci takes an rsiSegs string and returns an DFP targetting object
+ * getAudSci takes an rsiSegs string and returns an DFP targetting object.
+ * only segments begining J07717_1 will be entered into the return object.
+ * the return object will have a single key 'a' containing an array of segments: {'a' : []};
+ * @name getAudSci
+ * @memberof audsci
  * @lends audsci
- * @function
 */
     AudSci.prototype.getAudSci = function(rsiSegs){
-
         function parseSegs(segs, max) {
             var match,
                 exp = /J07717_10*([^|]*)/g,
@@ -46,13 +49,6 @@
         return parseSegs(rsiSegs, FT.ads.config('audSciLimit'));
     };
 
-    if (!win.FT ) {
-        FT = win.FT = {};
-    }
-
-    if (!FT.ads) {
-        FT.ads = {};
-    }
     FT._ads.utils.extend(FT.ads, {audsci: new AudSci()});
 }(window, document));
 

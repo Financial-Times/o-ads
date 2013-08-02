@@ -204,13 +204,5 @@
         return this.slots;
     };
 
-    if (!FT) {
-        FT = win.FT = {};
-    }
-
-    if (!FT.ads) {
-        FT.ads = {};
-    }
-
     FT._ads.utils.extend(FT.ads, {gpt: new GPT()});
 } (window, document));

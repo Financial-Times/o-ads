@@ -5,17 +5,29 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 
+/**
+ * The FT.ads.config object holds the confiuration properties for an FT.ads.gpt instance.
+ * There are four tiers of configuration; cookie level config, default config (set within the constructor), metatag config and global (env) config.
+ * Global config, (set in the page FT.env ojbect) takes priority over meta followed by default config with cookie config having the least priority.
+ * The FT.ads.config() function acts as an accessor method for the config; allowing getting and setting of configuration values.
+ * Calling config() with no parameters returns the entire configuration object.
+ * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
+ * Calling config passing a valid property key and a value will envoke the setter and set the value of the key to the new value.
+ * @name config
+ * @memberof FT.ads
+ * @function
+*/
 (function (win, doc, undefined) {
     "use strict";
 /**
+ * The Config class defines an FT.ads.config instance.
  * @class
  * @constructor
- * Config defines an object which holds the confiuration properties for an FT.ads.gpt instance
- * There are four tiers of configuration; cookie level config, default config (set within the constructor), meta-tag config and global (env) config.
- * Global config, set in the page FT.env ojbect takes priority over meta, default and cookie config in that order.
 */
     function Config() {
-
+/**
+ * Default configuration set in the constructor.
+ */
         var defaults =  {
             network: '5887',
             formats:  {
@@ -32,6 +44,11 @@
             audSciLimit : 2
         };
         var store = {};
+/**
+ * @private
+ * @function
+ * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
+ */
         var fetchMetaConfig = function() {
             var meta,
                 results = {},
@@ -44,14 +61,27 @@
                 }
             return results;
         };
+/**
+ * @private
+ * @function
+ * fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
+ */
         var fetchGlobalConfig = function() {
             return FT._ads.utils.isObject(FT.env) ? FT.env : {};
         };
-
+/**
+ * @private
+ * @function
+ * fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
+ */
+ //TODO update this function to only pull out cookies related to ad config rather than the entire object
         var fetchCookieConfig = function(){
             return FT._ads.utils.cookies;
         };
-
+/**
+ * @function
+ * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
+ */
         var access= function(k,v){
             var result;
             if (typeof v==="undefined") {
@@ -80,15 +110,5 @@
         }
         return access;
     }
-
-    if (!win.FT && FT._ads.utils.isObject(win.FT)) {
-        FT = win.FT = {};
-
-    }
-
-    if (!FT.ads) {
-        FT.ads = {};
-    }
-
     FT._ads.utils.extend(FT.ads, {config: new Config()});
 }(window, document));
