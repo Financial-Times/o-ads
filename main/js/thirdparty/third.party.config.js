@@ -99,7 +99,10 @@
         access.clear = function(){
             store={};
         };
-
+/**
+ * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
+ * this allows QA Testers to over-ride global and meta config.
+ */
         if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
             if (FT._ads.utils.cookie('ftads:mode_t')==="testuser"){
                 store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
