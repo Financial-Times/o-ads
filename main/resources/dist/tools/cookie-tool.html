@@ -55,7 +55,8 @@
     <div id="dev-prepopulaters" class="btn-group">
         <h3>Predefined cookie values for Developers</h3>
         <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "integration"}]'>Integration mode</button>​
-        <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "unit"}]'>Unit mode</button>​
+        <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "unit"}]'>Unit mode</button>
+        <button class="btn btn-success" data-cookies='[{"name": "ftads:mode_t", "value" : "testuser"}]'>Allow cookie values to over-ride env and metatag config settings (GPT thirdparty ad libarary).</button>
     </div>
 
     <div id="ipad-prepopulaters" class="btn-group">
@@ -112,6 +113,7 @@
          <tr><td>WA/FT</td><td>ord=123123123</td><td>set a specific ord value for ad calls. useful when intercepting ad calls with a web proxy</td></tr>
          <tr><td>WA/FT</td><td>noaudsci</td><td>omit Audience Science values from ad call. useful when intercepting ad calls with a web proxy</td></tr>
          <tr><td>FT</td><td>setxy=150,120</td><td>Change XY position of diagnostics dialog box</td></tr>
+         <tr><td>FT</td><td>ftads:mode_t=testuser</td><td>For the Third Party GPT Library - allow cookie values to over-ride  env and metatag config settings.</td></tr>
        </tbody>
    </table>
 </section>
