@@ -59,6 +59,8 @@
     };
 
     proto.fetchSlotConfig = function  (container, config) {
+        config = config || {};
+
         var attrs, attr, attrObj, name, matches, parser,
             sizes = [],
             targeting = {},
@@ -75,13 +77,12 @@
                     return value;
                 },
                 'out-of-page':  function (name, value){
-                    var outOfPage;
-                    if (value === 'true' || !!value){
-                        outOfPage = true;
-                    } else if (value === 'false' || !value){
-                        outOfPage = false;
+                    if (value === 'true'){
+                        config.outOfPage = true;
+                    } else if (value === 'false'){
+                        config.outOfPage = false;
                     }
-                    return outOfPage;
+                    return config.outOfPage;
                 },
                 'page-type':  function (name, value){
                     targeting.pt = value;
@@ -110,7 +111,6 @@
             }
         }
 
-        config = config || {};
         return {
             sizes: !!(sizes.length) ? sizes : config.sizes,
             outOfPage: config.outOfPage || false,

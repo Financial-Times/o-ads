@@ -27,10 +27,10 @@
             FT.ads.config('dfp_targeting', ';some=test;targeting=params');
 
             var result = FT.ads.gpt.setPageTargeting(),
-                expected = {some: 'test', targeting: 'params'};
+                expected = {eid: null, some: 'test', targeting: 'params'};
 
             deepEqual(result, expected, 'setting dfp_targeting in config works');
-            ok(sinon.spies.gptCmdPush.calledTwice, 'the params are queued with GPT');
+            ok(sinon.spies.gptCmdPush.calledThrice, 'the params are queued with GPT');
             FT.ads.config(oldConfig);
         });
 
@@ -109,30 +109,26 @@
             expect(5);
 
             var container = $('<div data-ftads-out-of-page="true"></div>')[0],
-                result = FT.ads.gpt.fetchSlotConfig(container, {}),
-                expected = true;
-            deepEqual(result.outOfPage, expected, 'data-ftads-out-of-page attribute is true');
+                result = FT.ads.gpt.fetchSlotConfig(container, {});
+
+            ok(result.outOfPage, 'data-ftads-out-of-page attribute is true');
 
             container = $('<div data-ftads-out-of-page="false">')[0];
             result = FT.ads.gpt.fetchSlotConfig(container, {});
-            expected = false;
-            deepEqual(result.outOfPage, expected, 'data-ftads-out-of-page is false');
+            ok(!result.outOfPage, 'data-ftads-out-of-page is false');
 
             container = $('<div data-ftads-out-of-page="">')[0];
             result = FT.ads.gpt.fetchSlotConfig(container, {outOfPage: true});
-            expected = true;
-            deepEqual(result.outOfPage, expected, 'Empty attribute returns value from passed config');
+            ok(result.outOfPage, 'Empty attribute returns value from passed config');
 
             container = $('<div>')[0];
             result = FT.ads.gpt.fetchSlotConfig(container, {outOfPage: true});
-            expected = true;
-            deepEqual(result.outOfPage, expected, 'No attribute returns value from passed config');
+            ok(result.outOfPage, 'No attribute returns value from passed config');
 
 
             container = $('<div>')[0];
             result = FT.ads.gpt.fetchSlotConfig(container, {});
-            expected = false;
-            deepEqual(result.outOfPage, expected, 'No attribute and no config returns false');
+            ok(!result.outOfPage, 'No attribute and no config returns false');
         });
 
         test('fetchSlotConfig targeting', function () {
