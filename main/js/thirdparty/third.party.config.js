@@ -13,6 +13,7 @@
  * Calling config() with no parameters returns the entire configuration object.
  * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
  * Calling config passing a valid property key and a value will envoke the setter and set the value of the key to the new value.
+ * Calling config passing an object of keys and values will envoke a setter that extends the store with the object provided.
  * @name config
  * @memberof FT.ads
  * @function
@@ -30,19 +31,37 @@
  */
         var defaults =  {
             network: '5887',
-            formats:  {
-                banlb: [[728,90], [468,60], [970,90]],
-                mpu: [[300,250],[336,280]],
-                doublet: [[342,200]],
-                hlfmpu: [[300,600],[336,850],[300,250],[336,280]],
-                intro: [[1,1]],
-                newssubs: [[239,90]],
-                refresh: [[1,1]],
-                searchbox: [[200,28]],
-                tlbxrib: [[336,60]]
-            },
+                formats: {
+                    banlb: {
+                        sizes: [[728,90], [468,60], [970,90]]
+                    },
+                    mpu: {
+                        sizes: [[300,250],[336,280]]
+                    },
+                    doublet: {
+                        sizes: [[342,200]]
+                    },
+                    hlfmpu: {
+                        sizes: [[300,600],[336,850],[300,250],[336,280]]
+                    },
+                    intro: {
+                        outOfPage: true
+                    },
+                    newssubs: {
+                        sizes: [[239,90]]
+                    },
+                    refresh: {
+                    },
+                    searchbox: {
+                        sizes: [[200,28]]
+                    },
+                    tlbxrib: {
+                        sizes: [[336,60]]
+                    }
+                },
             audSciLimit : 2
         };
+
         var store = {};
 /**
  * @private
@@ -61,6 +80,7 @@
                 }
             return results;
         };
+
 /**
  * @private
  * @function
@@ -78,27 +98,38 @@
         var fetchCookieConfig = function(){
             return FT._ads.utils.cookies;
         };
+
 /**
  * @function
  * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
  */
-        var access= function(k,v){
+        var access = function(k, v){
             var result;
-            if (typeof v==="undefined") {
-                if (typeof k ==="undefined"){result = store;}
-                else {
+            if (FT._ads.utils.isPlainObject(k)) {
+                store = FT._ads.utils.extend(store, k);
+                result = store;
+            } else if (typeof v === "undefined") {
+                if (typeof k === "undefined"){
+                    result = store;
+                } else {
                     result = store[k];
                 }
-            }
-            if (typeof v !== "undefined"){
+            } else {
                 store[k] = v;
                 result = v;
             }
+
             return result;
         };
-        access.clear = function(){
-            store={};
+
+        access.clear = function(key){
+            if (key) {
+                delete store[key];
+            } else {
+                store = {};
+            }
         };
+
 /**
  * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
  * this allows QA Testers to over-ride global and meta config.
@@ -108,10 +139,11 @@
                 store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
             }
         }
-       else {
+        else {
             store = FT._ads.utils.extend({}, fetchCookieConfig(), defaults, fetchMetaConfig(), fetchGlobalConfig());
         }
         return access;
     }
+
     FT._ads.utils.extend(FT.ads, {config: new Config()});
 }(window, document));

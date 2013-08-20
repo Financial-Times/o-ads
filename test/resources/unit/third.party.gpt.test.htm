@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Testing GPT Ads!</title>
-    <!-- use GPT for ad calls -->
     <!-- testing resources -->
     <link rel="stylesheet" href="../css/qunit-1.10.0pre.css" type="text/css" media="screen">
     <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen">
@@ -21,20 +20,13 @@
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
     <script src="../js/thirdparty/third.party.config.js"></script>
-    <script src="../js/thirdparty/third.party.audsci.js"></script>
+    <script src="../js/thirdparty/third.party.targeting.js"></script>
     <script src="../js/thirdparty/third.party.gpt.js"></script>
 
     <!-- tests -->
     <script src="../js/third.party.config.test.js"></script>
-    <script src="../js/third.party.audsci.test.js"></script>
+    <script src="../js/third.party.targeting.test.js"></script>
     <script src="../js/third.party.gpt.test.js"></script>
-
-    <!-- spies -->
-    <script>
-        FT.spies = {};
-        //FT.spies.GptCmdPushSpy = sinon.spy(googletag.cmd, 'push');
-        // FT.spies.getAudSciSpy = sinon.spy(FT.env, "getAudSci");
-    </script>
   </head>
   <body>
     <h1 id="qunit-header">Test plan for the third party library</h1>
@@ -55,16 +47,16 @@
         <div id="banlb">
         </div>
 
-        <h2>newssubs</h2>
-        <div id="newssubs">
-        </div>
-
         <h2>hlfmpu</h2>
         <div id="hlfmpu" data-ad-size="300x600">
         </div>
 
         <h2>mpu</h2>
         <div id="mpu" >
+        </div>
+
+        <h2>refresh</h2>
+        <div id="refresh">
         </div>
 
         <h2>invalidpos</h2>

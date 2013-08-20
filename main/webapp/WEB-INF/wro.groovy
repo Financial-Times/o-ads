@@ -21,45 +21,52 @@ groups {
     }
 
     "third-party-latest" {
+        js(minimize: false, "/js/thirdparty/third.party.namespace.js")
         js(minimize: false, "/js/thirdparty/third.party.js")
         js(minimize: false, "/js/ft/advertising.utils.js")
         js(minimize: false, "/js/ft/advertising.utils.cookie.js")
         js(minimize: false, "/js/thirdparty/third.party.config.js")
-        js(minimize: false, "/js/thirdparty/third.party.audsci.js")
+        js(minimize: false, "/js/thirdparty/third.party.targeting.js")
         js(minimize: false, "/js/thirdparty/third.party.gpt.js")
         js(minimize: false, "/js/thirdparty/third.party.gpt.switcher.js")
-
+        js(minimize: false, "/js/thirdparty/third.party.gpt.version.js")
     }
 
     "third-party-latest.min" {
+        js("/js/thirdparty/third.party.namespace.js")
         js("/js/thirdparty/third.party.js")
         js("/js/ft/advertising.utils.js")
         js("/js/ft/advertising.utils.cookie.js")
         js("/js/thirdparty/third.party.config.js")
-        js("/js/thirdparty/third.party.audsci.js")
+        js("/js/thirdparty/third.party.targeting.js")
         js("/js/thirdparty/third.party.gpt.js")
         js("/js/thirdparty/third.party.gpt.switcher.js")
+        js("/js/thirdparty/third.party.gpt.version.js")
     }
 
     //How to spend it specific third party lib
     "third-party-htsi" {
+        js(minimize: false, "/js/thirdparty/third.party.namespace.js")
         js(minimize: false, "/js/thirdparty/third.party.htsi.js")
         js(minimize: false, "/js/ft/advertising.utils.js")
         js(minimize: false, "/js/ft/advertising.utils.cookie.js")
         js(minimize: false, "/js/thirdparty/third.party.config.js")
-        js(minimize: false, "/js/thirdparty/third.party.audsci.js")
+        js(minimize: false, "/js/thirdparty/third.party.targeting.js")
         js(minimize: false, "/js/thirdparty/third.party.gpt.js")
         js(minimize: false, "/js/thirdparty/third.party.switcher.js")
+        js(minimize: false, "/js/thirdparty/third.party.version.js")
     }
 
     "third-party-htsi.min" {
+        js("/js/thirdparty/third.party.namespace.js")
         js("/js/ft/advertising.utils.js")
         js("/js/ft/advertising.utils.cookie.js")
         js("/js/thirdparty/third.party.htsi.js")
         js("/js/thirdparty/third.party.config.js")
-        js("/js/thirdparty/third.party.audsci.js")
+        js("/js/thirdparty/third.party.targeting.js")
         js("/js/thirdparty/third.party.gpt.js")
         js("/js/thirdparty/third.party.switcher.js")
+        js("/js/thirdparty/third.party.gpt.version.js")
     }
 
     "advertising-latest.min" {

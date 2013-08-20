@@ -19,7 +19,7 @@
                     value = 'value',
                     value2 = 'value2';
 
-                expect(7);
+                expect(9);
 
                 strictEqual(typeof FT.ads.config, 'function', 'The set method exists');
 
@@ -42,6 +42,18 @@
 
                 result = FT.ads.config(key);
                 deepEqual(result, value2, 'get returns the new value.');
+
+                FT.ads.config.clear();
+                obj = {
+                    'some': 'config',
+                    'parameters': 'to',
+                    'be': 'added'
+                }
+                result = FT.ads.config(obj);
+                deepEqual(result, obj, 'set multiple key/values using an object.');
+
+                result = FT.ads.config();
+                deepEqual(result, obj, 'get returns the new values.');
           });
 
         test('Config fetchMetaConfig', function () {
@@ -102,6 +114,7 @@
               });
               iframe.attr('src', '../iframes/third.party.switcher.global.html');
         });
+
         test('Config cookie over-ride for Test User mode', function () {
             QUnit.stop();
             iframe.load(function () {
@@ -114,7 +127,6 @@
                 QUnit.start();
               });
               iframe.attr('src', '../iframes/third.party.cookie.html');
-
         });
 
     }

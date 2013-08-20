@@ -18,11 +18,11 @@
         // executed when GPT code is available, if GPT is available they will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
 
+        this.unitName = '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         return this;
     }
 
     proto.attach = function () {
-
         var tag = doc.createElement('script'),
             node = doc.getElementsByTagName('script')[0];
 
@@ -35,15 +35,7 @@
 
     proto.setPageTargeting = function () {
         var param,
-            targeting = {},
-            base = FT.ads.config('dfp_targeting'),
-            audsci = FT.ads.audsci.getAudSci();
-
-        // Convert ;key=val strings to objects { key: value }
-        base = FT._ads.utils.isString(base) ? FT._ads.utils.hash(base, ';', '=') : base;
-        //audsci = FT._ads.utils.isString(audsci) ? FT._ads.utils.hash(audsci, ';', '=') : base;
-
-        FT._ads.utils.extend(targeting, base, audsci);
+            targeting = FT.ads.targeting();
 
         function setTargeting(key, value) {
             return function () {
@@ -58,7 +50,7 @@
         return targeting;
     };
 
-    proto.fetchAdContainer = function (slotName) {
+    proto.fetchContainer = function (slotName) {
         var container = doc.getElementById(slotName);
         if (container) {
             return container;
@@ -66,73 +58,113 @@
         return false;
     };
 
+    proto.fetchSlotConfig = function  (container, config) {
+        var attrs, attr, attrObj, name, matches, parser,
+            sizes = [],
+            targeting = {},
+            parsers = {
+                'size': function (name, value){
+                    value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
+                      sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
+                    });
 
+                    return !!sizes.length ? sizes : false;
+                },
+                'position': function (name, value){
+                    targeting.pos = value;
+                    return value;
+                },
+                'out-of-page':  function (name, value){
+                    var outOfPage;
+                    if (value === 'true' || !!value){
+                        outOfPage = true;
+                    } else if (value === 'false' || !value){
+                        outOfPage = false;
+                    }
+                    return outOfPage;
+                },
+                'page-type':  function (name, value){
+                    targeting.pt = value;
+                    return value;
+                },
+                'targeting': function (name, value) {
+                    if (value !== undefined) {
+                        value = FT._ads.utils.hash(value, ';', '=');
+                        targeting = FT._ads.utils.extend(targeting, value);
+                    }
+                    return value;
+                },
+                'default': function (name, value) {
+                    targeting[name] = value;
+                    return value;
+                }
+            };
 
-    proto.fetchSlotConfig = function  (container, sizes) {
-        var sizesString;
-        sizes = container.getAttribute('data-ad-size') || sizes || [1,1];
-
-        if (FT._ads.utils.isString(sizes)) {
-            sizesString = sizes;
-            sizes = [];
-            sizesString.replace(/(\d+)x(\d+)/g, function (match, width, height) {
-              sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
-            });
+        attrs = container.attributes;
+        for(attr in attrs) {
+            attrObj = attrs[attr];
+            if(attrs.hasOwnProperty(attr) && attrObj.name &&  !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/))) {
+                name = matches[3];
+                parser = FT._ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
+                parser(name, attrObj.value);
+            }
         }
 
-        //TODO add more slot level options targeting would be a good start
-
+        config = config || {};
         return {
-            sizes: sizes
+            sizes: !!(sizes.length) ? sizes : config.sizes,
+            outOfPage: config.outOfPage || false,
+            collapseEmpty: config.collapseEmpty,
+            targeting: targeting
         };
     };
 
-    proto.fixContainer = function(container) {
-        // this code is pretty much for HTSI only
-        // if the ID is on a script tag
-        // traverse the DOM for a suitable element to attach it to (anything but a script tag)
-        var slotName = container.id;
-        while (container.tagName === 'SCRIPT') {
-            if (container.id === slotName) {
-                container.removeAttribute('id');
-            }
-            container = container.parentNode;
+    proto.addSlotContainer = function(node, slotName) {
+        var divContainer = doc.createElement('div');
+            slotName = slotName || node.id;
+
+
+        divContainer.setAttribute('id', slotName);
+
+        if(node.tagName === 'SCRIPT') {
+            node.parentNode.insertBefore(divContainer, node);
+        } else {
+            node.appendChild(divContainer);
         }
-        container.setAttribute('id', slotName);
+
+        return divContainer;
     };
 
-    proto.fetchPageSlots = function () {
-        var slotName, container, config,
-            formats = FT.ads.config('formats');
-
-        // Find ad slots marked up by ID
-        for (slotName in formats) {
-            if (container = this.fetchAdContainer(slotName)) {
-                config = this.fetchSlotConfig(container, formats[slotName]);
-                this.fixContainer(container);
-
-                this.slots[slotName] = {
-                    container: container,
-                    config: config
-                };
-            }
-        }
-        return this.slots;
-    };
-
-    proto.configureSlot = function (slotName, slot) {
-        // TODO slot level config/targeting via data attrs on the container.
-
-        var unitName = this.getUnitName(slotName);
-        googletag.cmd.push(this.createSlot(unitName, slot.config.sizes, slotName));
-    };
-
-    proto.createSlot = function (unitName, sizes, slotName) {
+    proto.createSlot = function (context, slotName) {
         return function() {
-           var slot = googletag.defineSlot(unitName, sizes, slotName);
+            var gptSlot, oopSlot, targetKey,
+                unitName = context.getUnitName(slotName),
+                slot = context.slots[slotName],
+                container = slot.container;
 
-            slot.addService(googletag.pubads())
-                .setTargeting('pos', slotName);
+            container = context.addSlotContainer(slot.container, slotName);
+            context.addSlotContainer(container, slotName + '-itp');
+            gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotName + '-itp')
+                        .addService(googletag.pubads());
+
+            context.slots[slotName].gptSlot = gptSlot;
+            googletag.display(slotName + '-itp');
+
+            if (slot.config.outOfPage === true) {
+                context.addSlotContainer(slotName + '-oop');
+                oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotName + '-oop')
+                            .addService(googletag.pubads());
+                context.slots[slotName].oopSlot = oopSlot;
+                googletag.display(slotName + '-oop');
+            }
+
+            for (targetKey in slot.config.targeting) {
+                if (slot.config.targeting.hasOwnProperty(targetKey)) {
+                    gptSlot.setTargeting(targetKey, slot.config.targeting[targetKey]);
+                }
+            }
+
+            context.setSlotCollapseEmpty(gptSlot, slot.config);
         };
     };
 
@@ -143,63 +175,62 @@
     proto.displaySlot = function (slotName) {
         var unitName, config, container, formats;
 
-        if (FT.ads.config('fetchSlots') !== false) {
-            if (container = this.fetchAdContainer(slotName)) {
-                formats = FT.ads.config('formats');
-                unitName = this.getUnitName(slotName);
-                config = this.fetchSlotConfig(container, formats[slotName]);
+        if (container = this.fetchContainer(slotName)) {
+            formats = FT.ads.config('formats');
+            unitName = this.getUnitName(slotName);
+            config = this.fetchSlotConfig(container, formats[slotName]);
 
-                this.fixContainer(container);
+            this.slots[slotName] = {
+                container: container,
+                config: config
+            };
 
-                this.slots[slotName] = {
-                    container: container,
-                    config: config
-                };
+            googletag.cmd.push(this.createSlot(this, slotName));
+        }
+    };
 
-                googletag.cmd.push(this.createSlot(unitName, config.sizes, slotName));
-            }
+    proto.setPageCollapseEmpty = function () {
+        var mode = FT.ads.config('collapseEmpty');
+
+        if (mode === 'after' || mode === undefined) {
+            mode = undefined;
+        } else if (mode === 'before' || mode === true) {
+            mode = true;
+        } else {
+            mode = !!mode;
         }
 
         googletag.cmd.push( function () {
-            googletag.display(slotName);
+            googletag.pubads().collapseEmptyDivs(mode);
         });
+        return mode;
     };
 
-    proto.collapseEmpty = function () {
-        var mode = FT.ads.config('collapseEmpty');
-        if (FT.ads.config('collapseEmpty') !== false) {
-            mode = mode === 'before' ? true : undefined;
-            googletag.cmd.push( function () {
-                 googletag.pubads().collapseEmptyDivs(mode);
-            });
+    proto.setSlotCollapseEmpty = function (slot, config) {
+        var mode = config.collapseEmpty;
+        if (mode === true || mode === 'after') {
+            slot.setCollapseEmptyDiv(true);
+        } else if (mode === 'before') {
+            slot.setCollapseEmptyDiv(true, true);
+        } else if (mode === false || mode === 'never') {
+            slot.setCollapseEmptyDiv(false);
         }
+
+        return mode;
     };
 
-    // Use an init method for GPT while we have the switch, once we're fully on GPT this can be deprecated
+
     proto.init = function () {
         var slotName;
 
         this.attach();
-        this.unitName = [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         this.setPageTargeting();
-
-        if (FT.ads.config('fetchSlots') === false) {
-            this.fetchPageSlots();
-            for (slotName in this.slots) {
-                this.configureSlot(slotName, this.slots[slotName]);
-            }
-        }
-
-        this.collapseEmpty();
+        this.setPageCollapseEmpty();
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
             googletag.enableServices();
         });
-
-        for (slotName in this.slots) {
-            this.displaySlot(slotName);
-        }
 
         return this.slots;
     };

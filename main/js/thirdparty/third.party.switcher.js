@@ -1,4 +1,4 @@
-/**
+  /**
  * @fileOverview
  * Third party library for use with google publisher tags.
  *
@@ -20,14 +20,26 @@
             FT.ads.gpt.displaySlot.apply(FT.ads.gpt, arguments);
           };
 
-          FT.ads.config('formats', { banlb: [[728,90], [468,60], [970,90]], mpu: [[300,250],[336,280]], doublet: [[342,200]], hlfmpu: [[300,600],[336,850],[300,250],[336,280]], intro: [[1,1]], newssubs: [[239,90]], refresh: [[1,1]], searchbox: [[200,28]], tlbxrib: [[336,60]], mpu2: [[300,250],[336,280]]});
-          if (FT.ads.config('fetchSlots') === false) {
-            FT.ads.gpt.init();
-          } else {
-            $(function () {
-              FT.ads.gpt.init();
-            });
-          }
+          FT.ads.config('formats', {
+            banlb: {
+              sizes: [[728,90], [468,60], [970,90]]
+            },
+            mpu: {
+              sizes: [[300,250],[336,280]]
+            },
+            mpu2: {
+              sizes: [[300,250],[336,280]]
+            },
+            hlfmpu: {
+              sizes: [[300,600],[336,850],[300,250],[336,280]]
+            },
+            refresh: {
+              outOfPage: true,
+              collapseEmpty: false
+            }
+          });
+
+          FT.ads.gpt.init();
       }
     }
 
