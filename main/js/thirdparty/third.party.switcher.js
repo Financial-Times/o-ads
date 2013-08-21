@@ -39,6 +39,8 @@
             }
           });
 
+          FT.ads.config('collapseEmpty', 'ft');
+
           FT.ads.gpt.init();
       }
     }

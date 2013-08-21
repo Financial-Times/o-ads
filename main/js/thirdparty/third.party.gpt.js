@@ -310,7 +310,7 @@
         } else if (mode === 'never' || mode === false) {
             mode = false;
         } else if (mode === 'ft') {
-            mode = false;
+            mode = undefined;
             this.collapse();
         }
 
@@ -382,11 +382,25 @@
     proto.collapse = function () {
         googletag.cmd.push(function(){
             var _log = googletag.debug_log.log;
-            googletag.debug_log.log = function(level,message,service,slot,reference){
-                /* jshint devel: true*/
-                var matches;
-                if (matches = message.match(/Completed\srendering\sad\sfor\sslot\s([\/\w]*)/ig)) {
-                    //console.log(matches);
+            googletag.debug_log.log = function(level, message, service, slot, reference){
+                var slotId, container,  iframe, imgs, img;
+
+                if (/Completed\srendering\sad\sfor\sslot\s/ig.test(message)) {
+
+                    slotId = slot.getSlotId();
+                    container = doc.getElementById(slotId.getDomId());
+                    iframe = doc.getElementById('google_ads_iframe_' + slotId.getId());
+                    try {
+                        imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                        while (img = imgs.pop()) {
+                            if (img.src === 'http://media.ft.com/adimages/rich-banner/ft-no-ad.gif') {
+                                container.style.display = 'none';
+                            }
+                        }
+                    } catch (err) {
+                        // Probably blocked due ad rendered in iframe so it's no longer on same domain.
+                        return _log.apply(this, arguments);
+                    }
                 }
                 return _log.apply(this, arguments);
             };
