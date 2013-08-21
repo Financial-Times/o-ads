@@ -3,7 +3,6 @@
 
     sinon.spies = {
         gptCmdPush: sinon.spy(googletag.cmd, 'push'),
-        fetchContainer: sinon.spy(FT.ads.gpt, 'fetchContainer'),
         fetchSlotConfig: sinon.spy(FT.ads.gpt, 'fetchSlotConfig')
     };
 
@@ -106,20 +105,11 @@
         });
 
         test('fetchSlotConfig out of page', function () {
-            expect(5);
+            expect(3);
 
-            var container = $('<div data-ftads-out-of-page="true"></div>')[0],
+            var container = $('<div data-ftads-out-of-page></div>')[0],
                 result = FT.ads.gpt.fetchSlotConfig(container, {});
-
-            ok(result.outOfPage, 'data-ftads-out-of-page attribute is true');
-
-            container = $('<div data-ftads-out-of-page="false">')[0];
-            result = FT.ads.gpt.fetchSlotConfig(container, {});
-            ok(!result.outOfPage, 'data-ftads-out-of-page is false');
-
-            container = $('<div data-ftads-out-of-page="">')[0];
-            result = FT.ads.gpt.fetchSlotConfig(container, {outOfPage: true});
-            ok(result.outOfPage, 'Empty attribute returns value from passed config');
+            ok(result.outOfPage, 'data-ftads-out-of-page attribute is present returns true');
 
             container = $('<div>')[0];
             result = FT.ads.gpt.fetchSlotConfig(container, {outOfPage: true});
