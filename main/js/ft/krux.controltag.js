@@ -3,7 +3,7 @@ if(!FT.ads) { FT.ads ={};}
     /**
     * @namespace FT.ads
     */
-FT.ads.kruxConfigId="IhGt1gAD";
+FT.ads.kruxConfigId= (FT.ads.getDFPSite().match(/^test/)) ? "IhGt1gAD" : "liveid";
 
 var Krux = window.Krux||((Krux=function(){Krux.q.push(arguments);}).q=[]);
   (function(){
@@ -13,4 +13,4 @@ var Krux = window.Krux||((Krux=function(){Krux.q.push(arguments);}).q=[]);
       (location.protocol==="https:"?"https:":"http:")+"//cdn.krxd.net/controltag?confid="+FT.ads.kruxConfigId;
     var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(k,s);
   }());
-console.log(FT.ads.getDFPSite());
+
