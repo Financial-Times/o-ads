@@ -118,9 +118,9 @@ FT.Advertising = function () {
       '-': {}
    };
 
-   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'tile', 'ord'];
+   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'kuid', 'khost', 'ksg', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'tile', 'ord'];
    this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
-   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
+   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
@@ -869,6 +869,29 @@ FT.Advertising.prototype.rsiSegs = function () {
    return undefined;
 };
 
+FT.Advertising.prototype.kruxRetrieve = function (name) {
+   var value = '',
+      name ='kx'+ name;
+   if (!this.suppressKrux) {
+      if (window.localStorage && window.localStorage[name]) {
+         value = window.localStorage[name];
+      }  else if (FT._ads.utils.cookies[name]) {
+         value = FT._ads.utils.cookies[name];
+      }
+   }
+   return value;
+};
+
+FT.Advertising.prototype.kruxUserId = function () {
+   var kruxUserId = '';
+
+   return this.kruxRetrieve('user');
+};
+
+FT.Advertising.prototype.kruxSegs = function () {
+   return this.kruxRetrieve('segs').replace(/([^,]+)\,?/g, 'ksg=$1;');
+};
+
 FT.Advertising.prototype.getAyscVars = function (obj) {
    var out = {},
       item, q;
@@ -906,7 +929,8 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
    // get AYSC cookie values to determine ad server
    var AllVars = this.prepareAdVars(this.getAyscVars({})), cookie = FT._ads.utils.cookie("FTQA"),
       rFormat,
-      docUUID;
+      docUUID,
+      kruxUserId;
    this.baseAdvert.pos = pos;
 
    if ((cookie) && (cookie.match(/env=(.*)premiumcopy/))) {
@@ -943,6 +967,13 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
    });
 
    this.baseAdvert.a = this.rsiSegs();
+
+   if (!!(kruxUserId = this.kruxUserId())) {
+      this.baseAdvert.khost = encodeURIComponent(location.hostname);
+      this.baseAdvert.kuid = kruxUserId;
+   }
+
+   this.baseAdvert.ksg = this.kruxSegs();
 
    this.baseAdvert.cc = this.getConsentValue();
 
@@ -1158,6 +1189,11 @@ FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode, vidKV) {
 
       if (key === 'pos' && dfp_targeting) {
          results += dfp_targeting + ';';
+      }
+
+      if (key === 'ksg') {
+         results += value;
+         value = false;
       }
 
       if (key === 'a' && rsiSegs) {
@@ -1723,6 +1759,7 @@ FT.Advertising.prototype.beginNewPage = function (env) {
    this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
    this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
    this.suppressAudSci = false;
+   this.suppressKrux = false;
 
    // Let the FTQA cookie value override the timeout, if present
    cookie = FT._ads.utils.cookie("FTQA");
