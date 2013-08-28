@@ -9,15 +9,8 @@
     <script src="../lib/qunit/qunit-1.10.0pre.js"></script>
     <script>
         var FT = FT || {};
-        //added for Track.js
         FT.$ = $;
-        FT.env = FT.env || {
-                                "dfp_site": "test.5887.dev",
-                                "dfp_zone": "build-url-test"
-                            };
-
-//        var j, debugStr = '',
-//        re = new RegExp("%3D")
+        FT.env = FT.env || {"dfp_site": "test.5887.dev", "dfp_zone": "build-url-test"};
     </script>
     <script src="../js/ft/advertising.utils.js"></script>
     <script src="../js/ft/advertising.utils.cookie.js"></script>
@@ -25,18 +18,15 @@
     <script src="../js/ft/DartForPublishers.js"></script>
     <script src="../js/ft/krux.controltag.js"></script>
     <script src="../js/util/mock-ads.html.js"></script>
-
     <script>
         var testMode = unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
     </script>
-
-
     <script src="../js/krux.controltag.test.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 </head>
 <body>
-<h1 id="qunit-header">Test plan for DFP targeting</h1>
+<h1 id="qunit-header">Test plan for Krux Control tag</h1>
 
 <h2 id="qunit-banner"></h2>
 
