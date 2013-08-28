@@ -7,10 +7,10 @@
         module('Third party targeting - Krux Control tag');
 
         test( "Krux Config ID is set", function() {
-            strictEqual( typeof(FT.ads.kruxConfigId), "string", "FT.ads krux config id is defined and is a string.");
+            strictEqual( $.type(FT.ads.kruxConfigId), "string", "FT.ads krux config id is defined and is a string.");
         });
         test( "Krux function exists", function() {
-            strictEqual( typeof(Krux), "function", "Krux is a function.");
+            strictEqual( $.type(Krux), "function", "Krux is a function.");
         });
     }
 
