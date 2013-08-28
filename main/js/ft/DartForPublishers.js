@@ -74,7 +74,8 @@
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
- refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting  */
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -870,9 +871,9 @@ FT.Advertising.prototype.rsiSegs = function () {
 };
 
 FT.Advertising.prototype.kruxRetrieve = function (name) {
-   var value = '',
-      name ='kx'+ name;
+   var value = '';
    if (!this.suppressKrux) {
+      name ='kx'+ name;
       if (window.localStorage && window.localStorage[name]) {
          value = window.localStorage[name];
       }  else if (FT._ads.utils.cookies[name]) {

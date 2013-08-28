@@ -5,6 +5,7 @@ groups {
     }
 
     "advertising-latest" {
+        js(minimize: false, "/js/ft/krux.controltag.js")
         js(minimize: false, "/js/ft/revenue-science.js")
         js(minimize: false, "/js/ft/advertising.utils.js")
         js(minimize: false, "/js/ft/advertising.utils.cookie.js")
@@ -29,6 +30,7 @@ groups {
     }
 
     "advertising-latest.min" {
+        js "/js/ft/krux.controltag.js"
         js "/js/ft/revenue-science.js"
         js "/js/ft/advertising.utils.js"
         js "/js/ft/advertising.utils.cookie.js"
