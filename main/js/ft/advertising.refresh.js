@@ -40,7 +40,7 @@ FT.Refresh = (function () {
             FT.preservedRefreshScope = this;
             // TODO: no test case for this yet.
             timeout = timeout || 30 * 60 * 1000;  // give it 30 minutes
-            if ((obj.name === 'refresh') && (FT.env.asset === 'page')) {
+            if ((obj.name === 'refresh') && (FT.env.asset !== 'story')) {
                 this.refreshTime = timeout;
             }
         },
