@@ -182,7 +182,7 @@
 */
     proto.createSlot = function (context, slotName) {
         return function() {
-            var gptSlot,
+            var gptSlot, _renderEnded,
                 slot = context.slots[slotName],
                 container = slot.container,
                 slotId ='gpt-' + slotName;
@@ -191,6 +191,12 @@
             gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId)
                         .addService(googletag.pubads());
             context.slots[slotName].gptSlot = gptSlot;
+            _renderEnded = gptSlot.renderEnded;
+            gptSlot.renderEnded = function () {
+                console.log('renderEnded', arguments);
+                _renderEnded.apply(this, arguments);
+            };
+
 
             context.setSlotCollapseEmpty(gptSlot, slot.config);
             context.setSlotTargeting(gptSlot, slot.config.targeting);
@@ -331,13 +337,21 @@
  * @lends GPT
 */
     proto.setSlotCollapseEmpty = function (gptSlot, config) {
-        var mode = config.collapseEmpty;
+        var globalMode = FT.ads.config('collapseEmpty'),
+            mode = config.collapseEmpty;
+
         if (mode === true || mode === 'after') {
             gptSlot.setCollapseEmptyDiv(true);
         } else if (mode === 'before') {
             gptSlot.setCollapseEmptyDiv(true, true);
         } else if (mode === false || mode === 'never') {
             gptSlot.setCollapseEmptyDiv(false);
+        } else if (globalMode === 'ft' || mode === 'ft') {
+            gptSlot._renderEnded = gptSlot.renderEnded;
+            gptSlot.renderEnded = function () {
+                console.log('render end ', this.getName());
+                this._renderEnded.apply(this, arguments);
+            };
         }
 
         return mode;
@@ -380,26 +394,33 @@
     };
 
     proto.collapse = function () {
+
+        function collapseSlot(slot) {
+            var slotId = slot.getSlotId();
+            var container = document.getElementById(slotId.getDomId());
+            var iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
+            try {
+                var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                while (img = imgs.pop()) {
+                    if (img.src === 'http://media.ft.com/adimages/rich-banner/ft-no-ad.gif') {
+                        container.style.display = 'none';
+                    }
+                }
+            } catch (err) {
+                // Probably blocked due ad rendered in iframe no longer being on same domain.
+            }
+        }
+
         googletag.cmd.push(function(){
             var _log = googletag.debug_log.log;
             googletag.debug_log.log = function(level, message, service, slot, reference){
                 var slotId, container,  iframe, imgs, img;
 
-                if (/Completed\srendering\sad\sfor\sslot\s/ig.test(message)) {
-
-                    slotId = slot.getSlotId();
-                    container = doc.getElementById(slotId.getDomId());
-                    iframe = doc.getElementById('google_ads_iframe_' + slotId.getId());
-                    try {
-                        imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
-                        while (img = imgs.pop()) {
-                            if (img.src === 'http://media.ft.com/adimages/rich-banner/ft-no-ad.gif') {
-                                container.style.display = 'none';
-                            }
-                        }
-                    } catch (err) {
-                        // Probably blocked due ad rendered in iframe so it's no longer on same domain.
-                        return _log.apply(this, arguments);
+                if (/Completed\srendering\sad\sfor\sslot\s/ig.test(n)) {
+                    collapseSlot(i);
+                } else if (/Page\sload\scomplete/ig.test(n)) {
+                    for (i in FT.ads.gpt.slots) {
+                        collapseSlot(FT.ads.gpt.slots[i].gptSlot);
                     }
                 }
                 return _log.apply(this, arguments);
