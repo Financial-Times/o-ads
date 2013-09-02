@@ -21,7 +21,7 @@
 
                 expect(9);
 
-                strictEqual(typeof FT.ads.config, 'function', 'The set method exists');
+                ok(FT._ads.utils.isFunction(FT.ads.config), 'The set method exists');
 
                 result = FT.ads.config(key, value);
                 deepEqual(result, value, 'passing a key+value returns the value.');
