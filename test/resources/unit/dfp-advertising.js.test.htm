@@ -158,6 +158,8 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     // AYSC values which should not appear in the Ad call URL
     TEST.MaxAYSCFields = 60;
     TEST.UnusedAysc = ['00', '03', '04', '08', '09', '10', '11', '12', '13', '15', '16', '17', '18', '22', '23', '24', '25', '26', '28', '29', '30', '31', '32', '32', '33', '34', '35', '36', '37', '38', '39'];
+    //AYSC values that should not appear in video Ad call URL
+    TEST.UnusedVideoAysc = ['00', '03', '04', '08', '09', '10', '11', '12', '13', '15', '16', '17', '18', '22', '23', '24', '25', '26', '28', '29', '30', '31', '32', '32', '33', '34', '35', '36', '37', '38', '39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60'];
     // AYSC values which are omitted from the Ad call URL if they have specific values
     TEST.OmitXXX = ['02', '05', '06', '07', '20', '21', '19'];
     TEST.OmitPVTRES = ['14', '27', '24' ];
@@ -640,6 +642,16 @@ function testBuildURL(message, Args) {
     var url = FT.ads.buildURL(Args.pos);
     ok(true, "== BEGIN: " + message + " [" + url + "]");
     return url;
+}
+
+function testBuildURLForVideo(message,Args) {
+    Args = Args || {};
+    Args = $.extend({}, TEST.DefaultAdTag, Args);
+    FT.ads.setInitialAdState(Args.pos);
+    var result = FT.ads.buildURLForVideo(Args.env.dfp_zone,Args.pos,Args.kv);
+    ok(true, "== BEGIN: " + message + " [urlStem:" + result.urlStem + " additionalAdTargetingParams:" + result.additionalAdTargetingParams + "]");
+    return result;
+
 }
 
 function testErightsID(message) {
@@ -3705,6 +3717,57 @@ $(document).ready(function () {
         matches(url, ';socref=twi', "twi referral should appear in the URL");
         docReferrerStub.reset();
     });
+
+    test("FT.ads.buildURLForVideo (video.ft.com and right rail pos=video)", function () {
+
+        beginNewPage('buildURLForVideo');
+        mockCookies.AYSC = "_00M__01M_02M_03M_04M_05M_06M_07M_08M_09M_10M_11M_12M_13M_14M_15M_16M_17M_18M_19M_20M_21M_22M_23M_24M_25M_26M_27M_28M_29M_30M__31M_32M_33M_34M_35M_36M_37M_38M_39M_40M_41M_42M_43M_44M_45M_46M_47M_48M_49M_50M_51M_52M_53M_54M_55M_56M_57M_58M_59M_60M_";
+        //optional special key value pairs for video targeting. These will generally be defined in the page
+        var Args = {}, pos = "video", kv = {brand : 'videobrand', section : 'videosection', playlistid : 'videoplaylistid', playerid : 'videoplayerid' };
+        Args.pos = pos;
+        Args.kv = kv;
+        var result = testBuildURLForVideo('pos=video',Args);
+
+        //test here for unused video AYSC values
+        for (idx = 0; idx < 100; ++idx) {
+            var field = idx < 10 ? '0' + idx : '' + idx;
+            if (idx > TEST.MaxAYSCFields || hasIDX(TEST.UnusedVideoAysc, idx)) {
+                matches(result.additionalAdTargetingParams, ';' + field + '=', "Ad URL AYSC field " + field + " should not be present in url; ", false);
+            } else {
+                matches(result.additionalAdTargetingParams, ';' + field + '=', "Ad URL AYSC field " + field + " should be present in url; ", true);
+            }
+        }
+
+        matches(result.urlStem,'sz=592x333,400x225',"url stem should contain 'sz=592x333,400x225'");
+    });
+
+    //TODO: minivid' position and this test should be deprecated once both video.ft.com main player and right rail mini players are targeted using pos=video (US28408)
+    test("FT.ads.buildURLForVideo (right rail pos=minivid)", function () {
+
+        beginNewPage('buildURLForVideo');
+        mockCookies.AYSC = "_00M__01M_02M_03M_04M_05M_06M_07M_08M_09M_10M_11M_12M_13M_14M_15M_16M_17M_18M_19M_20M_21M_22M_23M_24M_25M_26M_27M_28M_29M_30M__31M_32M_33M_34M_35M_36M_37M_38M_39M_40M_41M_42M_43M_44M_45M_46M_47M_48M_49M_50M_51M_52M_53M_54M_55M_56M_57M_58M_59M_60M_";
+        //optional special key value pairs for video targeting. These will generally be defined in the page
+        //optional special key value pairs for video targeting. These will generally be defined in the page
+        var Args = {}, pos = "minivid", kv = {brand : 'videobrand', section : 'videosection', playlistid : 'videoplaylistid', playerid : 'videoplayerid' };
+        Args.pos = pos;
+        Args.kv = kv;
+        var result = testBuildURLForVideo('pos=minivid',Args);
+
+        //test here for unused video AYSC values
+        for (idx = 0; idx < 100; ++idx) {
+            var field = idx < 10 ? '0' + idx : '' + idx;
+
+            if (idx > TEST.MaxAYSCFields || hasIDX(TEST.UnusedVideoAysc, idx)) {
+                matches(result.urlStem, ';' + field + '=', "Ad URL AYSC field " + field + " should not be present in url; ", false);
+            } else {
+                matches(result.additionalAdTargetingParams, ';' + field + '=', "Ad URL AYSC field " + field + " should be present in url; ", true);
+            }
+        }
+
+        matches(result.urlStem,'sz=400x225',result.urlStem + "url stem should contain 'sz=400x225'");
+
+    });
+
 
 });
 
