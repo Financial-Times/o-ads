@@ -75,7 +75,8 @@
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
- kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux */
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
+ corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -914,6 +915,43 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
       }
    }
    return FT._ads.utils.extend({}, obj, out);
+};
+
+FT.Advertising.prototype.getUserData = function () {
+   var ayscProp, ayscVal,
+      aysc = FT.ads.fieldRegex(FT.ads.CONST.regex_key_names, FT.ads.prepareAdVars(FT.ads.getAyscVars({}))),
+      eid = FT.ads.erightsID(),
+      result = {},
+      valueFilter = /(PVT)|(x+)/i,
+      ayscProps = {
+          homepage_edition: '28',
+          corporate_access_id_code: '27',
+          phone_area_code: '26',
+          continent: '24',
+          subscription_level: 'slv',
+          active_personal_investor: '20',
+          company_size: '19',
+          post_code: '12',
+          job_position: '07',
+          job_responsibility: '06',
+          industry: '05',
+          state: '04',
+          gender: '02'
+      };
+
+
+   for (ayscProp in ayscProps) {
+      ayscVal = aysc[ayscProps[ayscProp]];
+      if (ayscVal && !(valueFilter.test(ayscVal))) {
+         result[ayscProp] = ayscVal;
+      }
+   }
+
+   if (eid && !(valueFilter.test(eid))) {
+      result.eid = eid;
+   }
+
+   return result;
 };
 
 FT.Advertising.prototype.getConsentValue = function () {

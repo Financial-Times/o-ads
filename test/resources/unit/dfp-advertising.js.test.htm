@@ -1950,6 +1950,27 @@ $(document).ready(function () {
         FT.env = saveEnv;
     });
 
+    test("FT.ads.getUserData()", function () {
+        var getAyscVarsStub = sinon.stub(FT.ads, "getAyscVars", function () {
+            return {"12":"N85XE","13":"PVT","14":"GBR","15":"PVT","17":"PVT","18":"PVT","19":"xxxx","20":"x","22":"P0P2Tools","24":"PVT","25":"PVT","26":"PVT","27":"zentea1","40":"2","41":"21","42":"1","45":"UK","96":"IA","98":"IA","07":"CP","06":"TEC","05":"IT","02":"X"};
+        }),
+        erightsIDStub = sinon.stub(FT.ads, "erightsID", function () {
+            return '123456';
+        }),
+        result = FT.ads.getUserData(),
+        expected = {eid: "123456", corporate_access_id_code: "zentea1", subscription_level: "lv2", job_position: "CP", job_responsibility: "TEC", industry: "IT", job_position: "CP", job_responsibility: "TEC", subscription_level: "lv2"};
+        deepEqual(result, expected, "The correct values are returned");
+
+        ok(!result.hasOwnProperty('active_personal_investor'), 'properties with value X are not present');
+        ok(!result.hasOwnProperty('company_size'), 'properties with value xxxx are not present');
+        ok(!result.hasOwnProperty('continent'), 'properties with value PVT are not present');
+        ok(!result.hasOwnProperty('gender'), 'properties with value X are not present');
+        ok(!result.hasOwnProperty('homepage_edition'), 'properties with value undefined are not present');
+
+        getAyscVarsStub.restore();
+        erightsIDStub.restore();
+    });
+
     test("FT.ads.buildURL (no cookies) - for Task TA10279", function () {
         var url, Params, Params2, order;
         maybeInitFixture();
