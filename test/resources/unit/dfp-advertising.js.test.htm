@@ -151,9 +151,9 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     // Documented in Targeting/KeyPriority.xls in DFP project share and on Twiki
     // http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#Order_of_key_values_placed_into
     //TEST.KeyOrder = "sz,dcopt,07,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";  // TODO referrer, investor relations
-    TEST.KeyOrder = "sz,dcopt,07,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,loc,uuid,auuid,ts,cc,pos,bht,fts,socref,tile,ord";
+    TEST.KeyOrder = "sz,dcopt,07,kuid,khost,ksg,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,loc,uuid,auuid,ts,cc,pos,bht,fts,socref,tile,ord";
     //TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,slv,eid,05,19,21,27,20,02,14,cn,01,kw,u,pos,bht,tile,ord";
-    TEST.Comprehensive = "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,tile,ord";
+    TEST.Comprehensive = "sz,dcopt,07,kuid,khost,ksg,ksg,ksg,ksg,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,tile,ord";
 
     // AYSC values which should not appear in the Ad call URL
     TEST.MaxAYSCFields = 60;
@@ -196,6 +196,13 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     TEST.AudSciResultShort4 = ';a=z502;a=z236';
     TEST.AudSciResultSplit1 = 'a=h6fna7;a=z89;a=z97;a=z98;a=z236;eid=4326601';
     TEST.AudSciResultSplit2 = '';
+
+    TEST.krux = {
+        segs: 'seg1,seg2,seg3,seg4',
+        urlSegs: ';ksg=seg1;ksg=seg2;ksg=seg3;ksg=seg4;',
+        userid: 'kxuser',
+        host: encodeURIComponent(location.hostname)
+    }
 
     TEST.AdStateKeysInit = "alwaysHide, hasDiv, hasInterstitial, initialHTML, isEmptyAd, isSystemDefault, requestsInterstitial, state";
     TEST.AdStateKeysChanged = "alwaysHide, hasDiv, hasInterstitial, initialHTML, innerHTML, isEmptyAd, isSystemDefault, requestsInterstitial, state";
@@ -1943,6 +1950,27 @@ $(document).ready(function () {
         FT.env = saveEnv;
     });
 
+    test("FT.ads.getUserData()", function () {
+        var getAyscVarsStub = sinon.stub(FT.ads, "getAyscVars", function () {
+            return {"12":"N85XE","13":"PVT","14":"GBR","15":"PVT","17":"PVT","18":"PVT","19":"xxxx","20":"x","22":"P0P2Tools","24":"PVT","25":"PVT","26":"PVT","27":"zentea1","40":"2","41":"21","42":"1","45":"UK","96":"IA","98":"IA","07":"CP","06":"TEC","05":"IT","02":"X"};
+        }),
+        erightsIDStub = sinon.stub(FT.ads, "erightsID", function () {
+            return '123456';
+        }),
+        result = FT.ads.getUserData(),
+        expected = {eid: "123456", corporate_access_id_code: "zentea1", subscription_level: "lv2", job_position: "CP", job_responsibility: "TEC", industry: "IT", job_position: "CP", job_responsibility: "TEC", subscription_level: "lv2"};
+        deepEqual(result, expected, "The correct values are returned");
+
+        ok(!result.hasOwnProperty('active_personal_investor'), 'properties with value X are not present');
+        ok(!result.hasOwnProperty('company_size'), 'properties with value xxxx are not present');
+        ok(!result.hasOwnProperty('continent'), 'properties with value PVT are not present');
+        ok(!result.hasOwnProperty('gender'), 'properties with value X are not present');
+        ok(!result.hasOwnProperty('homepage_edition'), 'properties with value undefined are not present');
+
+        getAyscVarsStub.restore();
+        erightsIDStub.restore();
+    });
+
     test("FT.ads.buildURL (no cookies) - for Task TA10279", function () {
         var url, Params, Params2, order;
         maybeInitFixture();
@@ -2906,7 +2934,103 @@ $(document).ready(function () {
         matches(url, ';' + TEST.AudSciResult[3] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
         equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
+    });
 
+    test("FT.ads.kruxRetrieve (for Krux DMP)", function () {
+        /* test setup, remove cookies and local storage keys that can get in the way */
+        maybeInitFixture();
+        if (window.localStorage) {
+            var old_kxuser_ls =  window.localStorage.getItem('kxuser');
+            var old_kxsegs_ls =  window.localStorage.getItem('kxsegs');
+            window.localStorage.removeItem('kxuser');
+            window.localStorage.removeItem('kxsegs');
+        }
+
+        mockCookies.kxuser = TEST.krux.userid + 'cookie';
+        mockCookies.kxsegs = 'cookie,' + TEST.krux.segs;
+        equal(FT.ads.kruxRetrieve('user'), TEST.krux.userid + 'cookie', 'can get user id from cookie');
+        equal(FT.ads.kruxRetrieve('segs'), 'cookie,' + TEST.krux.segs, 'can get segs from cookie');
+
+
+        if (window.localStorage) {
+            window.localStorage.setItem('kxuser', TEST.krux.userid + 'localstorage');
+            window.localStorage.setItem('kxsegs', 'localstorage,' + TEST.krux.segs);
+            equal(FT.ads.kruxRetrieve('user'), TEST.krux.userid + 'localstorage', 'can get user id from local storage if available');
+            equal(FT.ads.kruxRetrieve('segs'), 'localstorage,' + TEST.krux.segs, 'can get segs from local storage if available');
+
+            /* test teardown, reinstate local storage values */
+            window.localStorage.removeItem('kxuser');
+            window.localStorage.removeItem('kxsegs');
+            if (old_kxuser_ls) {
+                window.localStorage.setItem('kxuser', old_kxuser_ls);
+            }
+            if (old_kxsegs_ls) {
+                window.localStorage.setItem('kxsegs', old_kxsegs_ls);
+            }
+        } else {
+            ok(true, 'unable to test local storage');
+        }
+    });
+
+    test("FT.ads.buildURL (Krux local storage)", function () {
+        if (window.localStorage) {
+            maybeInitFixture();
+
+            /* test setup, remove cookies and local storage keys that can get in the way */
+            var old_kxuser_ls =  window.localStorage.getItem('kxuser');
+            var old_kxsegs_ls =  window.localStorage.getItem('kxsegs');
+            window.localStorage.setItem('kxuser', TEST.krux.userid);
+            window.localStorage.setItem('kxsegs', TEST.krux.segs);
+
+            beginNewPage('buildURL Krux segements in local storage');
+
+            var url = testBuildURL("test with krux cookie information");
+            var pars = extract_params(url);
+
+            equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
+
+            var Params = extract_params(url);
+            var order = Params._order.join(',');
+            matches(url, TEST.krux.urlSegs, "Ad URL krux segments appear in url correctly");
+            matches(url, 'kuid=' + TEST.krux.userid, "Ad URL krux user id appears in url correctly");
+            matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
+
+            equal(order, 'sz,dcopt,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains krux parameters in correct order");
+
+            /* test teardown, reinstate local storage values */
+            window.localStorage.removeItem('kxuser');
+            window.localStorage.removeItem('kxsegs');
+            if (old_kxuser_ls) {
+                window.localStorage.setItem('kxuser', old_kxuser_ls);
+            }
+            if (old_kxsegs_ls) {
+                window.localStorage.setItem('kxsegs', old_kxsegs_ls);
+            }
+        } else {
+            ok(true, 'localstorage unavailable in this browser')
+        }
+    });
+
+    test("FT.ads.buildURL (Krux cookies)", function () {
+        maybeInitFixture();
+
+        beginNewPage('buildURL Krux segements in cookies');
+        mockCookies.kxsegs = TEST.krux.segs;
+        mockCookies.kxuser = TEST.krux.userid;
+        var url = testBuildURL("test with krux cookie information");
+
+
+        var pars = extract_params(url);
+
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
+
+        var Params = extract_params(url);
+        var order = Params._order.join(',');
+        matches(url, TEST.krux.urlSegs, "Ad URL krux segments appear in url correctly");
+        matches(url, 'kuid=' + TEST.krux.userid, "Ad URL krux user id appears in url correctly");
+        matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
+
+        equal(order, 'sz,dcopt,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains krux cookie parameters in correct order");
 
     });
 
@@ -2916,6 +3040,9 @@ $(document).ready(function () {
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
         mockCookies.FT_U = "_EID=4326601_PID=4004326601_TIME=%5BThu%2C+07-May-2009+13%3A27%3A45+GMT%5D_SKEY=9e7iw%2BskQZwnnX2e29as1w%3D%3D_RI=1_";
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
+        mockCookies.kxsegs = TEST.krux.segs;
+        mockCookies.kxuser = TEST.krux.userid;
+
         var url = testBuildURL("test with all cookie information", { 'pos':'banlb' });
         var Params = extract_params(url);
         var order = Params._order.join(',');

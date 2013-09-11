@@ -15,6 +15,7 @@ groups {
         js(minimize: false, "/js/ft/registration-widget.js")
         js(minimize: false, "/js/ft/advertising.refresh.js")
         js(minimize: false, "/js/ft/advertising.pagevisibility.js")
+        js(minimize: false, "/js/ft/krux.controltag.js")
 //        js(minimize: false,"/js/thirdparty/**.js")
 //        js(minimize: false,"/js/lib/**.js")
         css(minimize: false, "/css/ft/**.css")
@@ -39,6 +40,7 @@ groups {
         js "/js/ft/registration-widget.js"
         js "/js/ft/advertising.refresh.js"
         js "/js/ft/advertising.pagevisibility.js"
+        js "/js/ft/krux.controltag.js"
 //       js "/js/thirdparty/**.js
  //       js "/js/lib/**.js"
         css "/css/ft/**.css"

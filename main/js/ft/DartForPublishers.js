@@ -74,7 +74,9 @@
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
- refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting  */
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
+ corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -118,9 +120,9 @@ FT.Advertising = function () {
       '-': {}
    };
 
-   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'tile', 'ord'];
+   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'kuid', 'khost', 'ksg', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'tile', 'ord'];
    this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
-   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
+   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
@@ -869,6 +871,29 @@ FT.Advertising.prototype.rsiSegs = function () {
    return undefined;
 };
 
+FT.Advertising.prototype.kruxRetrieve = function (name) {
+   var value = '';
+   if (!this.suppressKrux) {
+      name ='kx'+ name;
+      if (window.localStorage && window.localStorage[name]) {
+         value = window.localStorage[name];
+      }  else if (FT._ads.utils.cookies[name]) {
+         value = FT._ads.utils.cookies[name];
+      }
+   }
+   return value;
+};
+
+FT.Advertising.prototype.kruxUserId = function () {
+   var kruxUserId = '';
+
+   return this.kruxRetrieve('user');
+};
+
+FT.Advertising.prototype.kruxSegs = function () {
+   return this.kruxRetrieve('segs').replace(/([^,]+)\,?/g, 'ksg=$1;');
+};
+
 FT.Advertising.prototype.getAyscVars = function (obj) {
    var out = {},
       item, q;
@@ -892,6 +917,43 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
    return FT._ads.utils.extend({}, obj, out);
 };
 
+FT.Advertising.prototype.getUserData = function () {
+   var ayscProp, ayscVal,
+      aysc = FT.ads.fieldRegex(FT.ads.CONST.regex_key_names, FT.ads.prepareAdVars(FT.ads.getAyscVars({}))),
+      eid = FT.ads.erightsID(),
+      result = {},
+      valueFilter = /(PVT)|(x+)/i,
+      ayscProps = {
+          homepage_edition: '28',
+          corporate_access_id_code: '27',
+          phone_area_code: '26',
+          continent: '24',
+          subscription_level: 'slv',
+          active_personal_investor: '20',
+          company_size: '19',
+          post_code: '12',
+          job_position: '07',
+          job_responsibility: '06',
+          industry: '05',
+          state: '04',
+          gender: '02'
+      };
+
+
+   for (ayscProp in ayscProps) {
+      ayscVal = aysc[ayscProps[ayscProp]];
+      if (ayscVal && !(valueFilter.test(ayscVal))) {
+         result[ayscProp] = ayscVal;
+      }
+   }
+
+   if (eid && !(valueFilter.test(eid))) {
+      result.eid = eid;
+   }
+
+   return result;
+};
+
 FT.Advertising.prototype.getConsentValue = function () {
    var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
 
@@ -906,7 +968,8 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
    // get AYSC cookie values to determine ad server
    var AllVars = this.prepareAdVars(this.getAyscVars({})), cookie = FT._ads.utils.cookie("FTQA"),
       rFormat,
-      docUUID;
+      docUUID,
+      kruxUserId;
    this.baseAdvert.pos = pos;
 
    if ((cookie) && (cookie.match(/env=(.*)premiumcopy/))) {
@@ -943,6 +1006,13 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
    });
 
    this.baseAdvert.a = this.rsiSegs();
+
+   if (!!(kruxUserId = this.kruxUserId())) {
+      this.baseAdvert.khost = encodeURIComponent(location.hostname);
+      this.baseAdvert.kuid = kruxUserId;
+   }
+
+   this.baseAdvert.ksg = this.kruxSegs();
 
    this.baseAdvert.cc = this.getConsentValue();
 
@@ -1158,6 +1228,11 @@ FT.Advertising.prototype.encodeBaseAdvertProperties = function (mode, vidKV) {
 
       if (key === 'pos' && dfp_targeting) {
          results += dfp_targeting + ';';
+      }
+
+      if (key === 'ksg') {
+         results += value;
+         value = false;
       }
 
       if (key === 'a' && rsiSegs) {
@@ -1723,6 +1798,7 @@ FT.Advertising.prototype.beginNewPage = function (env) {
    this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
    this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
    this.suppressAudSci = false;
+   this.suppressKrux = false;
 
    // Let the FTQA cookie value override the timeout, if present
    cookie = FT._ads.utils.cookie("FTQA");
