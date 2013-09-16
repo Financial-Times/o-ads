@@ -3774,7 +3774,7 @@ console.log(url);
                 equal(paddingTop, "0px", "div has expected paddingTop of:0px");
             } else {
                 equal((FT.ads.VAR.pushDownExpandingAsset !== null), true, "the expanding assets should be not null on subsequent polls");
-                equal(paddingTop, l + "px", "div has expected paddingTop of:" + l + "px");
+                equal(Math.ceil(parseFloat(paddingTop)), l, "div has expected paddingTop of:" + l + "px");
             }
         }
 
