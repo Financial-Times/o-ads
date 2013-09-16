@@ -195,7 +195,7 @@
             gptSlot._renderEnded = gptSlot.renderEnded;
             gptSlot.renderEnded = function (context, slot) {
                 return function (){
-                    FT.ads.slots.findNoAd(slot);
+                    FT.ads.gpt.findNoAd(slot);
                     slot._renderEnded.apply(this, arguments);
                 };
             }(this, gptSlot);
@@ -203,6 +203,7 @@
 
         return mode;
     };
+
 
 /**
  * Adds key values from a given targetingObj to a given GPT ad slot
@@ -237,7 +238,7 @@
             var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
             while (img = imgs.pop()) {
                 if (/ft-no-ad/.test(img.src)) {
-                    return true;
+                    return container.style.display = 'none';
                 }
             }
         } catch (err) {

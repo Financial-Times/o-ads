@@ -59,7 +59,8 @@
                     sizes: [[336,60]]
                 }
             },
-            audSciLimit : 2
+            audSciLimit : 2,
+            collapseEmpty: 'ft'
         };
 
         var store = {};
