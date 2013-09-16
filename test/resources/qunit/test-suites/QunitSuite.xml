@@ -7,11 +7,11 @@
     <parameter name="seleniumPort" value="4444" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
-    <parameter name="majorBrowsers" value="firefox3-on-windows,googlechrome-on-windows" />
+    <parameter name="majorBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
 
 
     <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
-    <parameter name="localBrowsers" value="firefox3-on-windows,googlechrome-on-windows" />
+    <parameter name="majorBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
 
     <parameter name="testRoot" value="target/test-classes" />
 
@@ -24,7 +24,6 @@
          Tests will run in parallel so careful consideration as to the grouping of tests based on the number and execution time of each QUnit test suite .htm
          file is important. The entire run will be as slow as the longest <test> Tests will be run on the specified browser for each test.
      -->
-<!--
     <test name="iexplore8-windows">
         <parameter name="browser" value="iexplore8-windows" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
@@ -32,7 +31,6 @@
             <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
     </test>
--->
     <test name="iexplore9-win7-x86">
         <parameter name="browser" value="iexplore9-win7-x86" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
