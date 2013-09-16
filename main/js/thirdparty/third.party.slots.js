@@ -7,7 +7,7 @@
  * @constructor
 */
     function Slots() {
-        this.slots = {};
+        //this.slots = {};
     }
 /**
  * Collects configuration values from data attributes set on the slots container,
@@ -140,46 +140,33 @@
     };
 
 /**
- * creates a container for the ad in the page, centers the conatiner and
+ * creates a container for the ad in the page and gathers slot config then
  * calls the GPT module to define the slot in the GPT service
  * @name createSlot
  * @memberof Slots
  * @lends Slots
 */
-    proto.createSlot = function (context, slotName) {
-        return function() {
-            var gptSlot, _renderEnded,
-                slot = context.slots[slotName],
-                container = slot.container,
-                slotId = slotName + '-ad';
+    proto.initSlot = function (slotName) {
+        var container = doc.getElementById(slotName),
+            formats =  FT.ads.config('formats');
 
-            context.centerContainer(context.addContainer(container, slotId), slot.config.sizes);
-            FT.ads.gpt.defineSlot(FT.ads.gpt);
+        if (!container) {
+            return false;
+        }
+
+        var config = this.fetchSlotConfig(container, formats[slotName] || {});
+
+        if (container.tagName === 'SCRIPT') {
+            container = this.addContainer(container, slotName);
+        }
+
+        this[slotName] = {
+            container: container,
+            config: config
         };
-    };
 
-/**
- * creates a container for an out of page ad
- * Calls the GPT module to define the slot in the GPT service
- * @name createOutOfPage
- * @memberof Slots
- * @lends Slots
-*/
-    proto.createOutOfPage = function (context, slotName) {
-        return function() {
-            var oopSlot,
-                slot = context.slots[slotName],
-                slotId = slotName + '-oop';
-
-            context.addContainer(slot.container, slotId);
-            oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotId)
-                        .addService(googletag.pubads());
-
-            context.slots[slotName].oopSlot = oopSlot;
-
-            context.setSlotTargeting(oopSlot, slot.config.targeting);
-            googletag.cmd.push(googletag.display(slotId));
-        };
+        FT.ads.gpt.defineSlot(slotName);
+        return this[slotName];
     };
 
     FT._ads.utils.extend(FT.ads, { slots: new Slots()});

@@ -35,6 +35,7 @@
     }
 /**
  * Attaches the google publisher tags library to the page via an async script tag
+ * //TODO parameterise the inputs and move this function to a utils namespace so it can be resued by Krux, Aud Sci and the like
  * @name attach
  * @memberof GPT
  * @lends GPT
@@ -51,208 +52,59 @@
     };
 
 /**
- * Collects configuration values from data attributes set on the slots container,
- * attributes should be in the format ftads-attrname (data- can also be added)
- * Only certain attribute names are parsed, all attributes without a parser are
- * added to the slots targeting parameters as a key value
- * parsed attributes are:
- * position - is added to targeting parameters as pos
- * page-type  - is added to targeting parameters as pt
- * size - takes a comma separated list of sizes and parses them to an array e.g 1x1,728x60 -> [[1, 1], [728,60]]
- * targeting - a list of key value pairs to be added to targeting in the format key=value; e.g name=gilbert;fruit=grape;
- * out-of-page - when this attribute is present an out of page unit will be created for this slot
- * //TODO collapse - see slot collapse empty options
- * @name fetchSlotConfig
+ * Register methods with the publisher services to display the ad via GPT
+ * sets slot targeting and collapse configuration
+ * @name defineSlot
  * @memberof GPT
  * @lends GPT
 */
-    proto.fetchSlotConfig = function  (container, config) {
-        var attrs, attr, attrObj, name, matches, parser,
-            sizes = [],
-            targeting = {},
-            parsers = {
-                'size': function (name, value){
-                    value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
-                      sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
-                    });
+    proto.defineSlot = function (slotName) {
+        var context = this,
+            slot = FT.ads.slots[slotName],
+            slotId = slotName + '-gpt';
 
-                    return !!sizes.length ? sizes : false;
-                },
-                'position': function (name, value){
-                    targeting.pos = value;
-                    return value;
-                },
-                'out-of-page':  function (name, value){
-                    config.outOfPage = true;
-                    return true;
-                },
-                'page-type':  function (name, value){
-                    targeting.pt = value;
-                    return value;
-                },
-                'targeting': function (name, value) {
-                    if (value !== undefined) {
-                        value = FT._ads.utils.hash(value, ';', '=');
-                        targeting = FT._ads.utils.extend(targeting, value);
-                    }
-                    return value;
-                },
-                'default': function (name, value) {
-                    targeting[name] = value;
-                    return value;
-                }
-            };
-
-        attrs = container.attributes;
-        for(attr in attrs) {
-            attrObj = attrs[attr];
-            if(attrs.hasOwnProperty(attr) && attrObj.name &&  !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/))) {
-                name = matches[3];
-                parser = FT._ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
-                parser(name, attrObj.value);
-            }
-        }
-
-        return {
-            sizes: !!(sizes.length) ? sizes : config.sizes,
-            outOfPage: config.outOfPage || false,
-            collapseEmpty: config.collapseEmpty,
-            targeting: targeting
-        };
-    };
-
-/**
- * Given a script tag the method will inject a div with the given id into the dom just before the script tag
- * if the script tag has the same id as given to the method the attribute will be removed
- * Given any other tag the method will attempt to append the new div as a child
- * @name addContainer
- * @memberof GPT
- * @lends GPT
-*/
-    proto.addContainer = function(node, id) {
-        var container = doc.createElement('div');
-
-        container.setAttribute('id', id);
-
-        if (node.tagName === 'SCRIPT') {
-            if (node.id === id) {
-                node.removeAttribute('id');
-            }
-            node.parentNode.insertBefore(container, node);
-        } else {
-            node.appendChild(container);
-        }
-
-        return container;
-    };
-
-    proto.centerContainer = function (element, sizes) {
-        element.style.marginRight = 'auto';
-        element.style.marginLeft = 'auto';
-
-        function getMaximums(sizes) {
-            var result = [0, 0];
-
-            if (FT._ads.utils.isArray(sizes[0])) {
-                for (var i = 0; i < sizes.length; i++){
-                    result[0] = Math.max(sizes[i][0], result[0]);
-                    result[1] = Math.max(sizes[i][1], result[1]);
-                }
-            } else {
-                result = sizes;
-            }
-
-            return result;
-        }
-
-        var max = getMaximums(sizes);
-        element.style.minWidth = '1px';
-        element.style.maxWidth = max[0] + 'px';
-    };
-
-/**
- * creates a container for the gpt ad in the page
- * defines and configures a slot in the gpt publisher services
- * then queues the ad for display
- * @name createSlot
- * @memberof GPT
- * @lends GPT
-*/
-    proto.createSlot = function (context, slotName) {
-        return function() {
-            var gptSlot, _renderEnded,
-                slot = context.slots[slotName],
-                container = slot.container,
-                slotId ='gpt-' + slotName;
-
-            context.centerContainer(context.addContainer(container, slotId), slot.config.sizes);
-            gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId)
+        FT.ads.slots.addContainer(slot.container, slotId);
+        googletag.cmd.push(function (context, slot, slotName, slotId) {
+            return function () {
+                slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId)
                         .addService(googletag.pubads());
-            context.slots[slotName].gptSlot = gptSlot;
+                context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
+                context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+                googletag.cmd.push(googletag.display(slotId));
+            };
+        }(this, slot, slotName, slotId));
 
-            context.setSlotCollapseEmpty(gptSlot, slot.config);
-            context.setSlotTargeting(gptSlot, slot.config.targeting);
-            googletag.cmd.push(googletag.display(slotId));
-        };
+        if (slot.config.outOfPage) {
+            googletag.cmd.push(this.defineOutOfPage(this, slotName));
+        }
+
+        return slot;
     };
 
 /**
- * creates a container for a gpt out of page ad
- * defines and configures a slot in the gpt publisher services
- * then queues the ad for display
- * @name createOutOfPage
- * @memberof GPT
- * @lends GPT
+ * creates a container for an out of page ad
+ * Calls the GPT module to define the slot in the GPT service
+ * @name defineOutOfPage
+ * @memberof Slots
+ * @lends Slots
 */
-    proto.createOutOfPage = function (context, slotName) {
+    proto.defineOutOfPage = function (context, slotName) {
         return function() {
             var oopSlot,
-                slot = context.slots[slotName],
-                slotId = 'gpt-' + slotName + '-oop';
+                slot = FT.ads.slots[slotName],
+                slotId = slotName + '-oop';
 
-            context.addContainer(slot.container, slotId);
+            FT.ads.slots.addContainer(slot.container, slotId);
             oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotId)
                         .addService(googletag.pubads());
 
-            context.slots[slotName].oopSlot = oopSlot;
+            slot.oopSlot = oopSlot;
 
             context.setSlotTargeting(oopSlot, slot.config.targeting);
             googletag.cmd.push(googletag.display(slotId));
         };
     };
 
-/**
- * creates a container for the ad in the page
- * gathers configuration data and queues slot creation
- * for gpt
- * @name createSlot
- * @memberof GPT
- * @lends GPT
-*/
-    proto.displaySlot = function (slotName) {
-        var container = doc.getElementById(slotName),
-            formats =  FT.ads.config('formats');
-
-        if (!container) {
-            return false;
-        }
-
-        var config = this.fetchSlotConfig(container, formats[slotName]);
-
-        if (container.tagName === 'SCRIPT') {
-            container = this.addContainer(container, slotName);
-        }
-
-        this.slots[slotName] = {
-            container: container,
-            config: config
-        };
-
-        googletag.cmd.push(this.createSlot(this, slotName));
-        if (config.outOfPage) {
-            googletag.cmd.push(this.createOutOfPage(this, slotName));
-        }
-    };
 
 /**
  * Given the slot name will return the GPT unit name for the slot.
@@ -290,10 +142,11 @@
 
 /**
  * Sets the GPT collapse empty mode for the page
- * values can be 'after', 'before', 'never'
+ * values can be 'after', 'before', 'never', 'ft'
  * after as in after ads have rendered is the default
  * true is synonymous with before
  * false is synonymous with never
+ * ft uses our collapse method from the slots module, which is only attached at slot level
  * @name setPageTargeting
  * @memberof GPT
  * @lends GPT
@@ -319,10 +172,11 @@
 
 /**
  * Sets the GPT collapse empty mode for a given slot
- * values can be 'after', 'before', 'never'
+ * values can be 'after', 'before', 'never' or 'ft'
  * after as in after ads have rendered is the default
  * true is synonymous with before
  * false is synonymous with never
+ * ft uses our collapse method from the slots module
  * @name setPageTargeting
  * @memberof GPT
  * @lends GPT
@@ -341,7 +195,7 @@
             gptSlot._renderEnded = gptSlot.renderEnded;
             gptSlot.renderEnded = function (context, slot) {
                 return function (){
-                    context.collapse(slot);
+                    FT.ads.slots.findNoAd(slot);
                     slot._renderEnded.apply(this, arguments);
                 };
             }(this, gptSlot);
@@ -368,6 +222,31 @@
     };
 
 /**
+ * Searches the current GPT slot for a no-ad image and collapses the slot if one exists
+ *
+ * @name createOutOfPage
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.findNoAd = function (slot) {
+        var img,
+            slotId = slot.getSlotId(),
+            container = document.getElementById(slotId.getDomId()),
+            iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
+        try {
+            var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+            while (img = imgs.pop()) {
+                if (/ft-no-ad/.test(img.src)) {
+                    return true;
+                }
+            }
+        } catch (err) {
+            return false;
+            // Probably blocked due to ad rendered in iframe no longer being on same domain.
+        }
+    };
+
+/**
  * Initialises GPT on the page
  * @name setSlotTargeting
  * @memberof GPT
@@ -384,24 +263,6 @@
         });
 
         return this.slots;
-    };
-
-    proto.collapse = function (slot) {
-        var img,
-            slotId = slot.getSlotId(),
-            container = document.getElementById(slotId.getDomId()),
-            iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-        try {
-            var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
-            while (img = imgs.pop()) {
-                if (img.src === 'http://media.ft.com/adimages/rich-banner/ft-no-ad.gif') {
-                    container.style.display = 'none';
-                }
-            }
-        } catch (err) {
-            // Probably blocked due ad rendered in iframe no longer being on same domain.
-        }
-
     };
 
     FT._ads.utils.extend(FT.ads, { gpt: new GPT()});

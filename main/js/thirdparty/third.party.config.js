@@ -31,34 +31,34 @@
  */
         var defaults =  {
             network: '5887',
-                formats: {
-                    banlb: {
-                        sizes: [[728,90], [468,60], [970,90]]
-                    },
-                    mpu: {
-                        sizes: [[300,250],[336,280]]
-                    },
-                    doublet: {
-                        sizes: [[342,200]]
-                    },
-                    hlfmpu: {
-                        sizes: [[300,600],[336,850],[300,250],[336,280]]
-                    },
-                    intro: {
-                        outOfPage: true
-                    },
-                    newssubs: {
-                        sizes: [[239,90]]
-                    },
-                    refresh: {
-                    },
-                    searchbox: {
-                        sizes: [[200,28]]
-                    },
-                    tlbxrib: {
-                        sizes: [[336,60]]
-                    }
+            formats: {
+                banlb: {
+                    sizes: [[728,90], [468,60], [970,90]]
                 },
+                mpu: {
+                    sizes: [[300,250],[336,280]]
+                },
+                doublet: {
+                    sizes: [[342,200]]
+                },
+                hlfmpu: {
+                    sizes: [[300,600],[336,850],[300,250],[336,280]]
+                },
+                intro: {
+                    outOfPage: true
+                },
+                newssubs: {
+                    sizes: [[239,90]]
+                },
+                refresh: {
+                },
+                searchbox: {
+                    sizes: [[200,28]]
+                },
+                tlbxrib: {
+                    sizes: [[336,60]]
+                }
+            },
             audSciLimit : 2
         };
 

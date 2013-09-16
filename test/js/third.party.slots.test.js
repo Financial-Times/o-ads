@@ -24,27 +24,6 @@
             }
         });
 
-        test('Add container', function () {
-            expect(3);
-            FT.ads.slots.addContainer(testingContainer[0], 'container');
-            ok($('#container').size(), 'the container is appended to the div');
-
-            var scriptTag = testingContainer[0].appendChild($('<script id="script" class="slot">')[0]);
-            FT.ads.slots.addContainer(scriptTag, 'script');
-            ok($('div#script').size(), 'the container exists and the id has been moved');
-            ok($('div#script').next().hasClass('slot'), 'the container is inserted before the script tag');
-        });
-
-        test('Center container', function () {
-            expect(4);
-            FT.ads.slots.centerContainer(testingContainer[0], [[1,4], [2,5], [3,6]]);
-
-            equal(testingContainer[0].style.marginRight, 'auto', 'right margins are set to auto');
-            equal(testingContainer[0].style.marginLeft, 'auto', 'left margins are set to auto');
-            equal(testingContainer[0].style.minWidth, '1px', 'the min width is 1px');
-            equal(testingContainer[0].style.maxWidth, '3px', 'the max width is computed from sizes');
-        });
-
         test('fetchSlotConfig sizes', function () {
             expect(8);
 
@@ -87,6 +66,27 @@
             result = FT.ads.slots.fetchSlotConfig(container, {sizes: [[5,5]]});
             expected = [[5, 5]];
             deepEqual(result.sizes, expected, 'Single invalid size returns size passed from config');
+        });
+
+        test('Add container', function () {
+            expect(3);
+            FT.ads.slots.addContainer(testingContainer[0], 'container');
+            ok($('#container').size(), 'the container is appended to the div');
+
+            var scriptTag = testingContainer[0].appendChild($('<script id="script" class="slot">')[0]);
+            FT.ads.slots.addContainer(scriptTag, 'script');
+            ok($('div#script').size(), 'the container exists and the id has been moved');
+            ok($('div#script').next().hasClass('slot'), 'the container is inserted before the script tag');
+        });
+
+        test('Center container', function () {
+            expect(4);
+            FT.ads.slots.centerContainer(testingContainer[0], [[1,4], [2,5], [3,6]]);
+
+            equal(testingContainer[0].style.marginRight, 'auto', 'right margins are set to auto');
+            equal(testingContainer[0].style.marginLeft, 'auto', 'left margins are set to auto');
+            equal(testingContainer[0].style.minWidth, '1px', 'the min width is 1px');
+            equal(testingContainer[0].style.maxWidth, '3px', 'the max width is computed from sizes');
         });
 
         test('fetchSlotConfig out of page', function () {
