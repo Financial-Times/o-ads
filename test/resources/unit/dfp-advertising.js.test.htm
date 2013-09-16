@@ -3041,8 +3041,6 @@ $(document).ready(function () {
         mockCookies.kxsegs = TEST.krux.segs;
         mockCookies.kxuser = TEST.krux.userid;
         var url = testBuildURL("test with krux cookie information");
-
-console.log(url);
         var pars = extract_params(url);
 
         equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
