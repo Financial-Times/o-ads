@@ -1973,9 +1973,13 @@ $(document).ready(function () {
 
     test("FT.ads.buildURL (no cookies) - for Task TA10279", function () {
         var url, Params, Params2, order;
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
+
         maybeInitFixture();
 
         beginNewPage('buildURL 1');
+
+
         url = testBuildURL("basic test with no cookies");
         Params = extract_params(url);
         order = Params._order.join(',');
@@ -2015,6 +2019,8 @@ $(document).ready(function () {
         url = testBuildURL("another buildURL call to exceed tile value");
         equal(type(url), 'undefined', "Ad URL undefined as too many tiles on the page");
         equal(get_diagnostic('banlb', 'buildURLFromBaseAdvert'), 'too many ads, exceeds maximum tile', "Diagnostic recorded about too many tile on page");
+        stub.restore();
+
     });
 
     test("FT.ads.buildURL (release environment selection including DFP Premium environments for US24462)", function () {
@@ -2309,6 +2315,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (multiple interstitial warning)", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         var url, Params, order;
         maybeInitFixture();
 
@@ -2327,10 +2334,12 @@ $(document).ready(function () {
         equal(order, 'sz,uuid,ts,cc,pos,bht,tile,ord', "Ad URL order of parameters omits dcopt.");
         var result = 'multiple interstitials on page, ignoring banlb';
         equal(get_diagnostic('banlb', 'buildURLIst'), result, "Diagnostic recorded about multiple interstitials");
+        stub.restore();
     });
 
     test("FT.ads.buildURL (dfp_targeting parameter)", function () {
         var url, Params, order, uParams;
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         maybeInitFixture();
 
         beginNewPage('buildURL 1', {
@@ -2382,10 +2391,11 @@ $(document).ready(function () {
 
         matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;door=locked;pos=banlb', "Ad URL key and door parameters present in ad call");
         equal(order, 'sz,dcopt,uuid,ts,cc,key,door,pos,bht,tile,ord', "Ad URL position of key and door parameters are correct");
-
+        stub.restore();
     });
 
     test("FT.ads.buildURL (keyword search) - for Task TA16773", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         var url, Params, order, uParams;
         maybeInitFixture();
 
@@ -2398,9 +2408,11 @@ $(document).ready(function () {
 
         matches(url, ';kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb', "Ad URL kw parameter present in ad call");
         equal(order, 'sz,dcopt,kw,uuid,ts,cc,pos,bht,tile,ord', "Ad URL position of kw parameter is correct");
+        stub.restore();
     });
 
     test("FT.ads.buildURL (AYSC cookie 13) - for task TA10282", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         // See the Project Wiki Section on AYSC fields for these Specifications
         // http://epcvs.osb.ft.com/twiki/bin/view/Projects/DartForPublishers#AYSC_Parameters_placed_into_the
 
@@ -2421,6 +2433,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
         matches(url, '^http://ad\\.doubleclick\\.net/', "Ad URL AYSC country has no DFP ad server so default used");
         equal(get_diagnostic('banlb', 'adServerCountry'), 'Unsupported ad server: zm', "Diagnostic recorded about unsupported ad server");
+        stub.restore();
     });
 
     test("FT.ads.buildURL (AYSC cookie 01,27) - simple data as is - for task TA10282", function () {
@@ -2454,6 +2467,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (AYSC cookie 02, 05, 06, 07, 19, 20, 21) - if value is all X's we omit from ad call - for task TA10282", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         var url, Params, order;
         maybeInitFixture();
 
@@ -2557,6 +2571,7 @@ $(document).ready(function () {
         Params = extract_params(url);
         order = Params._order.join(',');
         equal(order, 'sz,07,06,05,19,20,21,02,uuid,ts,cc,pos,bht,tile,ord', "Ad URL AYSC fields in correct order");
+        stub.restore();
     });
 
     test("FT.ads.buildURL (AYSC cookie 14) - if value is PVT or RES we omit from url - for task TA10282", function () {
@@ -2775,6 +2790,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (FT_U cookie) - for task TA11307", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         maybeInitFixture();
         var url, params, order, uParams;
 
@@ -2803,6 +2819,7 @@ $(document).ready(function () {
         equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
 
         beginNewPage('buildURL FT_U Cookie 2');
+        stub.restore();
     });
 
     test("FT.ads.buildURL (FTSession cookie)", function () {
@@ -2857,6 +2874,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (Audience Science cookie) - for task TA10281 and TA13255 and story US17759", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         maybeInitFixture();
         equal(FT.ads.CONST.audSciMax, 35, "Maximum number of AudSci parameters to use should be");
 
@@ -2901,9 +2919,11 @@ $(document).ready(function () {
 
         // Restore the default values of AudSci Limits
         FT.ads.CONST.audSciMax = saveMax;
+        stub.restore();
     });
 
     test("FT.ads.buildURL (Audience Science cookie) - for US30608 Extend Aud Sci segments to 35", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         maybeInitFixture();
         equal(FT.ads.CONST.audSciMax, 35, "Maximum number of AudSci parameters to use should be");
 
@@ -2934,6 +2954,7 @@ $(document).ready(function () {
         matches(url, ';' + TEST.AudSciResult[3] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
         equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
+        stub.restore();
     });
 
     test("FT.ads.kruxRetrieve (for Krux DMP)", function () {
@@ -3012,6 +3033,8 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (Krux cookies)", function () {
+        window.localStorage.removeItem('kxuser');
+        window.localStorage.removeItem('kxsegs');
         maybeInitFixture();
 
         beginNewPage('buildURL Krux segements in cookies');
@@ -3019,7 +3042,7 @@ $(document).ready(function () {
         mockCookies.kxuser = TEST.krux.userid;
         var url = testBuildURL("test with krux cookie information");
 
-
+console.log(url);
         var pars = extract_params(url);
 
         equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
@@ -3035,6 +3058,8 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (Comprehensive cookie) - TA13255", function () {
+        window.localStorage.removeItem('kxuser');
+        window.localStorage.removeItem('kxsegs');
         maybeInitFixture();
         beginNewPage('buildURL Comprehensive All AudSci', { 'env':{ 'url_location':"http://www.ft.com/?q=cat+dog" } });
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
@@ -3065,9 +3090,11 @@ $(document).ready(function () {
 
         // Restore the default values of AudSci Limits
         FT.ads.CONST.audSciMax = saveMax;
+
     });
 
     test("FT.ads.buildURL (test for max length of ad calls)", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         maybeInitFixture();
         beginNewPage('buildURL Comprehensive Cookie', { 'env':{ 'url_location':"http://www.ft.com/?q=cat+dog" } });
 
@@ -3092,9 +3119,11 @@ $(document).ready(function () {
         equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
 
         clearMockCookies();
+        stub.restore();
     });
 
     test("FT.ads.buildURL (FT_Remember cookie) for US18551", function () {
+        var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return "";});
         maybeInitFixture();
         var url, params, order, uParams;
 
@@ -3111,7 +3140,7 @@ $(document).ready(function () {
         params = extract_params(url);
         order = params._order.join(',');
         equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
-
+        stub.restore();
     });
 
     test("FT.ads.buildURL () should include values from FT.ads.getConsentValue() with cc=n cc=y for US23911", function () {
@@ -3453,6 +3482,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.buildURL (FT_Remember cookie) for US18551", function () {
+         var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return "";});
         maybeInitFixture();
         var url, params, order, uParams;
 
@@ -3470,7 +3500,7 @@ $(document).ready(function () {
         params = extract_params(url);
         order = params._order.join(',');
         equal(order, 'sz,eid,uuid,ts,cc,pos,bht,tile,ord', "Ad URL contains eid and u parameters in correct order");
-
+        stub.restore();
     });
 
 
