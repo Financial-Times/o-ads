@@ -3,7 +3,7 @@ if(!FT.ads) { FT.ads ={};}
     /**
     * @namespace FT.ads
     */
-FT.ads.kruxConfigId= (FT.ads.getDFPSite().match(/^ft.com/)) ? "IgnVxTJW" : "IhGt1gAD";
+FT.ads.kruxConfigId= (FT.ads.getDFPSite().match(/^ftcom/)) ? "IgnVxTJW" : "IhGt1gAD";
 if (!window.Krux) {
   ((Krux=function(){Krux.q.push(arguments);}).q=[]);
 }
