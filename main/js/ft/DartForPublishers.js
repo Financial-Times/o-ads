@@ -76,7 +76,8 @@
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
- corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender */
+ corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position,
+ job_responsibility, industry, gender,rfrsh,isRefreshGenerated */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -120,9 +121,9 @@ FT.Advertising = function () {
       '-': {}
    };
 
-   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'kuid', 'khost', 'ksg', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'tile', 'ord'];
+   this.CONST.KeyOrder = ['sz', 'dcopt', '07', 'kuid', 'khost', 'ksg', 'a', '06', '05', '27', 'eid', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '19', '20', '21', 'slv', '02', '14', 'cn', '01', 'kw', 'loc', 'uuid', 'auuid', 'ts', 'cc', 'pos', 'bht', 'fts', 'socref', 'rfrsh', 'tile', 'ord'];
    this.CONST.KeyOrderVideo = ['sz', 'dcopt', 'pos'];
-   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01'];
+   this.CONST.KeyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh'];
    this.CONST.KeyOrderVideoSync = ['sz', 'dcopt'];
    this.CONST.uKeyOrder = ['eid', 'ip', 'uuid', 'auuid', 'ts'];
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
@@ -793,7 +794,7 @@ FT.Advertising.prototype.clearBaseAdvert = function () {
    //make sure the base ad doesnt inherit values from previous ads
    for (idx = 0; idx < this.CONST.KeyOrder.length; idx++) {
       keyname = this.CONST.KeyOrder[idx];
-      if ((keyname !== 'tile') && (keyname !== 'ord')) {
+      if ((keyname !== 'tile') && (keyname !== 'rfrsh') && (keyname !== 'ord')) {
          delete this.baseAdvert[keyname];
       }
    }
@@ -1074,6 +1075,7 @@ FT.Advertising.prototype.prepareBaseAdvert = function (pos) {
     }
     }*/
    this.baseAdvert.dfp_targeting = this.getDFPTargeting();
+
 };
 
 FT.Advertising.prototype.getDFPTargeting = function () {
@@ -1771,6 +1773,7 @@ FT.Advertising.prototype.beginNewPage = function (env) {
 
    this.baseAdvert = {};
    this.baseAdvert.ord = Math.floor(Math.random() * 1E16); // 16 digit random number
+   this.baseAdvert.rfrsh = this.isRefreshGenerated();
    this.baseAdvert.tile = 1; // tile = 1 .. 16 only
    this.extraAds = [];
 
@@ -2148,6 +2151,29 @@ FT.Advertising.prototype.getLongestUrl = function () {
       }
    });
    return longestRequestUrl;
+};
+
+FT.Advertising.prototype.isRefreshGenerated = function () {
+
+   var isRefreshGenerated = "na";
+
+   //needs to placed in try / catch block due to bug in older versions of Firefox
+   try {
+       if ((typeof (window.localStorage) !== "undefined") && (window.localStorage !== null)) {
+           if ((typeof (window.localStorage.isRefreshGenerated) !== "undefined")  && (window.localStorage.isRefreshGenerated === "true")) {
+            isRefreshGenerated = window.localStorage.isRefreshGenerated;
+            //delete isRefreshGenerated key from local storage
+            delete localStorage.isRefreshGenerated;
+           }  else {
+               isRefreshGenerated = "false";
+           }
+       }
+   } catch (e) {
+       clientAds.log("FT.Advertising.isRefreshGenerated() - exception thrown trying to access local storage" + e);
+   }
+
+    return isRefreshGenerated;
+
 };
 
 // Function to perform the pushdown of FT.com content on billboard Ad expansion. Accepts Ad position parameter like banlb and pause value in seconds

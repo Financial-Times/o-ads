@@ -16,7 +16,8 @@
   startRefreshTimer, handleW3CVisibility, handleAlentyVisibility, getElementById, innerHTML,
   env,asset, handleRefreshLogic, name, pageVisibilityScope,decorateHandler, pageVisibilityScope,
  refreshDelayMs,pageRefresh,userInteracting,cookie, location,href,reloadWindow,userInteractionTimer,
- reload, PageVisibility, isPageVisible, refreshOnVisibilityChange, preservedRefreshScope */
+ reload, PageVisibility, isPageVisible, refreshOnVisibilityChange, preservedRefreshScope, localStorage,
+ setItem */
 
 FT.Refresh = (function () {
 
@@ -64,7 +65,12 @@ FT.Refresh = (function () {
             var scope = returnPreservedScope() || this;
             if (!FT.userInteracting && FT.PageVisibility.isPageVisible()) {
                 document.cookie = "TRK_REF=" + window.location.href;
-                setTimeout(function () { scope.reloadWindow(false); }, this.refreshDelayMs);
+                setTimeout(function () {
+                    //add data to local storage if supported
+                    if (typeof(window.localStorage) !== "undefined") {
+                        localStorage.setItem('isRefreshGenerated',"true");
+                    }
+                    scope.reloadWindow(false); }, this.refreshDelayMs);
             } else {
                 // Kick page refresh timer off again
                 scope.userInteractionTimer = setTimeout(function () {
