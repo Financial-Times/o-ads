@@ -112,7 +112,7 @@ FT.Advertising = function () {
       'mpu': { 'sz': '300x250,336x280' },
       'mpusky': { 'sz': '300x250,336x280,160x60' },
       'wdesky': { 'sz': '160x600' },
-      'video': { 'sz': '592x333' },
+      'video': { 'sz': '592x333,400x225' },
       'minivid': { 'sz': '400x225' },
       'vidbut1': { 'sz': '120x29' }, // each vidbut is a different size so needs
       'vidbut2': { 'sz': '100x50' }, // its own entry in the table.
