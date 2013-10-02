@@ -63,10 +63,12 @@
 
 */
 
-var FT = window.FT || {};
+//
 
 // Temporary hack to allow selenium tests to pass until ad server configured-
 //FT.ads = {};
+
+FT = window.FT || {};
 FT.env =
 {
    // THIRD PARTY CUSTOMISATION HERE
@@ -168,7 +170,7 @@ FT.env =
    },
    'adCall':    function (pos)
    {
-      /*jshint evil:true */ 
+      /*jshint evil:true */
       var tag = this.getTag(pos);
       if (tag)
       {

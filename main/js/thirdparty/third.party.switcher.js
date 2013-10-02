@@ -5,7 +5,7 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 
-(function (win, doc, FT, undefined) {
+(function (win, doc, undefined) {
     "use strict";
 
     function switcher() {
@@ -43,4 +43,4 @@
     }
 
     switcher();
-}(window, document, FT || {}));
+}(window, document));

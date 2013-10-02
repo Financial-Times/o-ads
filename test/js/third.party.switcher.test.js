@@ -1,11 +1,11 @@
-(function (win, document, $, undefined) {
-    win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+(function (window, document, $, undefined) {
+    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
     function runTests() {
 
         module('Third party switcher', {
             setup: function () {
-                win.iframe = $('<iframe>').appendTo('body');
+                window.iframe = $('<iframe>').appendTo('body');
             },
             teardown: function () {
                 //win.iframe.remove();

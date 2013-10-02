@@ -65,7 +65,12 @@
         attrs = container.attributes;
         for(attr in attrs) {
             attrObj = attrs[attr];
-            if(attrs.hasOwnProperty(attr) && attrObj.name &&  !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/))) {
+            /**
+            /* the below is needed to make the code work in IE8,
+            /* because host Objects don't inherit has own property in IE8
+            /* we have to call it from the Object prototype
+            */
+            if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/)) ) {
                 name = matches[3];
                 parser = FT._ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
                 parser(name, attrObj.value);

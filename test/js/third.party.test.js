@@ -1,6 +1,6 @@
-(function (win, doc, $, undefined) {
+(function (window, doc, $, undefined) {
     "use strict";
-    win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
     function runTests() {
         module('Third Party');

@@ -1,5 +1,5 @@
-(function (win, doc, $, undefined) {
-    win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+(function (window, document, $, undefined) {
+    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
     sinon.spies = {
         gptCmdPush: sinon.spy(googletag.cmd, 'push')

@@ -1,4 +1,6 @@
 (function (window, document, $, undefined) {
+    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+
     function runTests() {
             module('Third party config', {
                 setup: function () {

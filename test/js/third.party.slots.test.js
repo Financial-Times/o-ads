@@ -1,11 +1,11 @@
-(function (win, doc, $, undefined) {
-    win.testMode  = win.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
+(function (window, doc, $, undefined) {
+    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
 
     sinon.spies = {
         fetchSlotConfig: sinon.spy(FT.ads.slots, 'fetchSlotConfig')
     };
 
-    win.testingContainer;
+    window.testingContainer;
 
     function runTests() {
 
@@ -72,8 +72,10 @@
             expect(3);
             FT.ads.slots.addContainer(testingContainer[0], 'container');
             ok($('#container').size(), 'the container is appended to the div');
-
-            var scriptTag = testingContainer[0].appendChild($('<script id="script" class="slot">')[0]);
+            var scriptTag = document.createElement('script');
+            scriptTag.id = 'slot';
+            scriptTag.className = 'slot';
+            testingContainer[0].appendChild(scriptTag);
             FT.ads.slots.addContainer(scriptTag, 'script');
             ok($('div#script').size(), 'the container exists and the id has been moved');
             ok($('div#script').next().hasClass('slot'), 'the container is inserted before the script tag');
