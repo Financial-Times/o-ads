@@ -77,7 +77,7 @@
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
  corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position,
- job_responsibility, industry, gender,rfrsh,isRefreshGenerated */
+ job_responsibility, industry, gender,rfrsh,isRefreshGenerated,removeItem */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -2157,13 +2157,13 @@ FT.Advertising.prototype.isRefreshGenerated = function () {
 
    var isRefreshGenerated = "na";
 
-   //needs to placed in try / catch block due to bug in older versions of Firefox
+   //needs to be placed in try / catch block due to bug in older versions of Firefox
    try {
-       if ((typeof (window.localStorage) !== "undefined") && (window.localStorage !== null)) {
-           if ((typeof (window.localStorage.isRefreshGenerated) !== "undefined")  && (window.localStorage.isRefreshGenerated === "true")) {
-            isRefreshGenerated = window.localStorage.isRefreshGenerated;
+       if ((window.localStorage) && (window.localStorage !== null)) {
+           if ((typeof (localStorage.isRefreshGenerated) !== "undefined")  && (localStorage.isRefreshGenerated === "true")) {
+            isRefreshGenerated = localStorage.isRefreshGenerated;
             //delete isRefreshGenerated key from local storage
-            delete localStorage.isRefreshGenerated;
+            localStorage.removeItem("isRefreshGenerated");
            }  else {
                isRefreshGenerated = "false";
            }

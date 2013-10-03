@@ -67,7 +67,7 @@ FT.Refresh = (function () {
                 document.cookie = "TRK_REF=" + window.location.href;
                 setTimeout(function () {
                     //add data to local storage if supported
-                    if (typeof(window.localStorage) !== "undefined") {
+                    if (typeof(localStorage) !== "undefined") {
                         localStorage.setItem('isRefreshGenerated',"true");
                     }
                     scope.reloadWindow(false); }, this.refreshDelayMs);
