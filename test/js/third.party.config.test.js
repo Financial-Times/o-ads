@@ -8,6 +8,7 @@
                     window.iframe = $('<iframe>').appendTo('body');
                 },
                 teardown: function () {
+                    //window.iframe.remove();
                     FT._ads.utils.cookie('ftads:mode_t', null, { expires: -1 });
                     FT._ads.utils.cookie('cookieconf1', null, { expires: -1 })
                 }
@@ -72,10 +73,11 @@
               iframe.attr('src', '../iframes/third.party.switcher.meta.html');
         });
 
-        asyncTest('Config fetchCookieConfig', function () {
+        test('Config fetchCookieConfig', function () {
+            QUnit.stop();
             iframe.load(function () {
 
-                // Use the iframe context for our assertions
+                    // Use the iframe context for our assertions
                 expect(1);
                 var win = this.contentWindow;
                 var FT = win.FT;
@@ -86,7 +88,8 @@
               iframe.attr('src', '../iframes/third.party.cookie.html');
         });
 
-        asyncTest('Config fetchGlobalConfig', function () {
+        test('Config fetchGlobalConfig', function () {
+            QUnit.stop();
             iframe.load(function () {
             // Use the iframe context for our assertions
                 expect(1);
@@ -99,7 +102,8 @@
               iframe.attr('src', '../iframes/third.party.switcher.global.html');
         });
 
-        asyncTest('Config defaults', function () {
+        test('Config defaults', function () {
+            QUnit.stop();
             iframe.load(function () {
             // Use the iframe context for our assertions
                 expect(1);
@@ -112,7 +116,8 @@
               iframe.attr('src', '../iframes/third.party.switcher.global.html');
         });
 
-        asyncTest('Config cookie over-ride for Test User mode', function () {
+        test('Config cookie over-ride for Test User mode', function () {
+            QUnit.stop();
             iframe.load(function () {
             // Use the iframe context for our assertions
                 expect(1);
