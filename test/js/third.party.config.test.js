@@ -57,8 +57,7 @@
                 deepEqual(result, obj, 'get returns the new values.');
           });
 
-        test('Config fetchMetaConfig', function () {
-            QUnit.stop();
+        asyncTest('Config fetchMetaConfig', function () {
             iframe.load(function () {
 
                     // Use the iframe context for our assertions
