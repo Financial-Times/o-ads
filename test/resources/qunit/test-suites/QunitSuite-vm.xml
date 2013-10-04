@@ -29,7 +29,7 @@
         <parameter name="browser" value="*firefox" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
-            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+            <class name="com.ft.advertising.AdsSeleniumRunner" />
         </classes>
     </test>
 
@@ -37,7 +37,7 @@
         <parameter name="browser" value="*googlechrome" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
-            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+            <class name="com.ft.advertising.AdsSeleniumRunner" />
         </classes>
     </test>
 
@@ -45,7 +45,7 @@
         <parameter name="browser" value="*iexplore" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
-            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+            <class name="com.ft.advertising.AdsSeleniumRunner" />
         </classes>
     </test>
 </suite>
