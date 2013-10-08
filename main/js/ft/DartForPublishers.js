@@ -129,7 +129,7 @@ FT.Advertising = function () {
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
                                     [/(%27)|(%22)+/g,''], //hex encoding special characters occurs for referring urls in some browsers (e.g. Firefox)
                                     [/(&#038;)/,'&'],
-                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2 '
+                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
                                     [/;;+/g, ';' ]
                                     ];
 
@@ -966,10 +966,10 @@ FT.Advertising.prototype.metadata.user= function () {
 
 FT.Advertising.prototype.metadata.page = function(){
    var result = {};
-      if ((typeof siteMapTerm !== "undefined") && (FT._ads.utils.isString(siteMapTerm)) && (siteMapTerm!=="") ) {result.siteMapTerm = siteMapTerm;}
-      if ((typeof navEdition!== "undefined") && (FT._ads.utils.isString(navEdition)) && (navEdition!=="")) {result.navEdition = navEdition;}
-      if ((typeof brandName!== "undefined") && (FT._ads.utils.isString(brandName)) && (brandName!=="")) {result.brandName = brandName;}
-      if ((typeof primaryThemeName !== "undefined") && (FT._ads.utils.isString(primaryThemeName)) && (primaryThemeName!=="")) {result.primaryThemeName = primaryThemeName;}
+      if ( FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
+      if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
+      if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
+      if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
       return result;
    };
 
