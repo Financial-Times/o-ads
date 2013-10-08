@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-	Line up test case descriptions in this file:
+    Line up test case descriptions in this file:
 pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../support/align-tests.pl dfp-advertising.html.bak > dfp-advertising.html; less dfp-advertising.html; popd
 -->
 <html>
@@ -210,6 +210,11 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     TEST.AdStateKeysChanged = "alwaysHide, hasDiv, hasInterstitial, initialHTML, innerHTML, isEmptyAd, isSystemDefault, requestsInterstitial, state";
 
     var pageUUID = '';
+    var siteMapTerm = "Sections.Front page";
+    var navEdition = "UK";
+    var brandName = "teststring";
+    var primaryThemeName = "";
+
     function getUUIDFromString(stringForExtractingUUID) {
         return '';
     }
@@ -221,7 +226,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     //FT.ads.baseAdvert['keyword'] = "ivi/lon" ;
 </script>
 <!--
-	<script src="../../dist/advertising-latest.js"></script>
+    <script src="../../dist/advertising-latest.js"></script>
 -->
 
 <script src="../js/ft/advertising.utils.js"></script>
@@ -562,10 +567,10 @@ function hasIDX(List, idx) {
 // Extract all the DFP parameters from the ad call URL
 // http://ad.doubleclick.net/adj/test.5887.dev/bsac1;sz=468x60,728x90;pos=banlb;ord=1234567890?
 // results in {
-//	 _order: ['sz', 'pos', 'ord'],
-//	 sz: '468x60,728x90',
-//	 pos: 'banlb',
-//	 ord: '1234567890?'
+//   _order: ['sz', 'pos', 'ord'],
+//   sz: '468x60,728x90',
+//   pos: 'banlb',
+//   ord: '1234567890?'
 // }
 function extract_params(url) {
     var Order = [];
@@ -1765,8 +1770,8 @@ $(document).ready(function () {
     test("FT.ads.cleanKeywords - TA16773", function () {
         maybeInitFixture();
         beginNewPage('getKeywordsParam');
-        equal(FT.ads.cleanKeywords("  this	is	"), "this%20is", "excess space removed");
-        equal(FT.ads.cleanKeywords("  THIS	IS	"), "this%20is", "lowercased");
+        equal(FT.ads.cleanKeywords("  this  is  "), "this%20is", "excess space removed");
+        equal(FT.ads.cleanKeywords("  THIS  IS  "), "this%20is", "lowercased");
         equal(FT.ads.cleanKeywords(" ^ this+is 'it' ; "), "this%20is%20it", "DFP restricted characters removed");
         equal(FT.ads.cleanKeywords(" %5E this%2Bis %27it%27 %3B %20 "), "this%20is%20it", "DFP restricted characters removed even if escaped");
         equal(FT.ads.cleanKeywords("  this.is%2Eit"), "this%2Eis%2Eit", "full-stop escaped as it means something to DFP");
@@ -1937,7 +1942,7 @@ $(document).ready(function () {
             "asset":"asset"
         };
 
-        mockCookies.AYSC = "_02gender_04state_05industry_06responsibility_07position_14subCountry_17regionalArea_18city_19companySize_20personalInvestor_21companyListings_22subscriberInformation_24continent_25lineSpeed_26areaCode_27corporateAccessIDcode_";
+        mockCookies.AYSC = "_02gender_04state_05industry_06responsibility_07position_14subCountry_17regionalArea_18city_19companySize_20personalInvestor_21companyListings_22subscriberInformation_24continent_25lineSpeed_26areaCode_27corporateAccessIDcode_40companysize_41industry_42turnover_45country_43cameocountry_46cameoinvestor_51cameoproperty_44cameolocal_";
 
         FT.env = FT.ads.getAyscVars(FT.env);
 
@@ -1950,7 +1955,7 @@ $(document).ready(function () {
         equal(FT.env["14"], "subCountry", "Country Tag");
         equal(FT.env["17"], "regionalArea", "Region  Tag");
         equal(FT.env["18"], "city", "City, Tag");
-        equal(FT.env["19"], "companySize", "Company Size	 Cookie");
+        equal(FT.env["19"], "companySize", "Company Size     Cookie");
         equal(FT.env["20"], "personalInvestor", "Personal Investor Cookie");
         equal(FT.env["21"], "companyListings", "Company Listings Cookie");
         equal(FT.env["22"], "subscriberInformation", "Subscription ID Level Cookie");
@@ -1962,15 +1967,15 @@ $(document).ready(function () {
         FT.env = saveEnv;
     });
 
-    test("FT.ads.getUserData()", function () {
+    test("FT.ads.metadata.user()", function () {
         var getAyscVarsStub = sinon.stub(FT.ads, "getAyscVars", function () {
-            return {"12":"N85XE","13":"PVT","14":"GBR","15":"PVT","17":"PVT","18":"PVT","19":"xxxx","20":"x","22":"P0P2Tools","24":"PVT","25":"PVT","26":"PVT","27":"zentea1","40":"2","41":"21","42":"1","45":"UK","96":"IA","98":"IA","07":"CP","06":"TEC","05":"IT","02":"X"};
+            return {"12":"N85XE","13":"PVT","14":"GBR","15":"PVT","17":"PVT","18":"PVT","19":"xxxx","20":"x","22":"P0P2Tools","24":"PVT","25":"PVT","26":"PVT","27":"zentea1","40":"2","41":"21","42":"1","45":"UK","96":"IA","98":"IA","07":"CP","06":"TEC","05":"IT","02":"X","43":"2","41":"IT","44":"007"};
         }),
         erightsIDStub = sinon.stub(FT.ads, "erightsID", function () {
             return '123456';
         }),
-        result = FT.ads.getUserData(),
-        expected = {eid: "123456", corporate_access_id_code: "zentea1", subscription_level: "lv2", job_position: "CP", job_responsibility: "TEC", industry: "IT", job_position: "CP", job_responsibility: "TEC", subscription_level: "lv2"};
+        result = FT.ads.metadata.user(),
+        expected = {eid: "123456", corporate_access_id_code: "zentea1", subscription_level: "lv2", job_position: "CP", job_responsibility: "TEC", industry: "IT", job_position: "CP", job_responsibility: "TEC", subscription_level: "lv2", DB_company_size : "2", DB_company_turnover:"1", DB_country_code:"UK", DB_industry:"IT", cameo_country_code:"2", cameo_local_code:"007"};
         deepEqual(result, expected, "The correct values are returned");
 
         ok(!result.hasOwnProperty('active_personal_investor'), 'properties with value X are not present');
@@ -1981,6 +1986,12 @@ $(document).ready(function () {
 
         getAyscVarsStub.restore();
         erightsIDStub.restore();
+    });
+
+    test("FT.ads.metadata.page()", function () {
+            var result = FT.ads.metadata.page();
+            var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"};
+        deepEqual(result, expected, "The correct values are returned");
     });
 
     test("FT.ads.buildURL (no cookies) - for Task TA10279", function () {
@@ -2474,7 +2485,7 @@ $(document).ready(function () {
 
         mockCookies.AYSC = "_27PVT_";
         url = testBuildURL("test AYSC 27 = PVT value");
-        //matches(url, ';27=' 	 "Ad URL AYSC field 27 should not be present in url", false);
+        //matches(url, ';27='    "Ad URL AYSC field 27 should not be present in url", false);
 
     });
 
@@ -3337,11 +3348,11 @@ $(document).ready(function () {
         FT.ads.CONST.urlThreshold = FT.ads.CONST.urlThresholdMax;
 // CANNOT PERFORM THESE TESTS as they cause selenium regression tests to hang when testing the build.
 // Not sure we can test the success case at all then except manually.
-//		result = FT.ads.injectUrlTrackCall();
-//		differs(result, undefined,	 "Ad call and thresholds ok FT.ads.injectUrlTrackCall returns non undefined");
+//      result = FT.ads.injectUrlTrackCall();
+//      differs(result, undefined,   "Ad call and thresholds ok FT.ads.injectUrlTrackCall returns non undefined");
         rImage = document.getElementById("injectUrlTrackCall");
-//		ok(rImage !== null 	  "injectUrlTrackCall image exists on page now");
-//		equal(rImage.src, FT.ads.CONST.trackUrl + "?long_url=" + FT.ads.getLongestUrl() 	 "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
+//      ok(rImage !== null    "injectUrlTrackCall image exists on page now");
+//      equal(rImage.src, FT.ads.CONST.trackUrl + "?long_url=" + FT.ads.getLongestUrl()      "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
 
         FT.ads.CONST.urlThreshold = saved_urlThreshold;
         FT.ads.CONST.urlThresholdMax = saved_urlThresholdMax;
@@ -3362,10 +3373,10 @@ $(document).ready(function () {
         FT.ads.submitToTrack = true;
 // CANNOT PERFORM THESE TESTS as they cause selenium regression tests to hang when testing the build.
 // Not sure we can test the success case at all then except manually.
-//		FT.ads.injectUnclassifiedTrackCall();
-//		equal(result, undefined,	  "Injection forced but not unclassified site, returns undefined");
+//      FT.ads.injectUnclassifiedTrackCall();
+//      equal(result, undefined,      "Injection forced but not unclassified site, returns undefined");
         var rImage = document.getElementById("injectUnclassifiedTrackCall");
-//		equal(rImage, null 	 "injectUnclassifiedTrackCall image should not be on page");
+//      equal(rImage, null   "injectUnclassifiedTrackCall image should not be on page");
 
         FT.ads.submitToTrack = false;
         FT.ads.setDefaultSiteZone();
@@ -3379,11 +3390,11 @@ $(document).ready(function () {
         FT.ads.submitToTrack = true;
 // CANNOT PERFORM THESE TESTS as they cause selenium regression tests to hang when testing the build.
 // Not sure we can test the success case at all then except manually.
-//		result = FT.ads.injectUnclassifiedTrackCall();
-//		differs(result, undefined,	 "Injection forced, returns a url");
+//      result = FT.ads.injectUnclassifiedTrackCall();
+//      differs(result, undefined,   "Injection forced, returns a url");
         rImage = document.getElementById("injectUnclassifiedTrackCall");
-//		differs(rImage, null 	"injectUnclassifiedTrackCall image exists on page now");
-//		equal(rImage.src, FT.ads.CONST.trackUrl + "?unclassified=" + document.location 	  "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
+//      differs(rImage, null    "injectUnclassifiedTrackCall image exists on page now");
+//      equal(rImage.src, FT.ads.CONST.trackUrl + "?unclassified=" + document.location    "The src attribute of injected image should contain CONST.trackUrl and the longest URL");
 
         FT.ads.CONST.urlThreshold = saved_urlThreshold;
         FT.ads.CONST.urlThresholdMax = saved_urlThresholdMax;

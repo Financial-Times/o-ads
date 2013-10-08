@@ -75,8 +75,9 @@
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
- kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
- corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender */
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, metadata, metadata.user, metadata.page, homepage_edition,
+ corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, DB_company_size,
+ DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName */
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -128,7 +129,7 @@ FT.Advertising = function () {
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
                                     [/(%27)|(%22)+/g,''], //hex encoding special characters occurs for referring urls in some browsers (e.g. Firefox)
                                     [/(&#038;)/,'&'],
-                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
+                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2 '
                                     [/;;+/g, ';' ]
                                     ];
 
@@ -916,8 +917,8 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
    }
    return FT._ads.utils.extend({}, obj, out);
 };
-
-FT.Advertising.prototype.getUserData = function () {
+FT.Advertising.prototype.metadata = {};
+FT.Advertising.prototype.metadata.user= function () {
    var ayscProp, ayscVal,
       aysc = FT.ads.fieldRegex(FT.ads.CONST.regex_key_names, FT.ads.prepareAdVars(FT.ads.getAyscVars({}))),
       eid = FT.ads.erightsID(),
@@ -936,7 +937,16 @@ FT.Advertising.prototype.getUserData = function () {
           job_responsibility: '06',
           industry: '05',
           state: '04',
-          gender: '02'
+          gender: '02',
+          DB_company_size: '40',
+          DB_industry: '41',
+          DB_company_turnover: '42',
+          cameo_country_code: '43',
+          cameo_local_code: '44',
+          DB_country_code: '45',
+          cameo_investor_code: '46',
+          cameo_property_code: '51'
+
       };
 
 
@@ -953,6 +963,15 @@ FT.Advertising.prototype.getUserData = function () {
 
    return result;
 };
+
+FT.Advertising.prototype.metadata.page = function(){
+   var result = {};
+      if ((typeof siteMapTerm !== "undefined") && (FT._ads.utils.isString(siteMapTerm)) && (siteMapTerm!=="") ) {result.siteMapTerm = siteMapTerm;}
+      if ((typeof navEdition!== "undefined") && (FT._ads.utils.isString(navEdition)) && (navEdition!=="")) {result.navEdition = navEdition;}
+      if ((typeof brandName!== "undefined") && (FT._ads.utils.isString(brandName)) && (brandName!=="")) {result.brandName = brandName;}
+      if ((typeof primaryThemeName !== "undefined") && (FT._ads.utils.isString(primaryThemeName)) && (primaryThemeName!=="")) {result.primaryThemeName = primaryThemeName;}
+      return result;
+   };
 
 FT.Advertising.prototype.getConsentValue = function () {
    var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
