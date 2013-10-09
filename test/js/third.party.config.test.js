@@ -75,20 +75,21 @@
               iframe.attr('src', '../iframes/third.party.switcher.meta.html');
         });
 
-        // test('Config fetchCookieConfig', function () {
-        //     QUnit.stop();
-        //     iframe.load(function () {
+        test('Config fetchCookieConfig', function () {
+            QUnit.stop();
+            var iframe = $('<iframe>').appendTo('body');
+            iframe.load(function () {
 
-        //             // Use the iframe context for our assertions
-        //         expect(1);
-        //         var win = this.contentWindow;
-        //         var FT = win.FT;
-        //         var result =  FT.ads.config();
-        //         ok(result.hasOwnProperty('cookieconf1'), 'Cookie values have been added to config');
-        //         QUnit.start();
-        //       });
-        //       iframe.attr('src', '../iframes/third.party.cookie.html');
-        // });
+                    // Use the iframe context for our assertions
+                expect(1);
+                var win = this.contentWindow;
+                var FT = win.FT;
+                var result =  FT.ads.config();
+                ok(result.hasOwnProperty('cookieconf1'), 'Cookie values have been added to config');
+                QUnit.start();
+              });
+              iframe.attr('src', '../iframes/third.party.cookie.html');
+        });
 
         // test('Config fetchGlobalConfig', function () {
         //     QUnit.stop();
