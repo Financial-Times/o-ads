@@ -5,10 +5,10 @@
             module('Third party config', {
                 setup: function () {
                     FT.ads.config.clear();
-                    window.iframe = window.iframe || $('<iframe>').appendTo('body');
+                    window.iframe = $('<iframe>').appendTo('body');
                 },
                 teardown: function () {
-                    //window.iframe.remove();
+                    window.iframe.remove();
                     FT._ads.utils.cookie('ftads:mode_t', null, { expires: -1 });
                     FT._ads.utils.cookie('cookieconf1', null, { expires: -1 })
                 }
