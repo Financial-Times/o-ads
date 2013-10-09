@@ -60,7 +60,6 @@
         test('Config fetchMetaConfig', function () {
             QUnit.stop();
             var iframe = $('<iframe>').appendTo('body');
-
             expect(1);
             iframe.load(function () {
                 // Use the iframe context for our assertions
@@ -105,33 +104,35 @@
               iframe.attr('src', '../iframes/third.party.switcher.global.html');
         });
 
-        // test('Config defaults', function () {
-        //     QUnit.stop();
-        //     iframe.load(function () {
-        //     // Use the iframe context for our assertions
-        //         expect(1);
-        //         var win = this.contentWindow;
-        //         var FT = win.FT;
-        //         var result =  FT.ads.config();
-        //         ok(result.hasOwnProperty('network'), 'default properties have been added to config');
-        //         QUnit.start();
-        //       });
-        //       iframe.attr('src', '../iframes/third.party.switcher.global.html');
-        // });
+        test('Config defaults', function () {
+            QUnit.stop();
+            var iframe = $('<iframe>').appendTo('body');
+            iframe.load(function () {
+            // Use the iframe context for our assertions
+                expect(1);
+                var win = this.contentWindow;
+                var FT = win.FT;
+                var result =  FT.ads.config();
+                ok(result.hasOwnProperty('network'), 'default properties have been added to config');
+                QUnit.start();
+              });
+              iframe.attr('src', '../iframes/third.party.switcher.global.html');
+        });
 
-        // test('Config cookie over-ride for Test User mode', function () {
-        //     QUnit.stop();
-        //     iframe.load(function () {
-        //     // Use the iframe context for our assertions
-        //         expect(1);
-        //         var win = this.contentWindow;
-        //         var FT = win.FT;
-        //         var result =  FT.ads.config();
-        //         ok(result.network==='over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
-        //         QUnit.start();
-        //       });
-        //       iframe.attr('src', '../iframes/third.party.cookie.html');
-        // });
+        test('Config cookie over-ride for Test User mode', function () {
+            QUnit.stop();
+            var iframe = $('<iframe>').appendTo('body');
+            iframe.load(function () {
+            // Use the iframe context for our assertions
+                expect(1);
+                var win = this.contentWindow;
+                var FT = win.FT;
+                var result =  FT.ads.config();
+                ok(result.network==='over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
+                QUnit.start();
+              });
+              iframe.attr('src', '../iframes/third.party.cookie.html');
+        });
 
     }
     $(runTests);
