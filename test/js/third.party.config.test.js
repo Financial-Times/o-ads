@@ -5,7 +5,7 @@
             module('Third party config', {
                 setup: function () {
                     FT.ads.config.clear();
-                    window.iframe = $('<iframe>').appendTo('body');
+                    window.iframe = window.iframe || $('<iframe>').appendTo('body');
                 },
                 teardown: function () {
                     //window.iframe.remove();
