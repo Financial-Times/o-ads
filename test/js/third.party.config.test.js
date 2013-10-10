@@ -57,22 +57,22 @@
             deepEqual(result, obj, 'get returns the new values.');
         });
 
-        // test('Config fetchMetaConfig', function () {
-        //     QUnit.stop();
-        //     var iframe = $('<iframe>').appendTo('body');
-        //     expect(1);
-        //     iframe.load(function () {
-        //         // Use the iframe context for our assertions
-        //         var win = this.contentWindow;
-        //         var FT = win.FT;
-        //         var result =  FT.ads.config();
+        test('Config fetchMetaConfig', function () {
+            QUnit.stop();
+            var iframe = $('<iframe>').appendTo('body');
+            expect(1);
+            iframe.load(function () {
+                // Use the iframe context for our assertions
+                var win = this.contentWindow;
+                var FT = win.FT;
+                var result =  FT.ads.config();
 
-        //         ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
-        //         QUnit.start();
-        //       });
+                ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
+                QUnit.start();
+              });
 
-        //       iframe.attr('src', '../iframes/third.party.switcher.meta.html');
-        // });
+            iframe.attr('src', '../iframes/third.party.switcher.meta.html');
+        });
 
         // test('Config fetchCookieConfig', function () {
         //     QUnit.stop();
