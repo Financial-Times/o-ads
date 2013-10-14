@@ -165,6 +165,8 @@
             container = this.addContainer(container, slotName);
         }
 
+        this.centerContainer(container, config.sizes);
+
         this[slotName] = {
             container: container,
             config: config
