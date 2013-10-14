@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testing global configuration!</title>
+
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/sinon/sinon-1.1.1.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.1.1.js"></script>
+
+    <!-- the code -->
+    <script src="../js/thirdparty/third.party.namespace.js"></script>
+    <script>
+        if(!FT.env) {
+            FT.env = {
+              'ftads:mode': 'gpt',
+              'globablconf1': 'globabconf1_val'
+            }
+        }
+    </script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/thirdparty/third.party.config.js"></script>
+    <script src="../js/thirdparty/third.party.targeting.js"></script>
+    <script src="../js/thirdparty/third.party.slots.js"></script>
+    <script src="../js/thirdparty/third.party.gpt.js"></script>
+    <script src="../js/thirdparty/third.party.js"></script>
+    <script src="../js/thirdparty/third.party.switcher.js"></script>
+
+    <!-- spies -->
+    <script>
+        FT.spies = {};
+        FT.spies.adCallSpy = sinon.spy(FT.env, "adCall");
+        FT.spies.getTagSpy = sinon.spy(FT.env, "getTag");
+        FT.spies.getAudSciSpy = sinon.spy(FT.env, "getAudSci");
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Testing global configuration</h1>
+
+    <div id="adCalls">
+        <div id="banlb">
+            <h2>banlb</h2>
+            <script>
+            FT.env.adCall('banlb');
+            </script>
+        </div>
+        <div id="newssubs">
+            <h2>newssubs</h2>
+            <script>
+            FT.env.adCall('newssubs');
+            </script>
+        </div>
+        <div id="hlfmpu">
+            <h2>hlfmpu</h2>
+            <script>
+            FT.env.adCall('hlfmpu');
+            </script>
+        <div id="mpu">
+            <h2>mpu</h2>
+            <script>
+            FT.env.adCall('mpu');
+            </script>
+        </div>
+        <div id="mpusky">
+            <h2>mpusky</h2>
+            <script>
+            FT.env.adCall('mpusky');
+            </script>
+        <div id="invalidpos">
+            <h2>invalidpos</h2>
+            <script>
+            FT.env.adCall('invalidpos');
+            </script>
+        </div>
+    </div>
+  </body>
+</html>
