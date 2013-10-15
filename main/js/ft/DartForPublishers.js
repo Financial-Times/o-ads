@@ -2235,7 +2235,7 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
                if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] === undefined) {
                   //acquire the  initial height of each asset and preserve it in a data structure
                   FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] = clientHeight;
-               } else if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] < clientHeight) {
+               } else if ((FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] < clientHeight) && ((clientHeight - FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id]) < 100 )){
                   //asset appears to be expanding in height - set as watched asset for expanding page
                   FT.ads.VAR.pushDownExpandingAsset = node;
                }
