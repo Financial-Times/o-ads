@@ -1999,11 +1999,10 @@ $(document).ready(function () {
         matches(url, '^http://ad\\.doubleclick\\.net/', "Ad URL begins with default ad server");
         matches(url, '\\.net/N5887/adj/test\\.5887\\.dev/build-url-test;', "Ad URL has correct site and zone name and ad type");
         matches(url, 'build-url-test;sz=468x60,728x90,970x90;', "Ad URL first parameter is ad size");
-        matches(url, ';dcopt=ist;', "Ad URL no interstitial tag for this ad type");
         matches(url, ';ord=\\d{1,16}\\?$', "Ad URL last parameter is up to 16 digit ord");
         matches(url, ';tile=\\d+;ord=', "Ad URL tile parameter is numerical and is before ord");
         matches(url, ';pos=banlb;bht=false;rfrsh=false;tile=', "Ad URL ad position appears before tile (for reference)");
-        equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains only non-cookie parameters");
+        equal(order, 'sz,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains only non-cookie parameters");
 
         // Test that baseAdvert reflects the values used from the last buildURL call
         // baseAdvert is used as a staging area for assembling the key values before
@@ -2012,11 +2011,9 @@ $(document).ready(function () {
         equal(FT.ads.baseAdvert.dfp_zone, 'build-url-test', "baseAdvert contains zone value ");
         equal(FT.ads.baseAdvert.ad_network_code, '/N5887', "baseAdvert contains Ad network code");
         equal(FT.ads.baseAdvert.sz, '468x60,728x90,970x90', "baseAdvert contains key value sz");
-        equal(FT.ads.baseAdvert.dcopt, 'ist', "baseAdvert contains key value dcopt");
         equal(FT.ads.baseAdvert.pos, 'banlb', "baseAdvert contains key value pos");
         equal(FT.ads.baseAdvert.tile, 2, "baseAdvert contains key value tile counter for next ad slot");
         equal(FT.ads.baseAdvert.ord + '?', Params.ord, "baseAdvert contains key value ord");
-        equal(FT.ads.baseAdvert.hasInterstitial, true, "baseAdvert has the interstitial flag");
 
         beginNewPage('buildURL 2');
         url = testBuildURL("a buildURL call on a new page");
@@ -2325,26 +2322,26 @@ $(document).ready(function () {
         beginNewPage('buildURL Rel Env restored', { 'ENV':release_env });
     });
 
-    test("FT.ads.buildURL (multiple interstitial warning)", function () {
+    test("FT.ads.buildURL (interstitial [dcopt=ist] tests)", function () {
         var stub = sinon.stub(FT.ads, "kruxRetrieve", function(name){return ""});
         var url, Params, order;
         maybeInitFixture();
 
         beginNewPage('buildURL multiple interstitals on page');
 
-        url = testBuildURL("test first interstitial");
+        url = testBuildURL("test first interstitial", {'pos': 'intro'});
         Params = extract_params(url);
         order = Params._order.join(',');
         matches(url, ';dcopt=ist;', "Ad URL dcopt=ist is present in the url to request the interstitial");
         equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL order of parameters is correct");
 
-        url = testBuildURL("test another interstitial on deepsame page");
+        url = testBuildURL("test another interstitial on deepsame page", {'pos': 'intro'});
         Params = extract_params(url);
         order = Params._order.join(',');
         matches(url, ';dcopt=ist;', "Ad URL dcopt=ist is NOT present in the url", false);
         equal(order, 'sz,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL order of parameters omits dcopt.");
-        var result = 'multiple interstitials on page, ignoring banlb';
-        equal(get_diagnostic('banlb', 'buildURLIst'), result, "Diagnostic recorded about multiple interstitials");
+        var result = 'multiple interstitials on page, ignoring intro';
+        equal(get_diagnostic('intro', 'buildURLIst'), result, "Diagnostic recorded about multiple interstitials");
         stub.restore();
     });
 
@@ -2361,7 +2358,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, 'xXxx', "Ad URL default xxxx NOT present in ad call", false);
-        equal(order, 'sz,dcopt,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL no xxxx parameter");
+        equal(order, 'sz,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL no xxxx parameter");
 
         beginNewPage('buildURL 1', {
             'env':{ 'dfp_targeting':";key=value" }
@@ -2371,7 +2368,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb', 'Ad URL key parameter present in ad call with leading semicolon handled ok ');
-        equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
+        equal(order, 'sz,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
 
         beginNewPage('buildURL 1', {
             'env':{ 'dfp_targeting':"key=value;" }
@@ -2381,7 +2378,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb', "Ad URL key parameter present in ad call with trailing semicolon handled ok");
-        equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
+        equal(order, 'sz,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
 
         beginNewPage('buildURL 1', {
             'env':{ 'dfp_targeting':"key=value" }
@@ -2391,7 +2388,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;pos=banlb', "Ad URL key parameter present in ad call with semicolon's ok");
-        equal(order, 'sz,dcopt,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
+        equal(order, 'sz,uuid,ts,cc,key,pos,bht,rfrsh,tile,ord', "Ad URL position of key parameter is correct");
 
         beginNewPage('buildURL 1', {
             'env':{ 'dfp_targeting':"key=value;;;;door=locked" }
@@ -2401,7 +2398,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;key=value;door=locked;pos=banlb', "Ad URL key and door parameters present in ad call");
-        equal(order, 'sz,dcopt,uuid,ts,cc,key,door,pos,bht,rfrsh,tile,ord', "Ad URL position of key and door parameters are correct");
+        equal(order, 'sz,uuid,ts,cc,key,door,pos,bht,rfrsh,tile,ord', "Ad URL position of key and door parameters are correct");
         stub.restore();
     });
 
@@ -2418,7 +2415,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb', "Ad URL kw parameter present in ad call");
-        equal(order, 'sz,dcopt,kw,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL position of kw parameter is correct");
+        equal(order, 'sz,kw,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL position of kw parameter is correct");
         stub.restore();
     });
 
@@ -2436,7 +2433,7 @@ $(document).ready(function () {
         Params = extract_params(url);
         order = Params._order.join(',');
         matches(url, '^http://ad\\.uk\\.doubleclick\\.net/', "Ad URL closest ad server selected from AYSC value");
-        equal(order, 'sz,dcopt,14,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL AYSC field 13 is not in Ad url but 14 is.");
+        equal(order, 'sz,14,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL AYSC field 13 is not in Ad url but 14 is.");
 
         mockCookies.AYSC = "_13ZMB_14USA_15ZM_";
         url = testBuildURL("test AYSC 13 = country code for unsupported ad server selection");
@@ -2902,7 +2899,7 @@ $(document).ready(function () {
         var order = Params._order.join(',');
         matches(url, ';' + TEST.AudSciResult[0] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
-        equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
+        equal(order, 'sz,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
 
         var saveMax = FT.ads.CONST.audSciMax;
         FT.ads.CONST.audSciMax = 5;
@@ -2915,7 +2912,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
 
         matches(url, ';' + TEST.AudSciResultShort1 + TEST.AudSciResultShort2, "Ad URL audience science encoded values appear in url encoded correctly");
-        equal(order, 'sz,dcopt,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains only five audience science cookie parameters in correct order");
+        equal(order, 'sz,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains only five audience science cookie parameters in correct order");
 
         beginNewPage('buildURL rsi_segs Split AudSci values around the u= parameter');
         clearMockCookies();
@@ -2950,7 +2947,7 @@ $(document).ready(function () {
         var order = Params._order.join(',');
         matches(url, ';' + TEST.AudSciResult[3] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
-        equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
+        equal(order, 'sz,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
 
         beginNewPage('buildURL rsi_segs has more than 35 segments');
         mockCookies.rsi_segs = TEST.AudSci[4];
@@ -2964,7 +2961,7 @@ $(document).ready(function () {
         order = Params._order.join(',');
         matches(url, ';' + TEST.AudSciResult[3] + ';', "Ad URL audience science encoded values appear in url encoded correctly");
 
-        equal(order, 'sz,dcopt,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
+        equal(order, 'sz,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains audience science cookie parameters in correct order");
         stub.restore();
     });
 
@@ -3027,7 +3024,7 @@ $(document).ready(function () {
             matches(url, 'kuid=' + TEST.krux.userid, "Ad URL krux user id appears in url correctly");
             matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
 
-            equal(order, 'sz,dcopt,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux parameters in correct order");
+            equal(order, 'sz,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux parameters in correct order");
 
             /* test teardown, reinstate local storage values */
             window.localStorage.removeItem('kxuser');
@@ -3062,7 +3059,7 @@ $(document).ready(function () {
         matches(url, 'kuid=' + TEST.krux.userid, "Ad URL krux user id appears in url correctly");
         matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
 
-        equal(order, 'sz,dcopt,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux cookie parameters in correct order");
+        equal(order, 'sz,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux cookie parameters in correct order");
 
     });
 
@@ -3077,7 +3074,7 @@ $(document).ready(function () {
         mockCookies.kxsegs = TEST.krux.segs;
         mockCookies.kxuser = TEST.krux.userid;
 
-        var url = testBuildURL("test with all cookie information", { 'pos':'banlb' });
+        var url = testBuildURL("test with all cookie information", { 'pos':'intro' });
         var Params = extract_params(url);
         var order = Params._order.join(',');
         equal(order, TEST.Comprehensive, "Ad URL contains parameters in correct order");
@@ -3090,12 +3087,12 @@ $(document).ready(function () {
         clearMockCookies();
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_97c_";
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|H07711_10127";
-        url = testBuildURL("test with all cookie information", { 'pos':'banlb' });
+        url = testBuildURL("test with all cookie information", { 'pos':'intro' });
 
         Params = extract_params(url);
         order = Params._order.join(',');
         equal(order, 'sz,dcopt,07,a,a,a,a,a,06,05,27,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains parameters in correct order");
-        matches(url, ';sz=468x60,728x90,970x90;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;06=tec;05=itt;27=3f5a2e;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=cor;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=banlb;bht=true;rfrsh=false;tile=1;', 'url parameters correctly substituted in correct order');
+        matches(url, ';sz=1x1;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;06=tec;05=itt;27=3f5a2e;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=cor;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pos=intro;bht=true;rfrsh=false;tile=1;', 'url parameters correctly substituted in correct order');
 
         // Restore the default values of AudSci Limits
         FT.ads.CONST.audSciMax = saveMax;
@@ -3119,12 +3116,12 @@ $(document).ready(function () {
         // rsi_segs with 35 segments
         mockCookies.rsi_segs = "H07711_10108|J07717_10576|J07717_10089|J07717_10502|J07717_10236|J07717_10286|J07717_10288|J07717_10295|J07717_10299|J07717_10301|J07717_10322|J07717_10344|J07717_10345|J07717_10357|J07717_10369|J07717_10530|J07717_10555|J07717_10545|J07717_10221|J07717_10224|J07717_10225|J07717_10226|J07717_10233|J07717_10236|J07717_10281|J07717_10286|J07717_10287|J07717_10288|J07717_10289|J07717_10294|J07717_10295|J07717_10296|J07717_10297|J07717_10298|H07711_10127";
 
-        var url = testBuildURL("test with all cookie information", { 'pos':'banlb' });
+        var url = testBuildURL("test with all cookie information", { 'pos':'intro' });
         var Params = extract_params(url);
         var order = Params._order.join(',');
 
         equal(order, "sz,dcopt,07,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,06,05,27,eid,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,19,20,21,slv,02,14,cn,01,kw,uuid,ts,cc,pt,org,peo,pos,bht,rfrsh,tile,ord", "Ad URL contains parameters in correct order");
-        matches(url, ';sz=468x60,728x90,970x90;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;a=z286;a=z288;a=z295;a=z299;a=z301;a=z322;a=z344;a=z345;a=z357;a=z369;a=z530;a=z555;a=z545;a=z221;a=z224;a=z225;a=z226;a=z233;a=z236;a=z281;a=z286;a=z287;a=z288;a=z289;a=z294;a=z295;a=z296;a=z297;a=z298;a=h7kdbz;06=tec;05=itt;27=3f5a2e;eid=4326601;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=lv2;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pt=art;org=mondelez%20international%20inc%20formerly%20kraft%20foods%20inc;peo=abu%20musab%20al-zarqawi;pos=banlb;bht=true;rfrsh=false;tile=1;', 'url parameters correctly substituted in correct order');
+        matches(url, ';sz=1x1;dcopt=ist;07=ma;a=h6fna7;a=z576;a=z89;a=z502;a=z236;a=z286;a=z288;a=z295;a=z299;a=z301;a=z322;a=z344;a=z345;a=z357;a=z369;a=z530;a=z555;a=z545;a=z221;a=z224;a=z225;a=z226;a=z233;a=z236;a=z281;a=z286;a=z287;a=z288;a=z289;a=z294;a=z295;a=z296;a=z297;a=z298;a=h7kdbz;06=tec;05=itt;27=3f5a2e;eid=4326601;40=forty;41=fortyone;42=fortytwo;43=fortythree;44=fortyfour;45=fortyfive;46=fortysix;47=fortyseven;48=fortyeight;49=fortynine;50=fifty;51=fiftyone;52=fiftytwo;53=fiftythree;54=fiftyfour;55=fiftyfive;56=fiftysix;57=fiftyseven;58=fiftyeight;59=fiftynine;60=sixty;19=500;20=n;21=12;slv=lv2;02=m;14=gbr;cn=eur;01=1967;kw=cat%20dog;uuid=' + Params.uuid + ';ts=' + Params.ts + ';cc=n;pt=art;org=mondelez%20international%20inc%20formerly%20kraft%20foods%20inc;peo=abu%20musab%20al-zarqawi;pos=intro;bht=true;rfrsh=false;tile=1;', 'url parameters correctly substituted in correct order');
         equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
 
         clearMockCookies();
