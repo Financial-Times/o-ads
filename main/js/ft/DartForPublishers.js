@@ -77,7 +77,7 @@
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, metadata, metadata.user, metadata.page, homepage_edition,
  corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, rfrsh,isRefreshGenerated,removeItem,
- DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName */
+ DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, clip */
 
 
 /* The Falcon Ads API follows from here. */
@@ -2218,7 +2218,7 @@ FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMillisecond
 FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMilliseconds) {
 
    var expandableHeight, creativeOffsetHeight = 0, pushDownDiv = FT.ads.CONST.pushDownFormats[adFormat],
-      clientHeight, clientWidth;
+      clientHeight, clientWidth, clipRectDims;
 
    if (FT.ads.VAR.pushDownExpandingAsset === null) {
       //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
@@ -2235,7 +2235,7 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
                if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] === undefined) {
                   //acquire the  initial height of each asset and preserve it in a data structure
                   FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] = clientHeight;
-               } else if ((FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] < clientHeight) && ((clientHeight - FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id]) < 100 )){
+               } else if (FT.ads.VAR.pushDownFullWidthAssetsHeights[node.id] < clientHeight) {
                   //asset appears to be expanding in height - set as watched asset for expanding page
                   FT.ads.VAR.pushDownExpandingAsset = node;
                }
@@ -2246,7 +2246,12 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
 
    //we think we know the expanding asset so reset relevant DOM element height
    if (FT.ads.VAR.pushDownExpandingAsset !== null) {
-      creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
+      clipRectDims = FT.ads.VAR.pushDownExpandingAsset.style.clip.match(/([0-9]+)/g);
+      if ((typeof(clipRectDims) !== "undefined") && (clipRectDims !== null) && (FT.ads.VAR.pushDownExpandingAsset.clientHeight > 400)) {
+        creativeOffsetHeight = clipRectDims[2];
+      } else {
+        creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
+      }
 
       expandableHeight = Math.floor(creativeOffsetHeight - pushDownDiv.expansionSubtrahend);
       document.getElementById(pushDownDiv.animatedDivId).style[pushDownDiv.animatedProperty] = expandableHeight + 'px';
