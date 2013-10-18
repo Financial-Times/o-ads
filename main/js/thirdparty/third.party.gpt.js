@@ -89,12 +89,13 @@
  * @lends Slots
 */
     proto.defineOutOfPage = function (context, slotName) {
-        return function() {
-            var oopSlot,
-                slot = FT.ads.slots[slotName],
-                slotId = slotName + '-oop';
+        var slot = FT.ads.slots[slotName],
+            slotId = slotName + '-oop';
 
-            FT.ads.slots.addContainer(slot.container, slotId);
+        FT.ads.slots.addContainer(slot.container, slotId);
+        return function() {
+            var oopSlot;
+
             oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotId)
                         .addService(googletag.pubads());
 
@@ -104,7 +105,6 @@
             googletag.cmd.push(googletag.display(slotId));
         };
     };
-
 
 /**
  * Given the slot name will return the GPT unit name for the slot.
