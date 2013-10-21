@@ -117,6 +117,7 @@ function audienceScienceAssertions() {
     equal(window.context.FT._ads.utils.cookies.FT_U, undefined, "FT.cookies.FT_U should be ");
     ok(window.context.FT.env.useDFP, "FT.env.useDFP should be set to true");
     ok(!window.context.FT.env.isLegacyAPI, "legacy API should not be used");
+    ok(window.context.FT.ads.metadata.user(), "FT.ads.metadata.user() should be defined");
 
     equal(window.context.FT.test.spyFacadeAddEncToLoc.callCount,9,"Number of times facade addEncToLoc() function should be called");
     ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('dfp_site',window.context.FT.env.dfp_site),"facade addEncToLoc() function called with dfp_site parameter");
