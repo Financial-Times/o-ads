@@ -44,7 +44,7 @@ var variants =  {
         {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.management;dfp_zone=management-index" }
     ],
     "z158" :    [
-        {"name": "AYSC", "type": "cookie", "value": "" },
+        {"name": "AYSC", "type": "cookie", "value": "_22Ftemp_" },
         {"name": "FTQA", "type": "cookie", "value": "integration;dfp_site=ftcom.5887.alphaville;dfp_zone=alphaville-index" }
     ]
 
@@ -119,12 +119,19 @@ function audienceScienceAssertions() {
     ok(!window.context.FT.env.isLegacyAPI, "legacy API should not be used");
     ok(window.context.FT.ads.metadata.user(), "FT.ads.metadata.user() should be defined");
 
-    equal(window.context.FT.test.spyFacadeAddEncToLoc.callCount,9,"Number of times facade addEncToLoc() function should be called");
+    equal(window.context.FT.test.spyFacadeAddEncToLoc.callCount,10,"Number of times facade addEncToLoc() function should be called");
     ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('dfp_site',window.context.FT.env.dfp_site),"facade addEncToLoc() function called with dfp_site parameter");
     ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('dfp_zone',window.context.FT.env.dfp_zone),"facade addEncToLoc() function called with dfp_zone parameter");
+
+    if (document.cookie.match("_22Ftemp_")){  //SubsLevel should be set correctly according to the user grabbed from AYSC cookie
+        ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('SubsLevel','int'),"facade addEncToLoc() function called with SubsLevel anon");
+    } else {
+        ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('SubsLevel','anon'),"facade addEncToLoc() function called with SubsLevel anon");
+    }
+
     equal(window.context.FT.test.spyFacadeTag.callCount,1,"Number of times facade tag() function should be called.");
 
-    equal(window.context.FT.test.spyWindowJ07717DM_addEncToLoc.callCount,10,"Number of times window.J07717.DM_addEncToLoc() function should be called");
+    equal(window.context.FT.test.spyWindowJ07717DM_addEncToLoc.callCount,11,"Number of times window.J07717.DM_addEncToLoc() function should be called");
     ok(window.context.FT.test.spyWindowJ07717DM_addEncToLoc.calledWith('dfp_site',window.context.FT.env.dfp_site),"window.J07717.DM_addEncToLoc() function called with dfp_site parameter");
     ok(window.context.FT.test.spyWindowJ07717DM_addEncToLoc.calledWith('dfp_zone',window.context.FT.env.dfp_zone),"window.J07717.DM_addEncToLoc() function called with dfp_zone parameter");
     equal(window.context.FT.test.spyWindowJ07717DM_tag.callCount,1,"Number of times window.J07717.DM_tag() function should be called.");
@@ -173,7 +180,7 @@ $(function() {
 for (var testSegment in variants) {
     asyncTest("Audience Science tests: " + testSegment, function (testSegment) {
         return function () {
-            expect(15);
+            expect(17);
             var dataValues = '', k, testSeg = testSegment;
             for (k=0; k < variants[testSeg].length; k++ ) {
                 dataValues += ' ' + variants[testSeg][k].name + ': ' + variants[testSeg][k].value;
