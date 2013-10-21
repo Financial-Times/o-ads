@@ -16,6 +16,7 @@ FT.analytics.populateAudSci = function () {
     FT.analytics.audienceScience.addEncToLoc("FTI", tempind);
     FT.analytics.audienceScience.addEncToLoc("FTC", tempcountry);
     FT.analytics.audienceScience.addEncToLoc("FTCS", tempcompsize);
+    FT.analytics.audienceScience.addEncToLoc("SubsLevel", FT.ads.metadata.user().subscription_level || "anon");
     if (FT && FT.env && FT.env.dfp_site && FT.env.dfp_zone) {
         FT.analytics.audienceScience.addEncToLoc('dfp_site', FT.env.dfp_site);
         FT.analytics.audienceScience.addEncToLoc('dfp_zone', FT.env.dfp_zone);
