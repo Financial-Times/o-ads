@@ -124,7 +124,7 @@ function audienceScienceAssertions() {
     ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('dfp_zone',window.context.FT.env.dfp_zone),"facade addEncToLoc() function called with dfp_zone parameter");
 
     if (document.cookie.match("_22Ftemp_")){  //SubsLevel should be set correctly according to the user grabbed from AYSC cookie
-        ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('SubsLevel','int'),"facade addEncToLoc() function called with SubsLevel anon");
+        ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('SubsLevel','int'),"facade addEncToLoc() function called with SubsLevel int for internal");
     } else {
         ok(window.context.FT.test.spyFacadeAddEncToLoc.calledWith('SubsLevel','anon'),"facade addEncToLoc() function called with SubsLevel anon");
     }
