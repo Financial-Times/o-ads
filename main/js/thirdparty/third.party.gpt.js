@@ -234,16 +234,20 @@
             slotId = slot.getSlotId(),
             container = document.getElementById(slotId.getDomId()),
             iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-        try {
-            var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
-            while (img = imgs.pop()) {
-                if (/ft-no-ad/.test(img.src)) {
-                    return container.style.display = 'none';
+        if (iframe.contentWindow.contents && /ft-no-ad/.test(iframe.contentWindow.contents)) {
+            return container.style.display = 'none';
+        } else {
+            try {
+                var imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                while (img = imgs.pop()) {
+                    if (/ft-no-ad/.test(img.src)) {
+                        return container.style.display = 'none';
+                    }
                 }
+            } catch (err) {
+                return false;
+                // Probably blocked due to ad rendered in iframe no longer being on same domain.
             }
-        } catch (err) {
-            return false;
-            // Probably blocked due to ad rendered in iframe no longer being on same domain.
         }
     };
 
