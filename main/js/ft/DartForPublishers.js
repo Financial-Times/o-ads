@@ -99,8 +99,8 @@ FT.Advertising = function () {
    // dcopt= doubleclick options. ist means interstitial ad - only one allowed per page
    // You can omit subsequently numbered positions if they match the formatting of the unnumbered ad position.
    this.CONST.AdFormat = {
-      'intro': { 'sz': '1x1' },
-      'banlb': { 'sz': '468x60,728x90,970x90', 'dcopt': 'ist' },
+      'intro': { 'sz': '1x1', 'dcopt': 'ist' },
+      'banlb': { 'sz': '468x60,728x90,970x90' },
       'newssubs': { 'sz': '239x90' },
       'tlbxrib': { 'sz': '336x60' },
       'marketingrib': { 'sz': '336x60' },
