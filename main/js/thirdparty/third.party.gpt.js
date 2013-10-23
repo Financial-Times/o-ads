@@ -192,6 +192,7 @@
         } else if (mode === false || mode === 'never') {
             gptSlot.setCollapseEmptyDiv(false);
         } else if (globalMode === 'ft' || mode === 'ft') {
+            gptSlot.setCollapseEmptyDiv(true, true);
             gptSlot._renderEnded = gptSlot.renderEnded;
             gptSlot.renderEnded = function (context, slot) {
                 return function (){
