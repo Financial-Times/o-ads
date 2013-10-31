@@ -200,6 +200,7 @@ pushd jstest/js; mv dfp-advertising.html dfp-advertising.html.bak; perl ../suppo
     TEST.krux = {
         segs: 'seg1,seg2,seg3,seg4',
         urlSegs: ';ksg=seg1;ksg=seg2;ksg=seg3;ksg=seg4;',
+        limitedSegs: ';ksg=seg1;',
         userid: 'kxuser',
         host: encodeURIComponent(location.hostname)
     }
@@ -2966,6 +2967,7 @@ $(document).ready(function () {
     });
 
     test("FT.ads.kruxRetrieve (for Krux DMP)", function () {
+        FT.ads.suppressKrux = false;
         /* test setup, remove cookies and local storage keys that can get in the way */
         maybeInitFixture();
         if (window.localStorage) {
@@ -2999,6 +3001,7 @@ $(document).ready(function () {
         } else {
             ok(true, 'unable to test local storage');
         }
+        FT.ads.suppressKrux = true;
     });
 
     test("FT.ads.buildURL (Krux local storage)", function () {
@@ -3010,6 +3013,7 @@ $(document).ready(function () {
             var old_kxsegs_ls =  window.localStorage.getItem('kxsegs');
             window.localStorage.setItem('kxuser', TEST.krux.userid);
             window.localStorage.setItem('kxsegs', TEST.krux.segs);
+            FT.ads.suppressKrux = false;
 
             beginNewPage('buildURL Krux segements in local storage');
 
@@ -3035,6 +3039,7 @@ $(document).ready(function () {
             if (old_kxsegs_ls) {
                 window.localStorage.setItem('kxsegs', old_kxsegs_ls);
             }
+            FT.ads.suppressKrux = true;
         } else {
             ok(true, 'localstorage unavailable in this browser')
         }
@@ -3048,6 +3053,7 @@ $(document).ready(function () {
         beginNewPage('buildURL Krux segements in cookies');
         mockCookies.kxsegs = TEST.krux.segs;
         mockCookies.kxuser = TEST.krux.userid;
+        FT.ads.suppressKrux = false;
         var url = testBuildURL("test with krux cookie information");
         var pars = extract_params(url);
 
@@ -3060,12 +3066,39 @@ $(document).ready(function () {
         matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
 
         equal(order, 'sz,kuid,khost,ksg,ksg,ksg,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux cookie parameters in correct order");
-
+        FT.ads.suppressKrux = true;
     });
 
+    test("FT.ads.buildURL (Krux limit number of segments)", function () {
+        window.localStorage.removeItem('kxuser');
+        window.localStorage.removeItem('kxsegs');
+        maybeInitFixture();
+
+        beginNewPage('buildURL Krux segements in cookies');
+        mockCookies.kxsegs = TEST.krux.segs;
+        mockCookies.kxuser = TEST.krux.userid;
+        FT.ads.suppressKrux = false;
+        FT.ads.kruxMaxSegs = 1;
+        var url = testBuildURL("test with krux cookie information");
+        var pars = extract_params(url);
+
+        equal(url.length < FT.ads.CONST.urlMax, true, 'The URL should be <= ' + FT.ads.CONST.urlMax + ' characters. URL length is ' + url.length);
+
+        var Params = extract_params(url);
+        var order = Params._order.join(',');
+        matches(url, TEST.krux.limitedSegs, "Ad URL krux segments appear in url correctly");
+        matches(url, 'kuid=' + TEST.krux.userid, "Ad URL krux user id appears in url correctly");
+        matches(url, 'khost=' + TEST.krux.host, "Ad URL krux host appears in url correctly");
+
+        equal(order, 'sz,kuid,khost,ksg,uuid,ts,cc,pos,bht,rfrsh,tile,ord', "Ad URL contains krux cookie parameters in correct order");
+        FT.ads.kruxMaxSegs = undefined;
+        FT.ads.suppressKrux = true;
+    });
     test("FT.ads.buildURL (Comprehensive cookie) - TA13255", function () {
         window.localStorage.removeItem('kxuser');
         window.localStorage.removeItem('kxsegs');
+        FT.ads.suppressKrux = false;
+
         maybeInitFixture();
         beginNewPage('buildURL Comprehensive All AudSci', { 'env':{ 'url_location':"http://www.ft.com/?q=cat+dog" } });
         mockCookies.AYSC = "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_";
@@ -3096,7 +3129,7 @@ $(document).ready(function () {
 
         // Restore the default values of AudSci Limits
         FT.ads.CONST.audSciMax = saveMax;
-
+        FT.ads.suppressKrux = true;
     });
 
     test("FT.ads.buildURL (test for max length of ad calls)", function () {

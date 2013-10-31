@@ -74,7 +74,7 @@
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
- refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, kruxMaxSegs, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, metadata, metadata.user, metadata.page, homepage_edition,
  corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, rfrsh,isRefreshGenerated,removeItem,
  DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, clip */
@@ -202,7 +202,8 @@ FT.Advertising = function () {
    };
 
    this.suppressAudSci = FT.env.suppressAudSci || false;
-   this.suppressKrux = FT.env.suppressKrux || false;
+   this.suppressKrux = FT.env.suppressKrux === false ? false : true;
+   this.kruxMaxSegs = parseInt(FT.env.kruxMaxSegs, 10) || undefined;
 };
 
 FT.ads = new FT.Advertising();
@@ -895,7 +896,17 @@ FT.Advertising.prototype.kruxUserId = function () {
 };
 
 FT.Advertising.prototype.kruxSegs = function () {
-   return this.kruxRetrieve('segs').replace(/([^,]+)\,?/g, 'ksg=$1;');
+   var segs = this.kruxRetrieve('segs'),
+      segTargeting = '';
+
+   if (segs) {
+      segs = segs.split(',');
+      if (this.kruxMaxSegs && !(isNaN(this.kruxMaxSegs)) ) {
+         segs = segs.slice(0, this.kruxMaxSegs);
+      }
+      segTargeting = 'ksg=' + segs.join(';ksg=') + ';';
+   }
+   return segTargeting;
 };
 
 FT.Advertising.prototype.getAyscVars = function (obj) {
