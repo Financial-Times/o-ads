@@ -75,7 +75,7 @@
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
- kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, metadata, metadata.user, metadata.page, homepage_edition,
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, metadata, metadata.user, metadata.page, homepage_edition,
  corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, rfrsh,isRefreshGenerated,removeItem,
  DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, clip */
 
@@ -130,7 +130,7 @@ FT.Advertising = function () {
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
                                     [/(%27)|(%22)+/g,''], //hex encoding special characters occurs for referring urls in some browsers (e.g. Firefox)
                                     [/(&#038;)/,'&'],
-                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
+                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2 '
                                     [/;;+/g, ';' ]
                                     ];
 
@@ -1819,8 +1819,8 @@ FT.Advertising.prototype.beginNewPage = function (env) {
 
    this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
    this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
-   this.suppressAudSci = false;
-   this.suppressKrux = false;
+   this.suppressAudSci = FT.env.suppressAudSci || false;
+   this.suppressKrux = FT.env.suppressKrux || false;
 
    // Let the FTQA cookie value override the timeout, if present
    cookie = FT._ads.utils.cookie("FTQA");
