@@ -201,6 +201,8 @@ FT.Advertising = function () {
       'drudgereport.com': 'dru'
    };
 
+   this.suppressAudSci = FT.env.suppressAudSci || false;
+   this.suppressKrux = FT.env.suppressKrux || false;
 };
 
 FT.ads = new FT.Advertising();
@@ -1819,8 +1821,6 @@ FT.Advertising.prototype.beginNewPage = function (env) {
 
    this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
    this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
-   this.suppressAudSci = FT.env.suppressAudSci || false;
-   this.suppressKrux = FT.env.suppressKrux || false;
 
    // Let the FTQA cookie value override the timeout, if present
    cookie = FT._ads.utils.cookie("FTQA");
