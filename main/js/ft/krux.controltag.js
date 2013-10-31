@@ -1,7 +1,7 @@
 if(!window.FT) { window.FT = {};}
 if(!FT.ads) { FT.ads ={};}
 
-if (!FT.env.suppressKrux) {
+if (!FT.ads.suppressKrux) {
     /**
     * @namespace FT.ads
     */
