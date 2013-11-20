@@ -74,10 +74,11 @@
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
  enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
- refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, localStorage, kruxUserId,
- kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, suppressKrux, getUserData, homepage_edition,
- corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position,
- job_responsibility, industry, gender,rfrsh,isRefreshGenerated,removeItem */
+ refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, kruxMaxSegs, localStorage, kruxUserId,
+ kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, metadata, metadata.user, metadata.page, homepage_edition,
+ corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, rfrsh,isRefreshGenerated,removeItem,
+ DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, clip */
+
 
 /* The Falcon Ads API follows from here. */
 //Setup the FT namespace if it doesn't already exist
@@ -98,8 +99,8 @@ FT.Advertising = function () {
    // dcopt= doubleclick options. ist means interstitial ad - only one allowed per page
    // You can omit subsequently numbered positions if they match the formatting of the unnumbered ad position.
    this.CONST.AdFormat = {
-      'intro': { 'sz': '1x1' },
-      'banlb': { 'sz': '468x60,728x90,970x90', 'dcopt': 'ist' },
+      'intro': { 'sz': '1x1', 'dcopt': 'ist' },
+      'banlb': { 'sz': '468x60,728x90,970x90' },
       'newssubs': { 'sz': '239x90' },
       'tlbxrib': { 'sz': '336x60' },
       'marketingrib': { 'sz': '336x60' },
@@ -129,7 +130,7 @@ FT.Advertising = function () {
    this.CONST.cleanDfpTargeting = [ [/(&#039;)|(&#034;)|(&#060;)|(&#062;)+/g,''],
                                     [/(%27)|(%22)+/g,''], //hex encoding special characters occurs for referring urls in some browsers (e.g. Firefox)
                                     [/(&#038;)/,'&'],
-                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2
+                                    [/(^;)|(^x+$)|(;$)|([\[\]\{\}\(\)\*\+\!\.\\\^\|\,~#'"<>]+)/g, ''], //this regex explained http://regex101.com/r/yY5mH2 '
                                     [/;;+/g, ';' ]
                                     ];
 
@@ -200,6 +201,9 @@ FT.Advertising = function () {
       'drudgereport.com': 'dru'
    };
 
+   this.suppressAudSci = FT.env.suppressAudSci || false;
+   this.suppressKrux = FT.env.suppressKrux === false ? false : true;
+   this.kruxMaxSegs = parseInt(FT.env.kruxMaxSegs, 10) || undefined;
 };
 
 FT.ads = new FT.Advertising();
@@ -892,7 +896,17 @@ FT.Advertising.prototype.kruxUserId = function () {
 };
 
 FT.Advertising.prototype.kruxSegs = function () {
-   return this.kruxRetrieve('segs').replace(/([^,]+)\,?/g, 'ksg=$1;');
+   var segs = this.kruxRetrieve('segs'),
+      segTargeting = '';
+
+   if (segs) {
+      segs = segs.split(',');
+      if (this.kruxMaxSegs && !(isNaN(this.kruxMaxSegs)) ) {
+         segs = segs.slice(0, this.kruxMaxSegs);
+      }
+      segTargeting = 'ksg=' + segs.join(';ksg=') + ';';
+   }
+   return segTargeting;
 };
 
 FT.Advertising.prototype.getAyscVars = function (obj) {
@@ -917,8 +931,8 @@ FT.Advertising.prototype.getAyscVars = function (obj) {
    }
    return FT._ads.utils.extend({}, obj, out);
 };
-
-FT.Advertising.prototype.getUserData = function () {
+FT.Advertising.prototype.metadata = {};
+FT.Advertising.prototype.metadata.user= function () {
    var ayscProp, ayscVal,
       aysc = FT.ads.fieldRegex(FT.ads.CONST.regex_key_names, FT.ads.prepareAdVars(FT.ads.getAyscVars({}))),
       eid = FT.ads.erightsID(),
@@ -937,7 +951,16 @@ FT.Advertising.prototype.getUserData = function () {
           job_responsibility: '06',
           industry: '05',
           state: '04',
-          gender: '02'
+          gender: '02',
+          DB_company_size: '40',
+          DB_industry: '41',
+          DB_company_turnover: '42',
+          cameo_country_code: '43',
+          cameo_local_code: '44',
+          DB_country_code: '45',
+          cameo_investor_code: '46',
+          cameo_property_code: '51'
+
       };
 
 
@@ -954,6 +977,15 @@ FT.Advertising.prototype.getUserData = function () {
 
    return result;
 };
+
+FT.Advertising.prototype.metadata.page = function(){
+   var result = {};
+      if ( FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
+      if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
+      if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
+      if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
+      return result;
+   };
 
 FT.Advertising.prototype.getConsentValue = function () {
    var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;
@@ -1800,8 +1832,6 @@ FT.Advertising.prototype.beginNewPage = function (env) {
 
    this.timeoutTolerance = FT.env.timeoutTolerance || 25;  // Milliseconds after which to collapse ad position
    this.timeIntervalTolerance = FT.env.timeIntervalTolerance || 300; //Millisecond interval between checking for ad div state
-   this.suppressAudSci = false;
-   this.suppressKrux = false;
 
    // Let the FTQA cookie value override the timeout, if present
    cookie = FT._ads.utils.cookie("FTQA");
@@ -2199,7 +2229,7 @@ FT.Advertising.prototype.pushDownExpand = function (adFormat, pauseInMillisecond
 FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMilliseconds) {
 
    var expandableHeight, creativeOffsetHeight = 0, pushDownDiv = FT.ads.CONST.pushDownFormats[adFormat],
-      clientHeight, clientWidth;
+      clientHeight, clientWidth, clipRectDims;
 
    if (FT.ads.VAR.pushDownExpandingAsset === null) {
       //we don't know what asset is being used to expand the ad yet - cycle through elements within the div
@@ -2227,7 +2257,12 @@ FT.Advertising.prototype.pollAdHeightAndExpand = function (adFormat, pauseInMill
 
    //we think we know the expanding asset so reset relevant DOM element height
    if (FT.ads.VAR.pushDownExpandingAsset !== null) {
-      creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
+      clipRectDims = FT.ads.VAR.pushDownExpandingAsset.style.clip.match(/([0-9]+)/g);
+      if ((typeof(clipRectDims) !== "undefined") && (clipRectDims !== null) && (FT.ads.VAR.pushDownExpandingAsset.clientHeight > 400)) {
+        creativeOffsetHeight = clipRectDims[2];
+      } else {
+        creativeOffsetHeight = FT.ads.VAR.pushDownExpandingAsset.clientHeight || FT.ads.VAR.pushDownExpandingAsset.offsetHeight || pushDownDiv.height;
+      }
 
       expandableHeight = Math.floor(creativeOffsetHeight - pushDownDiv.expansionSubtrahend);
       document.getElementById(pushDownDiv.animatedDivId).style[pushDownDiv.animatedProperty] = expandableHeight + 'px';
