@@ -77,7 +77,7 @@
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, kruxMaxSegs, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, metadata, metadata.user, metadata.page, homepage_edition,
  corporate_access_id_code, phone_area_code, continent, subscription_level, active_personal_investor, company_size, post_code, job_position, job_responsibility, industry, gender, rfrsh,isRefreshGenerated,removeItem,
- DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, clip */
+ DB_company_size, DB_industry, DB_company_turnover, cameo_country_code, cameo_local_code, DB_country_code, cameo_investor_code, cameo_property_code, siteMapTerm, navEdition, brandName, primaryThemeName, assetType, pageType, topic, clip */
 
 
 /* The Falcon Ads API follows from here. */
@@ -980,25 +980,25 @@ FT.Advertising.prototype.metadata.user= function () {
 
 FT.Advertising.prototype.metadata.page = function(){
    var result = {};
-      if (FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
-      if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
-      if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
-      if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
-      if (FT.env.dfp_targeting && FT.env.dfp_targeting !=="XXXX") {
-            var topic = FT.env.dfp_targeting.match(/top=(.*);/);
-         if (topic != null) { 
-            result.topic =  topic[1];
-         }
-         var pagetype = FT.env.dfp_targeting.match(/pt=(.*)/);
-         if (pagetype != null) { 
-            result.pagetype =  pagetype[1];
-         }
-     if (FT.env.asset && FT.env.asset !==""){
-      result.assetType = FT.env.asset; 
-     }
+   if (FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
+   if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
+   if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
+   if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
+   if (FT.env.dfp_targeting && FT.env.dfp_targeting !=="XXXX") {
+      var topic = FT.env.dfp_targeting.match(/top=(.*);/);
+      if (topic !== null) { 
+         result.topic =  topic[1];
       }
-      return result;
-   };
+      var pagetype = FT.env.dfp_targeting.match(/pt=(.*)/);
+      if (pagetype !== null) { 
+         result.pageType =  pagetype[1];
+      }
+   }
+   if (FT.env.asset && FT.env.asset !==""){
+      result.assetType = FT.env.asset; 
+   }
+   return result;
+};
 
 FT.Advertising.prototype.getConsentValue = function () {
    var cookieConsentName = FT.ads.CONST.cookieConsentName, cookieConsentAcceptanceValue = FT.ads.CONST.cookieConsentAcceptanceValue;

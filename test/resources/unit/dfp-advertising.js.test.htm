@@ -1978,8 +1978,27 @@ $(document).ready(function () {
     });
 
     test("FT.ads.metadata.page()", function () {
-            var result = FT.ads.metadata.page();
-            var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"};
+        beginNewPage('buildURL 1', {
+            'env':{ 'dfp_targeting':"key=value;;top=Barack Obama;pt=art","asset":"story" }
+        });
+        var result = FT.ads.metadata.page();
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", topic:"Barack Obama", pageType:"art", assetType:"story"};
+        deepEqual(result, expected, "The correct values are returned");
+    });
+    test("FT.ads.metadata.page()", function () {
+        beginNewPage('buildURL 1', {
+            'env':{ 'dfp_targeting':"XXXX" }
+        });
+        var result = FT.ads.metadata.page();
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"};
+        deepEqual(result, expected, "The correct values are returned");
+    });
+        test("FT.ads.metadata.page()", function () {
+        beginNewPage('buildURL 1', {
+            'env':{ 'dfp_targeting':"top=Barack Obama;pt=ind" }
+        });
+        var result = FT.ads.metadata.page();
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", topic:"Barack Obama", pageType:"ind"};
         deepEqual(result, expected, "The correct values are returned");
     });
 
