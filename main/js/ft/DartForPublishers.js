@@ -703,19 +703,21 @@ FT.Advertising.prototype.hasClassName = function (fullClass, className) {
 
 // Adds diagnostic info to stored response
 FT.Advertising.prototype.addDiagnostic = function (pos, rDiagObj) {
-   if (!pos) {
-      pos = '_anonymous';
-   }
-   if (!FT._ads.utils.isString(pos) || !FT._ads.utils.isObject(rDiagObj)) {
-      return false;
-   }
-   clientAds.log("FT.Advertising.addDiagnostic(" + pos + ", " + this.getKeys(rDiagObj).join(", ") + ")");
-   if (!this.adverts[pos]) {
-      this.adverts[pos] = {
-         "diagnostics": {}
-      };
-   }
-   this.adverts[pos].diagnostics = FT._ads.utils.extend({}, this.adverts[pos].diagnostics, rDiagObj);
+    if (!pos) {
+        pos = '_anonymous';
+    }
+    if (!FT._ads.utils.isString(pos) || !FT._ads.utils.isObject(rDiagObj)) {
+        return false;
+    }
+    clientAds.log("FT.Advertising.addDiagnostic(" + pos + ", " + this.getKeys(rDiagObj).join(", ") + ")");
+    if (this.adverts) {
+        if (!this.adverts[pos]) {
+            this.adverts[pos] = {
+                "diagnostics": {}
+            };
+        }
+        this.adverts[pos].diagnostics = FT._ads.utils.extend({}, this.adverts[pos].diagnostics, rDiagObj);
+    }
 }; // addDiagnostic(pos, rDiagObj)
 
 // Extend base advert with nodes and values from advert json
