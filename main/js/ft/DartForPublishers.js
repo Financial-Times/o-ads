@@ -980,10 +980,23 @@ FT.Advertising.prototype.metadata.user= function () {
 
 FT.Advertising.prototype.metadata.page = function(){
    var result = {};
-      if ( FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
+      if (FT._ads.utils.isString(window.siteMapTerm) && siteMapTerm!=="" ) {result.siteMapTerm = siteMapTerm;}
       if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
       if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
       if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
+      if (FT.env.dfp_targeting && FT.env.dfp_targeting !=="XXXX") {
+            var topic = FT.env.dfp_targeting.match(/top=(.*);/);
+         if (topic != null) { 
+            result.topic =  topic[1];
+         }
+         var pagetype = FT.env.dfp_targeting.match(/pt=(.*)/);
+         if (pagetype != null) { 
+            result.pagetype =  pagetype[1];
+         }
+     if (FT.env.asset && FT.env.asset !==""){
+      result.assetType = FT.env.asset; 
+     }
+      }
       return result;
    };
 
