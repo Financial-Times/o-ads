@@ -985,11 +985,11 @@ FT.Advertising.prototype.metadata.page = function(){
    if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
    if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
    if (FT.env.dfp_targeting && FT.env.dfp_targeting !=="XXXX") {
-      var topic = FT.env.dfp_targeting.match(/top=(.*);/);
+      var topic = FT.env.dfp_targeting.match(/top=([^;]*)/);
       if (topic !== null) { 
          result.topic =  topic[1];
       }
-      var pagetype = FT.env.dfp_targeting.match(/pt=(.*)/);
+      var pagetype = FT.env.dfp_targeting.match(/pt=([^;]*)/);
       if (pagetype !== null) { 
          result.pageType =  pagetype[1];
       }

@@ -1979,7 +1979,7 @@ $(document).ready(function () {
 
     test("FT.ads.metadata.page()", function () {
         beginNewPage('buildURL 1', {
-            'env':{ 'dfp_targeting':"key=value;;top=Barack Obama;pt=art","asset":"story" }
+            'env':{ 'dfp_targeting':"key=value;;top=Barack Obama;pt=art;key=value","asset":"story" }
         });
         var result = FT.ads.metadata.page();
         var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", topic:"Barack Obama", pageType:"art", assetType:"story"};
