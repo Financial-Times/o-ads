@@ -1977,12 +1977,18 @@ $(document).ready(function () {
         erightsIDStub.restore();
     });
 
+
+    /*
+      Functions for testing metadata.page public methods
+     */
+
     test("FT.ads.metadata.page()", function () {
         beginNewPage('buildURL 1', {
             'env':{ 'dfp_targeting':"key=value;;top=Barack Obama;pt=art;key=value","asset":"story" }
         });
         var result = FT.ads.metadata.page();
-        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", topic:"Barack Obama", pageType:"art", assetType:"story"};
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring",
+            topic:"Barack Obama", pageType:"art", assetType:"story", "dfpSite": "test.5887.dev", "dfpZone": "build-url-test"};
         deepEqual(result, expected, "The correct values are returned");
     });
     test("FT.ads.metadata.page()", function () {
@@ -1990,7 +1996,7 @@ $(document).ready(function () {
             'env':{ 'dfp_targeting':"XXXX" }
         });
         var result = FT.ads.metadata.page();
-        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"};
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", "dfpSite": "test.5887.dev", "dfpZone": "build-url-test"};
         deepEqual(result, expected, "The correct values are returned");
     });
         test("FT.ads.metadata.page()", function () {
@@ -1998,7 +2004,17 @@ $(document).ready(function () {
             'env':{ 'dfp_targeting':"top=Barack Obama;pt=ind" }
         });
         var result = FT.ads.metadata.page();
-        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", topic:"Barack Obama", pageType:"ind"};
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring",
+            topic:"Barack Obama", pageType:"ind", "dfpSite": "test.5887.dev", "dfpZone": "build-url-test"};
+        deepEqual(result, expected, "The correct values are returned");
+    });
+    //site & zone tests
+    test("FT.ads.metadata.page() - site & zone values", function () {
+        beginNewPage('buildURL 1', {
+            'env':{ dfp_site: "testingA", dfp_zone:"testingB" }
+        });
+        var result = FT.ads.metadata.page();
+        var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", dfpSite:"testingA", dfpZone:"testingB"};
         deepEqual(result, expected, "The correct values are returned");
     });
 

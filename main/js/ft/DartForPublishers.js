@@ -72,7 +72,7 @@
  pollAdHeightAndExpand, find, css, DFPPremiumReadOnlyNetworkCode, nodeName, encodeIP,
  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., replaceValue, replaceRegex, DFPPremiumIPReplaceLookup, SocialReferrerLookup, socref,
  "facebook.com", "linkedin.com", "drudgereport.com", "t.co", getSocialReferrer, getDocReferrer, socialReferrer, encode,
- enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop,
+ enc, Utf8, parse, stringify, _ads, utils, isObject, isArray, isFunction, isString, getCookieParam, pop, dfpSite, dfpZone
  splice, getUUIDFromString, artifactVersion, buildLifeId, buildLifeDate, buildLifeVersion, gitRev,reloadWindow,
  refresh, refreshTime, Refresh, startRefreshTimer, cleanDfpTargeting, kruxRetrieve, suppressKrux, kruxMaxSegs, localStorage, kruxUserId,
  kruxRetrieve, kruxSegs, kruxRetrieve, kruxUserId, khost, hostname, kuid, ksg, kruxSegs, metadata, metadata.user, metadata.page, homepage_edition,
@@ -986,6 +986,10 @@ FT.Advertising.prototype.metadata.page = function(){
    if (FT._ads.utils.isString(window.navEdition) && navEdition!=="") {result.navEdition = navEdition;}
    if (FT._ads.utils.isString(window.brandName) && brandName!=="") {result.brandName = brandName;}
    if (FT._ads.utils.isString(window.primaryThemeName) && primaryThemeName!=="") {result.primaryThemeName = primaryThemeName;}
+
+   if (FT._ads.utils.isString(FT.ads.getDFPSite()) && FT.ads.getDFPSite() !=="" ) {result.dfpSite = FT.ads.getDFPSite();}
+   if (FT._ads.utils.isString(FT.env.dfp_zone) && FT.env.dfp_zone !== "") {result.dfpZone = FT.env.dfp_zone;}
+
    if (FT.env.dfp_targeting && FT.env.dfp_targeting !=="XXXX") {
       var topic = FT.env.dfp_targeting.match(/top=([^;]*)/);
       if (topic !== null) { 
