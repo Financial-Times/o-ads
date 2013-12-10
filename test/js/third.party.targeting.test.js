@@ -186,7 +186,7 @@
         test("search term", function () {
             var result;
 
-            TEST.beginNewPage({querystring: 'q=  this  is  ', config: { cookieConsent: false, timestamp: false},});
+            TEST.beginNewPage({querystring: 'q=  this  is  ', config: { cookieConsent: false, timestamp: false}});
             result = FT.ads.targeting();
             equal(result.kw, "this is", "excess space removed");
 
