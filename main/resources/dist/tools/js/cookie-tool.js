@@ -122,25 +122,37 @@ $(function(){
       cookies = hashes.cookies,
       actions = {
       set: function () {
-        if(hash.name in cookies) {
+        if(encodeURIComponent(hash.name) in cookies) {
           renderMessage('cookie set: name ' + hash.name + ' value ' + hash.value, 'success');
         } else {
           renderMessage('sorry, failed to set cookie: name ' + hash.name, 'error');
         }
       },
       multiset: function() {
-        var cookie,
+        var cookie, msgPass, msgFail;
           msg = '<ul>',
           setCookies = JSON.parse(hash.cookies),
           passed = 0,
           failed = 0;
         while(cookie = setCookies.pop()) {
-          if(cookie.name in cookies) {
-            passed++;
-            msg += '<li class="success">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+          msgPass = '<li class="success">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+          msgFail = '<li class="error">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+          if(cookie.value === null){
+            if(!(encodeURIComponent(cookie.name) in cookies)) {
+              passed++;
+              msg += msgPass;
+            } else {
+              failed++;
+              msg += msgFail;
+            }
           } else {
-            failed++;
-            msg += '<li class="error">name ' + cookie.name + ' value ' + cookie.value + '</li>';
+            if(encodeURIComponent(cookie.name) in cookies) {
+              passed++;
+              msg += msgPass;
+            } else {
+              failed++;
+              msg += msgFail;
+            }
           }
         }
         msg += '</ul>';
