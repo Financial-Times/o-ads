@@ -1,23 +1,18 @@
 (function (window, document, $, undefined) {
-    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-    // spies and stubs
-    FT.sinon = {
-
-    };
-
     function runTests() {
         module('Third party config', {
             setup: function () {
-                FT.ads.config.clear();
+                //FT.ads.config.clear();
             },
             teardown: function () {
                 //window.iframe.remove();
-                FT._ads.utils.cookie('ftads:mode_t', null, { expires: -1 });
-                FT._ads.utils.cookie('cookieconf1', null, { expires: -1 })
+                //FT._ads.utils.cookie('ftads:mode_t', null, { expires: -1 });
+                //FT._ads.utils.cookie('cookieconf1', null, { expires: -1 })
             }
         });
 
         test('Config get/set', function () {
+            FT.ads.config.clear();
             var result, obj,
                 key = 'key',
                 invalid = 'invalid',
@@ -53,7 +48,7 @@
                 'some': 'config',
                 'parameters': 'to',
                 'be': 'added'
-            }
+            };
             result = FT.ads.config(obj);
             deepEqual(result, obj, 'set multiple key/values using an object.');
 
@@ -61,77 +56,65 @@
             deepEqual(result, obj, 'get returns the new values.');
         });
 
-        asyncTest('Config fetchMetaConfig', function () {
-            var iframe = $('<iframe>').appendTo('body');
-            expect(1);
-            iframe.load(function () {
-                // Use the iframe context for our assertions
-                var win = this.contentWindow;
-                var FT = win.FT;
-                var result =  FT.ads.config();
+        test('Config fetchMetaConfig', function () {
+            TEST.beginNewPage({
+                meta: {
+                    metaconf1: 'I\'m so meta, even this acronym.'
+                }
+            });
+            var result = FT.ads.config();
 
-                ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
-                QUnit.start();
-              });
-
-            iframe.attr('src', '../iframes/third.party.switcher.meta.html');
+            ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
+            equal(FT.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
         });
 
-        asyncTest('Config fetchCookieConfig', function () {
-            var iframe = $('<iframe>').appendTo('body');
-            iframe.load(function () {
-                // Use the iframe context for our assertions
-                expect(1);
-                var win = this.contentWindow;
-                var FT = win.FT;
-                var result =  FT.ads.config();
-                ok(result.hasOwnProperty('cookieconf1'), 'Cookie values have been added to config');
-                QUnit.start();
-              });
-              iframe.attr('src', '../iframes/third.party.cookie.html');
+        // test('Config fetchCookieConfig', function () {
+
+        // });
+
+        test('Config fetchGlobalConfig', function () {
+            TEST.beginNewPage({global: {globablconf1: 'Mondo Value!!'}});
+            var result =  FT.ads.config();
+            ok(result.hasOwnProperty('globablconf1'), 'Global (env) values have been added to config');
+            equal(FT.ads.config('globablconf1'), 'Mondo Value!!', 'Config returns the correct value');
         });
 
-        asyncTest('Config fetchGlobalConfig', function () {
-            var iframe = $('<iframe>').appendTo('body');
-            iframe.load(function () {
-            // Use the iframe context for our assertions
-                expect(1);
-                var win = this.contentWindow;
-                var FT = win.FT;
-                var result =  FT.ads.config();
-                ok(result.hasOwnProperty('globablconf1'), 'Global (env) values have been added to config');
-                QUnit.start();
-              });
-              iframe.attr('src', '../iframes/third.party.switcher.global.html');
+        test('Config defaults', function () {
+            TEST.beginNewPage();
+            var result =  FT.ads.config();
+            ok(result.hasOwnProperty('network'), 'default properties have been added to config');
+            equal(FT.ads.config('network'), '5887', 'Config returns the correct value');
         });
 
-        asyncTest('Config defaults', function () {
-            var iframe = $('<iframe>').appendTo('body');
-            iframe.load(function () {
-            // Use the iframe context for our assertions
-                expect(1);
-                var win = this.contentWindow;
-                var FT = win.FT;
-                var result =  FT.ads.config();
-                ok(result.hasOwnProperty('network'), 'default properties have been added to config');
-                QUnit.start();
-              });
-              iframe.attr('src', '../iframes/third.party.switcher.global.html');
+        test('Config cookie over-ride for Test User mode', function () {
+            TEST.beginNewPage({cookies: {'ftads:mode_t': 'testuser', network: 'over-ride'}});
+            equal(FT.ads.config('network'), 'over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
         });
 
-        asyncTest('Config cookie over-ride for Test User mode', function () {
-            var iframe = $('<iframe>').appendTo('body');
-            iframe.load(function () {
-            // Use the iframe context for our assertions
-                expect(1);
-                var win = this.contentWindow;
-                var FT = win.FT;
-                var result =  FT.ads.config();
-                ok(result.network==='over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
-                QUnit.start();
-              });
-              iframe.attr('src', '../iframes/third.party.cookie.html');
+        test('Config over-ride for dfp_site', function () {
+            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:dfpsite': 'test'}});
+            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'without test mode site is unaffected');
+
+            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser'}});
+            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'without dfpsite config is unaffected');
+
+            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'test'}});
+            equal(FT.ads.config('dfp_site'), 'test.5887.home', 'with test mode and dfpsite set to test, production config is updated to show test ads');
+
+            TEST.beginNewPage({global: {'dfp_site': 'test.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'ftcom'}});
+            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'with test mode and dfpsite set to ftcom, test config is updated to show live ads');
+
+            TEST.beginNewPage({global: {'dfp_site': 'test.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'test'}});
+            equal(FT.ads.config('dfp_site'), 'test.5887.home', 'with test mode and dfpsite set to test, test config is updated to show test ads');
+
+            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'ftcom'}});
+            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'with test mode and dfpsite set to ftcom, production config is updated to show live ads');
+
+            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'milkshake'}});
+            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'invalid cookie value does not affect the dfp_site value');
+
         });
     }
+
     $(runTests);
 }(window, document, jQuery));

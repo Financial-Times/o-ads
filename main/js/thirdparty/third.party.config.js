@@ -32,7 +32,10 @@
         var defaults =  {
             network: '5887',
             formats: {
-                banlb: {
+                intro: {
+                    outOfPage: true
+                },
+                banlbGPT: {
                     sizes: [[728,90], [468,60], [970,90]]
                 },
                 mpu: {
@@ -44,22 +47,38 @@
                 hlfmpu: {
                     sizes: [[300,600],[336,850],[300,250],[336,280]]
                 },
-                intro: {
-                    outOfPage: true
-                },
                 newssubs: {
                     sizes: [[239,90]]
                 },
                 refresh: {
+                    'sz': '1x1'
                 },
                 searchbox: {
                     sizes: [[200,28]]
                 },
                 tlbxrib: {
                     sizes: [[336,60]]
+                },
+                marketingrib: {
+                    sizes: [[336,60]]
+                },
+                lhn: {
+                    sizes: [[136,64]]
+                },
+                tradcent: {
+                    sizes: [[336,260]]
+                },
+                mktsdata: { // also matches mktsdata2 and mktsdata3
+                    sizes: [[88,31], [75,25]]
+                },
+                mpusky: {
+                    sizes: [[300,250], [336,280],[160,60]]
+                },
+                wdesky: {
+                    sizes: [[160,600]]
                 }
             },
-            audSciLimit : 2,
+            audSciLimit : 35,
             collapseEmpty: 'ft'
         };
 
@@ -73,12 +92,12 @@
             var meta,
                 results = {},
                 metas = doc.getElementsByTagName('meta');
-                for (var i= 0; i < metas.length; i++) {
-                    meta = metas[i];
-                    if (meta.name) {
-                        results[meta.name] = meta.content;
-                    }
+            for (var i= 0; i < metas.length; i++) {
+                meta = metas[i];
+                if (meta.name) {
+                    results[meta.name] = meta.content;
                 }
+            }
             return results;
         };
 
@@ -131,18 +150,34 @@
             }
         };
 
+        access.load = function(clear){
+
+            if (!!clear) {
+                access.clear();
+            }
+
 /**
  * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
  * this allows QA Testers to over-ride global and meta config.
  */
-        if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
-            if (FT._ads.utils.cookie('ftads:mode_t')==="testuser"){
-                store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+            if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
+                if (FT._ads.utils.cookie('ftads:mode_t') === "testuser"){
+                    store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+
+                    var siteCookie = FT._ads.utils.cookie('ftads:dfpsite');
+                    if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
+                        var splitSite = (store.dfp_site || '').split('.');
+                        splitSite[0] = siteCookie;
+                        store.dfp_site = splitSite.join('.');
+                    }
+                }
+            } else {
+                store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
             }
-        }
-        else {
-            store = FT._ads.utils.extend({}, fetchCookieConfig(), defaults, fetchMetaConfig(), fetchGlobalConfig());
-        }
+            return store;
+        };
+
+        access.load();
         return access;
     }
 

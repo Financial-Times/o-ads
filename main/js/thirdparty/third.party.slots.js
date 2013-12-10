@@ -25,10 +25,10 @@
  * @memberof Slots
  * @lends Slots
 */
-    proto.fetchSlotConfig = function  (container, config) {
+    proto.fetchSlotConfig = function  (container, slotName, config) {
         var attrs, attr, attrObj, name, matches, parser,
             sizes = [],
-            targeting = {},
+            targeting = {pos: slotName},
             parsers = {
                 'size': function (name, value){
                     value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
@@ -41,7 +41,7 @@
                     targeting.pos = value;
                     return value;
                 },
-                'out-of-page':  function (name, value){
+                'out-of-page':  function (){
                     config.outOfPage = true;
                     return true;
                 },
@@ -120,28 +120,29 @@
  * @memberof Slots
  * @lends Slots
 */
-    proto.centerContainer = function (element, sizes) {
-        element.style.marginRight = 'auto';
-        element.style.marginLeft = 'auto';
+    proto.centerContainer = function (container) {
+        FT._ads.utils.addClass(container, 'center');
+        // element.style.marginRight = 'auto';
+        // element.style.marginLeft = 'auto';
 
-        function getMaximums(sizes) {
-            var result = [0, 0];
+        // function getMaximums(sizes) {
+        //     var result = [0, 0];
 
-            if (FT._ads.utils.isArray(sizes[0])) {
-                for (var i = 0; i < sizes.length; i++){
-                    result[0] = Math.max(sizes[i][0], result[0]);
-                    result[1] = Math.max(sizes[i][1], result[1]);
-                }
-            } else {
-                result = sizes;
-            }
+        //     if (FT._ads.utils.isArray(sizes[0])) {
+        //         for (var i = 0; i < sizes.length; i++){
+        //             result[0] = Math.max(sizes[i][0], result[0]);
+        //             result[1] = Math.max(sizes[i][1], result[1]);
+        //         }
+        //     } else {
+        //         result = sizes;
+        //     }
 
-            return result;
-        }
+        //     return result;
+        // }
 
-        var max = getMaximums(sizes);
-        element.style.minWidth = '1px';
-        element.style.maxWidth = max[0] + 'px';
+        // var max = getMaximums(sizes);
+        // element.style.minWidth = '1px';
+        // element.style.maxWidth = max[0] + 'px';
     };
 
 /**
@@ -152,6 +153,10 @@
  * @lends Slots
 */
     proto.initSlot = function (slotName) {
+        if (this[slotName]) {
+            return false;
+        }
+
         var container = doc.getElementById(slotName),
             formats =  FT.ads.config('formats');
 
@@ -159,11 +164,15 @@
             return false;
         }
 
-        var config = this.fetchSlotConfig(container, formats[slotName] || {});
+        var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
+        if (!config.sizes){
+            return false;
+        }
 
         if (container.tagName === 'SCRIPT') {
             container = this.addContainer(container, slotName);
         }
+
 
         this.centerContainer(container, config.sizes);
 

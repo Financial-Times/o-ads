@@ -1,36 +1,41 @@
 (function (window, document, $, undefined) {
-    window.testMode  = window.unitOrIntegrationMode(FT._ads.utils.cookies.FTQA);
-
     sinon.spies = {
         gptCmdPush: sinon.spy(googletag.cmd, 'push')
     };
 
     function runTests() {
-
         module('Third party gpt',  {
             setup: function () {
-
-                // reset all spies between test
-                // this fails if you do it in teardown for some reason.
-                for (var spy in sinon.spies) {
-                    sinon.spies[spy].reset();
-                }
             }
+        });
+
+        test('init', function () {
+            TEST.beginNewPage({config: {krux: false, timestamp: false, audSci : false}});
+            FT.ads.gpt.init();
+
+            ok(TEST.sinon.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
         });
 
         test('set page targeting', function () {
             expect(2);
-            var oldConfig = FT.ads.config();
-            FT.ads.config.clear();
-            FT.ads.config('dfp_targeting', ';some=test;targeting=params');
-
+            sinon.spies.gptCmdPush.reset();
+            TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, audSci : false, dfp_targeting: ';some=test;targeting=params'}});
             var result = FT.ads.gpt.setPageTargeting(),
-                expected = {eid: null, some: 'test', targeting: 'params'};
+                expected = {some: 'test', targeting: 'params'};
 
             deepEqual(result, expected, 'setting dfp_targeting in config works');
-            ok(sinon.spies.gptCmdPush.calledThrice, 'the params are queued with GPT');
-            FT.ads.config(oldConfig);
+            equal(sinon.spies.gptCmdPush.callCount, 2, 'the params are queued with GPT');
         });
+
+        // test('refresh', function () {
+        //     TEST.mock.date('now');
+        //     TEST.beginNewPage({config: {refreshTime: 1 }});
+        //     FT.ads.gpt.startRefresh();
+        //     TEST.sinon.GPTrefreshTimer = sinon.spy(FT.ads.gpt.refreshTimer, 'fn');
+
+        //     TEST.sinon.clock.tick(1025);
+        //     ok();
+        // });
 
         test('collapse empty', function () {
             var result;
@@ -58,49 +63,9 @@
             equal(result, false, 'setting the value with false works');
             ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
         });
-
-        // test('displaySlot', function () {
-
-        //     FT.ads.gpt.defineSlot('mpu');
-
-        //     sinon.spies.gptCmdPush.reset();
-        //     FT.ads.config('fetchSlots', true);
-        //     FT.ads.gpt.defineSlot('hlfmpu');
-        //     //FT.ads.gpt.slots('');
-        //     //deepEqual({},{},);
-
-        // });
-
-        test('Attach GPT library to page', function () {
-            expect(2);
-
-            // initial number of async
-            var initialScripts = $('script').size();
-
-            FT.ads.gpt.attach();
-            deepEqual($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.' );
-
-            // wait for a maximum of 5 seconds for the google code to load
-            // the display methods is tested to see if the lib is available
-            QUnit.stop();
-
-            var totalTime = 0,
-                maxTime = 5000,
-                interval = 100,
-                timer = setInterval(function () {
-                    totalTime += interval;
-                    if (!!googletag.display) {
-                        ok(true, 'GPT available after ' + totalTime / 1000 + ' seconds');
-                        clearInterval(timer);
-                        QUnit.start();
-                    } else if (interval === maxTime) {
-                        ok(false, 'GPT was not available after ' + maxTime / 1000 + ' seconds');
-                        clearInterval(timer);
-                        QUnit.start();
-                    }
-                }, interval);
-        });
     }
 
     $(runTests);
 }(window, document, jQuery));
+
+

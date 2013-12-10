@@ -86,6 +86,24 @@
             ok(!FT._ads.utils.isWindow(function(){}), "function");
         });
 
+        test("isNonEmptyString method", function() {
+            expect(14);
+            ok($.type(FT._ads.utils.isNonEmptyString) === 'function', 'The function exists');
+            ok(FT._ads.utils.isNonEmptyString('hello'), "string with length");
+            ok(!FT._ads.utils.isNonEmptyString(""), "empty string");
+            ok(!FT._ads.utils.isNonEmptyString(), "empty");
+            ok(!FT._ads.utils.isNonEmptyString(null), "null");
+            ok(!FT._ads.utils.isNonEmptyString(undefined), "undefined");
+            ok(!FT._ads.utils.isNonEmptyString(document), "document");
+            ok(!FT._ads.utils.isNonEmptyString(document.documentElement), "documentElement");
+            ok(!FT._ads.utils.isNonEmptyString(1), "number");
+            ok(!FT._ads.utils.isNonEmptyString(true), "boolean");
+            ok(!FT._ads.utils.isNonEmptyString({}), "object");
+            ok(!FT._ads.utils.isNonEmptyString({ setInterval: function(){} }), "fake window");
+            ok(!FT._ads.utils.isNonEmptyString(/window/), "regexp");
+            ok(!FT._ads.utils.isNonEmptyString(function(){}), "function");
+        });
+
         test("isPlainObject method",function(){
             expect(15);
             ok($.type(FT._ads.utils.isPlainObject) === 'function', 'The function exists');
@@ -245,18 +263,70 @@
             deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
         });
 
-        test("hash", function() {
+        module('FT._ads.utils miscellanious methods');
+        test("css class methods", function() {
+            expect(6);
+            var $node = $('<div class="test cr@zy-c|-|@r/\cter$">'),
+            node = $node[0];
+
+            ok( FT._ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), "the node has the class cr@zy-c|-|@r/\cter$" );
+            ok( FT._ads.utils.hasClass(node, 'test'), "the node has the class test" );
+            ok( !FT._ads.utils.hasClass(node, 'tes'), "the node doesn't the class tes" );
+            ok( !FT._ads.utils.hasClass(node, 'r/\cter$'), "the node doesn't the class r/\cter$" );
+
+            FT._ads.utils.addClass(node, 'hello');
+            ok( $node.hasClass('hello'), "the node hello was added" );
+
+            FT._ads.utils.removeClass(node, 'hello');
+            ok( !$node.hasClass('hello'), "the node hello was removed" );
+
+        });
+
+        test("hash method", function() {
             var result, test = "a:1,b:2,c:3,a:12";
             expect(4);
             result = FT._ads.utils.hash( test, ",", ":" );
 
             ok( FT._ads.utils.isObject( result ), "the result is an object" );
-
-            // Better to test each case individually so if one fails you can see expected vs actual right in the test page output.
             deepEqual( result.b, '2', "Key b properly hashed (as string data)" );
             deepEqual( result.c, '3', "Key c properly hashed" );
             deepEqual( result.a, '12', "Duplicate keys properly hashed" );
-            //ok(  12 == result.a && 2 == result.b && 3 == result.c , "String properly hashed" );
+
+        });
+
+        test('attach method', function () {
+            expect(3);
+            window.attached = function(str){
+                return str;
+            };
+
+            TEST.sinon.attached = sinon.spy(window, "attached");
+            // initial number of scripts
+            var initialScripts = $('script').size();
+
+            FT._ads.utils.attach('../js/util/attach.js');
+            equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.' );
+            equal($('script[ftads]').size(), 1, 'the script tag has an ftads attribute');
+            // wait for a maximum of 5 seconds for the google code to load
+            // the display methods is tested to see if the lib is available
+
+            QUnit.stop();
+
+            var totalTime = 0,
+                maxTime = 5000,
+                interval = 100,
+                timer = setInterval(function () {
+                    totalTime += interval;
+                    if (!!TEST.sinon.attached.calledOnce) {
+                        ok(true, 'The script is executed after ' + totalTime / 1000 + ' seconds');
+                        clearInterval(timer);
+                        QUnit.start();
+                    } else if (interval === maxTime) {
+                        ok(false, 'The script was not executed after ' + maxTime / 1000 + ' seconds');
+                        clearInterval(timer);
+                        QUnit.start();
+                    }
+                }, interval);
         });
 
        test("writeScript method",function(){

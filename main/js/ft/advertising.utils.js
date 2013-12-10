@@ -108,7 +108,8 @@
       "Array",
       "Object",
       "String",
-      "Function"
+      "Function",
+      "Storage"
     ];
 
     while(!!classNames.length) {
@@ -165,6 +166,15 @@
     for ( key in obj ) {}
 
     return key === undefined || obj_hop.call( obj, key );
+  };
+
+  /**
+   * Test if an object is a string with a length
+   * @param {object} The object to be tested
+   * @returns Boolean true if the object is a string with a length greater than 0
+   */
+  utils.isNonEmptyString = function (str) {
+    return utils.isString(str) && !!str.length;
   };
 
   /**
@@ -237,11 +247,29 @@
     return target;
   };
 
-  utils.hasClass = function(ele, className){
-    if(ele.nodeType === 1){
-        return ele.className.split(' ').indexOf(className) > -1 ? true : false;
+  utils.hasClass = function(node, className){
+    if(node.nodeType === 1){
+        return node.className.split(' ').indexOf(className) > -1 ? true : false;
     }
     return false;
+  };
+
+  utils.addClass = function(node, className){
+    if(node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)){
+        node.className += ' ' + className.trim();
+    }
+    return true;
+  };
+
+  utils.removeClass = function(node, className){
+    var index, classes;
+    if(node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)){
+        classes = node.className.split(' ');
+        index = classes.indexOf(className);
+        classes.splice(index, 1);
+        node.className = classes.join(' ');
+    }
+    return true;
   };
 
   utils.writeScript = function (url) {
@@ -276,6 +304,98 @@
     }
 
     return hash;
+  };
+
+/**
+ * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
+ * The async value of the script can be set by the seccond parameter, which is a boolean
+ * Note, we should use protocol-relative URL paths to ensure we don't run into http/https issues
+ * @name attach
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+  utils.attach = function (scriptUrl, async) {
+    var tag = doc.createElement('script'),
+    node = doc.getElementsByTagName('script')[0];
+    tag.setAttribute('src', scriptUrl);
+    tag.setAttribute('ftads', '');
+    if (async){
+      tag.async = 'true';
+    }
+
+    // Use insert before, append child has issues with script tags in some browsers.
+    node.parentNode.insertBefore(tag, node);
+    return tag;
+  };
+
+/**
+ * return the current documents referrer or an empty string if non exists
+ * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
+ * @name getReferrer
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+  utils.getReferrer = function () {
+    return document.referrer || '';
+  };
+
+/**
+ * return the current documents url or an empty string if non exists
+ * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
+ * @name getReferrer
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+
+  utils.getPageType = function () {
+    var targeting = FT.ads.config('dfp_targeting') || {};
+    if (!FT._ads.utils.isPlainObject(targeting)) {
+        if (FT._ads.utils.isString(targeting)) {
+            targeting = FT._ads.utils.hash(targeting, ';', '=') || {};
+        }
+    }
+    return targeting.pt || 'unknown';
+  };
+
+/**
+ * return the current documents url or an empty string if non exists
+ * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
+ * @name getReferrer
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+  utils.getLocation = function () {
+    return document.location.href || '';
+  };
+
+/**
+ * return the current documents search or an empty string if non exists
+ * also strips the initial ? from the search string for easier parsing
+ * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
+ * @name getReferrer
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+  utils.getQueryString = function () {
+    return document.location.search.substring(1) || '';
+  };
+
+/**
+ * returns a timestamp of the current time in the format YYYYMMDDHHMMSS
+ * @name getReferrer
+ * @memberof FT._ads.utils
+ * @lends FT._ads.utils
+*/
+  utils.getTimestamp = function () {
+    var now = new Date();
+    return [
+        now.getFullYear(),
+        ('0' + (now.getMonth() + 1)).slice(-2),
+        ('0' + now.getDate()).slice(-2),
+        ('0' + now.getHours()).slice(-2),
+        ('0' + now.getMinutes()).slice(-2),
+        ('0' + now.getSeconds()).slice(-2)
+      ].join("");
   };
 
   utils.init = function () {
