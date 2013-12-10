@@ -258,25 +258,29 @@
         },
         /* Don't look at this */
         /* it's only here because the build fails if we try to access anything external */
-        suppressExternalScripts: function () {/*
+        suppressExternalScripts: function () {
             var _createElement = document.createElement;
             document.createElement = function () {
+                
                     var parent,_insertBefore,
                         node = _createElement.apply(this, arguments);
 
                     if (arguments[0] === 'script') {
+                        
                         parent = document.getElementsByTagName('script')[0].parentNode;
                         _insertBefore = parent.insertBefore;
                         parent.insertBefore = function (tag, node) {
                             var exp = new RegExp('^https?:\/\/' + location.hostname);
                             if (exp.test(tag.src)) {
-                                return _insertBefore.call(this, tag, node);
+                                 return _insertBefore.call(this, tag, node);
                             }
-                        }
-                    }
+                            if (!exp.test(tag.src)) { tag.src = "empty.js"; return _insertBefore.call(this, tag, node);}
+                         }
+                      }
                     return node;
             };
-        */}
+
+        }
     };
 
     window.TEST = {
