@@ -258,7 +258,7 @@
         },
         /* Don't look at this */
         /* it's only here because the build fails if we try to access anything external */
-        suppressExternalScripts: function () {
+        suppressExternalScripts: function () {/*
             var _createElement = document.createElement;
             document.createElement = function () {
                     var parent,_insertBefore,
@@ -276,7 +276,7 @@
                     }
                     return node;
             };
-        }
+        */}
     };
 
     window.TEST = {
