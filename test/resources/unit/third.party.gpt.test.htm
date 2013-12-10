@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testing GPT Ads!</title>
+    <!-- the code -->
+    <script src="../js/thirdparty/third.party.namespace.js"></script>
+    <script src="../js/ft/advertising.utils.js"></script>
+    <script src="../js/ft/advertising.utils.cookie.js"></script>
+    <script src="../js/ft/advertising.utils.timers.js"></script>
+    <script src="../js/thirdparty/third.party.config.js"></script>
+    <script src="../js/thirdparty/utils.js"></script>
+    <script src="../js/thirdparty/metadata.js"></script>
+    <script src="../js/thirdparty/third.party.targeting.js"></script>
+    <script src="../js/ft/audienceScienceFacade.js"></script>
+    <script src="../js/ft/audienceScience.js"></script>
+    <script src="../js/thirdparty/video.miniplayer.js"></script>
+    <script src="../js/thirdparty/third.party.slots.js"></script>
+    <script src="../js/thirdparty/third.party.gpt.js"></script>
+    <script src="../js/thirdparty/third.party.version.js"></script>
+
+    <!-- testing resources -->
+    <link rel="stylesheet" href="../css/qunit-1.12.0.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tests.css" type="text/css" media="screen">
+    <script src="../lib/jquery/jquery-1.7.2.js"></script>
+    <script src="../lib/jquery/jquery.cookie.js"></script>
+    <script src="../lib/qunit/qunit-1.12.0.js"></script>
+    <script src="../lib/sinon/sinon-1.7.3.js"></script>
+    <script src="../lib/sinon/sinon-ie-1.7.3.js"></script>
+    <script src="../js/util/test.helpers.js"></script>
+    <script src="../js/util/gpt.js"></script>
+
+    <!-- tests -->
+    <script src="../js/metadata.test.js"></script>
+    <script src="../js/third.party.targeting.test.js"></script>
+    <script src="../js/video.miniplayer.test.js"></script>
+    <script src="../js/third.party.config.test.js"></script>
+    <script src="../js/third.party.slots.test.js"></script>
+    <script src="../js/third.party.gpt.test.js"></script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Test plan for the third party library</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <h2 id="mode"></h2>
+    <ol id="qunit-tests">
+    </ol>
+
+    <div id="adCalls">
+        <h2>banlb</h2>
+        <div id="banlb">
+            <script>FT.ads.slots.initSlot('banlb');</script>
+        </div>
+
+        <h2>hlfmpu</h2>
+        <div id="hlfmpu" data-ad-size="300x600">
+        </div>
+
+        <h2>mpu</h2>
+        <div id="mpu" >
+        </div>
+
+        <h2>refresh</h2>
+        <div id="refresh">
+        </div>
+
+        <h2>invalidpos</h2>
+        <div id="invalidpos">
+        </div>
+    </div>
+  </body>
+</html>

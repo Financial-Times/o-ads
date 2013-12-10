@@ -25,14 +25,19 @@
     <script src="../js/thirdparty/third.party.slots.js"></script>
     <script src="../js/thirdparty/third.party.gpt.js"></script>
     <script src="../js/thirdparty/third.party.js"></script>
-    <script src="../js/thirdparty/third.party.switcher.js"></script>
-
     <!-- spies -->
     <script>
-        FT.spies = {};
-        FT.spies.adCallSpy = sinon.spy(FT.env, "adCall");
-        FT.spies.getTagSpy = sinon.spy(FT.env, "getTag");
-        FT.spies.getAudSciSpy = sinon.spy(FT.env, "getAudSci");
+        TEST = {};
+        TEST.sinon = TEST.sinon || {};
+        //this spy must be setup before the switcher initialises GPT
+        TEST.sinon.attach = sinon.stub(FT._ads.utils, "attach", function () {return true;});
+    </script>
+    <script src="../js/thirdparty/third.party.htsi.switcher.js"></script>
+    <script>
+        // this spy must be setup after the switcher has overriden the adCall method
+        TEST.sinon.adCallSpy = sinon.spy(FT.env, "adCall");
+        TEST.sinon.getTagSpy = sinon.spy(FT.env, "getTag");
+        TEST.sinon.getAudSciSpy = sinon.spy(FT.env, "getAudSci");
     </script>
   </head>
   <body>
