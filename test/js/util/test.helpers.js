@@ -255,12 +255,12 @@
                 test.mock.attach();
             }
             return true;
-        },
+        }
         /* Don't look at this */
         /* it's only here because the build fails if we try to access anything external */
-        suppressExternalScripts: function () {
+        /*suppressExternalScripts: function () {
             var _createElement = document.createElement;
-          /*  document.createElement = function () {
+            document.createElement = function () {
                 
                     var parent,_insertBefore,
                         node = _createElement.apply(this, arguments);
@@ -274,13 +274,13 @@
                             if (exp.test(tag.src)) {
                                  return _insertBefore.call(this, tag, node);
                             }
+                            if (!exp.test(tag.src)) { tag.src = "empty.js"; return _insertBefore.call(this, tag, node);}
                          }
                       }
-            
                     return node;
-            };*/
+            };
 
-        }
+        }*/
     };
 
     window.TEST = {
@@ -291,7 +291,7 @@
     };
 
     if (test.mode() === 'unit') {
-        test.suppressExternalScripts();
+     //   test.suppressExternalScripts();
     }
 
     $(function () {
