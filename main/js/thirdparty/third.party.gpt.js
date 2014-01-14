@@ -96,7 +96,7 @@
  * @lends GPT
 */
     proto.getUnitName = function (slotName) {
-        return this.unitName + '/' + slotName;
+        return this.unitName;
     };
 
 /**
