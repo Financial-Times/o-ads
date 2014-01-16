@@ -1,4 +1,4 @@
-(function (window, document, $, undefined) {
+/*(function (window, document, $, undefined) {
     function runTests() {
         module('Video Miniplayer');
         test("Video Miniplayer Targeting with Krux, audSci, AYSC and eid set", function () {
@@ -25,6 +25,7 @@
    }
     $(runTests);
 }(window, document, jQuery));
+*/
 
 
 
