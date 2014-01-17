@@ -64,7 +64,7 @@ groups {
         js("/js/thirdparty/third.party.namespace.js")
         js("/js/ft/advertising.utils.js")
         js("/js/ft/advertising.utils.cookie.js")
-        js "/js/ft/advertising.utils.timers.js"
+        js("/js/ft/advertising.utils.timers.js")
         js("/js/thirdparty/third.party.config.js")
         js("/js/thirdparty/metadata.js")
         js("/js/thirdparty/third.party.targeting.js")
