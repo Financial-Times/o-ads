@@ -272,9 +272,16 @@
                 iframe.attachEvent(
                     'onload',
                     function () {
-                        if (/ft-no-ad/.test(iframe.contentWindow.contents)) {
-                            FT._ads.utils.addClass(container, 'empty');
-                            //return container.style.display = 'none';
+                        try {
+                            var img, imgs = Array.prototype.slice.call(iframe.contentWindow.document.getElementsByTagName('img'), 0);
+                            while (img = imgs.pop()) {
+                                if (/ft-no-ad/.test(img.src)) {
+                                    FT._ads.utils.addClass(container, 'empty');
+                                }
+                            }
+                        } catch (err) {
+                            return false;
+                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
                         }
                     }
                 );

@@ -33,10 +33,11 @@
             network: '5887',
             formats: {
                 intro: {
-                    outOfPage: true
+                   
                 },
                 banlbGPT: {
-                    sizes: [[728,90], [468,60], [970,90]]
+                    sizes: [[728,90], [468,60], [970,90]],
+                    outOfPage: true
                 },
                 mpu: {
                     sizes: [[300,250],[336,280]]

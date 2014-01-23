@@ -21,4 +21,19 @@
 #bannerAdvertContainer {
     padding-bottom: 11px;
 }
-#mpu, #mpu2, #mpu3, #hlfmpu, #hlfmpu2, #hlfmpu3   { margin:0 0 32px 0 ; width:352px ; min-height:250px ; text-align:center ; }
+/* RAIL ADS */
+#tlbxrib, #tlbxrib2, #tlbxrib3 { margin:0 ; padding:0 5px 5px 8px ; min-height:60px ; background-color:#fff1e0 ; }
+.msie #tlbxrib  { height:60px ; }
+
+#mpu, #mpu2, #mpu3,
+#hlfmpu, #hlfmpu2, #hlfmpu3   { margin:0 0 32px 0 ; width:352px ; min-height:250px ; text-align:center ; }
+
+#mpu *, #mpu2 *, #mpu3 *,
+#hlfmpu *, #hlfmpu2 *, #hlfmpu3 * {
+    margin: 0 auto;
+}
+
+.msie6 #hlfmpu { height:250px ; }
+
+/* To align the expanding Ads in right rails */
+#mpu table,#mpu2 table,#mpu3 table,#hlfmpu table,#hlfmpu2 table,#hlfmpu3 table { display:block ; margin-left:auto ; margin-right:auto ; padding:0px ; }
