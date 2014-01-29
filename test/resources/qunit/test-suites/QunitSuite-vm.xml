@@ -6,10 +6,10 @@
     <parameter name="seleniumPort" value="4444" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
-    <parameter name="majorBrowsers" value="*iexplore,*firefox,*chrome" />
+    <parameter name="majorBrowsers" value="*iexplore,*chrome" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
-    <parameter name="localBrowsers" value="*firefox,*chrome" />
+    <parameter name="localBrowsers" value="*chrome" />
 
     <parameter name="testRoot" value="target/test-classes" />
 
@@ -24,14 +24,7 @@
      -->
 
 
-    <test name="Firefox">
-        <parameter name="browser" value="*firefox" />
-        <parameter name="include" value=".*\.test\.htm(l)?" />
-        <classes>
-           <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
-        </classes>
-    </test>
-
+    
     <test name="Chrome">
         <parameter name="browser" value="*chrome" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
