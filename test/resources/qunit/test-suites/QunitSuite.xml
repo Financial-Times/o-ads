@@ -2,14 +2,15 @@
 
 <suite name="QUnit tests" verbose="1" parallel="tests" thread-count="20" data-provider-thread-count="20">
 
+    <!-- Selenium Grid hub connection details -->
     <parameter name="seleniumHost" value="localhost" />
     <parameter name="seleniumPort" value="4444" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
-    <parameter name="majorBrowsers" value="*iexplore,*chrome" />
+    <parameter name="majorBrowsers" value="*firefox,*iexplore,*chrome" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
-    <parameter name="localBrowsers" value="*chrome" />
+    <parameter name="localBrowsers" value="*firefox,*chrome" />
 
     <parameter name="testRoot" value="target/test-classes" />
 
@@ -24,12 +25,19 @@
      -->
 
 
-    
-    <test name="Chrome">
-        <parameter name="browser" value="*chrome" />
+<test name="Firefox">
+        <parameter name="browser" value="*firefox" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
-           <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+
+    <test name="Chrome">
+        <parameter name="browser" value="*googlechrome" />
+        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
     </test>
 
