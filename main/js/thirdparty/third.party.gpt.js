@@ -286,9 +286,6 @@
                     }
                 );
             } else {
-                iframe.addEventListener(
-                    'load',
-                    function () {
                         try {
                             var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
                             while (img = imgs.pop()) {
@@ -300,12 +297,8 @@
                             return false;
                             // Probably blocked due to ad rendered in iframe no longer being on same domain.
                         }
-                    },
-                    false
-                );
-            }
-
-    };
+                    }
+            };
 
 /**
  * Initialises GPT on the page
