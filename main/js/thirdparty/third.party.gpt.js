@@ -272,9 +272,21 @@
                 iframe.attachEvent(
                     'onload',
                     function () {
+
+                        function toArray(obj) {
+                            var array = [];
+                            // iterate backwards ensuring that length is an UInt32
+                            for (var i = obj.length >>> 0; i--;) { 
+                            array[i] = obj[i];
+                            }
+                            return array;
+                        }
                         try {
-                            var img, imgs = Array.prototype.slice.call(iframe.contentWindow.document.getElementsByTagName('img'), 0);
+                            var img, imgs = iframe.contentDocument.getElementsByTagName('img');
+                            imgs = toArray(imgs);
+                            console.log(imgs);
                             while (img = imgs.pop()) {
+                                console.log(img);
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
                                 }
