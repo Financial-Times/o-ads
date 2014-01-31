@@ -285,7 +285,6 @@
                             var img, imgs = iframe.contentDocument.getElementsByTagName('img');
                             imgs = toArray(imgs);
                             while (img = imgs.pop()) {
-                                console.log(img);
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
                                 }
