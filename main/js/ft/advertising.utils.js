@@ -400,9 +400,8 @@
 
   utils.nodeListToArray = function(obj) {
     var array = [];
-    // iterate backwards ensuring that length is an UInt32
-    for (var i = obj.length >>> 0; i--;) { 
-      array[i] = obj[i];
+    for (var i = 0; i < obj.length; i++) { 
+        array[i] = obj[i];
       }
       return array;
     };
