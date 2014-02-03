@@ -272,18 +272,9 @@
                 iframe.attachEvent(
                     'onload',
                     function () {
-
-                        function toArray(obj) {
-                            var array = [];
-                            // iterate backwards ensuring that length is an UInt32
-                            for (var i = obj.length >>> 0; i--;) { 
-                            array[i] = obj[i];
-                            }
-                            return array;
-                        }
                         try {
                             var img, imgs = iframe.contentDocument.getElementsByTagName('img');
-                            imgs = toArray(imgs);
+                            imgs = FT._ads.utils.nodeListToArray(imgs);
                             while (img = imgs.pop()) {
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
