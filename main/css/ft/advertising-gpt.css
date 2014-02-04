@@ -37,3 +37,10 @@
 
 /* To align the expanding Ads in right rails */
 #mpu table,#mpu2 table,#mpu3 table,#hlfmpu table,#hlfmpu2 table,#hlfmpu3 table { display:block ; margin-left:auto ; margin-right:auto ; padding:0px ; }
+
+.no-banlbGPT div.topSection #header {
+    margin-top: 8px;
+}
+.msie .no-banlbGPT div.topAds { display:none ; } /* Fix for non-clickable header contents in IE6 when banlb collapses */
+
+#banlbGPT    { margin:0 0 5px 0; min-height:90px ; text-align:center ; }

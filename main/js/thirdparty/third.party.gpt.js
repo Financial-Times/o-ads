@@ -130,9 +130,9 @@
  * @name setPageRefresh
  * @memberof GPT
  * @lends GPT
-*/
 
-    proto.startRefresh = function () {
+*/
+proto.startRefresh = function () {
         var refreshConfig = FT.ads.config('refresh') || {},
             pageType = FT._ads.utils.getPageType(),
             time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
@@ -268,7 +268,8 @@
  * @lends GPT
 */
     proto.findNoAd = function (iframe, container) {
-            if (iframe.attachEvent) {
+        var bodyClasses = [];
+        if (iframe.attachEvent) {
                 iframe.attachEvent(
                     'onload',
                     function () {
@@ -278,6 +279,8 @@
                             while (img = imgs.pop()) {
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
+                                    bodyClasses.push(" no-" + container.id);
+                                    document.body.className += " no-"+container.id;       
                                 }
                             }
                         } catch (err) {
@@ -292,6 +295,8 @@
                             while (img = imgs.pop()) {
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
+                                    bodyClasses.push(" no-" + container.id);
+                                    document.body.className += " no-"+container.id; 
                                 }
                             }
                         } catch (err) {
@@ -299,6 +304,7 @@
                             // Probably blocked due to ad rendered in iframe no longer being on same domain.
                         }
                     }
+        document.body.className = bodyClasses.join(' ');
             };
 
 /**
