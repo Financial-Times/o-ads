@@ -235,10 +235,10 @@ proto.startRefresh = function () {
 
                     FT.ads.gpt.findNoAd(iframe, container);
                     slot._renderEnded.apply(this, arguments);
+                   if (container.id === "banlbGPT") {if (container.innerHTML.match(/width=(["]{0,1})970(["]{0,1})|width:([\s]*)970/)) { document.body.className += " fullwidth-banlb";}} 
                 };
             }(this, gptSlot);
         }
-
         return mode;
     };
 
@@ -279,7 +279,6 @@ proto.startRefresh = function () {
                             while (img = imgs.pop()) {
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
-                                    bodyClasses.push(" no-" + container.id);
                                     document.body.className += " no-"+container.id;       
                                 }
                             }
@@ -295,7 +294,6 @@ proto.startRefresh = function () {
                             while (img = imgs.pop()) {
                                 if (/ft-no-ad/.test(img.src)) {
                                     FT._ads.utils.addClass(container, 'empty');
-                                    bodyClasses.push(" no-" + container.id);
                                     document.body.className += " no-"+container.id; 
                                 }
                             }
@@ -304,7 +302,6 @@ proto.startRefresh = function () {
                             // Probably blocked due to ad rendered in iframe no longer being on same domain.
                         }
                     }
-        document.body.className = bodyClasses.join(' ');
             };
 
 /**
