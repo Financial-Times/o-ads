@@ -267,41 +267,40 @@ proto.startRefresh = function () {
  * @lends GPT
 */
     proto.findNoAd = function (iframe, container) {
-        var bodyClasses = [];
         if (iframe.attachEvent) {
-                iframe.attachEvent(
-                    'onload',
-                    function () {
-                        try {
-                            var img, imgs = iframe.contentDocument.getElementsByTagName('img');
-                            imgs = FT._ads.utils.nodeListToArray(imgs);
-                            while (img = imgs.pop()) {
-                                if (/ft-no-ad/.test(img.src)) {
-                                    FT._ads.utils.addClass(container, 'empty');
-                                    document.body.className += " no-"+container.id;       
-                                }
+            iframe.attachEvent(
+                'onload',
+                function () {
+                    try {
+                        var img, imgs = iframe.contentDocument.getElementsByTagName('img');
+                        imgs = FT._ads.utils.nodeListToArray(imgs);
+                        while (img = imgs.pop()) {
+                            if (/ft-no-ad/.test(img.src)) {
+                                FT._ads.utils.addClass(container, 'empty');
+                                document.body.className += " no-" + container.id;
                             }
-                        } catch (err) {
-                            return false;
-                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
                         }
+                    } catch (err) {
+                        return false;
+                        // Probably blocked due to ad rendered in iframe no longer being on same domain.
                     }
-                );
-            } else {
-                        try {
-                            var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
-                            while (img = imgs.pop()) {
-                                if (/ft-no-ad/.test(img.src)) {
-                                    FT._ads.utils.addClass(container, 'empty');
-                                    document.body.className += " no-"+container.id; 
-                                }
-                            }
-                        } catch (err) {
-                            return false;
-                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
-                        }
+                }
+            );
+        } else {
+            try {
+                var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                while (img = imgs.pop()) {
+                    if (/ft-no-ad/.test(img.src)) {
+                        FT._ads.utils.addClass(container, 'empty');
+                        document.body.className += " no-" + container.id;
                     }
-            };
+                }
+            } catch (err) {
+                return false;
+                // Probably blocked due to ad rendered in iframe no longer being on same domain.
+            }
+        }
+    };
 
 /**
  * Initialises GPT on the page
