@@ -43,5 +43,5 @@
 }
 .msie .no-banlbGPT div.topAds { display:none ; } /* Fix for non-clickable header contents in IE6 when banlb collapses */
 
-#banlbGPT    { height:90px ; text-align:center ; }
+#banlbGPT    { height:90px ; text-align:center ; min-height:90px;}
 .fullwidth-banlb #banlbGPT    { height:auto}
