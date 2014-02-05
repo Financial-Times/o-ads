@@ -235,7 +235,6 @@ proto.startRefresh = function () {
 
                     FT.ads.gpt.findNoAd(iframe, container);
                     slot._renderEnded.apply(this, arguments);
-                   if (container.id === "banlbGPT") {if (container.innerHTML.match(/width=(["]{0,1})970(["]{0,1})|width:([\s]*)970/)) { document.body.className += " fullwidth-banlb";}} 
                 };
             }(this, gptSlot);
         }
