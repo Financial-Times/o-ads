@@ -262,7 +262,7 @@
             result = FT.ads.targeting();
             equal(result.kw, "rock my world", "search: queryText in URL");
         });
-
+/*
         test("timestamp", function () {
             TEST.beginNewPage({ config: { timestamp: true }, date: 1384788607340 });
             result = FT.ads.targeting();
@@ -273,6 +273,7 @@
             result = FT.ads.targeting();
             equal(result.ts, '20131118163007', "fast forward one hour and timestamp value returns correctly");
         });
+*/
 
         test("Library Version", function () {
             TEST.beginNewPage({ config: { version: true }});
