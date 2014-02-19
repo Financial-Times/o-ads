@@ -62,6 +62,23 @@
       FT.ads.requestNewssubs = function (){
 
       };
+  FT.ads.customSlots = {
+    tlbxrib : function() {
+       if (FT.env.dfp_site === "ftcom.5887.markets-data" && FT.env.dfp_zone === "equity-and-investment-tearsheets"){
+        var iframe = document.getElementById('tlbxrib-gpt').getElementsByTagName('iframe')[0];
+        var css = 'a img { border: none; }';
+        var head = iframe.contentWindow.document.getElementsByTagName('head')[0],
+        style = iframe.contentWindow.document.createElement('style');
+        style.type = 'text/css';
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+        style.appendChild(iframe.contentWindow.document.createTextNode(css));
+        }
+        head.appendChild(style);
+      }
+    }
+  };
 
       FT.ads.config({
         collapseEmpty: 'ft',

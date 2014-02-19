@@ -139,6 +139,7 @@ proto.startRefresh = function () {
             max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
         function refresh() {
+            if (FT.env.refreshCancelFilter !== 'undefined' && FT.env.refreshCancelFilter()){return;}
             var slot, slotsForRefresh = [],
             slots = FT.ads.slots;
             for (slot in slots) {
@@ -232,8 +233,9 @@ proto.startRefresh = function () {
                     var slotId = slot.getSlotId(),
                         container = document.getElementById(slotId.getDomId()).parentNode,
                         iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-
+                    var slotName = container.getAttribute('id');
                     FT.ads.gpt.findNoAd(iframe, container);
+                    if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
                     slot._renderEnded.apply(this, arguments);
                 };
             }(this, gptSlot);
