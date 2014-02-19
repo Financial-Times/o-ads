@@ -139,7 +139,6 @@ proto.startRefresh = function () {
             max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
         function refresh() {
-            if (FT.env.refreshCancelFilter !== 'undefined' && FT.env.refreshCancelFilter()){return;}
             var slot, slotsForRefresh = [],
             slots = FT.ads.slots;
             for (slot in slots) {
@@ -150,7 +149,6 @@ proto.startRefresh = function () {
                 }
             }
             googletag.pubads().refresh(slotsForRefresh);
-        }
 
         if (time) {
             this.refreshTimer = FT._ads.utils.timers.create(time, refresh, max);
@@ -316,7 +314,10 @@ proto.startRefresh = function () {
     proto.init = function () {
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
-        this.startRefresh();
+
+        if (!FT._ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter()){
+            this.startRefresh();
+        }
         this.setPageCollapseEmpty();
 
         googletag.cmd.push( function () {
