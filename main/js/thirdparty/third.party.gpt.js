@@ -122,17 +122,17 @@
         return targeting;
     };
 
-/**
- * Starts a timer to refresh all ads on the page after
- * a time specified in config refreshTime, maximum number of
- * refreshes defaults to infinity but can be set via the
- * maxRefresh config property
- * @name setPageRefresh
- * @memberof GPT
- * @lends GPT
+    /**
+     * Starts a timer to refresh all ads on the page after
+     * a time specified in config refreshTime, maximum number of
+     * refreshes defaults to infinity but can be set via the
+     * maxRefresh config property
+     * @name setPageRefresh
+     * @memberof GPT
+     * @lends GPT
 
-*/
-proto.startRefresh = function () {
+    */
+    proto.startRefresh = function () {
         var refreshConfig = FT.ads.config('refresh') || {},
             pageType = FT._ads.utils.getPageType(),
             time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
@@ -149,6 +149,7 @@ proto.startRefresh = function () {
                 }
             }
             googletag.pubads().refresh(slotsForRefresh);
+        }
 
         if (time) {
             this.refreshTimer = FT._ads.utils.timers.create(time, refresh, max);
