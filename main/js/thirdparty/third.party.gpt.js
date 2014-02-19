@@ -233,9 +233,7 @@ proto.startRefresh = function () {
                     var slotId = slot.getSlotId(),
                         container = document.getElementById(slotId.getDomId()).parentNode,
                         iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-                    var slotName = container.getAttribute('id');
                     FT.ads.gpt.findNoAd(iframe, container);
-                    if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
                     slot._renderEnded.apply(this, arguments);
                 };
             }(this, gptSlot);
@@ -273,6 +271,9 @@ proto.startRefresh = function () {
             iframe.attachEvent(
                 'onload',
                 function () {
+                    // container = document.getElementById(slotId.getDomId()).parentNode;
+                    var slotName = container.getAttribute('id');
+                    if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
                     try {
                         var img, imgs = iframe.contentDocument.getElementsByTagName('img');
                         imgs = FT._ads.utils.nodeListToArray(imgs);
@@ -289,6 +290,8 @@ proto.startRefresh = function () {
                 }
             );
         } else {
+            var slotName = container.getAttribute('id');
+            if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
             try {
                 var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
                 while (img = imgs.pop()) {
