@@ -53,7 +53,7 @@
 
     <test name="firefox14-windows">
         <parameter name="browser" value="firefox14-windows" />
-        <parameter name="include" value=".*\.test\.htm(l)?" />
+        <parameter name="include" value="excluded" />
         <classes>
             <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
