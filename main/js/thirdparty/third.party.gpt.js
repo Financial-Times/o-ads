@@ -232,7 +232,7 @@
                     var slotId = slot.getSlotId(),
                         container = document.getElementById(slotId.getDomId()).parentNode,
                         iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-                    FT.ads.gpt.findNoAd(iframe, container);
+                    FT.ads.gpt.handleNoAdAndSlotCustomization(iframe, container);
                     slot._renderEnded.apply(this, arguments);
                 };
             }(this, gptSlot);
@@ -265,12 +265,11 @@
  * @memberof GPT
  * @lends GPT
 */
-    proto.findNoAd = function (iframe, container) {
+    proto.handleNoAdAndSlotCustomization = function (iframe, container) {
         if (iframe.attachEvent) {
             iframe.attachEvent(
                 'onload',
                 function () {
-                    // container = document.getElementById(slotId.getDomId()).parentNode;
                     var slotName = container.getAttribute('id');
                     if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
                     try {
