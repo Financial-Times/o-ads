@@ -22,7 +22,7 @@
     padding-bottom: 11px;
 }
 /* RAIL ADS */
-#tlbxrib, #tlbxrib2, #tlbxrib3 { margin:0 ; padding:0 5px 5px 8px ; min-height:60px ; background-color:#fff1e0 ; }
+#tlbxrib, #tlbxrib2, #tlbxrib3 { margin:0 ; padding:0 5px 5px 0; min-height:60px ; background-color:#fff1e0 ; }
 .msie #tlbxrib  { height:60px ; }
 
 #mpu, #mpu2, #mpu3,
@@ -44,3 +44,5 @@
 .msie .no-banlbGPT div.topAds { display:none ; } /* Fix for non-clickable header contents in IE6 when banlb collapses */
 
 #banlbGPT {font-size: 0; line-height: 0;min-height: 91px; white-space: pre;margin-top:3px;}
+#tlbxrib-gpt iframe[id^='google_ads_iframe_/5887/ftcom.5887.markets-data/equity-and-investment-tearsheets']:first-child {height:66px!important}
+
