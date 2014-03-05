@@ -84,6 +84,8 @@ var getDFPSite = function () {
                         .addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+                googletag.pubads().disableInitialLoad();
+                googletag.companionAds().setRefreshUnfilledSlots(true);
                 googletag.cmd.push(googletag.display(slotId));
             };
         }(this, slot, slotName, slotId));
