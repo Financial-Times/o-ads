@@ -7,8 +7,8 @@
 
 (function (win, doc, undefined) {
     "use strict";
-
     function switcher() {
+
       /* Initialise FT.corpopup, this should be migrated to into the
       *  membership codebase and removed from here ASAP.
       */
@@ -79,6 +79,8 @@
       }
     }
   };
+
+  FT.ads.beginVideo= function (){return true;};
 
       FT.ads.config({
         collapseEmpty: 'ft',

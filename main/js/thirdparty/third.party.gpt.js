@@ -29,7 +29,38 @@
         // will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
 
-        this.unitName = '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
+
+var getDFPSite = function () {
+   var site = FT.env.dfp_site,
+      env,
+      cookie;
+   if (FT.Properties && FT.Properties.ENV) {
+      env = FT.Properties.ENV.toLowerCase();
+      cookie = FT._ads.utils.cookie("FTQA");
+      if (cookie) {
+         cookie = cookie.replace(/%3D/g, "=");
+         // FTQA cookie present, look for env=live or env=nolive
+         if (cookie.match(/env=live/)) {
+            env = 'live';
+            clientAds.log("FTQA cookie has set ads from live environment");
+            this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from live environment" });
+         }
+         if (cookie.match(/env=nolive/)) {
+            env = 'ci';
+            clientAds.log("using FTQA cookie has set ads from non-live environment");
+            this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from non-live environment" });
+         }
+      }
+      if (env !== 'p' && !env.match(/^live/)) {
+         site = site.replace(/^\w+\./, "test.");
+      }
+   }
+   return site;
+};
+
+
+
+        this.unitName = '/' + [FT.ads.config('network'), getDFPSite(), FT.ads.config('dfp_zone')].join('/');
         return this;
     }
  /**
@@ -49,6 +80,7 @@
         googletag.cmd.push(function (context, slot, slotName, slotId) {
             return function () {
                 slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId)
+                        .addService(googletag.companionAds())
                         .addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
@@ -311,7 +343,7 @@
  * @memberof GPT
  * @lends GPT
 */
-    proto.init = function () {
+  proto.init = function () {
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
 
@@ -322,6 +354,8 @@
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
+            googletag.pubads().enableVideoAds();
+            googletag.companionAds().setRefreshUnfilledSlots(false);
             googletag.enableServices();
         });
 
