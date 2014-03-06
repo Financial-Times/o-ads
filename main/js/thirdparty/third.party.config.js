@@ -49,13 +49,13 @@
                     sizes: [[300,600],[336,850],[300,250],[336,280]]
                 },
                 newssubs: {
-                    sizes: [[239,90]]
+                    sizes: [[270,42]]
                 },
                 refresh: {
                     'sz': '1x1'
                 },
                 searchbox: {
-                    sizes: [[200,28]]
+                    sizes: [[270,42]]
                 },
                 tlbxrib: {
                     sizes: [[336,60]]
