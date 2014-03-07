@@ -62,6 +62,8 @@
       FT.ads.requestNewssubs = function (){
 
       };
+  if (FT.env.dfp_site==="ftcom.5887.video"){FT.ads.videoHub = true;}
+  FT.ads.beginVideo= function (){return true;};
   FT.ads.customSlots = {
     tlbxrib : function() {
        if (FT.env.dfp_site === "ftcom.5887.markets-data" && FT.env.dfp_zone === "equity-and-investment-tearsheets"){
