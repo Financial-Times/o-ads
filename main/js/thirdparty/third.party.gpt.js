@@ -77,10 +77,6 @@
         googletag.cmd.push(function (context, slot, slotName, slotId) {
             return function () {
                 slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
-                if (FT.ads.videoHub)  {
-                    slot.gptSlot.addService(googletag.companionAds());
-                    googletag.pubads().disableInitialLoad();
-                }
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
@@ -354,7 +350,6 @@
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
-            if (FT.ads.videoHub)  {googletag.companionAds().setRefreshUnfilledSlots(false);}
             googletag.enableServices();
         });
 

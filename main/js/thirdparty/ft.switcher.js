@@ -62,7 +62,6 @@
       FT.ads.requestNewssubs = function (){
 
       };
-  if (FT.env.dfp_site==="ftcom.5887.video"){FT.ads.videoHub = true;}
   FT.ads.beginVideo= function (){return true;};
   FT.ads.customSlots = {
     tlbxrib : function() {
