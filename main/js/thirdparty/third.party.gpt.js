@@ -31,7 +31,7 @@
 
         // getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config. 
         var getDFPSite = function () {
-           var site = FT.env.dfp_site,
+           var site = (FT.env) ? FT.env.dfp_site : FT.ads.config('dfp_zone'),
               env,
               cookie;
            if (FT.Properties && FT.Properties.ENV) {
