@@ -18,6 +18,15 @@
     margin-top: 0px;
     padding-top: 0px;
 }
+
+/*
+* Implement new header styles during switch over
+* This should be cleaned up once GPT is release in full.
+*/
+.topSection #header.headerGPT {
+    padding-top: 10px;
+}
+
 #bannerAdvertContainer {
     padding-bottom: 11px;
 }
