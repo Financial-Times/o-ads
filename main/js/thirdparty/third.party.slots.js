@@ -111,6 +111,8 @@
         return container;
     };
 
+
+
 /**
  * Given an element and an Array of sizes in the format [[width,height],[w,h]]
  * the method will apply style rules to center the container, the rules applied are
@@ -123,27 +125,50 @@
 */
     proto.centerContainer = function (container) {
         FT._ads.utils.addClass(container, 'center');
-        // element.style.marginRight = 'auto';
-        // element.style.marginLeft = 'auto';
+    };
 
-        // function getMaximums(sizes) {
-        //     var result = [0, 0];
+/**
+ * Given an array of slotnames will collapse the slots using the collapse method on the slot
+ * @name collapse
+ * @memberof Slots
+ * @lends Slots
+*/
+    proto.collapse = function (slotNames) {
+        var slotName, result = false;
+        if (!FT._ads.utils.isArray(slotNames)){
+            slotNames = [slotNames];
+        }
 
-        //     if (FT._ads.utils.isArray(sizes[0])) {
-        //         for (var i = 0; i < sizes.length; i++){
-        //             result[0] = Math.max(sizes[i][0], result[0]);
-        //             result[1] = Math.max(sizes[i][1], result[1]);
-        //         }
-        //     } else {
-        //         result = sizes;
-        //     }
+        while(slotName = slotNames.pop()) {
+            if(this[slotName] && FT._ads.utils.isFunction(this[slotName].collapse)) {
+                this[slotName].collapse();
+                result = true;
+            }
+        }
 
-        //     return result;
-        // }
+        return result;
+    };
 
-        // var max = getMaximums(sizes);
-        // element.style.minWidth = '1px';
-        // element.style.maxWidth = max[0] + 'px';
+/**
+* Given an array of slotnames will uncollapse the slots using the uncollapse method on the slot
+* @name uncollapse
+* @memberof Slots
+* @lends Slots
+*/
+    proto.uncollapse = function (slotNames) {
+        var slotName, result = false;
+        if (!FT._ads.utils.isArray(slotNames)){
+            slotNames = [slotNames];
+        }
+
+        while(slotName = slotNames.pop()) {
+            if(this[slotName] && FT._ads.utils.isFunction(this[slotName].uncollapse)) {
+                this[slotName].uncollapse();
+                result = true;
+            }
+        }
+
+        return result;
     };
 
 /**
@@ -179,7 +204,15 @@
 
         this[slotName] = {
             container: container,
-            config: config
+            config: config,
+            collapse: function(){
+                FT._ads.utils.addClass(this.container, 'empty');
+                FT._ads.utils.addClass(document.body, 'no-' + container.id);
+            },
+            uncollapse: function(){
+                FT._ads.utils.removeClass(this.container, 'empty');
+                FT._ads.utils.removeClass(document.body, 'no-' + container.id);
+            }
         };
 
         FT.ads.gpt.defineSlot(slotName);

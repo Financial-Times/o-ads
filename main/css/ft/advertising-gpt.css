@@ -3,11 +3,39 @@
     text-align:center;
 }
 
+
+/* remove this rule if transitions are added to all slots */
 .advertising.empty {
     width: 0;
     height: 0;
     display: none;
     visibility: hidden;
+}
+
+/* Uncomment this selector to add transitions to all slots, delete #banlbGPT selector too
+.advertising.empty
+*/
+ .advertising.empty#banlbGPT{
+    height: 0px;
+    display: block; /* remove this rule if  transitions are added to all slots */
+    overflow: hidden;
+    transition: height 250ms ease;
+    -moz-transition: height 250ms ease;
+    -webkit-transition: height 250ms ease;
+    -o-transition: height 250ms ease;
+    visibility: hidden;
+}
+
+/* Uncomment these selectors to add transitions to all slots
+.advertising.empty#tlbxrib, .advertising.empty#tlbxrib2, .advertising.empty#tlbxrib3,
+.advertising.empty#mpu, .advertising.empty#mpu2, .advertising.empty#mpu3,
+.advertising.empty#hlfmpu, .advertising.empty#hlfmpu2, .advertising.empty#hlfmpu3,*/
+.advertising.empty#banlbGPT {
+    min-height: 0px;
+    transition: min-height 250ms ease;
+    -moz-transition: min-height 250ms ease;
+    -webkit-transition: min-height 250ms ease;
+    -o-transition: min-height 250ms ease;
 }
 
 /**
