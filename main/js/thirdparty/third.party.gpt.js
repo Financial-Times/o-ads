@@ -29,7 +29,7 @@
         // will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
 
-        this.unitName = '/' + [FT.ads.config('network'),  getDFPSite(), FT.ads.config('dfp_zone')].join('/');
+        this.unitName = '/' + [FT.ads.config('network'), FT.ad.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         return this;
     }
  /**
