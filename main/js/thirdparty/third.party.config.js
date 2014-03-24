@@ -131,7 +131,7 @@
                 store.dfp_site = site;
             }
         }
-    };
+    }
 
 /**
  * @function
