@@ -7,8 +7,8 @@
 
 (function (win, doc, undefined) {
     "use strict";
-    function switcher() {
 
+    function switcher() {
       /* Initialise FT.corpopup, this should be migrated to into the
       *  membership codebase and removed from here ASAP.
       */
@@ -62,6 +62,7 @@
       FT.ads.requestNewssubs = function (){
 
       };
+  FT.ads.beginVideo= function (){return true;};
   FT.ads.customSlots = {
     tlbxrib : function() {
        if (FT.env.dfp_site === "ftcom.5887.markets-data" && FT.env.dfp_zone === "equity-and-investment-tearsheets"){
@@ -79,8 +80,6 @@
       }
     }
   };
-
-  FT.ads.beginVideo= function (){return true;};
 
       FT.ads.config({
         collapseEmpty: 'ft',
@@ -105,9 +104,83 @@
         }
       });
 
-      FT.ads.gpt.init();
 
+      if (FT.env.dfp_site==="ftcom.5887.video"){FT.ads.videoHub = true;
+        FT.ads.config({
+          collapseEmpty: 'ft',
+          // these are all targeting options
+          metadata: true,
+          audSci: true,
+          krux: true,
+          socialReferrer: true,
+          pageReferrer: true,
+          cookieConsent:  true,
+          timestamp: true,
+          version: true,
+             formats: {
+                  intro: {
+                     
+                  },
+                  banlbGPT: {
+                      sizes: [[728,90], [468,60], [970,90]],
+                      outOfPage: true
+                  },
+                  mpu: {
+                      sizes: [[300,250],[336,280]]
+                  },
+                  doublet: {
+                      sizes: [[352,200]]
+                  },
+                  hlfmpu: {
+                      sizes: [[300,250],[300,600],[336,850],[336,280]]
+                  },
+                  newssubs: {
+                      sizes: [[270,42]]
+                  },
+                  refresh: {
+                      'sz': '1x1'
+                  },
+                  searchbox: {
+                      sizes: [[270,42]]
+                  },
+                  tlbxrib: {
+                      sizes: [[336,60]]
+                  },
+                  marketingrib: {
+                      sizes: [[336,60]]
+                  },
+                  lhn: {
+                      sizes: [[136,64]]
+                  },
+                  tradcent: {
+                      sizes: [[336,260]]
+                  },
+                  mktsdata: { // also matches mktsdata2 and mktsdata3
+                      sizes: [[88,31], [75,25]]
+                  },
+                  mpusky: {
+                      sizes: [[300,250], [336,280],[160,60]]
+                  },
+                  wdesky: {
+                      sizes: [[160,600]]
+                  }
+              },
+          refresh: {
+            time: false,
+            max: 0,
+            art: {
+              time: false
+            },
+            ind: {
+              time: 900
+            }
+          }
+        });
     }
+
+  FT.ads.gpt.init();
+
+  }
 
     switcher();
 }(window, document));

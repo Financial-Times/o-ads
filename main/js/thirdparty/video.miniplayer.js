@@ -49,9 +49,13 @@
          }
          return results.replace(/;$/, '');
       };
-
-      URL = "http://ad.uk.doubleclick.net/N5887/pfadx/" + FT.ads.config('dfp_site') + "/" + FT.ads.config('dfp_zone') + ";sz=592x333,400x225;pos=video;";
-      URL += encodeBaseAdvertProperties('video');
+      if (FT.ads.videoHub)  {
+         URL="http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/ftcom.5887.video/video-hub&sz=592x333&unviewed_position_start=1&scp=pos%3Dvideo";
+      }
+      if (!FT.ads.videoHub)  {
+         URL = "http://ad.uk.doubleclick.net/N5887/pfadx/" + FT.ads.config('dfp_site') + "/" + FT.ads.config('dfp_zone') + ";sz=592x333,400x225;pos=video;";
+         URL += encodeBaseAdvertProperties('video');
+      }
    return  {
       urlStem: URL,
       additionalAdTargetingParams: encodeBaseAdvertProperties('videoExtra', vidKV)
@@ -60,7 +64,3 @@
 
  FT._ads.utils.extend(FT.ads, {buildURLForVideo: buildURLForVideo});
 }(window, document));
-
-
-
-
