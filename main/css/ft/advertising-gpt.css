@@ -3,7 +3,10 @@
     text-align:center;
 }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 /* remove this rule if transitions are added to all slots */
 .advertising.empty {
     width: 0;
@@ -24,6 +27,14 @@
     -webkit-transition: height 250ms ease;
     -o-transition: height 250ms ease;
     visibility: hidden;
+}
+
+/*
+* remove background from iframes in IE8
+*/
+.advertising iframe {
+    background: none transparent;
+
 }
 
 /* Uncomment these selectors to add transitions to all slots
