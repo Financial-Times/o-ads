@@ -3,10 +3,6 @@
     text-align:center;
 }
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 /* remove this rule if transitions are added to all slots */
 .advertising.empty {
     width: 0;
@@ -34,7 +30,6 @@
 */
 .advertising iframe {
     background: none transparent;
-
 }
 
 /* Uncomment these selectors to add transitions to all slots
