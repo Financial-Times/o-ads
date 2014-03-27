@@ -33,7 +33,7 @@
             network: '5887',
             formats: {
                 intro: {
-                   
+
                 },
                 banlbGPT: {
                     sizes: [[728,90], [468,60], [970,90]],
@@ -47,6 +47,9 @@
                 },
                 hlfmpu: {
                     sizes: [[300,600],[336,850],[300,250],[336,280]]
+                },
+                newssubs: {
+                    sizes: [[270,42]]
                 },
                 refresh: {
                     'sz': '1x1'
@@ -117,6 +120,19 @@
             return FT._ads.utils.cookies;
         };
 
+
+    // getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config.
+    function setDFPSiteForEnv() {
+        var env, site = store.dfp_site;
+        if (FT.Properties && FT.Properties.ENV) {
+            env = FT.Properties.ENV.toLowerCase();
+            if (env !== 'p') {
+                site = site.replace(/^\w+\./, "test.");
+                store.dfp_site = site;
+            }
+        }
+    }
+
 /**
  * @function
  * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
@@ -167,10 +183,13 @@
                         var splitSite = (store.dfp_site || '').split('.');
                         splitSite[0] = siteCookie;
                         store.dfp_site = splitSite.join('.');
+                    } else {
+                        setDFPSiteForEnv();
                     }
                 }
             } else {
                 store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
+                setDFPSiteForEnv();
             }
             return store;
         };

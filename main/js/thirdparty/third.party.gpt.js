@@ -273,15 +273,15 @@
             iframe.attachEvent(
                 'onload',
                 function () {
-                    var slotName = container.getAttribute('id');
+                    var slotName = container.getAttribute('id'),
+                        slot = FT.ads.slots[slotName];
                     if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
                     try {
                         var img, imgs = iframe.contentDocument.getElementsByTagName('img');
                         imgs = FT._ads.utils.nodeListToArray(imgs);
                         while (img = imgs.pop()) {
                             if (/ft-no-ad/.test(img.src)) {
-                                FT._ads.utils.addClass(container, 'empty');
-                                document.body.className += " no-" + container.id;
+                                slot.collapse();
                             }
                         }
                     } catch (err) {
@@ -291,14 +291,14 @@
                 }
             );
         } else {
-            var slotName = container.getAttribute('id');
+            var slotName = container.getAttribute('id'),
+                slot = FT.ads.slots[slotName];
             if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
             try {
                 var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
                 while (img = imgs.pop()) {
                     if (/ft-no-ad/.test(img.src)) {
-                        FT._ads.utils.addClass(container, 'empty');
-                        document.body.className += " no-" + container.id;
+                        slot.collapse();
                     }
                 }
             } catch (err) {
