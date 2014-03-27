@@ -29,35 +29,7 @@
         // will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
 
-        // getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config. 
-        var getDFPSite = function () {
-           var site = (FT.env) ? FT.env.dfp_site : FT.ads.config('dfp_zone'),
-              env,
-              cookie;
-           if (FT.Properties && FT.Properties.ENV) {
-              env = FT.Properties.ENV.toLowerCase();
-              cookie = FT._ads.utils.cookie("FTQA");
-              if (cookie) {
-                 cookie = cookie.replace(/%3D/g, "=");
-                 // FTQA cookie present, look for env=live or env=nolive
-                 if (cookie.match(/env=live/)) {
-                    env = 'live';
-                    clientAds.log("FTQA cookie has set ads from live environment");
-                    this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from live environment" });
-                 }
-                 if (cookie.match(/env=nolive/)) {
-                    env = 'ci';
-                    clientAds.log("using FTQA cookie has set ads from non-live environment");
-                    this.addDiagnostic(this.baseAdvert.pos, { "getDFPSite": "using FTQA cookie to set ads from non-live environment" });
-                 }
-              }
-              if (env !== 'p' && !env.match(/^live/)) {
-                 site = site.replace(/^\w+\./, "test.");
-              }
-           }
-           return site;
-        };
-        this.unitName = '/' + [FT.ads.config('network'),  getDFPSite(), FT.ads.config('dfp_zone')].join('/');
+        this.unitName = '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         return this;
     }
  /**
@@ -80,7 +52,7 @@
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
-                if (FT.ads.videoHub)  {
+                if (FT.ads.enableCompanionAds)  {
                     slot.gptSlot.addService(googletag.companionAds());
                 }
                 googletag.cmd.push(googletag.display(slotId));
@@ -353,11 +325,13 @@
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
-            if (FT.ads.videoHub)  {
+        if (FT.ads.enableVideoAds)   {
                 googletag.pubads().enableVideoAds();
+        }
+        if (FT.ads.enableCompanionAds)   {
                 googletag.pubads().disableInitialLoad();
                 googletag.companionAds().setRefreshUnfilledSlots(true);
-            }
+        }
             googletag.enableServices();
         });
 
