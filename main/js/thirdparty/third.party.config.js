@@ -108,7 +108,11 @@
  * fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
  */
         var fetchGlobalConfig = function() {
-            return FT._ads.utils.isObject(FT.env) ? FT.env : {};
+            if (!FT._ads.utils.isObject(FT.env)){return {};}
+            if (FT._ads.utils.isObject(FT.env)){
+                if (typeof FT.env.dfp_site==='undefined' || FT.env.dfp_site==='' ){FT.env.dfp_site ='ftcom.5887.unclassified'; FT.env.dfp_zone='unclassified';}
+                return FT.env;
+            }
         };
 /**
  * @private
@@ -191,10 +195,6 @@
                 store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
                 setDFPSiteForEnv();
             }
-/**
- * if the dfp_site value has not been set for a page then we set the dfp_site to 'unclassified'
- */
-            if (typeof store.dfp_site === 'undefined'){store.dfp_site = 'unclassified';}
             return store;
         };
 

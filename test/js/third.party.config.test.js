@@ -120,8 +120,9 @@
             TEST.beginNewPage({
                global: {}
             });
+            console.log(FT.env);
             result = FT.ads.config('dfp_site');
-            strictEqual(result,'unclassified');
+            strictEqual(result,'ftcom.5887.unclassified');
         });
     }
 
