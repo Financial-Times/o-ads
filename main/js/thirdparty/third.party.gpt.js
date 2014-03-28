@@ -52,7 +52,7 @@
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
-                if (FT.ads.enableCompanionAds)  {
+                if (FT.ads.config('enableCompanionAds')) {
                     slot.gptSlot.addService(googletag.companionAds());
                 }
                 googletag.cmd.push(googletag.display(slotId));
@@ -325,10 +325,10 @@
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
-        if (FT.ads.enableVideoAds)   {
+        if (FT.ads.config('enableVideoAds'))   {
                 googletag.pubads().enableVideoAds();
         }
-        if (FT.ads.enableCompanionAds)   {
+        if (FT.ads.config('enableCompanionAds'))   {
                 googletag.pubads().disableInitialLoad();
                 googletag.companionAds().setRefreshUnfilledSlots(true);
         }

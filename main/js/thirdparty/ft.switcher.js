@@ -105,9 +105,9 @@
       });
 
       if (FT.ads.config('dfp_site')==="ftcom.5887.video"){
-        FT.ads.enableCompanionAds = true;
-        FT.ads.enableVideoAds = true;
-    }
+        FT.ads.config('enableCompanionAds', true);
+        FT.ads.config('enableVideoAds', true);
+      }
 
   FT.ads.gpt.init();
 
