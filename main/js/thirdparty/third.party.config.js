@@ -110,7 +110,7 @@
         var fetchGlobalConfig = function() {
             if (!FT._ads.utils.isObject(FT.env)){return {};}
             if (FT._ads.utils.isObject(FT.env)){
-                if (typeof FT.env.dfp_site==='undefined' || FT.env.dfp_site==='' ){FT.env.dfp_site ='ftcom.5887.unclassified'; FT.env.dfp_zone='unclassified';}
+                if (!FT._ads.utils.isNonEmptyString(FT.env.dfp_site)){FT.env.dfp_site ='ftcom.5887.unclassified'; FT.env.dfp_zone='unclassified';}
                 return FT.env;
             }
         };
