@@ -191,6 +191,10 @@
                 store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
                 setDFPSiteForEnv();
             }
+/**
+ * if the dfp_site value has not been set for a page then we set the dfp_site to 'unclassified'
+ */
+            if (typeof store.dfp_site === 'undefined'){store.dfp_site = 'unclassified';}
             return store;
         };
 
