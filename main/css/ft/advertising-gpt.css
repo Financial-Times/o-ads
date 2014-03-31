@@ -10,17 +10,6 @@
     visibility: hidden;
 }
 
-/**
-* Remove margin from old absolutely positioned banlb slot
-* This should be cleaned up once GPT is release in full.
-*/
-.topSection #header {
-    margin-top: 0px;
-    padding-top: 0px;
-}
-#bannerAdvertContainer {
-    padding-bottom: 11px;
-}
 /* RAIL ADS */
 #tlbxrib, #tlbxrib2, #tlbxrib3 { margin:0 ; padding:0 5px 5px 0; min-height:60px ; background-color:#fff1e0 ; }
 .msie #tlbxrib  { height:60px ; }
