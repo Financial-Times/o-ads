@@ -11,6 +11,7 @@
     visibility: hidden;
 }
 
+<<<<<<< HEAD
 /* Uncomment this selector to add transitions to all slots, delete #banlbGPT selector too
 .advertising.empty
 */
@@ -26,7 +27,7 @@
 }
 
 /*
-* remove background from iframes in IE8
+* remove background from iframes
 */
 .advertising iframe {
     background: none transparent;
@@ -42,31 +43,6 @@
     -moz-transition: min-height 250ms ease;
     -webkit-transition: min-height 250ms ease;
     -o-transition: min-height 250ms ease;
-}
-
-/**
-* Remove margin from old absolutely positioned banlb slot
-* This should be cleaned up once GPT is release in full.
-*/
-.topSection #header {
-    margin-top: 0px;
-    padding-top: 0px;
-}
-
-/*
-* Implement new header styles during switch over
-* This should be cleaned up once GPT is release in full.
-*/
-.topSection #header.headerGPT {
-    padding-top: 10px;
-}
-
-.headerGPT #bannerAdvertContainer {
-    padding-bottom: 0;
-}
-
-#bannerAdvertContainer {
-    padding-bottom: 11px;
 }
 
 /* RAIL ADS */
