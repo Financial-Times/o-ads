@@ -1,4 +1,4 @@
-/*globals googletag: true */
+ /*globals googletag: true */
 
 /**
  * @fileOverview
@@ -52,9 +52,8 @@
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
-                if (FT.ads.config('enableCompanionAds')) {
-                    slot.gptSlot.addService(googletag.companionAds());
-                }
+                context.addCompanionService(slot);
+
                 googletag.cmd.push(googletag.display(slotId));
             };
         }(this, slot, slotName, slotId));
@@ -125,6 +124,19 @@
         return targeting;
     };
 
+/**
+ * Add a companion service to the GPT slot base on enableCompanionAds configuration
+ * @name setCompanionService
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.addCompanionService = function (slot) {
+        if (FT.ads.config('companions') && slot.config.companion !== false) {
+            slot.gptSlot.addService(googletag.companionAds());
+        }
+        return slot;
+    };
+
     /**
      * Starts a timer to refresh all ads on the page after
      * a time specified in config refreshTime, maximum number of
@@ -176,6 +188,7 @@
             this.refreshTimer.stop();
         }
     };
+
 /**
  * Sets the GPT collapse empty mode for the page
  * values can be 'after', 'before', 'never', 'ft'
@@ -204,6 +217,37 @@
             googletag.pubads().collapseEmptyDivs(mode);
         });
         return mode;
+    };
+
+/**
+ * Enables video ads
+ * @name enableVideo
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.enableVideo = function () {
+        if (FT.ads.config('video'))   {
+            googletag.pubads().enableVideoAds();
+        }
+    };
+
+
+/**
+ * Enables companion service for ad slots and
+ * values can be 'after', 'before', 'never', 'ft'
+ * after as in after ads have rendered is the default
+ * true is synonymous with before
+ * false is synonymous with never
+ * ft uses our collapse method from the slots module, which is only attached at slot level
+ * @name setPageTargeting
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.enableCompanions = function () {
+        if (FT.ads.config('companions'))   {
+            googletag.pubads().disableInitialLoad();
+            googletag.companionAds().setRefreshUnfilledSlots(true);
+        }
     };
 
 /**
@@ -315,6 +359,7 @@
  * @lends GPT
 */
     proto.init = function () {
+        var context = this;
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
 
@@ -325,14 +370,9 @@
 
         googletag.cmd.push( function () {
             googletag.pubads().enableAsyncRendering();
-        if (FT.ads.config('enableVideoAds'))   {
-                googletag.pubads().enableVideoAds();
-        }
-        if (FT.ads.config('enableCompanionAds'))   {
-                googletag.pubads().disableInitialLoad();
-                googletag.companionAds().setRefreshUnfilledSlots(true);
-        }
             googletag.enableServices();
+            context.enableVideo();
+            context.enableCompanions();
         });
 
         return this;
