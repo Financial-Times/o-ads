@@ -369,10 +369,11 @@
         this.setPageCollapseEmpty();
 
         googletag.cmd.push( function () {
-            googletag.pubads().enableAsyncRendering();
-            googletag.enableServices();
             context.enableVideo();
             context.enableCompanions();
+            googletag.pubads().enableAsyncRendering();
+            googletag.enableServices();
+
         });
 
         return this;
