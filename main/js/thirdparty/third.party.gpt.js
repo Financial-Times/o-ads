@@ -125,8 +125,9 @@
     };
 
 /**
- * Add a companion service to the GPT slot base on enableCompanionAds configuration
- * @name setCompanionService
+ * Add a companion service to the GPT slot if companions are on and the slot
+ * configuration doesn't exclude the slot
+ * @name addCompanionService
  * @memberof GPT
  * @lends GPT
 */
@@ -233,13 +234,9 @@
 
 
 /**
- * Enables companion service for ad slots and
- * values can be 'after', 'before', 'never', 'ft'
- * after as in after ads have rendered is the default
- * true is synonymous with before
- * false is synonymous with never
- * ft uses our collapse method from the slots module, which is only attached at slot level
- * @name setPageTargeting
+ * When companions are enabled we delay the rendering of ad slots until
+ * either a master is returned or all slots are returned without a master
+ * @name enableCompanions
  * @memberof GPT
  * @lends GPT
 */
