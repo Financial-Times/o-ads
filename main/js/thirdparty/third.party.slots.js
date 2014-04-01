@@ -26,7 +26,7 @@
  * @lends Slots
 */
     proto.fetchSlotConfig = function  (container, slotName, config) {
-         if (slotName === "searchbox") {slotName = "newssubs";}
+        if (slotName === "searchbox") {slotName = "newssubs";}
         var attrs, attr, attrObj, name, matches, parser,
             sizes = [],
             targeting = {pos: slotName},

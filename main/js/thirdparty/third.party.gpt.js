@@ -1,4 +1,4 @@
-/*globals googletag: true */
+ /*globals googletag: true */
 
 /**
  * @fileOverview
@@ -52,6 +52,8 @@
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+                context.addCompanionService(slot);
+
                 googletag.cmd.push(googletag.display(slotId));
             };
         }(this, slot, slotName, slotId));
@@ -122,6 +124,20 @@
         return targeting;
     };
 
+/**
+ * Add a companion service to the GPT slot if companions are on and the slot
+ * configuration doesn't exclude the slot
+ * @name addCompanionService
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.addCompanionService = function (slot) {
+        if (FT.ads.config('companions') && slot.config.companion !== false) {
+            slot.gptSlot.addService(googletag.companionAds());
+        }
+        return slot;
+    };
+
     /**
      * Starts a timer to refresh all ads on the page after
      * a time specified in config refreshTime, maximum number of
@@ -173,6 +189,7 @@
             this.refreshTimer.stop();
         }
     };
+
 /**
  * Sets the GPT collapse empty mode for the page
  * values can be 'after', 'before', 'never', 'ft'
@@ -201,6 +218,33 @@
             googletag.pubads().collapseEmptyDivs(mode);
         });
         return mode;
+    };
+
+/**
+ * Enables video ads
+ * @name enableVideo
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.enableVideo = function () {
+        if (FT.ads.config('video'))   {
+            googletag.pubads().enableVideoAds();
+        }
+    };
+
+
+/**
+ * When companions are enabled we delay the rendering of ad slots until
+ * either a master is returned or all slots are returned without a master
+ * @name enableCompanions
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.enableCompanions = function () {
+        if (FT.ads.config('companions'))   {
+            googletag.pubads().disableInitialLoad();
+            googletag.companionAds().setRefreshUnfilledSlots(true);
+        }
     };
 
 /**
@@ -312,6 +356,7 @@
  * @lends GPT
 */
     proto.init = function () {
+        var context = this;
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
 
@@ -321,8 +366,11 @@
         this.setPageCollapseEmpty();
 
         googletag.cmd.push( function () {
+            context.enableVideo();
+            context.enableCompanions();
             googletag.pubads().enableAsyncRendering();
             googletag.enableServices();
+
         });
 
         return this;
