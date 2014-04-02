@@ -25,6 +25,10 @@
     visibility: hidden;
 }
 
+.topSection #header {
+    margin-top: 0;
+}
+
 /*
 * remove background from iframes
 */
