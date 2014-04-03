@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="QUnit tests" verbose="1" parallel="tests" thread-count="20" data-provider-thread-count="20">
+
+    <!-- Selenium Grid hub connection details -->
+    <parameter name="seleniumHost" value="localhost" />
+    <parameter name="seleniumPort" value="4444" />
+
+    <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
+    <parameter name="majorBrowsers" value="iexplore8-on-windows,firefox3-on-windows,googlechrome-on-windows" />
+
+    <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
+    <parameter name="localBrowsers" value="*googlechrome" />
+
+    <parameter name="testRoot" value="target/test-classes" />
+
+    <listeners>
+        <listener class-name="org.uncommons.reportng.HTMLReporter" />
+    </listeners>
+
+    <test name="Chrome">
+        <parameter name="browser" value="*googlechrome" />
+        <parameter name="include" value="exclude" />
+        <classes>
+            <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
+        </classes>
+    </test>
+</suite>
