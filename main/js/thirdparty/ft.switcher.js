@@ -54,7 +54,8 @@
                         FT.corppop.getHTMLAd(pos, inj, URL);
                     }
                 }
-            } else {
+            }
+            else {
                 FT.ads.slots.initSlot.apply(FT.ads.slots, arguments);
             }
         };
