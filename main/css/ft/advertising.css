@@ -1,3 +1,19 @@
+/* Start switchover styles *
+* These styles are temporary while we switch over to GPT
+* Some will need to be added back into core.css in ft-cms if we rollback gpt
+*/
+
+#bannerAdvertContainer {
+    display: none;
+    visibility: hidden;
+}
+
+.topSection #header {
+    margin: 93px 0 0 0;
+}
+
+/* End switchover styles */
+
 .introAd { position:absolute ; top:-1px ; }
 
 .advertising { clear:left ; }
