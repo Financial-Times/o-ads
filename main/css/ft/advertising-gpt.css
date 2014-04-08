@@ -27,14 +27,7 @@
 
 .topSection #header {
     margin-top: 0;
-    padding-top: 0;
 
-}
-
-.topAds {
-    position: static;
-    display: none;
-    visibility: hidden;
 }
 
 /*
