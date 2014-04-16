@@ -1,0 +1,106 @@
+/* mpu-expand.css */
+
+#overlay-close {
+	position: absolute; 
+	right:8px; top:8px;
+	padding:4px 11px;
+	border: solid 1px #AAAAAA;
+	border-radius: 5px;
+	color: #AAAAAA;
+	text-decoration: none;
+	background: transparent;
+}
+#overlay-close:active {
+	border-color: #FF0000;
+	color: #FF0000;
+
+}
+
+#expand-overlay{
+			width:1024px;
+			height:1024px; 
+			background-color:rgba(0,0,0,0.7); 
+			opacity:0;
+			position:absolute;
+			z-index : 2000000;
+}
+
+#expand-content {
+			width:736px;
+			height:652px;
+			background: url('noble-expanded-bg.png') rgba(200,200,200,1);
+			color: #ffffff;
+			position:relative;
+			z-index:2000001;
+			border-radius: 2px;
+}
+#expand-video-holder {
+	width: 640px;
+	height: 360px;
+	background: #000000;
+	color: #ffffff;
+	position: absolute;
+	top: 96px;
+	left: 48px;
+	z-index: 2000002;
+}
+#expand-thumbs {
+	width: 736px;
+	height: 94px;
+	position: absolute;
+	top: 505px;
+	left: 0;
+}
+#expand-left-arrow {
+	position: absolute;
+	top: 27px;
+	left: 5px;
+	cursor: pointer;
+}
+#expand-right-arrow {
+	position: absolute;
+	top: 27px;
+	right: 5px;
+	cursor: pointer;
+}
+#expand-thumbs-viewport {
+	width: 644px;
+	height: 120px;
+	position: absolute;
+	top: 0;
+	left: 47px;
+	margin-left: -1px;
+	overflow: hidden;
+}
+#expand-thumbs-viewport ul {
+	width: 9999px;
+	position: relative;
+	margin: 0;
+	margin-left: 2px;
+	padding: 0;
+}
+
+#expand-thumbs-viewport li {
+	float: left;
+	margin-right: 13px;
+	margin-top: 5px;
+	list-style-type: none;
+
+}
+#expand-thumbs-viewport li img {
+	box-shadow: 1px 2px 2px rgba(0,0,0,0.7);
+}
+#expand-thumbs-viewport li img.active {
+	border: solid 2px #ffffff;
+	margin: -2px;
+}
+#expand-cta {
+	position: absolute;
+	bottom: 15px;
+	right: 46px;
+}
+#expand-caption {
+	position: absolute;
+	bottom: 145px;
+	left: 46px;
+}
