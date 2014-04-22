@@ -15,14 +15,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-   <link rel="stylesheet" href="../../../h5admaker/css/style.css?v=2">
+   <link rel="stylesheet" href="../../h5admaker/css/style.css?v=2">
    <link rel="stylesheet" href="../../css/qunit.css" type="text/css" media="screen">
-
-  <style type="text/css">
 
 <!-- THIS CONTENT WAS INJECTED BY inject-admaker.pl DO NOT EDIT BY HAND
       THE MAKE FILE UPDATES THIS CONTENT AUTOMATICALLY
 -->
+  <style type="text/css">
+
 
 
       /* STYLES NEEDED IN THE WEBAPP FOR FULLPAGE CENTERING */
@@ -35,32 +35,29 @@
       div.dfp-landscape img.dfp-fullpage-portrait  { display: none; }
       div.dfp-portrait img.dfp-fullpage-landscape  { display: none; }
       div.dfp-portrait img.dfp-fullpage-portrait   { display: block; }
-      
+
       /* OVERRIDES DUE TO ADMAKER DIFFERENCES */
       #fullpage { height:inherit; width:inherit; padding:0px; margin:0px; }
       .dfpadplaceholder { height:inherit; width:inherit; padding:0px; margin:0px; }
       .fullpage-advert-container { overflow: visible; background-image:url('img/admaker-stipple.png'); }
-  
-
-<!-- END OF CONTENT INJECTED BY inject-admaker.pl DO NOT EDIT THE ABOVE BY HAND -->
-
 
 </style>
+<!-- END OF CONTENT INJECTED BY inject-admaker.pl DO NOT EDIT THE ABOVE BY HAND -->
 
-   <script src="../../lib/qunit/qunit.js"></script>
+   <script src="../../lib/qunit/qunit-1.12.0.js"></script>
    <!--[if lt IE 8 ]> <script src="../../QUnitChainer/json2/json2.js"></script> <![endif]-->
 
-   <script src="../../lib/test-helpers/test-helpers.html.js"></script>
+   <script src="../../js/util/test-helpers.h5admaker.js"></script>
    <script src="../../lib/jquery/jquery-1.7.2.js"></script>
-   <script src="../../lib/qunitchainer/QUnitChainer.js"></script>
-   <script src="../../../h5admaker/js/jquery.event.drag-1.5.min.js"></script>
-   <script src="../../../h5admaker/js/libs/modernizr.custom.96736.js"></script>
+   <script src="../../js/util/QUnitChainer.js"></script>
+   <script src="../../h5admaker/js/jquery.event.drag-1.5.min.js"></script>
+   <script src="../../h5admaker/js/libs/modernizr.custom.96736.js"></script>
    <script src="../../lib/sinon/sinon-1.1.1.js"></script>
    <script src="../../lib/sinon/sinon-ie-1.1.1.js"></script>
-   <script src="../../lib/sinon/sinon-qunit-spyonly-1.0.0.js"></script>
+
 
    <!--  Enable for unbundled ad library -->
-   <script src="../../../ads.js"></script>
+   <script src="../../h5admaker/js/ads.js"></script>
 
    <!--  Enable for debugging -->
    <!--
@@ -69,8 +66,8 @@
    -->
 
    <!-- scripts concatenated and minified via ant build script-->
-   <script src="../../../h5admaker/js/admaker.js"></script>
-   <script src="../../../h5admaker/js/plugins.js"></script>
+   <script src="../../h5admaker/js/admaker.js"></script>
+   <script src="../../h5admaker/js/plugins.js"></script>
    <!-- end scripts-->
   <!-- BDD js code -->
   <script src="js/US16403.js"></script>
@@ -160,7 +157,7 @@ jQuery(document).ready(function () {
   <!-- Fullpage Ad Maker Added -->
     <div id="no_jquery" class="warnings">jQuery is missing. This won't be working.</div>
     <div id="no_permission" class="warnings">Sorry you do not have permission to view this page.</div>
-    <!-- 
+    <!--
     <div id="no_ghostwriter" class="warnings hidden">Ghostwriter is missing. Ad preview will not work.</div>
      -->
     <div id="main" role="main" style="display: none;">
@@ -172,15 +169,15 @@ jQuery(document).ready(function () {
           <option value='imageAd'>Image Ad</option>
           <option value='richAd'>Rich Media Ad</option>
           <option value='fullpageAd'>Full Page Ad</option>
-          <option value='browseJSONAd'>Browse JSON Ad</option>          
+          <option value='browseJSONAd'>Browse JSON Ad</option>
         </select>
       </form>
       </div>
       <div id="formWarnings" class="warnings hidden handle" style="position: relative; width:70%;">initial formWarnings text should be hidden</div>
       <div id="supportEmail" class="warnings hidden handle" style="position: relative; width:70%;">Direct queries about this tool to ads.enabling.team@ft.com</div>
-      
+
       <div id="adDiv" class="dimmer handle"></div>
-      
+
       <div id="adMaker" style="display: none;">
       <form name="fields" id="fields" method="post" action="#">
         <div id='adNameDiv'>
@@ -226,7 +223,7 @@ jQuery(document).ready(function () {
             </td>
           </tr>
         </table>
-        </div>  
+        </div>
         <div id='imagePortraitUrlDiv'>
         <table>
           <tr>
@@ -237,7 +234,7 @@ jQuery(document).ready(function () {
             </td>
           </tr>
         </table>
-        </div>  
+        </div>
         <div id='imageAltTextDiv'>
         <table>
           <tr>
@@ -313,7 +310,7 @@ jQuery(document).ready(function () {
           </tr>
         </table>
         </div>
-   
+
         <div id='reviewAndResetReviewButtonsDiv'>
         <table>
           <tr>
@@ -349,8 +346,8 @@ jQuery(document).ready(function () {
     </div>
     <div id="documentationDiv" class="docText handle">
       <p><i>Usage documentation for this tool is <a target="_docs" href="https://neo.pearson.com/docs/DOC-102633">here</a>.</i></p>
-    </div>  
-      
+    </div>
+
     <footer>
     </footer>
   </div>
@@ -362,13 +359,13 @@ jQuery(document).ready(function () {
   </div>
 
   <div id="adCheckerDiv" class="hidden"></div>
-  
+
   <!-- <script src="js/admaker.js"></script> DISABLED BY inject-admaker.pl -->
   <!-- <script src="js/plugins.js"></script> DISABLED BY inject-admaker.pl -->
   <!-- end scripts-->
 
   <!--[if lt IE 7 ]>
-<script src="../../../h5admaker/js/libs/dd_belatedpng.js"></script>
+<script src="../../h5admaker/js/libs/dd_belatedpng.js"></script>
 <script>DD_belatedPNG.fix("img, .png_bg"); </script>
 <![endif] -->
 

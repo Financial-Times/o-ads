@@ -1,6 +1,6 @@
 /*jslint regexp: true, browser: true, debug: false, sloppy: true, evil: true, white: true, maxerr: 1000, indent: 3 */
 
-/*global $, same, expect, BDD: true, matches, notMatches, jQuery, FT, initPage, sinon, fileLoad, window, escape
+/*global $, deepEqual, expect, BDD: true, matches, notMatches, jQuery, FT, initPage, sinon, fileLoad, window, escape
 */
 
 /*properties
@@ -58,10 +58,10 @@ var BDD = {
    'VERSION': "$Id$",
    'genericFunctions': {
       'selectAd' : function (selectVal) {
-         same(jQuery("#adTypeChoice").length > 0, true, 'select button does exist on page');
+         deepEqual(jQuery("#adTypeChoice").length > 0, true, 'select button does exist on page');
          jQuery("#adTypeChoice").val(selectVal);
          jQuery("#adTypeChoice").trigger('change');
-         same(jQuery('#adMaker').css('display'), 'block', 'after selection, div #adMaker should be display:block');
+         deepEqual(jQuery('#adMaker').css('display'), 'block', 'after selection, div #adMaker should be display:block');
       },
       'injectImageAdValuesIntoForm' : function () {
          jQuery("#adName").val("TestAd");
@@ -123,50 +123,47 @@ var BDD = {
    },
    // Scenario0
    'initialFormPopulation': {
-      'givenAUserOnTheAdvertBuilderPage': function () {
-         expect(0);
+      'givenAUserOnTheAdvertBuilderPage': function (noexpect) {
          // check for existence of FT_U cookie and eid?
           FT.cookies.FT_U = 'eid=6197937';
           initPage.activateDivs(FT.cookies);
           // reset the form
           jQuery("#resetReviewButton").trigger('click');
-          same(jQuery('#container').html().indexOf('FT Web App JSON Ad Builder Tool') !== -1, true, 'FT Web App JSON Ad Builder Tool should be present' );
-          same(jQuery('#adTypeChoice') !== null, true, 'select adTypeChoice should be present' );
+          deepEqual(jQuery('#container').html().indexOf('FT Web App JSON Ad Builder Tool') !== -1, true, 'FT Web App JSON Ad Builder Tool should be present' );
+          deepEqual(jQuery('#adTypeChoice') !== null, true, 'select adTypeChoice should be present' );
 
       },
       'whenAUserFirstViewsThePage': function () {
          expect(1);
          // check that the master div for the page is open and that the div containing
-          same(jQuery('#main').css('display'), 'block', 'div #main should be display:block');
+          deepEqual(jQuery('#main').css('display'), 'block', 'div #main should be display:block');
       },
       'thenTheSelectionBoxWillBeEmpty': function () {
-         same(jQuery('#adTypeChoice').val(), '', 'dropdown adTypeChoice should have no selected value');
+         deepEqual(jQuery('#adTypeChoice').val(), '', 'dropdown adTypeChoice should have no selected value');
       },
       'andNoOtherFormFieldsWillBeVisible': function () {
          // the sorry you dont have permissions message is closed
-          same(jQuery('#no_permission').css('display'), 'none', 'div #no_permission should be display:none');
+          deepEqual(jQuery('#no_permission').css('display'), 'none', 'div #no_permission should be display:none');
           // the div no_jquery should be hidden
-          same(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
+          deepEqual(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
           // the div adMaker should be hidden
-          same(jQuery('#adMaker').css('display'), 'none', 'div #adMaker should be hidden');
+          deepEqual(jQuery('#adMaker').css('display'), 'none', 'div #adMaker should be hidden');
           // the div adCheckerDiv should be hidden
-          same(jQuery('#adCheckerDiv').hasClass('hidden'), true, 'div #adCheckerDiv should be hidden');
+          deepEqual(jQuery('#adCheckerDiv').hasClass('hidden'), true, 'div #adCheckerDiv should be hidden');
           // the div adDiv should be hidden
-          same(jQuery('#adDiv').css('display'), 'none', 'div #adDiv should be hidden');
+          deepEqual(jQuery('#adDiv').css('display'), 'none', 'div #adDiv should be hidden');
           // zblat should be hidden
-          same(jQuery('#zblat').css('visibility'), 'hidden', 'div #zblat should not be visible');
+          deepEqual(jQuery('#zblat').css('visibility'), 'hidden', 'div #zblat should not be visible');
           // formWarnings should be hidden
-          same(jQuery('#formWarnings').css('visibility'), 'hidden', 'div #formWarnings should not be visible');
+          deepEqual(jQuery('#formWarnings').css('visibility'), 'hidden', 'div #formWarnings should not be visible');
            // helpTextDiv should be hidden
-          same(jQuery('#helpTextDiv').css('display'), 'none', 'div #helpTextDiv should be hidden');
+          deepEqual(jQuery('#helpTextDiv').css('display'), 'none', 'div #helpTextDiv should be hidden');
 
       }
    },
    'simpleImageAdvert': {
       'givenAUserOnTheAdvertBuilderPage': function (noexpect) {
-         if (typeof noexpect === "undefined") {
-            expect(2);
-         }
+         // expect(2);
 
          // check for existence of FT_U cookie and eid?
          FT.cookies.FT_U = 'eid=6197937';
@@ -174,9 +171,9 @@ var BDD = {
          // reset the form
          jQuery("#resetButton").trigger('click');
          // check that the master div for the page is open and that the div containing
-         same(jQuery('#main').css('display'), 'block', 'div #main should be display:block');
+         deepEqual(jQuery('#main').css('display'), 'block', 'div #main should be display:block');
          // the sorry you dont have permissions message is closed
-         same(jQuery('#no_permission').css('display'), 'none', 'div #no_permission should be display:none');
+         deepEqual(jQuery('#no_permission').css('display'), 'none', 'div #no_permission should be display:none');
       },
       'whenAUserSelectsToCreateASimpleImageAdvert': function () {
          expect(2);
@@ -185,23 +182,23 @@ var BDD = {
       },
       'thenOnlyTheFieldsRequiredForASimpleImageAdvertWillBeAvailableForDataEntry': function () {
          expect(5);
-         // check that all other fields are collapsed         
-         same(jQuery('#customHtmlDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
-         same(jQuery('#outputDiv').css('display'), 'none', 'div #outputDiv should be display=none');
-         same(jQuery('#loadFileDiv').css('display'), 'none', 'div #loadFileDiv should be display=none');
-         same(jQuery('#reviewAndResetReviewButtonsDiv').css('display'), 'none', 'div #reviewAndResetReviewButtonsDiv should be display=none');
-         same(jQuery('#zblat').css('display'), 'none', 'div #zblat should be display=none');
+         // check that all other fields are collapsed
+         deepEqual(jQuery('#customHtmlDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
+         deepEqual(jQuery('#outputDiv').css('display'), 'none', 'div #outputDiv should be display=none');
+         deepEqual(jQuery('#loadFileDiv').css('display'), 'none', 'div #loadFileDiv should be display=none');
+         deepEqual(jQuery('#reviewAndResetReviewButtonsDiv').css('display'), 'none', 'div #reviewAndResetReviewButtonsDiv should be display=none');
+         deepEqual(jQuery('#zblat').css('display'), 'none', 'div #zblat should be display=none');
       },
       'theseFieldsBeingImageURLClickURLAdNameAndAltText': function () {
          expect(7);
          // check that the fields for adding an image exist and are editable
-         same(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
-         same(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'block', 'div #thirdPartyImpressionUrlDiv should be display=block');
-         same(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
-         same(jQuery('#imageUrlDiv').css('display'), 'block', 'div #imageUrlDiv should be display=block');
-         same(jQuery('#clickUrlDiv').css('display'), 'block', 'div #clickUrlDiv should be display=block');
-         same(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtons should be display=block');
+         deepEqual(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
+         deepEqual(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'block', 'div #thirdPartyImpressionUrlDiv should be display=block');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
+         deepEqual(jQuery('#imageUrlDiv').css('display'), 'block', 'div #imageUrlDiv should be display=block');
+         deepEqual(jQuery('#clickUrlDiv').css('display'), 'block', 'div #clickUrlDiv should be display=block');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtons should be display=block');
       }
    },
    'hTML5Advert': {
@@ -214,20 +211,20 @@ var BDD = {
       },
       'thenOnlyTheFieldsRequiredForTheHTML5AdvertShouldDisplay': function () {
          expect(7);
-         same(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
-         same(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'none', 'div #thirdPartyImpressionUrlDiv should be display=none');
-         same(jQuery('#imageUrlDiv').css('display'), 'none', 'div #imageUrlDiv should be display=none');
-         same(jQuery('#clickUrlDiv').css('display'), 'none', 'div #clickUrlDiv should be display=none');
-         same(jQuery('#outputDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
-         same(jQuery('#loadFileDiv').css('display'), 'none', 'div #loadFileDiv should be display=none');
-         same(jQuery('#reviewAndResetReviewButtonsDiv').css('display'), 'none', 'div #reviewAndResetReviewButtonsDiv should be display=none');
+         deepEqual(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
+         deepEqual(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'none', 'div #thirdPartyImpressionUrlDiv should be display=none');
+         deepEqual(jQuery('#imageUrlDiv').css('display'), 'none', 'div #imageUrlDiv should be display=none');
+         deepEqual(jQuery('#clickUrlDiv').css('display'), 'none', 'div #clickUrlDiv should be display=none');
+         deepEqual(jQuery('#outputDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
+         deepEqual(jQuery('#loadFileDiv').css('display'), 'none', 'div #loadFileDiv should be display=none');
+         deepEqual(jQuery('#reviewAndResetReviewButtonsDiv').css('display'), 'none', 'div #reviewAndResetReviewButtonsDiv should be display=none');
       },
       'theseFieldsBeingAdNameAltTextAndAdvertCode': function () {
          expect(4);
-         same(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
-         same(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
-         same(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertAndResetButtons should be display=block');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
+         deepEqual(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertAndResetButtons should be display=block');
       }
    },
 
@@ -242,16 +239,16 @@ var BDD = {
       'thenABrowseFunctionWillDisplay': function () {
          expect(9);
          // other divs should be shut
-         same(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
-         same(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'none', 'div #thirdPartyImpressionUrlDiv should be display=none');
-         same(jQuery('#imageUrlDiv').css('display'), 'none', 'div #imageUrlDiv should be display=none');
-         same(jQuery('#clickUrlDiv').css('display'), 'none', 'div #clickUrlDiv should be display=none');
-         same(jQuery('#adNameDiv').css('display'), 'none', 'div #adNameDiv should be display=none');
-         same(jQuery('#imageAltTextDiv').css('display'), 'none', 'div #imageAltTextDiv should be display=none');
-         same(jQuery('#customHtmlDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
+         deepEqual(jQuery('#impressionUrlDiv').css('display'), 'none', 'div #impressionUrlDiv should be display=none');
+         deepEqual(jQuery('#thirdPartyImpressionUrlDiv').css('display'), 'none', 'div #thirdPartyImpressionUrlDiv should be display=none');
+         deepEqual(jQuery('#imageUrlDiv').css('display'), 'none', 'div #imageUrlDiv should be display=none');
+         deepEqual(jQuery('#clickUrlDiv').css('display'), 'none', 'div #clickUrlDiv should be display=none');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'none', 'div #adNameDiv should be display=none');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'none', 'div #imageAltTextDiv should be display=none');
+         deepEqual(jQuery('#customHtmlDiv').css('display'), 'none', 'div #customHtmlDiv should be display=none');
          // output div should be open
-         same(jQuery('#loadFileDiv').css('display'), 'block', 'div #loadFileDiv should be display=block');
-         same(jQuery('#outputDiv').css('display'), 'block', 'div #outputDiv should be display=block');
+         deepEqual(jQuery('#loadFileDiv').css('display'), 'block', 'div #loadFileDiv should be display=block');
+         deepEqual(jQuery('#outputDiv').css('display'), 'block', 'div #outputDiv should be display=block');
       },
       'andTheUserWillBeAbleToOpenAFileAndPreview' : function () {
          expect(2);
@@ -260,8 +257,8 @@ var BDD = {
          // BDD.genericFunctions.mockJSONAd();
          BDD.tinkerTaylorSoldierSpies.spyStubSetUp(fileLoad, "JSONLoad", BDD.genericFunctions.injectJSONAd());
          jQuery('#loadFileButton').trigger('change');
-         same(fileLoad.JSONLoad.callCount, 1, 'should be one call to FileLoad.JSONLoad');
-         same(jQuery('#output').hasClass('hidden'), false, 'output div should not have class .hidden');
+         deepEqual(fileLoad.JSONLoad.callCount, 1, 'should be one call to FileLoad.JSONLoad');
+         deepEqual(jQuery('#output').hasClass('hidden'), false, 'output div should not have class .hidden');
       }
    },
    // Scenario4
@@ -273,7 +270,7 @@ var BDD = {
          expect(3);
          // check that adTypeChoice select button exists
          BDD.genericFunctions.selectAd('imageAd');
-         same(jQuery("#adTypeChoice").val(), 'imageAd', 'selected ad type should be imageAd');
+         deepEqual(jQuery("#adTypeChoice").val(), 'imageAd', 'selected ad type should be imageAd');
       },
       'whenTheUserClicksTheButtonConvertToJSON': function () {
          expect(4);
@@ -281,23 +278,23 @@ var BDD = {
          BDD.genericFunctions.injectImageAdValuesIntoForm();
          jQuery("#convertButton").trigger('click');
 
-         same(jQuery('#adNameDiv').css('display'), 'block', 'div #adName should be display=block');
-         same(jQuery('#clickUrlDiv').css('display'), 'block', 'div #clickUrl should be display=block');
-         same(jQuery('#imageUrlDiv').css('display'), 'block', 'div #imageUrl should be display=block');
-         same(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltText should be display=block');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'block', 'div #adName should be display=block');
+         deepEqual(jQuery('#clickUrlDiv').css('display'), 'block', 'div #clickUrl should be display=block');
+         deepEqual(jQuery('#imageUrlDiv').css('display'), 'block', 'div #imageUrl should be display=block');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltText should be display=block');
       },
       'thenTheJSONObjectCodeWillBeDisplayed': function () {
          expect(2);
-         same(jQuery('#outputDiv').css('display'), 'block', 'div #outputDiv should be display=block');
+         deepEqual(jQuery('#outputDiv').css('display'), 'block', 'div #outputDiv should be display=block');
          // check if what is injected is valid JSON
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'contents of JSON object should be valid JSON string');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'contents of JSON object should be valid JSON string');
       },
       'andTheAdvertWillRenderWithinTheTestPageAsAPreview' : function () {
          expect(1);
          // check for contents injected into div
          jQuery("#reviewButton").trigger('click');
          var imageUrl = '<a href="http:\/\/www.ft.com" target="_blank"><img src="http:\/\/s0.2mdn.net\/2389285\/banlb-master-2-728x90.GIF" title="Test Ad Image Help Text" alt="Test Ad Image Help Text"></a>';
-         same(jQuery('#adDiv').html(), imageUrl, 'Contents of div should be image ad');
+         deepEqual(jQuery('#adDiv').html(), imageUrl, 'Contents of div should be image ad');
       }
    },
    // Scenario5
@@ -305,22 +302,22 @@ var BDD = {
       'givenAUserOnTheAdvertBuilderPage': function () {
          BDD.simpleImageAdvert.givenAUserOnTheAdvertBuilderPage('noexpect');
          // the div no_jquery should be hidden
-        same(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
+        deepEqual(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
       },
       'andTheUserClicksTheButtonConvertToJSONWithWarnings' : function () {
          expect(5);
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoFormWithDocWrites();
          // we trigger a change on the text area here as injecting values via jQuery wont do so
-         // in the same way a user doing so would
+         // in the deepEqual way a user doing so would
          jQuery("#customHtml").trigger('change');
          jQuery("#convertButton").trigger('click');
          jQuery("#reviewButton").trigger('click');
 
 
-         same(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
-         same(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
-         same(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
+         deepEqual(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
       },
       'whenTheAdvertContainsDocumentwriteWhichNeedsGhostwriter': function () {
          expect(3);
@@ -329,12 +326,12 @@ var BDD = {
 
          matches(jQuery('#customHtml').val(), docwriteRegex, 'The rich ad does contain some document.write code');
          notMatches(jQuery('#customHtml').val(), iFrameRegex, 'The rich ad does not contain forbidden iFrame code');
-         notMatches(jQuery('#customHtml').val(), commentsRegex, 'The rich ad does not contain forbidden comment code');         
-         
+         notMatches(jQuery('#customHtml').val(), commentsRegex, 'The rich ad does not contain forbidden comment code');
+
       },
       'thenWarningTextWillBeDisplayedAlongsideThePreviewOfTheAdvert': function () {
          expect(7);
-         same(jQuery('#formWarnings').css('display'), 'block', 'div #formWarnings should be visible');
+         deepEqual(jQuery('#formWarnings').css('display'), 'block', 'div #formWarnings should be visible');
 
          var docwriteRegex = "Warning! forbidden document\\.write found in advert",
             iFrameRegex = "Warning! forbidden &lt;iframe&gt;",
@@ -347,7 +344,7 @@ var BDD = {
          matches(jQuery('#customHtml').css('color'), /^rgb\(255, 255, 255\)$/, 'the font color of the customHtml textarea shoud be white');
 
          // should be able to continue with convrsion so convert/reset buttons should be visible
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertAndResetButtonsDiv should be visible');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertAndResetButtonsDiv should be visible');
       }
    },
    // Scenario5b
@@ -360,12 +357,12 @@ var BDD = {
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoFormWithIframe();
          // we trigger a change on the text area here as injecting values via jQuery wont do so
-         // in the same way a user doing so would
+         // in the deepEqual way a user doing so would
          jQuery("#customHtml").trigger('change');
 
-         same(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
-         same(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
-         same(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
+         deepEqual(jQuery('#adNameDiv').css('display'), 'block', 'div #adNameDiv should be display=block');
+         deepEqual(jQuery('#imageAltTextDiv').css('display'), 'block', 'div #imageAltTextDiv should be display=block');
+         deepEqual(jQuery('#customHtmlDiv').css('display'), 'block', 'div #customHtmlDiv should be display=block');
       },
       'whenTheAdvertContainsIframesOrOtherElementsThatWillCauseTheAdvertNotToFunction': function () {
          expect(3);
@@ -377,7 +374,7 @@ var BDD = {
       },
       'thenErrorTextWillBeDisplayedWithNoPreviewOfTheAdvert': function () {
          expect(7);
-         same(jQuery('#formWarnings').css('display'), 'block', 'div #formWarnings should be visaible');
+         deepEqual(jQuery('#formWarnings').css('display'), 'block', 'div #formWarnings should be visaible');
 
          var docwriteRegex = "Advert contains document\\.write and will use ghostwriter when rendered. \\(This is not an error.\\)", iFrameRegex = "Warning! forbidden &lt;iframe&gt;", commentsRegex = "Warning! comment line //";
 
@@ -388,21 +385,9 @@ var BDD = {
          matches(jQuery('#customHtml').css('color'), /^(white|rgb\(255, 255, 255\))$/, 'the font color of the customHtml textarea shoud be white');
 
          // shouldnt be able to continue with convrsion so convert/reset buttons should be hidden
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'none', 'div #convertAndResetButtonsDiv should be hidden');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'none', 'div #convertAndResetButtonsDiv should be hidden');
 
          return;
-         /*
-         setTimeout(function () {
-            var mysame = function (val,exp,msg) { alert(msg + "\n\nval: " + val + "\nexp: " + exp); };
-            var mynotsame = function (val,exp,msg) { alert(msg + "\n\nval: " + val + "\nnot exp: " + exp); };
-            mynotsame(jQuery('#formWarnings').html(), docwriteRegex, 'A warning concerning a document.write is displayed');
-            mysame(jQuery('#formWarnings').html(), iFrameRegex, 'A warning concerning an iFrame tag is displayed');
-            mysame(jQuery('#formWarnings').html(), commentsRegex, 'A warning concerning a comment tag is displayed');
-            mysame(jQuery('#customHtml').css('background-color'), /^(red|rgb\(255, 0, 0\))$/, 'the background color of the customHtml textarea shoud be red');
-            mysame(jQuery('#customHtml').css('color'), /^(white|rgb\(255, 255, 255\))$/, 'the font color of the customHtml textarea shoud be white');
-            mysame(jQuery('#convertAndResetButtonsDiv').css('display'), 'none', 'div #convertAndResetButtonsDiv should be hidden');
-         }, 5000);
-         */
       }
    },
    // Scenario6
@@ -410,7 +395,7 @@ var BDD = {
       'givenAUserOnTheAdvertBuilderPage': function () {
          BDD.simpleImageAdvert.givenAUserOnTheAdvertBuilderPage('noexpect');
          // the div no_jquery should be hidden
-        same(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
+        deepEqual(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
       },
       'andTheUserIsLookingToCreateASimpleImageAdvert' : function () {
          expect(2);
@@ -418,7 +403,7 @@ var BDD = {
       },
       'whenTheUserForgetsToEnterAField': function () {
          expect(3);
-         same(jQuery('#adName').val(), '', 'input #adName should be empty');
+         deepEqual(jQuery('#adName').val(), '', 'input #adName should be empty');
          matches(jQuery('#imageUrl').val(), 'http:\/\/', 'input #imageUrl should be http://');
          matches(jQuery('#clickUrl').val(), '%c%u', 'input #clickUrl should be empty');
       },
@@ -431,13 +416,13 @@ var BDD = {
          matches(jQuery('#clickUrl').css('background-color'), /^(red|rgb\(255, 0, 0\))$/, 'the background color of the clickUrl field should be set to red');
          matches(jQuery('#imageAltText').css('background-color'), /^(red|rgb\(255, 0, 0\))$/, 'the background color of the imageAltText field should be set to red');
          // shouldnt be able to continue with convrsion so convert/reset buttons should be hidden
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
 
          var warningRegex = "You must give a value for mandatory fields";
          // form warnings should be present
          matches(jQuery('#formWarnings').html(), warningRegex, 'Warnings concerning missing field(s) is displayed');
          // check no JSON object in outputJSON text area
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), false, 'no JSON object should be created');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), false, 'no JSON object should be created');
       },
       'andAfterTheFieldsAreCompletedTheWarningsWillDisappearAndTheAdConverted' : function () {
          expect(8);
@@ -451,14 +436,14 @@ var BDD = {
          matches(jQuery('#clickUrl').css('background-color'), /^(#d7e5f2|rgb\(215, 229, 242\))$/, 'the background color of the clickUrl field should be set to red');
          matches(jQuery('#imageAltText').css('background-color'), /^(#d7e5f2|rgb\(215, 229, 242\))$/, 'the background color of the imageAltText field should be set to red');
          // should  be able to continue with conversion so convert/reset buttons should be displayed
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
 
          var warningRegex = "You must give a value for mandatory fields";
          matches(jQuery('#formWarnings').attr('class'), /warnings handle hidden|warnings hidden handle/, 'div #formWarnings should have class=warnings hidden handle');
          notMatches(jQuery('#formWarnings').html(), warningRegex, 'No warning should now be present');
 
          // check a JSON object is now in the outputJSON text area
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
       }
    },
    // Scenario7
@@ -466,32 +451,32 @@ var BDD = {
       'givenAUserOnTheAdvertBuilderPage': function () {
          BDD.simpleImageAdvert.givenAUserOnTheAdvertBuilderPage('noexpect');
          // the div no_jquery should be hidden
-        same(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
+        deepEqual(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
       },
       'andTheUserHasSelectedHTML5AdvertAndPopulatedAllFields' : function () {
          expect(6);
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoForm();
 
-         same(jQuery('#adTypeChoice').val(), 'richAd', 'select adTypeChoice: Rich Media Ad should be selected');
-         same(jQuery('#adName').val() !== null, true, 'input #adName should be populated');
-         same(jQuery('#imageAltText').val() !== null, true, 'input #imageAltText should be populated');
-         same(jQuery('#customHtml').val() !== null, true, 'textarea #customHtml should be populated');
+         deepEqual(jQuery('#adTypeChoice').val(), 'richAd', 'select adTypeChoice: Rich Media Ad should be selected');
+         deepEqual(jQuery('#adName').val() !== null, true, 'input #adName should be populated');
+         deepEqual(jQuery('#imageAltText').val() !== null, true, 'input #imageAltText should be populated');
+         deepEqual(jQuery('#customHtml').val() !== null, true, 'textarea #customHtml should be populated');
       },
       'whenTheUserClicksTheButtonConvertToJSON' : function () {
-         // expect(0);
+         expect(0);
          jQuery("#convertButton").trigger('click');
       },
       'thenTheJSONObjectCodeWillBeDisplayed': function () {
          expect(1);
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
+         jQuery("#reviewButton").trigger('click');
       },
       'andTheAdvertWillRenderWithinTheTestPageAsAPreview' : function () {
          expect(4);
 
-         jQuery("#reviewButton").trigger('click');
-
-         var warningRegex = "Warning", content = jQuery("#adDiv").html();
+         var warningRegex = "Warning",
+         content = jQuery("#adDiv").html();
          matches(escape(content) , escape('RICH MEDIA AD CONTENT GOES'), "#adDiv should contain HTML");
          matches(escape(content) , escape('<a href="http://www.ft.com">HERE</a>'), "#adDiv should contain a URL");
 
@@ -504,18 +489,18 @@ var BDD = {
       'givenAUserOnTheAdvertBuilderPage': function () {
          BDD.simpleImageAdvert.givenAUserOnTheAdvertBuilderPage('noexpect');
          // the div no_jquery should be hidden
-        same(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
+        deepEqual(jQuery('#no_jquery').hasClass('hidden'), true, 'div #no_jquery should be hidden');
       },
       'andTheUserIsLookingToCreateAnHTML5Advert' : function () {
          expect(3);
          BDD.genericFunctions.selectAd('richAd');
-         same(jQuery('#adTypeChoice').val(), 'richAd', 'select adTypeChoice: Rich Media Ad should be selected');
+         deepEqual(jQuery('#adTypeChoice').val(), 'richAd', 'select adTypeChoice: Rich Media Ad should be selected');
       },
       'whenTheUserForgetsToEnterAField': function () {
          expect(3);
-         same(jQuery('#adName').val().length, 0, 'input #adName should be empty');
-         same(jQuery('#imageAltText').val().length, 0, 'input #imageAltText should be empty');
-         same(jQuery('#customHtml').val().length, 0, 'input #imageAltText should be empty');
+         deepEqual(jQuery('#adName').val().length, 0, 'input #adName should be empty');
+         deepEqual(jQuery('#imageAltText').val().length, 0, 'input #imageAltText should be empty');
+         deepEqual(jQuery('#customHtml').val().length, 0, 'input #imageAltText should be empty');
 
          jQuery("#convertButton").trigger('click');
 
@@ -528,12 +513,12 @@ var BDD = {
          matches(jQuery('#imageAltText').css('background-color'), /^(red|rgb\(255, 0, 0\))$/, 'the background color of the imageAltText field should be set to red');
          matches(jQuery('#customHtml').css('background-color'), /^(red|rgb\(255, 0, 0\))$/, 'the background color of the customHtml field should be set to red');
          // shouldnt be able to continue with convrsion so convert/reset buttons should be hidden
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
 
          var warningRegex = "You must give a value for mandatory fields";
          matches(jQuery('#formWarnings').html(), warningRegex, 'A warning concerning missing field(s) is displayed');
          // check no JSON object in outputJSON text area
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), false, 'no JSON object should be created');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), false, 'no JSON object should be created');
       },
       'andAfterTheFieldsAreCompletedTheWarningsWillDisappearAndTheAdConverted' : function () {
          expect(6);
@@ -547,13 +532,13 @@ var BDD = {
          matches(jQuery('#customHtml').css('background-color'), /^(#d7e5f2|rgb\(215, 229, 242\))$/, 'the background color of the customHtml field should be set to reset');
 
          // should  be able to continue with conversion so convert/reset buttons should be displayed
-         same(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
+         deepEqual(jQuery('#convertAndResetButtonsDiv').css('display'), 'block', 'div #convertResetButtonsdiv should be display=block');
 
          var warningRegex = "";
          matches(jQuery('#adDiv').html(), warningRegex, 'No warning should now be present');
 
          // check a JSON object is now in the outputJSON text area
-         same(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
+         deepEqual(BDD.genericFunctions.IsJsonString(jQuery('#outputJSON').val()), true, 'a JSON object should be created in the outputJSON textarea');
       }
    },
    // Scenario9
@@ -572,9 +557,9 @@ var BDD = {
       'andAnyWarningsAreDeemedToBeAcceptable' : function () {
          expect(4);
 
-         same(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
-         same(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
-         same(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
+         deepEqual(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
 
          matches(jQuery('#formWarnings').attr('class'), /warnings handle hidden|warnings hidden handle/, 'div #formWarnings should have class=warnings hidden handle');
       },
@@ -586,8 +571,8 @@ var BDD = {
 
          // select to copy the json object
          jQuery("#copyAdButton").trigger('click');
-         same(window.copyToClipboard.callCount, 1, 'copyToClipboard function called once');
-         same(mock.verify(), true, 'Window.prompt should be called once (sinon stub)');
+         deepEqual(window.copyToClipboard.callCount, 1, 'copyToClipboard function called once');
+         deepEqual(mock.verify(), true, 'Window.prompt should be called once (sinon stub)');
 
          // tear down spies
          BDD.tinkerTaylorSoldierSpies.spyGenericTearDown(window, "copyToClipboard");
@@ -608,9 +593,9 @@ var BDD = {
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoForm();
 
-         same(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
-         same(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
-         same(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
+         deepEqual(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
 
          // conversion buttons should now be present, so click to display JSON
          jQuery("#convertButton").trigger('click');
@@ -638,9 +623,9 @@ var BDD = {
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoForm();
 
-         same(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
-         same(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
-         same(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
+         deepEqual(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
 
          // conversion buttons should now be present, so click to display JSON
          jQuery("#convertButton").trigger('click');
@@ -652,7 +637,7 @@ var BDD = {
       'thenHelpTextWithRegardsToTheProcessAndHowToCopyAndPasteWillBeAvailable' : function () {
          expect(2);
          // test help div is now open
-         same(jQuery('#helpTextDiv').css('display'), 'block', 'div #helpTextDiv should be display=block');
+         deepEqual(jQuery('#helpTextDiv').css('display'), 'block', 'div #helpTextDiv should be display=block');
          // make sure contains help text
          var helpTextRegex = 'To place this ad in DFP, please follow the following steps';
          matches(jQuery('#helpTextDiv').html(), helpTextRegex, 'div #helpTextDiv should have content');
@@ -668,18 +653,18 @@ var BDD = {
          BDD.genericFunctions.selectAd('richAd');
          BDD.genericFunctions.injectRichAdValuesIntoFormForZIndex();
 
-         same(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
-         same(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
-         same(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#adName').val().length > 0, true, 'input #adName should not be empty');
+         deepEqual(jQuery('#imageAltText').val().length > 0, true, 'input #imageAltText should not be empty');
+         deepEqual(jQuery('#customHtml').val().length >0, true, 'input #imageAltText should not be empty');
 
          // conversion buttons should now be present, so click to display JSON
          jQuery("#convertButton").trigger('click');
-         same(jQuery('#adDiv').css('display'), 'none', '#adDiv should have style="display:none"');
+         deepEqual(jQuery('#adDiv').css('display'), 'none', '#adDiv should have style="display:none"');
       },
       'andTheUserHasDisplayedTheAd' : function () {
 
          jQuery("#reviewButton").trigger('click');
-         same(jQuery('#adDiv').css('display'), 'block', '#adDiv should have style="display:block"');
+         deepEqual(jQuery('#adDiv').css('display'), 'block', '#adDiv should have style="display:block"');
       },
       'whenTheUserOptsToTextTheZIndex' : function () {
 
@@ -690,7 +675,7 @@ var BDD = {
          jQuery('#zblat').attr('offsetTop'); // Force a DOM update NOW
          setTimeout(function () {
             // test the zblat div is now visible
-            same(jQuery('#zblat').css('visibility'), 'visible', 'div #zblat should now be visible');
+            deepEqual(jQuery('#zblat').css('visibility'), 'visible', 'div #zblat should now be visible');
             // test the z-index of the div is 1,000,001
             closeToYou(jQuery('#zblat').css('z-index'), '1000001', 2, 'div #zblat should have an index of 1,000,001 or close enough (£$@%£$ firefox)');
          }, 100);
