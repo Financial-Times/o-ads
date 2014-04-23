@@ -3,6 +3,7 @@
 <head>
   <title>Ads Enabling Team Cookie Tool</title>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
 
   <script src="js/lib/jquery-1.7.2.js"></script>
   <script src="js/lib/jquery-cookie.js"></script>
@@ -13,7 +14,7 @@
 </head>
 <body>
 <h1>Ads Enabling Team Cookie Tool</h1>
-<section>
+<div>
   <h2>Set Cookie</h2>
   <form name="cookie-setter" class="form-inline">
     <fieldset>
@@ -45,7 +46,7 @@
       <span class="help-block">Path will default to <code>/</code> Expires will default to <code>7</code> Domain will default to <code>.ft.com</code></span>
     </fieldset>
   </form>
-  <section id="prepopulaters">
+  <div id="prepopulaters">
     <div id="testing-prepopulaters" class="btn-group">
         <h3>Predefined cookie values for Testing</h3>
         <button class="btn btn-success" data-cookies='[{"name": "FTQA", "value" : "env=nolive"}]'>Show test ads</button>​
@@ -72,10 +73,10 @@
         <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,ghostbug=1,env=test,ghost=1,zone=fullpage-test,eid=fullpage-ipad,screenmode=large"}]'>FTQA for fullscreen iPad​</button>​
         <button class="btn btn-info" data-cookies='[{"name": "FTQA", "value" : "debug,ghostbug=1,env=test,ghost=1,zone=fullpage-test,eid=fp-perf-1.6mb,screenmode=large"}]'>​FTQA for slow fullscreen​</button>​
     </div>
-  </section>
-</section>
+  </div>
+</div>
 <hr>
-<section id="cookies">
+<div id="cookies">
   <h2>All Cookies</h2>
   <span class="help-block">Only cookies with a path of <code>/</code> can be deleted from here.</span>
   <table>
@@ -86,10 +87,10 @@
     <tbody>
     </tbody>
   </table>
-</section>
+</div>
 
 <hr>
-<section id="examples">
+<div id="examples">
   <h2>Examples</h2>
    <table border="1">
        <thead>
@@ -122,6 +123,6 @@
          <tr><td>FT</td><td>ftads:mode_t=testuser</td><td>For the Third Party GPT Library - allow cookie values to over-ride  env and metatag config settings.</td></tr>
        </tbody>
    </table>
-</section>
+</div>
 </body>
 </html>
