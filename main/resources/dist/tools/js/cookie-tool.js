@@ -190,7 +190,7 @@ $(function(){
         }
       },
       'default': function (){
-        renderMessage('yall dont be fiddlin wit ma cookie tool!!');
+        renderMessage('ya\'ll dont be fiddlin wit ma cookie tool!!');
       }
     }
 
