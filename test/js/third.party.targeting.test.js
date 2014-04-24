@@ -52,11 +52,9 @@
         });
 
         test('Krux', function () {
-            TEST.beginNewPage({config: { krux: {id: '112233'}} });
-            var result = FT.ads.targeting();
 
             if (FT._ads.utils.isStorage(window.localStorage)) {
-                TEST.beginNewPage({config: { cookieConsent: false, krux: true, timestamp: false}, localStorage: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
+                TEST.beginNewPage({config: { cookieConsent: false, krux: { krux: {id: '112233'}}, timestamp: false}, localStorage: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
                 var result = FT.ads.targeting();
                 deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "krux segments in localStorage returned correctly");
                 equal(result.kuid, 'kxuser', "krux user id returned correctly from localStorage");
@@ -67,14 +65,14 @@
                 ok(true, 'localstorage unavailable in this browser')
             }
 
-            TEST.beginNewPage({config: { krux: true}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
+            TEST.beginNewPage({config: { krux: {id: '112233'}}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
             var result = FT.ads.targeting();
             deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "krux returns segments from cookies");
          //   equal(result.kuid, "kxuser", "krux user id returned correctly  from cookies");
             equal(result.khost, encodeURIComponent(location.hostname), "krux host returned correctly");
             equal(result.bht, "true", "Behavioural flag is set, when cookies are used");
 
-            TEST.beginNewPage({config: { krux: true, kruxLimit: 2}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
+            TEST.beginNewPage({config: { krux:{id: '112233', limit: 2}}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
             var result = FT.ads.targeting();
             deepEqual(result.ksg, ["seg1", "seg2"], "krux returns 2 segments");
         });

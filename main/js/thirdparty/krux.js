@@ -18,8 +18,7 @@
  * @constructor
 */
     function Krux() {
-        this.config = FT.ads.config('krux');
-        if (this.config.id) {
+        if (FT.ads.config('krux') && FT.ads.config('krux').id) {
             if (!window.Krux) {
                 ((window.Krux = function(){
                         window.Krux.q.push(arguments);
@@ -32,7 +31,7 @@
 
             var m,
             src= (m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-            finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+            finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + FT.ads.config('krux').id;
 
             FT._ads.utils.attach(finalSrc,true);
         } else {
@@ -67,10 +66,7 @@
  * @lends Krux
 */
     proto.segments = function () {
-        var segs = this.retrieve('segs'),
-            limit = this.config.limit;
-
-        return segs;
+        return this.retrieve('segs');
     };
 
 /**
@@ -85,10 +81,9 @@
         segs = this.segments();
         if (segs) {
             segs = segs.split(',');
-            if (this.config.limit) {
-                segs = segs.slice(0, this.config.limit);
+            if (FT.ads.config('krux').limit) {
+                segs = segs.slice(0, FT.ads.config('krux').limit);
             }
-            return segs;
         }
 
         return  {
