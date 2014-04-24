@@ -22,7 +22,6 @@
       var context = this,
         parameters = {};
 
-
 /**
  * returns an object containing all targeting parameters
  * @memberof Targeting
@@ -50,34 +49,6 @@
               }
             }
 
-            // if (FT.ads.config('metadata') !== false) {
-            //   FT._ads.utils.extend(parameters, ());
-            // }
-
-            // if (FT.ads.config('audSci') !== false) {
-            //   FT._ads.utils.extend(parameters, ());
-            // }
-
-            // if (FT.ads.config('krux') !== false) {
-            //   FT._ads.utils.extend(parameters, ());
-            // }
-
-            // if (FT.ads.config('socialReferrer') !== false) {
-            //   FT._ads.utils.extend(parameters, context.getSocialReferrer());
-            // }
-
-            // if (FT.ads.config('pageReferrer') !== false) {
-            //   FT._ads.utils.extend(parameters, context.getPageReferrer());
-            // }
-
-            // if (FT.ads.config('cookieConsent') !== false) {
-            //   FT._ads.utils.extend(parameters, context.cookieConsent());
-            // }
-
-
-            // if(FT.ads.config('timestamp') !== false){
-            //   FT._ads.utils.extend(parameters, context.timestamp());
-            // }
             proto.init=true;
             return parameters;
         };
@@ -206,59 +177,7 @@
     };
 
     proto.fetchKrux = function (){
-        var segs, bht = false;
-
-        if (!window.Krux) {
-            ((window.Krux = function(){
-                    window.Krux.q.push(arguments);
-                }).q = []
-            );
-        }
-
-        function attachControlTag() {
-            var m,
-            kruxConfigId = ((FT.ads.config('dfp_site')) && FT.ads.config('dfp_site').match(/^ftcom/)) ? "IhGt1gAD" : "IgnVxTJW",
-            src=(m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-            finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid="+kruxConfigId;
-
-            FT._ads.utils.attach(finalSrc,true);
-        }
-
-        function retrieve(name){
-            var value;
-            name ='kx'+ name;
-
-            if (window.localStorage && localStorage.getItem(name)) {
-                value = localStorage.getItem(name);
-            }  else if (FT._ads.utils.cookie(name)) {
-                value = FT._ads.utils.cookie(name);
-            }
-
-            return value;
-        }
-
-        function segments() {
-            var segs = retrieve('segs'),
-                limit = FT.ads.config('kruxLimit');
-            if (segs) {
-                segs = segs.split(',');
-                if (limit) {
-                    segs = segs.slice(0, limit);
-                }
-                return segs;
-            }
-            return;
-        }
-if (!proto.init){
-        attachControlTag();
-      }
-        segs = segments();
-        return  {
-            "kuid" : retrieve('user'),
-            "ksg" : segs,
-            "khost": encodeURIComponent(location.hostname),
-            "bht": segs && segs.length > 0 ? 'true' : 'false'
-        };
+        return FT.ads.krux ? FT.ads.krux.targeting() : {};
     };
 
     proto.getPageReferrer = function () {

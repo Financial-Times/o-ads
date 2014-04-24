@@ -86,6 +86,12 @@
             }
         };
 
+        var kruxId;
+        if (FT.Properties.ENV === 'p') {
+            kruxId = 'IhGt1gAD';
+        } else {
+            kruxId = 'IgnVxTJW';
+        }
 
         // setup FT specific configuration
         FT.ads.config({
@@ -93,7 +99,10 @@
             // these are all targeting options
             metadata: true,
             audSci: true,
-            krux: true,
+            krux: {
+                limit: FT.env.kruxMaxSegs || false,
+                id: kruxId
+            },
             socialReferrer: true,
             pageReferrer: true,
             cookieConsent:  true,
@@ -110,6 +119,8 @@
                 }
             }
         });
+
+
 
 
         // turn on video only for the video sections

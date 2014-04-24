@@ -52,9 +52,8 @@
         });
 
         test('Krux', function () {
-            TEST.beginNewPage({config: { krux: true } });
+            TEST.beginNewPage({config: { krux: {id: '112233'}} });
             var result = FT.ads.targeting();
-            strictEqual( $.type(Krux), "function", "Krux is a function.");
 
             if (FT._ads.utils.isStorage(window.localStorage)) {
                 TEST.beginNewPage({config: { cookieConsent: false, krux: true, timestamp: false}, localStorage: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
