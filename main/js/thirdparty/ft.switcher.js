@@ -101,7 +101,14 @@
             audSci: true,
             krux: {
                 limit: FT.env.kruxMaxSegs || false,
-                id: kruxId
+                id: kruxId,
+                events: {
+                    dwell_time: {
+                        interval: 10,
+                        id: 'monkeys',
+                        total: 600
+                    }
+                }
             },
             socialReferrer: true,
             pageReferrer: true,
@@ -120,17 +127,14 @@
             }
         });
 
-
-
-
         // turn on video only for the video sections
-        if (FT.ads.config('dfp_site')==="ftcom.5887.video"){
+        if ( /5887\.video$/.test(FT.ads.config('dfp_site')) ) {
           FT.ads.config('companions', true);
           FT.ads.config('video', true);
         }
 
         FT.ads.gpt.init();
-
+        FT.ads.krux.init();
     }
 
     switcher();

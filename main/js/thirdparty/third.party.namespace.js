@@ -3,5 +3,5 @@ if(!FT.ads) {
     /**
     * @namespace FT.ads
     */
-    FT.ads={};
+    FT.ads = {};
 }
