@@ -23,7 +23,7 @@
                 var results = '',
                 rsiSegs = allTargeting.a,
                 kruxSegs = allTargeting.ksg,
-                includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh'];
+                includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnid'];
                 var i;
                 for (i=0;i<includeParams.length;i++){
                     var key= includeParams[i];
