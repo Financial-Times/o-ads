@@ -104,8 +104,8 @@
                 id: kruxId,
                 events: {
                     dwell_time: {
-                        interval: 10,
-                        id: 'monkeys',
+                        interval: 5,
+                        id: 'JCadw18P',
                         total: 600
                     }
                 }
