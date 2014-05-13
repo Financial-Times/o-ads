@@ -66,11 +66,6 @@
 /* To align the expanding Ads in right rails */
 #mpu table,#mpu2 table,#mpu3 table,#hlfmpu table,#hlfmpu2 table,#hlfmpu3 table { display:block ; margin-left:auto ; margin-right:auto ; padding:0px ; }
 
-.no-banlbGPT div.topSection #header {
-    margin-top: 8px;
-}
-.msie .no-banlbGPT div.topAds { display:none ; } /* Fix for non-clickable header contents in IE6 when banlb collapses */
-
 #banlbGPT {font-size: 0; line-height: 0;min-height: 91px; white-space: pre;margin-top:3px;}
 #tlbxrib-gpt iframe[id^='google_ads_iframe_/5887/ftcom.5887.markets-data/equity-and-investment-tearsheets']:first-child {height:66px!important}
 
