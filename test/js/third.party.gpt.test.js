@@ -3,7 +3,7 @@
         gptCmdPush: sinon.spy(googletag.cmd, 'push')
     };
 
-    function runTests() {
+     function runTests() {
         module('Third party gpt',  {
             setup: function () {
             }

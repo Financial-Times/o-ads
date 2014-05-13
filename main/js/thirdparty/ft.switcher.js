@@ -86,6 +86,12 @@
             }
         };
 
+        var kruxId;
+        if (FT.Properties.ENV === 'p') {
+            kruxId = 'IhGt1gAD';
+        } else {
+            kruxId = 'IgnVxTJW';
+        }
 
         // setup FT specific configuration
         FT.ads.config({
@@ -93,7 +99,17 @@
             // these are all targeting options
             metadata: true,
             audSci: true,
-            krux: true,
+            krux: {
+                limit: FT.env.kruxMaxSegs || false,
+                id: kruxId,
+                events: {
+                    dwell_time: {
+                        interval: 5,
+                        id: 'JCadw18P',
+                        total: 600
+                    }
+                }
+            },
             socialReferrer: true,
             pageReferrer: true,
             cookieConsent:  true,
@@ -111,15 +127,14 @@
             }
         });
 
-
         // turn on video only for the video sections
-        if (FT.ads.config('dfp_site')==="ftcom.5887.video"){
+        if ( /5887\.video$/.test(FT.ads.config('dfp_site')) ) {
           FT.ads.config('companions', true);
           FT.ads.config('video', true);
         }
 
         FT.ads.gpt.init();
-
+        FT.ads.krux.init();
     }
 
     switcher();
