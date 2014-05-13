@@ -1,0 +1,381 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>BDD Test Plan for FT Web App JSON Ad Builder Tool</title>
+  <meta name="description" content="BDD Test plan for the FT Web App Tool for creating JSON Ads for DFP">
+  <meta name="author" content="Andrew C. Cadman">
+  <meta name="version" content="$Id$">
+  <link type="text/plain" rel="author" href="/humans.txt" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+   <link rel="stylesheet" href="../../h5admaker/css/style.css?v=2">
+   <link rel="stylesheet" href="../../css/qunit.css" type="text/css" media="screen">
+
+<!-- THIS CONTENT WAS INJECTED BY inject-admaker.pl DO NOT EDIT BY HAND
+      THE MAKE FILE UPDATES THIS CONTENT AUTOMATICALLY
+-->
+  <style type="text/css">
+
+      /* STYLES NEEDED IN THE WEBAPP FOR FULLPAGE CENTERING */
+      .fullpage-advert-container { background-color: black; }
+      .dfp-centered-ad-wrapper { height:inherit; width:inherit; display:table-cell; vertical-align:middle; padding:0px; margin:0px; }
+      .dfp-centered-ad { display: block; margin-left: auto; margin-right:auto; padding:0px; }
+
+      /* STYLES NEEDED IN THE WEBAPP FOR FULLPAGE ORIENTATION */
+      div.dfp-landscape img.dfp-fullpage-landscape { display: block; }
+      div.dfp-landscape img.dfp-fullpage-portrait  { display: none; }
+      div.dfp-portrait img.dfp-fullpage-landscape  { display: none; }
+      div.dfp-portrait img.dfp-fullpage-portrait   { display: block; }
+
+      /* OVERRIDES DUE TO ADMAKER DIFFERENCES */
+      #fullpage { height:inherit; width:inherit; padding:0px; margin:0px; }
+      .dfpadplaceholder { height:inherit; width:inherit; padding:0px; margin:0px; }
+      .fullpage-advert-container { overflow: visible; background-image:url('img/admaker-stipple.png'); }
+
+
+<!-- END OF CONTENT INJECTED BY inject-admaker.pl DO NOT EDIT THE ABOVE BY HAND -->
+
+
+</style>
+
+   <script src="../../lib/qunit/qunit-1.12.0.js"></script>
+   <!--[if lt IE 8 ]> <script src="../../QUnitChainer/json2/json2.js"></script> <![endif]-->
+
+   <script src="../../js/util/test-helpers.h5admaker.js"></script>
+   <script src="../../lib/jquery/jquery-1.7.2.js"></script>
+   <script src="../../js/util/QUnitChainer.js"></script>
+   <script src="../../h5admaker/js/jquery.event.drag-1.5.min.js"></script>
+   <script src="../../h5admaker/js/libs/modernizr.custom.96736.js"></script>
+   <script src="../../lib/sinon/sinon-1.1.1.js"></script>
+   <script src="../../lib/sinon/sinon-ie-1.1.1.js"></script>
+
+
+   <!--  Enable for unbundled ad library -->
+   <script src="../../h5admaker/js/ads.js"></script>
+
+   <!--  Enable for debugging -->
+   <!--
+     <script src="../../ghostwriter/lib/gw.src.js"></script>
+     <script src="../../h5ads/ads.js"></script>
+   -->
+
+   <!-- scripts concatenated and minified via ant build script-->
+   <script src="../../h5admaker/js/admaker.js"></script>
+   <script src="../../h5admaker/js/plugins.js"></script>
+   <!-- end scripts-->
+
+  <!-- BDD js code -->
+  <script src="js/US16403.js"></script>
+  <script>
+
+/*jslint browser: true, sloppy: true, white: false, indent: 3, maxerr: 1000 */
+
+/*global asyncTest, expect, start, DD_belatedPNG, FT, Plan, QUnitChainer, TEST, document, installEventHandlers, jQuery, module, runBDD, test */
+
+var Plan = {
+   // Specify the test plan to run after this one
+   //nextTestPlan: 'US16403-Scenario06-fields-not-entered.html',
+   nextTestPlan: 'US16403-Scenario07-html5-advert-json-conversion.html',
+   '-': '-'
+};
+QUnitChainer.init(Plan);
+
+var FT = FT || {};
+FT.cookies = {};
+
+var TEST = {
+   // Description of the Behaviour Driven Development Test Case.
+   'story': "US16403",
+   'description': "AdMaker BDD Tests",
+
+   //we will auto-generate this down the line
+   'scenario': "Scenario 6 - Fields not Entered",
+   'given': "Given A User On The Advert Builder Page",
+   'given2': "And The User Is Looking To Create A Simple Image Advert",
+   'when':  "When The User Forgets To Enter A Field",
+   'then':  "Then Warning Text Will Display To Ensure Any Mandatory Fields Are Completed",
+   'then2': "And After The Fields Are Completed The Warnings Will Disappear And The Ad Converted"
+};
+
+TEST.title = "Test " + TEST.story + " " + TEST.scenario;
+
+module(TEST.title);
+
+// Customize the Title and description of the Test case from the TEST data.
+jQuery(document).ready(function () {
+   installEventHandlers();
+
+   document.title = TEST.title + ": " + TEST.description;
+   jQuery("#qunit-header").html(TEST.title);
+   jQuery("#test-desc").html("The purpose of this page is to test <b>" + TEST.description + "<\/b>");
+   jQuery("#test-scenario").html(TEST.scenario);
+
+   test(TEST.given, function () { runBDD(TEST.scenario, TEST.given); });
+   test(TEST.given2, function () { runBDD(TEST.scenario, TEST.given2); });
+   test(TEST.when, function () { runBDD(TEST.scenario, TEST.when); });
+   test(TEST.then, function () { runBDD(TEST.scenario, TEST.then); });
+   test(TEST.then2, function () { runBDD(TEST.scenario, TEST.then2); });
+});
+
+  </script>
+
+</head>
+
+
+<body>
+<!-- ADMAKER START -->
+
+<!-- THIS CONTENT WAS INJECTED BY inject-admaker.pl DO NOT EDIT BY HAND
+      THE MAKE FILE UPDATES THIS CONTENT AUTOMATICALLY
+-->
+
+
+  <!-- INJECT-ADMAKER-TESTHEADER -->
+  <div id="test">
+    <h1 id="qunit-header">AdMaker BDD</h1>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+
+    <p id="test-desc">The purpose of this page is to test the Admaker Tool</p>
+    <p id="test-scenario">Scenario TEMPLATE</p>
+    <hr>
+    <ol id="qunit-tests">
+    <li></li>
+    </ol>
+  </div>
+
+  <div id="container">
+    <header>
+      <h1>FT Web App JSON Ad Builder Tool</h1>
+    </header>
+
+  <!-- Fullpage Ad Maker Added -->
+    <div id="no_jquery" class="warnings">jQuery is missing. This won't be working.</div>
+    <div id="no_permission" class="warnings">Sorry you do not have permission to view this page.</div>
+    <!--
+    <div id="no_ghostwriter" class="warnings hidden">Ghostwriter is missing. Ad preview will not work.</div>
+     -->
+    <div id="main" role="main" style="display: none;">
+      <div>
+      <p><i>Please choose which type of ad you wish to create.</i></p>
+      <form name='adChoiceForm' id='AdChoiceForm' method="post" action="#">
+        <select id='adTypeChoice' class='initfocus' name='adTypeChoice' tabindex="1">
+          <option value='' selected></option>
+          <option value='imageAd'>Image Ad</option>
+          <option value='richAd'>Rich Media Ad</option>
+          <option value='fullpageAd'>Full Page Ad</option>
+          <option value='browseJSONAd'>Browse JSON Ad</option>
+        </select>
+      </form>
+      </div>
+      <div id="formWarnings" class="warnings hidden handle" style="position: relative; width:70%;">initial formWarnings text should be hidden</div>
+      <div id="supportEmail" class="warnings hidden handle" style="position: relative; width:70%;">Direct queries about this tool to ads.enabling.team@ft.com</div>
+
+      <div id="adDiv" class="dimmer handle"></div>
+
+      <div id="adMaker" style="display: none;">
+      <form name="fields" id="fields" method="post" action="#">
+        <div id='adNameDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="adName">Name of Advert</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text initfocusform input" name="adName" id="adName" value="" tabindex="2" />
+              <span class="fieldhelp visuallyhidden">Enter a descriptive name of the advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='clickUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="clickUrl">Click Through URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="clickUrl" id="clickUrl" value="%c%u" tabindex="3" />
+              <span class="fieldhelp visuallyhidden">Enter the URL to be directed to when the user clicks on the advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='imageUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="imageUrl">Image URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="imageUrl" id="imageUrl" value="http://" tabindex="4" />
+              <span class="fieldhelp visuallyhidden">Enter the URL of the image file for this advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='imageLandscapeUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="imageLandscapeUrl">Landscape Image URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="imageLandscapeUrl" id="imageLandscapeUrl" value="http://" tabindex="5" />
+              <span class="fieldhelp visuallyhidden">Enter the landscape URL of the image file for this advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='imagePortraitUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="imagePortraitUrl">Portrait Image URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="imageUrl" id="imagePortraitUrl" value="http://" tabindex="6" />
+              <span class="fieldhelp visuallyhidden">Enter the portrait URL of the image file for this advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='imageAltTextDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="imageAltText">Image Help Text</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="imageAltText" id="imageAltText" value="" tabindex="7" />
+                <span class="fieldhelp visuallyhidden">Enter the text to display when hovering over the advert image.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='impressionUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="impressionUrl">Impression URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="impressionUrl" id="impressionUrl" value="%i%h/dot.gif" tabindex="8" />
+              <span class="fieldhelp visuallyhidden">Enter the URL to invoke to count an impression of this advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='thirdPartyImpressionUrlDiv'>
+        <table>
+          <tr>
+            <td class="labelcell"><label for="thirdPartyImpressionUrl">Third Party Impression URL</label></td>
+            <td class="fieldcell">
+              <input type="text" class="text input" name="thirdPartyImpressionUrl" id="thirdPartyImpressionUrl" value="http://" tabindex="9" />
+              <span class="fieldhelp visuallyhidden">Enter the third party URL to invoke to count an impression of this advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='customHtmlDiv'>
+        <table>
+          <tr>
+            <td class="labelcellfull"><label for="customHtml">Custom Ad HTML</label></td>
+          </tr>
+          <tr>
+            <td class="fieldcellfull">
+              <textarea class="textarea input" name="customHtml" id="customHtml" rows="20" tabindex="10" ></textarea>
+              <span class="fieldhelp visuallyhidden">Paste the custom HTML5 content of the advert.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='convertAndResetButtonsDiv'>
+        <table>
+          <tr>
+            <td class="labelcellfull">
+              <input type="button" class="button" id="convertButton" name="convert" value="Convert to JSON Ad" tabindex="11"/>
+              <input type="reset" class="button" id="resetButton" name="clear" value="Clear form for a new Ad" tabindex="12"/>
+              <span id="toolHelpText"></span>
+            </td>
+          </tr>
+        </table>
+        </div>
+        <div id='loadFileDiv'>
+          <input type="file" class="button initfocusbrowse" id='loadFileButton' name="uploadJSON" tabindex="13"/>
+        </div>
+        <!-- TODO use a hidden class instead -->
+        <div id='outputDiv' style="display: none;">
+        <table>
+          <tr class="output">
+            <td class="labelcell"><label for="outputJSON"><br/>Output JSON for DFP</label></td>
+            <td class="labelcellhelp"><br/><span class="labelhelp">select all and paste to the Creative Code field in DFP</span></td>
+          </tr>
+          <tr class="output">
+            <td class="fieldcellfull" colspan="2">
+              <textarea class="textarea" name="outputJSON" id="outputJSON" rows="20" tabindex="14" ></textarea>
+              <span class="fieldhelp visuallyhidden">Select all and paste to the Creative Code field in DFP.</span>
+            </td>
+          </tr>
+        </table>
+        </div>
+
+        <div id='reviewAndResetReviewButtonsDiv'>
+        <table>
+          <tr>
+            <td class="labelcellfull">
+              <input type="button" class="button" id="reviewButton" name="review" value="Review Ad" tabindex="15"/>
+              <input type="button" class="button" id="reviewLandscapeButton" name="reviewLandscape" value="Review Landscape Ad" tabindex="16"/>
+              <input type="button" class="button" id="reviewPortraitButton" name="reviewPortrait" value="Review Portrait Ad" tabindex="17"/>
+              <input type="reset" class="button" id="resetReviewButton" name="clear" value="Clear Reviewed Ad" tabindex="18"/>
+              <input type="button" class="button" id="copyAdButton" name="clear" value="Copy Reviewed Ad Code" tabindex="19"/>
+              <input type="button" class="button" id="testZButton" name="clear" value="Test Ad Z Index" tabindex="20"/>
+            </td>
+          </tr>
+        </table>
+        </div>
+        </form>
+      </div>
+    </div> <!-- main  -->
+
+
+    <div id="helpTextDiv" class="helpText handle">
+      <p><i>To place this ad in DFP, please follow the following steps</i></p>
+      <ul>
+      <li>Click the 'Copy Reviewed Ad Code' Button.</li>
+      <li>A dialog box with your Ad Code should appear.</li>
+      <li>Press CTRL C and the 'Enter' key simultaneously.</li>
+      <li>Open DFP in Internet Explorer.</li>
+      <li>Go to your Ad Order or create a new one.</li>
+      <li>Select or create your ad.</li>
+      <li>Select or create a new creative of the 'Custom' type</li>
+      <li>Paste the ad code in the 'Creative Code' field.</li>
+      <li>Fill in the required extra fields and save the ad.</li>
+      </ul>
+    </div>
+    <div id="documentationDiv" class="docText handle">
+      <p><i>Usage documentation for this tool is <a target="_docs" href="https://neo.pearson.com/docs/DOC-102633">here</a>.</i></p>
+    </div>
+
+    <footer>
+    </footer>
+  </div>
+
+  <div id="zblat" class="zblat handle hidden" style="left:50px; top:52px; background-color:black;">
+    <p>The z-index of this movable screen is 1,000,001.</p>
+    <p>If you can see any part of an ad through it</p>
+    <p>please advise the creative supplier that they need to reduce their z-index values to something below 1,000,001</p>
+  </div>
+
+  <div id="adCheckerDiv" class="hidden"></div>
+
+  <!-- <script src="js/admaker.js"></script> DISABLED BY inject-admaker.pl -->
+  <!-- <script src="js/plugins.js"></script> DISABLED BY inject-admaker.pl -->
+  <!-- end scripts-->
+
+  <!--[if lt IE 7 ]>
+<script src="../../h5admaker/js/libs/dd_belatedpng.js"></script>
+<script>DD_belatedPNG.fix("img, .png_bg"); </script>
+<![endif] -->
+
+
+
+<!-- END OF CONTENT INJECTED BY inject-admaker.pl DO NOT EDIT THE ABOVE BY HAND -->
+
+
+<!-- ADMAKER END -->
+</body>
+</html>
