@@ -37,7 +37,6 @@
           });
 
           FT.ads.config('collapseEmpty', 'ft');
-          FT.ads.config('krux', {id: 'IgnVxTJW'});
 
           FT.ads.gpt.init();
       }
