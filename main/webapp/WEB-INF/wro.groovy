@@ -112,7 +112,7 @@ groups {
 
     "third-party-htsi" {
         js(minimize: false, "/js/thirdparty/third.party.htsi.js")
-        groupRef("advertising-gpt-latest")
+        groupRef("advertising-gpt")
         js(minimize: false, "/js/thirdparty/third.party.htsi.switcher.js")
     }
 }

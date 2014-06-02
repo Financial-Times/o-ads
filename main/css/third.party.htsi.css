@@ -1,0 +1,29 @@
+.adwrap .center,
+.ad .center {
+    width:100%;
+    text-align:center;
+}
+
+/* remove this rule if transitions are added to all slots */
+.adwrap .empty,
+.ad .empty {
+    width: 0;
+    height: 0;
+    display: none;
+    visibility: hidden;
+}
+
+/* Uncomment this selector to add transitions to all slots, delete #banlbGPT selector too
+.advertising.empty
+*/
+.adwrap .empty#banlb,
+.ad .empty#banlb {
+    height: 0px;
+    display: block; /* remove this rule if  transitions are added to all slots */
+    overflow: hidden;
+    transition: height 250ms ease;
+    -moz-transition: height 250ms ease;
+    -webkit-transition: height 250ms ease;
+    -o-transition: height 250ms ease;
+    visibility: hidden;
+}
