@@ -400,7 +400,7 @@
 
   utils.nodeListToArray = function(obj) {
     var array = [];
-    for (var i = 0; i < obj.length; i++) { 
+    for (var i = 0; i < obj.length; i++) {
         array[i] = obj[i];
       }
       return array;
