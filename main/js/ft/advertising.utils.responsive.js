@@ -30,7 +30,7 @@
     function getNearestBreakpoint() {
         var viewPort, viewPortDims, current, winner,
             dims = getViewportDims();
-        console.log('dims:', dims.w, dims.h);
+
         for (viewPort in viewPorts){
             viewPortDims = viewPorts[viewPort];
             if(dims.w > viewPortDims[0] && dims.h > viewPortDims[1]){
