@@ -13,13 +13,13 @@
   <meta name="version" content="$Id$">
   <link type="text/plain" rel="author" href="/humans.txt" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../QUnitChainer/jquery/jquery-1.6.2.min.js"></script>
+  <script src="../js/lib/jquery-1.7.2.js"></script>
   <script src="js/jquery.event.drag-1.5.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/libs/modernizr.custom.96736.js"></script>
 
   <!--  Enable for unbundled ad library -->
-  <script src="../../../../main/js/ads.js"></script>
+  <script src="js/ads.js"></script>
 
   <!--  Enable for debugging -->
 <!--
@@ -27,7 +27,7 @@
   <script src="../h5ads/ads.js"></script>
 -->
 
-<!-- 
+<!--
   <script src="../h5ads/ads.clean.js"></script>
   <script src="../h5ads/ads.pretty.js"></script>
 -->
@@ -42,7 +42,7 @@
       div.dfp-landscape img.dfp-fullpage-portrait  { display: none; }
       div.dfp-portrait img.dfp-fullpage-landscape  { display: none; }
       div.dfp-portrait img.dfp-fullpage-portrait   { display: block; }
-      
+
       /* OVERRIDES DUE TO ADMAKER DIFFERENCES */
       #fullpage { height:inherit; width:inherit; padding:0px; margin:0px; }
       .dfpadplaceholder { height:inherit; width:inherit; padding:0px; margin:0px; }
@@ -75,7 +75,7 @@ FT.cookies = {};
   <!-- Fullpage Ad Maker Added -->
     <div id="no_jquery" class="warnings">jQuery is missing. This won't be working.</div>
     <div id="no_permission" class="warnings">Sorry you do not have permission to view this page.</div>
-    <!-- 
+    <!--
     <div id="no_ghostwriter" class="warnings hidden">Ghostwriter is missing. Ad preview will not work.</div>
      -->
     <div id="main" role="main" style="display: none;">
@@ -87,15 +87,15 @@ FT.cookies = {};
           <option value='imageAd'>Image Ad</option>
           <option value='richAd'>Rich Media Ad</option>
           <option value='fullpageAd'>Full Page Ad</option>
-          <option value='browseJSONAd'>Browse JSON Ad</option>          
+          <option value='browseJSONAd'>Browse JSON Ad</option>
         </select>
       </form>
       </div>
       <div id="formWarnings" class="warnings hidden handle" style="position: relative; width:70%;">initial formWarnings text should be hidden</div>
       <div id="supportEmail" class="warnings hidden handle" style="position: relative; width:70%;">Direct queries about this tool to ads.enabling.team@ft.com</div>
-      
+
       <div id="adDiv" class="dimmer handle"></div>
-      
+
       <div id="adMaker" style="display: none;">
       <form name="fields" id="fields" method="post" action="#">
         <div id='adNameDiv'>
@@ -141,7 +141,7 @@ FT.cookies = {};
             </td>
           </tr>
         </table>
-        </div>  
+        </div>
         <div id='imagePortraitUrlDiv'>
         <table>
           <tr>
@@ -152,7 +152,7 @@ FT.cookies = {};
             </td>
           </tr>
         </table>
-        </div>  
+        </div>
         <div id='imageAltTextDiv'>
         <table>
           <tr>
@@ -228,7 +228,7 @@ FT.cookies = {};
           </tr>
         </table>
         </div>
-   
+
         <div id='reviewAndResetReviewButtonsDiv'>
         <table>
           <tr>
@@ -264,8 +264,8 @@ FT.cookies = {};
     </div>
     <div id="documentationDiv" class="docText handle">
       <p><i>Usage documentation for this tool is <a target="_docs" href="https://neo.pearson.com/docs/DOC-102633">here</a>.</i></p>
-    </div>  
-      
+    </div>
+
     <footer>
     </footer>
   </div>
@@ -277,7 +277,7 @@ FT.cookies = {};
   </div>
 
   <div id="adCheckerDiv" class="hidden"></div>
-  
+
   <script src="js/admaker.js"></script>
   <script src="js/plugins.js"></script>
   <!-- end scripts-->
