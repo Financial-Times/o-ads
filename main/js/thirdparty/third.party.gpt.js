@@ -43,12 +43,19 @@
         var context = this,
             slot = FT.ads.slots[slotName],
             slotId = slotName + '-gpt',
-            wrap = FT.ads.slots.addContainer(slot.container, slotId);
+            wrap = FT.ads.slots.addContainer(slot.container, slotId),
+            responsive = FT.ads.config('responsive');
 
         FT._ads.utils.addClass(wrap, 'wrap');
         googletag.cmd.push(function (context, slot, slotName, slotId) {
             return function () {
-                slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
+                if(FT._ads.utils.isObject(responsive) && FT._ads.utils.isObject(slot.config.sizes)) {
+                    var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
+                    slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
+                    slot.gptSlot.defineSizeMapping(sizeMapping);
+                } else {
+                    slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
+                }
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
@@ -139,6 +146,19 @@
         return slot;
     };
 
+    proto.refresh = function () {
+        var slot, slotsForRefresh = [],
+        slots = FT.ads.slots;
+        for (slot in slots) {
+            slot = slots[slot];
+            if (slot.gptSlot && slot.timer === undefined) {
+                slot.gptSlot.setTargeting('rfrsh', 'true');
+                slotsForRefresh.push(slot.gptSlot);
+            }
+        }
+        googletag.pubads().refresh(slotsForRefresh);
+    };
+
     /**
      * Starts a timer to refresh all ads on the page after
      * a time specified in config refreshTime, maximum number of
@@ -155,21 +175,8 @@
             time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
             max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
-        function refresh() {
-            var slot, slotsForRefresh = [],
-            slots = FT.ads.slots;
-            for (slot in slots) {
-                slot = slots[slot];
-                if (slot.gptSlot && slot.timer === undefined) {
-                    slot.gptSlot.setTargeting('rfrsh', 'true');
-                    slotsForRefresh.push(slot.gptSlot);
-                }
-            }
-            googletag.pubads().refresh(slotsForRefresh);
-        }
-
         if (time) {
-            this.refreshTimer = FT._ads.utils.timers.create(time, refresh, max);
+            this.refreshTimer = FT._ads.utils.timers.create(time, this.refresh, max);
         }
     };
 
@@ -244,6 +251,19 @@
         }
     };
 
+    proto.buildSizeMapping = function (viewports, slotSizes) {
+      var size, viewport,
+        mapping = googletag.sizeMapping();
+      for ( viewport in slotSizes) {
+        if (slotSizes[viewport]) {
+          mapping.addSize(viewports[viewport], slotSizes[viewport]);
+        }
+      }
+
+      mapping = mapping.build();
+      return mapping;
+    };
+
 /**
  * Sets the GPT collapse empty mode for a given slot
  * values can be 'after', 'before', 'never'
@@ -292,16 +312,24 @@
  * @lends GPT
 */
     proto.init = function () {
-        var context = this;
+        var context = this,
+        responsive = FT.ads.config('responsive');
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
 
         if (!FT._ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter()){
             this.startRefresh();
         }
+
+        if ( FT._ads.utils.isObject(responsive) ) {
+            FT._ads.utils.responsive(responsive, function () {
+                context.refresh();
+            });
+        }
+
         this.setPageCollapseEmpty();
 
-        googletag.cmd.push( function () {
+        googletag.cmd.push(function () {
             context.enableVideo();
             context.enableCompanions();
             googletag.pubads().enableAsyncRendering();
@@ -319,7 +347,6 @@
                 }
             });
             googletag.enableServices();
-
         });
 
         return this;
