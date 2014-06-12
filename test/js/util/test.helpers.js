@@ -45,6 +45,15 @@
                 }
                 return data;
             },
+            container: function(data) {
+              var name;
+              if (data) {
+                 for (name in data) {
+                    $('<div name="' + name + '></>').appendTo('body');
+                 }
+              }
+              return data;
+            },
             cookie: function (name, value){
                 cookies[encodeURIComponent(name)] = value;
             },

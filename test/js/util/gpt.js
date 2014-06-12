@@ -7,6 +7,7 @@
     googletag.defineOutOfPageSlot = sinon.stub();
     googletag.defineSlot = sinon.stub();
     googletag.defineUnit = sinon.stub();
+    googletag.defineSizeMapping = sinon.stub();
     googletag.display = sinon.stub();
     googletag.enableServices = sinon.stub();
     googletag.companionAds = sinon.stub();
@@ -17,12 +18,18 @@
 
 
     googletag.defineSlot = sinon.stub().returns({
-        addService: sinon.stub().returns({
-            setCollapseEmptyDiv: sinon.stub(),
-            renderEnded: sinon.stub(),
-            setTargeting: sinon.stub()
-        })
+         addService: sinon.stub(),
+         setCollapseEmptyDiv: sinon.stub(),
+         renderEnded: sinon.stub(),
+         setTargeting: sinon.stub(),
+         defineSizeMapping: sinon.stub()
     });
+
+   googletag.sizeMapping = sinon.stub().returns({
+      addSize: sinon.stub(),
+      build: sinon.stub()
+   });
+
 
     googletag.pubads = sinon.stub().returns({
         getName : sinon.stub(),

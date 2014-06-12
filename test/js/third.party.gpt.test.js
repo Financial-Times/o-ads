@@ -63,6 +63,56 @@
             equal(result, false, 'setting the value with false works');
             ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
         });
+
+        test('define with images sizes', function () {
+           TEST.beginNewPage({config: {responsive:{large: [1280, 800], medium: [970, 690], small: [0,0]}, meta: mpu ,formats: {
+              banlb: {
+                 sizes: {
+                    small: [[468, 60]],
+                    medium: [[728, 90]],
+                    large: [[970, 90]]
+                 }
+              },
+              hlfmpu:{
+                 sizes: {
+                    small: [[300, 250]],
+                    medium: [[300, 600]],
+                    large: [[300, 1050]]
+                 }
+              },
+              mpu: {
+                 sizes: {
+                    small: false,
+                    medium: [[300, 250]],
+                    large: [[336,280]]
+                 }
+              }
+           },  krux: false, timestamp: false, audSci : false}});
+           FT.ads.gpt.init(); // define method is run in the init
+
+           FT.ads.slots.initSlot('mpu');
+           var result, stubOnSlot;
+           stubOnSlot = FT.ads.slots.mpu.gptSlot;
+           expect(2);
+           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+           ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
+
+        });
+
+        test('define without images sizes', function () {
+           TEST.beginNewPage({config: {responsive:{large: [1280, 800], medium: [970, 690], small: [0,0]}, meta: mpu,  krux: false, timestamp: false, audSci : false}});
+           FT.ads.gpt.init(); // define method is run in the init
+
+           FT.ads.slots.initSlot('mpu');
+           var result, stubOnSlot;
+           stubOnSlot = FT.ads.slots.mpu.gptSlot;
+           expect(2);
+           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+           equal(stubOnSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+
+        });
+
+
     }
 
     $(runTests);
