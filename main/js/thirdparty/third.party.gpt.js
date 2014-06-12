@@ -28,8 +28,6 @@
         // executed when GPT code is available, if GPT is already available they
         // will be executed immediately
         win.googletag.cmd = win.googletag.cmd || [];
-
-        this.unitName = '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
         return this;
     }
  /**
@@ -106,7 +104,7 @@
  * @lends GPT
 */
     proto.getUnitName = function (slotName) {
-        return this.unitName;
+        return  '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
     };
 
 /**
@@ -317,7 +315,7 @@
         FT._ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
         this.setPageTargeting();
 
-        if (!FT._ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter()){
+        if (FT.env && (!FT._ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
             this.startRefresh();
         }
 
