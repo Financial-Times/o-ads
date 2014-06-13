@@ -48,9 +48,7 @@
             container: function(data) {
               var name;
               if (data) {
-                 for (name in data) {
-                    $('<div name="' + name + '></>').appendTo('body');
-                 }
+                $('<div id="' + data + '" ftads></div>').appendTo('#adCalls');
               }
               return data;
             },
@@ -185,6 +183,17 @@
             scripts: function () {
                 $('script[ftads]').remove();
             },
+            container: function (){
+                $('div[ftads]').remove();
+            },
+            gpt: function () {
+                if(googletag && googletag.sinon){
+                    var len = googletag.sinon.fakes.length;
+                    while (len--) {
+                        googletag.sinon.fakes[len].reset();
+                    }
+                }
+            },
             sinon: function (mocks) {
                 var mock, func,
                     restore = ['clock'];
@@ -270,12 +279,12 @@
         /*suppressExternalScripts: function () {
             var _createElement = document.createElement;
             document.createElement = function () {
-                
+
                     var parent,_insertBefore,
                         node = _createElement.apply(this, arguments);
 
                     if (arguments[0] === 'script') {
-                        
+
                         parent = document.getElementsByTagName('script')[0].parentNode;
                         _insertBefore = parent.insertBefore;
                         parent.insertBefore = function (tag, node) {

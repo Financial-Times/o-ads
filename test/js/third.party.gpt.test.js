@@ -27,16 +27,6 @@
             equal(sinon.spies.gptCmdPush.callCount, 2, 'the params are queued with GPT');
         });
 
-        // test('refresh', function () {
-        //     TEST.mock.date('now');
-        //     TEST.beginNewPage({config: {refreshTime: 1 }});
-        //     FT.ads.gpt.startRefresh();
-        //     TEST.sinon.GPTrefreshTimer = sinon.spy(FT.ads.gpt.refreshTimer, 'fn');
-
-        //     TEST.sinon.clock.tick(1025);
-        //     ok();
-        // });
-
         test('collapse empty', function () {
             var result;
 
@@ -65,22 +55,15 @@
         });
 
         test('define with images sizes', function () {
-           TEST.beginNewPage({config: {responsive:{large: [1280, 800], medium: [970, 690], small: [0,0]}, meta: mpu ,formats: {
-              banlb: {
-                 sizes: {
-                    small: [[468, 60]],
-                    medium: [[728, 90]],
-                    large: [[970, 90]]
-                 }
-              },
-              hlfmpu:{
-                 sizes: {
-                    small: [[300, 250]],
-                    medium: [[300, 600]],
-                    large: [[300, 1050]]
-                 }
-              },
-              mpu: {
+           TEST.beginNewPage({
+            container: 'responsive-mpu', config: {
+            responsive:{
+              large: [1280, 800],
+              medium: [970, 690],
+              small: [0,0]
+            },
+            formats: {
+              'responsive-mpu': {
                  sizes: {
                     small: false,
                     medium: [[300, 250]],
@@ -90,9 +73,9 @@
            },  krux: false, timestamp: false, audSci : false}});
            FT.ads.gpt.init(); // define method is run in the init
 
-           FT.ads.slots.initSlot('mpu');
+           FT.ads.slots.initSlot('responsive-mpu');
            var result, stubOnSlot;
-           stubOnSlot = FT.ads.slots.mpu.gptSlot;
+           stubOnSlot = FT.ads.slots['responsive-mpu'].gptSlot;
            expect(2);
            ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
            ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
@@ -100,15 +83,33 @@
         });
 
         test('define without images sizes', function () {
-           TEST.beginNewPage({config: {responsive:{large: [1280, 800], medium: [970, 690], small: [0,0]}, meta: mpu,  krux: false, timestamp: false, audSci : false}});
-           FT.ads.gpt.init(); // define method is run in the init
+           TEST.beginNewPage({
+            container: 'no-responsive-mpu',
+            config: {
+              responsive: {
+                large: [1280, 800],
+                medium: [970, 690],
+                small: [0,0]
+              },
+              krux: false,
+              timestamp: false,
+              audSci : false,
+              formats: {
+                'no-responsive-mpu': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
 
-           FT.ads.slots.initSlot('mpu');
-           var result, stubOnSlot;
-           stubOnSlot = FT.ads.slots.mpu.gptSlot;
-           expect(2);
-           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
-           equal(stubOnSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+          FT.ads.gpt.init(); // define method is run in the init
+
+          FT.ads.slots.initSlot('no-responsive-mpu');
+          var result, stubOnSlot;
+              stubOnSlot = FT.ads.slots['no-responsive-mpu'].gptSlot;
+          expect(2);
+          ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+          equal(stubOnSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
 
         });
 

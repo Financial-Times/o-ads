@@ -2,75 +2,76 @@
     "use strict";
 
     var fn, googletag = window.googletag || {};
-    //googletag = {};
-    googletag.getEventLog = sinon.stub();
-    googletag.defineOutOfPageSlot = sinon.stub();
-    googletag.defineSlot = sinon.stub();
-    googletag.defineUnit = sinon.stub();
-    googletag.defineSizeMapping = sinon.stub();
-    googletag.display = sinon.stub();
-    googletag.enableServices = sinon.stub();
-    googletag.companionAds = sinon.stub();
-    googletag.content = sinon.stub();
-    googletag.disablePublisherConsole = sinon.stub();
-    googletag.sizeMapping = sinon.stub();
-    googletag.getVersion = sinon.stub();
 
+    var stubs = googletag.sinon = sinon.sandbox.create();
+    //var stubs = sinon;
+    googletag.getEventLog = stubs.stub();
+    googletag.defineOutOfPageSlot = stubs.stub();
+    googletag.defineSlot = stubs.stub();
+    googletag.defineUnit = stubs.stub();
+    googletag.defineSizeMapping = stubs.stub();
+    googletag.display = stubs.stub();
+    googletag.enableServices = stubs.stub();
+    googletag.companionAds = stubs.stub();
+    googletag.content = stubs.stub();
+    googletag.disablePublisherConsole = stubs.stub();
+    googletag.sizeMapping = stubs.stub();
+    googletag.getVersion = stubs.stub();
 
-    googletag.defineSlot = sinon.stub().returns({
-         addService: sinon.stub(),
-         setCollapseEmptyDiv: sinon.stub(),
-         renderEnded: sinon.stub(),
-         setTargeting: sinon.stub(),
-         defineSizeMapping: sinon.stub()
+    googletag.defineSlot = stubs.stub().returns({
+         addService: stubs.stub(),
+         setCollapseEmptyDiv: stubs.stub(),
+         renderEnded: stubs.stub(),
+         setTargeting: stubs.stub(),
+         defineSizeMapping: stubs.stub()
     });
 
-   googletag.sizeMapping = sinon.stub().returns({
-      addSize: sinon.stub(),
-      build: sinon.stub()
+   googletag.sizeMapping = stubs.stub().returns({
+      addSize: stubs.stub(),
+      build: stubs.stub()
    });
 
 
-    googletag.pubads = sinon.stub().returns({
-        getName : sinon.stub(),
-        fillSlot : sinon.stub(),
-        setCookieOptions : sinon.stub(),
-        setTagForChildDirectedTreatment : sinon.stub(),
-        disableInitialLoad : sinon.stub(),
-        enableSingleRequest : sinon.stub(),
-        enableAsyncRendering : sinon.stub(),
-        setPublisherProvidedId : sinon.stub(),
-        refresh : sinon.stub(),
-        getCorrelator : sinon.stub(),
-        getVideoStreamCorrelator : sinon.stub(),
-        isAdRequestFinished : sinon.stub(),
-        isSlotAPersistentRoadblock : sinon.stub(),
-        collapseEmptyDivs : sinon.stub(),
-        clear : sinon.stub(),
-        clearNoRefreshState : sinon.stub(),
-        clearSlotTargeting : sinon.stub(),
-        setLocation : sinon.stub(),
-        definePassback : sinon.stub(),
-        enableSyncRendering : sinon.stub(),
-        enableVideoAds : sinon.stub(),
-        forceExperiment : sinon.stub(),
-        getVideoContent : sinon.stub(),
-        noFetch : sinon.stub(),
-        onGoogleAdsJsLoad : sinon.stub(),
-        setTargeting : sinon.stub(),
-        clearTargeting : sinon.stub(),
-        setCategoryExclusion : sinon.stub(),
-        clearCategoryExclusions : sinon.stub(),
-        setVideoContent : sinon.stub(),
-        videoRefresh : sinon.stub(),
-        setCentering : sinon.stub(),
-        clearTagForChildDirectedTreatment : sinon.stub(),
-        isEnabled : sinon.stub(),
-        enable : sinon.stub(),
-        display : sinon.stub(),
-        getSlots : sinon.stub(),
-        getSlotIdMap : sinon.stub(),
-        getAttributeKeys : sinon.stub()
+    googletag.pubads = stubs.stub().returns({
+        getName : stubs.stub(),
+        fillSlot : stubs.stub(),
+        setCookieOptions : stubs.stub(),
+        setTagForChildDirectedTreatment : stubs.stub(),
+        disableInitialLoad : stubs.stub(),
+        enableSingleRequest : stubs.stub(),
+        enableAsyncRendering : stubs.stub(),
+        setPublisherProvidedId : stubs.stub(),
+        refresh : stubs.stub(),
+        getCorrelator : stubs.stub(),
+        getVideoStreamCorrelator : stubs.stub(),
+        isAdRequestFinished : stubs.stub(),
+        isSlotAPersistentRoadblock : stubs.stub(),
+        collapseEmptyDivs : stubs.stub(),
+        clear : stubs.stub(),
+        clearNoRefreshState : stubs.stub(),
+        clearSlotTargeting : stubs.stub(),
+        setLocation : stubs.stub(),
+        definePassback : stubs.stub(),
+        enableSyncRendering : stubs.stub(),
+        enableVideoAds : stubs.stub(),
+        forceExperiment : stubs.stub(),
+        getVideoContent : stubs.stub(),
+        noFetch : stubs.stub(),
+        onGoogleAdsJsLoad : stubs.stub(),
+        setTargeting : stubs.stub(),
+        clearTargeting : stubs.stub(),
+        setCategoryExclusion : stubs.stub(),
+        clearCategoryExclusions : stubs.stub(),
+        setVideoContent : stubs.stub(),
+        videoRefresh : stubs.stub(),
+        setCentering : stubs.stub(),
+        clearTagForChildDirectedTreatment : stubs.stub(),
+        isEnabled : stubs.stub(),
+        enable : stubs.stub(),
+        display : stubs.stub(),
+        getSlots : stubs.stub(),
+        getSlotIdMap : stubs.stub(),
+        getAttributeKeys : stubs.stub()
     });
 
     googletag.cmd =  googletag.cmd || [];
