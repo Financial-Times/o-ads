@@ -113,17 +113,7 @@
             TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'milkshake'}});
             equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'invalid cookie value does not affect the dfp_site value');
         });
-       
-        test('dfp_site is set to unclassified when FT.env.dfp_site has no value', function () {
-            expect(1);
-            var result;
-            TEST.beginNewPage({
-               global: {}
-            });
-            console.log(FT.env);
-            result = FT.ads.config('dfp_site');
-            strictEqual(result,'ftcom.5887.unclassified');
-        });
+
     }
 
     $(runTests);

@@ -108,10 +108,10 @@
  * fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
  */
         var fetchGlobalConfig = function() {
-            if (!FT._ads.utils.isObject(FT.env)){return {};}
             if (FT._ads.utils.isObject(FT.env)){
-                if (!FT._ads.utils.isNonEmptyString(FT.env.dfp_site)){FT.env.dfp_site ='ftcom.5887.unclassified'; FT.env.dfp_zone='unclassified';}
                 return FT.env;
+            } else {
+                return {};
             }
         };
 /**

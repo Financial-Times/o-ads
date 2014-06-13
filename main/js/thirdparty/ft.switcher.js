@@ -179,6 +179,9 @@
           FT.ads.config('video', true);
         }
 
+        if ( !FT._ads.utils.isNonEmptyString(FT.ads.config('dfp_site')) ) {
+            FT.ads.config('dfp_site', 'ftcom.5887.unclassified');
+        }
         FT.ads.gpt.init();
         FT.ads.krux.init();
     }
