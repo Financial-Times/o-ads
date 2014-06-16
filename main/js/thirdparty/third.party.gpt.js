@@ -55,6 +55,7 @@
                 context.addCompanionService(slot);
 
                 googletag.cmd.push(googletag.display(slotId));
+
             };
         }(this, slot, slotName, slotId));
 
@@ -196,7 +197,6 @@
  * after as in after ads have rendered is the default
  * true is synonymous with before
  * false is synonymous with never
- * ft uses our collapse method from the slots module, which is only attached at slot level
  * @name setPageTargeting
  * @memberof GPT
  * @lends GPT
@@ -210,10 +210,7 @@
             mode = true;
         } else if (mode === 'never' || mode === false) {
             mode = false;
-        } else if (mode === 'ft') {
-            mode = undefined;
-        }
-
+        } 
         googletag.cmd.push( function () {
             googletag.pubads().collapseEmptyDivs(mode);
         });
@@ -249,11 +246,10 @@
 
 /**
  * Sets the GPT collapse empty mode for a given slot
- * values can be 'after', 'before', 'never' or 'ft'
+ * values can be 'after', 'before', 'never' 
  * after as in after ads have rendered is the default
  * true is synonymous with before
  * false is synonymous with never
- * ft uses our collapse method from the slots module
  * @name setPageTargeting
  * @memberof GPT
  * @lends GPT
@@ -268,22 +264,9 @@
             gptSlot.setCollapseEmptyDiv(true, true);
         } else if (mode === false || mode === 'never') {
             gptSlot.setCollapseEmptyDiv(false);
-        } else if (globalMode === 'ft' || mode === 'ft') {
-            gptSlot.setCollapseEmptyDiv(true, true);
-            gptSlot._renderEnded = gptSlot.renderEnded;
-            gptSlot.renderEnded = function (context, slot) {
-                return function (){
-                    var slotId = slot.getSlotId(),
-                        container = document.getElementById(slotId.getDomId()).parentNode,
-                        iframe = document.getElementById('google_ads_iframe_' + slotId.getId());
-                    FT.ads.gpt.handleNoAdAndSlotCustomization(iframe, container);
-                    slot._renderEnded.apply(this, arguments);
-                };
-            }(this, gptSlot);
-        }
+        } 
         return mode;
     };
-
 
 /**
  * Adds key values from a given targetingObj to a given GPT ad slot
@@ -298,53 +281,6 @@
                 if (targetingObj.hasOwnProperty(targetKey)) {
                     gptSlot.setTargeting(targetKey, targetingObj[targetKey]);
                 }
-            }
-        }
-    };
-
-/**
- * Searches the current GPT slot for a no-ad image and collapses the slot if one exists
- *
- * @name createOutOfPage
- * @memberof GPT
- * @lends GPT
-*/
-    proto.handleNoAdAndSlotCustomization = function (iframe, container) {
-        if (iframe.attachEvent) {
-            iframe.attachEvent(
-                'onload',
-                function () {
-                    var slotName = container.getAttribute('id'),
-                        slot = FT.ads.slots[slotName];
-                    if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
-                    try {
-                        var img, imgs = iframe.contentDocument.getElementsByTagName('img');
-                        imgs = FT._ads.utils.nodeListToArray(imgs);
-                        while (img = imgs.pop()) {
-                            if (/ft-no-ad/.test(img.src)) {
-                                slot.collapse();
-                            }
-                        }
-                    } catch (err) {
-                        return false;
-                        // Probably blocked due to ad rendered in iframe no longer being on same domain.
-                    }
-                }
-            );
-        } else {
-            var slotName = container.getAttribute('id'),
-                slot = FT.ads.slots[slotName];
-            if (FT.ads.customSlots && slotName in FT.ads.customSlots) {FT.ads.customSlots[slotName]();}
-            try {
-                var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
-                while (img = imgs.pop()) {
-                    if (/ft-no-ad/.test(img.src)) {
-                        slot.collapse();
-                    }
-                }
-            } catch (err) {
-                return false;
-                // Probably blocked due to ad rendered in iframe no longer being on same domain.
             }
         }
     };
@@ -369,6 +305,11 @@
             context.enableVideo();
             context.enableCompanions();
             googletag.pubads().enableAsyncRendering();
+            googletag.pubads().addEventListener('slotRenderEnded', function(event) {
+                if (FT._ads.utils.isFunction(FT.ads.renderEnded)) {
+                    FT.ads.renderEnded(event);
+                }
+            });
             googletag.enableServices();
 
         });

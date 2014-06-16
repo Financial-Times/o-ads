@@ -67,22 +67,71 @@
         // Brightcove calls this method and sometimes it causes errors under GPT so we#re over writing it just in case
         FT.ads.beginVideo= function (){return true;};
 
-        // Fix styling issues with IR Buttons
-        FT.ads.customSlots = {
-            tlbxrib : function() {
-                if (FT.env.dfp_site === "ftcom.5887.markets-data" && FT.env.dfp_zone === "equity-and-investment-tearsheets"){
-                    var iframe = document.getElementById('tlbxrib-gpt').getElementsByTagName('iframe')[0];
-                    var css = 'a img { border: none; }';
-                    var head = iframe.contentWindow.document.getElementsByTagName('head')[0],
-                    style = iframe.contentWindow.document.createElement('style');
-                    style.type = 'text/css';
-                    if (style.styleSheet){
-                        style.styleSheet.cssText = css;
-                    } else {
-                        style.appendChild(iframe.contentWindow.document.createTextNode(css));
+        var findNoAD = function(iframe, slotName, callback){
+            if (iframe.attachEvent) {
+                iframe.attachEvent(
+                    'onload',
+                    function () {
+                        try {
+                            var img, imgs = iframe.contentDocument.getElementsByTagName('img');
+                            imgs = FT._ads.utils.nodeListToArray(imgs);
+                            while (img = imgs.pop()) {
+                                if (/ft-no-ad/.test(img.src)) {
+                                    callback(true, slotName);
+                                } else {callback(false, slotName);}
+                            }
+                        } catch (err) {
+                            return false;
+                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
+                        }
                     }
-                    head.appendChild(style);
+                );
+            } else {
+                try {
+                    var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                    while (img = imgs.pop()) {
+                        if (/ft-no-ad/.test(img.src)) {
+                            callback(true, slotName);
+                        } else {callback(false, slotName);}
+                    }
+                } catch (err) {
+                    return false;
+                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
                 }
+                // Attaching an event listener to the iFrame's load event as a catch-all fail-safe to collapse the slot 
+                // in the case that the no-ad image hadn't loaded at the point of the first check.
+                iframe.addEventListener(
+                    'load',
+                    function () {
+                        try {
+                            var img, imgs = Array.prototype.slice.call(iframe.contentDocument.getElementsByTagName('img'), 0);
+                            while (img = imgs.pop()) {
+                                if (/ft-no-ad/.test(img.src)) {
+                                    callback(true, slotName);
+                                } else {callback(false, slotName);}
+                            }
+                        } catch (err) {
+                            return false;
+                            // Probably blocked due to ad rendered in iframe no longer being on same domain.
+                        }
+                    },
+                    false
+                );
+            }
+        };
+
+        FT.ads.renderEnded = function(event){
+             var gptSlotId = event.slot.getSlotId(),
+             name = gptSlotId.getDomId().split('-')[0],
+             iframeId = 'google_ads_iframe_' + gptSlotId.getId(),
+             iframe = document.getElementById(iframeId),
+             slot = FT.ads.slots[name];
+            if(event.isEmpty) {
+                slot.collapse();
+            }else { 
+               findNoAD(iframe, name, function(isNoAd, name){
+                    if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
+                });
             }
         };
 
@@ -139,3 +188,13 @@
 
     switcher();
 }(window, document));
+
+
+  if ('%%PATTERN:pos%%'.match(/^tlbxrib$/)){    
+   var links = document.getElementsByTagName("a");
+   for (var i = 0, l = links.length; i < l; i++) {
+      links[i].target = "_blank";
+      var img = links[i].getElementsByTagName("img")[0];
+      if(img) {img.style.border="none";}
+     }
+}
