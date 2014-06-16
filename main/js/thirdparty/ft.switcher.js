@@ -188,13 +188,3 @@
 
     switcher();
 }(window, document));
-
-
-  if ('%%PATTERN:pos%%'.match(/^tlbxrib$/)){    
-   var links = document.getElementsByTagName("a");
-   for (var i = 0, l = links.length; i < l; i++) {
-      links[i].target = "_blank";
-      var img = links[i].getElementsByTagName("img")[0];
-      if(img) {img.style.border="none";}
-     }
-}
