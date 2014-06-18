@@ -313,7 +313,7 @@
 
                     event.iframe = document.getElementById(iframeId);
                     event.name = domId[0];
-                    event.type = domId[1];
+                    event.slotType = domId[1];
                     event.slot = FT.ads.slots[name];
                     FT.ads.renderEnded(event);
                 }

@@ -121,17 +121,19 @@
         };
 
         FT.ads.renderEnded = function(event){
-             var gptSlotId = event.slot.getSlotId(),
-             name = gptSlotId.getDomId().split('-')[0],
-             iframeId = 'google_ads_iframe_' + gptSlotId.getId(),
-             iframe = document.getElementById(iframeId),
-             slot = FT.ads.slots[name];
-            if(event.isEmpty) {
-                slot.collapse();
-            }else { 
-               findNoAD(iframe, name, function(isNoAd, name){
-                    if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
-                });
+             //var gptSlotId = event.slot.getSlotId(),
+             //name = gptSlotId.getDomId().split('-')[0],
+             // iframeId = 'google_ads_iframe_' + gptSlotId.getId(),
+             // iframe = document.getElementById(iframeId),
+             // slot = FT.ads.slots[name];
+            if (event.slotType !== "oop") {
+                if(event.isEmpty) {
+                    event.slot.collapse();
+                }else { 
+                   findNoAD(event.iframe, event.name, function(isNoAd, name){
+                        if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
+                    });
+                }
             }
         };
 
