@@ -121,11 +121,6 @@
         };
 
         FT.ads.renderEnded = function(event){
-             //var gptSlotId = event.slot.getSlotId(),
-             //name = gptSlotId.getDomId().split('-')[0],
-             // iframeId = 'google_ads_iframe_' + gptSlotId.getId(),
-             // iframe = document.getElementById(iframeId),
-             // slot = FT.ads.slots[name];
             if (event.slotType !== "oop") {
                 if(event.isEmpty) {
                     event.slot.collapse();
