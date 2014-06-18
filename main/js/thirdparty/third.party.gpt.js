@@ -210,7 +210,7 @@
             mode = true;
         } else if (mode === 'never' || mode === false) {
             mode = false;
-        } 
+        }
         googletag.cmd.push( function () {
             googletag.pubads().collapseEmptyDivs(mode);
         });
@@ -246,7 +246,7 @@
 
 /**
  * Sets the GPT collapse empty mode for a given slot
- * values can be 'after', 'before', 'never' 
+ * values can be 'after', 'before', 'never'
  * after as in after ads have rendered is the default
  * true is synonymous with before
  * false is synonymous with never
@@ -264,7 +264,7 @@
             gptSlot.setCollapseEmptyDiv(true, true);
         } else if (mode === false || mode === 'never') {
             gptSlot.setCollapseEmptyDiv(false);
-        } 
+        }
         return mode;
     };
 
@@ -307,6 +307,14 @@
             googletag.pubads().enableAsyncRendering();
             googletag.pubads().addEventListener('slotRenderEnded', function(event) {
                 if (FT._ads.utils.isFunction(FT.ads.renderEnded)) {
+                    var gptSlotId = event.slot.getSlotId(),
+                        domId = gptSlotId.getDomId().split('-'),
+                        iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+
+                    event.iframe = document.getElementById(iframeId);
+                    event.name = domId[0];
+                    event.type = domId[1];
+                    event.slot = FT.ads.slots[name];
                     FT.ads.renderEnded(event);
                 }
             });
