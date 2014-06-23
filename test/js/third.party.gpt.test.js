@@ -105,6 +105,66 @@
             equal(result, false, 'setting the value with false works');
             ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
         });
+
+
+        test('define with images sizes', function () {
+           TEST.beginNewPage({
+            container: 'responsive-mpu', config: {
+            responsive:{
+              large: [1280, 800],
+              medium: [970, 690],
+              small: [0,0]
+            },
+            formats: {
+              'responsive-mpu': {
+                 sizes: {
+                    small: false,
+                    medium: [[300, 250]],
+                    large: [[336,280]]
+                 }
+              }
+           },  krux: false, timestamp: false, audSci : false}});
+           FT.ads.gpt.init(); // define method is run in the init
+
+           FT.ads.slots.initSlot('responsive-mpu');
+           var result, stubOnSlot;
+           stubOnSlot = FT.ads.slots['responsive-mpu'].gptSlot;
+           expect(2);
+           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+           ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
+
+        });
+
+        test('define without images sizes', function () {
+           TEST.beginNewPage({
+            container: 'no-responsive-mpu',
+            config: {
+              responsive: {
+                large: [1280, 800],
+                medium: [970, 690],
+                small: [0,0]
+              },
+              krux: false,
+              timestamp: false,
+              audSci : false,
+              formats: {
+                'no-responsive-mpu': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
+
+          FT.ads.gpt.init(); // define method is run in the init
+
+          FT.ads.slots.initSlot('no-responsive-mpu');
+          var result, stubOnSlot;
+              stubOnSlot = FT.ads.slots['no-responsive-mpu'].gptSlot;
+          expect(2);
+          ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+          equal(stubOnSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+
+        });
     }
 
     $(runTests);
