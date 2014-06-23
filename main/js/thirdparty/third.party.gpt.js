@@ -104,9 +104,6 @@
  * @lends GPT
 */
     proto.getUnitName = function (slotName) {
-<<<<<<< HEAD
-        return  '/' + [FT.ads.config('network'), FT.ads.config('dfp_site'), FT.ads.config('dfp_zone')].join('/');
-=======
         var unitName,
             gptUnitName = FT.ads.config('gptUnitName'),
             site = FT.ads.config('dfp_site'),
@@ -120,7 +117,6 @@
             unitName += FT._ads.utils.isNonEmptyString(zone ) ? '/' + zone : '';
         }
         return unitName;
->>>>>>> DE12108: Fixes issues with unit names and unclassified sites/zone
     };
 
 /**
