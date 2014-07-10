@@ -9,14 +9,14 @@
             TEST.mock.date('now');
 
             var method = sinon.spy(),
-            timer = FT._ads.utils.timers.create(1, method, 3),
+            timer = FT._ads.utils.timers.create(1, method, 3, { rebase: true }),
             stop = sinon.spy(timer, 'stop');
 
             TEST.sinon.clock.tick(1025);
             ok(method.calledOnce, 'Tick: the method is called on the first tick');
 
             timer.pause();
-            equal(timer.timeLeft, 975, "Pause: timer left to next tick is calculated correctly");
+            equal(timer.timeLeft, 975, "Pause: time left to next tick is calculated correctly");
             equal(timer.id, undefined, 'Pause: the timeout is canceled');
             TEST.sinon.clock.tick(4000);
             ok(method.calledOnce, "Pause: when the timer is paused the method doesn't run");
@@ -63,13 +63,14 @@
             timer2 = FT._ads.utils.timers.create(1, method2, 3),
             timer3 = FT._ads.utils.timers.create(1, method3, 3);
 
+            TEST.sinon.clock.tick(25);
             FT._ads.utils.timers.pauseall();
             equal(timer1.id, undefined, 'Pause all: timer 1 canceled');
             equal(timer2.id, undefined, 'Pause all: timer 2 canceled');
             equal(timer3.id, undefined, 'Pause all: timer 3 canceled');
-            equal(timer1.timeLeft, 1000, 'Pause all: timer 1 time left calculated correctly');
-            equal(timer2.timeLeft, 1000, 'Pause all: timer 2 time left calculated correctly');
-            equal(timer3.timeLeft, 1000, 'Pause all: timer 3 time left calculated correctly');
+            equal(timer1.timeLeft, 975, 'Pause all: timer 1 time left calculated correctly');
+            equal(timer2.timeLeft, 975, 'Pause all: timer 2 time left calculated correctly');
+            equal(timer3.timeLeft, 975, 'Pause all: timer 3 time left calculated correctly');
 
             TEST.sinon.clock.tick(4000);
             ok(!method1.called, "Pause all: method 1 didn't run");
@@ -78,10 +79,10 @@
 
 
             FT._ads.utils.timers.resumeall();
-            TEST.sinon.clock.tick(1200);
             ok(!!timer1.id, 'Resume all: timer 1 resumed');
             ok(!!timer2.id, 'Resume all: timer 2 resumed');
             ok(!!timer3.id, 'Resume all: timer 3 resumed');
+            TEST.sinon.clock.tick(1200);
             ok(method1.calledOnce, "Resume all: method 1 ran");
             ok(method2.calledOnce, "Resume all: method 2 ran");
             ok(method3.calledOnce, "Resume all: method 3 ran");
@@ -95,6 +96,24 @@
             ok(method2.calledOnce, "Stop all: method 2 didn't run again");
             ok(method3.calledOnce, "Stop all: method 3 didn't run again");
         });
+
+        // test('Timers: js execution paused', function () {
+        //     TEST.mock.date(1000);
+        //     var method1 = sinon.spy(),
+        //     timer1 = FT._ads.utils.timers.create(10, method1, 4, { rebase: true });
+
+        //     TEST.sinon.clock.tick(11000);
+        //     ok(method1.calledOnce, "Rebase: method 1 ran");
+
+        //     // simulate execution in the browser being paused by shunting the clock forwarda bit
+        //     TEST.sinon.clock.tick(101000);
+        //     equal(timer1.startTime, 101000, 'Rebase: the start time of the timer is set to now');
+        //     ok(method1.calledTwice, "Rebase: method 1 ran again");
+
+        //     TEST.sinon.clock.tick(11000);
+        //     ok(method1.calledThrice, "Rebase: method 1 ran");
+
+        // });
     }
 
     $(runTests);
