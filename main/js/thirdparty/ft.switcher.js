@@ -185,6 +185,7 @@
         FT.ads.gpt.init();
         FT.ads.krux.init();
     }
+    
 
     switcher();
 }(window, document));
