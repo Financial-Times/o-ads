@@ -105,16 +105,15 @@
     proto.events = {
         dwell_time: function (config) {
             if (config) {
-                var interval = config.interval || 5,
-                max = (config.total / config.interval) || 120,
-                uid = config.id,
-                arrival = (new Date()).valueOf();
-
+                var fire = this.fire,
+                    interval = config.interval || 5,
+                max = (config.total / interval) || 120,
+                uid = config.id;
                 FT._ads.utils.timers.create(interval, (function () {
                     return function () {
-                        FT.ads.krux.events.fire(uid, {dwell_time: Math.round(((new Date()).valueOf() - arrival) / 1000)});
+                        fire(uid, {dwell_time: Math.floor(((new Date()).valueOf() - this.startTime) / 1000)});
                     };
-                }()), max);
+                }()), max, {rebase: true});
             }
         }
     };
