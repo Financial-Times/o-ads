@@ -78,7 +78,8 @@
                 if(event.isEmpty) {
                     event.slot.collapse();
                 }else {
-                   findNoAD(event.iframe, event.name, function(isNoAd, name){
+                    FT.ads.slots[event.name] && FT.ads.slots[event.name].container.setAttribute('data-cb-ad-id', event.name);
+                    findNoAD(event.iframe, event.name, function(isNoAd, name){
                         if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
                     });
                 }
