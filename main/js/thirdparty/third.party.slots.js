@@ -82,7 +82,8 @@
             sizes: !!(sizes.length) ? sizes : config.sizes,
             outOfPage: config.outOfPage || false,
             collapseEmpty: config.collapseEmpty,
-            targeting: targeting
+            targeting: targeting,
+            cbTrack: config.cbTrack
         };
     };
 
@@ -112,7 +113,6 @@
     };
 
 
-
 /**
  * Given an element and an Array of sizes in the format [[width,height],[w,h]]
  * the method will apply style rules to center the container, the rules applied are
@@ -127,6 +127,15 @@
         FT._ads.utils.addClass(container, 'center');
     };
 
+/**
+ * Add a data-attribute for chartbeat tracking to the div element which contains the slot
+ * @name addChartBeatTracking
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.addChartBeatTracking = function(container, slotName) {
+            container.setAttribute('data-cb-ad-id', slotName);
+    };
 /**
  * Given an array of slotnames will collapse the slots using the collapse method on the slot
  * @name collapse
@@ -167,7 +176,6 @@
                 result = true;
             }
         }
-
         return result;
     };
 
@@ -201,6 +209,7 @@
 
 
         this.centerContainer(container, config.sizes);
+        if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
 
         this[slotName] = {
             container: container,
