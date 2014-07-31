@@ -27,14 +27,14 @@
          file is important. The entire run will be as slow as the longest <test> Tests will be run on the specified browser for each test.
      -->
 
-
+<!--
 <test name="Firefox">
         <parameter name="browser" value="*firefox" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
             <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
-    </test>
+    </test>   -->
 
     <test name="Chrome">
         <parameter name="browser" value="*googlechrome" />
@@ -44,11 +44,12 @@
         </classes>
     </test>
 
+    <!--
     <test name="Internet Explorer">
         <parameter name="browser" value="*iexplore" />
         <parameter name="include" value=".*\.test\.htm(l)?" />
         <classes>
             <class name="com.ft.test.qunit.runner.QunitSeleniumRunner" />
         </classes>
-    </test>
+    </test>  -->
 </suite>
