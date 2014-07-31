@@ -108,6 +108,7 @@
           FT.ads.config('collapseEmpty', 'ft');
 
           FT.ads.gpt.init();
+          FT.ads.krux.init();
       }
     }
 
