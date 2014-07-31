@@ -78,7 +78,7 @@
                 if(event.isEmpty) {
                     event.slot.collapse();
                 }else {
-                   findNoAD(event.iframe, event.name, function(isNoAd, name){
+                    findNoAD(event.iframe, event.name, function(isNoAd, name){
                         if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
                     });
                 }
@@ -88,16 +88,20 @@
           FT.ads.config('formats', {
             banlb: {
               sizes: [[728,90], [468,60], [970,90]],
-              outOfPage: true
+              outOfPage: true,
+              cbTrack: true
             },
             mpu: {
-              sizes: [[300,250], [336,280]]
+              sizes: [[300,250], [336,280]],
+              cbTrack: true
             },
             mpu2: {
-              sizes: [[300,250], [336,280]]
+              sizes: [[300,250], [336,280]],
+              cbTrack: true
             },
             hlfmpu: {
-              sizes: [[300,600], [336,850], [300,250], [336,280]]
+              sizes: [[300,600], [336,850], [300,250], [336,280]],
+              cbTrack: true
             }
           });
 
