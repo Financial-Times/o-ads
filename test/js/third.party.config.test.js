@@ -59,13 +59,28 @@
         test('Config fetchMetaConfig', function () {
             TEST.beginNewPage({
                 meta: {
-                    metaconf1: 'I\'m so meta, even this acronym.'
+                    metaconf1: 'I&#39;m so meta, even this acronym.'
                 }
             });
             var result = FT.ads.config();
 
             ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
             equal(FT.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
+        });
+
+        test('Config fetchMetaConfigJSON', function () {
+            TEST.beginNewPage({
+                meta: {
+                    metaconfjson1: {
+                        content: '{"testing":"blah"}',
+                        other: 'data-contenttype="json"'
+                    }
+                }
+            });
+            var result = FT.ads.config();
+
+            ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
+            equal(FT.ads.config('metaconfjson1').testing, 'blah', 'Config returns the correct value');
         });
 
         // test('Config fetchCookieConfig', function () {

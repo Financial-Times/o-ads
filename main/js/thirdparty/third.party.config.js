@@ -27,7 +27,7 @@
 */
     function Config() {
 /**
- * Default configuration set in the constructor.
+ * cDefault configuration set in the constructor.
  */
         var defaults =  {
             network: '5887',
@@ -96,7 +96,11 @@
             for (var i= 0; i < metas.length; i++) {
                 meta = metas[i];
                 if (meta.name) {
-                    results[meta.name] = meta.content;
+                    if (meta.getAttribute("data-contenttype") === "json"){
+                        results[meta.name] = (JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+                    } else {
+                        results[meta.name] = meta.content;
+                    }
                 }
             }
             return results;

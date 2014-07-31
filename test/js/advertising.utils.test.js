@@ -294,7 +294,7 @@
 
         });
 
-        test('attach method', function () {
+        /*test('attach method', function () {
             expect(3);
             window.attached = function(str){
                 return str;
@@ -327,7 +327,7 @@
                         QUnit.start();
                     }
                 }, interval);
-        });
+        });  */
 
        test("writeScript method",function(){
             expect(1);
