@@ -7,10 +7,13 @@
     <parameter name="seleniumPort" value="4444" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on the Selenium Grid-->
-    <parameter name="majorBrowsers" value="*firefox,*iexplore,*chrome" />
+    <!--<parameter name="majorBrowsers" value="*firefox,*iexplore,*chrome" /> -->
+    <!-- commenting out ff & ie as I think these may have problems need further investigation -->
+    <parameter name="majorBrowsers" value="*chrome" />
 
     <!-- The build will FAIL if any of the tests fail on these browsers on your local Grid-->
-    <parameter name="localBrowsers" value="*firefox,*chrome" />
+    <!--<parameter name="localBrowsers" value="*firefox,*chrome" /> -->
+    <parameter name="localBrowsers" value="*chrome" />
 
     <parameter name="testRoot" value="target/test-classes" />
 
