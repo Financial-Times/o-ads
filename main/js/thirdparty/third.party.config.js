@@ -27,7 +27,7 @@
 */
     function Config() {
 /**
- * cDefault configuration set in the constructor.
+ * Default configuration set in the constructor.
  */
         var defaults =  {
             network: '5887',

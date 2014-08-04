@@ -41,7 +41,7 @@
                 if (data) {
                     for (name in data) {
                         var content, other = "", metatag;
-                        if (typeof data[name] === "string"){
+                        if (FT._ads.utils.isString(data[name])){
                             content = data[name];
                         } else {
                             content = data[name].content;
