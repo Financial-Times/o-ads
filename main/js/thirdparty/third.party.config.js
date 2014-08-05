@@ -97,7 +97,7 @@
                 meta = metas[i];
                 if (meta.name) {
                     if (meta.getAttribute("data-contenttype") === "json"){
-                        results[meta.name] = (JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+                        results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
                     } else {
                         results[meta.name] = meta.content;
                     }
