@@ -60,7 +60,15 @@
                 var name;
                 if (data) {
                     for (name in data) {
-                        $('<meta name="' + name + '" content="' + data[name] +'" remove>').appendTo('head');
+                        var content, other = "", metatag;
+                        if (FT._ads.utils.isString(data[name])){
+                            content = data[name];
+                        } else {
+                            content = data[name].content;
+                            other = data[name].other;
+                        }
+                        metatag = '<meta name="' + name + "\" content='" + content + "' " + other + ' remove>';
+                        $(metatag).appendTo('head');
                     }
                 }
                 return data;

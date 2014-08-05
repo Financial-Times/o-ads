@@ -71,7 +71,8 @@
         display : stubs.stub(),
         getSlots : stubs.stub(),
         getSlotIdMap : stubs.stub(),
-        getAttributeKeys : stubs.stub()
+        getAttributeKeys : stubs.stub(),
+        addEventListener : stubs.stub()
     });
 
     googletag.cmd =  googletag.cmd || [];

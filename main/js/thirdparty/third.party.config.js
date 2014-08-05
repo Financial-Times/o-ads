@@ -96,7 +96,11 @@
             for (var i= 0; i < metas.length; i++) {
                 meta = metas[i];
                 if (meta.name) {
-                    results[meta.name] = meta.content;
+                    if (meta.getAttribute("data-contenttype") === "json"){
+                        results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+                    } else {
+                        results[meta.name] = meta.content;
+                    }
                 }
             }
             return results;
