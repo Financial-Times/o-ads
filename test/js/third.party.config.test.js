@@ -69,18 +69,21 @@
         });
 
         test('Config fetchMetaConfigJSON', function () {
-            TEST.beginNewPage({
-                meta: {
-                    metaconfjson1: {
-                        content: '{"testing":"blah"}',
-                        other: 'data-contenttype="json"'
+            if (window.JSON) {
+                TEST.beginNewPage({
+                    meta: {
+                        metaconfjson1: {
+                            content: '{"testing":"blah"}',
+                            other: 'data-contenttype="json"'
+                        }
                     }
-                }
-            });
-            var result = FT.ads.config();
+                });
+                var result = FT.ads.config();
 
-            ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
-            equal(FT.ads.config('metaconfjson1').testing, 'blah', 'Config returns the correct value');
+                ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
+                equal(FT.ads.config('metaconfjson1').testing, 'blah', 'Config returns the correct value');
+            }
+            else {ok(true, "JSON is not defined");}
         });
 
         // test('Config fetchCookieConfig', function () {
