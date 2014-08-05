@@ -11,14 +11,6 @@
             }
         });
 
-        function mockViewportSize(width, height) {
-            //d = document.documentElement || document.body;
-            window.innerWidth = width;
-            window.innerHeight = height;
-            //d.clientWidth = width;
-            //d.clientHeight = height;
-        }
-
         function triggerResize(){
             var event;
             if (document.createEvent) {
@@ -34,28 +26,28 @@
 
         test('resizing the browser window, simple config', function () {
             expect(5);
-            var callback = sinon.spy(),
+            var callback = sinon.stub(),
                 viewports = {
                     large: [300, 200],
                     medium: [200, 100],
                     small: [0,0]
                 };
 
-            mockViewportSize(1, 1);
+            TEST.mock.viewport(1, 1);
             FT._ads.utils.responsive(viewports, callback);
 
-            mockViewportSize(201, 101);
+            TEST.mock.viewport(201, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
 
-            mockViewportSize(250, 101);
+            TEST.mock.viewport(250, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When the viewport is resized but a breakpoint is not crossed the callback function is not called');
 
-            mockViewportSize(301, 201);
+            TEST.mock.viewport(301, 201);
             triggerResize();
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
@@ -73,22 +65,22 @@
                     small: [0,0]
                 };
 
-            mockViewportSize(1, 1);
+            TEST.mock.viewport(1, 1);
             FT._ads.utils.responsive(viewports, callback);
 
-            mockViewportSize(201, 101);
+            TEST.mock.viewport(201, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
 
-            mockViewportSize(101, 201);
+            TEST.mock.viewport(101, 201);
             triggerResize();
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('other'), 'the first arument to the callback is the expected viewport size (other)');
 
-            mockViewportSize(301, 201);
+            TEST.mock.viewport(301, 201);
             triggerResize();
             clock.tick(210);
             ok(callback.calledThrice, 'When a breakpoint is crossed the callback function is called');

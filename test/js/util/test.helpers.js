@@ -20,6 +20,26 @@
         },
         /* methods for mocking things */
         mock: {
+            viewport: function (width, height){
+                window.innerWidth = width;
+                window.innerHeight = height;
+                // in firefox we can't overwrite these props so need to use defineProperty
+                if (Object.defineProperty && (window.innerWidth || window.innerHeight !== height) ) {
+                    Object.defineProperty(window, 'innerWidth', {
+                        value: width,
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Object.defineProperty(window, 'innerHeight', {
+                        value: height,
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    });
+                }
+            },
             global: function(data) {
                 FT.env = data || {};
             },
@@ -177,6 +197,11 @@
         },
         /* methods for clearing things */
         clear: {
+            viewport: function (){
+                if (TEST.winWidth !== window.innerWidth) {
+                    TEST.mock.viewport(TEST.winWidth, TEST.winHeight);
+                }
+            },
             meta: function () {
                 $('meta[remove]').remove();
             },
@@ -305,7 +330,9 @@
         beginNewPage: test.beginNewPage,
         sinon: test.sinon,
         mock: test.mock,
-        mode: test.mode()
+        mode: test.mode(),
+        winWidth: window.innerWidth,
+        winHeight: window.innerHeight
     };
 
     if (test.mode() === 'unit') {
