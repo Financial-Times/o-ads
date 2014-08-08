@@ -72,7 +72,8 @@
         getSlots : stubs.stub(),
         getSlotIdMap : stubs.stub(),
         getAttributeKeys : stubs.stub(),
-        addEventListener : stubs.stub()
+        addEventListener : stubs.stub(),
+        updateCorrelator : stubs.stub()
     });
 
     googletag.cmd =  googletag.cmd || [];

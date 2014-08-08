@@ -165,6 +165,12 @@
           equal(stubOnSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
 
         });
+
+        test('update correlator without images sizes', function () {
+          TEST.beginNewPage();          
+          FT.ads.gpt.updateCorrelator();
+          ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
+        });
     }
 
     $(runTests);

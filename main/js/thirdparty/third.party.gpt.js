@@ -156,6 +156,18 @@
         return slot;
     };
 
+/**
+ * Add a companion service to the GPT slot if companions are on and the slot
+ * configuration doesn't exclude the slot
+ * @name addCompanionService
+ * @memberof GPT
+ * @lends GPT
+*/
+    proto.updateCorrelator = function (slot) {
+         googletag.pubads().updateCorrelator();
+        return slot;
+    };
+
     proto.refresh = function () {
         var slot, slotsForRefresh = [],
         slots = FT.ads.slots;
