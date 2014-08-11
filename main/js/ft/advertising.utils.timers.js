@@ -18,11 +18,12 @@
         return (new Date()).valueOf();
     }
 
-    function Timer(interval, fn, maxTicks) {
+    function Timer(interval, fn, maxTicks, opts) {
         this.interval = (parseFloat(interval) || 1)  * 1000;
         this.maxTicks = parseInt(maxTicks, 10) || 0;
         this.fn = fn;
         this.ticks = 0;
+        this.opts = opts || {};
         this.start();
         return this;
     }
@@ -31,8 +32,8 @@
         var Timer = this;
         return function () {
             Timer.ticks++;
-            Timer.fn.apply();
-            Timer.start();
+            Timer.fn.apply(Timer);
+            Timer.lastTick = now();
 
             if (Timer.ticks === Timer.maxTicks) {
                 Timer.stop();
@@ -41,14 +42,14 @@
     };
 
     Timer.prototype.start = function(){
-        this.startTime = now();
-        this.id = setTimeout(this.tick(), this.interval);
+        this.startTime = this.lastTick = now();
+        this.id = setInterval(this.tick(), this.interval);
         return true;
     };
 
     Timer.prototype.resume = function(){
         if (this.timeLeft){
-            this.id = setTimeout(this.tick(), this.timeLeft);
+            this.id = setInterval(this.tick(), this.timeLeft);
             delete this.timeLeft;
             return true;
         }
@@ -57,16 +58,25 @@
 
     Timer.prototype.pause = function(){
         if (this.id){
-            this.timeLeft = this.interval - (now() - this.startTime);
+            this.timeLeft = (this.interval) - (now() - this.lastTick);
             this.kill();
             return true;
         }
         return false;
     };
 
+    Timer.prototype.rebase = function() {
+        if (!!this.startTime) {
+            this.startTime = now();
+            return true;
+        } else{
+            return false;
+        }
+    };
+
     Timer.prototype.kill = function(){
         if (this.id) {
-            clearTimeout(this.id);
+            clearInterval(this.id);
             delete this.id;
             return true;
         }
@@ -98,8 +108,31 @@
             };
         }
 
-        function create(interval, fn, maxTicks) {
-            timer  = new Timer(interval, fn, maxTicks);
+        function hasExecutionPaused(fn){
+            return function () {
+                var Timer = this,
+                    rebase = Timer.opts.rebase || false,
+                    reset = Timer.opts.reset || false,
+                    time = now() - Timer.lastTick - Timer.interval,
+                    threshhold = Timer.interval * 2;
+
+                if ( threshhold < time) {
+                    console.warn('paused', now());
+                    if (rebase ){
+                        Timer.rebase();
+                    }
+                }
+
+                fn.apply(Timer);
+            };
+        }
+
+        function create(interval, fn, maxTicks, opts) {
+            if( (opts && opts.rebase) || (opts && opts.reset) ){
+                fn = hasExecutionPaused(fn);
+            }
+
+            timer  = new Timer(interval, fn, maxTicks, opts);
             scope.timers.push(timer);
             return timer;
         }

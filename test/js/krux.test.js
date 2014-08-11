@@ -41,7 +41,6 @@
 
 
         test('event pixels', function () {
-
             TEST.beginNewPage({config: { krux: {id: '112233'}}});
             window.Krux = TEST.sinon.Krux = sinon.stub();
             var eventId = 'crunch',
@@ -56,7 +55,7 @@
         test('event pixel - dwell time', function () {
             var dwellTimeId = 'JCadw18P',
                 dwellTimeInterval = 10,
-                dwellTimeTotal = 20;
+                dwellTimeTotal = 30;
             TEST.beginNewPage({
                 date: (new Date()).valueOf(),
                 config: {
@@ -76,13 +75,22 @@
             window.Krux = TEST.sinon.Krux = sinon.stub();
             FT.ads.krux.events.init();
             TEST.sinon.clock.tick(11000);
-            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: dwellTimeInterval}), 'fired after first interval');
+            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'fired after first interval');
 
             TEST.sinon.clock.tick(11000);
-            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: dwellTimeTotal}), 'fired after second interval');
+            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
+
+            TEST.sinon.clock.tick(41000);
+            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'if js execution is paused the event resets');
 
             TEST.sinon.clock.tick(11000);
-            ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 30}), 'doesn\'t fire once max interval is reached');
+            ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
+
+            TEST.sinon.clock.tick(11000);
+            ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 30}), 'fired after third interval');
+
+            TEST.sinon.clock.tick(11000);
+            ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 40}), 'doesn\'t fire once max interval is reached');
         });
     }
     $(runTests);

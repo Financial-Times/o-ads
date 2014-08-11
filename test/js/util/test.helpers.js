@@ -220,7 +220,7 @@
                 $('div[ftads]').remove();
             },
             gpt: function () {
-                if(googletag && googletag.sinon){
+                if(window.googletag && googletag.sinon){
                     var len = googletag.sinon.fakes.length;
                     while (len--) {
                         googletag.sinon.fakes[len].reset();
