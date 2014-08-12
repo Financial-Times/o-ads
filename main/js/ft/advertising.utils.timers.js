@@ -65,9 +65,10 @@
         return false;
     };
 
-    Timer.prototype.rebase = function() {
+    Timer.prototype.reset = function() {
         if (!!this.startTime) {
             this.startTime = now();
+            this.ticks = 1; // ticks are set to 1 because we're about to execute the first tick again
             return true;
         } else{
             return false;
@@ -111,15 +112,13 @@
         function hasExecutionPaused(fn){
             return function () {
                 var Timer = this,
-                    rebase = Timer.opts.rebase || false,
                     reset = Timer.opts.reset || false,
                     time = now() - Timer.lastTick - Timer.interval,
-                    threshhold = Timer.interval * 2;
+                    threshhold = Timer.interval * 1.5;
 
                 if ( threshhold < time) {
-                    console.warn('paused', now());
-                    if (rebase ){
-                        Timer.rebase();
+                    if (reset ){
+                        Timer.reset();
                     }
                 }
 
@@ -128,7 +127,7 @@
         }
 
         function create(interval, fn, maxTicks, opts) {
-            if( (opts && opts.rebase) || (opts && opts.reset) ){
+            if( (opts && opts.reset) ){
                 fn = hasExecutionPaused(fn);
             }
 

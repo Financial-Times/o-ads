@@ -111,9 +111,9 @@
                 uid = config.id;
                 FT._ads.utils.timers.create(interval, (function () {
                     return function () {
-                        fire(uid, {dwell_time: Math.floor(((new Date()).valueOf() - this.startTime) / 1000)});
+                        fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
                     };
-                }()), max, {rebase: true});
+                }()), max, {reset: true});
             }
         }
     };
