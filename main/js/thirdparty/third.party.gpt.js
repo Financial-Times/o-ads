@@ -47,19 +47,23 @@
         FT._ads.utils.addClass(wrap, 'wrap');
         googletag.cmd.push(function (context, slot, slotName, slotId) {
             return function () {
+                var currentSize;
                 if(FT._ads.utils.isObject(responsive) && FT._ads.utils.isObject(slot.config.sizes)) {
+                    currentSize = slot.config.sizes[context.responsive()];
                     var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
                     slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
                     slot.gptSlot.defineSizeMapping(sizeMapping);
                 } else {
+                    currentSize = slot.config.sizes;
                     slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
                 }
                 slot.gptSlot.addService(googletag.pubads());
                 context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
                 context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
                 context.addCompanionService(slot);
-
-                googletag.cmd.push(googletag.display(slotId));
+                if (currentSize !== false) {
+                  googletag.cmd.push(googletag.display(slotId));
+                }
 
             };
         }(this, slot, slotName, slotId));
@@ -164,18 +168,21 @@
  * @lends GPT
 */
     proto.updateCorrelator = function (slot) {
-         googletag.pubads().updateCorrelator();
-        return slot;
+        googletag.cmd.push(function () {
+            googletag.pubads().updateCorrelator();
+        });
     };
 
-    proto.refresh = function () {
-        var slot, slotsForRefresh = [],
-        slots = FT.ads.slots;
-        for (slot in slots) {
-            slot = slots[slot];
-            if (slot.gptSlot && slot.timer === undefined) {
-                slot.gptSlot.setTargeting('rfrsh', 'true');
-                slotsForRefresh.push(slot.gptSlot);
+    proto.refresh = function (slotsForRefresh) {
+        var slot, slots = FT.ads.slots;
+        slotsForRefresh = slotsForRefresh || [];
+        if ( slotsForRefresh.length === 0 ) {
+            for (slot in slots) {
+                slot = slots[slot];
+                if (slot.gptSlot && slot.timer === undefined) {
+                    slot.gptSlot.setTargeting('rfrsh', 'true');
+                    slotsForRefresh.push(slot.gptSlot);
+                }
             }
         }
         googletag.pubads().refresh(slotsForRefresh);
@@ -343,10 +350,32 @@
             this.startRefresh();
         }
 
+        function onViewportChange(viewport){
+            var slot, slotName, slots = FT.ads.slots, slotsForRefresh = [];
+            for (slotName in slots) {
+                slot = slots[slotName];
+                if (slot.gptSlot && FT._ads.utils.isObject(slot.config.sizes)) {
+                    if (slot.config.sizes[viewport] === false) {
+                        slot.collapse();
+                    } else {
+                        if (!slot.isDisplayed) {
+                          slot.isDisplayed = true;
+                          googletag.display(slot.gptSlot.getSlotId().getDomId());
+                        } else {
+                          slotsForRefresh.push(slot.gptSlot);
+                        }
+                        slot.uncollapse();
+                    }
+                }
+            }
+
+            if (!!slotsForRefresh.length) {
+              context.refresh(slotsForRefresh);
+            }
+        }
+
         if ( FT._ads.utils.isObject(responsive) ) {
-            FT._ads.utils.responsive(responsive, function () {
-                context.refresh();
-            });
+            this.responsive = FT._ads.utils.responsive(responsive, onViewportChange);
         }
 
         this.setPageCollapseEmpty();
