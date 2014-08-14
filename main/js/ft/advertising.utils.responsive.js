@@ -14,7 +14,7 @@
      */
     utils = FT._ads.utils = FT._ads.utils || {};
 
-    var callback, viewPorts,
+    var callback, viewPorts, current,
         timer = false;
 
     function getViewportDims() {
