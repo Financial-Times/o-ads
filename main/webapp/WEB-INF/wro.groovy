@@ -53,6 +53,7 @@ groups {
         js(minimize: false, "/js/thirdparty/third.party.config.js")
         js(minimize: false, "/js/thirdparty/metadata.js")
         js(minimize: false, "/js/thirdparty/krux.js")
+        js(minimize: false, "/js/thirdparty/chartbeat.js")
         js(minimize: false, "/js/thirdparty/third.party.targeting.js")
         js(minimize: false, "/js/ft/audienceScienceFacade.js")
         js(minimize: false, "/js/ft/audienceScience.js")
@@ -118,3 +119,7 @@ groups {
         js(minimize: false, "/js/thirdparty/third.party.htsi.switcher.js")
     }
 }
+
+
+
+
