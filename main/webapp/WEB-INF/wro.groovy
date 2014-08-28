@@ -72,6 +72,7 @@ groups {
         js("/js/thirdparty/third.party.config.js")
         js("/js/thirdparty/metadata.js")
         js("/js/thirdparty/krux.js")
+        js("/js/thirdparty/chartbeat.js")
         js("/js/thirdparty/third.party.targeting.js")
         js("/js/ft/audienceScienceFacade.js")
         js("/js/ft/audienceScience.js")
