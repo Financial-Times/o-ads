@@ -30,9 +30,7 @@
  * @lends ChartBeat
 */
     proto.init = function () {
-        if (window.pSUPERFLY) {
-            this.decorateRefresh();
-        }
+        this.decorateRefresh();
     };
 
     proto.decorateRefresh = function () {
@@ -52,13 +50,16 @@
 */
     proto.refresh = function (fn) {
         return function (slotsForRefresh) {
-            var slot, slotName, cbName,slots = FT.ads.slots;
-            slotsForRefresh = slotsForRefresh || slots;
-            for (slotName in slotsForRefresh) {
-                slot = slots[slotName];
-                if (slot.gptSlot && slot.timer === undefined) {
-                    if ( FT._ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-                        window.pSUPERFLY.refreshAd(cbName);
+            if (window.pSUPERFLY){
+                var slot, slotName, cbName,
+                    slots = FT.ads.slots;
+                slotsForRefresh = slotsForRefresh || slots;
+                for (slotName in slotsForRefresh) {
+                    slot = slots[slotName];
+                    if (slot.gptSlot && slot.timer === undefined) {
+                        if ( FT._ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
+                            window.pSUPERFLY.refreshAd(cbName);
+                        }
                     }
                 }
             }
