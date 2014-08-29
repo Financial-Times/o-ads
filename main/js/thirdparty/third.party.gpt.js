@@ -205,7 +205,9 @@
             max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
         if (time) {
-            this.refreshTimer = FT._ads.utils.timers.create(time, this.refresh, max);
+            this.refreshTimer = FT._ads.utils.timers.create(time, function() {
+                FT.ads.gpt.refresh();
+            }, max);
         }
     };
 

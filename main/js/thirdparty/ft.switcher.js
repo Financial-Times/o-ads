@@ -98,7 +98,7 @@
                     return false;
                             // Probably blocked due to ad rendered in iframe no longer being on same domain.
                 }
-                // Attaching an event listener to the iFrame's load event as a catch-all fail-safe to collapse the slot 
+                // Attaching an event listener to the iFrame's load event as a catch-all fail-safe to collapse the slot
                 // in the case that the no-ad image hadn't loaded at the point of the first check.
                 iframe.addEventListener(
                     'load',
@@ -124,7 +124,7 @@
             if (event.slotType !== "oop") {
                 if(event.isEmpty) {
                     event.slot.collapse();
-                }else { 
+                }else {
                    findNoAD(event.iframe, event.name, function(isNoAd, name){
                         if (isNoAd) {FT.ads.slots[name].collapse();} else {FT.ads.slots[name].uncollapse();}
                     });
@@ -183,9 +183,10 @@
             FT.ads.config('dfp_site', 'ftcom.5887.unclassified');
         }
         FT.ads.gpt.init();
+        FT.ads.cb.init();
         FT.ads.krux.init();
     }
-    
+
 
     switcher();
 }(window, document));
