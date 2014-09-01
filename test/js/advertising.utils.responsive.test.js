@@ -25,7 +25,7 @@
         }
 
         test('resizing the browser window, simple config', function () {
-            expect(5);
+            expect(7);
             var callback = sinon.stub(),
                 viewports = {
                     large: [300, 200],
@@ -34,13 +34,14 @@
                 };
 
             TEST.mock.viewport(1, 1);
-            FT._ads.utils.responsive(viewports, callback);
+            respsonsive  = FT._ads.utils.responsive(viewports, callback);
 
             TEST.mock.viewport(201, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
+            equal(respsonsive(), 'medium', 'returns the current viewport size.');
 
             TEST.mock.viewport(250, 101);
             triggerResize();
@@ -52,11 +53,11 @@
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('large'), 'the first arument to the callback is the expected viewport size (large)');
-
+            equal(respsonsive(), 'large', 'returns the current viewport size.');
         });
 
         test('resizing the browser window, overlapping viewport sizes', function () {
-            expect(6);
+            expect(9);
             var callback = sinon.spy(),
                 viewports = {
                     large: [300, 200],
@@ -73,18 +74,23 @@
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
+            equal(respsonsive(), 'medium', 'returns the current viewport size.');
+
 
             TEST.mock.viewport(101, 201);
             triggerResize();
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('other'), 'the first arument to the callback is the expected viewport size (other)');
+            equal(respsonsive(), 'other', 'returns the current viewport size.');
+
 
             TEST.mock.viewport(301, 201);
             triggerResize();
             clock.tick(210);
             ok(callback.calledThrice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('large'), 'the first arument to the callback is the expected viewport size (large)');
+            equal(respsonsive(), 'large', 'returns the current viewport size.');
         });
     }
 

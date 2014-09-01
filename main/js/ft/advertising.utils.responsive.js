@@ -33,7 +33,7 @@
 
         for (viewPort in viewPorts){
             viewPortDims = viewPorts[viewPort];
-            if(dims.w > viewPortDims[0] && dims.h > viewPortDims[1]){
+            if( dims.w > viewPortDims[0] && dims.h > viewPortDims[1] ){
                 if(!winner || viewPortDims[0] > viewPorts[winner][0]) {
                     winner = viewPort;
                 }
@@ -57,8 +57,8 @@
     }
 
     function onResize() {
-        if (timer) {clearTimeout(timer); }
-        timer = setTimeout(function () {fire();}, 200);
+        if (timer) { clearTimeout(timer); }
+        timer = setTimeout(fire, 200);
     }
 
     function init(vps, cb) {
@@ -79,6 +79,10 @@
         else if (document.body.attachEvent) {
             document.body.attachEvent("onresize", onResize);
         }
+
+        return function() {
+            return current;
+        };
     }
 
     utils.responsive = init;
