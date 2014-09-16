@@ -328,6 +328,14 @@
     return tag;
   };
 
+  utils.isScriptAlreadyLoaded = function(url) {
+    var scripts = document.getElementsByTagName('script');
+    for (var i = scripts.length; i--;) {
+        if (scripts[i].src == url) return true;
+    }
+    return false;
+  };
+
 /**
  * return the current documents referrer or an empty string if non exists
  * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose

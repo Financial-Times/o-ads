@@ -333,6 +333,26 @@
             expect(1);
             ok($.type(FT._ads.utils.writeScript) === 'function', 'The function exists');
         });
+
+
+       test("isScriptAlreadyLoaded method when script is not present", function(){
+            expect(1);
+            var url = "http://local.ft.com/null.js";
+            ok(!FT._ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
+              }
+        );
+        test("isScriptAlreadyLoaded method when script is present", function(){
+            expect(2);
+            var url = "http://local.ft.com/null.js";
+            var nullScript = window.document.createElement('script');
+            nullScript.setAttribute("id", "nullScript");
+            nullScript.setAttribute('src',url);
+            window.document.head.appendChild(nullScript);
+            ok(true, true, 'true');
+            ok(FT._ads.utils.isScriptAlreadyLoaded(url), "The function returns true when a script with the given url is present in the page dom");
+            document.head.removeChild(nullScript);
+            }
+        );
     }
 
     $(runTests);
