@@ -343,13 +343,14 @@
         );
         test("isScriptAlreadyLoaded method when script is present", function(){
             expect(1);
-            var url = "http://local.ft.com/null.js";
-            var nullScript = window.document.createElement('script');
-            nullScript.setAttribute("id", "nullScript");
-            nullScript.setAttribute('src',url);
-            window.document.head.appendChild(nullScript);
+            var url = "http://local.ft.com/null.js",
+                tag = document.createElement('script'),
+                node = document.getElementsByTagName('script')[0];
+            tag.setAttribute('src', url);
+            tag.setAttribute("id", "nullScript");
+            document.head.insertBefore(tag, node);
             ok(FT._ads.utils.isScriptAlreadyLoaded(url), "The function returns true when a script with the given url is present in the page dom");
-            document.head.removeChild(nullScript);
+            document.head.removeChild(tag);
             }
         );
     }
