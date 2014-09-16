@@ -263,6 +263,13 @@
 */
     proto.enableVideo = function () {
         if (FT.ads.config('video'))   {
+            /**
+            * In order for the video companion service to work on mobile devices we need to attach the GPT Proxy script
+            */
+            var url = 'http://s0.2mdn.net/instream/html5/gpt_proxy.js';
+            if (!FT._ads.utils.isScriptAlreadyLoaded(url)){
+                FT._ads.utils.attach(url, true);  
+            }  
             googletag.pubads().enableVideoAds();
         }
     };
@@ -335,6 +342,7 @@
             }
         }
     };
+
 
 /**
  * Initialises GPT on the page
