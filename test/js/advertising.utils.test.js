@@ -342,7 +342,7 @@
               }
         );
         test("isScriptAlreadyLoaded method when script is present", function(){
-            expect(2);
+            expect(1);
             var url = "http://local.ft.com/null.js";
             var nullScript = window.document.createElement('script');
             nullScript.setAttribute("id", "nullScript");
