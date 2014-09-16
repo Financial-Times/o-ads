@@ -348,7 +348,6 @@
             nullScript.setAttribute("id", "nullScript");
             nullScript.setAttribute('src',url);
             window.document.head.appendChild(nullScript);
-            ok(true, true, 'true');
             ok(FT._ads.utils.isScriptAlreadyLoaded(url), "The function returns true when a script with the given url is present in the page dom");
             document.head.removeChild(nullScript);
             }
