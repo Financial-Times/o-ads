@@ -347,10 +347,9 @@
                 tag = document.createElement('script'),
                 node = document.getElementsByTagName('script')[0];
             tag.setAttribute('src', url);
-            tag.setAttribute("id", "nullScript");
-            document.head.insertBefore(tag, node);
+            node.parentNode.insertBefore(tag, node);
             ok(FT._ads.utils.isScriptAlreadyLoaded(url), "The function returns true when a script with the given url is present in the page dom");
-            document.head.removeChild(tag);
+            node.parentNode.removeChild(tag);
             }
         );
     }
