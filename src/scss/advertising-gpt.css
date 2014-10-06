@@ -11,25 +11,6 @@
     visibility: hidden;
 }
 
-/* Uncomment this selector to add transitions to all slots, delete #banlbGPT selector too
-.advertising.empty
-*/
- .advertising.empty#banlbGPT{
-    height: 0px;
-    display: block; /* remove this rule if  transitions are added to all slots */
-    overflow: hidden;
-    transition: height 250ms ease;
-    -moz-transition: height 250ms ease;
-    -webkit-transition: height 250ms ease;
-    -o-transition: height 250ms ease;
-    visibility: hidden;
-}
-
-.topSection #header {
-    margin-top: 0;
-}
-
-
 /*
 * remove background from iframes
 */
@@ -37,37 +18,6 @@
     background: none transparent;
 }
 
-/* Uncomment these selectors to add transitions to all slots
-.advertising.empty#tlbxrib, .advertising.empty#tlbxrib2, .advertising.empty#tlbxrib3,
-.advertising.empty#mpu, .advertising.empty#mpu2, .advertising.empty#mpu3,
-.advertising.empty#hlfmpu, .advertising.empty#hlfmpu2, .advertising.empty#hlfmpu3,*/
-.advertising.empty#banlbGPT {
-    min-height: 0px;
-    transition: min-height 250ms ease;
-    -moz-transition: min-height 250ms ease;
-    -webkit-transition: min-height 250ms ease;
-    -o-transition: min-height 250ms ease;
-}
 
-/* RAIL ADS */
-#tlbxrib, #tlbxrib2, #tlbxrib3 { margin:0 ; padding:0 5px 5px 0; min-height:60px ; background-color:#fff1e0 ; }
-.msie #tlbxrib  { height:60px ; }
 
-#mpu, #mpu2, #mpu3,
-#hlfmpu, #hlfmpu2, #hlfmpu3   { margin:0 0 32px 0 ; width:352px ; min-height:250px ; text-align:center ; }
-
-#mpu *, #mpu2 *, #mpu3 *,
-#hlfmpu *, #hlfmpu2 *, #hlfmpu3 * {
-    margin: 0 auto;
-}
-
-.msie6 #hlfmpu { height:250px ; }
-
-/* To align the expanding Ads in right rails */
-#mpu table,#mpu2 table,#mpu3 table,#hlfmpu table,#hlfmpu2 table,#hlfmpu3 table { display:block ; margin-left:auto ; margin-right:auto ; padding:0px ; }
-
-#banlbGPT {font-size: 0; line-height: 0;min-height: 66px; white-space: pre;margin-top:3px;}
-#tlbxrib-gpt iframe[id^='google_ads_iframe_/5887/ftcom.5887.markets-data/equity-and-investment-tearsheets']:first-child {height:66px!important}
-
-#banlbGPT-gpt div {margin:0 auto;}
 
