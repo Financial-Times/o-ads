@@ -1,0 +1,247 @@
+<!--  SOURCE: http://www.ecsspert.com/play/css3-logos/atari.php -->
+
+<!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<style>
+#atari.canvas { 
+    height: 500px;
+    margin: 0px auto 0;
+    overflow: hidden;
+    position: relative;
+    top: 0px;
+    text-indent:-9999px;
+    width: 830px;
+    z-index: 10;
+}
+
+#atari.canvas.adsize-mpu {
+    -o-transform: scale(0.361, 0.5);
+    -moz-transform: scale(0.361, 0.5);
+    -ms-transform: scale(0.361, 0.5);
+    -webkit-transform: scale(0.361, 0.5);
+    transform: scale(0.361, 0.5);
+}  
+
+#atari.canvas.adsize-full-portrait {
+    -o-transform: scale(0.9253, 2.006);
+    -moz-transform: scale(0.9253, 2.006);
+    -ms-transform: scale(0.9253, 2.006);
+    -webkit-transform: scale(0.9253, 2.006);
+    transform: scale(0.9253, 2.006);
+}  
+
+#atari.canvas.adsize-full-landscape {
+    -o-transform: scale(1.2337, 1.494);
+    -moz-transform: scale(1.2337, 1.494);
+    -ms-transform: scale(1.2337, 1.494);
+    -webkit-transform: scale(1.2337, 1.494);
+    transform: scale(1.2337, 1.494);
+}  
+  
+#atari {
+    background: #AD9978;
+}
+#atari .screen, #atari .atari2,#atari .atari4,#atari .line,#atari .line:after,#atari .line:before {
+    background: #111;
+}
+#atari .shadow {
+
+    border-radius:500px/20px;
+    box-shadow:0 320px 20px RGBA(0,0,0,0.5);
+    height: 20px;
+    margin-left:15px;
+    width: 500px;    
+}
+#atari .screen { 
+    border-radius:15px;
+    left:150px;
+    height: 300px;
+    position: absolute;
+    top:120px;
+    width:530px;
+}
+#atari .resolution { 
+    background: none;
+    box-shadow: none;
+    margin:0;
+    position: absolute;
+    top:0;
+}
+#atari .inner-shadow {
+    box-shadow: inset 0 0 100px black;
+    height: 300px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 500px;
+    z-index: 100;
+}
+#atari .line,#atari .line:after,#atari .line:before {
+    height: 1px;
+    margin-bottom: 5px;
+    position: relative;
+    width:530px;
+}
+#atari .line:before,#atari .line:after {
+    content:"#";
+    display: block;
+    margin: 0 none;
+    position: absolute;
+    text-indent:-9999px;
+    top:2px;
+    width:530px;
+}
+#atari .line:after {
+    top:4px;
+}
+#atari .line:nth-child(1),#atari .line:nth-child(1):before,#atari .line:nth-child(1):after,#atari .line:nth-child(2),#atari .line:nth-child(2):before,#atari .line:nth-child(2):after,#atari .line:nth-child(50),#atari .line:nth-child(50):before,#atari .line:nth-child(50):after,#atari .line:nth-child(49),#atari .line:nth-child(49):before,#atari .line:nth-child(49):after{
+    width: 500px;
+}
+#atari .line:nth-child(1),#atari .line:nth-child(2),#atari .line:nth-child(49),#atari .line:nth-child(50) {
+    left:15px;
+}
+#atari .line:nth-child(1){
+    background: transparent;
+}
+#atari .pong {
+    left:15px;
+    position: absolute;
+    top:0;
+}
+#atari .pong * {
+    background: #fff;
+    position: absolute;
+}
+@-moz-keyframes atari-keyframes-ball { 0%, 100% { left:30px; top:107px } 30% { left:300px; top:294px } 50% { left:464px; top:192px } 80% { left:198px; top:0px } }
+@-moz-keyframes atari-keyframes-player1 { 0%, 90%, 100% { top:70px } 30% { top:90px } 50% { top:80px } 80% { top:60px } }
+@-moz-keyframes atari-keyframes-player2 { 0%, 90%, 100% { top:180px } 30% { top:200px } 50% { top:190px } 80% { top:160px } }
+@-webkit-keyframes atari-keyframes-ball { 0%, 100% { left:30px; top:107px } 30% { left:300px; top:294px } 50% { left:464px; top:192px } 80% { left:198px; top:0px } }
+@-webkit-keyframes atari-keyframes-player1 { 0%, 90%, 100% { top:70px } 30% { top:90px } 50% { top:80px } 80% { top:60px } }
+@-webkit-keyframes atari-keyframes-player2 { 0%, 90%, 100% { top:180px } 30% { top:200px } 50% { top:190px } 80% { top:160px } }
+@keyframes atari-keyframes-ball { 0%, 100% { left:30px; top:107px } 30% { left:300px; top:294px } 50% { left:464px; top:192px } 80% { left:198px; top:0px } }
+@keyframes atari-keyframes-player1 { 0%, 90%, 100% { top:70px } 30% { top:90px } 50% { top:80px } 80% { top:60px } }
+@keyframes atari-keyframes-player2 { 0%, 90%, 100% { top:180px } 30% { top:200px } 50% { top:190px } 80% { top:160px } }
+  
+#atari .pong .ball {
+    -moz-animation: atari-keyframes-ball 4s linear 0s infinite normal;
+    -webkit-animation: atari-keyframes-ball 4s linear 0s infinite normal;
+    animation: atari-keyframes-ball 4s linear 0s infinite normal;
+    height: 6px;
+    left:300px;
+    top:294px;
+    width:6px;
+}
+  
+#atari .pong .player {
+    height: 54px;
+    width:8px;
+}
+  
+#atari .pong .player1 {
+    -moz-animation: atari-keyframes-player1 4s linear 0s infinite alternate;
+    -webkit-animation: atari-keyframes-player1 4s linear 0s infinite alternate;
+    animation: atari-keyframes-player1 4s linear 0s infinite alternate;
+    left: 22px;
+    top: 70px;
+}
+
+#atari .pong .player2 { 
+    -moz-animation: atari-keyframes-player2 4s linear 0s infinite normal;
+    -webkit-animation: atari-keyframes-player2 4s linear 0s infinite normal;
+    animation: atari-keyframes-player2 4s linear 0s infinite normal;
+    left:470px;
+    top: 180px;
+}
+  
+#atari .pong .midfield {
+    height: 240px;
+    left: 247px;
+    top:30px;
+    width:6px;
+}
+#atari .icon {
+    height: 200px;
+    left:148px;
+    overflow: hidden;
+    position: absolute;
+    top:50px;
+    width:234px;
+}
+#atari .icon * {
+    opacity:1;
+    position: absolute;
+}
+#atari .side2 {
+    left:234px;
+    position: absolute;
+    top:0px;
+    -o-transform:scalex(-1);
+    -moz-transform:scalex(-1);
+    -ms-transform:scalex(-1);
+    -webkit-transform:scalex(-1);
+    transform:scalex(-1);
+}
+#atari .atari1,.atari3 {
+    background: #fa000f;
+}
+#atari .atari1 {
+    height: 200px;
+    left: 85px;
+    width: 32px;
+}
+#atari .atari2 {
+    height:256px;
+    top:-53px;
+    width:141px}
+#atari .atari2 {
+    border-radius:0 0 141px 141px/256px 256px 256px 256px;
+    left: -34px;
+    top:-22px;
+}
+#atari .atari3 {
+    border-radius:0 0 200px 200px/334px 334px 334px 334px;
+    bottom:0;
+    height: 334px;
+    left:-101px;
+    top:-135px;
+    width:200px;
+}
+#atari .atari4 {
+    border-radius:0 0 183px 183px/239px 239px 239px 239px;
+    height:239px;
+    left:-100px;
+    top:-89px;
+    width:183px;
+}  
+</style>
+ 
+<div id=atari class="canvas adsize-mpu">
+    <div class="screen">
+        <div class="icon">
+            <div class="side1 side">
+                <div class="atari1"></div>
+                <div class="atari2"></div>
+                <div class="atari3"></div>
+                <div class="atari4"></div>
+            </div>
+            <div class="side2 side">
+                <div class="atari1"></div>
+                <div class="atari2"></div>
+                <div class="atari3"></div>
+                <div class="atari4"></div>
+            </div>
+        </div>
+        <div class="pong">
+            <div class="score1 score"></div>
+            <div class="score2 score"></div>
+            <div class="player1 player"></div>
+            <div class="player2 player"></div>
+            <div class="ball"></div>
+        </div>
+        <div class="resolution canvas">
+            <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div> <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+        </div>
+        <div class="shadow"></div>
+    </div>
+</div>  
