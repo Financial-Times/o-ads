@@ -1,7 +1,7 @@
 {
     "description": "Advertising",
     "origamiType": "module",
-    "origamiVersion": 0.1,
+    "origamiVersion": 1,
     "support": "none",
     "supportStatus": "experimental"
 }
