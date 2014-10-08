@@ -16,7 +16,7 @@ module.exports = function(config) {
      'js/util/*.js',
      'js/*.js'
     ],
-    browsers: ['Chrome'],
+    browsers: ['IE', 'Chrome'],
 
     reporters: ['progress'],
     preprocessors: {  },
