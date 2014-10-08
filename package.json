@@ -1,0 +1,19 @@
+{
+  "name": "o-ads",
+  "version": "0.0.0",
+  "description": "FT branded Advertising Client-side Library",
+  "main": "main.js",
+  "scripts": {
+    "test": "node_modules/.bin/karma start test/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.svc.ft.com/scm/ads/o-ads.git"
+  },
+  "author": "",
+  "devDependencies": {
+        "karma": "~0.10.2",
+        "karma-qunit": "~0.1.1",
+        "karma-coverage": "~0.1.0"
+    }
+}

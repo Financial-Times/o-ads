@@ -1,9 +1,8 @@
 (function (window, document, $, undefined) {
-    sinon.spies = {
-        gptCmdPush: sinon.spy(googletag.cmd, 'push')
-    };
-
      function runTests() {
+        sinon.spies = {
+          gptCmdPush: sinon.spy(googletag.cmd, 'push')
+        };
         module('Third party gpt',  {
             setup: function () {
             }
@@ -108,6 +107,7 @@
 
 
         test('define with images sizes', function () {
+           $('body').append('<div id="responsive-mpu"></div>');
            TEST.beginNewPage({
             container: 'responsive-mpu', config: {
             responsive:{
@@ -136,6 +136,7 @@
         });
 
         test('define without images sizes', function () {
+          $('body').append('<div id="no-responsive-mpu"></div>');
            TEST.beginNewPage({
             container: 'no-responsive-mpu',
             config: {
