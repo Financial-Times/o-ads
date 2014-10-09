@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
    var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
-   if ((browser.browser === 'msie' && browser.version < 10) || (ua.match(/Trident.*rv\:(\d+)/)) || browser.browser !== 'msie') "use strict";
+   if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
 
     var localstorage = {},
     globalVars = {},
