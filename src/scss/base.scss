@@ -1,0 +1,29 @@
+.advertising {
+    // center adverts in slots
+    &.center {
+        width:100%;
+        text-align:center;
+    }
+
+    // remove this rule if transitions are added to all slots 
+    &.empty {
+        width: 0;
+        height: 0;
+        display: none;
+        visibility: hidden;
+    }
+
+    // add a label above the ad slot
+    &.label > div.wrap::before {
+        content: "▼ Advertisement ▼";
+        float: right;
+        font-size: 80%;
+    }
+
+    //remove background from iframes.
+    iframe {
+        background: none transparent;
+    }
+}
+
+
