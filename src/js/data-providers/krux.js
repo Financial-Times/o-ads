@@ -11,7 +11,7 @@
 */
 "use strict";
 var ads;
-var utils = require('../lib/utils');
+var utils = require('../utils');
 var proto = Krux.prototype;
 /**
  * The Krux class defines an FT.ads.krux instance

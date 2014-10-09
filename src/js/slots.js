@@ -1,8 +1,6 @@
 "use strict";
 var ads;
 var utils = require('./utils');
-//var gpt = require('./gpt.js');
-//console.log(gpt);
 
 /**
 * The Slots class defines an FT.ads.slots instance.

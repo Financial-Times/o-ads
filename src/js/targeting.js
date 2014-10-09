@@ -13,7 +13,6 @@
 "use strict";
 var ads;
 var utils = require('./utils');
-var metadata = require('./metadata');
 var proto = Targeting.prototype;
 
 proto.initialised = false;
@@ -65,8 +64,8 @@ function Targeting() {
 
 
 proto.getFromMetaData =  function () {
-  var page = metadata.page(),
-  user = metadata.user();
+  var page = ads.metadata.page(),
+  user = ads.metadata.user();
   return {
     eid: user.eid || null,
     fts: user.loggedIn + '',
@@ -184,8 +183,7 @@ proto.fetchAudSci = function (rsiSegs) {
 };
 
 proto.fetchKrux = function (){
-    var krux = require('../data-providers/krux');
-    return krux.targeting();
+    return ads.krux.targeting();
 };
 
 proto.getPageReferrer = function () {
@@ -237,7 +235,7 @@ var exclusions =  ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', '
 var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1, '20': 1, '21': 1};
 var remove_res_pvt = {'14': 1, 'cn': 1, '27': 1};
 var returnObj = {};
-var AllVars = metadata.getAyscVars({});
+var AllVars = ads.metadata.getAyscVars({});
 
 function excludeFields(exclusions, obj) {
   var idx, keyvalsplit, prop;
@@ -287,11 +285,11 @@ proto.timestamp = function () {
 };
 
 proto.version = function(){
-  return {ver : "gpt-" + require('./version').artifactVersion};
+  return {ver : "gpt-" + ads.version.artifactVersion};
 };
 
 proto.init = function (impl) {
   ads = impl;
 }
 
-module.exports = new Targeting();s
+module.exports = new Targeting();

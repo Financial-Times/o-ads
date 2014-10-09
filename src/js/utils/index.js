@@ -6,7 +6,7 @@
  */
 
 
-//TODO Use polyfils service here instead
+//TODO Use polyfils service for these instead
 // add an ECMAScript5 compliant trim to String
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
 if(!String.prototype.trim) {

@@ -16,8 +16,8 @@
 "use strict";
 var ads;
 var proto = GPT.prototype;
-var utils = require('./utils');
-var slots = require('./slots');
+var utils = require('../utils');
+var slots = require('../slots');
 /**
 * The GPT class defines an FT.ads.gpt instance.
 * @class
@@ -134,7 +134,7 @@ proto.getUnitName = function (slotName) {
 */
 proto.setPageTargeting = function () {
     var param,
-        targeting = require('./targeting')();
+        targeting = ads.targeting();
 
     function setTargeting(key, value) {
         return function () {
