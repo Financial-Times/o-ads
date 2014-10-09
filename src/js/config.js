@@ -18,14 +18,16 @@
  * @memberof FT.ads
  * @function
 */
-(function (win, doc, undefined) {
-    "use strict";
+
 /**
  * The Config class defines an FT.ads.config instance.
  * @class
  * @constructor
 */
     function Config() {
+        "use strict";
+        var utils = require('./utils');
+            
 /**
  * Default configuration set in the constructor.
  */
@@ -92,7 +94,7 @@
         var fetchMetaConfig = function() {
             var meta,
                 results = {},
-                metas = doc.getElementsByTagName('meta');
+                metas = document.getElementsByTagName('meta');
             for (var i= 0; i < metas.length; i++) {
                 meta = metas[i];
                 if (meta.name) {
@@ -111,8 +113,10 @@
  * @function
  * fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
  */
+ 
+ //TODO: this is FT specfic content and needs to be removed
         var fetchGlobalConfig = function() {
-            if (FT._ads.utils.isObject(FT.env)){
+            if (window.FT && utils.isObject(FT.env)){
                 return FT.env;
             } else {
                 return {};
@@ -125,14 +129,14 @@
  */
  //TODO update this function to only pull out cookies related to ad config rather than the entire object
         var fetchCookieConfig = function(){
-            return FT._ads.utils.cookies;
+            return utils.cookies;
         };
 
-
+    //TODO: this whole method is FT Specific move it into what ever becomes of the switcher
     // getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config.
     function setDFPSiteForEnv() {
         var env, site = store.dfp_site;
-        if (FT.Properties && FT.Properties.ENV) {
+        if (window.FT && FT.Properties && FT.Properties.ENV) {
             env = FT.Properties.ENV.toLowerCase();
             if (env !== 'p') {
                 site = site.replace(/^\w+\./, "test.");
@@ -147,8 +151,8 @@
  */
         var access = function(k, v){
             var result;
-            if (FT._ads.utils.isPlainObject(k)) {
-                store = FT._ads.utils.extend(store, k);
+            if (utils.isPlainObject(k)) {
+                store = utils.extend(store, k);
                 result = store;
             } else if (typeof v === "undefined") {
                 if (typeof k === "undefined"){
@@ -172,7 +176,7 @@
             }
         };
 
-        access.load = function(clear){
+        access.init = function(clear){
 
             if (!!clear) {
                 access.clear();
@@ -182,11 +186,11 @@
  * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
  * this allows QA Testers to over-ride global and meta config.
  */
-            if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
-                if (FT._ads.utils.cookie('ftads:mode_t') === "testuser"){
-                    store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+            if (utils.isString(utils.cookie('ftads:mode_t'))) {
+                if (utils.cookie('ftads:mode_t') === "testuser"){
+                    store = utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
 
-                    var siteCookie = FT._ads.utils.cookie('ftads:dfpsite');
+                    var siteCookie = utils.cookie('ftads:dfpsite');
                     if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
                         var splitSite = (store.dfp_site || '').split('.');
                         splitSite[0] = siteCookie;
@@ -196,15 +200,13 @@
                     }
                 }
             } else {
-                store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
+                store = utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
                 setDFPSiteForEnv();
             }
             return store;
         };
 
-        access.load();
+        //access.load();
         return access;
     }
-
-    FT._ads.utils.extend(FT.ads, {config: new Config()});
-}(window, document));
+module.exports = new Config();
