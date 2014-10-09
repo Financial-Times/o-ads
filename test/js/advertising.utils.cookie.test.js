@@ -68,8 +68,8 @@
             }
         });
 
-       var browser = jQuery.uaMatch(navigator.userAgent);
-       if (browser.browser !== 'msie' || (browser.browser === 'msie' && browser.version < 10)) {
+       var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
+       if ((browser.browser === 'msie' && browser.version < 10) || (ua.match(/Trident.*rv\:(\d+)/)) || browser.browser !== 'msie') {
            asyncTest('read malformed cookie value in IE (#88, #117)', 1, function() {
                // Sandbox in an iframe so that we can poke around with document.cookie.
                var iframe = document.createElement('iframe'),
