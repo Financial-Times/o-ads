@@ -68,27 +68,30 @@
             }
         });
 
-        asyncTest('read malformed cookie value in IE (#88, #117)', 1, function() {
-            // Sandbox in an iframe so that we can poke around with document.cookie.
-            var iframe = document.createElement('iframe'),
-                iframeSrc = location.href.split('/');
+       var browser = jQuery.uaMatch(navigator.userAgent);
+       if (browser.browser !== 'msie' || (browser.browser === 'msie' && browser.version < 10)) {
+           asyncTest('read malformed cookie value in IE (#88, #117)', 1, function() {
+               // Sandbox in an iframe so that we can poke around with document.cookie.
+               var iframe = document.createElement('iframe'),
+                   iframeSrc = location.href.split('/');
 
-            $(iframe).load(function() {
-                start();
-                if (iframe.contentWindow.loaded) {
-                    equal(iframe.contentWindow.testValue, '2nd', 'reads all cookie values, skipping duplicate occurences of "; " and preserving the last value of any duplicated keys');
-                } else {
-                    // Skip the test where we can't stub document.cookie using
-                    // Object.defineProperty. Seems to work fine in
-                    // Chrome, Firefox and IE 8+.
-                    ok(true, 'N/A');
-                }
-            });
-            iframeSrc.pop(); //remove the current file name from the location
-            iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
-            iframe.src = iframeSrc.join('/');
-            document.body.appendChild(iframe);
-        });
+               $(iframe).load(function() {
+                   start();
+                   if (iframe.contentWindow.loaded) {
+                       equal(iframe.contentWindow.testValue, '2nd', 'reads all cookie values, skipping duplicate occurences of "; " and preserving the last value of any duplicated keys');
+                   } else {
+                       // Skip the test where we can't stub document.cookie using
+                       // Object.defineProperty. Seems to work fine in
+                       // Chrome, Firefox and IE 8+.
+                       ok(true, 'N/A');
+                   }
+               });
+               iframeSrc.pop(); //remove the current file name from the location
+               iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
+               iframe.src = iframeSrc.join('/');
+               document.body.appendChild(iframe);
+           });
+       }
 
         test('write String primitive', 1, function () {
             FT._ads.utils.cookie('c', 'v');

@@ -1,5 +1,7 @@
 (function (window, document, $, undefined) {
-    "use strict";
+   var browser = jQuery.uaMatch(navigator.userAgent);
+   if (browser.browser !== 'msie' || (browser.browser === 'msie' && browser.version < 10)) "use strict";
+
     var localstorage = {},
     globalVars = {},
     cookies = {},
