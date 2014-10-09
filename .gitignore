@@ -1,2 +1,36 @@
-/.idea
+# Build Generated Files #
+#########################
+build/
+demos/local/
+
+# Dependency Files #
+####################
+node_modules/
+bower_components/
+.sass-cache/
+bower_components/
+
+# Log Files #
+#############
+*.log
+*.log*
+timestamp.dat
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# VIM/editor generated files #
+##############################
+.idea/
 .iml
+*.sublime*
+*.bak
+*.swp
