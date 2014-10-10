@@ -1,3 +1,5 @@
+
+//console.log(FT);
 (function (window, document, $, undefined) {
     function cookieTests (){
         var cookies, oldCookies,
@@ -9,7 +11,7 @@
             }
         };
 
-        module('FT._ads.utils.cookie', callbacks);
+        QUnit.module('FT._ads.utils.cookie', callbacks);
 
         test('read simple value', function () {
             expect(1);
@@ -32,11 +34,13 @@
 
         test('read decode', function () {
             expect(1);
-            FT._ads.utils.cookie(' c',' v');
-            equal(FT._ads.utils.cookie(' c'), ' v', 'should decode key and value');
+            FT._ads.utils.cookie('c',' v');
+            equal(FT._ads.utils.cookie('c'), ' v', 'should decode key and value');
         });
 
+
         test('read decode pluses to space for server side written cookie', 1, function () {
+            expect(1);
             FT._ads.utils.cookie('c','foo bar');
             equal(FT._ads.utils.cookie('c'), 'foo bar', 'should convert pluses back to space');
         });

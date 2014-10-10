@@ -129,6 +129,7 @@
  */
  //TODO update this function to only pull out cookies related to ad config rather than the entire object
         var fetchCookieConfig = function(){
+            console.log(utils.cookies);
             return utils.cookies;
         };
 
@@ -182,6 +183,8 @@
                 access.clear();
             }
 
+
+
 /**
  * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
  * this allows QA Testers to over-ride global and meta config.
@@ -206,7 +209,7 @@
             return store;
         };
 
-        //access.load();
+        access.init();
         return access;
     }
 module.exports = new Config();

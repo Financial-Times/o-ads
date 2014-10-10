@@ -1,3 +1,5 @@
+
+//console.log(FT);
 (function (window, document, $, undefined) {
    var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
    if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
@@ -55,7 +57,7 @@
                 }
             },
             config: function (data) {
-                FT.ads.config.load();
+                FT.ads.config.init();
                 return FT.ads.config(data);
             },
             meta: function(data) {
@@ -359,3 +361,4 @@
         test.mode();
     });
 }(window, document, jQuery))
+

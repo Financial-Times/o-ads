@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('FT._ads.utils.isType methods');
+        QUnit.module('FT._ads.utils.isType methods');
 
         test('Utils object exists', function () {
             expect(1);
@@ -156,7 +156,7 @@
             }
         });
 
-        module('FT._ads.utils.extend');
+        QUnit.module('FT._ads.utils.extend');
         test("extend method", function() {
             expect(27);
 
@@ -263,7 +263,7 @@
             deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
         });
 
-        module('FT._ads.utils miscellanious methods');
+        QUnit.module('FT._ads.utils miscellanious methods');
         test("css class methods", function() {
             expect(6);
             var $node = $('<div class="test cr@zy-c|-|@r/\cter$">'),

@@ -2,7 +2,7 @@
     function responsiveTests (){
         var clock;
 
-        module('FT._ads.utils.responsive', {
+        QUnit.module('FT._ads.utils.responsive', {
             setup: function () {
                 clock = sinon.useFakeTimers();
             },

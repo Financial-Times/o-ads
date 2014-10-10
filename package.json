@@ -4,7 +4,7 @@
   "description": "FT branded Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
-    "test": "node_modules/.bin/karma start test/karma.conf.js"
+    "test": "node_modules/.bin/karma start karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -12,7 +12,9 @@
   },
   "author": "",
   "devDependencies": {
+    "browserify" : "^4.0.0",
     "karma": "~0.10.2",
+    "karma-browserify": "^0.2.1",
     "karma-coverage": "~0.1.0",
     "karma-ie-launcher": "^0.1.5",
     "karma-qunit": "~0.1.1"

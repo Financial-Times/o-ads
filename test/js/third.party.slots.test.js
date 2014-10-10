@@ -1,13 +1,13 @@
 (function (window, doc, $, undefined) {
-    sinon.spies = {
-        fetchSlotConfig: sinon.spy(FT.ads.slots, 'fetchSlotConfig')
-    };
+
 
     window.testingContainer;
 
     function runTests() {
 
-
+    sinon.spies = {
+        fetchSlotConfig: sinon.spy(FT.ads.slots, 'fetchSlotConfig')
+    };
         module('Third party slots',  {
             setup: function () {
                 testingContainer = $('<div id="slot-tests">').appendTo(document.body);
