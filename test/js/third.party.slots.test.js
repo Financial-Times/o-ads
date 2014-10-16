@@ -8,7 +8,7 @@
     sinon.spies = {
         fetchSlotConfig: sinon.spy(FT.ads.slots, 'fetchSlotConfig')
     };
-        module('Third party slots',  {
+        QUnit.module('Third party slots',  {
             setup: function () {
                 testingContainer = $('<div id="slot-tests">').appendTo(document.body);
                 // reset all spies between tests

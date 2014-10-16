@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Video Miniplayer');
+        QUint.module('Video Miniplayer');
         test("Video Miniplayer Targeting with Krux, audSci, AYSC and eid set", function () {
             var result;
             if (FT._ads.utils.isStorage(window.localStorage)) {

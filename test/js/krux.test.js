@@ -1,16 +1,17 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Krux');
+        QUnit.module('Krux');
+
 
         test( "control tag is attached when initialised", function() {
             TEST.beginNewPage({
                 config: {krux: {id: 'hello'}}
             });
 
-           FT.ads.krux.init();
+           FT.ads.krux.init(FT.ads);
            ok($('script[src*="util/krux.js"][ftads]').size() === 1, 'the krux control tag file is attached to the page');
         });
-
+/*
         test('targeting data is generated correctly', function () {
 
             if (FT._ads.utils.isStorage(window.localStorage)) {
@@ -39,7 +40,7 @@
             deepEqual(result.ksg, ["seg1", "seg2"], "returns 2 segments");
         });
 
-
+*/
         test('event pixels', function () {
             TEST.beginNewPage({config: { krux: {id: '112233'}}});
             window.Krux = TEST.sinon.Krux = sinon.stub();

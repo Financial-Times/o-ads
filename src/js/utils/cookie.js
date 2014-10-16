@@ -22,7 +22,6 @@ function decoded(s) {
 }
 
 var config = module.exports.cookie = function (key, value, options) {
-
     // write
     if (value !== undefined) {
         options = utils.extend({}, config.defaults, options);
