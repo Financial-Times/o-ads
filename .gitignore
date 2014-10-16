@@ -8,7 +8,6 @@ demos/local/
 node_modules/
 bower_components/
 .sass-cache/
-bower_components/
 
 # Log Files #
 #############
