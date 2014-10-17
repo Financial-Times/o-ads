@@ -16,12 +16,12 @@ module.exports = function(config) {
       'test/js/advertising.utils.test.js',
       'test/js/advertising.utils.timers.test.js',
       'test/js/chartbeat.test.js',
-      'test/js/krux.test.js',
-      'test/js/metadata.test.js',
+     'test/js/krux.test.js',
+     'test/js/metadata.test.js',
       'test/js/third.party.config.test.js',
       'test/js/third.party.gpt.test.js',
-      //'test/js/third.party.slots.test.js'
-      'test/js/third.party.targeting.test.js',
+      'test/js/third.party.slots.test.js',
+     'test/js/third.party.targeting.test.js'
 
     ],
     browsers: ['Chrome'],
