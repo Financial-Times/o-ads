@@ -3,7 +3,7 @@
         
     };
     function runTests() {
-    	module('Video Main-player tests',  {
+    	QUnit.module('Video Main-player tests',  {
             setup: function () {
             },
             teardown: function () {

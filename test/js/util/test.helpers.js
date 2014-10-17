@@ -20,7 +20,7 @@
                 node.addClass(mode).append(mode.toUpperCase() + ' MODE');
             }
 
-            return mode;
+            return 'unit';
         },
         /* methods for mocking things */
         mock: {

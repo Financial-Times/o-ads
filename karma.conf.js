@@ -10,8 +10,19 @@ module.exports = function(config) {
       'test/js/util/test.helpers.js',
       'test/js/util/gpt.js',
       'test/js/util/*.js',
-      'test/js/advertising.utils.cookie.test.js',
+     // 'test/js/advertising.utils.cookie.test.js',
+     'test/js/advertising.utils.cookie.test.js',
+     'test/js/advertising.utils.responsive.test.js',
+      'test/js/advertising.utils.test.js',
+      'test/js/advertising.utils.timers.test.js',
+      'test/js/chartbeat.test.js',
+      'test/js/krux.test.js',
+      'test/js/metadata.test.js',
       'test/js/third.party.config.test.js',
+      'test/js/third.party.gpt.test.js',
+      //'test/js/third.party.slots.test.js'
+      'test/js/third.party.targeting.test.js',
+
     ],
     browsers: ['Chrome'],
 
