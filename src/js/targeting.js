@@ -12,7 +12,6 @@
 
 "use strict";
 var ads;
-var utils = require('./utils');
 var proto = Targeting.prototype;
 
 proto.initialised = false;
@@ -43,11 +42,11 @@ function Targeting() {
           version : context.version
         };
 
-        parameters = utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+        parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
 
         for (item in config)  {
           if (ads.config(item)) {
-            utils.extend(parameters, config[item]());
+            ads.utils.extend(parameters, config[item]());
           }
         }
 
@@ -90,7 +89,7 @@ proto.encodedIp =  function () {
     };
 
     function getIP () {
-       var ip, tmp, ftUserTrackVal = utils.cookie('FTUserTrack'), ipTemp;
+       var ip, tmp, ftUserTrackVal = ads.utils.cookie('FTUserTrack'), ipTemp;
 
        // sample FTUserTrackValue = 203.190.72.182.1344916650137365
        if (ftUserTrackVal) {
@@ -137,9 +136,9 @@ proto.encodedIp =  function () {
 */
 proto.getFromConfig = function () {
     var targeting = ads.config('dfp_targeting') || {};
-    if (!utils.isPlainObject(targeting)) {
-        if (utils.isString(targeting)) {
-            targeting = utils.hash(targeting, ';', '=') || {};
+    if (!ads.utils.isPlainObject(targeting)) {
+        if (ads.utils.isString(targeting)) {
+            targeting = ads.utils.hash(targeting, ';', '=') || {};
         }
     }
     return targeting;
@@ -157,7 +156,7 @@ proto.fetchAudSci = function (rsiSegs) {
     var segments = {};
 
     if (!proto.initialised) {
-        utils.attach("//js.revsci.net/gateway/gw.js?csid=J07717",true);
+        ads.utils.attach("//js.revsci.net/gateway/gw.js?csid=J07717",true);
     }
 
     function parseSegs(segs, max) {
@@ -175,7 +174,7 @@ proto.fetchAudSci = function (rsiSegs) {
     }
 
     if (typeof rsiSegs === "undefined") {
-        rsiSegs = utils.cookie('rsi_segs');
+        rsiSegs = ads.utils.cookie('rsi_segs');
     }
 
     segments = parseSegs(rsiSegs, ads.config('audSciLimit'));
@@ -188,7 +187,7 @@ proto.fetchKrux = function (){
 
 proto.getPageReferrer = function () {
    var match = null,
-      referrer = utils.getReferrer(),
+      referrer = ads.utils.getReferrer(),
       hostRegex;
    //referrer is not article
    if (referrer !== '') {
@@ -205,7 +204,7 @@ proto.getPageReferrer = function () {
 
 proto.getSocialReferrer = function () {
     var codedValue, refUrl,
-    referrer = utils.getReferrer(),
+    referrer = ads.utils.getReferrer(),
     lookup = {
         't.co': 'twi',
         'facebook.com': 'fac',
@@ -214,7 +213,7 @@ proto.getSocialReferrer = function () {
     },
     refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
 
-    if (utils.isString(referrer)) {
+    if (ads.utils.isString(referrer)) {
         for(refUrl in lookup) {
             var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
             if (refUrl !== undefined && refererRegex.test(referrer)) {
@@ -227,7 +226,7 @@ proto.getSocialReferrer = function () {
 };
 
 proto.cookieConsent = function () {
-    return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
+    return {cc: ads.utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
 };
 
 proto.getAysc = function () {
@@ -267,7 +266,7 @@ proto.behaviouralFlag = function () {
 };
 
 proto.searchTerm = function () {
-  var qs = utils.hash(utils.getQueryString(), /\&|\;/, '='),
+  var qs = ads.utils.hash(ads.utils.getQueryString(), /\&|\;/, '='),
   keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
   if (keywords && keywords !== '') {
@@ -281,7 +280,7 @@ proto.searchTerm = function () {
 };
 
 proto.timestamp = function () {
-  return { ts: utils.getTimestamp() };
+  return { ts: ads.utils.getTimestamp() };
 };
 
 proto.version = function(){

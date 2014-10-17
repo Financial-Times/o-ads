@@ -1,22 +1,21 @@
 "use strict";
 var ads;
-var utils = require('./utils');
 
 var Metadata = {};
 
 Metadata.getLoginInfo = function () {
     var loggedIn = false,
-    eid = utils.getCookieParam('FT_U', 'EID') || null,
-    remember = utils.cookie('FT_Remember');
+    eid = ads.utils.getCookieParam('FT_U', 'EID') || null,
+    remember = ads.utils.cookie('FT_Remember');
 
     //TODO fix the utils hash method to not error when undefined is passed
     // then we can get rid of the test for the split method
-    if (!eid && remember && utils.isFunction(remember.split)) {
+    if (!eid && remember && ads.utils.isFunction(remember.split)) {
         remember = remember.split(':');
         eid = !!(remember[0].length) ? remember[0] : eid;
     }
 
-    if (eid || utils.cookie('FTSession')) {
+    if (eid || ads.utils.cookie('FTSession')) {
         loggedIn = true;
     }
 
@@ -39,7 +38,7 @@ Metadata.getAyscVars = function(obj){
     function fieldSubstr(SubStrKeyNames, obj) {
         var i, value;
         for(i=0; i < SubStrKeyNames.length; i++){
-            value = utils.isString(obj) ? obj.charAt(i) : obj[i];
+            value = ads.utils.isString(obj) ? obj.charAt(i) : obj[i];
             if (value === false) {
                 continue;
             }
@@ -58,8 +57,8 @@ Metadata.getAyscVars = function(obj){
     }
 
     function detectERights(obj) {
-        if (utils.cookie("FT_U")) {
-            var erights = utils.cookie("FT_U").split("="),
+        if (ads.utils.cookie("FT_U")) {
+            var erights = ads.utils.cookie("FT_U").split("="),
             keyname = erights[0],
             val = erights[1];
             if ((keyname !== undefined) && (val === undefined)) {
@@ -125,8 +124,8 @@ Metadata.getAyscVars = function(obj){
 
     var out = {},
     item, q;
-    if (utils.cookie("AYSC")) {
-        q = utils.cookie("AYSC").split("_");
+    if (ads.utils.cookie("AYSC")) {
+        q = ads.utils.cookie("AYSC").split("_");
 
         for (var i = 0, j = q.length; i < j; i++) {
             item = q.pop();
@@ -144,7 +143,7 @@ Metadata.getAyscVars = function(obj){
     }
 
     var x = prepareAdVars(out);
-    return utils.extend({}, obj, x);
+    return ads.utils.extend({}, obj, x);
 };
 
 
@@ -202,14 +201,14 @@ Metadata.user= function () {
 Metadata.page = function(){
     var result = {};
     result.uuid = window.pageUUID ? window.pageUUID :
-                  utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
+                  ads.utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
     result.auuid = window.articleUUID || undefined;
     result.dfpSite = ads.config('dfp_site');
     result.dfpZone = ads.config('dfp_zone');
-    if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
-    if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
-    if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
-    if (utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
+    if (ads.utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
+    if (ads.utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
+    if (ads.utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
+    if (ads.utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
     return result;
 };
 

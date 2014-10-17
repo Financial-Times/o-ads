@@ -1,6 +1,5 @@
 "use strict";
 var ads;
-var utils = require('./utils');
 
 /**
 * The Slots class defines an FT.ads.slots instance.
@@ -60,8 +59,8 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
             },
             'targeting': function (name, value) {
                 if (value !== undefined) {
-                    value = utils.hash(value, ';', '=');
-                    targeting = utils.extend(targeting, value);
+                    value = ads.utils.hash(value, ';', '=');
+                    targeting = ads.utils.extend(targeting, value);
                 }
                 return value;
             },
@@ -81,7 +80,7 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
         */
         if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/)) ) {
             name = matches[3];
-            parser = utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
+            parser = ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
             parser(name, attrObj.value);
         }
     }
@@ -132,7 +131,7 @@ proto.addContainer = function(node, id) {
 * @lends Slots
 */
 proto.centerContainer = function (container) {
-    utils.addClass(container, 'center');
+    ads.utils.addClass(container, 'center');
 };
 
 /**
@@ -152,12 +151,12 @@ proto.addChartBeatTracking = function(container, slotName) {
 */
 proto.collapse = function (slotNames) {
     var slotName, result = false;
-    if (!utils.isArray(slotNames)){
+    if (!ads.utils.isArray(slotNames)){
         slotNames = [slotNames];
     }
 
     while(slotName = slotNames.pop()) {
-        if(this[slotName] && utils.isFunction(this[slotName].collapse)) {
+        if(this[slotName] && ads.utils.isFunction(this[slotName].collapse)) {
             this[slotName].collapse();
             result = true;
         }
@@ -174,12 +173,12 @@ proto.collapse = function (slotNames) {
 */
 proto.uncollapse = function (slotNames) {
     var slotName, result = false;
-    if (!utils.isArray(slotNames)){
+    if (!ads.utils.isArray(slotNames)){
         slotNames = [slotNames];
     }
 
     while(slotName = slotNames.pop()) {
-        if(this[slotName] && utils.isFunction(this[slotName].uncollapse)) {
+        if(this[slotName] && ads.utils.isFunction(this[slotName].uncollapse)) {
             this[slotName].uncollapse();
             result = true;
         }
@@ -223,12 +222,12 @@ proto.initSlot = function (slotName) {
         container: container,
         config: config,
         collapse: function(){
-            utils.addClass(this.container, 'empty');
-            utils.addClass(document.body, 'no-' + container.id);
+            ads.utils.addClass(this.container, 'empty');
+            ads.utils.addClass(document.body, 'no-' + container.id);
         },
         uncollapse: function(){
-            utils.removeClass(this.container, 'empty');
-            utils.removeClass(document.body, 'no-' + container.id);
+            ads.utils.removeClass(this.container, 'empty');
+            ads.utils.removeClass(document.body, 'no-' + container.id);
         }
     };
 

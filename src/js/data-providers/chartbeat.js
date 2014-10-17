@@ -11,7 +11,6 @@
 */
 "use strict";
 var ads;
-var utils = require('../utils');
 var proto = Chartbeat.prototype;
 /**
 * The ChartBeat class defines an FT.ads.chartbeat instance
@@ -36,9 +35,9 @@ proto.init = function (impl) {
 };
 
 proto.decorateRefresh = function () {
-    if (FT._ads.utils.isFunction(FT.ads.gpt.refresh)) {
-        var _refresh = FT.ads.gpt.refresh;
-            FT.ads.gpt.refresh =  this.refresh(_refresh);
+    if (ads.utils.isFunction(ads.gpt.refresh)) {
+        var _refresh = ads.gpt.refresh;
+            ads.gpt.refresh =  this.refresh(_refresh);
         return true;
     }
 };
@@ -54,12 +53,12 @@ proto.refresh = function (fn) {
     return function (slotsForRefresh) {
         if (window.pSUPERFLY){
             var slot, slotName, cbName,
-                slots = FT.ads.slots;
+                slots = ads.slots;
             slotsForRefresh = slotsForRefresh || slots;
             for (slotName in slotsForRefresh) {
                 slot = slots[slotName];
                 if (slot.gptSlot && slot.timer === undefined) {
-                    if ( FT._ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
+                    if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
                         window.pSUPERFLY.refreshAd(cbName);
                     }
                 }

@@ -11,7 +11,6 @@
 */
 "use strict";
 var ads;
-var utils = require('../utils');
 var proto = Krux.prototype;
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -36,7 +35,7 @@ proto.init = function (impl) {
         src= (m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
         finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + ads.config('krux').id;
 
-        utils.attach(finalSrc,true);
+        ads.utilsattach(finalSrc,true);
         this.events.init();
     } else {
         // can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
@@ -55,8 +54,8 @@ proto.retrieve = function (name) {
 
     if (window.localStorage && localStorage.getItem(name)) {
         value = localStorage.getItem(name);
-    }  else if (utils.cookie(name)) {
-        value = utils.cookie(name);
+    }  else if (ads.utilscookie(name)) {
+        value = ads.utilscookie(name);
     }
 
     return value;
@@ -111,7 +110,7 @@ proto.events = {
                 interval = config.interval || 5,
             max = (config.total / interval) || 120,
             uid = config.id;
-            utils.timers.create(interval, (function () {
+            ads.utilstimers.create(interval, (function () {
                 return function () {
                     fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
                 };
@@ -122,7 +121,7 @@ proto.events = {
 
 proto.events.fire = function (id, attrs) {
     if(id) {
-        attrs = utils.isPlainObject(attrs) ? attrs : {};
+        attrs = ads.utilsisPlainObject(attrs) ? attrs : {};
         return window.Krux('admEvent', id, attrs);
     }
     return false;
@@ -130,11 +129,11 @@ proto.events.fire = function (id, attrs) {
 
 proto.events.init = function() {
     var event, configured = ads.config('krux') && ads.config('krux').events;
-    if (utils.isPlainObject(configured)) {
+    if (ads.utilsisPlainObject(configured)) {
         for(event in configured) {
-            if(utils.isFunction(this[event])) {
+            if(ads.utilsisFunction(this[event])) {
                 this[event](configured[event]);
-            } else if (utils.isFunction(configured[event].fn)) {
+            } else if (ads.utilsisFunction(configured[event].fn)) {
                 configured[event].fn(configured[event]);
             }
         }

@@ -16,7 +16,6 @@
 "use strict";
 var ads;
 var proto = GPT.prototype;
-var utils = require('../utils');
 var slots = require('../slots');
 /**
 * The GPT class defines an FT.ads.gpt instance.
@@ -47,11 +46,11 @@ proto.defineSlot = function (slotName) {
         wrap = ads.slots.addContainer(slot.container, slotId),
         responsive = ads.config('responsive');
 
-    utils.addClass(wrap, 'wrap');
+    ads.utils.addClass(wrap, 'wrap');
     googletag.cmd.push(function (context, slot, slotName, slotId) {
         return function () {
             var currentSize;
-            if(utils.isObject(responsive) && utils.isObject(slot.config.sizes)) {
+            if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.config.sizes)) {
                 currentSize = slot.config.sizes[context.responsive()];
                 var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
                 slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
@@ -116,12 +115,12 @@ proto.getUnitName = function (slotName) {
         site = ads.config('dfp_site'),
         zone = ads.config('dfp_zone');
 
-    if (utils.isNonEmptyString(gptUnitName)) {
+    if (ads.utils.isNonEmptyString(gptUnitName)) {
         unitName = gptUnitName;
     } else {
         unitName = '/' + ads.config('network');
-        unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
-        unitName += utils.isNonEmptyString(zone ) ? '/' + zone : '';
+        unitName += ads.utils.isNonEmptyString(site)  ? '/' + site : '';
+        unitName += ads.utils.isNonEmptyString(zone ) ? '/' + zone : '';
     }
     return unitName;
 };
@@ -203,12 +202,12 @@ proto.refresh = function (slotsForRefresh) {
 */
 proto.startRefresh = function () {
     var refreshConfig = ads.config('refresh') || {},
-        pageType = utils.getPageType(),
+        pageType = ads.utils.getPageType(),
         time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
         max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
     if (time) {
-        this.refreshTimer = utils.timers.create(time, function() {
+        this.refreshTimer = ads.utils.timers.create(time, function() {
             FT.ads.gpt.refresh();
         }, max);
     }
@@ -270,8 +269,8 @@ proto.enableVideo = function () {
         * In order for the video companion service to work on mobile devices we need to attach the GPT Proxy script
         */
         var url = 'http://s0.2mdn.net/instream/html5/gpt_proxy.js';
-        if (!utils.isScriptAlreadyLoaded(url)){
-            utils.attach(url, true);  
+        if (!ads.utils.isScriptAlreadyLoaded(url)){
+            ads.utils.attach(url, true);  
         }  
         googletag.pubads().enableVideoAds();
     }
@@ -336,7 +335,7 @@ proto.setSlotCollapseEmpty = function (gptSlot, config) {
 * @lends GPT
 */
 proto.setSlotTargeting = function (gptSlot, targetingObj) {
-    if (utils.isPlainObject(targetingObj)) {
+    if (ads.utils.isPlainObject(targetingObj)) {
         var targetKey;
         for (targetKey in targetingObj) {
             if (targetingObj.hasOwnProperty(targetKey)) {
@@ -357,10 +356,10 @@ proto.init = function (impl) {
     ads = impl;
     var context = this,
     responsive = ads.config('responsive');
-    utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
+    ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
     this.setPageTargeting();
     //TODO: this is FT specific content needs to be removed
-    if (window.FT && FT.env && (!utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
+    if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
         this.startRefresh();
     }
 
@@ -368,7 +367,7 @@ proto.init = function (impl) {
         var slot, slotName, slots = FT.ads.slots, slotsForRefresh = [];
         for (slotName in slots) {
             slot = slots[slotName];
-            if (slot.gptSlot && utils.isObject(slot.config.sizes)) {
+            if (slot.gptSlot && ads.utils.isObject(slot.config.sizes)) {
                 if (slot.config.sizes[viewport] === false) {
                     slot.collapse();
                 } else {
@@ -388,8 +387,8 @@ proto.init = function (impl) {
         }
     }
 
-    if ( utils.isObject(responsive) ) {
-        this.responsive = utils.responsive(responsive, onViewportChange);
+    if ( ads.utils.isObject(responsive) ) {
+        this.responsive = ads.utils.responsive(responsive, onViewportChange);
     }
 
     this.setPageCollapseEmpty();
@@ -399,7 +398,7 @@ proto.init = function (impl) {
         context.enableCompanions();
         googletag.pubads().enableAsyncRendering();
         googletag.pubads().addEventListener('slotRenderEnded', function(event) {
-            if (utils.isFunction(FT.ads.renderEnded)) {
+            if (ads.utils.isFunction(FT.ads.renderEnded)) {
                 var gptSlotId = event.slot.getSlotId(),
                     domId = gptSlotId.getDomId().split('-'),
                     iframeId = 'google_ads_iframe_' + gptSlotId.getId();
