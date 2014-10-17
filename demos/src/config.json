@@ -1,0 +1,28 @@
+{
+   "options": {
+      "sass": "demos/src/demo.scss",
+      "js": "demos/src/demo.js",
+      "bodyClasses": "o-hoverable-on"
+   },
+   "demos": [
+      {
+         "name": "leaderboard",
+         "template": "main.mustache",
+         "data": {"pos":"banlb"}
+      },
+      {
+         "name": "mpu",
+         "template": "main.mustache",
+         "data": {"pos":"mpu"}
+      },
+      {
+         "name": "hlfmpu",
+         "template": "main.mustache",
+         "data": {"pos":"hlfmpu"}
+      },
+      {
+         "name": "glossary",
+         "template": "demos/src/glossary.mustache"
+      }
+   ]
+}
