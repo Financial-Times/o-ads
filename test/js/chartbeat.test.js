@@ -8,7 +8,7 @@
             var gptRefresh = sinon.spy(FT.ads.gpt, 'refresh');
 
             window.pSUPERFLY = {refreshAd: sinon.stub};
-            FT.ads.cb.init();
+            FT.ads.cb.init(FT.ads);
             ok(decorateRefresh.called, 'initialising chartbeat decorates the gpt refresh method.');
 
             FT.ads.gpt.refresh();

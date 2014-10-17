@@ -1,7 +1,6 @@
 window.FT = {
     _ads:{}
 };
-window.FT._ads.utils = require('./../../../src/js/utils');
 window.FT.ads = require('./../../../main.js').init({
     collapseEmpty: 'ft',
     // these are all targeting options
@@ -38,4 +37,4 @@ window.FT.ads = require('./../../../main.js').init({
 
 
 
-
+window.FT._ads = window.FT.ads;

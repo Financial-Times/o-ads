@@ -57,7 +57,7 @@
                 }
             },
             config: function (data) {
-                FT.ads.config.init();
+                FT.ads.config.init(FT.ads);
                 return FT.ads.config(data);
             },
             meta: function(data) {

@@ -35,7 +35,7 @@ proto.init = function (impl) {
         src= (m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
         finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + ads.config('krux').id;
 
-        ads.utilsattach(finalSrc,true);
+        ads.utils.attach(finalSrc,true);
         this.events.init();
     } else {
         // can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
@@ -54,8 +54,8 @@ proto.retrieve = function (name) {
 
     if (window.localStorage && localStorage.getItem(name)) {
         value = localStorage.getItem(name);
-    }  else if (ads.utilscookie(name)) {
-        value = ads.utilscookie(name);
+    }  else if (ads.utils.cookie(name)) {
+        value = ads.utils.cookie(name);
     }
 
     return value;
