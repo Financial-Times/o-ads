@@ -2,6 +2,7 @@
 #########################
 build/
 demos/local/
+.editorconfig
 
 # Dependency Files #
 ####################
@@ -31,6 +32,7 @@ Thumbs.db
 ##############################
 .idea/
 .iml
+*.iml
 *.sublime*
 *.bak
 *.swp
