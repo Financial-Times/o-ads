@@ -3,5 +3,27 @@
     "origamiType": "module",
     "origamiVersion": 1,
     "support": "none",
-    "supportStatus": "experimental"
+    "supportStatus": "experimental",
+    "demos": [
+      {
+         "path": "/demos/leaderboard.html",
+         "expanded": true,
+         "description": ""
+      },
+      {
+         "path": "/demos/mpu.html",
+         "expanded": true,
+         "description": ""
+      },
+      {
+         "path": "/demos/hlfmpu.html",
+         "expanded": true,
+         "description": ""
+      },
+      {
+         "path": "/demos/glossary.html",
+         "expanded": true,
+         "description": ""
+      }
+   ]
 }
