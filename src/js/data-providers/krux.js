@@ -110,7 +110,7 @@ proto.events = {
                 interval = config.interval || 5,
             max = (config.total / interval) || 120,
             uid = config.id;
-            ads.utilstimers.create(interval, (function () {
+            ads.utils.timers.create(interval, (function () {
                 return function () {
                     fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
                 };
