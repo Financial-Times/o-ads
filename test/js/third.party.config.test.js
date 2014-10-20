@@ -106,8 +106,6 @@
 
         test('Config cookie over-ride for Test User mode', function () {
             TEST.beginNewPage({cookies: {'ftads:mode_t': 'testuser', network: 'over-ride'}});
-            console.log(FT.ads.utils.cookies);
-            console.log(FT.ads.utils.cookie('network'));
             equal(FT.ads.config('network'), 'over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
         });
 
