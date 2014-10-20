@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
     filter = require('gulp-filter'),
+    gutil = require('gulp-util'),
     tag_version = require('gulp-tag-version');
 
 /**
@@ -27,11 +28,10 @@ function inc(importance) {
         .pipe(gulp.dest('./'))
         // commit the changed version number
         .pipe(git.commit('bumps package version'))
-
         // read only one file to get the version number
-        .pipe(filter('package.json'))
+        .pipe(filter('bower.json'))
         // **tag it in the repository**
-        .pipe(tag_version())
+        .pipe(tag_version({prefix:""}))
 }
 
 gulp.task('patch', function() { return inc('patch'); })
