@@ -76,6 +76,7 @@
         updateCorrelator : stubs.stub()
     });
 
+
     googletag.cmd =  googletag.cmd || [];
 
     googletag.cmd.push = function(fn){

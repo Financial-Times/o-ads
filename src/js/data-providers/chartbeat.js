@@ -1,72 +1,72 @@
 /**
- * @fileOverview
- * Third party library for use with google publisher tags.
- *
- * @author Robin Marr, robin.marr@ft.com
- */
-/**
- * FT.ads.chartbeat provides chartbest integration for the FT advertising library
- * @name targeting
- * @memberof FT.ads
+* @fileOverview
+* Third party library for use with google publisher tags.
+*
+* @author Robin Marr, robin.marr@ft.com
 */
-(function (win, doc, undefined) {
-    "use strict";
-    var proto = Chartbeat.prototype;
 /**
- * The ChartBeat class defines an FT.ads.chartbeat instance
- * @class
- * @constructor
+* FT.ads.chartbeat provides chartbest integration for the FT advertising library
+* @name targeting
+* @memberof FT.ads
 */
-    function Chartbeat() {
+"use strict";
+var ads;
+var proto = Chartbeat.prototype;
+/**
+* The ChartBeat class defines an FT.ads.chartbeat instance
+* @class
+* @constructor
+*/
+function Chartbeat() {
 
+}
+
+
+/**
+* initialise chartbeat functionality
+* Decorates the gpt refresh method with chartbeat functionality
+* @name init
+* @memberof ChartBeat
+* @lends ChartBeat
+*/
+proto.init = function (impl) {
+    ads = impl;
+    this.decorateRefresh();
+};
+
+proto.decorateRefresh = function () {
+    if (ads.utils.isFunction(ads.gpt.refresh)) {
+        var _refresh = ads.gpt.refresh;
+            ads.gpt.refresh =  this.refresh(_refresh);
+        return true;
     }
+};
 
 
 /**
- * initialise chartbeat functionality
- * Decorates the gpt refresh method with chartbeat functionality
- * @name init
- * @memberof ChartBeat
- * @lends ChartBeat
+* Alerts chartbeat that a refresh is about ot happen on multiple slots
+* @name refresh
+* @memberof ChartBeat
+* @lends ChartBeat
 */
-    proto.init = function () {
-        this.decorateRefresh();
-    };
-
-    proto.decorateRefresh = function () {
-        if (FT._ads.utils.isFunction(FT.ads.gpt.refresh)) {
-            var _refresh = FT.ads.gpt.refresh;
-                FT.ads.gpt.refresh =  this.refresh(_refresh);
-            return true;
-        }
-    };
-
-
-/**
- * Alerts chartbeat that a refresh is about ot happen on multiple slots
- * @name refresh
- * @memberof ChartBeat
- * @lends ChartBeat
-*/
-    proto.refresh = function (fn) {
-        return function (slotsForRefresh) {
-            if (window.pSUPERFLY){
-                var slot, slotName, cbName,
-                    slots = FT.ads.slots;
-                slotsForRefresh = slotsForRefresh || slots;
-                for (slotName in slotsForRefresh) {
-                    slot = slots[slotName];
-                    if (slot.gptSlot && slot.timer === undefined) {
-                        if ( FT._ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-                            window.pSUPERFLY.refreshAd(cbName);
-                        }
+proto.refresh = function (fn) {
+    return function (slotsForRefresh) {
+        if (window.pSUPERFLY){
+            var slot, slotName, cbName,
+                slots = ads.slots;
+            slotsForRefresh = slotsForRefresh || slots;
+            for (slotName in slotsForRefresh) {
+                slot = slots[slotName];
+                if (slot.gptSlot && slot.timer === undefined) {
+                    if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
+                        window.pSUPERFLY.refreshAd(cbName);
                     }
                 }
             }
+        }
 
-            fn.apply(this, arguments);
-        };
+        fn.apply(this, arguments);
     };
+};
 
-  FT._ads.utils.extend(FT.ads, {cb: new Chartbeat()});
-}(window, document));
+module.exports = new Chartbeat();

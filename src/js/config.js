@@ -18,193 +18,196 @@
  * @memberof FT.ads
  * @function
 */
-(function (win, doc, undefined) {
-    "use strict";
+var ads;
 /**
- * The Config class defines an FT.ads.config instance.
- * @class
- * @constructor
+* The Config class defines an FT.ads.config instance.
+* @class
+* @constructor
 */
-    function Config() {
+function Config() {
+    "use strict";
+        
 /**
- * Default configuration set in the constructor.
- */
-        var defaults =  {
-            network: '5887',
-            formats: {
-                intro: {
+* Default configuration set in the constructor.
+*/
+    var defaults =  {
+        network: '5887',
+        formats: {
+            intro: {
 
-                },
-                banlbGPT: {
-                    sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
-                    outOfPage: true
-                },
-                mpu: {
-                    sizes: [[300,250],[336,280]]
-                },
-                doublet: {
-                    sizes: [[352,230]]
-                },
-                hlfmpu: {
-                    sizes: [[300,250],[300,600],[336,850],[336,280],[300,1050]]
-                },
-                newssubs: {
-                    sizes: [[270,42]]
-                },
-                refresh: {
-                    'sz': '1x1'
-                },
-                searchbox: {
-                    sizes: [[270,42]]
-                },
-                tlbxrib: {
-                    sizes: [[336,60]]
-                },
-                marketingrib: {
-                    sizes: [[336,60]]
-                },
-                lhn: {
-                    sizes: [[136,64]]
-                },
-                tradcent: {
-                    sizes: [[336,260]]
-                },
-                mktsdata: { // also matches mktsdata2 and mktsdata3
-                    sizes: [[88,31], [75,25]]
-                },
-                mpusky: {
-                    sizes: [[300,250], [336,280],[160,60]]
-                },
-                wdesky: {
-                    sizes: [[160,600]]
-                }
             },
-            audSciLimit : 35,
-            collapseEmpty: 'ft'
-        };
+            leaderboard: {
+                sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
+                outOfPage: true
+            },
+            mpu: {
+                sizes: [[300,250],[336,280]]
+            },
+            doublet: {
+                sizes: [[352,230]]
+            },
+            hlfmpu: {
+                sizes: [[300,250],[300,600],[336,850],[336,280],[300,1050]]
+            },
+            newssubs: {
+                sizes: [[270,42]]
+            },
+            refresh: {
+                'sz': '1x1'
+            },
+            searchbox: {
+                sizes: [[270,42]]
+            },
+            tlbxrib: {
+                sizes: [[336,60]]
+            },
+            marketingrib: {
+                sizes: [[336,60]]
+            },
+            lhn: {
+                sizes: [[136,64]]
+            },
+            tradcent: {
+                sizes: [[336,260]]
+            },
+            mktsdata: { // also matches mktsdata2 and mktsdata3
+                sizes: [[88,31], [75,25]]
+            },
+            mpusky: {
+                sizes: [[300,250], [336,280],[160,60]]
+            },
+            wdesky: {
+                sizes: [[160,600]]
+            }
+        },
+        audSciLimit : 35,
+        collapseEmpty: 'ft'
+    };
 
-        var store = {};
+    var store = {};
 /**
- * @private
- * @function
- * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
- */
-        var fetchMetaConfig = function() {
-            var meta,
-                results = {},
-                metas = doc.getElementsByTagName('meta');
-            for (var i= 0; i < metas.length; i++) {
-                meta = metas[i];
-                if (meta.name) {
-                    if (meta.getAttribute("data-contenttype") === "json"){
-                        results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
-                    } else {
-                        results[meta.name] = meta.content;
-                    }
+* @private
+* @function
+* fetchMetaConfig pulls out metatag key value pairs into an object returns the object
+*/
+    var fetchMetaConfig = function() {
+        var meta,
+            results = {},
+            metas = document.getElementsByTagName('meta');
+        for (var i= 0; i < metas.length; i++) {
+            meta = metas[i];
+            if (meta.name) {
+                if (meta.getAttribute("data-contenttype") === "json"){
+                    results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+                } else {
+                    results[meta.name] = meta.content;
                 }
-            }
-            return results;
-        };
-
-/**
- * @private
- * @function
- * fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
- */
-        var fetchGlobalConfig = function() {
-            if (FT._ads.utils.isObject(FT.env)){
-                return FT.env;
-            } else {
-                return {};
-            }
-        };
-/**
- * @private
- * @function
- * fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
- */
- //TODO update this function to only pull out cookies related to ad config rather than the entire object
-        var fetchCookieConfig = function(){
-            return FT._ads.utils.cookies;
-        };
-
-
-    // getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config.
-    function setDFPSiteForEnv() {
-        var env, site = store.dfp_site;
-        if (FT.Properties && FT.Properties.ENV) {
-            env = FT.Properties.ENV.toLowerCase();
-            if (env !== 'p') {
-                site = site.replace(/^\w+\./, "test.");
-                store.dfp_site = site;
             }
         }
-    }
+        return results;
+    };
 
 /**
- * @function
- * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
- */
-        var access = function(k, v){
-            var result;
-            if (FT._ads.utils.isPlainObject(k)) {
-                store = FT._ads.utils.extend(store, k);
+* @private
+* @function
+* fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
+*/
+
+//TODO: this is FT specfic content and needs to be removed
+    var fetchGlobalConfig = function() {
+        if (window.FT && ads.utils.isObject(FT.env)){
+            return FT.env;
+        } else {
+            return {};
+        }
+    };
+/**
+* @private
+* @function
+* fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
+*/
+//TODO update this function to only pull out cookies related to ad config rather than the entire object
+    var fetchCookieConfig = function(){
+        return ads.utils.cookies;
+    };
+
+//TODO: this whole method is FT Specific move it into what ever becomes of the switcher
+// getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config.
+function setDFPSiteForEnv() {
+    var env, site = store.dfp_site;
+    if (window.FT && FT.Properties && FT.Properties.ENV) {
+        env = FT.Properties.ENV.toLowerCase();
+        if (env !== 'p') {
+            site = site.replace(/^\w+\./, "test.");
+            store.dfp_site = site;
+        }
+    }
+}
+
+/**
+* @function
+* access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
+*/
+    var access = function(k, v){
+        var result;
+        if (ads.utils.isPlainObject(k)) {
+            store = ads.utils.extend(store, k);
+            result = store;
+        } else if (typeof v === "undefined") {
+            if (typeof k === "undefined"){
                 result = store;
-            } else if (typeof v === "undefined") {
-                if (typeof k === "undefined"){
-                    result = store;
-                } else {
-                    result = store[k];
-                }
             } else {
-                store[k] = v;
-                result = v;
+                result = store[k];
             }
+        } else {
+            store[k] = v;
+            result = v;
+        }
 
-            return result;
-        };
+        return result;
+    };
 
-        access.clear = function(key){
-            if (key) {
-                delete store[key];
-            } else {
-                store = {};
-            }
-        };
+    access.clear = function(key){
+        if (key) {
+            delete store[key];
+        } else {
+            store = {};
+        }
+    };
 
-        access.load = function(clear){
+    access.init = function(impl, clear){
+        ads = impl;
+        if (!!clear) {
+            access.clear();
+        }
 
-            if (!!clear) {
-                access.clear();
-            }
+
 
 /**
- * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
- * this allows QA Testers to over-ride global and meta config.
- */
-            if (FT._ads.utils.isString(FT._ads.utils.cookie('ftads:mode_t'))) {
-                if (FT._ads.utils.cookie('ftads:mode_t') === "testuser"){
-                    store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+* if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
+* this allows QA Testers to over-ride global and meta config.
+*/
+        if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
+            if (ads.utils.cookie('ftads:mode_t') === "testuser"){
+                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
 
-                    var siteCookie = FT._ads.utils.cookie('ftads:dfpsite');
-                    if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
-                        var splitSite = (store.dfp_site || '').split('.');
-                        splitSite[0] = siteCookie;
-                        store.dfp_site = splitSite.join('.');
-                    } else {
-                        setDFPSiteForEnv();
-                    }
+                var siteCookie = ads.utils.cookie('ftads:dfpsite');
+                if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
+                    var splitSite = (store.dfp_site || '').split('.');
+                    splitSite[0] = siteCookie;
+                    store.dfp_site = splitSite.join('.');
+                } else {
+                    setDFPSiteForEnv();
                 }
-            } else {
-                store = FT._ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
-                setDFPSiteForEnv();
             }
-            return store;
-        };
+        } else {
+            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
+            setDFPSiteForEnv();
+        }
+        return store;
+    };
 
-        access.load();
-        return access;
-    }
-
-    FT._ads.utils.extend(FT.ads, {config: new Config()});
-}(window, document));
+    //access.init();
+    return access;
+}
+module.exports = new Config();

@@ -1,3 +1,5 @@
+
+//console.log(FT);
 (function (window, document, $, undefined) {
     function cookieTests (){
         var cookies, oldCookies,
@@ -9,7 +11,7 @@
             }
         };
 
-        module('FT._ads.utils.cookie', callbacks);
+        QUnit.module('FT._ads.utils.cookie', callbacks);
 
         test('read simple value', function () {
             expect(1);
@@ -32,11 +34,13 @@
 
         test('read decode', function () {
             expect(1);
-            FT._ads.utils.cookie(' c',' v');
-            equal(FT._ads.utils.cookie(' c'), ' v', 'should decode key and value');
+            FT._ads.utils.cookie('c',' v');
+            equal(FT._ads.utils.cookie('c'), ' v', 'should decode key and value');
         });
 
+
         test('read decode pluses to space for server side written cookie', 1, function () {
+            expect(1);
             FT._ads.utils.cookie('c','foo bar');
             equal(FT._ads.utils.cookie('c'), 'foo bar', 'should convert pluses back to space');
         });
@@ -68,27 +72,30 @@
             }
         });
 
-        asyncTest('read malformed cookie value in IE (#88, #117)', 1, function() {
-            // Sandbox in an iframe so that we can poke around with document.cookie.
-            var iframe = document.createElement('iframe'),
-                iframeSrc = location.href.split('/');
+       var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
+       if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) {
+           asyncTest('read malformed cookie value in IE (#88, #117)', 1, function() {
+               // Sandbox in an iframe so that we can poke around with document.cookie.
+               var iframe = document.createElement('iframe'),
+                   iframeSrc = location.href.split('/');
 
-            $(iframe).load(function() {
-                start();
-                if (iframe.contentWindow.loaded) {
-                    equal(iframe.contentWindow.testValue, '2nd', 'reads all cookie values, skipping duplicate occurences of "; " and preserving the last value of any duplicated keys');
-                } else {
-                    // Skip the test where we can't stub document.cookie using
-                    // Object.defineProperty. Seems to work fine in
-                    // Chrome, Firefox and IE 8+.
-                    ok(true, 'N/A');
-                }
-            });
-            iframeSrc.pop(); //remove the current file name from the location
-            iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
-            iframe.src = iframeSrc.join('/');
-            document.body.appendChild(iframe);
-        });
+               $(iframe).load(function() {
+                   start();
+                   if (iframe.contentWindow.loaded) {
+                       equal(iframe.contentWindow.testValue, '2nd', 'reads all cookie values, skipping duplicate occurences of "; " and preserving the last value of any duplicated keys');
+                   } else {
+                       // Skip the test where we can't stub document.cookie using
+                       // Object.defineProperty. Seems to work fine in
+                       // Chrome, Firefox and IE 8+.
+                       ok(true, 'N/A');
+                   }
+               });
+               iframeSrc.pop(); //remove the current file name from the location
+               iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
+               iframe.src = iframeSrc.join('/');
+               document.body.appendChild(iframe);
+           });
+       }
 
         test('write String primitive', 1, function () {
             FT._ads.utils.cookie('c', 'v');

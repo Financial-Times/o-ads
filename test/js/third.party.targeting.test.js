@@ -1,6 +1,7 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Third party targeting');
+        QUnit.module('Third party targeting');
+        /*
         test('fetchAudSci', function () {
             expect(4);
             TEST.beginNewPage({
@@ -76,6 +77,8 @@
             var result = FT.ads.targeting();
             deepEqual(result.ksg, ["seg1", "seg2"], "krux returns 2 segments");
         });
+*/
+/*
 
         test('cookieConsent', function () {
 
@@ -113,6 +116,7 @@
             equal(result.loc,'cadzbjazhczbic', "203.190.72.182.aaaaa - incomplete FTUserTrack information");
 
         });
+
 
         test("social referrer", function () {
             var result;
@@ -180,6 +184,7 @@
             deepEqual(result, {"05": "map","06": "tec","07": "ts","14": "gbr","cn": "eur","slv": "lv2"}, "AYSC values are returned correctly; using 'real' aysc values");
         });
 
+*/
         test("search term", function () {
             var result;
 

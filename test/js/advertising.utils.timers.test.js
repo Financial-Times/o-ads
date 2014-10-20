@@ -2,7 +2,7 @@
     "use strict";
 
     function runTests() {
-        module('FT._ads.utils.timers');
+        QUnit.module('FT._ads.utils.timers');
 
 
         test('Timer', function () {

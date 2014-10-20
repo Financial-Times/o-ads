@@ -9,7 +9,6 @@ demos/local/
 node_modules/
 bower_components/
 .sass-cache/
-bower_components/
 
 # Log Files #
 #############
@@ -31,7 +30,6 @@ Thumbs.db
 # VIM/editor generated files #
 ##############################
 .idea/
-.iml
 *.iml
 *.sublime*
 *.bak

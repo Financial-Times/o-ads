@@ -1,6 +1,6 @@
 (function (window, document, $, undefined) {
     function runTests() {
-        module('Chartbeat');
+        QUnit.module('Chartbeat');
 
         test('the refreshAd method is called before gpt begins refreshing the ad', function () {
             var decorateRefresh = sinon.spy(FT.ads.cb, 'decorateRefresh');
@@ -8,7 +8,7 @@
             var gptRefresh = sinon.spy(FT.ads.gpt, 'refresh');
 
             window.pSUPERFLY = {refreshAd: sinon.stub};
-            FT.ads.cb.init();
+            FT.ads.cb.init(FT.ads);
             ok(decorateRefresh.called, 'initialising chartbeat decorates the gpt refresh method.');
 
             FT.ads.gpt.refresh();
