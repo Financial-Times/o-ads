@@ -8,7 +8,7 @@
       {
          "name": "leaderboard",
          "template": "main.mustache",
-         "data": {"pos":"banlb"}
+         "data": {"pos":"leaderboard"}
       },
       {
          "name": "mpu",
