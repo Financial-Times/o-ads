@@ -32,6 +32,7 @@ function inc(importance) {
         .pipe(filter('bower.json'))
         // **tag it in the repository**
         .pipe(tag_version({prefix:""}))
+        .pipe(git.push('origin','master', '--tags'))
 }
 
 gulp.task('patch', function() { return inc('patch'); })
