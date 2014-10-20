@@ -65,7 +65,7 @@
                 if (data) {
                     for (name in data) {
                         var content, other = "", metatag;
-                        if (FT._ads.utils.isString(data[name])){
+                        if (FT.ads.utils.isString(data[name])){
                             content = data[name];
                         } else {
                             content = data[name].content;
@@ -95,11 +95,11 @@
                         test.mock.cookie(cookie, data[cookie]);
                     }
                 }
-                FT._ads.utils.cookies = cookies;
+                FT.ads.utils.cookies = cookies;
                 return cookies;
             },
             localStorage: function (data) {
-                if (FT._ads.utils.isStorage(window.localStorage) || test.sinon.localStorage) {
+                if (FT.ads.utils.isStorage(window.localStorage) || test.sinon.localStorage) {
                     var stub, key,
                     stubs = {
                         getItem: function (key) {
@@ -126,7 +126,7 @@
 
                     if (!test.sinon.localStorage) {
                         test.sinon.localStorage = {};
-                        if (FT._ads.utils.isFunction(Object.defineProperty)) {
+                        if (FT.ads.utils.isFunction(Object.defineProperty)) {
                             Object.defineProperty(window , 'localStorage', { value: stubs, configurable: true, writable: true });
                         }
 
@@ -140,7 +140,7 @@
                 data = data || '';
                 if (!test.sinon.referrer) {
                     test.sinon.referrer = sinon.stub(
-                        FT._ads.utils,
+                        FT.ads.utils,
                         'getReferrer'
                     ).returns(data);
                 } else {
@@ -151,7 +151,7 @@
                 data = data || '';
                 if (!test.sinon.location) {
                     test.sinon.location = sinon.stub(
-                        FT._ads.utils,
+                        FT.ads.utils,
                         'getLocation'
                     ).returns(data);
                 } else {
@@ -162,7 +162,7 @@
                 data = data || '';
                 if (!test.sinon.querystring) {
                     test.sinon.querystring = sinon.stub(
-                        FT._ads.utils,
+                        FT.ads.utils,
                         'getQueryString'
                     ).returns(data);
                 } else {
@@ -185,10 +185,10 @@
             },
             attach: function () {
                 if (!test.sinon.attach) {
-                    var attach = FT._ads.utils.attach;
+                    var attach = FT.ads.utils.attach;
 
                     test.sinon.attach = sinon.stub(
-                        FT._ads.utils,
+                        FT.ads.utils,
                         'attach',
                         function (scriptUrl, async) {
                             function matchFile(url) {
@@ -248,7 +248,7 @@
                 }
             },
             cookies: function () {
-                FT._ads.utils.cookies = cookies = {};
+                FT.ads.utils.cookies = cookies = {};
             },
             config: function () {
                 if (FT && FT.ads && FT.ads.config) {

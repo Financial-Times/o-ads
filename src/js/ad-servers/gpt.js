@@ -202,7 +202,7 @@ proto.refresh = function (slotsForRefresh) {
 */
 proto.startRefresh = function () {
     var refreshConfig = ads.config('refresh') || {},
-        pageType = ads.utils.getPageType(),
+        pageType = ads.metadata.getPageType(),
         time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
         max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
 
@@ -359,9 +359,9 @@ proto.init = function (impl) {
     ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
     this.setPageTargeting();
     //TODO: this is FT specific content needs to be removed
-    if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
-        this.startRefresh();
-    }
+  if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
+      this.startRefresh();
+ }
 
     function onViewportChange(viewport){
         var slot, slotName, slots = FT.ads.slots, slotsForRefresh = [];

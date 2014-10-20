@@ -36,7 +36,7 @@ function Config() {
             intro: {
 
             },
-            banlbGPT: {
+            leaderboard: {
                 sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
                 outOfPage: true
             },
@@ -128,7 +128,6 @@ function Config() {
 */
 //TODO update this function to only pull out cookies related to ad config rather than the entire object
     var fetchCookieConfig = function(){
-        console.log(ads.utils.cookies);
         return ads.utils.cookies;
     };
 
