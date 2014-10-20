@@ -212,6 +212,24 @@ Metadata.page = function(){
     return result;
 };
 
+/**
+* return the current documents url or an empty string if non exists
+* This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
+* @name getReferrer
+* @memberof FT._ads.utils
+* @lends FT._ads.utils
+*/
+
+Metadata.getPageType = function () {
+  var targeting = ads.config('dfp_targeting') || {};
+  if (!ads.utils.isPlainObject(targeting)) {
+      if (ads.utils.isString(targeting)) {
+          targeting = ads.utils.hash(targeting, ';', '=') || {};
+      }
+  }
+  return targeting.pt || 'unknown';
+};
+
 
 Metadata.init = function (impl) {
     ads = impl;
