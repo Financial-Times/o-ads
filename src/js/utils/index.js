@@ -385,6 +385,8 @@ module.exports.nodeListToArray = function(obj) {
   return array;
 };
 
+module.exports.cookies = utils.hash(document.cookie, ';', '=');
+
 extend(module.exports, require('./cookie.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();

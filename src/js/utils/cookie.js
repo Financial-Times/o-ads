@@ -38,9 +38,9 @@ var config = module.exports.cookie = function (key, value, options) {
         value = config.json ? JSON.stringify(value) : String(value);
         value = config.raw ? value : encodeURIComponent(value);
         if(!!options.expires && (options.expires.valueOf() - today.valueOf()) < 0) {
-            delete module.exports.cookies[encodeURIComponent(key)];
+            delete utils.cookies[encodeURIComponent(key)];
         } else {
-            module.exports.cookies[encodeURIComponent(key)] = value;
+            utils.cookies[encodeURIComponent(key)] = value;
         }
 
         return (document.cookie = [
@@ -54,7 +54,7 @@ var config = module.exports.cookie = function (key, value, options) {
 
     // read
     var decode = config.raw ? raw : decoded;
-    var cookie = module.exports.cookies[encodeURIComponent(key)];
+    var cookie = utils.cookies[encodeURIComponent(key)];
     if (!!cookie || cookie === '') {
         return config.json ? JSON.parse(decode(cookie)) : decode(cookie);
     }
@@ -116,4 +116,3 @@ module.exports.getCookieParam = function (name, param) {
     return (matches && matches.length) ? matches[1] : undefined;
 };
 
-module.exports.cookies = utils.hash(document.cookie, ';', '=');
