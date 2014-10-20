@@ -1,9 +1,13 @@
 {
-    "name": "o-ads",
-    "version": "0.1.6",
-    "main": [
-        "main.scss",
-        "main.js"
-    ],
-    "ignore": []
+  "name": "o-ads",
+  "version": "0.1.6",
+  "main": [
+    "main.scss",
+    "main.js"
+  ],
+  "ignore": [],
+  "devDependencies": {
+    "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
+    "jquery.cookie": "https://raw.githubusercontent.com/carhartl/jquery-cookie/master/src/jquery.cookie.js"
+  }
 }
