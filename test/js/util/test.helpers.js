@@ -2,8 +2,11 @@
 // we turn of strict here because in order to mock certain things we have to do things strict won't allow
 
 (function (window, document, $, undefined) {
-   var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
-   if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
+    var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
+    window.FT = {};
+    window.FT._ads = window.FT.ads = require('./../../../main.js');
+
+    if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
 
     var localstorage = {},
     globalVars = {},
@@ -357,12 +360,7 @@
 
         test.mode();
 
-
-        window.FT = {
-            _ads:{}
-        };
-
-        window.FT.ads = require('./../../../main.js').init({
+        FT.ads.init({
             collapseEmpty: 'ft',
             // these are all targeting options
             metadata: true,
@@ -394,10 +392,6 @@
                 }
             }
         });
-        //console.log(FT);
     });
-
-
-    window.FT._ads = window.FT.ads;
 
 }(window, document, jQuery))
