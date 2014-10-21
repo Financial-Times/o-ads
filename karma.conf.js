@@ -1,34 +1,45 @@
+/* jshint node: true */
+
+'use strict';
+var browsers = ['Chrome', 'Firefox'];
+if(/^win/.test(process.platform)){
+    browsers.push('IE');
+} else if (process.platform === 'darwin') {
+    browsers.push('Safari');
+}
+
+var singleRun = false;
+var autoWatch = true;
+
+if (process.env.TRAVIS === 'true'){
+    browsers = ['PhantomJS'];
+}
+
+// using CI environment variable to see if this is a ci build
+if (process.env.CI === 'true') {
+    singleRun = true;
+    autoWatch = false;
+}
+
 module.exports = function(config) {
-  config.set({
-    basePath: '',
-    autoWatch: true,
-    frameworks: ['qunit', 'browserify'],
-    files: [
-      'test/js/util/initialize.namespace.js',
-      'test/lib/jquery/*.js',
-      'test/lib/sinon/*.js',
-      'test/js/util/test.helpers.js',
-      'test/js/util/gpt.js',
-      'test/js/util/*.js',
-     // 'test/js/advertising.utils.cookie.test.js',
-     'test/js/advertising.utils.cookie.test.js',
-     'test/js/advertising.utils.responsive.test.js',
-      'test/js/advertising.utils.test.js',
-      'test/js/advertising.utils.timers.test.js',
-      'test/js/chartbeat.test.js',
-     'test/js/krux.test.js',
-     'test/js/metadata.test.js',
-      'test/js/third.party.config.test.js',
-      'test/js/third.party.gpt.test.js',
-      'test/js/third.party.slots.test.js',
-     'test/js/third.party.targeting.test.js'
+    config.set({
+        basePath: '.',
+        autoWatch: autoWatch,
+        frameworks: ['qunit', 'sinon', 'browserify'],
+        files: [
+            'bower_components/jquery-1.7.2.min/index.js',
+            'bower_components/jquery.cookie/index.js',
+            'test/js/util/test.helpers.js',
+            'test/js/util/initialize.namespace.js',
+            'test/js/util/gpt.js',
+            'test/js/util/*.js',
+            'test/js/*.test.js'
+        ],
+        browsers: browsers,
 
-    ],
-    browsers: ['Chrome'],
+        reporters: ['progress'],
+        preprocessors: { 'test/js/util/initialize.namespace.js': ['browserify']},
 
-    reporters: ['progress'],
-    preprocessors: { 'test/js/util/initialize.namespace.js': ['browserify']},
-
-    singleRun: false
-  });
+        singleRun: singleRun
+    });
 };

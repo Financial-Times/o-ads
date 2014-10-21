@@ -1,9 +1,12 @@
+/* jshint strict: false */
+/* globals  FT, jQuery, $, asyncTest: false, deepEqual: false, equal: false, expect: false, module: false, notDeepEqual: false, notEqual: false, notStrictEqual : false, ok: false, QUnit: false, raises: false, start: false, stop: false, strictEqual: false, test: false, TEST: false */
+/* these are the globals setup by Qunit, FT for our namespace and TEST for our mocks and helpers */
+/* we also turn of use strict in the test as you may need to do something to do something strict mode won't allow in order to test/mock something */
 
-//console.log(FT);
-(function (window, document, $, undefined) {
+
+(function (window, document, undefined) {
     function cookieTests (){
-        var cookies, oldCookies,
-        callbacks = {
+        var callbacks = {
             setup: function () {
                 FT._ads.utils.cookie.defaults = {};
                 delete FT._ads.utils.cookie.raw;
@@ -91,7 +94,7 @@
                    }
                });
                iframeSrc.pop(); //remove the current file name from the location
-               iframeSrc.push('../images/cookie-iframe.html'); // add the file name of our iframe doc
+               iframeSrc.push('/base/test/lib/cookie-iframe.html'); // add the file name of our iframe doc
                iframe.src = iframeSrc.join('/');
                document.body.appendChild(iframe);
            });
@@ -103,8 +106,11 @@
         });
 
         test('write String object', 1, function () {
-            FT._ads.utils.cookie('c', new String('v'));
-            equal(FT._ads.utils.cookie('c'), 'v', 'should write value');
+            /* jshint -W053 */
+            // using the string constructor is a silly thing to do, we use it to make sure if someone esle is silly enough to try this our code will work
+            FT._ads.utils.cookie('c', new String(2));
+            /* jshint +W053 */
+            equal(FT._ads.utils.cookie('c'), '2', 'should write value');
         });
 
         test('write value "[object Object]"', 1, function () {
@@ -233,4 +239,4 @@
     }
 
    $(cookieTests);
-}(window, document, jQuery))
+}(window, document));

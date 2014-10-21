@@ -1,4 +1,4 @@
-/*global require*/
+/*global require, FT*/
 
 window.FT = {
     env: {'dfp_site' : 'test.5887.origami', 'dfp_zone' : '', 'site': 'test'}

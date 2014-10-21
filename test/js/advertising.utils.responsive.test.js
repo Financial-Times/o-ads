@@ -1,3 +1,8 @@
+/* jshint strict: false */
+/* globals  FT, sinon: true, asyncTest: false, deepEqual: false, equal: false, expect: false, module: false, notDeepEqual: false, notEqual: false, notStrictEqual : false, ok: false, QUnit: false, raises: false, start: false, stop: false, strictEqual: false, test: false, TEST: false */
+/* these are the globals setup by Qunit, FT for our namespace and TEST for our mocks and helpers */
+/* we also turn of use strict in the test as you may need to do something to do something strict mode won't allow in order to test/mock something */
+
 (function (window, document, $, undefined) {
     function responsiveTests (){
         var clock;
@@ -34,14 +39,14 @@
                 };
 
             TEST.mock.viewport(1, 1);
-            respsonsive  = FT._ads.utils.responsive(viewports, callback);
+            var responsive  = FT._ads.utils.responsive(viewports, callback);
 
             TEST.mock.viewport(201, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
-            equal(respsonsive(), 'medium', 'returns the current viewport size.');
+            equal(responsive(), 'medium', 'returns the current viewport size.');
 
             TEST.mock.viewport(250, 101);
             triggerResize();
@@ -53,7 +58,7 @@
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('large'), 'the first arument to the callback is the expected viewport size (large)');
-            equal(respsonsive(), 'large', 'returns the current viewport size.');
+            equal(responsive(), 'large', 'returns the current viewport size.');
         });
 
         test('resizing the browser window, overlapping viewport sizes', function () {
@@ -67,14 +72,14 @@
                 };
 
             TEST.mock.viewport(1, 1);
-            FT._ads.utils.responsive(viewports, callback);
+            var responsive  = FT._ads.utils.responsive(viewports, callback);
 
             TEST.mock.viewport(201, 101);
             triggerResize();
             clock.tick(210);
             ok(callback.calledOnce, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('medium'), 'the first arument to the callback is the expected viewport size (medium)');
-            equal(respsonsive(), 'medium', 'returns the current viewport size.');
+            equal(responsive(), 'medium', 'returns the current viewport size.');
 
 
             TEST.mock.viewport(101, 201);
@@ -82,7 +87,7 @@
             clock.tick(210);
             ok(callback.calledTwice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('other'), 'the first arument to the callback is the expected viewport size (other)');
-            equal(respsonsive(), 'other', 'returns the current viewport size.');
+            equal(responsive(), 'other', 'returns the current viewport size.');
 
 
             TEST.mock.viewport(301, 201);
@@ -90,7 +95,7 @@
             clock.tick(210);
             ok(callback.calledThrice, 'When a breakpoint is crossed the callback function is called');
             ok(callback.calledWith('large'), 'the first arument to the callback is the expected viewport size (large)');
-            equal(respsonsive(), 'large', 'returns the current viewport size.');
+            equal(responsive(), 'large', 'returns the current viewport size.');
         });
     }
 

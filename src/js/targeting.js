@@ -1,3 +1,6 @@
+/* jshint forin: false */
+//TODO: refactor the asyc code, it's nasty
+
 /**
 * @fileOverview
 * Third party library for use with google publisher tags.
@@ -45,14 +48,15 @@ function Targeting() {
         parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
 
         for (item in config)  {
-          if (ads.config(item)) {
+          if (config.hasOwnProperty(item) && ads.config(item)) {
             ads.utils.extend(parameters, config[item]());
           }
         }
 
         proto.initialised = true;
         return parameters;
-    };
+    }
+    
     targeting.init = proto.init;
 
     return targeting;
@@ -112,7 +116,9 @@ proto.encodedIp =  function () {
        if (ip) {
           encodedIP = ip;
           for (lookupKey in DFPPremiumIPReplaceLookup) {
-             encodedIP = encodedIP.replace(new RegExp(DFPPremiumIPReplaceLookup[lookupKey].replaceRegex), DFPPremiumIPReplaceLookup[lookupKey].replaceValue);
+            if(DFPPremiumIPReplaceLookup.hasOwnProperty(lookupKey)){
+              encodedIP = encodedIP.replace(new RegExp(DFPPremiumIPReplaceLookup[lookupKey].replaceRegex), DFPPremiumIPReplaceLookup[lookupKey].replaceValue);
+            }
           }
        }
 
@@ -215,11 +221,13 @@ proto.getSocialReferrer = function () {
 
     if (ads.utils.isString(referrer)) {
         for(refUrl in lookup) {
+          if(lookup.hasOwnProperty(refUrl)){
             var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
             if (refUrl !== undefined && refererRegex.test(referrer)) {
                codedValue = lookup[refUrl];
                break;
             }
+          }
         }
     }
     return codedValue && { socref: codedValue } || {};
@@ -289,6 +297,6 @@ proto.version = function(){
 
 proto.init = function (impl) {
   ads = impl;
-}
+};
 
 module.exports = new Targeting();

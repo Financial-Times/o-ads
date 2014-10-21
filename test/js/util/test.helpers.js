@@ -1,5 +1,6 @@
+/* jshint strict:true */
+// we turn of strict here because in order to mock certain things we have to do things strict won't allow
 
-//console.log(FT);
 (function (window, document, $, undefined) {
    var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
    if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
@@ -199,8 +200,8 @@
                                 filename =  splitUrl.pop();
                                 return mockFiles[filename] || 'null.js';
                             }
-
-                            return attach('../js/util/' + matchFile(scriptUrl), async);
+                            //attach files using the karma path, if we move away from karma this will need to change
+                            return attach('base/test/js/util/' + matchFile(scriptUrl), async);
                         }
                     );
                 }
@@ -218,7 +219,7 @@
                 $('meta[remove]').remove();
             },
             scripts: function () {
-                $('script[ftads]').remove();
+                //q$('script[ftads]').remove();
             },
             container: function (){
                 $('div[ftads]').remove();
@@ -347,10 +348,6 @@
         winHeight: window.innerHeight
     };
 
-    if (test.mode() === 'unit') {
-     //   test.suppressExternalScripts();
-    }
-
     $(function () {
         QUnit.testDone(function () {
             if (test.mode() === 'unit') {
@@ -359,6 +356,48 @@
         });
 
         test.mode();
-    });
-}(window, document, jQuery))
 
+
+        window.FT = {
+            _ads:{}
+        };
+
+        window.FT.ads = require('./../../../main.js').init({
+            collapseEmpty: 'ft',
+            // these are all targeting options
+            metadata: true,
+            audSci: true,
+            krux: {
+                limit: 70,
+                id: '',
+                events: {
+                    dwell_time: {
+                        interval: 5,
+                        id: 'JCadw18P',
+                        total: 600
+                    }
+                }
+            },
+            socialReferrer: true,
+            pageReferrer: true,
+            cookieConsent:  true,
+            timestamp: true,
+            version: true,
+            refresh: {
+                time: false,
+                max: 0,
+                art: {
+                    time: false
+                },
+                ind: {
+                    time: 900
+                }
+            }
+        });
+        //console.log(FT);
+    });
+
+
+    window.FT._ads = window.FT.ads;
+
+}(window, document, jQuery))

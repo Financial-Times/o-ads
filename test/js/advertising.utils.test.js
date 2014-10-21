@@ -1,3 +1,8 @@
+/* jshint strict: false */
+/* globals  FT, asyncTest: false, deepEqual: false, equal: false, expect: false, module: false, notDeepEqual: false, notEqual: false, notStrictEqual : false, ok: false, QUnit: false, raises: false, start: false, stop: false, strictEqual: false, test: false, TEST: false */
+/* these are the globals setup by Qunit, FT for our namespace and TEST for our mocks and helpers */
+/* we also turn of use strict in the test as you may need to do something to do something strict mode won't allow in order to test/mock something */
+
 (function (window, document, $, undefined) {
     function runTests() {
         QUnit.module('FT._ads.utils.isType methods');
@@ -130,17 +135,17 @@
             ok(!FT._ads.utils.isPlainObject(fnplain), "fn");
 
             /** @constructor */
-            var fn = function() {};
+            var Fn = function() {};
 
             // Again, instantiated objects shouldn't be matched
-            ok(!FT._ads.utils.isPlainObject(new fn()), "new fn (no methods)");
+            ok(!FT._ads.utils.isPlainObject(new Fn()), "new fn (no methods)");
 
             // Makes the function a little more realistic
             // (and harder to detect, incidentally)
-            fn.prototype["someMethod"] = function(){};
+            Fn.prototype["someMethod"] = function(){};
 
             // Again, instantiated objects shouldn't be matched
-            ok(!FT._ads.utils.isPlainObject(new fn()), "new fn");
+            ok(!FT._ads.utils.isPlainObject(new Fn()), "new fn");
 
             // DOM Element
             ok(!FT._ads.utils.isPlainObject(document.createElement("div")), "DOM Element");
@@ -165,7 +170,6 @@
                 optionsCopy = { "xnumber2": 1, "xstring2": "x", "xxx": "newstring" },
                 merged = { "xnumber1": 5, "xnumber2": 1, "xstring1": "peter", "xstring2": "x", "xxx": "newstring" },
                 deep1 = { "foo": { "bar": true } },
-                deep1copy = { "foo": { "bar": true } },
                 deep2 = { "foo": { "baz": true }},
                 deep2copy = { "foo": { "baz": true }},
                 deepmerged = { "foo": { "bar": true, "baz": true }},
@@ -199,8 +203,8 @@
             deepEqual( empty["foo"], optionsWithDate["foo"], "Dates copy correctly" );
 
             /** @constructor */
-            var myKlass = function() {};
-            var customObject = new myKlass();
+            var MyKlass = function() {};
+            var customObject = new MyKlass();
             var optionsWithCustomObject = { "foo": { "date": customObject } };
             empty = {};
             FT._ads.utils.extend(true, empty, optionsWithCustomObject);
@@ -214,7 +218,7 @@
 
             var MyNumber = Number;
             var ret = FT._ads.utils.extend(true, { "foo": 4 }, { "foo": new MyNumber(5) } );
-            ok( ret.foo == 5, "Wrapped numbers copy correctly" );
+            ok( parseInt(ret.foo, 10) === 5, "Wrapped numbers copy correctly" );
 
             var nullUndef;
             nullUndef = FT._ads.utils.extend({}, options, { "xnumber2": null });
@@ -235,7 +239,7 @@
             equal( ret.foo.length, 1, "Check to make sure a value with coersion 'false' copies over when necessary to fix #1907" );
 
             ret = FT._ads.utils.extend(true, { foo: "1,2,3" }, { foo: [1, 2, 3] } );
-            ok( typeof ret.foo != "string", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
+            ok( typeof ret.foo !== "string", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
 
             ret = FT._ads.utils.extend(true, { foo:"bar" }, { foo:null } );
             ok( typeof ret.foo !== "undefined", "Make sure a null value doesn't crash with deep extend, for #1908" );
@@ -266,6 +270,8 @@
         QUnit.module('FT._ads.utils miscellanious methods');
         test("css class methods", function() {
             expect(6);
+            /* jshint -W044 */
+            //just hint complains about all the crazy string escaping in here, but that's what we're testing 
             var $node = $('<div class="test cr@zy-c|-|@r/\cter$">'),
             node = $node[0];
 
@@ -279,7 +285,7 @@
 
             FT._ads.utils.removeClass(node, 'hello');
             ok( !$node.hasClass('hello'), "the node hello was removed" );
-
+            /* jshint +W044 */
         });
 
         test("hash method", function() {
@@ -343,7 +349,7 @@
         );
         test("isScriptAlreadyLoaded method when script is present", function(){
             expect(1);
-            var url = "http://local.ft.com/null.js",
+            var url = location.protocol + "//"  + location.host + "/base/test/js/util/null.js",
                 tag = document.createElement('script'),
                 node = document.getElementsByTagName('script')[0];
             tag.setAttribute('src', url);

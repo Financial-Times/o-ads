@@ -1,3 +1,8 @@
+/* jshint forin: false, boss: true */
+//see line ~76 for explaination on for in
+// boos mode used in this file, we should replace instaces with Array.map when polyfils are available
+
+
 "use strict";
 var ads;
 
@@ -14,7 +19,7 @@ var proto = Slots.prototype;
 
 proto.init = function (impl){
     ads = impl;     
-}
+};
 
 /**
 * Collects configuration values from data attributes set on the slots container,
