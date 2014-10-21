@@ -2,7 +2,7 @@
     "description": "Advertising",
     "origamiType": "module",
     "origamiVersion": 1,
-    "support": "none",
+    "support": "origami.advertising.technology@ft.com",
     "supportStatus": "experimental",
     "demos": [
       {
