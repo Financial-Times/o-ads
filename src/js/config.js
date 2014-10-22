@@ -1,3 +1,7 @@
+/* globals FT */
+//TODO remove all ft.com specific stuff so we can remove this as a global
+// currently all FT specific stuff is wrapped in an if window.FT
+
 /**
  * @fileOverview
  * Third party library for use with google publisher tags.
@@ -18,15 +22,14 @@
  * @memberof FT.ads
  * @function
 */
+"use strict";
 var ads;
 /**
 * The Config class defines an FT.ads.config instance.
 * @class
 * @constructor
 */
-function Config() {
-    "use strict";
-        
+function Config() {    
 /**
 * Default configuration set in the constructor.
 */

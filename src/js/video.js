@@ -17,7 +17,6 @@ function buildURLForVideo(zone, pos, vidKV){
 
     var gptVideoURL = function(){
         var URL;
-        var dfp_targeting;
         var encodeCustParams = function (vkv) {
             var allTargeting = ads.targeting();
             var results = '',
@@ -102,10 +101,10 @@ function buildURLForVideo(zone, pos, vidKV){
     if (!ads.config('video')) {
         return legacyVideoURL();
     }
-};
+}
 
 buildURLForVideo.init = function (impl) {
     ads = impl;
-}
+};
 
 module.exports = buildURLForVideo;

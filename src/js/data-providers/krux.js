@@ -110,7 +110,7 @@ proto.events = {
                 interval = config.interval || 5,
             max = (config.total / interval) || 120,
             uid = config.id;
-            ads.utilstimers.create(interval, (function () {
+            ads.utils.timers.create(interval, (function () {
                 return function () {
                     fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
                 };
@@ -121,7 +121,7 @@ proto.events = {
 
 proto.events.fire = function (id, attrs) {
     if(id) {
-        attrs = ads.utilsisPlainObject(attrs) ? attrs : {};
+        attrs = ads.utils.isPlainObject(attrs) ? attrs : {};
         return window.Krux('admEvent', id, attrs);
     }
     return false;
@@ -129,11 +129,11 @@ proto.events.fire = function (id, attrs) {
 
 proto.events.init = function() {
     var event, configured = ads.config('krux') && ads.config('krux').events;
-    if (ads.utilsisPlainObject(configured)) {
+    if (ads.utils.isPlainObject(configured)) {
         for(event in configured) {
-            if(ads.utilsisFunction(this[event])) {
+            if(ads.utils.isFunction(this[event])) {
                 this[event](configured[event]);
-            } else if (ads.utilsisFunction(configured[event].fn)) {
+            } else if (ads.utils.isFunction(configured[event].fn)) {
                 configured[event].fn(configured[event]);
             }
         }

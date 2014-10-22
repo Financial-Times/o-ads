@@ -1,11 +1,11 @@
 .advertising {
     // center adverts in slots
     &.center {
-        width:100%;
-        text-align:center;
+        width: 100%;
+        text-align: center;
     }
 
-    // remove this rule if transitions are added to all slots 
+    // remove this rule if transitions are added to all slots
     &.empty {
         width: 0;
         height: 0;

@@ -1,3 +1,8 @@
+/* jshint forin: false */
+/* globals getUUIDFromString */
+//todo: jshint complains about the for in loop on line ~102 because it set the myState var before filtering for hasOwnProperty
+// I'm not sure what affect moving the myState var will have (it's used above too) so this need to be refactored at some point
+
 "use strict";
 var ads;
 
@@ -37,6 +42,7 @@ Metadata.getAyscVars = function(obj){
 
     function fieldSubstr(SubStrKeyNames, obj) {
         var i, value;
+
         for(i=0; i < SubStrKeyNames.length; i++){
             value = ads.utils.isString(obj) ? obj.charAt(i) : obj[i];
             if (value === false) {
@@ -187,9 +193,11 @@ Metadata.user= function () {
     };
 
     for (ayscProp in ayscProps) {
-        ayscVal = asyc[ayscProps[ayscProp]];
-        if (ayscVal && !(valueFilter.test(ayscVal))) {
-            result[ayscProp] = ayscVal;
+        if(ayscProps.hasOwnProperty(ayscProp)){
+            ayscVal = asyc[ayscProps[ayscProp]];
+            if (ayscVal && !(valueFilter.test(ayscVal))) {
+                result[ayscProp] = ayscVal;
+            }
         }
     }
 

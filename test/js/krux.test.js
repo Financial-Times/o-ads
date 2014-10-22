@@ -1,3 +1,8 @@
+/* jshint strict: false */
+/* globals  FT, asyncTest: false, deepEqual: false, equal: false, expect: false, module: false, notDeepEqual: false, notEqual: false, notStrictEqual : false, ok: false, QUnit: false, raises: false, start: false, stop: false, strictEqual: false, test: false, TEST: false */
+/* these are the globals setup by Qunit, FT for our namespace and TEST for our mocks and helpers */
+/* we also turn of use strict in the test as you may need to do something to do something strict mode won't allow in order to test/mock something */
+
 (function (window, document, $, undefined) {
     function runTests() {
         QUnit.module('Krux');
@@ -13,13 +18,13 @@
         });
 
         test('targeting data is generated correctly', function () {
-
+            var result;
             if (FT._ads.utils.isStorage(window.localStorage)) {
                 var kruxData= { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
 
 
                 TEST.beginNewPage({config: { cookieConsent: false, krux: { krux: {id: '112233'}}, timestamp: false}, localStorage: kruxData});
-                var result = FT.ads.krux.targeting();
+                result = FT.ads.krux.targeting();
                 deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "segments in localStorage returned correctly");
                 equal(result.kuid, kruxData.kxuser, "user id returned correctly from localStorage");
                 equal(result.khost, encodeURIComponent(location.hostname), "host returned correctly");
@@ -30,13 +35,13 @@
             }
 
             TEST.beginNewPage({config: { krux: {id: '112233'}}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
-            var result = FT.ads.krux.targeting();
+            result = FT.ads.krux.targeting();
             deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "returns segments from cookies");
             equal(result.khost, encodeURIComponent(location.hostname), "host returned correctly");
             equal(result.bht, "true", "Behavioural flag is set, when cookies are used");
 
             TEST.beginNewPage({config: { krux: {id: '112233', limit: 2}}, cookies: { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'}});
-            var result = FT.ads.targeting();
+            result = FT.ads.targeting();
             deepEqual(result.ksg, ["seg1", "seg2"], "returns 2 segments");
         });
 

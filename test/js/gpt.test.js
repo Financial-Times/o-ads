@@ -1,8 +1,11 @@
+/* jshint strict: false */
+/* globals  FT, asyncTest: false, deepEqual: false, equal: false, expect: false, module: false, notDeepEqual: false, notEqual: false, notStrictEqual : false, ok: false, QUnit: false, raises: false, start: false, stop: false, strictEqual: false, test: false, TEST: false */
+/* these are the globals setup by Qunit, FT for our namespace and TEST for our mocks and helpers */
+/* we also turn of use strict in the test as you may need to do something to do something strict mode won't allow in order to test/mock something */
+
 (function (window, document, $, undefined) {
      function runTests() {
-        sinon.spies = {
-          gptCmdPush: sinon.spy(googletag.cmd, 'push')
-        };
+
         QUnit.module('Third party gpt',  {
             setup: function () {
             }
@@ -14,18 +17,17 @@
 
             ok(TEST.sinon.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
         });
-/*
+
         test('set page targeting', function () {
             expect(2);
-            sinon.spies.gptCmdPush.reset();
+            googletag.cmd.push.reset();
             TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, audSci : false, dfp_targeting: ';some=test;targeting=params'}});
             var result = FT.ads.gpt.setPageTargeting(),
                 expected = {some: 'test', targeting: 'params'};
-                console.log(result);
             deepEqual(result, expected, 'setting dfp_targeting in config works');
-            equal(sinon.spies.gptCmdPush.callCount, 2, 'the params are queued with GPT');
+            equal(googletag.cmd.push.callCount, 2, 'the params are queued with GPT');
         });
-*/
+
         test('getUnitName', function () {
             expect(6);
 
@@ -59,7 +61,6 @@
 
             strictEqual(result, expected, 'setting unit name with site and empty string zone works');
 
-
             TEST.beginNewPage({config: {gptUnitName: '/hello-there/stranger'}});
             var result = FT.ads.gpt.getUnitName(),
                 expected = '/hello-there/stranger';
@@ -80,29 +81,29 @@
 
         test('collapse empty', function () {
             var result;
-
-            sinon.spies.gptCmdPush.reset();
+            googletag.cmd.push.reset();
+            googletag.cmd.push.reset()
             result  = FT.ads.gpt.setPageCollapseEmpty();
             equal(result, undefined, 'No config set defaults to undefined');
-            ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
+            ok(googletag.cmd.push.calledOnce, 'the action is queued with GPT');
 
-            sinon.spies.gptCmdPush.reset();
+            googletag.cmd.push.reset();
             FT.ads.config('collapseEmpty', 'after');
             result  = FT.ads.gpt.setPageCollapseEmpty();
             equal(result, undefined, 'Config set to "after" mode is undefined!');
-            ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
+            ok(googletag.cmd.push.calledOnce, 'the action is queued with GPT');
 
-            sinon.spies.gptCmdPush.reset();
+            googletag.cmd.push.reset();
             FT.ads.config('collapseEmpty', 'before');
             result  = FT.ads.gpt.setPageCollapseEmpty();
             equal(result, true, 'Config set to "before" mode is true!');
-            ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
+            ok(googletag.cmd.push.calledOnce, 'the action is queued with GPT');
 
-            sinon.spies.gptCmdPush.reset();
+            googletag.cmd.push.reset();
             FT.ads.config('collapseEmpty', false);
             result  = FT.ads.gpt.setPageCollapseEmpty();
             equal(result, false, 'setting the value with false works');
-            ok(sinon.spies.gptCmdPush.calledOnce, 'the action is queued with GPT');
+            ok(googletag.cmd.push.calledOnce, 'the action is queued with GPT');
         });
 
 
@@ -168,7 +169,7 @@
         });
 
         test('update correlator without images sizes', function () {
-          TEST.beginNewPage();          
+          TEST.beginNewPage();
           FT.ads.gpt.updateCorrelator();
           ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
         });
