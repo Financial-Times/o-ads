@@ -16,7 +16,7 @@ var browserify = { debug: true };
 if(/^win/.test(process.platform)){
   browsers.push('IE');
 } else if (process.platform === 'darwin') {
-  //browsers.push('Safari');
+  browsers.push('Safari');
 }
 
 if (process.env.CI === 'true') {
