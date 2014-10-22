@@ -39,10 +39,12 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     autoWatch: autoWatch,
-    frameworks: ['qunit', 'sinon', 'browserify'],
+    frameworks: ['qunit', 'browserify'],
     files: [
       'bower_components/jquery-1.7.2.min/index.js',
       'bower_components/jquery.cookie/index.js',
+      'bower_components/sinon-1.10.3/index.js',
+      'bower_components/sinon.ie.timers-1.10.3/index.js',
       'test/js/util/gpt.js',
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
