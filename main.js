@@ -1,8 +1,5 @@
 'use strict';
 function Ads() {
-    if (!(this instanceof Ads)){
-        return new Ads();
-    }
 }
 
 
@@ -32,4 +29,4 @@ Ads.prototype.init = function (config){
     return this;
 };
 
-module.exports = Ads();
+module.exports = new Ads();
