@@ -21,11 +21,10 @@
     "gulp-tag-version": "^1.1.0",
     "karma": "~0.10.2",
     "karma-browserify": "^0.2.1",
+    "karma-qunit": "~0.1.1",
     "karma-coverage": "~0.1.0",
     "karma-ie-launcher": "^0.1.5",
     "karma-chrome-launcher": "^0.1.5",
-    "karma-safari-launcher": "~0.1.1",
-    "karma-qunit": "~0.1.1",
-    "map-stream": "^0.1.0"
+    "karma-safari-launcher": "~0.1.1"
   }
 }

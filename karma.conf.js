@@ -45,7 +45,7 @@ module.exports = function(config) {
       'bower_components/jquery.cookie/index.js',
       'bower_components/sinon-1.10.3/index.js',
       'bower_components/sinon.ie.timers-1.10.3/index.js',
-      'test/js/util/gpt.js',
+      'test/js/util/gpt-mock.js',
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
     ],
