@@ -33,7 +33,8 @@ function inc(importance) {
         // read only one file to get the version number
         .pipe(filter('bower.json'))
         // **tag it in the repository**
-        .pipe(tag_version({prefix:""}));
+        .pipe(tag_version({prefix:""}))
+        .pipe(git.push('origin','master', '--tags'));
 }
 
 gulp.task('patch', function() { return inc('patch'); });
