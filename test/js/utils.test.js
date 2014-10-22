@@ -211,7 +211,7 @@
             ok( empty["foo"] && empty["foo"]["date"] === customObject, "Custom objects copy correctly (no methods)" );
 
             // Makes the class a little more realistic
-            myKlass.prototype = { "someMethod": function(){} };
+            MyKlass.prototype = { "someMethod": function(){} };
             empty = {};
             FT._ads.utils.extend(true, empty, optionsWithCustomObject);
             ok( empty["foo"] && empty["foo"]["date"] === customObject, "Custom objects copy correctly" );
@@ -271,7 +271,7 @@
         test("css class methods", function() {
             expect(6);
             /* jshint -W044 */
-            //just hint complains about all the crazy string escaping in here, but that's what we're testing 
+            //just hint complains about all the crazy string escaping in here, but that's what we're testing
             var $node = $('<div class="test cr@zy-c|-|@r/\cter$">'),
             node = $node[0];
 

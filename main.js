@@ -1,24 +1,28 @@
 'use strict';
 function Ads() {
+    if (!(this instanceof Ads)){
+        return new Ads();
+    }
 }
 
-Ads.init = function (config){
-    // this is our internal namespace
-    // we passed into each module so we can to maintain state in each module
-    // it enavles us to keep config as the single source of truth while stil maintaing the ability to change it on the fly
-    this.utils = require('./src/js/utils');
-    this.config = require('./src/js/config');
-    this.gpt = require('./src/js/ad-servers/gpt');
-    this.krux = require('./src/js/data-providers/krux');
-    this.cb = require('./src/js/data-providers/chartbeat');
-    this.slots = require('./src/js/slots');
-    this.targeting = require('./src/js/targeting');
-    this.metadata = require('./src/js/metadata');
-    this.version = require('./src/js/version');
-    this.buildURLForVideo = require('./src/js/video');
-    
+
+// bung all our modules on the protoype
+Ads.prototype.config = require('./src/js/config');
+Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
+Ads.prototype.krux = require('./src/js/data-providers/krux');
+Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
+Ads.prototype.slots = require('./src/js/slots');
+Ads.prototype.targeting = require('./src/js/targeting');
+Ads.prototype.metadata = require('./src/js/metadata');
+Ads.prototype.version = require('./src/js/version');
+Ads.prototype.buildURLForVideo = require('./src/js/video');
+Ads.prototype.utils = require('./src/js/utils');
+
+Ads.prototype.init = function (config){
+    // use `this` as our internal namespace
+    // it's passed into each module so we can to maintain state in each module
     this.config.init(this);
-    this.config(config);    
+    this.config(config);
     this.metadata.init(this);
     this.targeting.init(this);
     this.slots.init(this);
@@ -28,4 +32,4 @@ Ads.init = function (config){
     return this;
 };
 
-module.exports = Ads;
+module.exports = Ads();

@@ -23,13 +23,6 @@ var slots = require('../slots');
 * @constructor
 */
 function GPT() {
-
-    // set up a place holder for the gpt code downloaded from google
-    window.googletag = window.googletag || {};
-    // this is a command queue used by GPT any methods added to it will be
-    // executed when GPT code is available, if GPT is already available they
-    // will be executed immediately
-    window.googletag.cmd = window.googletag.cmd || [];
     return this;
 }
 /**
@@ -270,8 +263,8 @@ proto.enableVideo = function () {
         */
         var url = 'http://s0.2mdn.net/instream/html5/gpt_proxy.js';
         if (!ads.utils.isScriptAlreadyLoaded(url)){
-            ads.utils.attach(url, true);  
-        }  
+            ads.utils.attach(url, true);
+        }
         googletag.pubads().enableVideoAds();
     }
 };
@@ -354,14 +347,22 @@ proto.setSlotTargeting = function (gptSlot, targetingObj) {
 */
 proto.init = function (impl) {
     ads = impl;
+    if (!window.googletag){
+        // set up a place holder for the gpt code downloaded from google
+        window.googletag = {};
+        // this is a command queue used by GPT any methods added to it will be
+        // executed when GPT code is available, if GPT is already available they
+        // will be executed immediately
+        window.googletag.cmd = [];
+    }
     var context = this,
     responsive = ads.config('responsive');
     ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
     this.setPageTargeting();
     //TODO: this is FT specific content needs to be removed
-  if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
-      this.startRefresh();
- }
+    if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
+          this.startRefresh();
+     }
 
     function onViewportChange(viewport){
         var slot, slotName, slots = FT.ads.slots, slotsForRefresh = [];
