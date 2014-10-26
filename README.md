@@ -1,6 +1,11 @@
-# o-ads
+# o-ads - Display Advertising
 
-Display advertising
+This module adds display advertising functionality to your product. Using this module will enable you to easily take advantage of
+ standard demographic targeting functionality, behavioural tracking features, useful custom targeting attributes, it is also
+ aligned to the standard FT Advertising Technology stack so co-ordination with Ad Operations should be a breeze.
+
+  Having a sales model is important! See this document for pre-requisite steps required for adding advertising to your product:
+   https://docs.google.com/a/ft.com/document/d/1a9Dyi-4VzN_gzhYn6scVLgKICEP1AEPR7A7-shefklU/edit
 
 ## Browser support
 |  Browsers  | Primary Experience | Core Experience |
@@ -12,13 +17,13 @@ Display advertising
 
 Known issues:
 
-* Excessively big ads may cause user dissatisfaction
+* Excessively big ads may cause user dissatisfaction! We are a classy site, please don't go overboard.
 
 ## Markup
 
-Before adding adveritsing to your product you will need to contact Ad Operations and have a sales strategy agreed. See checklist here (add link).
-
 Add ad slots to your page using the following div structure:
+
+Example HTML:
 
 ```html
 <div class="o-ads" data-o-ads-position="mpu">
@@ -26,4 +31,41 @@ Add ad slots to your page using the following div structure:
 </div>
 ```
 
+## Configuring Basic Targeting Criteria
+
 Add configuration to enable targeting
+
+### Out of the box targeting
+
+* User ID level (only available for testing functionality)
+* Pre-packaged social referrer (twitter, google, facebook, drudge)
+*
+*
+
+### Adding additional custom targeting criteria
+
+o-ads.setTargeting()
+
+## Advanced Features
+
+### Behavioural Targeting - Krux
+
+what it provides
+
+how to configure
+
+who to contact to get additional data points in your product
+
+### Chartbeat - Ad Visibility
+
+#### what it provides
+
+#### how to configure
+
+### Ad Refresh
+
+how to configure
+
+
+
+
