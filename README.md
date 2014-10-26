@@ -37,10 +37,8 @@ Add configuration to enable targeting
 
 ### Out of the box targeting
 
-* User ID level (only available for testing functionality)
-* Pre-packaged social referrer (twitter, google, facebook, drudge)
-*
-*
+* Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
+* Registration/Subscription/AYSC metadata
 
 ### Adding additional custom targeting criteria
 
@@ -48,19 +46,35 @@ o-ads.setTargeting()
 
 ## Advanced Features
 
+### Responsive slot configuration
+
+#### What it provides
+
+#### How to configure
+
 ### Behavioural Targeting - Krux
 
-what it provides
+#### What it provides
 
-how to configure
+#### How to configure
 
-who to contact to get additional data points in your product
+#### who to contact to get additional data points in your product
 
 ### Chartbeat - Ad Visibility
 
-#### what it provides
+#### What it provides
 
-#### how to configure
+#### How to configure
+
+### Video setup
+
+#### Basic Setup
+
+Example
+
+#### Companions
+
+Example
 
 ### Ad Refresh
 
