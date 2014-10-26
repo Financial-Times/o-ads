@@ -33,7 +33,9 @@ Example HTML:
 
 ## Configuring Basic Targeting Criteria
 
-Add configuration to enable targeting
+Add configuration to enable targeting.
+
+[PLACEHOLDER]
 
 ### Out of the box targeting
 
@@ -43,6 +45,7 @@ Add configuration to enable targeting
 ### Adding additional custom targeting criteria
 
 o-ads.setTargeting()
+[PLACEHOLDER]
 
 ## Advanced Features
 
@@ -50,35 +53,49 @@ o-ads.setTargeting()
 
 #### What it provides
 
+[PLACEHOLDER]
+
 #### How to configure
+
+[PLACEHOLDER]
 
 ### Behavioural Targeting - Krux
 
 #### What it provides
 
+[PLACEHOLDER]
+
 #### How to configure
 
+[PLACEHOLDER]
+
 #### who to contact to get additional data points in your product
+
+[PLACEHOLDER]
 
 ### Chartbeat - Ad Visibility
 
 #### What it provides
 
+[PLACEHOLDER]
+
 #### How to configure
 
-### Video setup
+[PLACEHOLDER]
+
+### Video Advertising
 
 #### Basic Setup
 
-Example
+[PLACEHOLDER]
 
 #### Companions
 
-Example
+[PLACEHOLDER]
 
 ### Ad Refresh
 
-how to configure
+[PLACEHOLDER]
 
 
 

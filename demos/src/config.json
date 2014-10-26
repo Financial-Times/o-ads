@@ -6,22 +6,29 @@
    },
    "demos": [
       {
-         "name": "leaderboard",
+         "name": "Single Ad",
          "template": "main.mustache",
          "data": {"pos":"leaderboard"}
       },
       {
-         "name": "mpu",
-         "template": "main.mustache",
-         "data": {"pos":"mpu"}
+         "name": "Single Ad with Custom Targeting Values",
+         "template": "leaderboardcustomtargeting.mustache",
+         "data": {"pos":"leaderboard"}
       },
       {
-         "name": "hlfmpu",
-         "template": "main.mustache",
-         "data": {"pos":"hlfmpu"}
+         "name": "Master and Companion",
+         "template": "demos/src/masterandcompanion.mustache"
       },
       {
-         "name": "glossary",
+         "name": "Responsive Positions",
+         "template": "demos/src/responsive.mustache"
+      },
+      {
+         "name": "Video Advertising",
+         "template": "demos/src/glossary.mustache"
+      },
+      {
+         "name": "Video Advertising",
          "template": "demos/src/glossary.mustache"
       }
    ]
