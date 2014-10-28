@@ -6,23 +6,35 @@
    },
    "demos": [
       {
-         "name": "leaderboard",
+         "name": "Individual-Ad",
          "template": "main.mustache",
          "data": {"pos":"leaderboard"}
       },
       {
-         "name": "mpu",
+         "name": "Individual-Ad-With-Out-Of-Page",
          "template": "main.mustache",
-         "data": {"pos":"mpu"}
+         "data": {"pos":"leaderboard"}
       },
       {
-         "name": "hlfmpu",
-         "template": "main.mustache",
-         "data": {"pos":"hlfmpu"}
+         "name": "Individual-Ad-with-Custom-Targeting-Values",
+         "template": "leaderboardcustomtargeting.mustache",
+         "data": {"pos":"leaderboard"}
       },
       {
-         "name": "glossary",
-         "template": "demos/src/glossary.mustache"
+         "name": "Master-and-Companion",
+         "template": "demos/src/masterandcompanion.mustache"
+      },
+      {
+         "name": "Responsive-Positions",
+         "template": "demos/src/responsive.mustache"
+      },
+      {
+         "name": "Video-Advertising",
+         "template": "demos/src/video.mustache"
+      },
+      {
+         "name": "Video-Advertising-with-Companion",
+         "template": "demos/src/videocompanions.mustache"
       }
    ]
 }
