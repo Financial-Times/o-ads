@@ -8,7 +8,7 @@
 // run `git update-index --no-assume-unchanged karma.config.js` to undo
 var singleRun = false;
 var autoWatch = true;
-var browsers = ['Chrome'];
+var browsers = [],// ['Chrome'];
 //var browsers = ['Chrome', 'Firefox'];
 var browserify = { debug: true };
 
