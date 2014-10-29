@@ -24,6 +24,7 @@ Ads.prototype.init = function (config){
     this.targeting.init(this);
     this.slots.init(this);
     this.krux.init(this);
+    this.cb.init(this);
     this.gpt.init(this);
     this.buildURLForVideo.init(this);
     return this;

@@ -145,6 +145,7 @@ proto.centerContainer = function (container) {
 * @memberof GPT
 * @lends GPT
 */
+//TODO Refactor this code into the chartbeat module
 proto.addChartBeatTracking = function(container, slotName) {
         container.setAttribute('data-cb-ad-id', slotName);
 };
