@@ -1,6 +1,8 @@
 /* jshint node: true */
 
 'use strict';
+
+printAscii();
 var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
@@ -40,3 +42,16 @@ function inc(importance) {
 gulp.task('patch', function() { return inc('patch'); });
 gulp.task('feature', function() { return inc('minor'); });
 gulp.task('release', function() { return inc('major'); });
+
+
+function printAscii() {
+    console.log("                                  __           ");          
+    console.log("                                 /  |          ");    
+    console.log("  ______           ______    ____$$ |  _______ ");
+    console.log(" /      \\  ______ /      \\  /    $$ | /       |");
+    console.log("/$$$$$$  |/      |$$$$$$  |/$$$$$$$ |/$$$$$$$/ ");
+    console.log("$$ |  $$ |$$$$$$/ /    $$ |$$ |  $$ |$$      \\ ");
+    console.log("$$ \\__$$ |       /$$$$$$$ |$$ \\__$$ | $$$$$$  |");
+    console.log("$$    $$/        $$    $$ |$$    $$ |/     $$/ ");
+    console.log("$$$$$$/          $$$$$$$/  $$$$$$$/ $$$$$$$/");
+}

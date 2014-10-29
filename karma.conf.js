@@ -8,7 +8,7 @@
 // run `git update-index --no-assume-unchanged karma.config.js` to undo
 var singleRun = false;
 var autoWatch = true;
-var browsers = ['Chrome'];
+var browsers = ['Chrome_with_flags'];
 //var browsers = ['Chrome', 'Firefox'];
 var browserify = { debug: true };
 
@@ -22,6 +22,7 @@ if(/^win/.test(process.platform)){
 if (process.env.CI === 'true') {
 // In the CI environment set an environment variable CI = 'true'
 // CI options go here
+//  browsers.push('Firefox');
   singleRun = true;
   autoWatch = false;
 }
@@ -49,6 +50,14 @@ module.exports = function(config) {
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
     ],
+
+    customLaunchers: {
+      Chrome_with_flags: {
+        base: 'Chrome',
+        flags: ['--disable-web-security', '--no-sandbox', '--no-first-run']
+      }
+    },
+
     browsers: browsers,
     browserify: browserify,
     reporters: ['progress'],
