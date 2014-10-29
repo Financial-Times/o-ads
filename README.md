@@ -55,7 +55,12 @@ myAds.init({
 ### Setting configuration via metatags
 In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
 
-
+### Config accessor method
+The o-ads library exposes all configuration properties via the `config()` accessor method. 
+The `config()` function allows for getting and setting of configuration values.
+ * Calling `config()` with no parameters returns the entire configuration object.
+ * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
+ * Calling config passing a valid property key and a value will envoke the setter and set the value of the key to the new value.
 
 
 ## Configuring Basic Targeting Criteria
