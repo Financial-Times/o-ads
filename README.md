@@ -36,12 +36,13 @@ The o-ads library is customisable in order to accomodate product specific config
 
 Ad positions, ad sizes and ad server network ids are examples of configuration options that will be specific to a product/site.
 
+### The configuration object
 The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance. 
 
 The example below demonstrates instantiating an o-ads instance setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
 
 ```
-myAds = require('./../bower_components/o-ads/main.js');
+myAds = require('./o-ads/main.js');
 myAds.init({
   network : '5887',
   formats : {
@@ -51,14 +52,13 @@ myAds.init({
 );
 ```
 
+### Additional configuration methods
+In addition to the configuration object which is passed to the o-ads constructer there are a number of options for setting config properties on an o-ads instance.
+There are three tiers of configuration; in order from lowest priority to highest priority these are:
  1. cookie level config
  2. default config (set within the library code)
  3. meta config (set via meta-tags within the markup of the page)
- 4. global config (set via the FT.env object
 
-The libraryvia a json configuration object.
-
-Each product or site will most likely have ad slot sizes/positions which are specific to the product.
 
 ## Configuring Basic Targeting Criteria
 
@@ -146,3 +146,7 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
 ### Ad Refresh
 
 [PLACEHOLDER]
+
+
+
+
