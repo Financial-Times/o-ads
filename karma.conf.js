@@ -55,7 +55,8 @@ module.exports = function(config) {
         base: 'Chrome',
         flags: ['--disable-web-security', '--no-sandbox', '--no-first-run']
       }
-    }
+    },
+    
     browsers: browsers,
     browserify: browserify,
     reporters: ['progress'],
