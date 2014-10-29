@@ -32,15 +32,24 @@ Example HTML:
 ```
 
 ## Product Specific Configuration
-The o-ads library is customisable in order to accomodate site specific configuration options.
+The o-ads library is customisable in order to accomodate product specific configuration options.
 
 Ad positions, ad sizes and ad server network ids are examples of configuration options that will be specific to a product/site.
 
-The o-ads `init()` method takes a json configuration object which sets various properties on the o-ads instance. 
+The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance. 
 
+The example below demonstrates instantiating an o-ads instance setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
 
-
-
+```
+myAds = require('./../bower_components/o-ads/main.js');
+myAds.init({
+  network : '5887',
+  formats : {
+    mpu : {sizes : [[300,250],[336,280]]},
+    leaderboard : {sizes : [[728,90],[970,90]]}
+  }
+);
+```
 
  1. cookie level config
  2. default config (set within the library code)
@@ -137,7 +146,3 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
 ### Ad Refresh
 
 [PLACEHOLDER]
-
-
-
-
