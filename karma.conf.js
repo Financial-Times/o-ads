@@ -22,7 +22,7 @@ if(/^win/.test(process.platform)){
 if (process.env.CI === 'true') {
 // In the CI environment set an environment variable CI = 'true'
 // CI options go here
-  browsers.push('Firefox');
+//  browsers.push('Firefox');
   singleRun = true;
   autoWatch = false;
 }
