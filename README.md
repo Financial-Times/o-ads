@@ -52,12 +52,10 @@ myAds.init({
 );
 ```
 
-### Additional configuration methods
-In addition to the configuration object which is passed to the o-ads constructer there are a number of options for setting config properties on an o-ads instance.
-There are three tiers of configuration; in order from lowest priority to highest priority these are:
- 1. cookie level config
- 2. default config (set within the library code)
- 3. meta config (set via meta-tags within the markup of the page)
+### Setting configuration via metatags
+In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
+
+
 
 
 ## Configuring Basic Targeting Criteria
