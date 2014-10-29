@@ -34,12 +34,12 @@ Example HTML:
 ## Product Specific Configuration
 The o-ads library is customisable in order to accomodate product specific configuration options.
 
-Ad positions, ad sizes and ad server network ids are examples of configuration options that will be specific to a product/site.
+Ad positions, ad sizes and ad server network IDs are examples of configuration options that will be specific to a product/site.
 
 ### The configuration object
 The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance. 
 
-The example below demonstrates instantiating an o-ads instance setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
+The example below demonstrates instantiating an o-ads instance, setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
 
 ```
 myAds = require('./o-ads/main.js');
@@ -54,6 +54,8 @@ myAds.init({
 
 ### Setting configuration via metatags
 In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
+
+[DOCUMENT METATAG CONFIG]
 
 ### Config accessor method
 The o-ads library exposes all configuration properties via the `config()` accessor method. 
@@ -134,7 +136,11 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
    cbTrack: true
   }
 ```
+Setting the `cbTrack` property to true for an ad slot will configure o-ads to add a data-attribute to the HTML markup of the ad slot. Specifically the Chartbeat data-attirbute `data-cb-ad-id` is set and the ad position name is set as the value. The data-attribute is added to the `<div>` element that wraps the ad slot. See the example below.
 
+```
+<div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
+```
 
 ### Video Advertising
 
