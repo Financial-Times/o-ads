@@ -31,6 +31,26 @@ Example HTML:
 </div>
 ```
 
+## Product Specific Configuration
+The o-ads library is customisable in order to accomodate site specific configuration options.
+
+Ad positions, ad sizes and ad server network ids are examples of configuration options that will be specific to a product/site.
+
+The o-ads `init()` method takes a json configuration object which sets various properties on the o-ads instance. 
+
+
+
+
+
+ 1. cookie level config
+ 2. default config (set within the library code)
+ 3. meta config (set via meta-tags within the markup of the page)
+ 4. global config (set via the FT.env object
+
+The libraryvia a json configuration object.
+
+Each product or site will most likely have ad slot sizes/positions which are specific to the product.
+
 ## Configuring Basic Targeting Criteria
 
 Add configuration to enable targeting.
@@ -87,7 +107,7 @@ A key feature of the Chartbeat ad viewability solution is the "time in view" met
 The Chartbeat library must be included on the website - See the [Chartbeat implementation documentation](http://chartbeat.com/docs/). 
 
 #### How to configure  
-The o-ads library Chartbeat ads tracking integration is configured at the individual ad slot level. 
+The o-ads library integrates with Chartbeat at the individual ad slot level. 
 
 Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
@@ -102,6 +122,7 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
    cbTrack: true
   }
 ```
+
 
 ### Video Advertising
 
