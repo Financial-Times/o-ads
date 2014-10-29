@@ -79,13 +79,19 @@ o-ads.setTargeting()
 
 The o-ads library integrates with the Chartbeat web analytics system to enable ad "viewability" tracking.
 
-#### How to configure  
-Individual Ad Slots can be configured to be trackable by Chartbeat. 
+See [Chartbeat's explanation of their ad sales solution](http://chartbeat.com/publishing/for-adsales/display/) for an overview of what is provided.
 
-In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
+A key feature of the Chartbeat ad viewability solution is the "time in view" metric; this is a measures of the length of time for which an ad impression was viewable.
+
+#### Prerequisites
+The Chartbeat library must be included on the website - See the [Chartbeat implementation documentation](http://chartbeat.com/docs/). 
+
+#### How to configure  
+The o-ads library Chartbeat ads tracking integration is configured at the individual ad slot level. 
+
+Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
 #### Example code
-
 ```javascript
  mpu: {
    sizes: [[300,250], [336,280]],
