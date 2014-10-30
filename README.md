@@ -144,13 +144,33 @@ Setting the `cbTrack` property to true for an ad slot will configure o-ads to ad
 
 ### Video Advertising
 
+The o-ads library supports video pre-roll ads. See [Google DFP's documentation on video advertising](https://support.google.com/dfp_premium/answer/1711021?hl=en)
+
 #### Basic Setup
 
 [PLACEHOLDER]
 
 #### Companions
 
-[PLACEHOLDER]
+The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a Master ad and pull in companion ads into other ad slots on the page.
+
+
+The companion ads service is enabled via config settings. 
+Setting companions to true on a page will enable the Companion Ads service on all slots on the page. 
+
+The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file. 
+```
+    if (myAds.config('dfp_zone')==="video-hub"){
+          myAds.config('companions', true);
+    }
+```
+By default the Companion Ads service is added to all ad slots on a page where the companions property has been set to true. It is possible to exclude the Companion Ads service from being set on particular slots via slot level configuration. Setting the companions config property to false will explicitly exclude the  ad slot from having the Companions service enabled, for example, to exlclude the Companions service from the MPU ad slot we could use the below code in the site specific configuration file.
+```
+            mpu: {
+                sizes: [[300,250],[336,280]],
+                companions : false
+            }
+```
 
 ### Ad Refresh
 
