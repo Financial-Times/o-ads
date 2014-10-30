@@ -23,7 +23,7 @@ var gulp = require('gulp'),
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc(importance) {
+function inc(importance, callback) {
     // get all the files to bump version in
     return gulp.src(['./package.json', './bower.json'])
         // bump the version number in those files
@@ -35,13 +35,24 @@ function inc(importance) {
         // read only one file to get the version number
         .pipe(filter('bower.json'))
         // **tag it in the repository**
-        .pipe(tag_version({prefix:""}))
-        .pipe(git.push('origin', '--tag'));
+      .pipe(tag_version({prefix:""}))
+      .on('end', function () {
+         git.push('origin', 'master', function (err) {
+          if (err) throw err;
+          git.push('origin', '--tag', function (err) {
+            if (err) throw err;
+            callback();
+          });
+        });
+      });
 }
 
-gulp.task('patch', function() { return inc('patch'); });
-gulp.task('feature', function() { return inc('minor'); });
-gulp.task('release', function() { return inc('major'); });
+gulp.task('patch', function(callback) { inc('patch', callback); });
+gulp.task('feature', function(callback) { inc('minor', callback); });
+gulp.task('release', function(callback) { inc('major', callback); });
+
+
+
 
 
 function printAscii() {
