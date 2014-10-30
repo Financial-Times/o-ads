@@ -11,8 +11,9 @@ var autoWatch = true;
 var browsers = ['Chrome_with_flags'];
 //var browsers = ['Chrome', 'Firefox'];
 var browserify = { debug: true };
+var junitReporter = {outputFile: './test-results.xml' };
 
-// add OS specific browsers
+// add OS specific browsercb()s
 if(/^win/.test(process.platform)){
   browsers.push('IE');
 } else if (process.platform === 'darwin') {
@@ -60,7 +61,8 @@ module.exports = function(config) {
 
     browsers: browsers,
     browserify: browserify,
-    reporters: ['progress'],
+    reporters: ['progress', 'junit'],
+    junitReporter: junitReporter,
     preprocessors: { 'test/js/util/test.helpers.js': ['browserify']},
     singleRun: singleRun
   });
