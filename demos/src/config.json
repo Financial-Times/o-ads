@@ -13,7 +13,7 @@
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "main.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"leaderboardOop"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
