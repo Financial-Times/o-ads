@@ -24,27 +24,32 @@ var gulp = require('gulp'),
  */
 
 function inc(importance, callback) {
-    // get all the files to bump version in
-    return gulp.src(['./package.json', './bower.json'])
-        // bump the version number in those files
-        .pipe(bump({type: importance}))
-        // save it back to filesystem
-        .pipe(gulp.dest('./'))
-        // commit the changed version number
-        .pipe(git.commit('bumps package version'))
-        // read only one file to get the version number
-        .pipe(filter('bower.json'))
-        // **tag it in the repository**
-      .pipe(tag_version({prefix:""}))
-      .on('end', function () {
-         git.push('origin', 'master', function (err) {
-          if (err) throw err;
-          git.push('origin', '--tag', function (err) {
-            if (err) throw err;
-            callback();
-          });
-        });
-      });
+      // make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
+    git.checkout('master', function (err) {
+        if (err) throw err;
+        // get all the files to bump version in
+        gulp.src(['./package.json', './bower.json'])
+            // bump the version number in those files
+            .pipe(bump({type: importance}))
+            // save it back to filesystem
+            .pipe(gulp.dest('./'))
+            // commit the changed version number
+            .pipe(git.commit('bumps package version'))
+            // read only one file to get the version number
+            .pipe(filter('bower.json'))
+            // **tag it in the repository**
+            .pipe(tag_version({prefix:""}))
+            .on('end', function () {
+                git.push('origin', 'master', function (err) {
+                    if (err) throw err;
+                    git.push('origin', '--tag', function (err) {
+                        if (err) throw err;
+                        callback();
+                    });
+                });
+            });
+    });
+
 }
 
 gulp.task('patch', function(callback) { inc('patch', callback); });
