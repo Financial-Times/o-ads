@@ -13,7 +13,7 @@
 <body class="o-hoverable-on">
     <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
     <script>
-    var ads = require('../../main.js').init({
+    ads = ads.init({
         dfp_site: 'ftcom.5887.video',
         dfp_zone: 'video'
         eid: 'oads'
@@ -47,7 +47,7 @@
 
     var options = {
       id: 'content_video',
-      adTagUrl: FT.ads.buildURLForVideo('video','','').fullURL
+      adTagUrl: ads.buildURLForVideo('video','','').fullURL
     };
 
 
@@ -86,7 +86,7 @@ player.on('click', function() {
 
 
 </script>
-    
+    <script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
     <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>
