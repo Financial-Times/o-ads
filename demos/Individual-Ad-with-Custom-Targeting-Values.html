@@ -4,7 +4,7 @@
 <!--[if gt IE 8]><!--> <html class="o-hoverable-on"> <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
-    <title>o-ads: glossary demo</title>
+    <title>o-ads: Individual-Ad-with-Custom-Targeting-Values demo</title>
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <script src="//polyfill.webservices.ft.com/v1/polyfill.min.js"></script>
     <style>body { margin: 0; }.demo-js .o--if-nojs { display: none; }</style>
@@ -12,10 +12,23 @@
 </head>
 <body class="o-hoverable-on">
     <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
-    <div>
-video player here.
-</div>
-    <script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
+    <script>
+    var ads = require('../../main.js').init({
+    dfp_site: 'test.5887.origami',
+    eid: 'oads',
+    formats: {
+       leaderboard: {
+         sizes: [[970,90]]
+       }
+    }
+});
+
+ads.slots.initSlot('leaderboard');
+</script>
+
+<div id="leaderboard" class="advertising " ></div>
+
+    
     <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

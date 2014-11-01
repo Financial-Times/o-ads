@@ -16,39 +16,46 @@ function buildURLForVideo(zone, pos, vidKV){
     vidKV = vidKV || {};
 
     var gptVideoURL = function(){
-        var URL;
-        var encodeCustParams = function (vkv) {
+        var URL, additionalAdTargetingParams, fullURL;
+        var buildCustomParams = function (vkv) {
             var allTargeting = ads.targeting();
-            var results = '',
-            rsiSegs = allTargeting.a,
-            kruxSegs = allTargeting.ksg,
-            includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
-            var i;
-            for (i=0;i<includeParams.length;i++){
-                var key= includeParams[i];
-                var value = false;
-                if (typeof allTargeting[key] !== 'undefined') {
-                    value = allTargeting[key];
-                } else if (typeof vkv !== 'undefined' && (typeof vkv[key] !== 'undefined')) {
-                    value = vkv[key];
-                }
-                if (key === 'ksg' && kruxSegs) {
-                    value=kruxSegs.slice(0,ads.config('kruxMaxSegs')).join(',');
-                }
-                if (key === 'a' && rsiSegs) {
-                    value = rsiSegs.slice(0, ads.config('audSciLimit')).join(',');
-                }
-                results += !value ? '' : key + '=' + value + '&';
-            }
-            return encodeURIComponent(results);
+                        var results = '',
+                        rsiSegs = allTargeting.a,
+                        kruxSegs = allTargeting.ksg,
+                        includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
+                        var i;
+                        for (i=0;i<includeParams.length;i++){
+                            var key= includeParams[i];
+                            var value = false;
+                            if (typeof allTargeting[key] !== 'undefined') {
+                                value = allTargeting[key];
+                            } else if (typeof vkv !== 'undefined' && (typeof vkv[key] !== 'undefined')) {
+                                value = vkv[key];
+                            }
+                            if (key === 'ksg' && kruxSegs) {
+                                value=kruxSegs.slice(0,ads.config('kruxMaxSegs')).join(',');
+                            }
+                            if (key === 'a' && rsiSegs) {
+                                value = rsiSegs.slice(0, ads.config('audSciLimit')).join(',');
+                            }
+                            results += !value ? '' : key + '=' + value + '&';
+                        }
+                        return results;
+        };
+        var encodeCustParams = function (vkv) {
+            return encodeURIComponent(buildCustomParams(results);
         };
 
 
         URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/"+ ads.config('dfp_site') + "/" + ads.config('dfp_zone') + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
+        additionalAdTargetingParams = encodeCustParams(vidKV);
+        fullUrl = (buildCustomParams(vidKV) === "") ? URL : URL + '&' + buildCustomParams(vidKV);
+
        // URL += encodeURIComponent(ads.config('dfp_targeting'));
         return {
             urlStem : URL,
-            additionalAdTargetingParams : encodeCustParams(vidKV)
+            additionalAdTargetingParams : additionalAdTargetingParams,
+            fullUrl : URL + '&' + fullUrl
         };
     };
 

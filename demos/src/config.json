@@ -1,23 +1,22 @@
 {
    "options": {
       "sass": "demos/src/demo.scss",
-      "js": "demos/src/demo.js",
       "bodyClasses": "o-hoverable-on"
    },
    "demos": [
       {
          "name": "Individual-Ad",
-         "template": "main.mustache",
+         "template": "demos/src/individual.mustache",
          "data": {"pos":"leaderboard"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
-         "template": "main.mustache",
+         "template": "demos/src/individualoop.mustache",
          "data": {"pos":"leaderboardOop"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
-         "template": "leaderboardcustomtargeting.mustache",
+         "template": "demos/src/individualcustomtargeting.mustache",
          "data": {"pos":"leaderboard"}
       },
       {
