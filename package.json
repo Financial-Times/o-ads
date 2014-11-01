@@ -20,13 +20,13 @@
     "gulp-filter": "^1.0.2",
     "gulp-git": "^0.5.2",
     "gulp-tag-version": "^1.1.0",
-    "karma": "~0.10.2",
+    "karma": "^0.12.24",
     "karma-browserify": "^0.2.1",
     "karma-chrome-launcher": "^0.1.5",
     "karma-coverage": "~0.1.0",
     "karma-ie-launcher": "^0.1.5",
+    "karma-junit-reporter": "~0.2.2",
     "karma-qunit": "~0.1.1",
-    "karma-safari-launcher": "~0.1.1",
-    "karma-junit-reporter": "~0.2.2"
+    "karma-safari-launcher": "~0.1.1"
   }
 }
