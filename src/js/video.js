@@ -43,7 +43,7 @@ function buildURLForVideo(zone, pos, vidKV){
                         return results;
         };
         var encodeCustParams = function (vkv) {
-            return encodeURIComponent(buildCustomParams(results);
+            return encodeURIComponent(buildCustomParams(results));
         };
 
 
