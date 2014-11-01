@@ -1,5 +1,5 @@
 <script>
-    var ads = require('../../main.js').init({
+    ads = ads.init({
         dfp_site: 'ftcom.5887.video',
         dfp_zone: 'video'
         eid: 'oads'
@@ -33,7 +33,7 @@
 
     var options = {
       id: 'content_video',
-      adTagUrl: FT.ads.buildURLForVideo('video','','').fullURL
+      adTagUrl: ads.buildURLForVideo('video','','').fullURL
     };
 
 
