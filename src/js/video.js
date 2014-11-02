@@ -49,12 +49,12 @@ function buildURLForVideo(zone, pos, vidKV){
 
         URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/"+ ads.config('dfp_site') + "/" + ads.config('dfp_zone') + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
         additionalAdTargetingParams = encodeCustParams(vidKV);
-        fullUrl = (buildCustomParams(vidKV) === "") ? URL : URL + '&' + buildCustomParams(vidKV);
+        fullURL = (buildCustomParams(vidKV) === "") ? URL : URL + '&' + buildCustomParams(vidKV);
 
         return {
             urlStem : URL,
             additionalAdTargetingParams : additionalAdTargetingParams,
-            fullUrl : fullUrl
+            fullURL : fullURL
         };
     };
 
