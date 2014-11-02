@@ -55,7 +55,7 @@ function buildURLForVideo(zone, pos, vidKV){
         return {
             urlStem : URL,
             additionalAdTargetingParams : additionalAdTargetingParams,
-            fullUrl : URL + '&' + fullUrl
+            fullUrl : fullUrl
         };
     };
 
