@@ -5,6 +5,8 @@ var ads = require('../../main.js').init({
     eid: 'oads'
 });
 
+ads.config('video',true);
+
     var player = videojs('content_video');
 
     var options = {
