@@ -14,5 +14,5 @@ var ads = require('../../main.js').init({
 });
 
 ads.slots.initSlot('leaderboard');
-ads.slots.initSlot('leaderboardOop');         */
+ads.slots.initSlot('leaderboardOop');
 
