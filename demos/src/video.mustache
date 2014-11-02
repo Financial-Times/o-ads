@@ -1,12 +1,20 @@
 
 <span class="o-registry-demo-chunk">
+
+<!-- These are all supporting script for videojs player & ima plugin -->
 <link href="//vjs.zencdn.net/4.5/video-js.css" rel="stylesheet">
-<link rel="stylesheet" href="/bundles/js?modules=o-ads:/demos/src/videojs.ads.css"/>
-<link rel="stylesheet" href="/bundles/js?modules=o-ads:/demos/src/videojs.ima.css"/>
+<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/videojs.ads.css"/>
+<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/videojs.ima.css"/>
+<script src="//vjs.zencdn.net/4.5/video.js"></script>
+<script src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+<script src="/bundles/js?modules=o-ads:/demos/src/videojs.ads.js"></script>
+<script src="/bundles/js?modules=o-ads:/demos/src/videojs.ima.js"></script>
 
 
+<!-- include the o-ads origami module - can use require instead -->
 <script src="/bundles/js?modules=o-ads"></script>
 
+<!-- define your video player -->
 <video id="content_video" class="video-js vjs-default-skin"
        controls preload="auto" width="640"
        height="360">
@@ -17,22 +25,26 @@
 
     <script>
 
+// initialise the configuration for o-ads
 var ads = Origami["o-ads"].init({
     dfp_site: 'ftcom.5887.video',
     dfp_zone: 'video',
     eid: 'oads'
 });
 
+// enable video mode
 ads.config('video',true);
 
     var player = videojs('content_video');
 
+//use buildURLForVideo to get a adserver url which will return a VAST response
     var options = {
       id: 'content_video',
       adTagUrl: ads.buildURLForVideo('video','','').fullURL
     };
 
 
+// setup the player options in the ima (google interactive media ads) videojs module
     player.ima(options);
 
     /*
@@ -67,10 +79,4 @@ player.on('click', function() {
 });
     </script>
 
-<!-- Load dependent scripts -->
-<script src="//vjs.zencdn.net/4.5/video.js"></script>
-<script src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
-
-<script src="/bundles/js?modules=o-ads:/demos/src/videojs.ads.js"></script>
-<script src="/bundles/js?modules=o-ads:/demos/src/videojs.ima.js"></script>
 </span>
