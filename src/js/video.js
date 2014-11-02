@@ -51,7 +51,6 @@ function buildURLForVideo(zone, pos, vidKV){
         additionalAdTargetingParams = encodeCustParams(vidKV);
         fullUrl = (buildCustomParams(vidKV) === "") ? URL : URL + '&' + buildCustomParams(vidKV);
 
-       // URL += encodeURIComponent(ads.config('dfp_targeting'));
         return {
             urlStem : URL,
             additionalAdTargetingParams : additionalAdTargetingParams,
