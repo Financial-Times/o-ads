@@ -8,11 +8,16 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <script src="//polyfill.webservices.ft.com/v1/polyfill.min.js"></script>
     <style>body { margin: 0; }.demo-js .o--if-nojs { display: none; }</style>
-    <link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
+    
 </head>
 <body class="o-hoverable-on">
     <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
-    <div>
+    <span class="o-registry-demo-chunk">
+
+<!-- include the o-ads origami module - can use require instead -->
+<script src="/bundles/js?modules=o-ads"></script>
+
+<div>
     Advert 1 (Master)
     <div id="ad1" class="advertising " ></div>
 </div>
@@ -22,7 +27,30 @@
     <div id="ad2" class="advertising " ></div>
 </div>
 
-    <script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
+    <script>
+    // initialise the configuration for o-ads with master and companion
+    var ads = Origami["o-ads"].init({
+        dfp_site: 'test.5887.origami',
+        eid: 'oads',
+        formats: {
+            advert1: {
+                sizes: [[720,90]],
+                outOfPage: true
+            },
+            advert2: {
+                sizes: [[720,90]]
+            },
+        }
+    });
+
+    ads.slots.initSlot('advert1');
+    ads.slots.initSlot('advert2');
+    </script>
+
+
+</span>
+
+    
     <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

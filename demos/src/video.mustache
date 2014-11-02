@@ -1,7 +1,11 @@
 
 <span class="o-registry-demo-chunk">
 
-<!-- These are all supporting script for videojs player & ima plugin -->
+<!-- These are all supporting script for videojs player & ima plugin
+see:
+http://www.videojs.com/
+https://github.com/googleads/videojs-ima
+-->
 <link href="//vjs.zencdn.net/4.5/video-js.css" rel="stylesheet">
 <link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/videojs.ads.css"/>
 <link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/videojs.ima.css"/>
@@ -9,7 +13,6 @@
 <script src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
 <script src="/bundles/js?modules=o-ads:/demos/src/videojs.ads.js"></script>
 <script src="/bundles/js?modules=o-ads:/demos/src/videojs.ima.js"></script>
-
 
 <!-- include the o-ads origami module - can use require instead -->
 <script src="/bundles/js?modules=o-ads"></script>
@@ -23,8 +26,7 @@
 
 <div id="credits"> Sample video credits (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org</div>
 
-    <script>
-
+<script>
 // initialise the configuration for o-ads
 var ads = Origami["o-ads"].init({
     dfp_site: 'ftcom.5887.video',
@@ -35,30 +37,18 @@ var ads = Origami["o-ads"].init({
 // enable video mode
 ads.config('video',true);
 
-    var player = videojs('content_video');
+var player = videojs('content_video');
 
 //use buildURLForVideo to get a adserver url which will return a VAST response
-    var options = {
-      id: 'content_video',
-      adTagUrl: ads.buildURLForVideo('video','','').fullURL
-    };
-
+var options = {
+  id: 'content_video',
+  adTagUrl: ads.buildURLForVideo('video','','').fullURL
+};
 
 // setup the player options in the ima (google interactive media ads) videojs module
-    player.ima(options);
+player.ima(options);
 
-    /*
-    player.ima.requestAds();
-    // On mobile devices, you must call initializeAdDisplayContainer as the result
-    // of a user action (e.g. button click). If you do not make this call, the SDK
-    // will make it for you, but not as the result of a user action. For more info
-    // see our examples, all of which are set up to work on mobile devices.
-    // player.ima.initializeAdDisplayContainer();
-    player.play();
-
-    */
-
-    // Remove controls from the player on iPad to stop native controls from stealing
+/ Remove controls from the player on iPad to stop native controls from stealing
 // our click
 var contentPlayer =  document.getElementById('content_video_html5_api');
 if (navigator.userAgent.match(/iPad/i) != null &&
@@ -77,6 +67,6 @@ player.on('click', function() {
       clickedOnce = true;
     }
 });
-    </script>
+</script>
 
 </span>

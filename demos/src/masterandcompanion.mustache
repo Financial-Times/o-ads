@@ -1,3 +1,8 @@
+<span class="o-registry-demo-chunk">
+
+<!-- include the o-ads origami module - can use require instead -->
+<script src="/bundles/js?modules=o-ads"></script>
+
 <div>
     Advert 1 (Master)
     <div id="ad1" class="advertising {{classes}}" {{{o-ads-data-attr}}}></div>
@@ -7,3 +12,26 @@
     Advert 2 (Companion)
     <div id="ad2" class="advertising {{classes}}" {{{o-ads-data-attr}}}></div>
 </div>
+
+    <script>
+    // initialise the configuration for o-ads with master and companion
+    var ads = Origami["o-ads"].init({
+        dfp_site: 'test.5887.origami',
+        eid: 'oads',
+        formats: {
+            advert1: {
+                sizes: [[720,90]],
+                outOfPage: true
+            },
+            advert2: {
+                sizes: [[720,90]]
+            },
+        }
+    });
+
+    ads.slots.initSlot('advert1');
+    ads.slots.initSlot('advert2');
+    </script>
+
+
+</span>

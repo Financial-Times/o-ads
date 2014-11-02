@@ -1,7 +1,5 @@
 {
    "options": {
-      "sass": "demos/src/demo.scss",
-      "js" : "demos/src/demo.js",
       "bodyClasses": "o-hoverable-on"
    },
    "demos": [
@@ -30,8 +28,7 @@
       },
       {
          "name": "Video-Advertising",
-         "template": "demos/src/video.mustache",
-         "js" : "demos/src/demo-video.js"
+         "template": "demos/src/video.mustache"
       },
       {
          "name": "Video-Advertising-with-Companion",
