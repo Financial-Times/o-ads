@@ -16,7 +16,7 @@
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"halfpage"}
       },
       {
          "name": "Master-and-Companion",
