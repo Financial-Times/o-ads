@@ -11,7 +11,7 @@
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"leaderboardOop"}
+         "data": {"pos":"leaderboard"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
