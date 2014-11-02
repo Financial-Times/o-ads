@@ -30,7 +30,8 @@
       },
       {
          "name": "Video-Advertising",
-         "template": "demos/src/video.mustache"
+         "template": "demos/src/video.mustache",
+         "js" : "demos/src/demo-video.js"
       },
       {
          "name": "Video-Advertising-with-Companion",
