@@ -74,7 +74,7 @@ Add configuration to enable targeting.
 ### Out of the box targeting
 
 * Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
-* Registration/Subscripti```on/AYSC metadata
+* Registration/Subscription/AYSC metadata
 
 ### Adding additional custom targeting criteria
 
