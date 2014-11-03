@@ -111,7 +111,7 @@ Krux provide a JS snippet referred to as the Krux Control Tag; all Krux Platform
 
 Importantly the Control Tag contains a unique identifier, the Config ID, which is specific to a product or site. Krux provide a Production Config ID as well as a dummy ID for testing on any non-production environments.
 
-Including the Krux control tag and configuring it with the correct ID is handled by the o-ads library via the site specific configuration file.
+Including the Krux control tag and configuring it with the correct ID is handled by the o-ads library via the site specific configuration file. In order to enable the Krux platform integration a 'Krux' object must be added to the site configuration object; the Krux configuration object requires an ID attribute which should correspond to the unique Krux ID for the environment (Production or QA) for the site. 
 
 ```
 krux: {
