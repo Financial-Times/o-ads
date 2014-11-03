@@ -36,12 +36,22 @@
     // initialise the configuration for o-ads with a leaderboard
     var ads = Origami["o-ads"].init({
         dfp_site: 'test.5887.origami',
+        responsive: {
+            large: [400, 0],
+            small: [0, 0]
+        },
         formats: {
             responsivePos1: {
-                sizes: [[300,600]]
+                sizes: {
+                    large: [[300, 600]],
+                    small: [[300, 600]]
+                }
             },
             responsivePos2: {
-                sizes: [[728,90]]
+                sizes: {
+                 large: [[728,90]],
+                 small: false
+                }
             },
             responsiveAd: {
                 sizes: [[2,2]]
