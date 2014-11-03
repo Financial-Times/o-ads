@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "0.2.38",
+  "version": "0.2.39",
   "description": "FT branded Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
