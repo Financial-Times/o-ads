@@ -11,12 +11,12 @@
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"halfpage"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"halfpage"}
+         "data": {"pos":"leaderboard"}
       },
       {
          "name": "Master-and-Companion",

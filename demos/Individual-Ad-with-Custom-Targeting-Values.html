@@ -17,7 +17,7 @@
 <!-- include the o-ads origami module - can use require instead -->
 <script src="/bundles/js?modules=o-ads"></script>
 
-<div id="halfpage" class="advertising " ></div>
+<div id="leaderboard" class="advertising " ></div>
 
     <script>
     // initialise the configuration for o-ads with a leaderboard
@@ -25,13 +25,13 @@
         dfp_site: 'test.5887.origami',
         dfp_targeting: 'auuid=articleid',
         formats: {
-            halfpage: {
+            leaderboard: {
                 sizes: [[728,90]]
             }
         }
     });
 
-    ads.slots.initSlot('halfpage');
+    ads.slots.initSlot('leaderboard');
     </script>
 
 </span>

@@ -17,21 +17,21 @@
 <!-- include the o-ads origami module - can use require instead -->
 <script src="/bundles/js?modules=o-ads"></script>
 
-<div id="leaderboard" class="advertising " ></div>
+<div id="halfpage" class="advertising " ></div>
 
     <script>
     // initialise the configuration for o-ads with a leaderboard and out of page (overlay)
     var ads = Origami["o-ads"].init({
         dfp_site: 'test.5887.origami',
         formats: {
-            leaderboard: {
+            halfpage: {
                 sizes: [[300,600]],
                 outOfPage: true
             }
         }
     });
 
-    ads.slots.initSlot('leaderboard');
+    ads.slots.initSlot('halfpage');
     </script>
 
 </span>
