@@ -97,15 +97,42 @@ o-ads.setTargeting()
 
 #### What it provides
 
-[PLACEHOLDER]
+Krux provide an Audience Data Monetization and Management solution. 
+The Krux platform includes four modules; Data Sentry, SuperTag, Audience Data Manager and Interchange. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
 
-#### How to configure
+#### Perquisites
 
-[PLACEHOLDER]
+Before Krux can be enabled on site the [Ad Operations](mailto:adopsuk@ft.com) team must coordinate with an account manager at Krux to ensure that a Production and QA environment have been created in the Krux system specific to the site.
+In most cases each site will have its own Production and QA environment set up in the Krux platform.
+
+#### How to configure  
+
+Krux provide a JS snippet referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
+
+Importantly the Control Tag contains a unique identifier, the Config ID, which is specific to a product or site. Krux provide a Production Config ID as well as a dummy ID for testing on any non-production environments.
+
+Including the Krux control tag and configuring it with the correct ID is handled by the o-ads library via the site specific configuration file. In order to enable the Krux platform integration a 'Krux' object must be added to the site configuration object; the Krux configuration object requires an ID attribute which should correspond to the unique Krux ID for the environment (Production or QA) for the site. 
+
+```
+krux: {
+        id: 'AbcXyzJk'
+      }
+```
+#### Further configuration options
+
+It is possible to limit the number of Krux segments that are passed to the ad request via the 'limit' config property in the Krux config object, the example code below sets the maximum number of segments to 50.
+
+```
+krux: {
+        id: 'AbcXyzJk',
+        limit: 50
+      }
+```
 
 #### who to contact to get additional data points in your product
+The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
 
-[PLACEHOLDER]
+
 
 ### Chartbeat - Ad Visibility
 
@@ -152,24 +179,24 @@ The o-ads library supports video pre-roll ads. See [Google DFP's documentation o
 
 #### Companions
 
-The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a Master ad and pull in companion ads into other ad slots on the page.
+The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a master ad which is able to pull in companion ads into other ad slots on the page.
 
 
 The companion ads service is enabled via config settings. 
-Setting companions to true on a page will enable the Companion Ads service on all slots on the page. 
+Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page. 
 
 The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file. 
 ```
-    if (myAds.config('dfp_zone')==="video-hub"){
-          myAds.config('companions', true);
-    }
+if (myAds.config('dfp_zone')==="video-hub"){
+  myAds.config('companions', true);
+}
 ```
 By default the Companion Ads service is added to all ad slots on a page where the companions property has been set to true. It is possible to exclude the Companion Ads service from being set on particular slots via slot level configuration. Setting the companions config property to false will explicitly exclude the  ad slot from having the Companions service enabled, for example, to exlclude the Companions service from the MPU ad slot we could use the below code in the site specific configuration file.
 ```
-            mpu: {
-                sizes: [[300,250],[336,280]],
-                companions : false
-            }
+mpu: {
+  sizes: [[300,250],[336,280]],
+  companions : false
+}
 ```
 
 ### Ad Refresh
