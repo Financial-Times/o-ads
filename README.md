@@ -87,11 +87,38 @@ o-ads.setTargeting()
 
 #### What it provides
 
-[PLACEHOLDER]
+Slots can be configured to react to viewport size by either hiding the ad or requesting an ad of a different size. 
+Responsive slots will react to the window being resized as long as the HTML is well formed, in various browsers the resize event can fail to fire if a doctype is not included.
 
 #### How to configure
+To enable respsonsive slots you first add your breakpoints to your configuration e.g.
+```
+  responsive: {
+    "extraLarge": [ 1400, 0 ],
+    "large": [ 1000, 0 ],
+    "medium": [ 600, 0 ],
+    "small": [ 0, 0 ]
+}
+```
+Within the breakpoints object keys can be any arbitary name and values are an array containing width and height of the viewport ot be targetted, we are usually only concerned with widths so height is set to 0, it is recomended to have a 0, 0 breakpoint for calrity but it is not needed.
 
-[PLACEHOLDER]
+Now within your sizes configuration for each ad format you can supply which sizes should be requested or if a slot should be displayed at each breakpoint e.g.
+```
+  formats : {
+    leaderboard : {
+      sizes: {
+        small: false,
+        medium: [[468, 60]],
+        large: [[728, 90]],
+        extraLarge: [ [970, 90] ]
+      },
+      mpu: [[300, 250]]
+    }
+  }
+```
+
+With the above configuration a different sized banner will be displayed for each screen size except small where the slot will be collapsed.
+It should also be noted that not all slot need to be configured responsively, above the mpu will be the same size on all screens
 
 ### Behavioural Targeting - Krux
 
@@ -107,7 +134,7 @@ In most cases each site will have its own Production and QA environment set up i
 
 #### How to configure  
 
-Krux provide a JS snippet referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
+Krux provide a JS file referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
 
 Importantly the Control Tag contains a unique identifier, the Config ID, which is specific to a product or site. Krux provide a Production Config ID as well as a dummy ID for testing on any non-production environments.
 
@@ -128,6 +155,31 @@ krux: {
         limit: 50
       }
 ```
+
+##### Events
+Krux also user interaqctions on the page to be captured via an events system,these are essentially image requests sent to Krux that contain an event ID and a set of attributes about the event, currently only one event is available for configuration, dwell time.
+
+Dwell time is the measure of how much time a user is on the site, currently when the event is configured a tracking call will be made every x number of seconds for a maximum number of seconds. To add this event to your site add the following to your Krux config:
+
+```
+<meta name="krux" content=" { id: 'AbcXyzJk', event: dwell_time: {interval: 5, id: 'JCadw18P', total: 600}}" />
+```
+            
+or  
+
+```
+    krux: {
+        events: {
+            dwell_time: {
+                interval: 5, // every 5 seconds
+                id: 'JCadw18P',
+                total: 600 // for 10 minutes
+            }
+        }
+    }
+```
+
+
 
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.

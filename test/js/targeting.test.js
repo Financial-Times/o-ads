@@ -285,7 +285,7 @@
         test("Library Version", function () {
             TEST.beginNewPage({ config: { version: true }});
             result = FT.ads.targeting();
-            equal(result.ver, 'gpt-$' + '{project.version}', "library version returned correctly");
+            equal(result.ver, '${project.version}', "library version returned correctly");
         });
    }
     $(runTests);

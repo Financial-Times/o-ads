@@ -292,7 +292,7 @@ proto.timestamp = function () {
 };
 
 proto.version = function(){
-  return {ver : "gpt-" + ads.version.artifactVersion};
+  return {ver : ads.version.artifactVersion};
 };
 
 proto.init = function (impl) {
