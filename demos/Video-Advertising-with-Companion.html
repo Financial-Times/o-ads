@@ -61,6 +61,7 @@ https://github.com/googleads/videojs-ima
     // enable video mode - setting this mode will automatically register all other positions (unless specifically excluded)
     // to be companions to the video (pre-roll, mid-roll, post-roll) advert this will delay requesting the companion until
     // the video ad is loaded (to syncronise the ads)
+    ads.config('companions',true);
     ads.config('video',true);
 
     ads.slots.initSlot('videoCompanion');

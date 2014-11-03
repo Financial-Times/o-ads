@@ -12,7 +12,49 @@
 </head>
 <body class="o-hoverable-on">
     <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
-    <b>PLACEHOLDER</b>
+    <span class="o-registry-demo-chunk">
+
+<!-- include the o-ads origami module - can use require instead -->
+<script src="/bundles/js?modules=o-ads"></script>
+
+    <!-- ######## AD PLACEMENTS ###########-->
+    <div id="responsiveBlock">
+        <div id="resposiveSlots">
+            On a wide screen format two ads will show. On the thin (e.g. phone) aspect only one will show.
+            <div id="responsivePos1" class="advertising " ></div>
+            <div id="responsivePos2" class="advertising " ></div>
+        </div>
+        <div id="responsiveAdvert">
+            This ad will reflow depending on screen size. <br />
+            Note: This is a specially produced format and as such volume sales may be difficult.
+            <div id="responsiveAd" class="advertising " ></div>
+        </div>
+    </div
+
+    <!-- ######## AD CONFIGURATION ###########-->
+    <script>
+    // initialise the configuration for o-ads with a leaderboard
+    var ads = Origami["o-ads"].init({
+        dfp_site: 'test.5887.origami',
+        formats: {
+            responsivePos1: {
+                sizes: [[300,600]]
+            },
+            responsivePos2: {
+                sizes: [[728,90]]
+            },
+            responsiveAd: {
+                sizes: [[2,2]]
+            }
+        }
+    });
+
+    ads.slots.initSlot('responsivePos1');
+    ads.slots.initSlot('responsivePos2');
+    ads.slots.initSlot('responsiveAd');
+    </script>
+
+</span>
     
     <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
