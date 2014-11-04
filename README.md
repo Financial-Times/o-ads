@@ -145,7 +145,7 @@ The **Audience Data Manager (ADM)** enables a publisher to sell against the valu
 
 An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
 
-The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target the audience segments identifeid by the ADM.
+The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target advertising to to audience segments created in the ADM.
 
 See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
 
@@ -181,6 +181,14 @@ krux: {
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
 
+#### Basic verification checks
+It can be useful to carry out the following verification checks after enabling the Krux integration. 
+
+ * Verify that the page makes a GET request for 'pixel.gif' from the 'beacon.krxd.net' domain. - This will demonstrate that the Control Tag has been attached to the page correctly.
+ * Inspect the request headers for the pixel request to verify that the control tag is configured correctly:
+   * ensure that there is a header parameter named '_kcp_d' and that it contains the value of the sites domain.
+   * ensure that there is a header parameter named '_kcp_s' and that it contains the site value as its named in the Krux admin panel.
+
 
 
 ### Chartbeat - Ad Visibility
@@ -212,11 +220,12 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
    cbTrack: true
   }
 ```
-Setting the `cbTrack` property to true for an ad slot will configure o-ads to add a data-attribute to the HTML markup of the ad slot. Specifically the Chartbeat data-attirbute `data-cb-ad-id` is set and the ad position name is set as the value. The data-attribute is added to the `<div>` element that wraps the ad slot. See the example below.
+Setting the `cbTrack` property to true for an ad slot will configure o-ads to add a data-attribute to the HTML markup of the ad slot. Specifically the Chartbeat data-attirbute `data-cb-ad-id` is set and the ad position name is set as the value. The data-attribute is added to the `<div>` element that wraps the ad slot. See the example below:
 
 ```
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
+
 
 ### Video Advertising
 
