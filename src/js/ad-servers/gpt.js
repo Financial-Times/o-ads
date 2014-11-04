@@ -169,7 +169,7 @@ proto.updateCorrelator = function (slot) {
 };
 
 proto.refresh = function (slotsForRefresh) {
-    var slot, slots = FT.ads.slots;
+    var slot, slots = ads.slots;
     slotsForRefresh = slotsForRefresh || [];
     if ( slotsForRefresh.length === 0 ) {
         for (slot in slots) {
@@ -201,7 +201,7 @@ proto.startRefresh = function () {
 
     if (time) {
         this.refreshTimer = ads.utils.timers.create(time, function() {
-            FT.ads.gpt.refresh();
+            ads.gpt.refresh();
         }, max);
     }
 };
@@ -365,7 +365,7 @@ proto.init = function (impl) {
      }
 
     function onViewportChange(viewport){
-        var slot, slotName, slots = FT.ads.slots, slotsForRefresh = [];
+        var slot, slotName, slots = ads.slots, slotsForRefresh = [];
         for (slotName in slots) {
             slot = slots[slotName];
             if (slot.gptSlot && ads.utils.isObject(slot.config.sizes)) {
@@ -399,7 +399,7 @@ proto.init = function (impl) {
         context.enableCompanions();
         googletag.pubads().enableAsyncRendering();
         googletag.pubads().addEventListener('slotRenderEnded', function(event) {
-            if (ads.utils.isFunction(FT.ads.renderEnded)) {
+            if (ads.utils.isFunction(ads.renderEnded)) {
                 var gptSlotId = event.slot.getSlotId(),
                     domId = gptSlotId.getDomId().split('-'),
                     iframeId = 'google_ads_iframe_' + gptSlotId.getId();
@@ -407,8 +407,8 @@ proto.init = function (impl) {
                 event.iframe = document.getElementById(iframeId);
                 event.name = domId[0];
                 event.slotType = domId[1];
-                event.slot = FT.ads.slots[name];
-                FT.ads.renderEnded(event);
+                event.slot = ads.slots[name];
+                ads.renderEnded(event);
             }
         });
         googletag.enableServices();
