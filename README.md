@@ -104,7 +104,7 @@ The **Audience Data Manager (ADM)** enables a publisher to sell against the valu
 
 An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
 
-The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target the audience segments identifeid by the ADM.
+The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target advertising to to audience segments created in the ADM.
 
 See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
 
