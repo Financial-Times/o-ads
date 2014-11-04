@@ -182,7 +182,7 @@ The full list of existing ad units available in different FT sites, along with c
 
 Some examples are:
 
-#### 1. Leaderboard
+#### 1. Leaderboard (banner)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A type of online advert that generally runs across the top of the screen.
 
@@ -190,19 +190,19 @@ Some examples are:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Creative Format**: gif, jpeg, rich media including flash
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Expandable**: Yes (expand vertically down the page only)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Expandable**: Yes (expand vertically down the page only)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 970x90 can expand to 970x415 (also called pushdown)
 
 <br/>
-#### 2. Half page unit
+#### 2. Half page unit (hlfmpu)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Sizes (WxH pixels)**: 300x250, 300x600, 336x850, 336x280, 300x1050
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Creative Format**: gif, jpeg, rich media including flash
 
 <br/>
-#### 3. Mid Page Unit
+#### 3. Mid Page Unit (mpu)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An advert that sits in the middle of the page, more likely to be viewed/read.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Sizes (WxH pixels)**: 300x250, 336x280
