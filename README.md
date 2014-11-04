@@ -98,7 +98,15 @@ o-ads.setTargeting()
 #### What it provides
 
 Krux provide an Audience Data Monetization and Management solution. 
-The Krux platform includes four modules; Data Sentry, SuperTag, Audience Data Manager and Interchange. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
+The Krux platform includes four modules; Data Sentry, SuperTag, **Audience Data Manager** and **Interchange**. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
+
+The **Audience Data Manager (ADM)** enables a publisher to sell against the value of their audience. The ADM functionality allows a publisher to break down their audience into subsets  (segments) based on a wide range of data-points. Data points that can be used to generate an audience segment can include demographics and user registration details along with user behaviours such as sharing articles or repeatedly visiting a specific section of the site.
+
+An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
+
+The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target the audience segments identifeid by the ADM.
+
+See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
 
 #### Perquisites
 
@@ -107,7 +115,7 @@ In most cases each site will have its own Production and QA environment set up i
 
 #### How to configure  
 
-Krux provide a JS snippet referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
+Krux provide a JS file referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
 
 Importantly the Control Tag contains a unique identifier, the Config ID, which is specific to a product or site. Krux provide a Production Config ID as well as a dummy ID for testing on any non-production environments.
 
