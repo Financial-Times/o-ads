@@ -203,6 +203,39 @@ mpu: {
 
 [PLACEHOLDER]
 
+## Ad Units: Creatives, Styling and Layout
+
+The full list of existing ad units available in different FT sites, along with creative specs and other information, is available in the [FT Toolkit](http://fttoolkit.co.uk/d/#nav-specifications/1)
+
+Some examples are:
+
+#### 1. Leaderboard (banner)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A type of online advert that generally runs across the top of the screen.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 728x90, 970x90, 468x60, 970x66, 970x250
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Expandable</b>: Yes (expand vertically down the page only)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 970x90 can expand to 970x415 (also called pushdown)
+
+<br/>
+#### 2. Half page unit (hlfmpu)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 300x250, 300x600, 336x850, 336x280, 300x1050
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
+
+<br/>
+#### 3. Mid Page Unit (mpu)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An advert that sits in the middle of the page, more likely to be viewed/read.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 300x250, 336x280
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
 
 
-
+<br>
+IAB's (Interactive Advertising Bureau) ad standards, creative guidelines and best practices can be found [here](http://www.iab.net/guidelines/508676/508767/ad_unit)
