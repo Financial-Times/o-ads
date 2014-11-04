@@ -190,19 +190,19 @@ Some examples are:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>CExpandable</b>: Yes (expand vertically down the page only)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Expandable</b>: Yes (expand vertically down the page only)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 970x90 can expand to 970x415 (also called pushdown)
 
 <br/>
-#### 2. Half page (hlfmpu)
+#### 2. Half page unit
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 300x250, 300x600, 336x850, 336x280, 300x1050
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 300x600, 336x850, 336x280, 300x1050, 300x250
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
 
 <br/>
-#### 3. Mid Page Unit (mpu)
+#### 3. Mid Page Unit
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An advert that sits in the middle of the page, more likely to be viewed/read.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Sizes (WxH pixels)</b>: 300x250, 336x280
