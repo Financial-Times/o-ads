@@ -190,8 +190,8 @@ Some examples are:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Creative Format</b>: gif, jpeg, rich media including flash
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Expandable</b>: Yes (expand vertically down the page only)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Expandable</b>: Yes (expand vertically down the page only)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 728x90 can expand to 728x300
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 970x90 can expand to 970x415 (also called pushdown)
 
 <br/>
