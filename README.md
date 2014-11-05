@@ -23,12 +23,17 @@ Known issues:
 
 Add ad slots to your page using the following div structure:
 
-Example HTML:
+Example HTML for defining an "mpu" position:
 
 ```html
 <div class="o-ads" data-o-ads-position="mpu">
     ...
 </div>
+```
+or
+
+```html
+<div id="mpu" class="advertising"></div>
 ```
 
 ## Product Specific Configuration
@@ -55,7 +60,18 @@ myAds.init({
 ### Setting configuration via metatags
 In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
 
-[DOCUMENT METATAG CONFIG]
+Here's an example (some of the values will become clear by reading later documentation).
+```HTML
+ <meta name="dfp_site" content="test.5887.origami">
+ <meta name="dfp_zone" content="home">
+ <meta name="dfp_targeting" content="">
+ <meta name="krux" content='{"id":"JVB5A2WA","limit":70}' data-contenttype="json">
+ ```
+ and ad positions as such:
+ 
+ ```HTML
+ <div data-ad-position="hlfmpu" data-ad-size="300x600" id="hlfmpu"></div>
+ ```
 
 ### Config accessor method
 The o-ads library exposes all configuration properties via the `config()` accessor method. 
@@ -64,17 +80,42 @@ The `config()` function allows for getting and setting of configuration values.
  * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
  * Calling config passing a valid property key and a value will envoke the setter and set the value of the key to the new value.
 
+### Targeting Key Values
 
-## Configuring Basic Targeting Criteria
-
-Add configuration to enable targeting.
-
-[PLACEHOLDER]
-
-### Out of the box targeting
-
+Some key values are added to the ad requests out of the box 
 * Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
-* Registration/Subscription/AYSC metadata
+* Registration/Subscription/AYSC metadata (when on ft.com domain for logged in users)
+
+It's possible to add additional targeting key/values by setting the ```dfp_targeting``` config parameter e.g. to add the key values pagetype=article and article id = 67867868687687 you could do the following:
+
+```
+ <meta name="dfp_targeting" content="pagetype=article;articleid=67867868687687">
+```
+or by setting in the init config:
+```
+myAds.init({
+  ...
+  dfp_targeting: "pagetype=article;articleid=67867868687687",
+  ...
+  }
+);
+```
+
+### Collapsing options
+
+default functionality it to request an ad and if the ad comes back empty the slot (div) will remain closed (display:none) and expand to the size of the ad returned if there is an ad scheduled. However other options are available. These are:
+
+*after* - the ad slot will load open before the ad is requested and if an ad isn't scheduled then the position will collapse.
+
+*before* - same as default
+
+*never* - the ad position will remain open and will not close even if an ad isn't scheduled.
+
+these modes can be chaged by the setting ```collapseEmpty``` in either init or page metadata. e.g. 
+```
+ <meta name="collapseEmpty" content="after">
+```
+
 
 ### Adding additional custom targeting criteria
 
@@ -125,7 +166,15 @@ It should also be noted that not all slot need to be configured responsively, ab
 #### What it provides
 
 Krux provide an Audience Data Monetization and Management solution. 
-The Krux platform includes four modules; Data Sentry, SuperTag, Audience Data Manager and Interchange. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
+The Krux platform includes four modules; Data Sentry, SuperTag, **Audience Data Manager** and **Interchange**. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
+
+The **Audience Data Manager (ADM)** enables a publisher to sell against the value of their audience. The ADM functionality allows a publisher to break down their audience into subsets  (segments) based on a wide range of data-points. Data points that can be used to generate an audience segment can include demographics and user registration details along with user behaviours such as sharing articles or repeatedly visiting a specific section of the site.
+
+An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
+
+The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target advertising to to audience segments created in the ADM.
+
+See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
 
 #### Perquisites
 
@@ -184,6 +233,14 @@ or
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
 
+#### Basic verification checks
+It can be useful to carry out the following verification checks after enabling the Krux integration. 
+
+ * Verify that the page makes a GET request for 'pixel.gif' from the 'beacon.krxd.net' domain. - This will demonstrate that the Control Tag has been attached to the page correctly.
+ * Inspect the request headers for the pixel request to verify that the control tag is configured correctly:
+   * ensure that there is a header parameter named '_kcp_d' and that it contains the value of the sites domain.
+   * ensure that there is a header parameter named '_kcp_s' and that it contains the site value as its named in the Krux admin panel.
+
 
 
 ### Chartbeat - Ad Visibility
@@ -215,11 +272,12 @@ Ad positions can be configured to be trackable by Chartbeat. In order to enable 
    cbTrack: true
   }
 ```
-Setting the `cbTrack` property to true for an ad slot will configure o-ads to add a data-attribute to the HTML markup of the ad slot. Specifically the Chartbeat data-attirbute `data-cb-ad-id` is set and the ad position name is set as the value. The data-attribute is added to the `<div>` element that wraps the ad slot. See the example below.
+Setting the `cbTrack` property to true for an ad slot will configure o-ads to add a data-attribute to the HTML markup of the ad slot. Specifically the Chartbeat data-attirbute `data-cb-ad-id` is set and the ad position name is set as the value. The data-attribute is added to the `<div>` element that wraps the ad slot. See the example below:
 
 ```
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
+
 
 ### Video Advertising
 
@@ -255,6 +313,40 @@ mpu: {
 
 [PLACEHOLDER]
 
+## Ad Units: Creatives, Styling and Layout
+
+The full list of existing ad units available in different FT sites, along with creative specs and other information, is available in the [FT Toolkit](http://fttoolkit.co.uk/d/#nav-specifications/1)
+
+IAB's (Interactive Advertising Bureau) ad standards, creative guidelines and best practices can be found [here](http://www.iab.net/guidelines/508676/508767/ad_unit) which is a good guideline to general industry stardards around formats.
+
+Some examples are:
+
+1. Leaderboard (banner)
+
+    A type of online advert that generally runs across the top of the screen.
+
+    **Sizes (WxH pixels)**: 728x90, 970x90, 468x60, 970x66, 970x250
+
+    **Creative Format**: gif, jpeg, rich media including flash
+
+    **Expandable**: Yes (expand vertically down the page only)
+    - 728x90 can expand to 728x300  
+    - 970x90 can expand to 970x415 (also called pushdown)
 
 
+2. Half page unit (hlfmpu)
 
+    **Sizes (WxH pixels)**: 300x250, 300x600, 336x850, 336x280, 300x1050
+
+    **Creative Format**: gif, jpeg, rich media including flash
+
+3. Mid Page Unit (mpu)
+    An advert that sits in the middle of the page, more likely to be viewed/read.
+
+    **Sizes (WxH pixels)**: 300x250, 336x280
+
+    **Creative Format**: gif, jpeg, rich media including flash
+
+## Email Advertising
+
+Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tagss** and they will probably use the following tool to create them http://dfpgpt.appspot.com/
