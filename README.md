@@ -1,4 +1,19 @@
-# o-ads - Display Advertising
+# o-ads - Display Advertising <div id="title1"></div>
+
+##Contents
+
+* <a href="#title1">Introduction</a>
+* <a href="#title2">Browser Support</a>
+* <a href="#title3">Product Specific Configuration</a>
+* <a href="#title4"> - Configuration Object</a>
+* <a href="#title5"> - By Metatags</a>
+* <a href="#title6"> - Targeting Key/Values</a>
+* <a href="#title7"> - Collapsing Options</a>
+* <a href="#title8">Advanced Features</a>
+* <a href="#title9"> - Responsive Slots</a>
+* <a href="#title9"> - Krux (Behavioural Targeting)</a>
+
+##Introduction
 
 This module adds display advertising functionality to your product. Using this module will enable you to easily take advantage of
  standard demographic targeting functionality, behavioural tracking features, useful custom targeting attributes, it is also
@@ -7,7 +22,7 @@ This module adds display advertising functionality to your product. Using this m
   Having a sales model is important! See this document for pre-requisite steps required for adding advertising to your product:
    https://docs.google.com/a/ft.com/document/d/1a9Dyi-4VzN_gzhYn6scVLgKICEP1AEPR7A7-shefklU/edit
 
-## Browser support
+## Browser support <div id="title2"></div>
 |  Browsers  | Primary Experience | Core Experience |
 |:----------:|:------------------:|:---------------:|
 |   Chrome   |        35+         |       35+       |
@@ -36,12 +51,12 @@ or
 <div id="mpu" class="advertising"></div>
 ```
 
-## Product Specific Configuration
+## Product Specific Configuration <div id="title3"></div>
 The o-ads library is customisable in order to accomodate product specific configuration options.
 
 Ad positions, ad sizes and ad server network IDs are examples of configuration options that will be specific to a product/site.
 
-### The configuration object
+### The configuration object <div id="title4"></div>
 The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance. 
 
 The example below demonstrates instantiating an o-ads instance, setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
@@ -57,7 +72,7 @@ myAds.init({
 );
 ```
 
-### Setting configuration via metatags
+### Setting configuration via metatags <div id="title5"></div>
 In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
 
 Here's an example (some of the values will become clear by reading later documentation).
@@ -80,7 +95,7 @@ The `config()` function allows for getting and setting of configuration values.
  * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
  * Calling config passing a valid property key and a value will envoke the setter and set the value of the key to the new value.
 
-### Targeting Key Values
+### Targeting Key Values <div id="title6"></div>
 
 Some key values are added to the ad requests out of the box 
 * Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
@@ -101,7 +116,7 @@ myAds.init({
 );
 ```
 
-### Collapsing options
+### Collapsing options <div id="title7"></div>
 
 default functionality it to request an ad and if the ad comes back empty the slot (div) will remain closed (display:none) and expand to the size of the ad returned if there is an ad scheduled. However other options are available. These are:
 
@@ -122,9 +137,9 @@ these modes can be chaged by the setting ```collapseEmpty``` in either init or p
 o-ads.setTargeting()
 [PLACEHOLDER]
 
-## Advanced Features
+## Advanced Features <div id="title8"></div>
 
-### Responsive slot configuration
+### Responsive slot configuration <div id="title9"></div>
 
 #### What it provides
 
@@ -161,7 +176,7 @@ Now within your sizes configuration for each ad format you can supply which size
 With the above configuration a different sized banner will be displayed for each screen size except small where the slot will be collapsed.
 It should also be noted that not all slot need to be configured responsively, above the mpu will be the same size on all screens
 
-### Behavioural Targeting - Krux
+### Behavioural Targeting - Krux <div id="title10"></div>
 
 #### What it provides
 
