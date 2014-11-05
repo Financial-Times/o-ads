@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "0.2.148",
+  "version": "0.2.149",
   "main": [
     "main.scss",
     "main.js"
