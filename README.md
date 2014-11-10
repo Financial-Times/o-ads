@@ -2,16 +2,20 @@
 
 ##Contents
 
-* <a href="#title1">**Introduction**</a>
-* <a href="#title2">**Browser Support**</a>
-* <a href="#title3">**Product Specific Configuration**</a>
-* <a href="#title4"> Configuration Object</a>
-* <a href="#title5"> By Metatags</a>
-* <a href="#title6"> Targeting Key/Values</a>
-* <a href="#title7"> Collapsing Options</a>
-* <a href="#title8">**Advanced Features**</a>
-* <a href="#title9"> Responsive Slots</a>
-* <a href="#title9"> Krux (Behavioural Targeting)</a>
+* <a href="#title1">Introduction</a>
+* <a href="#title2">Browser Support</a>
+* <a href="#title3">Product Specific Configuration</a>
+    * <a href="#title4"> Configuration Object</a>
+    * <a href="#title5"> By Metatags</a>
+    * <a href="#title6"> Targeting Key/Values</a>
+    * <a href="#title7"> Collapsing Options</a>
+* <a href="#title8">Advanced Features</a>
+    * <a href="#title9"> Responsive Slots</a>
+    * <a href="#title9"> Krux (Behavioural Targeting)</a>
+    * <a href="#title10"> Video</a>
+* <a href="#title11">Creative Types and IAB guidelines</a>
+* <a href="#title12">Email</a>
+* <a href="#title13">Useful Links</a>
 
 ##Introduction
 
@@ -31,6 +35,7 @@ This module adds display advertising functionality to your product. Using this m
 |   IE       |        8+          |       8+        |
 
 Known issues:
+
 * Excessively big ads may cause user dissatisfaction! We are a classy site, please don't go overboard.
 
 ## Markup
@@ -96,7 +101,8 @@ The `config()` function allows for getting and setting of configuration values.
 
 ### Targeting Key Values <div id="title6"></div>
 
-Some key values are added to the ad requests out of the box 
+Some key values are added to the ad requests out of the box:
+
 * Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
 * Registration/Subscription/AYSC metadata (when on ft.com domain for logged in users)
 
@@ -281,7 +287,7 @@ Setting the `cbTrack` property to true for an ad slot will configure o-ads to ad
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
 
-### Video Advertising
+### Video Advertising <div id="title10"></div>
 
 The o-ads library supports video pre-roll ads. See [Google DFP's documentation on video advertising](https://support.google.com/dfp_premium/answer/1711021?hl=en)
 
@@ -296,6 +302,7 @@ ads.config('video',true);
 This setting will enable the ability to request a url via the method ```buildURLForVideo(DFP_ZONE, POSITION_NAME (DEFAULT 'video'), ADDITIONAL_TARGETING_KEY_VALUES)``` in a format suitable to pass to compatible video players for them to retrieve scheduled ad serving data (in a format called [VAST - Video Ad Serving Template](http://www.iab.net/vast))
 
 buildURLForVideo returns an object with variables suitable for use in many different players:
+
 * urlStem & additionalTargetingParams for brightcove use.
 * fullURL for VideoJS use.
 
@@ -310,6 +317,7 @@ var options = {
 Currently players with ima3 (google intertactive media ads) plugins are supported. Many video players support this functionaliy including brightcove (out of the box) and videojs (with plugin)
 
 Player configuration guides:
+
 * Brightcove configuration [(http://support.brightcove.com/en/video-cloud/docs/using-dfp-ima-3-ad-source)]
 * VideoJS [(http://googleadsdeveloper.blogspot.co.uk/2014/08/introducing-ima-sdk-plugin-for-videojs.html)]
 
@@ -342,7 +350,7 @@ mpu: {
 }
 ```
 
-## Ad Units: Creatives, Styling and Layout
+## Ad Units: Creatives, Styling and Layout <div id="title11"></div>
 
 The full list of existing ad units available in different FT sites, along with creative specs and other information, is available in the [FT Toolkit](http://fttoolkit.co.uk/d/#nav-specifications/1)
 
@@ -376,11 +384,11 @@ Some examples are:
 
     **Creative Format**: gif, jpeg, rich media including flash
 
-## Email Advertising
+## Email Advertising <div id="title12"></div>
 
 Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tags** and they will probably use the following tool to create them [(http://dfpgpt.appspot.com/)]
 
-## Useful tools
+## Useful tools <div id="title13"></div>
 
 * [Google Publisher Toolbar](https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
 * Cookie tool [insert link](HERE)
