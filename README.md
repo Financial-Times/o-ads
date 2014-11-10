@@ -271,6 +271,8 @@ The o-ads library integrates with Chartbeat at the individual ad slot level.
 
 Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
+**Important Note:** Additionally AD Operations must enable tracking on campaign details to be added to ad units (dfp sites & zones) by configuration within the ad server (via adding a label "ChartbeatCampaignAnalysis").
+
 #### Example code
 
 ```javascript
