@@ -146,9 +146,10 @@ Slots can be configured to react to viewport size by either hiding the ad or req
 Responsive slots will react to the window being resized as long as the HTML is well formed, in various browsers the resize event can fail to fire if a doctype is not included.
 
 #### How to configure
-To enable respsonsive slots you first add your breakpoints to your configuration e.g.
+To enable responsive slots you first add your breakpoints to your configuration e.g.
+
 ```
-  responsive: {
+responsive: {
     "extraLarge": [ 1400, 0 ],
     "large": [ 1000, 0 ],
     "medium": [ 600, 0 ],
@@ -159,17 +160,17 @@ Within the breakpoints object keys can be any arbitary name and values are an ar
 
 Now within your sizes configuration for each ad format you can supply which sizes should be requested or if a slot should be displayed at each breakpoint e.g.
 ```
-  formats : {
-    leaderboard : {
-      sizes: {
-        small: false,
-        medium: [[468, 60]],
-        large: [[728, 90]],
-        extraLarge: [ [970, 90] ]
-      },
-      mpu: [[300, 250]]
-    }
-  }
+formats : {
+leaderboard : {
+  sizes: {
+    small: false,
+    medium: [[468, 60]],
+    large: [[728, 90]],
+    extraLarge: [ [970, 90] ]
+  },
+  mpu: [[300, 250]]
+}
+}
 ```
 
 With the above configuration a different sized banner will be displayed for each screen size except small where the slot will be collapsed.
@@ -204,8 +205,8 @@ Including the Krux control tag and configuring it with the correct ID is handled
 
 ```
 krux: {
-        id: 'AbcXyzJk'
-      }
+  id: 'AbcXyzJk'
+}
 ```
 #### Further configuration options
 
@@ -213,9 +214,9 @@ It is possible to limit the number of Krux segments that are passed to the ad re
 
 ```
 krux: {
-        id: 'AbcXyzJk',
-        limit: 50
-      }
+  id: 'AbcXyzJk',
+  limit: 50
+}
 ```
 
 ##### Events
@@ -230,15 +231,15 @@ Dwell time is the measure of how much time a user is on the site, currently when
 or  
 
 ```
-    krux: {
-        events: {
-            dwell_time: {
-                interval: 5, // every 5 seconds
-                id: 'JCadw18P',
-                total: 600 // for 10 minutes
-            }
+krux: {
+    events: {
+        dwell_time: {
+            interval: 5, // every 5 seconds
+            id: 'JCadw18P',
+            total: 600 // for 10 minutes
         }
     }
+}
 ```
 
 #### who to contact to get additional data points in your product
@@ -271,6 +272,7 @@ The o-ads library integrates with Chartbeat at the individual ad slot level.
 Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
 #### Example code
+
 ```javascript
  mpu: {
    sizes: [[300,250], [336,280]],
@@ -391,4 +393,4 @@ Offically Google DFP does not support email advertising so implementation is at 
 ## Useful tools <div id="title13"></div>
 
 * [Google Publisher Toolbar](https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
-* Cookie tool [insert link](HERE)
+* [Cookie tool](http://www.ft.com/m/advertising/tools/) - functionality works only if on ft.com domain or subdomain.
