@@ -31,7 +31,6 @@ This module adds display advertising functionality to your product. Using this m
 |   IE       |        8+          |       8+        |
 
 Known issues:
-
 * Excessively big ads may cause user dissatisfaction! We are a classy site, please don't go overboard.
 
 ## Markup
@@ -73,7 +72,7 @@ myAds.init({
 ```
 
 ### Setting configuration via metatags <div id="title5"></div>
-In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
+In addition to the configuration object which is passed to the o-ads constructor, it is possible to set config options via metatags in the page DOM.
 
 Here's an example (some of the values will become clear by reading later documentation).
 ```HTML
@@ -131,12 +130,6 @@ these modes can be chaged by the setting ```collapseEmpty``` in either init or p
  <meta name="collapseEmpty" content="after">
 ```
 
-
-### Adding additional custom targeting criteria
-
-o-ads.setTargeting()
-[PLACEHOLDER]
-
 ## Advanced Features <div id="title8"></div>
 
 ### Responsive slot configuration <div id="title9"></div>
@@ -185,8 +178,6 @@ The Krux platform includes four modules; Data Sentry, SuperTag, **Audience Data 
 
 The **Audience Data Manager (ADM)** enables a publisher to sell against the value of their audience. The ADM functionality allows a publisher to break down their audience into subsets  (segments) based on a wide range of data-points. Data points that can be used to generate an audience segment can include demographics and user registration details along with user behaviours such as sharing articles or repeatedly visiting a specific section of the site.
 
-An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
-
 The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target advertising to to audience segments created in the ADM.
 
 See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
@@ -194,6 +185,7 @@ See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&
 #### Perquisites
 
 Before Krux can be enabled on site the [Ad Operations](mailto:adopsuk@ft.com) team must coordinate with an account manager at Krux to ensure that a Production and QA environment have been created in the Krux system specific to the site.
+
 In most cases each site will have its own Production and QA environment set up in the Krux platform.
 
 #### How to configure  
@@ -243,8 +235,6 @@ or
     }
 ```
 
-
-
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
 
@@ -255,8 +245,6 @@ It can be useful to carry out the following verification checks after enabling t
  * Inspect the request headers for the pixel request to verify that the control tag is configured correctly:
    * ensure that there is a header parameter named '_kcp_d' and that it contains the value of the sites domain.
    * ensure that there is a header parameter named '_kcp_s' and that it contains the site value as its named in the Krux admin panel.
-
-
 
 ### Chartbeat - Ad Visibility
 
@@ -293,40 +281,66 @@ Setting the `cbTrack` property to true for an ad slot will configure o-ads to ad
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
 
-
 ### Video Advertising
 
 The o-ads library supports video pre-roll ads. See [Google DFP's documentation on video advertising](https://support.google.com/dfp_premium/answer/1711021?hl=en)
 
 #### Basic Setup
 
-[PLACEHOLDER]
+Video advertising service is enabled via config settings. e.g. as below:
+
+```
+ads.config('video',true);
+```
+
+This setting will enable the ability to request a url via the method ```buildURLForVideo(DFP_ZONE, POSITION_NAME (DEFAULT 'video'), ADDITIONAL_TARGETING_KEY_VALUES)``` in a format suitable to pass to compatible video players for them to retrieve scheduled ad serving data (in a format called [VAST - Video Ad Serving Template](http://www.iab.net/vast))
+
+buildURLForVideo returns an object with variables suitable for use in many different players:
+* urlStem & additionalTargetingParams for brightcove use.
+* fullURL for VideoJS use.
+
+e.g. used as such (VideoJS example):
+```
+var options = {
+  id: 'content_video',
+  adTagUrl: ads.buildURLForVideo('video','','').fullURL
+};
+```
+
+Currently players with ima3 (google intertactive media ads) plugins are supported. Many video players support this functionaliy including brightcove (out of the box) and videojs (with plugin)
+
+Player configuration guides:
+* Brightcove configuration [(http://support.brightcove.com/en/video-cloud/docs/using-dfp-ima-3-ad-source)]
+* VideoJS [(http://googleadsdeveloper.blogspot.co.uk/2014/08/introducing-ima-sdk-plugin-for-videojs.html)]
 
 #### Companions
 
 The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a master ad which is able to pull in companion ads into other ad slots on the page.
 
-
 The companion ads service is enabled via config settings. 
-Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page. 
+Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page.
+
+e.g.
+```
+myAds.config('companions', true);
+```
 
 The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file. 
+
 ```
 if (myAds.config('dfp_zone')==="video-hub"){
   myAds.config('companions', true);
 }
 ```
+
 By default the Companion Ads service is added to all ad slots on a page where the companions property has been set to true. It is possible to exclude the Companion Ads service from being set on particular slots via slot level configuration. Setting the companions config property to false will explicitly exclude the  ad slot from having the Companions service enabled, for example, to exlclude the Companions service from the MPU ad slot we could use the below code in the site specific configuration file.
+
 ```
 mpu: {
   sizes: [[300,250],[336,280]],
   companions : false
 }
 ```
-
-### Ad Refresh
-
-[PLACEHOLDER]
 
 ## Ad Units: Creatives, Styling and Layout
 
@@ -364,8 +378,9 @@ Some examples are:
 
 ## Email Advertising
 
-Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tagss** and they will probably use the following tool to create them http://dfpgpt.appspot.com/
+Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tags** and they will probably use the following tool to create them [(http://dfpgpt.appspot.com/)]
 
 ## Useful tools
 
-Google Publisher Toolbar (https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
+* [Google Publisher Toolbar](https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
+* Cookie tool [insert link](HERE)
