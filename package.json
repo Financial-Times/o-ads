@@ -1,11 +1,11 @@
 {
   "name": "o-ads",
-  "version": "0.2.188",
+  "version": "0.2.193",
   "description": "FT branded Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
-    "test": "node_modules/.bin/karma start karma.conf.js",
-    "install": "node_modules/.bin/bower install --config.interactive=false"
+    "test": "karma start karma.conf.js",
+    "install": "bower install --config.interactive=false"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "karma": "^0.12.24",
     "karma-browserify": "^0.2.1",
     "karma-chrome-launcher": "^0.1.5",
+    "karma-cli": "0.0.4",
     "karma-coverage": "~0.1.0",
     "karma-ie-launcher": "^0.1.5",
     "karma-junit-reporter": "~0.2.2",
