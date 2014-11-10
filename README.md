@@ -2,16 +2,16 @@
 
 ##Contents
 
-* <a href="#title1">Introduction</a>
-* <a href="#title2">Browser Support</a>
-* <a href="#title3">Product Specific Configuration</a>
-* <a href="#title4"> - Configuration Object</a>
-* <a href="#title5"> - By Metatags</a>
-* <a href="#title6"> - Targeting Key/Values</a>
-* <a href="#title7"> - Collapsing Options</a>
-* <a href="#title8">Advanced Features</a>
-* <a href="#title9"> - Responsive Slots</a>
-* <a href="#title9"> - Krux (Behavioural Targeting)</a>
+* <a href="#title1">**Introduction**</a>
+* <a href="#title2">**Browser Support**</a>
+* <a href="#title3">**Product Specific Configuration**</a>
+* <a href="#title4"> Configuration Object</a>
+* <a href="#title5"> By Metatags</a>
+* <a href="#title6"> Targeting Key/Values</a>
+* <a href="#title7"> Collapsing Options</a>
+* <a href="#title8">**Advanced Features**</a>
+* <a href="#title9"> Responsive Slots</a>
+* <a href="#title9"> Krux (Behavioural Targeting)</a>
 
 ##Introduction
 
@@ -365,3 +365,7 @@ Some examples are:
 ## Email Advertising
 
 Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tagss** and they will probably use the following tool to create them http://dfpgpt.appspot.com/
+
+## Useful tools
+
+Google Publisher Toolbar (https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
