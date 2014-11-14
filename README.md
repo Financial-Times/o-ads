@@ -45,13 +45,6 @@ Add ad slots to your page using the following div structure:
 Example HTML for defining an "mpu" position:
 
 ```html
-<div class="o-ads" data-o-ads-position="mpu">
-    ...
-</div>
-```
-or
-
-```html
 <div id="mpu" class="advertising"></div>
 ```
 
