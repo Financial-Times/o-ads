@@ -111,21 +111,6 @@ proto.initValuation = function (slotName) {
 };
 
 /**
- * Valuation request callback
- * This is the callback for that receives the data from a valution request
- * @name init
- * @memberof Rubicon
- * @lends Rubicon
- */
-proto.valuationCallback = function (results) {
-   if (config.defer) {
-      // add results to slot targeting and run initSlot
-   } else {
-      // store the results somewhere or make a track requested
-   }
-};
-
-/**
  * Valuation request callback factory
  * This is the callback for that receives the data from a valution request
  * @name init
@@ -135,7 +120,13 @@ proto.valuationCallback = function (results) {
 proto.valuationCallbackFactory = function (slotName) {
    var config = ads.config('rubicon');
    return function (results) {
-      this.valuationCallback(results);
+      if (config.defer) {
+         // add results to slot targeting and run initSlot
+
+         _initSlot.call(ads.slots, slotName);
+      } else {
+         // store the results somewhere or make a track requested
+      }
    }
 };
 
