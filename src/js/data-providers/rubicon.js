@@ -104,6 +104,7 @@ proto.initValuation = function (slotName) {
 proto.valuationCallbackFactory = function (slotName) {
 	return function (results) {
 		// add results to slot targeting and run initSlot
+		document.getElementById(slotName).setAttribute('data-ftads-tier', results.estimate.tier);
 		_initSlot.call(ads.slots, slotName);
 	}
 };
