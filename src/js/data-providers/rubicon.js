@@ -37,9 +37,9 @@ function Rubicon() {
  */
 proto.init = function (impl) {
    ads = impl;
-   var config = this.config = FT.ads.config('rubicon');
+   var config = this.config = ads.config('rubicon');
    if(config && config.id && config.site){
-      FT._ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
+      ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
       this.decorateInitSlot();
    }
 };
@@ -106,7 +106,7 @@ proto.initValuation = function (slotName) {
    if (config.defer) {
 
    } else {
-      _initSlot.apply(FT.ads.slots, arguments);
+      _initSlot.apply(ads.slots, arguments);
    }
 };
 
