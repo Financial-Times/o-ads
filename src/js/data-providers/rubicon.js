@@ -58,7 +58,7 @@ proto.initValuation = function (slotName) {
 	var dfpZone = ads.config('dfp_zone');
 
 	if (ads.utils.isFunction(window.RubiconInsight) ) {
-		var insight = ads.slots[slotName].insight = new RubiconInsight();
+		var insight = ads.rubicon[slotName] = new RubiconInsight();
 	} else {
 		ads.utils.timers.create(0.2, (function (slotName) {
 			return function () {
