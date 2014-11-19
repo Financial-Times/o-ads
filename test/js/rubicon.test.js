@@ -12,7 +12,7 @@
       TEST.beginNewPage({config: {rubicon: false}});
       FT.ads.rubicon.init(FT.ads);
 
-      ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
+      ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is not attached to the page');
    })
 
    test('init - enable rubicon', function () {
