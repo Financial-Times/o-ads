@@ -66,8 +66,8 @@ proto.initValuation = function (slotName) {
 	}
 
 
-	var zone = config.zones[slotName] || false;
-	var size = config.formats[slotName] || false;
+	var zone = (config && config.zones) ? config.zones[slotName] : false;
+	var size = (config && config.formats) ? config.formats[slotName] : false;
 
 	if (zone && size) {
 		insight.init({
