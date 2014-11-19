@@ -54,9 +54,6 @@ proto.init = function (impl) {
 */
 proto.initValuation = function (slotName) {
 	var config = context.config;
-	var dfpSite = ads.config('dfp_site');
-	var dfpZone = ads.config('dfp_zone');
-
 	if (ads.utils.isFunction(window.RubiconInsight) ) {
 		var insight = context.insights[slotName] = new RubiconInsight();
 	} else {
@@ -68,9 +65,9 @@ proto.initValuation = function (slotName) {
 		return;
 	}
 
-	var maps = config.mappings[dfpZone] || config.mappings[dfpSite];
-	var zone = maps[slotName] ?  maps[slotName].zone : false;
-	var size = maps[slotName] ? maps[slotName].size : false;
+
+	var zone = config.zones[slotName] || false;
+	var size = config.formats[slotName] || false;
 
 	if (zone && size) {
 		insight.init({
