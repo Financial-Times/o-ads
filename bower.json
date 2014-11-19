@@ -6,6 +6,9 @@
     "main.js"
   ],
   "ignore": [],
+   "dependencies": {
+      "ftdomdelegate": "^2.0.3"
+  },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
     "jquery.cookie": "https://raw.githubusercontent.com/carhartl/jquery-cookie/master/src/jquery.cookie.js",
