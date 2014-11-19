@@ -36,13 +36,24 @@
 
    test('test rubicon insight - no rubicon mapping for given site and size', function () {
       var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
-      TEST.beginNewPage({config: {dfp_site: 'test.5887.home', 'dfp_zone': ' index', rubicon: {id: 10232, site: 26290,
-         mappings: {
-         'test.5887.home': {
-            banlbGPT: {
-               size: '728x90',
-               zone: 123456
-            }}}}}});
+      TEST.beginNewPage({
+          config: {
+              dfp_site: 'test.5887.home',
+              'dfp_zone': ' index',
+              rubicon: {
+                  id: 10232,
+                  site: 26290,
+                  formats: {
+                     leaderboard: '728x90'
+                  },
+                  zones: {
+                      'test.5887.home': {
+                          leaderboard: 123456
+                      }
+                  }
+              }
+          }
+      });
 
       FT.ads.rubicon.init(FT.ads);
       FT.ads.slots.initSlot("mpu");
@@ -52,6 +63,40 @@
       ok(rubiconInsight.start.notCalled, 'rubiconInsight.start is not Called');
       ok(rubiconInsight.onValuationLoaded.notCalled, 'rubiconInsight.onValuationLoaded is not Called');
 
+      initValuation.restore();
+   });
+
+   test('test rubicon insight - rubicon mapping for given site and size', function () {
+      TEST.beginNewPage({
+         container: 'leaderboard',
+         config: {
+            dfp_site: 'test.5887.home',
+            dfp_zone: ' index',
+            rubicon: {
+               id: 10232,
+               site: 26290,
+               formats: {
+                  leaderboard: '728x90'
+               },
+               zones: {
+                  'test.5887.home': {
+                     leaderboard: 123456
+                  }
+               }
+            }
+         }
+      });
+
+      FT.ads.rubicon.init(FT.ads);
+      FT.ads.slots.initSlot("leaderboard");
+
+      ok(initValuation.called, 'ads.rubicon.initValuation called');
+      ok(rubiconInsight.init.called, 'rubiconInsight.init is called');
+      ok(rubiconInsight.start.called, 'rubiconInsight.start is Called');
+      //ok(rubiconInsight.onValuationLoaded.called, 'rubiconInsight.onValuationLoaded is not Called');
+
+      rubiconInsight.init.restore();
+      rubiconInsight.start.restore();
       initValuation.restore();
    });
 
