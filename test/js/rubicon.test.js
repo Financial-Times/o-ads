@@ -21,7 +21,9 @@
       FT.ads.rubicon.init(FT.ads);
 
       ok(TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
-      ok(decorateInitSlot.calledOnce, 'initSlot is decorated');
+      ok(decorateInitSlot.calledOnce, 'initSlot is called');
+
+      decorateInitSlot.restore();
    });
 
    test('decorate slots.initSlot', function () {
@@ -49,11 +51,12 @@
       ok(rubiconInsight.init.notCalled, 'rubiconInsight.init is not called');
       ok(rubiconInsight.start.notCalled, 'rubiconInsight.start is not Called');
       ok(rubiconInsight.onValuationLoaded.notCalled, 'rubiconInsight.onValuationLoaded is not Called');
+
+      initValuation.restore();
    });
 
-   test('test rubicon insight - ok', function () {
-
-   });
+//   test('test rubicon insight - ok', function () {
+//   });
 
    $(runTests);
 }(window, document, jQuery));
