@@ -30,6 +30,7 @@ https://github.com/googleads/videojs-ima
 
 <!-- include the o-ads origami module - can use require instead -->
 <script src="/bundles/js?modules=o-ads"></script>
+<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
 
 <!-- define your video player -->
 <video id="content_video" class="video-js vjs-default-skin"
@@ -43,7 +44,7 @@ https://github.com/googleads/videojs-ima
 <script>
 // initialise the configuration for o-ads
 var ads = Origami["o-ads"].init({
-    dfp_site: 'ftcom.5887.video',
+    dfp_site: 'test.5887.origami',
     dfp_zone: 'video'
 });
 

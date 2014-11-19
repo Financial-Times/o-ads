@@ -5,13 +5,17 @@
 * <a href="#title1">Introduction</a>
 * <a href="#title2">Browser Support</a>
 * <a href="#title3">Product Specific Configuration</a>
-* <a href="#title4"> - Configuration Object</a>
-* <a href="#title5"> - By Metatags</a>
-* <a href="#title6"> - Targeting Key/Values</a>
-* <a href="#title7"> - Collapsing Options</a>
+    * <a href="#title4"> Configuration Object</a>
+    * <a href="#title5"> By Metatags</a>
+    * <a href="#title6"> Targeting Key/Values</a>
+    * <a href="#title7"> Collapsing Options</a>
 * <a href="#title8">Advanced Features</a>
-* <a href="#title9"> - Responsive Slots</a>
-* <a href="#title9"> - Krux (Behavioural Targeting)</a>
+    * <a href="#title9"> Responsive Slots</a>
+    * <a href="#title9"> Krux (Behavioural Targeting)</a>
+    * <a href="#title10"> Video</a>
+* <a href="#title11">Creative Types and IAB guidelines</a>
+* <a href="#title12">Email</a>
+* <a href="#title13">Useful Links</a>
 
 ##Introduction
 
@@ -41,13 +45,6 @@ Add ad slots to your page using the following div structure:
 Example HTML for defining an "mpu" position:
 
 ```html
-<div class="o-ads" data-o-ads-position="mpu">
-    ...
-</div>
-```
-or
-
-```html
 <div id="mpu" class="advertising"></div>
 ```
 
@@ -73,7 +70,7 @@ myAds.init({
 ```
 
 ### Setting configuration via metatags <div id="title5"></div>
-In addition to the configuration object which is passed to the o-ads constructer, it is possible to set config options via metatags in the page DOM.
+In addition to the configuration object which is passed to the o-ads constructor, it is possible to set config options via metatags in the page DOM.
 
 Here's an example (some of the values will become clear by reading later documentation).
 ```HTML
@@ -97,7 +94,8 @@ The `config()` function allows for getting and setting of configuration values.
 
 ### Targeting Key Values <div id="title6"></div>
 
-Some key values are added to the ad requests out of the box 
+Some key values are added to the ad requests out of the box:
+
 * Pre-packaged social referrer metadata (twitter, google, facebook, drudge)
 * Registration/Subscription/AYSC metadata (when on ft.com domain for logged in users)
 
@@ -131,12 +129,6 @@ these modes can be chaged by the setting ```collapseEmpty``` in either init or p
  <meta name="collapseEmpty" content="after">
 ```
 
-
-### Adding additional custom targeting criteria
-
-o-ads.setTargeting()
-[PLACEHOLDER]
-
 ## Advanced Features <div id="title8"></div>
 
 ### Responsive slot configuration <div id="title9"></div>
@@ -147,9 +139,10 @@ Slots can be configured to react to viewport size by either hiding the ad or req
 Responsive slots will react to the window being resized as long as the HTML is well formed, in various browsers the resize event can fail to fire if a doctype is not included.
 
 #### How to configure
-To enable respsonsive slots you first add your breakpoints to your configuration e.g.
+To enable responsive slots you first add your breakpoints to your configuration e.g.
+
 ```
-  responsive: {
+responsive: {
     "extraLarge": [ 1400, 0 ],
     "large": [ 1000, 0 ],
     "medium": [ 600, 0 ],
@@ -160,17 +153,17 @@ Within the breakpoints object keys can be any arbitary name and values are an ar
 
 Now within your sizes configuration for each ad format you can supply which sizes should be requested or if a slot should be displayed at each breakpoint e.g.
 ```
-  formats : {
-    leaderboard : {
-      sizes: {
-        small: false,
-        medium: [[468, 60]],
-        large: [[728, 90]],
-        extraLarge: [ [970, 90] ]
-      },
-      mpu: [[300, 250]]
-    }
-  }
+formats : {
+leaderboard : {
+  sizes: {
+    small: false,
+    medium: [[468, 60]],
+    large: [[728, 90]],
+    extraLarge: [ [970, 90] ]
+  },
+  mpu: [[300, 250]]
+}
+}
 ```
 
 With the above configuration a different sized banner will be displayed for each screen size except small where the slot will be collapsed.
@@ -185,8 +178,6 @@ The Krux platform includes four modules; Data Sentry, SuperTag, **Audience Data 
 
 The **Audience Data Manager (ADM)** enables a publisher to sell against the value of their audience. The ADM functionality allows a publisher to break down their audience into subsets  (segments) based on a wide range of data-points. Data points that can be used to generate an audience segment can include demographics and user registration details along with user behaviours such as sharing articles or repeatedly visiting a specific section of the site.
 
-An example of a valuable FT.com Audience Segment that can be derived via the ADM could be "Diplomats"; if a user's industry is known to be "Government or NGO" and the user is known to be frequently visiting the site from Brussels and reading articles related to the EU/ European commission or a frequent reader of the Brussels Blog section they may fall into the Diplomats segment.  
-
 The **Interchange Module** allows the ADM functionality to integrate with an Ad Server (in the case of FT.com, this will be Google DFP). By integrating with the ad server, ad operations are able to target advertising to to audience segments created in the ADM.
 
 See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&srcid=ZnQuY29tfGFkdmVydGlzaW5nLWVuYWJsZW1lbnR8Z3g6ZjIyZTBkZmQwZjkxOTc3&u=0) for more detailed information on the ADM functionality.
@@ -194,6 +185,7 @@ See the [ADM User Guide](https://drive.google.com/viewerng/viewer?a=v&pid=sites&
 #### Perquisites
 
 Before Krux can be enabled on site the [Ad Operations](mailto:adopsuk@ft.com) team must coordinate with an account manager at Krux to ensure that a Production and QA environment have been created in the Krux system specific to the site.
+
 In most cases each site will have its own Production and QA environment set up in the Krux platform.
 
 #### How to configure  
@@ -206,8 +198,8 @@ Including the Krux control tag and configuring it with the correct ID is handled
 
 ```
 krux: {
-        id: 'AbcXyzJk'
-      }
+  id: 'AbcXyzJk'
+}
 ```
 #### Further configuration options
 
@@ -215,9 +207,9 @@ It is possible to limit the number of Krux segments that are passed to the ad re
 
 ```
 krux: {
-        id: 'AbcXyzJk',
-        limit: 50
-      }
+  id: 'AbcXyzJk',
+  limit: 50
+}
 ```
 
 ##### Events
@@ -232,18 +224,16 @@ Dwell time is the measure of how much time a user is on the site, currently when
 or  
 
 ```
-    krux: {
-        events: {
-            dwell_time: {
-                interval: 5, // every 5 seconds
-                id: 'JCadw18P',
-                total: 600 // for 10 minutes
-            }
+krux: {
+    events: {
+        dwell_time: {
+            interval: 5, // every 5 seconds
+            id: 'JCadw18P',
+            total: 600 // for 10 minutes
         }
     }
+}
 ```
-
-
 
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
@@ -255,8 +245,6 @@ It can be useful to carry out the following verification checks after enabling t
  * Inspect the request headers for the pixel request to verify that the control tag is configured correctly:
    * ensure that there is a header parameter named '_kcp_d' and that it contains the value of the sites domain.
    * ensure that there is a header parameter named '_kcp_s' and that it contains the site value as its named in the Krux admin panel.
-
-
 
 ### Chartbeat - Ad Visibility
 
@@ -276,7 +264,10 @@ The o-ads library integrates with Chartbeat at the individual ad slot level.
 
 Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
+**Important Note:** Additionally AD Operations must enable tracking on campaign details to be added to ad units (dfp sites & zones) by configuration within the ad server (via adding a label "ChartbeatCampaignAnalysis").
+
 #### Example code
+
 ```javascript
  mpu: {
    sizes: [[300,250], [336,280]],
@@ -293,30 +284,62 @@ Setting the `cbTrack` property to true for an ad slot will configure o-ads to ad
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
 
-
-### Video Advertising
+### Video Advertising <div id="title10"></div>
 
 The o-ads library supports video pre-roll ads. See [Google DFP's documentation on video advertising](https://support.google.com/dfp_premium/answer/1711021?hl=en)
 
 #### Basic Setup
 
-[PLACEHOLDER]
+Video advertising service is enabled via config settings. e.g. as below:
+
+```
+ads.config('video',true);
+```
+
+This setting will enable the ability to request a url via the method ```buildURLForVideo(DFP_ZONE, POSITION_NAME (DEFAULT 'video'), ADDITIONAL_TARGETING_KEY_VALUES)``` in a format suitable to pass to compatible video players for them to retrieve scheduled ad serving data (in a format called [VAST - Video Ad Serving Template](http://www.iab.net/vast))
+
+buildURLForVideo returns an object with variables suitable for use in many different players:
+
+* urlStem & additionalTargetingParams for brightcove use.
+* fullURL for VideoJS use.
+
+e.g. used as such (VideoJS example):
+```
+var options = {
+  id: 'content_video',
+  adTagUrl: ads.buildURLForVideo('video','','').fullURL
+};
+```
+
+Currently players with ima3 (google intertactive media ads) plugins are supported. Many video players support this functionaliy including brightcove (out of the box) and videojs (with plugin)
+
+Player configuration guides:
+
+* Brightcove configuration [(http://support.brightcove.com/en/video-cloud/docs/using-dfp-ima-3-ad-source)]
+* VideoJS [(http://googleadsdeveloper.blogspot.co.uk/2014/08/introducing-ima-sdk-plugin-for-videojs.html)]
 
 #### Companions
 
 The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a master ad which is able to pull in companion ads into other ad slots on the page.
 
-
 The companion ads service is enabled via config settings. 
-Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page. 
+Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page.
+
+e.g.
+```
+myAds.config('companions', true);
+```
 
 The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file. 
+
 ```
 if (myAds.config('dfp_zone')==="video-hub"){
   myAds.config('companions', true);
 }
 ```
+
 By default the Companion Ads service is added to all ad slots on a page where the companions property has been set to true. It is possible to exclude the Companion Ads service from being set on particular slots via slot level configuration. Setting the companions config property to false will explicitly exclude the  ad slot from having the Companions service enabled, for example, to exlclude the Companions service from the MPU ad slot we could use the below code in the site specific configuration file.
+
 ```
 mpu: {
   sizes: [[300,250],[336,280]],
@@ -324,11 +347,7 @@ mpu: {
 }
 ```
 
-### Ad Refresh
-
-[PLACEHOLDER]
-
-## Ad Units: Creatives, Styling and Layout
+## Ad Units: Creatives, Styling and Layout <div id="title11"></div>
 
 The full list of existing ad units available in different FT sites, along with creative specs and other information, is available in the [FT Toolkit](http://fttoolkit.co.uk/d/#nav-specifications/1)
 
@@ -362,7 +381,11 @@ Some examples are:
 
     **Creative Format**: gif, jpeg, rich media including flash
 
-## Email Advertising
+## Email Advertising <div id="title12"></div>
 
-Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tagss** and they will probably use the following tool to create them http://dfpgpt.appspot.com/
+Offically Google DFP does not support email advertising so implementation is at your own risk. However it is possible to produce tags for creating static img tags which seem to be effective. **Contact ad ops for these tags** and they will probably use the following tool to create them [(http://dfpgpt.appspot.com/)]
 
+## Useful tools <div id="title13"></div>
+
+* [Google Publisher Toolbar](https://chrome.google.com/webstore/detail/google-publisher-toolbar/omioeahgfecgfpfldejlnideemfidnkc?hl=en)
+* [Cookie tool](http://www.ft.com/m/advertising/tools/) - functionality works only if on ft.com domain or subdomain.

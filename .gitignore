@@ -3,6 +3,7 @@
 build/
 demos/local/
 .editorconfig
+test-results.xml
 
 # Dependency Files #
 ####################
