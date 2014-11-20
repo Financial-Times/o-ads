@@ -19,11 +19,9 @@ Delegate = require('dom-delegate');
 
 //myDel.on('click', 'body', function(){alert('ok');})
 
-window.addEventListener('load', function() {
-  var delegate = new Delegate(document.body);
-  delegate.on('click', '#shareListOverlay .twitter', function(){alert('test');});
 
-}, false);
+
+
 /**
  * The Krux class defines an FT.ads.krux instance
  * @class
@@ -153,5 +151,12 @@ proto.events.init = function() {
         }
     }
 };
+proto.events.delegated = function(selector, eType, id, attrs){
+  window.addEventListener('load', function() {
+    var delegate = new Delegate(document.body);
+    delegate.on('mousedown', selector, function(){alert('test');});
+  }, false);
+};
+
 
 module.exports = new Krux();
