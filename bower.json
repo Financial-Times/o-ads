@@ -7,7 +7,7 @@
   ],
   "ignore": [],
    "dependencies": {
-      "ftdomdelegate": "^2.0.3"
+      "dom-delegate": "^2.0.3"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",

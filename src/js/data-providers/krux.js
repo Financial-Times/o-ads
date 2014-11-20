@@ -8,12 +8,22 @@
  * FT.ads.targeting is an object providing properties and methods for accessing targeting parameters from various sources including FT Track and Audience Science and passing them into DFP
  * @name targeting
  * @memberof FT.ads
+ // dependant modules ?
+
 */
 "use strict";
 var ads;
 var proto = Krux.prototype;
-var Delegate = require('ftdomdelegate').Delegate;
+var delegate, Delegate;
+Delegate = require('dom-delegate');
 
+//myDel.on('click', 'body', function(){alert('ok');})
+
+window.addEventListener('load', function() {
+  var delegate = new Delegate(document.body);
+  delegate.on('click', '#shareListOverlay .twitter', function(){alert('test');});
+
+}, false);
 /**
  * The Krux class defines an FT.ads.krux instance
  * @class
@@ -129,21 +139,7 @@ proto.events.fire = function (id, attrs) {
     return false;
 };
 
-proto.events.dom = function(){
 
-    function handleButtonClicks(event) {
-    alert('clicked');
-}
-
-
-
-window.addEventListener('load', function() {
-  var delegate = new Delegate(document.body);
-  delegate.on('click', 'button', handleButtonClicks);
-
-}, false);
-
-}
 
 proto.events.init = function() {
     var event, configured = ads.config('krux') && ads.config('krux').events;
