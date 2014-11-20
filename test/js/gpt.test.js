@@ -12,7 +12,7 @@
         });
 
         test('init', function () {
-            TEST.beginNewPage({config: {krux: false, timestamp: false, audSci : false}});
+            TEST.beginNewPage({config: {krux: false, timestamp: false}});
             FT.ads.gpt.init(FT.ads);
 
             ok(TEST.sinon.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
@@ -21,7 +21,7 @@
         test('set page targeting', function () {
             expect(2);
             googletag.cmd.push.reset();
-            TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, audSci : false, dfp_targeting: ';some=test;targeting=params'}});
+            TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, dfp_targeting: ';some=test;targeting=params'}});
             var result = FT.ads.gpt.setPageTargeting(),
                 expected = {some: 'test', targeting: 'params'};
             deepEqual(result, expected, 'setting dfp_targeting in config works');
@@ -124,7 +124,7 @@
                     large: [[336,280]]
                  }
               }
-           },  krux: false, timestamp: false, audSci : false}});
+           },  krux: false, timestamp: false}});
            FT.ads.gpt.init(FT.ads); // define method is run in the init
 
            FT.ads.slots.initSlot('responsive-mpu');
@@ -148,7 +148,6 @@
               },
               krux: false,
               timestamp: false,
-              audSci : false,
               formats: {
                 'no-responsive-mpu': {
                    sizes: [[300, 250]]

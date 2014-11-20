@@ -36,7 +36,6 @@ function Targeting() {
         var item,
         config = {
           metadata: context.getFromMetaData,
-          audSci: context.fetchAudSci,
           krux: context.fetchKrux,
           socialReferrer: context.getSocialReferrer,
           pageReferrer: context.getPageReferrer,
@@ -150,43 +149,6 @@ proto.getFromConfig = function () {
     return targeting;
 };
 
-/**
-* fetchAudSci reads the rsi_segs cookie or takes an rsiSegs string in the format "J07717_10826|J07717_10830|D08734_70012" and returns a DFP targeting object.
-* only segments begining J07717_10 will be entered into the return object.
-* The return object will have a single key 'a' containing an array of segments: {'a' : []};
-* @name fetchAudSci
-* @memberof Targeting
-* @lends Targeting
-*/
-proto.fetchAudSci = function (rsiSegs) {
-    var segments = {};
-
-    if (!proto.initialised) {
-        ads.utils.attach("//js.revsci.net/gateway/gw.js?csid=J07717",true);
-    }
-
-    function parseSegs(segs, max) {
-        var match,
-            exp = /J07717_10*([^|]*)/g,
-            found = [];
-
-        if (max && segs) {
-            while((match = exp.exec(segs)) && (found.length < max)){
-                found.push('z'+ match[1]);
-            }
-        }
-
-        return (found.length) ? found : false;
-    }
-
-    if (typeof rsiSegs === "undefined") {
-        rsiSegs = ads.utils.cookie('rsi_segs');
-    }
-
-    segments = parseSegs(rsiSegs, ads.config('audSciLimit'));
-    return segments ? {a: segments} : {};
-};
-
 proto.fetchKrux = function (){
     return ads.krux.targeting();
 };
@@ -256,7 +218,7 @@ function excludeFields(exclusions, obj) {
           }
         }
       return obj;
-    }
+}
 
     AllVars = excludeFields(exclusions, AllVars);
     for (var ayscVar in AllVars){

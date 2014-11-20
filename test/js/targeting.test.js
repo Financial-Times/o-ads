@@ -7,25 +7,6 @@
     function runTests() {
         QUnit.module('Third party targeting');
         /*
-        test('fetchAudSci', function () {
-            expect(4);
-            TEST.beginNewPage({
-                config: {audSci: true},
-                cookies: {
-                    "rsi_segs" : "J07717_10089|J07717_10236|J07717_10288|J07717_10295|J07717_10299|J07717_10369|J07717_10555|J07717_10545|J07717_10633|J07717_10644|J07717_10645"
-                }
-            });
-
-            var result = FT.ads.targeting();
-            strictEqual(typeof result, "object", "result is an object");
-            deepEqual(result.a, ["z89", "z236", "z288", "z295", "z299", "z369", "z555", "z545", "z633", "z644", "z645"], "No audSciLimit set");
-
-            FT.ads.config("audSciLimit", 2);
-            result = FT.ads.targeting();
-            strictEqual(typeof result, "object", "result is an object");
-            deepEqual(result.a, ['z89', 'z236'], "While the audSciLimit is 2, there should be only two segments in the results");
-
-        });
 
         test('getFromConfig', function () {
             TEST.beginNewPage({config: {}});
