@@ -5,68 +5,72 @@
 
 (function (window, document, $, undefined) {
    function runTests() {
-      QUnit.module('Rubicon');
-   }
-
-   test('init - disable rubicon', function () {
-      TEST.beginNewPage({config: {rubicon: false}});
-      FT.ads.rubicon.init(FT.ads);
-
-      ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is not attached to the page');
-   })
-
-   test('init - enable rubicon', function () {
-      var decorateInitSlot = sinon.spy(FT.ads.rubicon, 'decorateInitSlot');
-      TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
-      FT.ads.rubicon.init(FT.ads);
-
-      ok(TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
-      ok(decorateInitSlot.calledOnce, 'initSlot is called');
-
-      decorateInitSlot.restore();
-   });
-
-   test('decorate slots.initSlot', function () {
-      TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
-
-      FT.ads.rubicon.decorateInitSlot();
-
-      equal(FT.ads.slots.initSlot, FT.ads.rubicon.initValuation, 'ads.slots.initSlot is decorated by ads.rubicon.initValuation');
-   });
-
-   test('test rubicon insight - no rubicon mapping for given site and size', function () {
-      var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
-      TEST.beginNewPage({
-          config: {
-              dfp_site: 'test.5887.home',
-              'dfp_zone': ' index',
-              rubicon: {
-                  id: 10232,
-                  site: 26290,
-                  formats: {
-                     leaderboard: '728x90'
-                  },
-                  zones: {
-                      'test.5887.home': {
-                          leaderboard: 123456
-                      }
-                  }
-              }
-          }
+      var _initSlot = FT.ads.slots.initSlot;
+      QUnit.module('Rubicon', {
+         setup: function() {
+         },
+         teardown: function() {
+            FT.ads.slots.initSlot = _initSlot;
+         }
       });
 
-      FT.ads.rubicon.init(FT.ads);
-      FT.ads.slots.initSlot("mpu");
+      test('init - disable rubicon', function () {
+         TEST.beginNewPage({config: {rubicon: false}});
+         FT.ads.rubicon.init(FT.ads);
 
-      ok(initValuation.called, 'ads.rubicon.initValuation called');
-      ok(rubiconInsight.init.notCalled, 'rubiconInsight.init is not called');
-      ok(rubiconInsight.start.notCalled, 'rubiconInsight.start is not Called');
-      ok(rubiconInsight.onValuationLoaded.notCalled, 'rubiconInsight.onValuationLoaded is not Called');
+         ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is not attached to the page');
+      })
 
-      initValuation.restore();
-   });
+      test('init - enable rubicon', function () {
+         var decorateInitSlot = sinon.spy(FT.ads.rubicon, 'decorateInitSlot');
+         TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
+         FT.ads.rubicon.init(FT.ads);
+
+         ok(TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
+         ok(decorateInitSlot.calledOnce, 'initSlot is called');
+
+         decorateInitSlot.restore();
+      });
+
+      test('decorate slots.initSlot', function () {
+         TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
+
+         FT.ads.rubicon.decorateInitSlot();
+
+         equal(FT.ads.slots.initSlot, FT.ads.rubicon.initValuation, 'ads.slots.initSlot is decorated by ads.rubicon.initValuation');
+      });
+
+      test('test rubicon insight - no rubicon mapping for given site and size', function () {
+         var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
+         TEST.beginNewPage({
+             config: {
+                 dfp_site: 'test.5887.home',
+                 dfp_zone: 'index',
+                 rubicon: {
+                     id: 10232,
+                     site: 26290,
+                     formats: {
+                        leaderboard: '728x90'
+                     },
+                     zones: {
+                        leaderboard: 123456
+                     }
+                 }
+             }
+         });
+
+         FT.ads.rubicon.init(FT.ads);
+         FT.ads.slots.initSlot('mpu');
+
+         ok(initValuation.called, 'ads.rubicon.initValuation called');
+         ok(FT.ads.rubicon.insights['mpu'].init.notCalled, 'rubiconInsight.init is not called');
+         ok(FT.ads.rubicon.insights['mpu'].start.notCalled, 'rubiconInsight.start is not Called');
+
+         initValuation.restore();
+      });
 
    test('test rubicon insight - rubicon mapping for given site and size', function () {
+      var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
       TEST.beginNewPage({
          container: 'leaderboard',
          config: {
@@ -79,9 +83,7 @@
                   leaderboard: '728x90'
                },
                zones: {
-                  'test.5887.home': {
-                     leaderboard: 123456
-                  }
+                  leaderboard: 123456
                }
             }
          }
@@ -91,17 +93,11 @@
       FT.ads.slots.initSlot("leaderboard");
 
       ok(initValuation.called, 'ads.rubicon.initValuation called');
-      ok(rubiconInsight.init.called, 'rubiconInsight.init is called');
-      ok(rubiconInsight.start.called, 'rubiconInsight.start is Called');
-      //ok(rubiconInsight.onValuationLoaded.called, 'rubiconInsight.onValuationLoaded is not Called');
-
-      rubiconInsight.init.restore();
-      rubiconInsight.start.restore();
+      ok(FT.ads.rubicon.insights['leaderboard'].init.called, 'rubiconInsight.init is called');
+      ok(FT.ads.rubicon.insights['leaderboard'].start.called, 'rubiconInsight.start is called');
       initValuation.restore();
    });
 
-//   test('test rubicon insight - ok', function () {
-//   });
-
+   }
    $(runTests);
 }(window, document, jQuery));

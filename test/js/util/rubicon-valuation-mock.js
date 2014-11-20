@@ -1,9 +1,5 @@
 window.RubiconInsight = function RubiconInsight(){
+   this.init = sinon.stub();
+   this.start = sinon.stub();
 };
-
-var stubs = RubiconInsight.sinon = sinon.sandbox.create();
-
-RubiconInsight.init = stubs.stub();
-
-RubiconInsight.start = stubs.stub();
 
