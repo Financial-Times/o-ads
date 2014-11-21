@@ -63,8 +63,8 @@
          FT.ads.slots.initSlot('mpu');
 
          ok(initValuation.called, 'ads.rubicon.initValuation called');
-         ok(FT.ads.rubicon.insights['mpu'].init.notCalled, 'rubiconInsight.init is not called');
-         ok(FT.ads.rubicon.insights['mpu'].start.notCalled, 'rubiconInsight.start is not Called');
+         ok(!(FT.ads.rubicon.insights && FT.ads.rubicon.insights['mpu']), 'rubiconInsight.init is not created');
+         ok(!(FT.ads.rubicon.insights && FT.ads.rubicon.insights['mpu']), 'rubiconInsight.start is not created');
 
          initValuation.restore();
       });
