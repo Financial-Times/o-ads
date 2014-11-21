@@ -72,8 +72,11 @@ proto.initValuation = function (slotName) {
 			return;
 		} else {
 			// dorothy js has failed to promptly load so undecorate initSlot
+			// and make the call for this slot
 			// no calls to the valuation api will be made
+			_initSlot.call(ads.slots, slotName);
 			ads.slots.initSlot = _initSlot;
+			return;
 		}
 
 		insight.init({
