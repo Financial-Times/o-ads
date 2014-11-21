@@ -22,6 +22,7 @@ var context; // used to store a local copy of ads.slots.initSlot
 function Rubicon() {
 	context = this;
 	this.insights = {};
+	this.attempts = 0;
 	// these have to be global
 	window.oz_async = true;
 	window.oz_cached_only = false;
@@ -39,6 +40,7 @@ proto.init = function (impl) {
 	ads = impl;
 	var config = context.config = ads.config('rubicon');
 	if (config && config.id && config.site) {
+		context.maxAttempts = config.maxAttempts || 10;
 		ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
 		context.decorateInitSlot();
 	} 
@@ -56,13 +58,18 @@ proto.initValuation = function (slotName) {
 	var config = context.config;
 	if (ads.utils.isFunction(window.RubiconInsight) ) {
 		var insight = context.insights[slotName] = new RubiconInsight();
-	} else {
+	} else if (context.attempts <= context.maxAttempts) {
+		context.attempts++;
 		ads.utils.timers.create(0.2, (function (slotName) {
 			return function () {
 				context.initValuation(slotName);
 			};
 		}(slotName)), 1);
 		return;
+	} else {
+		// dorothy js has failed to promptly load so undecorate initSlot
+		// no calls to the valuation api will be made
+		ads.slots.initSlot = _initSlot;
 	}
 
 
