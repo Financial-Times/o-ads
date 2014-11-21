@@ -56,27 +56,26 @@ proto.init = function (impl) {
 */
 proto.initValuation = function (slotName) {
 	var config = context.config;
-	if (ads.utils.isFunction(window.RubiconInsight) ) {
-		var insight = context.insights[slotName] = new RubiconInsight();
-	} else if (context.attempts <= context.maxAttempts) {
-		context.attempts++;
-		ads.utils.timers.create(0.2, (function (slotName) {
-			return function () {
-				context.initValuation(slotName);
-			};
-		}(slotName)), 1);
-		return;
-	} else {
-		// dorothy js has failed to promptly load so undecorate initSlot
-		// no calls to the valuation api will be made
-		ads.slots.initSlot = _initSlot;
-	}
-
-
 	var zone = (config && config.zones) ? config.zones[slotName] : false;
 	var size = (config && config.formats) ? config.formats[slotName] : false;
 
 	if (zone && size) {
+		if (ads.utils.isFunction(window.RubiconInsight) ) {
+			var insight = context.insights[slotName] = new RubiconInsight();
+		} else if (context.attempts <= context.maxAttempts) {
+			context.attempts++;
+			ads.utils.timers.create(0.2, (function (slotName) {
+				return function () {
+					context.initValuation(slotName);
+				};
+			}(slotName)), 1);
+			return;
+		} else {
+			// dorothy js has failed to promptly load so undecorate initSlot
+			// no calls to the valuation api will be made
+			ads.slots.initSlot = _initSlot;
+		}
+
 		insight.init({
 			oz_api: 'valuation',
 			oz_callback: context.valuationCallbackFactory(slotName),
