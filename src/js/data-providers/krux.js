@@ -129,10 +129,12 @@ proto.events = {
     },
     delegated : function(config){
         if (config) {
-            window.addEventListener('load', function() {
-                var delegate = new Delegate(document.body);
-                delegate.on(config.eType, config.selector, function(){alert('test');});
-            }, false);
+            for (event in config){
+                window.addEventListener('load', function() {
+                    var delegate = new Delegate(document.body);
+                    delegate.on(event.eType, event.selector, function(){alert('test');});
+                }, false);
+           }
         }
     }
 };
