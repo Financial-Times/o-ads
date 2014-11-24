@@ -126,6 +126,14 @@ proto.events = {
                 };
             }()), max, {reset: true});
         }
+    },
+    delegated : function(config){
+        if (config) {
+            window.addEventListener('load', function() {
+                var delegate = new Delegate(document.body);
+                delegate.on(config.eType, config.selector, function(){alert('test');});
+            }, false);
+        }
     }
 };
 
@@ -150,12 +158,6 @@ proto.events.init = function() {
             }
         }
     }
-};
-proto.events.delegated = function(selector, eType, id, attrs){
-  window.addEventListener('load', function() {
-    var delegate = new Delegate(document.body);
-    delegate.on('mousedown', selector, function(){alert('test');});
-  }, false);
 };
 
 
