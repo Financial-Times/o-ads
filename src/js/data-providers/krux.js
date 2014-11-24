@@ -129,10 +129,10 @@ proto.events = {
     },
     delegated : function(config){
         if (config) {
-            for (event in config){
+            for (kevent in config){
                 window.addEventListener('load', function() {
                     var delegate = new Delegate(document.body);
-                    delegate.on(event.eType, event.selector, function(){alert('test');});
+                    delegate.on(kevent.eType, kevent.selector, function(){alert('test');});
                 }, false);
            }
         }
