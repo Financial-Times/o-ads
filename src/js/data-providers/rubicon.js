@@ -58,7 +58,7 @@ proto.initValuation = function (slotName) {
 
     if (zone && size) {
         if (!ads.utils.isFunction(window.oz_insight)) {
-            context.attempts[slotName] = context.attempts[slotName] ? 0 : context.attempts[slotName] + 1;
+            context.attempts[slotName] = context.attempts[slotName] ? context.attempts[slotName] + 1 : 1;
             ads.utils.timers.create(0.2, (function (slotName) {
                 return function () {
                     context.initValuation(slotName);
