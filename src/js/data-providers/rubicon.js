@@ -20,12 +20,9 @@ var context; // used to store a local copy of ads.slots.initSlot
  * @constructor
 */
 function Rubicon() {
-	context = this;
-	this.insights = {};
-	this.attempts = 0;
-	// these have to be global
-	window.oz_async = true;
-	window.oz_cached_only = false;
+    context = this;
+    this.insights = {};
+    this.attempts = 0;
 }
 
 /**
@@ -37,13 +34,13 @@ function Rubicon() {
  * @lends Rubicon
 */
 proto.init = function (impl) {
-	ads = impl;
-	var config = context.config = ads.config('rubicon');
-	if (config && config.id && config.site) {
-		context.maxAttempts = config.maxAttempts || 10;
-		ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
-		context.decorateInitSlot();
-	} 
+    ads = impl;
+    var config = context.config = ads.config('rubicon');
+    if (config && config.id && config.site) {
+        context.maxAttempts = config.maxAttempts || 10;
+        ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
+        context.decorateInitSlot();
+    } 
 };
 
 
@@ -55,49 +52,41 @@ proto.init = function (impl) {
  * @lends Rubicon
 */
 proto.initValuation = function (slotName) {
-	var config = context.config;
-	var zone = (config && config.zones) ? config.zones[slotName] : false;
-	var size = (config && config.formats) ? config.formats[slotName] : false;
+    var config = context.config;
+    var zone = (config && config.zones) ? config.zones[slotName] : false;
+    var size = (config && config.formats) ? config.formats[slotName] : false;
 
-	if (zone && size) {
-		if (ads.utils.isFunction(window.RubiconInsight) ) {
-			var insight = context.insights[slotName] = new RubiconInsight();
-		} else if (context.attempts <= context.maxAttempts) {
-			context.attempts++;
-			ads.utils.timers.create(0.2, (function (slotName) {
-				return function () {
-					context.initValuation(slotName);
-				};
-			}(slotName)), 1);
-			return;
-		} else {
-			// dorothy js has failed to promptly load so undecorate initSlot
-			// and make the call for this slot
-			// no calls to the valuation api will be made
-			_initSlot.call(ads.slots, slotName);
-			ads.slots.initSlot = _initSlot;
-			return;
-		}
+    if (zone && size) {
+        if (!ads.utils.isFunction(window.oz_insight)) {
+            context.attempts++;
+            ads.utils.timers.create(0.2, (function (slotName) {
+                return function () {
+                    context.initValuation(slotName);
+                };
+            }(slotName)), 1);
+            return;
+        } else if (context.attempts === context.maxAttempts){
+            // dorothy js has failed to promptly load so undecorate initSlot
+            // and make the call for this slot
+            // no calls to the valuation api will be made
+            _initSlot.call(ads.slots, slotName);
+            ads.slots.initSlot = _initSlot;
+            return;
+        }
 
-		insight.init({
-			oz_api: 'valuation',
-			oz_callback: context.valuationCallbackFactory(slotName),
-			oz_ad_server: 'gpt',
-			oz_site: config.id + '/' + config.site,
-			oz_ad_slot_size: size,
-			oz_zone: zone,
-			oz_async: true
-		});
-
-		// hopefully temp fix while rubicon sort out their api
-		oz_onValuationLoaded = function(H) {
-			insight.onValuationLoaded(H); 
-		};
-
-		insight.start();
-	} else {
-		_initSlot.call(ads.slots, slotName);
-	}
+        // rubicon loves globals
+        window.oz_api = 'valuation';
+        window.oz_callback = context.valuationCallbackFactory(slotName);
+        window.oz_ad_server = 'gpt';
+        window.oz_async = true;
+        window.oz_cached_only = false;
+        window.oz_site = config.id + '/' + config.site;
+        window.oz_ad_slot_size = size;
+        window.oz_zone = zone;
+        window.oz_insight();
+    } else {
+        _initSlot.call(ads.slots, slotName);
+    }
 };
 
 /**
@@ -108,11 +97,11 @@ proto.initValuation = function (slotName) {
  * @lends Rubicon
 */    
 proto.valuationCallbackFactory = function (slotName) {
-	return function (results) {
-		// add results to slot targeting and run initSlot
-		document.getElementById(slotName).setAttribute('data-ftads-rtp', results.estimate.tier);
-		_initSlot.call(ads.slots, slotName);
-	}
+    return function (results) {
+        // add results to slot targeting and run initSlot
+        document.getElementById(slotName).setAttribute('data-ftads-rtp', results.estimate.tier);
+        _initSlot.call(ads.slots, slotName);
+    };
 };
 
 /**
@@ -122,11 +111,11 @@ proto.valuationCallbackFactory = function (slotName) {
  * @lends Rubicon
 */    
 proto.decorateInitSlot = function () {
-	if (ads.utils.isFunction(ads.slots.initSlot)) {
-		_initSlot = ads.slots.initSlot;
-		ads.slots.initSlot = context.initValuation;
-		return ads.slots.initSlot;
-	}
+    if (ads.utils.isFunction(ads.slots.initSlot)) {
+        _initSlot = ads.slots.initSlot;
+        ads.slots.initSlot = context.initValuation;
+        return ads.slots.initSlot;
+    }
 };
 
 

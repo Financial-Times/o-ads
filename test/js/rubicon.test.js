@@ -93,8 +93,8 @@
       FT.ads.slots.initSlot("leaderboard");
 
       ok(initValuation.called, 'ads.rubicon.initValuation called');
-      ok(FT.ads.rubicon.insights['leaderboard'].init.called, 'rubiconInsight.init is called');
-      ok(FT.ads.rubicon.insights['leaderboard'].start.called, 'rubiconInsight.start is called');
+      ok(window.oz_insight.called, 'rubiconInsight.init is called');
+      ok(window.oz_insight.called, 'rubiconInsight.start is called');
       initValuation.restore();
    });
 
