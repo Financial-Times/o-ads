@@ -144,12 +144,11 @@ proto.events = {
  */
     delegated : function(config){
         if (config) {
-            var del = [], i = 0;
+            var del = [], i;
              window.addEventListener('load', function(){
-                 for (var kevent in config){
+                 for (i = 0; i < config.lenght; i++;){
                       del[i] = new Delegate(document.body); 
-                      del[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
-                      i++;
+                      del[i].on(config[i].eType, config[i].selector, function(){console.log(config[i]);});
                  }
              }, false);
         }   
