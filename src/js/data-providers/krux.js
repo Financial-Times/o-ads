@@ -128,21 +128,22 @@ proto.events = {
         }
     },
     delegated : function(config){
-        if (config) {
-                var fire = this.fire;
+            if (config) {
+
                 window.addEventListener('load', function(){
-                    var delegate = new Delegate(document.body); 
+                    
                     for (var kevent in config){
+                        var delegate = new Delegate(document.body); 
                         delegate.on(config[kevent].eType, config[kevent].selector, function(){
                            // fire(config[kevent].id);
                            // console.log('fire' + config[kevent].id);
-                           console.log(kevent);
+                        console.log(kevent);
                          });
                     }
                 }, false);
+            }
         }
-    }
-};
+    };
 
 proto.events.fire = function (id, attrs) {
     if(id) {
