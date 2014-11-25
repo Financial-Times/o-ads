@@ -135,7 +135,7 @@ proto.events = {
               //  delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
                for (var kevent in config){
                   var delegate = new Delegate(document.body); 
-                   delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
+                   delegate.on(config[kevent].eType, config[kevent].selector, function(e, t){console.log('fire: ' + t);});
               }
             }, false);
         }
