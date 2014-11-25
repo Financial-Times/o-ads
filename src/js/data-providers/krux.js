@@ -130,15 +130,16 @@ proto.events = {
     delegated : function(config){
         if (config) {
                 var fire = this.fire;
-                window.addEventListener('load', function(){var delegate = new Delegate(document.body); 
-                 for ( var kevent in config){
-                                    delegate.on(config[kevent].eType, config[kevent].selector, function(){
-                                    fire(config[kevent].id);
-                                    console.log('fire' + config[kevent].id);
-                                    });
-                                }
-                    }, false);
-
+                window.addEventListener('load', function(){
+                    var delegate = new Delegate(document.body); 
+                    for (var kevent in config){
+                        delegate.on(config[kevent].eType, config[kevent].selector, function(){
+                           // fire(config[kevent].id);
+                           // console.log('fire' + config[kevent].id);
+                           console.log(kevent);
+                         });
+                    }
+                }, false);
         }
     }
 };
