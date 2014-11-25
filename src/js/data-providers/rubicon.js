@@ -22,7 +22,7 @@ var context; // used to store a local copy of ads.slots.initSlot
 function Rubicon() {
     context = this;
     this.insights = {};
-    this.attempts = 0;
+    this.attempts = {};
 }
 
 /**
@@ -58,14 +58,14 @@ proto.initValuation = function (slotName) {
 
     if (zone && size) {
         if (!ads.utils.isFunction(window.oz_insight)) {
-            context.attempts++;
+            context.attempts[slotName] = context.attempts[slotName] ? 0 : context.attempts[slotName] + 1;
             ads.utils.timers.create(0.2, (function (slotName) {
                 return function () {
                     context.initValuation(slotName);
                 };
             }(slotName)), 1);
             return;
-        } else if (context.attempts === context.maxAttempts){
+        } else if (context.attempts[slotName] === context.maxAttempts){
             // dorothy js has failed to promptly load so undecorate initSlot
             // and make the call for this slot
             // no calls to the valuation api will be made
