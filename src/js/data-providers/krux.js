@@ -148,7 +148,7 @@ proto.events = {
              window.addEventListener('load', function(){
                  for (i = 0; i < config.length; i++){
                       del[i] = new Delegate(document.body); 
-                      del[i].on(config[i].eType, config[i].selector, function(){console.log(config[i]);});
+                      del[i].on(config[i][1], config[i][0], function(){console.log(config[i]);});
                  }
              }, false);
         }   
