@@ -133,7 +133,8 @@ proto.events = {
                 window.addEventListener('load', function(){var delegate = new Delegate(document.body); 
                  for ( var kevent in config){
                                     delegate.on(config[kevent].eType, config[kevent].selector, function(){
-                                    this.fire(config[keyevent].id, {})
+                                    fire(config[kevent].id);
+                                    console.log('fire' + config[kevent].id);
                                     });
                                 }
                     }, false);
