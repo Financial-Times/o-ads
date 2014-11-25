@@ -127,33 +127,16 @@ proto.events = {
             }()), max, {reset: true});
         }
     },
-  /*  delegated : function(config){
-        if (config) {
-            var delegateArray = [], i = 0;
-             for (var kevent in config){
-                 delegateArray[i] = new Delegate(document.body); 
-                    window.addEventListener('load', function(){
-                     delegateArray[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
-               }, false);
-                 i++;
-            }
-
-           
-        }
-    }
- */
     delegated : function(config){
         if (config) {
-            var del = [], i;
-             window.addEventListener('load', function(){
-                 for (i = 0; i < config.all.length; i++){
-                      del[i] = new Delegate(document.body); 
-                      del[i].on(config.all[i][1], config.all[i][0], function(){console.log('fire' + i);});
-                 }
-             }, false);
-        }   
+            window.addEventListener('load', function(){
+                var delegate = new Delegate(document.body); 
+                for (var kevent in config){console.log(kevent);
+                    delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
+                }
+            }, false);
+        }
     }
-
 };
 
 proto.events.fire = function (id, attrs) {
