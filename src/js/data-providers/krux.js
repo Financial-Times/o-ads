@@ -147,7 +147,7 @@ proto.events = {
             var del = [], i = 0;
              window.addEventListener('load', function(){
                  for (var kevent in config){
-                     var del[i] = new Delegate(document.body); 
+                      del[i] = new Delegate(document.body); 
                       del[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
                  }
              }, false);
