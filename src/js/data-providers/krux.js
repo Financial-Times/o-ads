@@ -129,16 +129,12 @@ proto.events = {
     },
     delegated : function(config){
         if (config) {
-             var fire = this.fire;
+            var fire = this.fire;
             window.addEventListener('load', function(){
-
-                //  var delegate = new Delegate(document.body);
-                //  delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
+                    var delegate = new Delegate(document.body); 
                     for (var kevent in config){
-                        var delegate = new Delegate(document.body); 
                         delegate.on(config[kevent].eType, config[kevent].selector, function (kevent) {
                             return function(e, t){
-                                console.log(config[kevent]);
                                 fire(config[kevent].id);
                             };
                     }(kevent));
