@@ -131,7 +131,9 @@ proto.events = {
         if (config) {
             var delegateArray = [], i = 0;
             window.addEventListener('load', function(){
-                for (var kevent in config){console.log(kevent);
+                for (var kevent in config){
+                    debugger;
+                    console.log(kevent);
                     var delegateArray[i] = new Delegate(document.body); 
                     delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
                     i++;
