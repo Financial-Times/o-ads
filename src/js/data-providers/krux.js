@@ -131,14 +131,13 @@ proto.events = {
         if (config) {
             var delegateArray = [], i = 0;
              for (var kevent in config){
-            window.addEventListener('load', function(){
-               
-                    delegateArray[i] = new Delegate(document.body); 
-                    delegateArray[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
-                    console.log( delegateArray[i]);
-                    i++;
+                 delegateArray[i] = new Delegate(document.body); 
+                    window.addEventListener('load', function(){
+                     delegateArray[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
                }, false);
-                }
+                 i++;
+            }
+
            
         }
     }
