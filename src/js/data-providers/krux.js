@@ -136,7 +136,7 @@ proto.events = {
                     }, false);
 
         }
-    }
+    };
 };
 
 proto.events.fire = function (id, attrs) {
