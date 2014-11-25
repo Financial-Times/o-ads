@@ -58,6 +58,54 @@
             ok(window.Krux.calledWith('admEvent', eventId, attrs), 'firing an event with attributes works!');
         });
 
+        test('delegated', function(){
+            TEST.beginNewPage({
+                config: {
+                    krux: {
+                        id: '112233',
+                        events: {
+                            delegated: {
+                                shareTwitter : {
+                                    selector : '#kevents',
+                                    eType: 'click',
+                                    id : 'xyz'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+           window.Krux = TEST.sinon.Krux = sinon.stub();
+           FT.ads.krux.events.init();
+            
+            $('body').append('<div id="kevents">event</div>');
+
+                var fireEvent = function(element, event) {
+                    var evt;
+                    var isString = function(it) {
+                        return typeof it == "string" || it instanceof String;
+                    }
+                    element = (isString(element)) ? document.getElementById(element) : element;
+                    if (document.createEventObject) {
+                    // dispatch for IE
+                    evt = document.createEventObject();
+                    return element.fireEvent('on' + event, evt)
+                    }
+                    else {
+                    // dispatch for firefox + others
+                    evt = document.createEvent("HTMLEvents");
+                    evt.initEvent(event, true, true); // event type,bubbling,cancelable
+                    return !element.dispatchEvent(evt);
+                    }
+            }
+            fireEvent(window, 'load');
+            fireEvent('kevents', 'click');
+
+
+           console.log(window.Krux.calledOnce);
+           ok(window.Krux.calledWith('admEvent', 'xyz'), 'dom delegated event fired');
+           
+        });
         test('event pixel - dwell time', function () {
             var dwellTimeId = 'JCadw18P',
                 dwellTimeInterval = 10,
