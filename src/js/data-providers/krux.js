@@ -131,12 +131,12 @@ proto.events = {
         if (config) {
             window.addEventListener('load', function(){
                 console.log(Object.keys(config));
-                var delegate = new Delegate(document.body);
-                delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
-              //  for (var kevent in config){console.log(kevent);
-              //      var delegate = new Delegate(document.body); 
-              //      delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
-             //   }
+              //  var delegate = new Delegate(document.body);
+              //  delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
+               for (var kevent in config){
+                  var delegate = new Delegate(document.body); 
+                   delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
+              }
             }, false);
         }
     }
