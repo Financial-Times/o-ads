@@ -127,7 +127,7 @@ proto.events = {
             }()), max, {reset: true});
         }
     },
-    delegated : function(config){
+  /*  delegated : function(config){
         if (config) {
             var delegateArray = [], i = 0;
              for (var kevent in config){
@@ -141,6 +141,19 @@ proto.events = {
            
         }
     }
+ */
+    delegated : function(config){
+        if (config) {
+            var del = [], i = 0;
+             window.addEventListener('load', function(){
+                 for (var kevent in config){
+                     var del[i] = new Delegate(document.body); 
+                      del[i].on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
+                 }
+             }, false);
+        }   
+    }
+
 };
 
 proto.events.fire = function (id, attrs) {
