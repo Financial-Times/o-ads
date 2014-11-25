@@ -129,14 +129,12 @@ proto.events = {
     },
     delegated : function(config){
         if (config) {
-
-               // window.addEventListener('load', function() {
-               //     var delegate = new Delegate(document.body);
-               //     delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('test test test');});
-               // }, false);
+                var fire = this.fire;
                 window.addEventListener('load', function(){var delegate = new Delegate(document.body); 
                  for ( var kevent in config){
-                                    delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('test test test');});
+                                    delegate.on(config[kevent].eType, config[kevent].selector, function(){
+                                    this.fire(config[keyevent].id, {})
+                                    });
                                 }
                     }, false);
 
