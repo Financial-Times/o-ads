@@ -146,7 +146,7 @@ proto.events = {
         if (config) {
             var del = [], i;
              window.addEventListener('load', function(){
-                 for (i = 0; i < config.lenght; i++;){
+                 for (i = 0; i < config.length; i++;){
                       del[i] = new Delegate(document.body); 
                       del[i].on(config[i].eType, config[i].selector, function(){console.log(config[i]);});
                  }
