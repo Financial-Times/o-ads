@@ -134,7 +134,7 @@ proto.events = {
                 for (var kevent in config){console.log(kevent);
                     var delegateArray[i] = new Delegate(document.body); 
                     delegate.on(config[kevent].eType, config[kevent].selector, function(){console.log('fire: ' + kevent);});
-                    i++
+                    i++;
                 }
             }, false);
         }
