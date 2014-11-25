@@ -37,7 +37,7 @@ proto.init = function (impl) {
     ads = impl;
     var config = context.config = ads.config('rubicon');
     if (config && config.id && config.site) {
-        context.maxAttempts = config.maxAttempts || 10;
+        context.maxAttempts = config.maxAttempts || 3;
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
         context.decorateInitSlot();
     } 
@@ -79,7 +79,7 @@ proto.initValuation = function (slotName) {
         window.oz_callback = context.valuationCallbackFactory(slotName);
         window.oz_ad_server = 'gpt';
         window.oz_async = true;
-        window.oz_cached_only = true;
+        window.oz_cached_only = config.cached || true;
         window.oz_site = config.id + '/' + config.site;
         window.oz_ad_slot_size = size;
         window.oz_zone = zone;
