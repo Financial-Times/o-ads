@@ -129,14 +129,20 @@ proto.events = {
     },
     delegated : function(config){
         if (config) {
+             var fire = this.fire;
             window.addEventListener('load', function(){
-                console.log(Object.keys(config));
-              //  var delegate = new Delegate(document.body);
-              //  delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
-               for (var kevent in config){
-                  var delegate = new Delegate(document.body); 
-                   delegate.on(config[kevent].eType, config[kevent].selector, function(e, t){console.log(t);});
-              }
+
+                //  var delegate = new Delegate(document.body);
+                //  delegate.on(config[kevent].eType, config[kevent].selector, function(e, targ){console.log('fire: ' + targ);});
+                    for (var kevent in config){
+                        var delegate = new Delegate(document.body); 
+                        delegate.on(config[kevent].eType, config[kevent].selector, function (kevent) {
+                            return function(e, t){
+                                console.log(config[kevent]);
+                                this.fire(config[kevent].id);
+                            };
+                    }(kevent));
+                }
             }, false);
         }
     }
