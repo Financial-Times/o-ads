@@ -139,7 +139,7 @@ proto.events = {
                         delegate.on(config[kevent].eType, config[kevent].selector, function (kevent) {
                             return function(e, t){
                                 console.log(config[kevent]);
-                                this.fire(config[kevent].id);
+                                fire(config[kevent].id);
                             };
                     }(kevent));
                 }
