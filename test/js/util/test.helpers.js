@@ -230,8 +230,6 @@ test = {
             return this;
         }
     },
-    
-
     /* methods for clearing things */
     clear: {
         viewport: function (){
