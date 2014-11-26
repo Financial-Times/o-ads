@@ -13,8 +13,8 @@
 "use strict";
 var ads;
 var proto = Krux.prototype;
-var delegate, Delegate;
-Delegate = require('dom-delegate');
+var delegate;
+delegate = require('dom-delegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -125,14 +125,14 @@ proto.events = {
         if (config) {
             var fire = this.fire;
             window.addEventListener('load', function(){
-                    var delegate = new Delegate(document.body); 
-                    for (var kevent in config){
+                    var delEvnt = new delegate(document.body); 
+                    for (var kEvnt in config){
 
-                        delegate.on(config[kevent].eType, config[kevent].selector, function (kevent) {
+                        delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, function (kEvnt) {
                             return function(e, t){
-                                fire(config[kevent].id);
+                                fire(config[kEvnt].id);
                             };
-                    }(kevent));
+                    }(kEvnt));
                 }
             }, false);
         }
