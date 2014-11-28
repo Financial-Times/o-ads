@@ -340,7 +340,6 @@ $(function () {
         // TODO create a targeting section
         // these are all targeting options
         metadata: true,
-        audSci: true,
         socialReferrer: true,
         pageReferrer: true,
         cookieConsent:  true,
