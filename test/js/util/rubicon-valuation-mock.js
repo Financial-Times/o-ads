@@ -1,0 +1,1 @@
+window.oz_insight = sinon.stub();
