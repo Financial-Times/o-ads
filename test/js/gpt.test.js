@@ -131,7 +131,7 @@
            var result, stubOnSlot;
            stubOnSlot = FT.ads.slots['responsive-mpu'].gptSlot;
            expect(2);
-           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+           ok(googletag.defineUnit.calledOnce, 'the GPT define unit is called');
            ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 
         });
@@ -160,7 +160,7 @@
           FT.ads.gpt.init(FT.ads); // define method is run in the init
 
           FT.ads.slots.initSlot('no-responsive-mpu');
-          var result, stubOnSlot;
+          var result,
               stubOnSlot = FT.ads.slots['no-responsive-mpu'].gptSlot;
           expect(2);
           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
@@ -172,6 +172,25 @@
           TEST.beginNewPage();
           FT.ads.gpt.updateCorrelator();
           ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
+        });
+
+        test('fix the url for ad requests', function () {
+          TEST.beginNewPage({
+            container: 'url-slot',
+            config: {
+              canonical: 'http://www.ft.com',
+              formats: {
+                'url-slot': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
+          FT.ads.slots.initSlot('url-slot');
+
+          var slot = FT.ads.slots['url-slot'];
+          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'the GPT set method sets the page_url');
+
         });
     }
 

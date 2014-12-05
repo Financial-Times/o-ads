@@ -37,7 +37,8 @@ proto.defineSlot = function (slotName) {
         slot = ads.slots[slotName],
         slotId = slotName + '-gpt',
         wrap = ads.slots.addContainer(slot.container, slotId),
-        responsive = ads.config('responsive');
+        responsive = ads.config('responsive'),
+        canonical = ads.config('canonical');
 
     ads.utils.addClass(wrap, 'wrap');
     googletag.cmd.push(function (context, slot, slotName, slotId) {
@@ -46,15 +47,18 @@ proto.defineSlot = function (slotName) {
             if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.config.sizes)) {
                 currentSize = slot.config.sizes[context.responsive()];
                 var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
-                slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
+                slot.gptSlot = googletag.defineUnit(context.getUnitName(slotName), slotId);
                 slot.gptSlot.defineSizeMapping(sizeMapping);
             } else {
                 currentSize = slot.config.sizes;
                 slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
             }
             slot.gptSlot.addService(googletag.pubads());
+
             context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
             context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+
+            context.setSlotURL(slot.gptSlot, canonical);
             context.addCompanionService(slot);
             if (currentSize !== false) {
               googletag.cmd.push(googletag.display(slotId));
@@ -319,6 +323,20 @@ proto.setSlotCollapseEmpty = function (gptSlot, config) {
         gptSlot.setCollapseEmptyDiv(false);
     }
     return mode;
+};
+
+/**
+* Sets canonical url to be sent to google
+* prevents later url changes via javascript from breaking the ads
+* @name setSlotURL
+* @memberof GPT
+* @lends GPT
+*/
+proto.setSlotURL = function(gptSlot, url) {
+    if (url) {
+        gptSlot.set("page_url", url);
+    }
+    return gptSlot;
 };
 
 /**
