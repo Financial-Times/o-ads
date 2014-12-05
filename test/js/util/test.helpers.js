@@ -83,7 +83,7 @@ test = {
         container: function(data) {
           var name;
           if (data) {
-            $('<div id="' + data + '" ftads></div>').appendTo('#adCalls');
+            $('<div id="' + data + '" ftads></div>').appendTo(document.body);
           }
           return data;
         },
