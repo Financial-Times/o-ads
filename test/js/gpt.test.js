@@ -189,10 +189,27 @@
           FT.ads.slots.initSlot('url-slot');
 
           var slot = FT.ads.slots['url-slot'];
-          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'the GPT set method sets the page_url');
+          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'page url set via config');
 
-        });
-    }
+          TEST.beginNewPage({
+            canonical: 'http://www.ft.com/',
+            container: 'canonical-slot',
+            config: {
+              formats: {
+                'canonical-slot': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
+
+          FT.ads.slots.initSlot('canonical-slot');
+
+          var slot = FT.ads.slots['canonical-slot'];
+          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com/'), 'page url set via canonical link tag');
+
+    });
+  }
 
     $(runTests);
 }(window, document, jQuery));

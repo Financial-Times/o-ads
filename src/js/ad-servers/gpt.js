@@ -333,7 +333,7 @@ proto.setSlotCollapseEmpty = function (gptSlot, config) {
 * @lends GPT
 */
 proto.setSlotURL = function(gptSlot, url) {
-    if (url) {
+    if (ads.utils.isNonEmptyString(url)) {
         gptSlot.set("page_url", url);
     }
     return gptSlot;

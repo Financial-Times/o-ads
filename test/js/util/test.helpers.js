@@ -80,6 +80,10 @@ test = {
             }
             return data;
         },
+        canonical: function(url){
+            linktag = '<link rel="canonical" href="' + url + '" remove>';
+            $(linktag).appendTo('head');
+        },
         container: function(data) {
           var name;
           if (data) {
@@ -221,6 +225,9 @@ test = {
         meta: function () {
             $('meta[remove]').remove();
         },
+        canonical: function () {
+            $('link[remove]').remove();
+        },
         scripts: function () {
             //q$('script[ftads]').remove();
         },
@@ -327,6 +334,7 @@ window.TEST = {
 };
 
 $(function () {
+
     QUnit.testDone(function () {
         if (test.mode() === 'unit') {
                 test.clear.all();
@@ -335,6 +343,7 @@ $(function () {
 
     test.mode();
     test.mock.attach();
+
     FT.ads.init({
         collapseEmpty: 'ft',
         // TODO create a targeting section
