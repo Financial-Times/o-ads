@@ -122,19 +122,21 @@ proto.events = {
         }
     },
     delegated : function(config) {
-        if (config) {
-            var fire = this.fire;
-            window.addEventListener('load', function(){
-                    var delEvnt = new delegate(document.body); 
-                    for (var kEvnt in config){
+        if (window.addEventListener) {
+            if (config) {
+                var fire = this.fire;
+                window.addEventListener('load', function(){
+                        var delEvnt = new delegate(document.body); 
+                        for (var kEvnt in config){
 
-                        delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, function (kEvnt) {
-                            return function(e, t){
-                                fire(config[kEvnt].id);
-                            };
-                    }(kEvnt));
-                }
-            }, false);
+                            delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, function (kEvnt) {
+                                return function(e, t){
+                                    fire(config[kEvnt].id);
+                                };
+                        }(kEvnt));
+                    }
+                }, false);
+            }
         }
     }
 };
