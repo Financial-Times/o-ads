@@ -124,7 +124,7 @@ proto.events = {
     delegated : function(config) {
         if (config) {
             var fire = this.fire;
-            window.addEventListener('load', function(){
+            document.addEventListener('load', function(){
                     var delEvnt = new delegate(document.body); 
                     for (var kEvnt in config){
 
