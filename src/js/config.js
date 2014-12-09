@@ -83,7 +83,6 @@ function Config() {
                 sizes: [[160,600]]
             }
         },
-        audSciLimit : 35,
         collapseEmpty: 'ft'
     };
 

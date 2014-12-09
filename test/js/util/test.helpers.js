@@ -25,6 +25,25 @@ test = {
 
         return 'unit';
     },
+    fireEvent : function (element, event) {
+        var evt;
+        var isString = function(it) {
+            return typeof it == "string" || it instanceof String;
+        }
+        element = (isString(element)) ? document.getElementById(element) : element;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            return element.fireEvent('on' + event, evt)
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true); // event type,bubbling,cancelable
+            return !element.dispatchEvent(evt);
+        }
+     },
+
     /* methods for mocking things */
     mock: {
         viewport: function (width, height){
@@ -319,6 +338,7 @@ test = {
 
 window.TEST = {
     beginNewPage: test.beginNewPage,
+    fireEvent : test.fireEvent,
     sinon: test.sinon,
     mock: test.mock,
     mode: test.mode(),
@@ -340,7 +360,6 @@ $(function () {
         // TODO create a targeting section
         // these are all targeting options
         metadata: true,
-        audSci: true,
         socialReferrer: true,
         pageReferrer: true,
         cookieConsent:  true,

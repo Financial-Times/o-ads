@@ -20,7 +20,6 @@ function buildURLForVideo(zone, pos, vidKV){
         var buildCustomParams = function (vkv) {
             var allTargeting = ads.targeting();
                         var results = '',
-                        rsiSegs = allTargeting.a,
                         kruxSegs = allTargeting.ksg,
                         includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
                         var i;
@@ -34,9 +33,6 @@ function buildURLForVideo(zone, pos, vidKV){
                             }
                             if (key === 'ksg' && kruxSegs) {
                                 value=kruxSegs.slice(0,ads.config('kruxMaxSegs')).join(',');
-                            }
-                            if (key === 'a' && rsiSegs) {
-                                value = rsiSegs.slice(0, ads.config('audSciLimit')).join(',');
                             }
                             results += !value ? '' : key + '=' + value + '&';
                         }
@@ -66,7 +62,6 @@ function buildURLForVideo(zone, pos, vidKV){
             var allTargeting = ads.targeting();
             var results = '',
             dfp_targeting = ads.config('dfp_targeting'),
-            rsiSegs = allTargeting.a,
             kruxSegs = allTargeting.ksg,
             order;
             if (mode === 'video') {order=keyOrderVideo;}
@@ -85,9 +80,6 @@ function buildURLForVideo(zone, pos, vidKV){
                 }
                 if (key === 'ksg' && kruxSegs) {
                     value=kruxSegs.slice(0,ads.config('kruxMaxSegs')).join(';ksg=');
-                }
-                if (key === 'a' && rsiSegs) {
-                    value = rsiSegs.slice(0, ads.config('audSciLimit')).join(';a=');
                 }
                 results += !value ? '' : key + '=' + value + ';';
             }
