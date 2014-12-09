@@ -47,7 +47,7 @@ proto.defineSlot = function (slotName) {
             if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.config.sizes)) {
                 currentSize = slot.config.sizes[context.responsive()];
                 var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
-                slot.gptSlot = googletag.defineUnit(context.getUnitName(slotName), slotId);
+                slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
                 slot.gptSlot.defineSizeMapping(sizeMapping);
             } else {
                 currentSize = slot.config.sizes;
@@ -68,7 +68,9 @@ proto.defineSlot = function (slotName) {
     }(this, slot, slotName, slotId));
 
     if (slot.config.outOfPage) {
-        googletag.cmd.push(this.defineOutOfPage(this, slotName));
+        googletag.cmd.push(
+            this.defineOutOfPage(this, slotName)
+        );
     }
 
     return slot;
@@ -95,6 +97,8 @@ proto.defineOutOfPage = function (context, slotName) {
         slot.oopSlot = oopSlot;
 
         context.setSlotTargeting(oopSlot, slot.config.targeting);
+        context.setSlotURL(oopSlot, canonical);
+
         googletag.cmd.push(googletag.display(slotId));
     };
 };

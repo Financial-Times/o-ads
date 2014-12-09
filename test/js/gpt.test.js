@@ -131,7 +131,7 @@
            var result, stubOnSlot;
            stubOnSlot = FT.ads.slots['responsive-mpu'].gptSlot;
            expect(2);
-           ok(googletag.defineUnit.calledOnce, 'the GPT define unit is called');
+           ok(googletag.defineSlot.calledOnce, 'the GPT define unit is called');
            ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 
         });
