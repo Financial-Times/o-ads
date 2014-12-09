@@ -49,7 +49,7 @@ if (!Array.prototype.indexOf) {
     };
 }
 
-this.Element && Element.prototype.attachEvent && !Element.prototype.addEventListener && (function () {
+window.Element && Element.prototype.attachEvent && !Element.prototype.addEventListener && (function () {
   function addToPrototype(name, method) {
     Window.prototype[name] = HTMLDocument.prototype[name] = Element.prototype[name] = method;
   }
