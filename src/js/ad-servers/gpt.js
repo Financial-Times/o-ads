@@ -38,7 +38,7 @@ proto.defineSlot = function (slotName) {
         slotId = slotName + '-gpt',
         wrap = ads.slots.addContainer(slot.container, slotId),
         responsive = ads.config('responsive'),
-        canonical = ads.config('canonical');
+        canonical = context.canonical = ads.config('canonical');
 
     ads.utils.addClass(wrap, 'wrap');
     googletag.cmd.push(function (context, slot, slotName, slotId) {
@@ -97,7 +97,7 @@ proto.defineOutOfPage = function (context, slotName) {
         slot.oopSlot = oopSlot;
 
         context.setSlotTargeting(oopSlot, slot.config.targeting);
-        context.setSlotURL(oopSlot, canonical);
+        context.setSlotURL(oopSlot, context.canonical);
 
         googletag.cmd.push(googletag.display(slotId));
     };
