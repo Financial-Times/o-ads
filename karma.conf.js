@@ -13,7 +13,7 @@ var browsers = ['Chrome_with_flags'];
 var browserify = { debug: true };
 var junitReporter = {outputFile: './test-results.xml' };
 
-// add OS specific browsercb()s
+// add OS specific browsers
 if(/^win/.test(process.platform)){
   browsers.push('IE');
 } else if (process.platform === 'darwin') {
@@ -23,7 +23,7 @@ if(/^win/.test(process.platform)){
 if (process.env.CI === 'true') {
 // In the CI environment set an environment variable CI = 'true'
 // CI options go here
-//  browsers.push('Firefox');
+  browsers.push('Firefox');
   singleRun = true;
   autoWatch = false;
 }
@@ -43,11 +43,14 @@ module.exports = function(config) {
     autoWatch: autoWatch,
     frameworks: ['qunit', 'browserify'],
     files: [
+      'node_modules/qunitjs/qunit/qunit.css',
       'bower_components/jquery-1.7.2.min/index.js',
       'bower_components/jquery.cookie/index.js',
       'bower_components/sinon-1.10.3/index.js',
       'bower_components/sinon.ie.timers-1.10.3/index.js',
-      'test/js/util/gpt-mock.js',
+      {pattern: 'test/mocks/*', included: false},
+      {pattern: 'test/fixtures/*', included: false},
+      {pattern: 'test/mocks/gpt-mock.js', included: true},
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
     ],

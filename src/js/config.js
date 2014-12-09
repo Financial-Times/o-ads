@@ -29,7 +29,7 @@ var ads;
 * @class
 * @constructor
 */
-function Config() {    
+function Config() {
 /**
 * Default configuration set in the constructor.
 */
@@ -183,8 +183,6 @@ function setDFPSiteForEnv() {
         if (!!clear) {
             access.clear();
         }
-
-
 
 /**
 * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
