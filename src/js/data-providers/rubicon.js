@@ -61,14 +61,14 @@ proto.initValuation = function (slotName) {
             context.attempts[slotName] = context.attempts[slotName] ? context.attempts[slotName] + 1 : 1;
             if (!context.timer){
                 context.timer = ads.utils.timers.create(0.2, (function (slotName) {
-                        return function () {
-                            context.processQueue();
-                        };
+                    return function () {
+                        context.processQueue();
+                    };
                 }(slotName)), 1);
             }
 
             if (!~context.queue.indexOf(slotName)) {
-                queue.push(slotName);
+                context.queue.push(slotName);
             }
 
             return;
