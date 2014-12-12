@@ -21,7 +21,7 @@ var context; // used to store a local copy of ads.slots.initSlot
 */
 function Rubicon() {
     context = this;
-    this.insights = {};
+    this.queue = [];
     this.attempts = {};
 }
 
@@ -40,7 +40,7 @@ proto.init = function (impl) {
         context.maxAttempts = config.maxAttempts || 3;
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
         context.decorateInitSlot();
-    } 
+    }
 };
 
 
@@ -59,11 +59,18 @@ proto.initValuation = function (slotName) {
     if (zone && size) {
         if (!ads.utils.isFunction(window.oz_insight) && context.attempts[slotName] !== context.maxAttempts) {
             context.attempts[slotName] = context.attempts[slotName] ? context.attempts[slotName] + 1 : 1;
-            ads.utils.timers.create(0.2, (function (slotName) {
-                return function () {
-                    context.initValuation(slotName);
-                };
-            }(slotName)), 1);
+            if (!context.timer){
+                context.timer = ads.utils.timers.create(0.2, (function (slotName) {
+                        return function () {
+                            context.processQueue();
+                        };
+                }(slotName)), 1);
+            }
+
+            if (!~context.queue.indexOf(slotName)) {
+                queue.push(slotName);
+            }
+
             return;
         } else if (context.attempts[slotName] === context.maxAttempts){
             // dorothy js has failed to promptly load so undecorate initSlot
@@ -95,7 +102,7 @@ proto.initValuation = function (slotName) {
  * @name init
  * @memberof Rubicon
  * @lends Rubicon
-*/    
+*/
 proto.valuationCallbackFactory = function (slotName) {
     return function (results) {
         // add results to slot targeting and run initSlot
@@ -106,15 +113,30 @@ proto.valuationCallbackFactory = function (slotName) {
 
 /**
  * Decorate initSlot to make a valuation request
- * @name init
+ * @name decorateInitSlot
  * @memberof Rubicon
  * @lends Rubicon
-*/    
+*/
 proto.decorateInitSlot = function () {
     if (ads.utils.isFunction(ads.slots.initSlot)) {
         _initSlot = ads.slots.initSlot;
         ads.slots.initSlot = context.initValuation;
         return ads.slots.initSlot;
+    }
+};
+
+/**
+ * Process queue
+ * @name processQueue
+ * @memberof Rubicon
+ * @lends Rubicon
+*/
+proto.processQueue = function () {
+    if (context.queue.length) {
+        var slotName;
+        while (slotName = context.queue.pop()) {
+            context.initValuation(slotName);
+        }
     }
 };
 
