@@ -7,7 +7,7 @@
 
 // EventListener | CC0 | github.com/jonathantneal/EventListener
 
-this.Element && Element.prototype.attachEvent && !Element.prototype.addEventListener && (function () {
+window.Element && Element.prototype.attachEvent && !Element.prototype.addEventListener && (function () {
   function addToPrototype(name, method) {
     Window.prototype[name] = HTMLDocument.prototype[name] = Element.prototype[name] = method;
   }
@@ -15,7 +15,7 @@ this.Element && Element.prototype.attachEvent && !Element.prototype.addEventList
   // add
   addToPrototype("addEventListener", function (type, listener) {
     var
-    target = this,
+    target = window,
     listeners = target.addEventListener.listeners = target.addEventListener.listeners || {},
     typeListeners = listeners[type] = listeners[type] || [];
 
@@ -56,7 +56,7 @@ this.Element && Element.prototype.attachEvent && !Element.prototype.addEventList
   // remove
   addToPrototype("removeEventListener", function (type, listener) {
     var
-    target = this,
+    target = window,
     listeners = target.addEventListener.listeners = target.addEventListener.listeners || {},
     typeListeners = listeners[type] = listeners[type] || [];
 
@@ -78,7 +78,7 @@ this.Element && Element.prototype.attachEvent && !Element.prototype.addEventList
   // dispatch
   addToPrototype("dispatchEvent", function (eventObject) {
     var
-    target = this,
+    target = window,
     type = eventObject.type,
     listeners = target.addEventListener.listeners = target.addEventListener.listeners || {},
     typeListeners = listeners[type] = listeners[type] || [];
@@ -97,7 +97,7 @@ this.Element && Element.prototype.attachEvent && !Element.prototype.addEventList
   // CustomEvent
   Object.defineProperty(Window.prototype, "CustomEvent", {
     get: function () {
-      var self = this;
+      var self = window;
 
       return function CustomEvent(type, eventInitDict) {
         var event = self.document.createEventObject(), key;
