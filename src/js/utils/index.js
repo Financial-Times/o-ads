@@ -7,7 +7,7 @@
 
 // EventListener | CC0 | github.com/jonathantneal/EventListener
 
-this.Element && Element.prototype.attachEvent && !Element.prototype.addEventListener && (function () {
+windo.Element && window.prototype.attachEvent && !window.prototype.addEventListener && (function () {
   function addToPrototype(name, method) {
     Window.prototype[name] = HTMLDocument.prototype[name] = Element.prototype[name] = method;
   }
@@ -15,7 +15,7 @@ this.Element && Element.prototype.attachEvent && !Element.prototype.addEventList
   // add
   addToPrototype("addEventListener", function (type, listener) {
     var
-    target = this,
+    target = window,
     listeners = target.addEventListener.listeners = target.addEventListener.listeners || {},
     typeListeners = listeners[type] = listeners[type] || [];
 
