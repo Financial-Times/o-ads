@@ -233,7 +233,6 @@ function extend() {
   // Return the modified object
   return target;
 };
-
 module.exports.hasClass = function(node, className){
   if(node.nodeType === 1){
       return node.className.split(' ').indexOf(className) > -1 ? true : false;
@@ -293,6 +292,16 @@ module.exports.hash = function (str, delimiter, pairing) {
   return hash;
 };
 
+
+
+function scriptOnloadFallback(tag, callback) {
+  if (tag.readyState=='loaded' || scriptElement.readyState=='completed') {
+       callback();
+   } else {
+       setTimeout(function() {ieLoadBugFix(scriptElement, callback); }, 100);
+   }
+}
+
 /**
 * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
 * The async value of the script can be set by the seccond parameter, which is a boolean
@@ -301,13 +310,28 @@ module.exports.hash = function (str, delimiter, pairing) {
 * @memberof FT._ads.utils
 * @lends FT._ads.utils
 */
-module.exports.attach = function (scriptUrl, async) {
+module.exports.attach = function (scriptUrl, async, callback) {
   var tag = document.createElement('script'),
-  node = document.getElementsByTagName('script')[0];
+  obj_hop = Object.prototype.hasOwnProperty,
+  node = document.getElementsByTagName('script')[0],
+  hasRun = false;
   tag.setAttribute('src', scriptUrl);
   tag.setAttribute('ftads', '');
-  if (async){
+
+  if (async) {
     tag.async = 'true';
+  }
+
+  if (utils.isFunction(callback)) {
+    tag.onload = function () {
+      if(!hasRun) {
+        callback();
+      }
+    };
+
+    if (obj_hop.call(tag, 'onreadystatechange')) {
+      tag.onreadystatechange = tag.onload;
+    }
   }
 
   // Use insert before, append child has issues with script tags in some browsers.
