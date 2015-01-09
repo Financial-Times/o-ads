@@ -38,6 +38,7 @@ proto.init = function (impl) {
     var config = context.config = ads.config('rubicon');
     if (config && config.id && config.site) {
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site, true, function(){
+            console.log('dorothy loaded processing queue');
             context.processQueue();
             ads.slots.initSlot = context.initValuation;
         });
@@ -59,6 +60,7 @@ proto.initValuation = function (slotName) {
     var size = (config && config.formats) ? config.formats[slotName] : false;
 
     if (zone && size) {
+        console.log('doing a valution for ', slotName);
         // rubicon loves globals
         window.oz_api = 'valuation';
         window.oz_callback = context.valuationCallbackFactory(slotName, config.target);
@@ -115,6 +117,7 @@ proto.decorateInitSlot = function () {
  * @lends Rubicon
 */
 proto.addToQueue = function (slotName) {
+    console.log(slotName, 'added to queue');
     if (!~context.queue.indexOf(slotName)) {
         context.queue.push(slotName);
     }

@@ -49,6 +49,7 @@ if (!Array.prototype.indexOf) {
     };
 }
 
+
 var utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
@@ -231,7 +232,8 @@ function extend() {
 
   // Return the modified object
   return target;
-};
+}
+
 module.exports.hasClass = function(node, className){
   if(node.nodeType === 1){
       return node.className.split(' ').indexOf(className) > -1 ? true : false;

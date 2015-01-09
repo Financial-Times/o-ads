@@ -18,7 +18,7 @@ function Slots() {
 var proto = Slots.prototype;
 
 proto.init = function (impl){
-    ads = impl;     
+    ads = impl;
 };
 
 /**
@@ -147,7 +147,7 @@ proto.centerContainer = function (container) {
 */
 //TODO Refactor this code into the chartbeat module
 proto.addChartBeatTracking = function(container, slotName) {
-        container.setAttribute('data-cb-ad-id', slotName);
+    container.setAttribute('data-cb-ad-id', slotName);
 };
 /**
 * Given an array of slotnames will collapse the slots using the collapse method on the slot
@@ -200,6 +200,7 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
+    console.log(slotName, 'requesting slot');
     if (this[slotName]) {
         return false;
     }
