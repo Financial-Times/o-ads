@@ -61,7 +61,7 @@ module.exports = function(config) {
     },
 
     browsers: browsers,
-    browserify: browserify,
+    browserify: { transform: ['debowerify']},
     reporters: ['progress', 'junit'],
     junitReporter: junitReporter,
     preprocessors: { 'test/js/util/test.helpers.js': ['browserify']},

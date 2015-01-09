@@ -12,7 +12,7 @@
         });
 
         test('init', function () {
-            TEST.beginNewPage({config: {krux: false, timestamp: false, audSci : false}});
+            TEST.beginNewPage({config: {krux: false, timestamp: false}});
             FT.ads.gpt.init(FT.ads);
 
             ok(TEST.sinon.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
@@ -21,7 +21,7 @@
         test('set page targeting', function () {
             expect(2);
             googletag.cmd.push.reset();
-            TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, audSci : false, dfp_targeting: ';some=test;targeting=params'}});
+            TEST.beginNewPage({config: {cookieConsent: false, krux: false, timestamp: false, dfp_targeting: ';some=test;targeting=params'}});
             var result = FT.ads.gpt.setPageTargeting(),
                 expected = {some: 'test', targeting: 'params'};
             deepEqual(result, expected, 'setting dfp_targeting in config works');
@@ -124,14 +124,14 @@
                     large: [[336,280]]
                  }
               }
-           },  krux: false, timestamp: false, audSci : false}});
+           },  krux: false, timestamp: false}});
            FT.ads.gpt.init(FT.ads); // define method is run in the init
 
            FT.ads.slots.initSlot('responsive-mpu');
            var result, stubOnSlot;
            stubOnSlot = FT.ads.slots['responsive-mpu'].gptSlot;
            expect(2);
-           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+           ok(googletag.defineSlot.calledOnce, 'the GPT define unit is called');
            ok(stubOnSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 
         });
@@ -148,7 +148,6 @@
               },
               krux: false,
               timestamp: false,
-              audSci : false,
               formats: {
                 'no-responsive-mpu': {
                    sizes: [[300, 250]]
@@ -160,7 +159,7 @@
           FT.ads.gpt.init(FT.ads); // define method is run in the init
 
           FT.ads.slots.initSlot('no-responsive-mpu');
-          var result, stubOnSlot;
+          var result,
               stubOnSlot = FT.ads.slots['no-responsive-mpu'].gptSlot;
           expect(2);
           ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
@@ -173,7 +172,43 @@
           FT.ads.gpt.updateCorrelator();
           ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
         });
-    }
+
+        test('fix the url for ad requests', function () {
+          TEST.beginNewPage({
+            container: 'url-slot',
+            config: {
+              canonical: 'http://www.ft.com',
+              formats: {
+                'url-slot': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
+          FT.ads.slots.initSlot('url-slot');
+
+          var slot = FT.ads.slots['url-slot'];
+          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'page url set via config');
+
+          TEST.beginNewPage({
+            canonical: 'http://www.ft.com/',
+            container: 'canonical-slot',
+            config: {
+              formats: {
+                'canonical-slot': {
+                   sizes: [[300, 250]]
+                }
+              }
+            }
+          });
+
+          FT.ads.slots.initSlot('canonical-slot');
+
+          var slot = FT.ads.slots['canonical-slot'];
+          ok(slot.gptSlot.set.calledWith('page_url', 'http://www.ft.com/'), 'page url set via canonical link tag');
+
+    });
+  }
 
     $(runTests);
 }(window, document, jQuery));

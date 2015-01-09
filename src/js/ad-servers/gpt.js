@@ -37,7 +37,8 @@ proto.defineSlot = function (slotName) {
         slot = ads.slots[slotName],
         slotId = slotName + '-gpt',
         wrap = ads.slots.addContainer(slot.container, slotId),
-        responsive = ads.config('responsive');
+        responsive = ads.config('responsive'),
+        canonical = context.canonical = ads.config('canonical');
 
     ads.utils.addClass(wrap, 'wrap');
     googletag.cmd.push(function (context, slot, slotName, slotId) {
@@ -53,8 +54,11 @@ proto.defineSlot = function (slotName) {
                 slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
             }
             slot.gptSlot.addService(googletag.pubads());
+
             context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
             context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+
+            context.setSlotURL(slot.gptSlot, canonical);
             context.addCompanionService(slot);
             if (currentSize !== false) {
               googletag.cmd.push(googletag.display(slotId));
@@ -64,7 +68,9 @@ proto.defineSlot = function (slotName) {
     }(this, slot, slotName, slotId));
 
     if (slot.config.outOfPage) {
-        googletag.cmd.push(this.defineOutOfPage(this, slotName));
+        googletag.cmd.push(
+            this.defineOutOfPage(this, slotName)
+        );
     }
 
     return slot;
@@ -91,6 +97,8 @@ proto.defineOutOfPage = function (context, slotName) {
         slot.oopSlot = oopSlot;
 
         context.setSlotTargeting(oopSlot, slot.config.targeting);
+        context.setSlotURL(oopSlot, context.canonical);
+
         googletag.cmd.push(googletag.display(slotId));
     };
 };
@@ -319,6 +327,20 @@ proto.setSlotCollapseEmpty = function (gptSlot, config) {
         gptSlot.setCollapseEmptyDiv(false);
     }
     return mode;
+};
+
+/**
+* Sets canonical url to be sent to google
+* prevents later url changes via javascript from breaking the ads
+* @name setSlotURL
+* @memberof GPT
+* @lends GPT
+*/
+proto.setSlotURL = function(gptSlot, url) {
+    if (ads.utils.isNonEmptyString(url)) {
+        gptSlot.set("page_url", url);
+    }
+    return gptSlot;
 };
 
 /**
