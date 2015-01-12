@@ -38,8 +38,11 @@ proto.init = function (impl) {
     var config = context.config = ads.config('rubicon');
     if (config && config.id && config.site) {
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site, true, function(){
-            context.processQueue();
+            context.processQueue(context.initValuation);
             ads.slots.initSlot = context.initValuation;
+        }, function () {
+            context.processQueue(_initSlot);
+            ads.slots.initSlot = _initSlot;
         });
         context.decorateInitSlot();
     }
@@ -127,11 +130,11 @@ proto.addToQueue = function (slotName) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.processQueue = function () {
+proto.processQueue = function (action) {
     if (context.queue.length) {
         var slotName;
         while (slotName = context.queue.pop()) {
-            context.initValuation(slotName);
+            action(slotName);
         }
     }
 };

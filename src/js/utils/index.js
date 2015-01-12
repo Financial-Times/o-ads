@@ -311,7 +311,7 @@ function scriptOnloadFallback(tag, callback) {
 * @memberof FT._ads.utils
 * @lends FT._ads.utils
 */
-module.exports.attach = function (scriptUrl, async, callback) {
+module.exports.attach = function (scriptUrl, async, callback, errorcb) {
   var tag = document.createElement('script'),
   obj_hop = Object.prototype.hasOwnProperty,
   node = document.getElementsByTagName('script')[0],
@@ -325,11 +325,21 @@ module.exports.attach = function (scriptUrl, async, callback) {
 
   if (utils.isFunction(callback)) {
     tag.onload = function () {
-      console.log(arguments)
       if(!hasRun) {
         callback();
+        hasRun = true;
       }
     };
+
+    if (utils.isFunction(errorcb)) {
+      tag.onerror = function () {
+        if(!hasRun) {
+          errorcb();
+          hasRun = true;
+        }
+      };
+    }
+
 
     if (obj_hop.call(tag, 'onreadystatechange')) {
       tag.onreadystatechange = tag.onload;
