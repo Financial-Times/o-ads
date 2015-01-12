@@ -133,7 +133,7 @@ proto.addToQueue = function (slotName) {
 proto.processQueue = function (action) {
     if (context.queue.length) {
         var slotName;
-        while (slotName = context.queue.pop()) {
+        while (slotName = context.queue.shift()) {
             action(slotName);
         }
     }
