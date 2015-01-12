@@ -40,7 +40,7 @@ proto.init = function (impl) {
         context.maxAttempts = config.maxAttempts || 3;
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site);
         context.decorateInitSlot();
-    } 
+    }
 };
 
 
@@ -95,11 +95,11 @@ proto.initValuation = function (slotName) {
  * @name init
  * @memberof Rubicon
  * @lends Rubicon
-*/    
+*/
 proto.valuationCallbackFactory = function (slotName) {
     return function (results) {
         // add results to slot targeting and run initSlot
-        document.getElementById(slotName).setAttribute('data-ftads-rtp', results.estimate.tier);
+        document.getElementById(slotName).setAttribute('data-o-ads-rtp', results.estimate.tier);
         _initSlot.call(ads.slots, slotName);
     };
 };
@@ -109,7 +109,7 @@ proto.valuationCallbackFactory = function (slotName) {
  * @name init
  * @memberof Rubicon
  * @lends Rubicon
-*/    
+*/
 proto.decorateInitSlot = function () {
     if (ads.utils.isFunction(ads.slots.initSlot)) {
         _initSlot = ads.slots.initSlot;
