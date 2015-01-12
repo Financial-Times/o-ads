@@ -325,6 +325,7 @@ module.exports.attach = function (scriptUrl, async, callback) {
 
   if (utils.isFunction(callback)) {
     tag.onload = function () {
+      console.log(arguments)
       if(!hasRun) {
         callback();
       }
