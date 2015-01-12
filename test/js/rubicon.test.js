@@ -19,7 +19,7 @@
          FT.ads.rubicon.init(FT.ads);
 
          ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is not attached to the page');
-      })
+      });
 
       test('init - enable rubicon', function () {
          var decorateInitSlot = sinon.spy(FT.ads.rubicon, 'decorateInitSlot');
@@ -37,11 +37,11 @@
 
          FT.ads.rubicon.decorateInitSlot();
 
-         equal(FT.ads.slots.initSlot, FT.ads.rubicon.initValuation, 'ads.slots.initSlot is decorated by ads.rubicon.initValuation');
+         equal(FT.ads.slots.initSlot, FT.ads.rubicon.addToQueue, 'ads.slots.initSlot is decorated by ads.rubicon.initValuation');
       });
 
       test('test rubicon insight - no rubicon mapping for given site and size', function () {
-         var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
+         var addToQueue = sinon.spy(FT.ads.rubicon, 'addToQueue');
          TEST.beginNewPage({
              config: {
                  dfp_site: 'test.5887.home',
@@ -62,15 +62,18 @@
          FT.ads.rubicon.init(FT.ads);
          FT.ads.slots.initSlot('mpu');
 
-         ok(initValuation.called, 'ads.rubicon.initValuation called');
-         ok(!(FT.ads.rubicon.insights && FT.ads.rubicon.insights['mpu']), 'rubiconInsight.init is not created');
-         ok(!(FT.ads.rubicon.insights && FT.ads.rubicon.insights['mpu']), 'rubiconInsight.start is not created');
+         ok(addToQueue.called, 'ads.rubicon.addToQueue called');
+         equal(FT.ads.rubicon.queue[0], 'mpu', 'mpu is added to the queue');
 
-         initValuation.restore();
+         FT.ads.rubicon.processQueue();
+         ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
+         ok(!window.oz_insight.called,'no valuation is intialised');
+
+         addToQueue.restore();
       });
 
    test('test rubicon insight - rubicon mapping for given site and size', function () {
-      var initValuation = sinon.spy(FT.ads.rubicon, 'initValuation');
+      var addToQueue = sinon.spy(FT.ads.rubicon, 'addToQueue');
       TEST.beginNewPage({
          container: 'leaderboard',
          config: {
@@ -90,12 +93,16 @@
       });
 
       FT.ads.rubicon.init(FT.ads);
-      FT.ads.slots.initSlot("leaderboard");
+      FT.ads.slots.initSlot('leaderboard');
 
-      ok(initValuation.called, 'ads.rubicon.initValuation called');
-      ok(window.oz_insight.called, 'rubiconInsight.init is called');
-      ok(window.oz_insight.called, 'rubiconInsight.start is called');
-      initValuation.restore();
+      ok(addToQueue.called, 'ads.rubicon.addToQueue called');
+      equal(FT.ads.rubicon.queue[0], 'leaderboard', 'leaderboard is added to the queue');
+
+      FT.ads.rubicon.processQueue();
+      ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
+      ok(window.oz_insight.called,'a valuation is intialised');
+
+      addToQueue.restore();
    });
 
    }

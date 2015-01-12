@@ -200,7 +200,6 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
-    console.log(slotName, 'requesting slot');
     if (this[slotName]) {
         return false;
     }

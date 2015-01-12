@@ -5,9 +5,6 @@ var fn, googletag = window.googletag || {};
 var stubs = googletag.sinon = sinon.sandbox.create();
 //var stubs = sinon;
 googletag.getEventLog = stubs.stub();
-googletag.defineOutOfPageSlot = stubs.stub();
-googletag.defineSlot = stubs.stub();
-googletag.defineUnit = stubs.stub();
 googletag.defineSizeMapping = stubs.stub();
 googletag.display = stubs.stub();
 googletag.enableServices = stubs.stub();
@@ -27,6 +24,7 @@ var gptSlot = {
 
 googletag.defineUnit = stubs.stub().returns(gptSlot);
 googletag.defineSlot = stubs.stub().returns(gptSlot);
+googletag.defineOutOfPageSlot = stubs.stub().returns(gptSlot);
 
 googletag.sizeMapping = stubs.stub().returns({
   addSize: stubs.stub(),

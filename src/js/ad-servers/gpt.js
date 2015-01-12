@@ -91,8 +91,8 @@ proto.defineOutOfPage = function (context, slotName) {
     return function() {
         var oopSlot;
 
-        oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotId)
-                    .addService(googletag.pubads());
+        oopSlot = googletag.defineOutOfPageSlot(context.getUnitName(slotName), slotId);
+        oopSlot.addService(googletag.pubads());
 
         slot.oopSlot = oopSlot;
 
