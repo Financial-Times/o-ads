@@ -29,6 +29,25 @@ test = {
 
         return 'unit';
     },
+    fireEvent : function (element, event) {
+        var evt;
+        var isString = function(it) {
+            return typeof it == "string" || it instanceof String;
+        }
+        element = (isString(element)) ? document.getElementById(element) : element;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            return element.fireEvent('on' + event, evt)
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true); // event type,bubbling,cancelable
+            return !element.dispatchEvent(evt);
+        }
+     },
+
     /* methods for mocking things */
     mock: {
         viewport: function (width, height){
@@ -84,10 +103,14 @@ test = {
             }
             return data;
         },
+        canonical: function(url){
+            linktag = '<link rel="canonical" href="' + url + '" remove>';
+            $(linktag).appendTo('head');
+        },
         container: function(data) {
           var name;
           if (data) {
-            $('<div id="' + data + '" ftads></div>').appendTo('#adCalls');
+            $('<div id="' + data + '" ftads></div>').appendTo(document.body);
           }
           return data;
         },
@@ -230,6 +253,9 @@ test = {
         meta: function () {
             $('meta[remove]').remove();
         },
+        canonical: function () {
+            $('link[remove]').remove();
+        },
         scripts: function () {
             //q$('script[ftads]').remove();
         },
@@ -328,6 +354,7 @@ test = {
 
 window.TEST = {
     beginNewPage: test.beginNewPage,
+    fireEvent : test.fireEvent,
     sinon: test.sinon,
     mock: test.mock,
     mode: test.mode(),
@@ -336,6 +363,7 @@ window.TEST = {
 };
 
 $(function () {
+
     QUnit.testDone(function () {
         if (test.mode() === 'unit') {
                 test.clear.all();
@@ -344,12 +372,12 @@ $(function () {
 
     test.mode();
     test.mock.attach();
+
     FT.ads.init({
         collapseEmpty: 'ft',
         // TODO create a targeting section
         // these are all targeting options
         metadata: true,
-        audSci: true,
         socialReferrer: true,
         pageReferrer: true,
         cookieConsent:  true,

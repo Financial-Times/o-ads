@@ -49,7 +49,6 @@ if (!Array.prototype.indexOf) {
     };
 }
 
-
 var utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,

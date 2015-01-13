@@ -16,14 +16,17 @@ googletag.content = stubs.stub();
 googletag.disablePublisherConsole = stubs.stub();
 googletag.sizeMapping = stubs.stub();
 googletag.getVersion = stubs.stub();
-
-googletag.defineSlot = stubs.stub().returns({
+var gptSlot = {
      addService: stubs.stub(),
      setCollapseEmptyDiv: stubs.stub(),
      renderEnded: stubs.stub(),
      setTargeting: stubs.stub(),
-     defineSizeMapping: stubs.stub()
-});
+     defineSizeMapping: stubs.stub(),
+     set: stubs.stub()
+};
+
+googletag.defineUnit = stubs.stub().returns(gptSlot);
+googletag.defineSlot = stubs.stub().returns(gptSlot);
 
 googletag.sizeMapping = stubs.stub().returns({
   addSize: stubs.stub(),

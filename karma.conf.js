@@ -51,6 +51,7 @@ module.exports = function(config) {
       {pattern: 'test/mocks/*', included: false},
       {pattern: 'test/fixtures/*', included: false},
       {pattern: 'test/mocks/gpt-mock.js', included: true},
+      {pattern: 'test/js/util/rubicon-valuation-mock.js', included: true},
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
     ],
@@ -63,7 +64,7 @@ module.exports = function(config) {
     },
 
     browsers: browsers,
-    browserify: browserify,
+    browserify: { transform: ['debowerify']},
     reporters: ['progress', 'junit'],
     junitReporter: junitReporter,
     preprocessors: { 'test/js/util/test.helpers.js': ['browserify']},
