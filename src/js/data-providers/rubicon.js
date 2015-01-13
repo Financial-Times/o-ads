@@ -86,13 +86,11 @@ proto.initValuation = function (slotName) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.valuationCallbackFactory = function (slotName, target) {
+proto.valuationCallbackFactory = function (slotName) {
     return function (results) {
         // add results to slot targeting and run initSlot
-        document.getElementById(slotName).setAttribute('data-ftads-rtp', results.estimate.tier);
-        if (target) {
-            _initSlot.call(ads.slots, slotName);
-        }
+        document.getElementById(slotName).setAttribute('data-o-ads-rtp', results.estimate.tier);
+        _initSlot.call(ads.slots, slotName);
     };
 };
 

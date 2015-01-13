@@ -317,9 +317,8 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
   node = document.getElementsByTagName('script')[0],
   hasRun = false;
   tag.setAttribute('src', scriptUrl);
-  tag.setAttribute('ftads', '');
-
-  if (async) {
+  tag.setAttribute('o-ads', '');
+  if (async){
     tag.async = 'true';
   }
 

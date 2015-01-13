@@ -23,7 +23,7 @@ proto.init = function (impl){
 
 /**
 * Collects configuration values from data attributes set on the slots container,
-* attributes should be in the format ftads-attrname (data- can also be added)
+* attributes should be in the format o-ads-attrname (data- can also be added)
 * Only certain attribute names are parsed, all attributes without a parser are
 * added to the slots targeting parameters as a key value
 * parsed attributes are:
@@ -83,7 +83,7 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
         /* because host Objects don't inherit has own property in IE8
         /* we have to call it from the Object prototype
         */
-        if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(ad|ftads)-(.+)/)) ) {
+        if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(o-ads|ad|ftads)-(.+)/)) ) {
             name = matches[3];
             parser = ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
             parser(name, attrObj.value);
