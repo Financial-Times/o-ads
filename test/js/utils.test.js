@@ -312,7 +312,7 @@
 
             FT._ads.utils.attach('../js/util/attach.js');
             equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.' );
-            equal($('script[ftads]').size(), 1, 'the script tag has an ftads attribute');
+            equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
             // wait for a maximum of 5 seconds for the google code to load
             // the display methods is tested to see if the lib is available
 

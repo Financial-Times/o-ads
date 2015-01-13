@@ -304,7 +304,7 @@ module.exports.attach = function (scriptUrl, async) {
   var tag = document.createElement('script'),
   node = document.getElementsByTagName('script')[0];
   tag.setAttribute('src', scriptUrl);
-  tag.setAttribute('ftads', '');
+  tag.setAttribute('o-ads', '');
   if (async){
     tag.async = 'true';
   }

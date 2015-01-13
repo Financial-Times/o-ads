@@ -110,7 +110,7 @@ test = {
         container: function(data) {
           var name;
           if (data) {
-            $('<div id="' + data + '" ftads></div>').appendTo(document.body);
+            $('<div id="' + data + '" o-ads></div>').appendTo(document.body);
           }
           return data;
         },
@@ -257,10 +257,10 @@ test = {
             $('link[remove]').remove();
         },
         scripts: function () {
-            //q$('script[ftads]').remove();
+            //q$('script[o-ads]').remove();
         },
         container: function (){
-            $('div[ftads]').remove();
+            $('div[o-ads]').remove();
         },
         gpt: function () {
             if(window.googletag && googletag.sinon){
