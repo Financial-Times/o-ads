@@ -94,7 +94,7 @@
                    }
                });
                iframeSrc.pop(); //remove the current file name from the location
-               iframeSrc.push('/base/test/fixtures/cookie-iframe.html'); // add the file name of our iframe doc
+               iframeSrc.push('base/test/fixtures/cookie-iframe.html'); // add the file name of our iframe doc
                iframe.src = iframeSrc.join('/');
                document.body.appendChild(iframe);
            });

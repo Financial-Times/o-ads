@@ -14,7 +14,7 @@
             });
 
            FT.ads.krux.init(FT.ads);
-           ok($('script[src*="util/krux.js"][ftads]').size() === 1, 'the krux control tag file is attached to the page');
+           ok($('script[src*="mocks/krux.js"][ftads]').size() === 1, 'the krux control tag file is attached to the page');
         });
 
         test('targeting data is generated correctly', function () {
@@ -82,7 +82,7 @@
             TEST.fireEvent('kevents', 'click');
             ok(window.Krux.calledWith('admEvent', 'xyz'), 'dom delegated event fired');
         });
-        
+
         test('event pixel - dwell time', function () {
             var dwellTimeId = 'JCadw18P',
                 dwellTimeInterval = 10,
