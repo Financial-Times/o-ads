@@ -127,20 +127,6 @@ function Config() {
 /**
 * @private
 * @function
-* fetchGlobalConfig pulls out the FT.env global config object if it exists and returns it.
-*/
-
-//TODO: this is FT specfic content and needs to be removed
-    var fetchGlobalConfig = function() {
-        if (window.FT && ads.utils.isObject(FT.env)){
-            return FT.env;
-        } else {
-            return {};
-        }
-    };
-/**
-* @private
-* @function
 * fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
 */
 //TODO update this function to only pull out cookies related to ad config rather than the entire object
@@ -204,7 +190,7 @@ function setDFPSiteForEnv() {
 */
         if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
             if (ads.utils.cookie('ftads:mode_t') === "testuser"){
-                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchGlobalConfig(), fetchCookieConfig());
+                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchCookieConfig());
 
                 var siteCookie = ads.utils.cookie('ftads:dfpsite');
                 if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
@@ -216,7 +202,7 @@ function setDFPSiteForEnv() {
                 }
             }
         } else {
-            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchGlobalConfig());
+            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
             setDFPSiteForEnv();
         }
         return store;
