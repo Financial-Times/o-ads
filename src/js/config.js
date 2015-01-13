@@ -148,19 +148,6 @@ function Config() {
         return ads.utils.cookies;
     };
 
-//TODO: this whole method is FT Specific move it into what ever becomes of the switcher
-// getDFPSite will check the value of the FTQA cookie and the FT.Properties.ENV value and return either a live or test dfpsite value based on the config.
-function setDFPSiteForEnv() {
-    var env, site = store.dfp_site;
-    if (window.FT && FT.Properties && FT.Properties.ENV) {
-        env = FT.Properties.ENV.toLowerCase();
-        if (env !== 'p') {
-            site = site.replace(/^\w+\./, "test.");
-            store.dfp_site = site;
-        }
-    }
-}
-
 /**
 * @function
 * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
