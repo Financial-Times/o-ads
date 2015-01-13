@@ -70,9 +70,6 @@ test = {
                 });
             }
         },
-        global: function(data) {
-            FT.env = data || {};
-        },
         window: function(data){
             var prop;
             for (prop in data){
@@ -333,7 +330,6 @@ test = {
             mockData = $.extend(true, {
                 cookies: {},
                 localStorage: {},
-                global: {},
                 window: {},
                 referrer: '',
                 querystring: ''

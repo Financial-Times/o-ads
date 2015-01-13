@@ -25,7 +25,7 @@
         test("Video Miniplayer URL Stem", function () {
             var result;
             TEST.beginNewPage({
-              global: {'dfp_site': 'ftcom.5887.home', 'dfp_zone': 'dev', 'dfp_targeting': 'XXXX;pt=ind'}
+              config: {'dfp_site': 'ftcom.5887.home', 'dfp_zone': 'dev', 'dfp_targeting': 'XXXX;pt=ind'}
             });
             result = FT.ads.buildURLForVideo("uk","video",{});
             strictEqual(result.urlStem,'http://ad.uk.doubleclick.net/N5887/pfadx/ftcom.5887.home/dev;sz=592x333,400x225;pos=video;XXXX;pt=ind');
