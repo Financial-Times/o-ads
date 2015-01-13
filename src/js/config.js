@@ -184,13 +184,10 @@ function Config() {
                     var splitSite = (store.dfp_site || '').split('.');
                     splitSite[0] = siteCookie;
                     store.dfp_site = splitSite.join('.');
-                } else {
-                    setDFPSiteForEnv();
                 }
             }
         } else {
             store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
-            setDFPSiteForEnv();
         }
         return store;
     };
