@@ -349,7 +349,7 @@
         );
         test("isScriptAlreadyLoaded method when script is present", function(){
             expect(1);
-            var url = location.protocol + "//"  + location.host + "/base/test/js/util/null.js",
+            var url = location.protocol + "//"  + location.host + "/base/test/mocks/null.js",
                 tag = document.createElement('script'),
                 node = document.getElementsByTagName('script')[0];
             tag.setAttribute('src', url);

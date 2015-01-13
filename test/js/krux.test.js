@@ -14,7 +14,7 @@
             });
 
            FT.ads.krux.init(FT.ads);
-           ok($('script[src*="util/krux.js"][o-ads]').size() === 1, 'the krux control tag file is attached to the page');
+           ok($('script[src*="mocks/krux.js"][o-ads]').size() === 1, 'the krux control tag file is attached to the page');
         });
 
         test('targeting data is generated correctly', function () {
