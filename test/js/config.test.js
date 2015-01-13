@@ -91,17 +91,6 @@
             else {ok(true, "JSON is not defined");}
         });
 
-        // test('Config fetchCookieConfig', function () {
-
-        // });
-
-        test('Config fetchGlobalConfig', function () {
-            TEST.beginNewPage({global: {globablconf1: 'Mondo Value!!'}});
-            var result =  FT.ads.config();
-            ok(result.hasOwnProperty('globablconf1'), 'Global (env) values have been added to config');
-            equal(FT.ads.config('globablconf1'), 'Mondo Value!!', 'Config returns the correct value');
-        });
-
         test('Config defaults', function () {
             TEST.beginNewPage();
             var result =  FT.ads.config();
@@ -113,30 +102,6 @@
             TEST.beginNewPage({cookies: {'ftads:mode_t': 'testuser', network: 'over-ride'}});
             equal(FT.ads.config('network'), 'over-ride', 'the global config network property should be over-ridden by the network value set in the cookie, as we have set the test mode cookie ');
         });
-
-        test('Config over-ride for dfp_site', function () {
-            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:dfpsite': 'test'}});
-            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'without test mode site is unaffected');
-
-            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser'}});
-            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'without dfpsite config is unaffected');
-
-            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'test'}});
-            equal(FT.ads.config('dfp_site'), 'test.5887.home', 'with test mode and dfpsite set to test, production config is updated to show test ads');
-
-            TEST.beginNewPage({global: {'dfp_site': 'test.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'ftcom'}});
-            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'with test mode and dfpsite set to ftcom, test config is updated to show live ads');
-
-            TEST.beginNewPage({global: {'dfp_site': 'test.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'test'}});
-            equal(FT.ads.config('dfp_site'), 'test.5887.home', 'with test mode and dfpsite set to test, test config is updated to show test ads');
-
-            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'ftcom'}});
-            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'with test mode and dfpsite set to ftcom, production config is updated to show live ads');
-
-            TEST.beginNewPage({global: {'dfp_site': 'ftcom.5887.home'}, cookies: {'ftads:mode_t': 'testuser', 'ftads:dfpsite': 'milkshake'}});
-            equal(FT.ads.config('dfp_site'), 'ftcom.5887.home', 'invalid cookie value does not affect the dfp_site value');
-        });
-
 
     }
 
