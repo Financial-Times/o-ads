@@ -29,7 +29,7 @@ var ads;
 * @class
 * @constructor
 */
-function Config() {    
+function Config() {
 /**
 * Default configuration set in the constructor.
 */
@@ -109,6 +109,21 @@ function Config() {
         return results;
     };
 
+
+/**
+* @private
+* @function
+* fetchCanonicalURL Grabs the canonical URL of the page.
+*/
+    var fetchCanonicalURL = function() {
+        var canonical,
+            canonicalTag = document.querySelector('link[rel="canonical"]');
+        if(canonicalTag) {
+           canonical = canonicalTag.href;
+        }
+        return { canonical: canonical };
+    };
+
 /**
 * @private
 * @function
@@ -183,15 +198,13 @@ function setDFPSiteForEnv() {
             access.clear();
         }
 
-
-
 /**
 * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
 * this allows QA Testers to over-ride global and meta config.
 */
         if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
             if (ads.utils.cookie('ftads:mode_t') === "testuser"){
-                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig(), fetchCookieConfig());
+                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchGlobalConfig(), fetchCookieConfig());
 
                 var siteCookie = ads.utils.cookie('ftads:dfpsite');
                 if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
@@ -203,7 +216,7 @@ function setDFPSiteForEnv() {
                 }
             }
         } else {
-            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchGlobalConfig());
+            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchGlobalConfig());
             setDFPSiteForEnv();
         }
         return store;

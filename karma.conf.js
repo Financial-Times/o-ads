@@ -10,10 +10,10 @@ var singleRun = false;
 var autoWatch = true;
 var browsers = ['Chrome_with_flags'];
 //var browsers = ['Chrome', 'Firefox'];
-var browserify = { debug: true };
+var browserify = { transform: ['debowerify'] };
 var junitReporter = {outputFile: './test-results.xml' };
 
-// add OS specific browsercb()s
+// add OS specific browsers
 if(/^win/.test(process.platform)){
   browsers.push('IE');
 } else if (process.platform === 'darwin') {
@@ -23,9 +23,12 @@ if(/^win/.test(process.platform)){
 if (process.env.CI === 'true') {
 // In the CI environment set an environment variable CI = 'true'
 // CI options go here
-//  browsers.push('Firefox');
+  browsers.push('Firefox');
   singleRun = true;
   autoWatch = false;
+} else {
+  //options for local go here
+  browserify.debug = true;
 }
 
 if (process.env.TRAVIS === 'true'){
@@ -43,12 +46,16 @@ module.exports = function(config) {
     autoWatch: autoWatch,
     frameworks: ['qunit', 'browserify'],
     files: [
+      'node_modules/qunitjs/qunit/qunit.css',
       'bower_components/jquery-1.7.2.min/index.js',
       'bower_components/jquery.cookie/index.js',
       'bower_components/sinon-1.10.3/index.js',
       'bower_components/sinon.ie.timers-1.10.3/index.js',
-      'test/js/util/gpt-mock.js',
-      'test/js/util/rubicon-valuation-mock.js',
+      {pattern: 'test/mocks/gpt-mock.js', included: true},
+      {pattern: 'test/mocks/rubicon-valuation-mock.js', included: true},
+      /* mocks that can't be loaded dynamically must be included beofre this */
+      {pattern: 'test/mocks/*', included: false},
+      {pattern: 'test/fixtures/*', included: false},
       'test/js/util/test.helpers.js',
       'test/js/*.test.js'
     ],
@@ -61,7 +68,7 @@ module.exports = function(config) {
     },
 
     browsers: browsers,
-    browserify: { transform: ['debowerify']},
+    browserify: browserify,
     reporters: ['progress', 'junit'],
     junitReporter: junitReporter,
     preprocessors: { 'test/js/util/test.helpers.js': ['browserify']},

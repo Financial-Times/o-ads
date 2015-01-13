@@ -7,6 +7,10 @@ window.FT._ads = window.FT.ads = require('./../../../main.js');
 
 if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
 
+if(!window.opener){
+    $('<div id="qunit"></div>').appendTo(document.body);
+}
+
 var localstorage = {},
 globalVars = {},
 cookies = {},
@@ -27,14 +31,14 @@ test = {
     },
     fireEvent : function (element, event) {
         var evt;
-        var isString = function(it) {
+        function isString(it) {
             return typeof it == "string" || it instanceof String;
         }
         element = (isString(element)) ? document.getElementById(element) : element;
         if (document.createEventObject) {
             // dispatch for IE
             evt = document.createEventObject();
-            return element.fireEvent('on' + event, evt)
+            return element.fireEvent('on' + event, evt);
         }
         else {
             // dispatch for firefox + others
@@ -99,10 +103,14 @@ test = {
             }
             return data;
         },
+        canonical: function(url){
+            linktag = '<link rel="canonical" href="' + url + '" remove>';
+            $(linktag).appendTo('head');
+        },
         container: function(data) {
           var name;
           if (data) {
-            $('<div id="' + data + '" ftads></div>').appendTo('#adCalls');
+            $('<div id="' + data + '" ftads></div>').appendTo(document.body);
           }
           return data;
         },
@@ -149,7 +157,12 @@ test = {
                 if (!test.sinon.localStorage) {
                     test.sinon.localStorage = {};
                     if (FT.ads.utils.isFunction(Object.defineProperty)) {
-                        Object.defineProperty(window , 'localStorage', { value: stubs, configurable: true, writable: true });
+                        try {
+                            Object.defineProperty(window , 'localStorage', { value: stubs, configurable: true, writable: true });
+                        } catch (err) {
+                            // this will fail is some browsers where you can't override host properties (Safari)
+                            // but without it Firefox will not let you mock local storage
+                        }
                     }
 
                     for(stub in stubs) {
@@ -215,15 +228,15 @@ test = {
                     function (scriptUrl, async) {
                         function matchFile(url) {
                             var mockFiles = {
-                                'controltag': 'krux.js'
-                                //'gpt.js': 'gpt.js'
+                                'controltag': 'krux.js',
+                                'gpt.js': 'null.js'
                             },
                             splitUrl = url.split('?')[0].split('/'),
                             filename =  splitUrl.pop();
                             return mockFiles[filename] || 'null.js';
                         }
                         //attach files using the karma path, if we move away from karma this will need to change
-                        return attach('base/test/js/util/' + matchFile(scriptUrl), async);
+                        return attach('base/test/mocks/' + matchFile(scriptUrl), async);
                     }
                 );
             }
@@ -239,6 +252,9 @@ test = {
         },
         meta: function () {
             $('meta[remove]').remove();
+        },
+        canonical: function () {
+            $('link[remove]').remove();
         },
         scripts: function () {
             //q$('script[ftads]').remove();
@@ -347,6 +363,7 @@ window.TEST = {
 };
 
 $(function () {
+
     QUnit.testDone(function () {
         if (test.mode() === 'unit') {
                 test.clear.all();
@@ -355,6 +372,7 @@ $(function () {
 
     test.mode();
     test.mock.attach();
+
     FT.ads.init({
         collapseEmpty: 'ft',
         // TODO create a targeting section
