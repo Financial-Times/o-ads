@@ -198,8 +198,6 @@ function setDFPSiteForEnv() {
             access.clear();
         }
 
-
-
 /**
 * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
 * this allows QA Testers to over-ride global and meta config.
