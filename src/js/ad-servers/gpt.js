@@ -422,12 +422,12 @@ proto.init = function (impl) {
         googletag.pubads().enableAsyncRendering();
         googletag.pubads().addEventListener('slotRenderEnded', function(event) {
             if (ads.utils.isFunction(ads.renderEnded)) {
-                var gptSlotId = event.slot.getSlotId(),
-                    domId = gptSlotId.getDomId().split('-'),
-                    iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+                var gptSlotId = event.slot.getSlotId();
+                var domId = gptSlotId.getDomId().split('-');
+                var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 
                 event.iframe = document.getElementById(iframeId);
-                event.name = domId[0];
+                var name = event.name = domId[0];
                 event.slotType = domId[1];
                 event.slot = ads.slots[name];
                 ads.renderEnded(event);
