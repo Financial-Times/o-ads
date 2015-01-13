@@ -290,13 +290,17 @@
 
         test("hash method", function() {
             var result, test = "a:1,b:2,c:3,a:12";
-            expect(4);
+            expect(6);
             result = FT._ads.utils.hash( test, ",", ":" );
 
             ok( FT._ads.utils.isObject( result ), "the result is an object" );
             deepEqual( result.b, '2', "Key b properly hashed (as string data)" );
             deepEqual( result.c, '3', "Key c properly hashed" );
             deepEqual( result.a, '12', "Duplicate keys properly hashed" );
+
+            result = FT._ads.utils.hash( [], ",", ":" );
+            ok( FT._ads.utils.isObject( result ), "Attempting to hash a invlid type returns an object." );
+            equal( Object.keys(result).length, 0, "the object is empty." );
 
         });
 
