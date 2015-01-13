@@ -31,14 +31,14 @@ test = {
     },
     fireEvent : function (element, event) {
         var evt;
-        var isString = function(it) {
+        function isString(it) {
             return typeof it == "string" || it instanceof String;
         }
         element = (isString(element)) ? document.getElementById(element) : element;
         if (document.createEventObject) {
             // dispatch for IE
             evt = document.createEventObject();
-            return element.fireEvent('on' + event, evt)
+            return element.fireEvent('on' + event, evt);
         }
         else {
             // dispatch for firefox + others
@@ -229,7 +229,7 @@ test = {
                         function matchFile(url) {
                             var mockFiles = {
                                 'controltag': 'krux.js',
-                                'gpt.js': 'gpt-mock.js'
+                                'gpt.js': 'null.js'
                             },
                             splitUrl = url.split('?')[0].split('/'),
                             filename =  splitUrl.pop();
