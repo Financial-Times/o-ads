@@ -278,17 +278,17 @@ module.exports.writeScript = function (url) {
 module.exports.hash = function (str, delimiter, pairing) {
   var pair, value, idx, len,
     hash = {};
+  if (str && str.split) {
+    str = str.split(delimiter);
 
-  str = str.split(delimiter);
-
-  for (idx = 0, len = str.length; idx < len; idx += 1) {
-    value = str[idx];
-    pair = value.split(pairing);
-    if (pair.length > 1) {
-      hash[pair[0].trim()] = pair.slice(1).join(pairing);
+    for (idx = 0, len = str.length; idx < len; idx += 1) {
+      value = str[idx];
+      pair = value.split(pairing);
+      if (pair.length > 1) {
+        hash[pair[0].trim()] = pair.slice(1).join(pairing);
+      }
     }
   }
-
   return hash;
 };
 
@@ -304,7 +304,7 @@ module.exports.attach = function (scriptUrl, async) {
   var tag = document.createElement('script'),
   node = document.getElementsByTagName('script')[0];
   tag.setAttribute('src', scriptUrl);
-  tag.setAttribute('ftads', '');
+  tag.setAttribute('o-ads', '');
   if (async){
     tag.async = 'true';
   }
