@@ -17,22 +17,22 @@
             equal(result.loggedIn, false, 'the user is not logged in');
 
             TEST.beginNewPage({cookies : {FT_U: '_EID=1111111_PID=4009036331_TIME=%5BTue%2C+06-Aug-2013+11%3A54%3A53+GMT%5D_SKEY=lUM4QDoONobvNQGGJP3ETA%3D%3D_RI=0_I=1'}});
-            var result = FT.ads.metadata.getLoginInfo();
+            result = FT.ads.metadata.getLoginInfo();
             equal(result.eid, '1111111', 'FT_U set returns correct eid (1111111)');
             equal(result.loggedIn, true, 'the user is logged in');
 
             TEST.beginNewPage({cookies : {FT_Remember: '222222:TK1583990837682794904:FNAME=Bat:LNAME=man:EMAIL=batman@not.wayne.enterprises.com'}});
-            var result = FT.ads.metadata.getLoginInfo();
+            result = FT.ads.metadata.getLoginInfo();
             equal(result.eid, '222222', 'FT_Remember set returns correct eid (222222)');
             equal(result.loggedIn, true, 'the user is logged in');
 
             TEST.beginNewPage({cookies : { FT_U: '_EID=333333_PID=4009036331_TIME=%5BTue%2C+06-Aug-2013+11%3A54%3A53+GMT%5D_SKEY=lUM4QDoONobvNQGGJP3ETA%3D%3D_RI=0_I=1_', FT_Remember: '444444:TK1583990837682794904:FNAME=Bat:LNAME=man:EMAIL=batman@not.wayne.enterprises.com'}});
-            var result = FT.ads.metadata.getLoginInfo();
+            result = FT.ads.metadata.getLoginInfo();
             equal(result.eid, '333333', 'FT_U and FT_Remember set returns eid (333333) from FT_U');
             equal(result.loggedIn, true, 'the user is logged in');
 
             TEST.beginNewPage({cookies : { FTSession: '4009036331'}});
-            var result = FT.ads.metadata.getLoginInfo();
+            result = FT.ads.metadata.getLoginInfo();
             equal(result.eid, null, 'No FT_U or FT_Remember set but FTSession is present, returns eid (null) but logged in true');
             equal(result.loggedIn, true, 'the user is logged in');
         });
@@ -74,7 +74,7 @@
 
 
         test("FT.ads.metadata.page()", function () {
-            TEST.beginNewPage({window:{siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"}, global: {dfp_site: 'test.site', dfp_zone: 'test.zone'}});
+            TEST.beginNewPage({window:{siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"}, config: {dfp_site: 'test.site', dfp_zone: 'test.zone'}});
             var result = FT.ads.metadata.page();
             var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", uuid: undefined, auuid: undefined, dfpSite: 'test.site', dfpZone: 'test.zone'};
             deepEqual(result, expected, "The correct values are returned");
