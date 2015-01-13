@@ -65,7 +65,7 @@
          ok(addToQueue.called, 'ads.rubicon.addToQueue called');
          equal(FT.ads.rubicon.queue[0], 'mpu', 'mpu is added to the queue');
 
-         FT.ads.rubicon.processQueue();
+         FT.ads.rubicon.processQueue(FT.ads.rubicon.initValuation);
          ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
          ok(!window.oz_insight.called,'no valuation is intialised');
 
@@ -98,7 +98,7 @@
       ok(addToQueue.called, 'ads.rubicon.addToQueue called');
       equal(FT.ads.rubicon.queue[0], 'leaderboard', 'leaderboard is added to the queue');
 
-      FT.ads.rubicon.processQueue();
+      FT.ads.rubicon.processQueue(FT.ads.rubicon.initValuation);
       ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
       ok(window.oz_insight.called,'a valuation is intialised');
 
