@@ -22,7 +22,6 @@ var context;
 */
 function Rubicon() {
     context = this;
-    this.queue = [];
 }
 
 /**
@@ -35,14 +34,15 @@ function Rubicon() {
 */
 proto.init = function (impl) {
     ads = impl;
+    context.queue = ads.utils.queue(context.initValuation);
     var config = context.config = ads.config('rubicon');
     if (config && config.id && config.site) {
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site, true, function(){
-            context.processQueue(context.initValuation);
-            ads.slots.initSlot = context.initValuation;
+            context.queue.process();
         }, function () {
-            context.processQueue(_initSlot);
-            ads.slots.initSlot = _initSlot;
+            if(config.target){
+                context.queue.setProcessor(_initSlot).process();
+            }
         });
         context.decorateInitSlot();
     }
@@ -103,44 +103,16 @@ proto.valuationCallbackFactory = function (slotName, config) {
 proto.decorateInitSlot = function () {
     if (ads.utils.isFunction(ads.slots.initSlot)) {
         _initSlot = ads.slots.initSlot;
-        ads.slots.initSlot = context.addToQueue;
+        if(!context.config.target){
+            ads.slots.initSlot = function (slotName){
+                context.queue.add(slotName);
+                _initslot(slotName);
+            };
+        } else {
+            ads.slots.initSlot = context.queue.add;
+        }
         return ads.slots.initSlot;
     }
 };
-
-/**
- * Add to queue
- * add an item to the queue while we wait for external dependencies
- * @name addToQueue
- * @memberof Rubicon
- * @lends Rubicon
-*/
-proto.addToQueue = function (slotName) {
-    if (!~context.queue.indexOf(slotName)) {
-        context.queue.push(slotName);
-    }
-
-    var config = context.config;
-    if (!config.target) {
-        _initSlot.call(ads.slots, slotName);
-    }
-};
-
-/**
- * Process queue
- * once external dependencies have loaded process requests that have been queued
- * @name processQueue
- * @memberof Rubicon
- * @lends Rubicon
-*/
-proto.processQueue = function (action) {
-    if (context.queue.length) {
-        var slotName;
-        while (slotName = context.queue.shift()) {
-            action(slotName);
-        }
-    }
-};
-
 
 module.exports = new Rubicon();
