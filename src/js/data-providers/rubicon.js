@@ -72,9 +72,7 @@ proto.initValuation = function (slotName) {
         window.oz_ad_slot_size = size;
         window.oz_zone = zone;
         window.oz_insight();
-    }
-
-    if (!config.target || !(zone && size)) {
+    } else if(config.target){
         _initSlot.call(ads.slots, slotName);
     }
 };
@@ -86,11 +84,13 @@ proto.initValuation = function (slotName) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.valuationCallbackFactory = function (slotName) {
+proto.valuationCallbackFactory = function (slotName, config) {
     return function (results) {
         // add results to slot targeting and run initSlot
         document.getElementById(slotName).setAttribute('data-o-ads-rtp', results.estimate.tier);
-        _initSlot.call(ads.slots, slotName);
+        if(config.target){
+            _initSlot.call(ads.slots, slotName);
+        }
     };
 };
 
@@ -118,6 +118,11 @@ proto.decorateInitSlot = function () {
 proto.addToQueue = function (slotName) {
     if (!~context.queue.indexOf(slotName)) {
         context.queue.push(slotName);
+    }
+
+    var config = context.config;
+    if (!config.target) {
+        _initSlot.call(ads.slots, slotName);
     }
 };
 
