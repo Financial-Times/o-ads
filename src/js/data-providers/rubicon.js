@@ -111,7 +111,9 @@ proto.decorateInitSlot = function () {
                 _initSlot.call(ads.slots, slotName);
             };
         } else {
-            ads.slots.initSlot = context.queue.add;
+            ads.slots.initSlot = function(slotName){
+                context.queue.add(slotName);
+            }
         }
         return ads.slots.initSlot;
     }
