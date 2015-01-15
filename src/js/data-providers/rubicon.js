@@ -41,7 +41,9 @@ proto.init = function (impl) {
             context.queue.process();
         }, function () {
             if(config.target){
-                context.queue.setProcessor(_initSlot).process();
+                context.queue.setProcessor(function (slotName){
+                    _initSlot.call(ads.slots, slotName);
+                }).process();
             }
         });
         context.decorateInitSlot();
@@ -106,7 +108,7 @@ proto.decorateInitSlot = function () {
         if(!context.config.target){
             ads.slots.initSlot = function (slotName){
                 context.queue.add(slotName);
-                _initSlot(slotName);
+                _initSlot.call(ads.slots, slotName);
             };
         } else {
             ads.slots.initSlot = context.queue.add;
