@@ -106,7 +106,7 @@ proto.decorateInitSlot = function () {
         if(!context.config.target){
             ads.slots.initSlot = function (slotName){
                 context.queue.add(slotName);
-                _initslot(slotName);
+                _initSlot(slotName);
             };
         } else {
             ads.slots.initSlot = context.queue.add;
