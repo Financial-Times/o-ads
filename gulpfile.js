@@ -7,6 +7,8 @@ var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
     filter = require('gulp-filter'),
+    markdox = require("gulp-markdox"),
+    docco = require("gulp-docco"),
     tag_version = require('gulp-tag-version');
 
 /**
@@ -56,13 +58,16 @@ gulp.task('patch', function(callback) { inc('patch', callback); });
 gulp.task('feature', function(callback) { inc('minor', callback); });
 gulp.task('release', function(callback) { inc('major', callback); });
 
-
-
-
+gulp.task("doc", function(){
+  gulp.src(['./main.js', './src/js/**.js'])
+    .pipe(markdox())
+    .pipe(docco())
+    .pipe(gulp.dest("./doc"));
+});
 
 function printAscii() {
-    console.log("                                  __           ");          
-    console.log("                                 /  |          ");    
+    console.log("                                  __           ");
+    console.log("                                 /  |          ");
     console.log("  ______           ______    ____$$ |  _______ ");
     console.log(" /      \\  ______ /      \\  /    $$ | /       |");
     console.log("/$$$$$$  |/      |$$$$$$  |/$$$$$$$ |/$$$$$$$/ ");
@@ -70,4 +75,5 @@ function printAscii() {
     console.log("$$ \\__$$ |       /$$$$$$$ |$$ \\__$$ | $$$$$$  |");
     console.log("$$    $$/        $$    $$ |$$    $$ |/     $$/ ");
     console.log("$$$$$$/          $$$$$$$/  $$$$$$$/ $$$$$$$/");
+    console.log("");
 }

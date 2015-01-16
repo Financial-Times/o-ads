@@ -1,4 +1,14 @@
+/**
+ * O-ADS - the origami advertising library
+ * @author Advertising Technology origami.advertising.technology@ft.com
+ *
+ */
 'use strict';
+
+/**
+ * Represents an instance of the o-ads on the page.
+ * @constructor
+ */
 function Ads() {
 }
 

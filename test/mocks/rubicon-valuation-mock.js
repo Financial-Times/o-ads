@@ -1,4 +1,4 @@
-window.oz_insight = sinon.stub(function (){
+function oz_insight(){
   var oz_globals = {};
   for (var property in window) {
       if (window.hasOwnProperty(property) && /^oz_/.test(property)) {
@@ -12,4 +12,6 @@ window.oz_insight = sinon.stub(function (){
   };
   oz_globals.oz_callback(results);
   return oz_globals;
-});
+};
+
+sinon.stub(window, 'oz_insight');
