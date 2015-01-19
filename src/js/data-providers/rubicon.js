@@ -53,7 +53,6 @@ proto.init = function (impl) {
 
 /**
  * initialise rubicon valuation for a slot
- * This is called before an ad call is made so a valution can be made for slots that are configured to make one
  * @name initValuation
  * @memberof Rubicon
  * @lends Rubicon
@@ -96,6 +95,17 @@ proto.valuationCallbackFactory = function (slotName, target) {
     };
 };
 
+proto.decoratorTarget = function (slotName){
+    context.queue.add(slotName);
+};
+
+
+proto.decoratorNoTarget = function (slotName){
+    context.queue.add(slotName);
+    _initSlot.call(ads.slots, slotName);
+};
+
+
 /**
  * Decorate initSlot to make a valuation request
  * @name decorateInitSlot
@@ -106,14 +116,9 @@ proto.decorateInitSlot = function () {
     if (ads.utils.isFunction(ads.slots.initSlot)) {
         _initSlot = ads.slots.initSlot;
         if(!context.config.target){
-            ads.slots.initSlot = function (slotName){
-                context.queue.add(slotName);
-                _initSlot.call(ads.slots, slotName);
-            };
+            ads.slots.initSlot = context.decoratorNoTarget;
         } else {
-            ads.slots.initSlot = function(slotName){
-                context.queue.add(slotName);
-            };
+            ads.slots.initSlot = context.decoratorTarget;
         }
         return ads.slots.initSlot;
     }

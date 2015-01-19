@@ -45,7 +45,7 @@ proto.init = function (impl) {
         // can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
     }
 };
-    
+
 /**
 * retrieve Krux values from localstorage or cookies in older browsers.
 * @name retrieve
@@ -126,7 +126,7 @@ proto.events = {
             if (config) {
                 var fire = this.fire;
                 window.addEventListener('load', function(){
-                        var delEvnt = new delegate(document.body); 
+                        var delEvnt = new delegate(document.body);
                         for (var kEvnt in config){
 
                             delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, function (kEvnt) {
