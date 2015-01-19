@@ -187,7 +187,6 @@ function Config() {
                 }
             }
         } else {
-
             store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
         }
         return store;
