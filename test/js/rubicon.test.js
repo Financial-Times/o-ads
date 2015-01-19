@@ -5,106 +5,65 @@
 
 (function (window, document, $, undefined) {
    function runTests() {
-      var _initSlot = FT.ads.slots.initSlot;
-      QUnit.module('Rubicon', {
-         setup: function() {
-         },
-         teardown: function() {
-            FT.ads.slots.initSlot = _initSlot;
-         }
-      });
-
-      test('init - disable rubicon', function () {
-         TEST.beginNewPage({config: {rubicon: false}});
-         FT.ads.rubicon.init(FT.ads);
-
-         ok(!TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is not attached to the page');
-      });
-
-      test('init - enable rubicon', function () {
-         var decorateInitSlot = sinon.spy(FT.ads.rubicon, 'decorateInitSlot');
+      QUnit.module('Rubicon');
+      test('init - enabling rubicon attaches the RTP library', function () {
          TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
          FT.ads.rubicon.init(FT.ads);
-
          ok(TEST.sinon.attach.calledWith('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
-         ok(decorateInitSlot.calledOnce, 'initSlot is called');
-
-         decorateInitSlot.restore();
       });
 
-      test('decorate slots.initSlot', function () {
-         TEST.beginNewPage({config: {rubicon: {id: 10232, site: 26290}}});
-
-         FT.ads.rubicon.decorateInitSlot();
-
-         equal(FT.ads.slots.initSlot, FT.ads.rubicon.addToQueue, 'ads.slots.initSlot is decorated by ads.rubicon.initValuation');
-      });
-
-      test('test rubicon insight - no rubicon mapping for given site and size', function () {
-         var addToQueue = sinon.spy(FT.ads.rubicon, 'addToQueue');
+      test('rubicon configured to make request but not add targeting', function () {
          TEST.beginNewPage({
-             config: {
-                 dfp_site: 'test.5887.home',
-                 dfp_zone: 'index',
-                 rubicon: {
-                     id: 10232,
-                     site: 26290,
-                     formats: {
-                        leaderboard: '728x90'
-                     },
-                     zones: {
-                        leaderboard: 123456
-                     }
-                 }
-             }
-         });
-
-         FT.ads.rubicon.init(FT.ads);
-         FT.ads.slots.initSlot('mpu');
-
-         ok(addToQueue.called, 'ads.rubicon.addToQueue called');
-         equal(FT.ads.rubicon.queue[0], 'mpu', 'mpu is added to the queue');
-
-         FT.ads.rubicon.processQueue(FT.ads.rubicon.initValuation);
-         ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
-         ok(!window.oz_insight.called,'no valuation is intialised');
-
-         addToQueue.restore();
-      });
-
-   test('test rubicon insight - rubicon mapping for given site and size', function () {
-      var addToQueue = sinon.spy(FT.ads.rubicon, 'addToQueue');
-      TEST.beginNewPage({
-         container: 'leaderboard',
-         config: {
-            dfp_site: 'test.5887.home',
-            dfp_zone: ' index',
-            rubicon: {
-               id: 10232,
-               site: 26290,
+            container: 'rubicon-no-target',
+            config: {
+               network: 1234,
+               dfp_site: 'rubicon',
+               dfp_zone: 'rubicon',
                formats: {
-                  leaderboard: '728x90'
+                  'rubicon-no-target': {
+                     sizes: [[728,90]]
+                  }
                },
-               zones: {
-                  leaderboard: 123456
+               rubicon: {
+                  id: 10232,
+                  site: 26290,
+                  zone: 1111,
+                  formats: {
+                     'rubicon-no-target': '728x90'
+                  }
                }
             }
-         }
+         });
+         FT.ads.rubicon.init(FT.ads);
+         equal(FT.ads.slots.initSlot, FT.ads.rubicon.decoratorNoTarget, 'Inislot is decorated with the correct method');
       });
 
-      FT.ads.rubicon.init(FT.ads);
-      FT.ads.slots.initSlot('leaderboard');
-
-      ok(addToQueue.called, 'ads.rubicon.addToQueue called');
-      equal(FT.ads.rubicon.queue[0], 'leaderboard', 'leaderboard is added to the queue');
-
-      FT.ads.rubicon.processQueue(FT.ads.rubicon.initValuation);
-      ok(!FT.ads.rubicon.queue.length,'the queue has been processed');
-      ok(window.oz_insight.called,'a valuation is intialised');
-
-      addToQueue.restore();
-   });
-
+      test('rubicon configured to make request and add targeting', function () {
+         TEST.beginNewPage({
+            container: 'rubicon-target',
+            config: {
+               network: 1234,
+               dfp_site: 'rubicon',
+               dfp_zone: 'rubicon',
+               formats: {
+                  'rubicon-no-target': {
+                     sizes: [[728,90]]
+                  }
+               },
+               rubicon: {
+                  id: 10232,
+                  site: 26290,
+                  zone: 1111,
+                  target: true,
+                  formats: {
+                     'rubicon-target': '728x90'
+                  }
+               }
+            }
+         });
+         FT.ads.rubicon.init(FT.ads);
+         equal(FT.ads.slots.initSlot, FT.ads.rubicon.decoratorTarget, 'Inislot is decorated with the correct method');
+      });
    }
    $(runTests);
 }(window, document, jQuery));

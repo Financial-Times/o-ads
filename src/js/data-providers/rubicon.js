@@ -22,7 +22,6 @@ var context;
 */
 function Rubicon() {
     context = this;
-    this.queue = [];
 }
 
 /**
@@ -35,14 +34,17 @@ function Rubicon() {
 */
 proto.init = function (impl) {
     ads = impl;
+    context.queue = ads.utils.queue(context.initValuation);
     var config = context.config = ads.config('rubicon');
     if (config && config.id && config.site) {
         ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site, true, function(){
-            context.processQueue(context.initValuation);
-            ads.slots.initSlot = context.initValuation;
+            context.queue.process();
         }, function () {
-            context.processQueue(_initSlot);
-            ads.slots.initSlot = _initSlot;
+            if(config.target){
+                context.queue.setProcessor(function (slotName){
+                    _initSlot.call(ads.slots, slotName);
+                }).process();
+            }
         });
         context.decorateInitSlot();
     }
@@ -51,7 +53,6 @@ proto.init = function (impl) {
 
 /**
  * initialise rubicon valuation for a slot
- * This is called before an ad call is made so a valution can be made for slots that are configured to make one
  * @name initValuation
  * @memberof Rubicon
  * @lends Rubicon
@@ -84,15 +85,26 @@ proto.initValuation = function (slotName) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.valuationCallbackFactory = function (slotName, config) {
+proto.valuationCallbackFactory = function (slotName, target) {
     return function (results) {
         // add results to slot targeting and run initSlot
         document.getElementById(slotName).setAttribute('data-o-ads-rtp', results.estimate.tier);
-        if(config.target){
+        if(target){
             _initSlot.call(ads.slots, slotName);
         }
     };
 };
+
+proto.decoratorTarget = function (slotName){
+    context.queue.add(slotName);
+};
+
+
+proto.decoratorNoTarget = function (slotName){
+    context.queue.add(slotName);
+    _initSlot.call(ads.slots, slotName);
+};
+
 
 /**
  * Decorate initSlot to make a valuation request
@@ -103,44 +115,13 @@ proto.valuationCallbackFactory = function (slotName, config) {
 proto.decorateInitSlot = function () {
     if (ads.utils.isFunction(ads.slots.initSlot)) {
         _initSlot = ads.slots.initSlot;
-        ads.slots.initSlot = context.addToQueue;
+        if(!context.config.target){
+            ads.slots.initSlot = context.decoratorNoTarget;
+        } else {
+            ads.slots.initSlot = context.decoratorTarget;
+        }
         return ads.slots.initSlot;
     }
 };
-
-/**
- * Add to queue
- * add an item to the queue while we wait for external dependencies
- * @name addToQueue
- * @memberof Rubicon
- * @lends Rubicon
-*/
-proto.addToQueue = function (slotName) {
-    if (!~context.queue.indexOf(slotName)) {
-        context.queue.push(slotName);
-    }
-
-    var config = context.config;
-    if (!config.target) {
-        _initSlot.call(ads.slots, slotName);
-    }
-};
-
-/**
- * Process queue
- * once external dependencies have loaded process requests that have been queued
- * @name processQueue
- * @memberof Rubicon
- * @lends Rubicon
-*/
-proto.processQueue = function (action) {
-    if (context.queue.length) {
-        var slotName;
-        while (slotName = context.queue.shift()) {
-            action(slotName);
-        }
-    }
-};
-
 
 module.exports = new Rubicon();

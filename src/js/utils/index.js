@@ -423,17 +423,17 @@ module.exports.writeScript = function (url) {
 module.exports.hash = function (str, delimiter, pairing) {
   var pair, value, idx, len,
     hash = {};
+  if (str && str.split) {
+    str = str.split(delimiter);
 
-  str = str.split(delimiter);
-
-  for (idx = 0, len = str.length; idx < len; idx += 1) {
-    value = str[idx];
-    pair = value.split(pairing);
-    if (pair.length > 1) {
-      hash[pair[0].trim()] = pair.slice(1).join(pairing);
+    for (idx = 0, len = str.length; idx < len; idx += 1) {
+      value = str[idx];
+      pair = value.split(pairing);
+      if (pair.length > 1) {
+        hash[pair[0].trim()] = pair.slice(1).join(pairing);
+      }
     }
   }
-
   return hash;
 };
 
@@ -569,5 +569,6 @@ module.exports.cookies = utils.hash(document.cookie, ';', '=');
 extend(module.exports, require('./cookie.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();
+module.exports.queue = require('./queue.js');
 module.exports.extend = extend;
 curryIsMethods(module.exports);
