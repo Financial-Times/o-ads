@@ -467,25 +467,30 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
   }
 
   if (utils.isFunction(callback)) {
-    tag.onload = function () {
+    function loaded() {
       if(!hasRun) {
         callback();
         hasRun = true;
       }
-    };
-
-    if (utils.isFunction(errorcb)) {
-      tag.onerror = function () {
-        if(!hasRun) {
-          errorcb();
-          hasRun = true;
-        }
-      };
     }
 
+    if(obj_hop.call(tag, 'onreadystatechange')) {
+      tag.onreadystatechange = function () {
+        if (tag.readyState === "loaded") {
+          loaded();
+        }
+      };
+    } else{
+      tag.onload =  loaded;
 
-    if (obj_hop.call(tag, 'onreadystatechange')) {
-      tag.onreadystatechange = tag.onload;
+      if (utils.isFunction(errorcb)) {
+        tag.onerror = function () {
+          if(!hasRun) {
+            errorcb();
+            hasRun = true;
+          }
+        };
+      }
     }
   }
 
