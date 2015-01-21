@@ -7,8 +7,6 @@ var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
     filter = require('gulp-filter'),
-    markdox = require("gulp-markdox"),
-    docco = require("gulp-docco"),
     tag_version = require('gulp-tag-version');
 
 /**
@@ -57,13 +55,6 @@ function inc(importance, callback) {
 gulp.task('patch', function(callback) { inc('patch', callback); });
 gulp.task('feature', function(callback) { inc('minor', callback); });
 gulp.task('release', function(callback) { inc('major', callback); });
-
-gulp.task("doc", function(){
-  gulp.src(['./main.js', './src/js/**.js'])
-    .pipe(markdox())
-    .pipe(docco())
-    .pipe(gulp.dest("./doc"));
-});
 
 function printAscii() {
     console.log("                                  __           ");
