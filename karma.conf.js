@@ -44,7 +44,7 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     autoWatch: autoWatch,
-    frameworks: ['qunit', 'browserify'],
+    frameworks: ['browserify', 'qunit'],
     files: [
       'node_modules/qunitjs/qunit/qunit.css',
       'bower_components/jquery-1.7.2.min/index.js',
