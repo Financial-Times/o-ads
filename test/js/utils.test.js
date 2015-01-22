@@ -109,6 +109,26 @@
             ok(!FT._ads.utils.isNonEmptyString(function(){}), "function");
         });
 
+        test("isNumeric method", function() {
+            expect(16);
+            ok($.type(FT._ads.utils.isNumeric) === 'function', 'The function exists');
+            ok(FT._ads.utils.isNumeric(42), "integer");
+            ok(FT._ads.utils.isNumeric(-42), "negative integer");
+            ok(FT._ads.utils.isNumeric(3.142), "float");
+            ok(FT._ads.utils.isNumeric(-3.142), "negative float");
+            ok(!FT._ads.utils.isNumeric(NaN), "NaN");
+            ok(!FT._ads.utils.isNumeric(Infinity), "NaN");
+            ok(!FT._ads.utils.isNumeric('hello'), "string with length");
+            ok(!FT._ads.utils.isNumeric(""), "empty string");
+            ok(!FT._ads.utils.isNumeric(), "empty");
+            ok(!FT._ads.utils.isNumeric(null), "null");
+            ok(!FT._ads.utils.isNumeric(undefined), "undefined");
+            ok(!FT._ads.utils.isNumeric(true), "boolean true");
+            ok(!FT._ads.utils.isNumeric(false), "boolean false");
+            ok(!FT._ads.utils.isNumeric({}), "object");
+            ok(!FT._ads.utils.isNumeric(function(){}), "function");
+        });
+
         test("isPlainObject method",function(){
             expect(15);
             ok($.type(FT._ads.utils.isPlainObject) === 'function', 'The function exists');
@@ -300,8 +320,11 @@
 
             result = FT._ads.utils.hash( [], ",", ":" );
             ok( FT._ads.utils.isObject( result ), "Attempting to hash a invlid type returns an object." );
-            equal( Object.keys(result).length, 0, "the object is empty." );
-
+            if(Object.keys){
+                equal( Object.keys(result).length, 0, "the object is empty." );
+            } else {
+                ok(true)
+            }
         });
 
         /*test('attach method', function () {
@@ -351,6 +374,7 @@
             ok(!FT._ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
               }
         );
+
         test("isScriptAlreadyLoaded method when script is present", function(){
             expect(1);
             var url = location.protocol + "//"  + location.host + "/base/test/mocks/null.js",

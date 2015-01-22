@@ -7,9 +7,7 @@ window.FT._ads = window.FT.ads = require('./../../../main.js');
 
 if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
 
-if(!window.opener){
-    $('<div id="qunit"></div>').appendTo(document.body);
-}
+$('<div id="qunit"></div>').appendTo(document.body);
 
 var localstorage = {},
 globalVars = {},

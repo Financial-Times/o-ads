@@ -164,6 +164,15 @@ module.exports.isNonEmptyString = function (str) {
 };
 
 /**
+ * Test if an object is a finite number
+ * @param {object} The object to be tested
+ * @returns Boolean true if the object is a finite number, can be a float or int but not NaN or Infinity
+ */
+module.exports.isNumeric = function (num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
+};
+
+/**
  * Used to merge or clone objects
  * @param If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
  * @param If deep copy is true will be the target object of the copy
@@ -258,6 +267,8 @@ module.exports.removeClass = function(node, className){
   return true;
 };
 
+
+//TODO: remove this
 module.exports.writeScript = function (url) {
   // Stop document.write() from happening after page load (unless QUnit is present)
   if (document.readyState !== "complete" || typeof QUnit === "object") {
@@ -335,7 +346,7 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
           loaded();
         }
       };
-    } else{
+    } else {
       tag.onload =  loaded;
 
       if (utils.isFunction(errorcb)) {
@@ -360,6 +371,32 @@ module.exports.isScriptAlreadyLoaded = function(url) {
       if (scripts[i].src == url) return true;
   }
   return false;
+};
+
+utils.createCORSRequest = function (url, method, callback, errorcb) {
+    var xhr = new XMLHttpRequest();
+    // Check if the XMLHttpRequest object has a "withCredentials" property.
+    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+    if (xhr.hasOwnProperty('withCredentials')) {
+        xhr.responseType = 'json';
+        xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+        // Otherwise, check if XDomainRequest.
+        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+        xhr = new XDomainRequest();
+        xhr.open(method, url, true);
+    } else {
+        // Otherwise, CORS is not supported by the browser.
+        xhr = null;
+        errorcb();
+    }
+    xhr.onload = callback;
+    if (utils.isFunction(errorcb)) {
+      xhr.onerror = errorcb;
+      xhr.ontimeout = errorcb;
+    }
+    xhr.send();
+    return xhr;
 };
 
 /**
