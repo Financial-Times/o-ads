@@ -55,8 +55,15 @@ function Targeting() {
         proto.initialised = true;
         return parameters;
     }
-    
+
     targeting.init = proto.init;
+
+    targeting.add = function (data) {
+      if(ads.utils.isPlainObject(data)){
+        ads.utils.extend(parameters, data);
+      }
+      return targeting;
+    };
 
     return targeting;
 
@@ -230,6 +237,7 @@ function excludeFields(exclusions, obj) {
     return returnObj;
 };
 
+//TODO is this still relevant maybe we should remove it
 proto.behaviouralFlag = function () {
     var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
     return flag;

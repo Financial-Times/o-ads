@@ -4,7 +4,7 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-
+'use strict';
 //TODO Use polyfils service for these instead
 // add an ECMAScript5 compliant trim to String
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
@@ -303,16 +303,6 @@ module.exports.hash = function (str, delimiter, pairing) {
   return hash;
 };
 
-
-
-function scriptOnloadFallback(tag, callback) {
-  if (tag.readyState=='loaded' || scriptElement.readyState=='completed') {
-       callback();
-   } else {
-       setTimeout(function() {ieLoadBugFix(scriptElement, callback); }, 100);
-   }
-}
-
 /**
 * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
 * The async value of the script can be set by the seccond parameter, which is a boolean
@@ -377,7 +367,7 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
     var xhr = new XMLHttpRequest();
     // Check if the XMLHttpRequest object has a "withCredentials" property.
     // "withCredentials" only exists on XMLHTTPRequest2 objects.
-    if (xhr.hasOwnProperty('withCredentials')) {
+    if ('withCredentials' in xhr) {
         xhr.responseType = 'json';
         xhr.open(method, url, true);
     } else if (typeof XDomainRequest != "undefined") {
