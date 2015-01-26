@@ -57,7 +57,7 @@ proto.makeAPIRequest = function () {
         "body": ads.utils.getLocation()
     };
     var url = context.api + encodeURIComponent(JSON.stringify(requestData));
-    context.xhr = ads.utils.createCORSRequest(context.api, 'GET', context.resolve, context.resolve);
+    context.xhr = ads.utils.createCORSRequest(url, 'GET', context.resolve, context.resolve);
 };
 
 proto.processCollection = function(collection, max){
