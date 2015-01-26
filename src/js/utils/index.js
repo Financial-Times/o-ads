@@ -323,21 +323,23 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
   }
 
   if (utils.isFunction(callback)) {
-    function loaded() {
-      if(!hasRun) {
-        callback();
-        hasRun = true;
-      }
-    }
 
     if(obj_hop.call(tag, 'onreadystatechange')) {
       tag.onreadystatechange = function () {
         if (tag.readyState === "loaded") {
-          loaded();
+          if(!hasRun) {
+            callback();
+            hasRun = true;
+          }
         }
       };
     } else {
-      tag.onload =  loaded;
+      tag.onload =  function () {
+        if(!hasRun) {
+          callback();
+          hasRun = true;
+        }
+      };
 
       if (utils.isFunction(errorcb)) {
         tag.onerror = function () {
