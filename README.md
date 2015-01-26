@@ -54,7 +54,7 @@ The o-ads library is customisable in order to accomodate product specific config
 Ad positions, ad sizes and ad server network IDs are examples of configuration options that will be specific to a product/site.
 
 ### The configuration object <div id="title4"></div>
-The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance. 
+The o-ads `init()` method takes a json configuration object as its only argument. The configuration object sets various properties on the o-ads instance.
 
 The example below demonstrates instantiating an o-ads instance, setting the ad network code and ad formats (ad position name + sizes) via the configuration object.
 
@@ -80,13 +80,13 @@ Here's an example (some of the values will become clear by reading later documen
  <meta name="krux" content='{"id":"JVB5A2WA","limit":70}' data-contenttype="json">
  ```
  and ad positions as such:
- 
+
  ```HTML
  <div data-ad-position="hlfmpu" data-ad-size="300x600" id="hlfmpu"></div>
  ```
 
 ### Config accessor method
-The o-ads library exposes all configuration properties via the `config()` accessor method. 
+The o-ads library exposes all configuration properties via the `config()` accessor method.
 The `config()` function allows for getting and setting of configuration values.
  * Calling `config()` with no parameters returns the entire configuration object.
  * Calling config passing a valid property key will envoke the 'getter' and return the value for that property key.
@@ -124,7 +124,7 @@ default functionality it to request an ad and if the ad comes back empty the slo
 
 *never* - the ad position will remain open and will not close even if an ad isn't scheduled.
 
-these modes can be chaged by the setting ```collapseEmpty``` in either init or page metadata. e.g. 
+these modes can be chaged by the setting ```collapseEmpty``` in either init or page metadata. e.g.
 ```
  <meta name="collapseEmpty" content="after">
 ```
@@ -135,7 +135,7 @@ these modes can be chaged by the setting ```collapseEmpty``` in either init or p
 
 #### What it provides
 
-Slots can be configured to react to viewport size by either hiding the ad or requesting an ad of a different size. 
+Slots can be configured to react to viewport size by either hiding the ad or requesting an ad of a different size.
 Responsive slots will react to the window being resized as long as the HTML is well formed, in various browsers the resize event can fail to fire if a doctype is not included.
 
 #### How to configure
@@ -173,7 +173,7 @@ It should also be noted that not all slot need to be configured responsively, ab
 
 #### What it provides
 
-Krux provide an Audience Data Monetization and Management solution. 
+Krux provide an Audience Data Monetization and Management solution.
 The Krux platform includes four modules; Data Sentry, SuperTag, **Audience Data Manager** and **Interchange**. The o-ads library integrates with the Audience Data Manager and the Interchange modules.
 
 The **Audience Data Manager (ADM)** enables a publisher to sell against the value of their audience. The ADM functionality allows a publisher to break down their audience into subsets  (segments) based on a wide range of data-points. Data points that can be used to generate an audience segment can include demographics and user registration details along with user behaviours such as sharing articles or repeatedly visiting a specific section of the site.
@@ -188,19 +188,20 @@ Before Krux can be enabled on site the [Ad Operations](mailto:adopsuk@ft.com) te
 
 In most cases each site will have its own Production and QA environment set up in the Krux platform.
 
-#### How to configure  
+#### How to configure
 
 Krux provide a JS file referred to as the Krux Control Tag; all Krux Platform modules require this tag in order to initialise. The Krux platform is considered activated on a webpage when the Control Tag is present within the DOM of the page.
 
 Importantly the Control Tag contains a unique identifier, the Config ID, which is specific to a product or site. Krux provide a Production Config ID as well as a dummy ID for testing on any non-production environments.
 
-Including the Krux control tag and configuring it with the correct ID is handled by the o-ads library via the site specific configuration file. In order to enable the Krux platform integration a 'Krux' object must be added to the site configuration object; the Krux configuration object requires an ID attribute which should correspond to the unique Krux ID for the environment (Production or QA) for the site. 
+Including the Krux control tag and configuring it with the correct ID is handled by the o-ads library via the site specific configuration file. In order to enable the Krux platform integration a 'Krux' object must be added to the site configuration object; the Krux configuration object requires an ID attribute which should correspond to the unique Krux ID for the environment (Production or QA) for the site.
 
 ```
 krux: {
   id: 'AbcXyzJk'
 }
 ```
+
 #### Further configuration options
 
 It is possible to limit the number of Krux segments that are passed to the ad request via the 'limit' config property in the Krux config object, the example code below sets the maximum number of segments to 50.
@@ -220,8 +221,8 @@ Dwell time is the measure of how much time a user is on the site, currently when
 ```
 <meta name="krux" content=" { id: 'AbcXyzJk', event: dwell_time: {interval: 5, id: 'JCadw18P', total: 600}}" />
 ```
-            
-or  
+
+or
 
 ```
 krux: {
@@ -238,8 +239,9 @@ krux: {
 #### who to contact to get additional data points in your product
 The [Ad Operations](mailto:adopsuk@ft.com) team will work with product developers to build relevant Krux segments.
 
+
 #### Basic verification checks
-It can be useful to carry out the following verification checks after enabling the Krux integration. 
+It can be useful to carry out the following verification checks after enabling the Krux integration.
 
  * Verify that the page makes a GET request for 'pixel.gif' from the 'beacon.krxd.net' domain. - This will demonstrate that the Control Tag has been attached to the page correctly.
  * Inspect the request headers for the pixel request to verify that the control tag is configured correctly:
@@ -257,10 +259,10 @@ See [Chartbeat's explanation of their ad sales solution](http://chartbeat.com/pu
 A key feature of the Chartbeat ad viewability solution is the "time in view" metric; this is a measures of the length of time for which an ad impression was viewable.
 
 #### Prerequisites
-The Chartbeat library must be included on the website - See the [Chartbeat implementation documentation](http://chartbeat.com/docs/). 
+The Chartbeat library must be included on the website - See the [Chartbeat implementation documentation](http://chartbeat.com/docs/).
 
-#### How to configure  
-The o-ads library integrates with Chartbeat at the individual ad slot level. 
+#### How to configure
+The o-ads library integrates with Chartbeat at the individual ad slot level.
 
 Ad positions can be configured to be trackable by Chartbeat. In order to enable an ad slot to be tracked by chartbeat the `cbTrack` property must be set to `true` in the product specific configuration object.
 
@@ -283,6 +285,46 @@ Setting the `cbTrack` property to true for an ad slot will configure o-ads to ad
 ```
 <div id="hlfmpu" data-cb-ad-id="hlfmpu">...</div>
 ```
+
+### Semnatic Meta Data
+
+Currently we use Admantx to supply sematic data targeting for the ad library, the Adamntx module makes a CORS request to their service before any ad calls are made and returns various collections of semantic meta data that can be added to ad calls. The library can be configured to include either an entire collection or x items from a collection, an example configuration will look like:
+
+```
+admantx: {
+  id: '<YOUR-ADMANTX-API-KEY>',
+  collections: {
+    people: true,
+    entities: 3,
+    companies: 2
+  }
+}
+```
+The above configuration will add all poeple, 3 entities and 2 companies returned from the service to targeting data for the ads.
+Available collections are Admants, People, Companies, Places, Relations, Categories and Feelings. Please contact ad enablement for the api key.
+
+### Real-time Pricing
+Rubicon our real time bidding ad supplier offer a service that returns the current value of the ad slots on a page on the RTB market, this can be used to sell high value advertising to customers instead of just the remnant inventory usually sold on the RTB exchange.
+
+In order to configure the library to use this service you will need to contact ad ops as rubicon uses it's own site and zone values to categorise sections on your site. Rubicon also uses it's own size mappings with only one size specified per slot, once you have this information the library can be configured to make calls to the service:
+```
+rubicon: {
+  id: '<Rubicon-account-id>',
+  site: '<Rubicon-site-id>',
+  zone: '<Zone-for-the-current-page-configured-in-Rubicon>',
+  target: true,
+  cached: true,
+  formats: {
+    SlotName: 'Rubicon-size-value'
+  }
+}
+```
+Once configured you should see an rtp key in the custom targeting parameters of your ad calls with a 3 digit number value, you can also validate the service calls are being made by looking for calls to `anvil.rubiconproject.com` in Charles.
+
+That target parameter above tells the library to add the data to ad calls, without it calls will be made asynchronously with ad calls this is useful for running trial to check if the service will be valuable before delaying ad calls to ad the data.
+
+The cached parameter will cause the service to only return cached result, if you find the service is causing a significant slow down to your ads  configure this to true.
+
 
 ### Video Advertising <div id="title10"></div>
 
@@ -322,7 +364,7 @@ Player configuration guides:
 
 The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service enables the video pre-roll ad to be booked as a master ad which is able to pull in companion ads into other ad slots on the page.
 
-The companion ads service is enabled via config settings. 
+The companion ads service is enabled via config settings.
 Setting the companions config property to true on a page will enable the Companion Ads service on all slots on the page.
 
 e.g.
@@ -330,7 +372,7 @@ e.g.
 myAds.config('companions', true);
 ```
 
-The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file. 
+The example code below demonstrates how the Companion Ads service can be enabled on a particular DFP zone (in this example 'video-hub') within a site. Assuming the instance of the o-ads library has been namespaced as myAds, the following code could be added to the product specific configuration file.
 
 ```
 if (myAds.config('dfp_zone')==="video-hub"){
@@ -364,7 +406,7 @@ Some examples are:
     **Creative Format**: gif, jpeg, rich media including flash
 
     **Expandable**: Yes (expand vertically down the page only)
-    - 728x90 can expand to 728x300  
+    - 728x90 can expand to 728x300
     - 970x90 can expand to 970x415 (also called pushdown)
 
 
