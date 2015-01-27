@@ -38,10 +38,11 @@ proto.init = function (impl) {
     ads = impl;
     var config = context.config = ads.config('admantx') || {};
     if (config.id) {
-        context.queue = ads.utils.queue(_initSlot);
         context.collections = config.collections || {admants: true};
         context.api = config.url || 'http://usasync01.admantx.com/admantx/service?request=';
         context.makeAPIRequest();
+        context.decorateInitSlot();
+        context.queue = ads.utils.queue(_initSlot);
     }
 };
 
