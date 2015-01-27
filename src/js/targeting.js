@@ -58,13 +58,6 @@ function Targeting() {
 
     targeting.init = proto.init;
 
-    targeting.add = function (data) {
-      if(ads.utils.isPlainObject(data)){
-        ads.utils.extend(parameters, data);
-      }
-      return targeting;
-    };
-
     return targeting;
 
     //FT.ads.config('targeting') could hold switches for each Targeting function

@@ -132,9 +132,9 @@ proto.getUnitName = function (slotName) {
 * @memberof GPT
 * @lends GPT
 */
-proto.setPageTargeting = function () {
-    var param,
-        targeting = ads.targeting();
+proto.setPageTargeting = function (targeting) {
+    var param;
+    targeting = ad.utils.isOPlainObject(targeting) ? targeting :ads.targeting();
 
     function setTargeting(key, value) {
         return function () {
