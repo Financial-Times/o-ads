@@ -63,7 +63,7 @@ proto.makeAPIRequest = function () {
 proto.processCollection = function(collection, max){
     var names = [];
     var i = 0;
-    var j = ads.utils.isNumeric(max) ? max : collection.length;
+    var j = ads.utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
     for (;i < j; i++) {
         names.push(collection[i].name);
     }
