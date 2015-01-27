@@ -134,7 +134,7 @@ proto.getUnitName = function (slotName) {
 */
 proto.setPageTargeting = function (targeting) {
     var param;
-    targeting = ad.utils.isOPlainObject(targeting) ? targeting :ads.targeting();
+    targeting = ads.utils.isPlainObject(targeting) ? targeting :ads.targeting();
 
     function setTargeting(key, value) {
         return function () {
