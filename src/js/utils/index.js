@@ -382,7 +382,9 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
         xhr = null;
         errorcb();
     }
-    xhr.onload = callback;
+    xhr.onload = function (xhrEvent){
+      callback.call(this, this.response || this.responseText, xhrEvent);
+    }
     if (utils.isFunction(errorcb)) {
       xhr.onerror = errorcb;
       xhr.ontimeout = errorcb;

@@ -75,11 +75,13 @@ proto.resolve = function (response){
     var collections = context.collections;
     var shortName;
     var targetingObj = {};
-    try {
-        response = JSON.parse(response);
-    } catch (e){
-        // if the response is not valid JSON;
-        response = false;
+    if (ads.utils.isString(response)) {
+        try {
+            response = JSON.parse(response);
+        } catch (e){
+            // if the response is not valid JSON;
+            response = false;
+        }
     }
 
     //parse required targetting data from the response
