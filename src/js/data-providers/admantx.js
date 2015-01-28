@@ -42,7 +42,9 @@ proto.init = function (impl) {
         context.api = config.url || 'http://usasync01.admantx.com/admantx/service?request=';
         context.makeAPIRequest();
         context.decorateInitSlot();
-        context.queue = ads.utils.queue(_initSlot);
+        context.queue = ads.utils.queue(function (slotName){
+            _initSlot.call(ads.slots, slotName);
+        });
     }
 };
 

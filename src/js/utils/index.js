@@ -367,8 +367,6 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 
 utils.createCORSRequest = function (url, method, callback, errorcb) {
     var xhr = new XMLHttpRequest();
-    // Check if the XMLHttpRequest object has a "withCredentials" property.
-    // "withCredentials" only exists on XMLHTTPRequest2 objects.
     if ('withCredentials' in xhr) {
         xhr.responseType = 'json';
         xhr.open(method, url, true);
@@ -378,13 +376,14 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
         xhr = new XDomainRequest();
         xhr.open(method, url, true);
     } else {
-        // Otherwise, CORS is not supported by the browser.
         xhr = null;
         errorcb();
     }
+
     xhr.onload = function (xhrEvent){
       callback.call(this, this.response || this.responseText, xhrEvent);
-    }
+    };
+
     if (utils.isFunction(errorcb)) {
       xhr.onerror = errorcb;
       xhr.ontimeout = errorcb;
