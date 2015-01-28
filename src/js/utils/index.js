@@ -368,11 +368,9 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 utils.createCORSRequest = function (url, method, callback, errorcb) {
     var xhr = new XMLHttpRequest();
     if ('withCredentials' in xhr) {
-        xhr.responseType = 'json';
         xhr.open(method, url, true);
+        xhr.responseType = 'json';
     } else if (typeof XDomainRequest != "undefined") {
-        // Otherwise, check if XDomainRequest.
-        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
         xhr = new XDomainRequest();
         xhr.open(method, url, true);
     } else {
