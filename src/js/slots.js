@@ -44,7 +44,7 @@ proto.lazyLoad = function(slotName) {
         if (window.addEventListener) {
             window.addEventListener('load', function() {
                 var del = new delegate(document.body);
-                del.on('click', 'window', function() {console.log('visibility ' + ads.slots[slotName].inView())});
+                del.on('click', 'p', function() {console.log('visibility ' + ads.slots[slotName].inView())});
             }, false);
         }
 };
