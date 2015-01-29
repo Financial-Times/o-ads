@@ -5,6 +5,8 @@
 
 "use strict";
 var ads;
+var delegate;
+delegate = require('dom-delegate');
 
 /**
 * The Slots class defines an FT.ads.slots instance.
@@ -37,6 +39,17 @@ proto.init = function (impl){
 * @memberof Slots
 * @lends Slots
 */
+
+proto.lazyLoad = function(slotName) {
+        if (window.addEventListener) {
+            window.addEventListener('load', function() {
+                var delegate = new Delegate(document.body);
+                delegate.on('scroll', 'window', function() {console.log('visibility ' + ads.slots[slotName].inView())});
+            }, false);
+        }
+};
+
+
 proto.fetchSlotConfig = function  (container, slotName, config) {
     if (slotName === "searchbox") {slotName = "newssubs";}
     var attrs, attr, attrObj, name, matches, parser,
@@ -223,6 +236,7 @@ proto.initSlot = function (slotName) {
 
     this.centerContainer(container, config.sizes);
     if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
+    if (config.lazyLoad) {this.lazyLoad(slotName);}
 
     this[slotName] = {
         container: container,
