@@ -234,7 +234,16 @@ proto.initSlot = function (slotName) {
         uncollapse: function(){
             ads.utils.removeClass(this.container, 'empty');
             ads.utils.removeClass(document.body, 'no-' + container.id);
+        },
+
+        inView : function() {
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            console.log(h);
+            var rect = container.getBoundingClientRect();
+            console.log(rect.top);
+            return (rect.top <= h);
         }
+
     };
 
     ads.gpt.defineSlot(slotName);
