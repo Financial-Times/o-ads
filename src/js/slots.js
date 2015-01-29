@@ -108,7 +108,8 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
         outOfPage: config.outOfPage || false,
         collapseEmpty: config.collapseEmpty,
         targeting: targeting,
-        cbTrack: config.cbTrack
+        cbTrack: config.cbTrack,
+        lazyLoad: config.lazyLoad
     };
 };
 
