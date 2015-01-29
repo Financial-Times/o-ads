@@ -5,8 +5,6 @@
 
 "use strict";
 var ads;
-var delegate;
-delegate = require('dom-delegate');
 
 /**
 * The Slots class defines an FT.ads.slots instance.
@@ -40,14 +38,23 @@ proto.init = function (impl){
 * @lends Slots
 */
 
+
 proto.lazyLoad = function(slotName) {
-        if (window.addEventListener) {
-            window.addEventListener('load', function() {
-                var del = new delegate(document.body);
-                del.on('click', 'p', function() {console.log('visibility ' + ads.slots[slotName].inView())});
-            }, false);
-        }
+    if (window.addEventListener) {
+        addEventListener('DOMContentLoaded', handler, false); 
+        addEventListener('load', handler, false); 
+        addEventListener('scroll', handler, false); 
+        addEventListener('resize', handler, false); 
+    } else if (window.attachEvent)  {
+        attachEvent('onDOMContentLoaded', handler); // IE9+ :(
+        attachEvent('onload', handler);
+        attachEvent('onscroll', handler);
+        attachEvent('onresize', handler);
+    }
 };
+
+var handler =  function() {console.log('visibility ' + ads.slots[slotName].inView())});
+
 
 
 proto.fetchSlotConfig = function  (container, slotName, config) {
