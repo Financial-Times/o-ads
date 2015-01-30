@@ -56,6 +56,12 @@ function Targeting() {
         return parameters;
     }
 
+    targeting.add = function (obj){
+      if (ads.utils.isPlainObject(obj)){
+        ads.extend(parameters, obj);
+      }
+    };
+
     targeting.init = proto.init;
 
     return targeting;

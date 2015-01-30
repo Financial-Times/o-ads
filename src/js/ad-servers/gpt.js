@@ -134,7 +134,7 @@ proto.getUnitName = function (slotName) {
 */
 proto.setPageTargeting = function (targeting) {
     var param;
-    targeting = ads.utils.isPlainObject(targeting) ? targeting :ads.targeting();
+    targeting = ads.utils.isPlainObject(targeting) ? targeting : ads.targeting();
 
     function setTargeting(key, value) {
         return function () {
@@ -381,6 +381,8 @@ proto.init = function (impl) {
     responsive = ads.config('responsive');
     ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
     this.setPageTargeting();
+    ads.targeting = this.setPageTargeting();
+
     //TODO: this is FT specific content needs to be removed
     if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
           this.startRefresh();

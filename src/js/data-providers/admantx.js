@@ -40,11 +40,11 @@ proto.init = function (impl) {
     if (config.id) {
         context.collections = config.collections || {admants: true};
         context.api = config.url || 'http://usasync01.admantx.com/admantx/service?request=';
-        context.makeAPIRequest();
         context.decorateInitSlot();
         context.queue = ads.utils.queue(function (slotName){
             _initSlot.call(ads.slots, slotName);
         });
+        context.makeAPIRequest();
     }
 };
 
@@ -73,7 +73,7 @@ proto.processCollection = function(collection, max){
     return names;
 };
 
-proto.resolve = function (response){
+proto.resolve = function (response) {
     var collection;
     var collections = context.collections;
     var shortName;
@@ -95,7 +95,8 @@ proto.resolve = function (response){
                 targetingObj[shortName] = context.processCollection(response[collection], collections[collection]);
             }
         }
-        ads.gpt.setPageTargeting(targetingObj);
+        ads.config();
+        ads.targeting.add(targetingObj);
     }
     context.queue.process();
 };
