@@ -40,7 +40,7 @@ proto.init = function (impl){
 
 
 proto.lazyLoad = function(slotName) {
-    var handler =  function() {console.log('visibility ' + ads.slots[slotName].inView())});
+    var handler =  function() {console.log('visibility ' + ads.slots[slotName].inView());});
     if (window.addEventListener) {
         addEventListener('DOMContentLoaded', handler, false); 
         addEventListener('load', handler, false); 
@@ -269,7 +269,7 @@ proto.initSlot = function (slotName) {
 
     };
 
-    ads.gpt.defineSlot(slotName);
+    if (!config.lazyLoad) {ads.gpt.defineSlot(slotName)};
     return this[slotName];
 };
 
