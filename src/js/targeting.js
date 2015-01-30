@@ -16,6 +16,7 @@
 "use strict";
 var ads;
 var proto = Targeting.prototype;
+var context;
 var parameters = {};
 proto.initialised = false;
 
@@ -25,44 +26,10 @@ proto.initialised = false;
 * @constructor
 */
 function Targeting() {
-  var context = this;
+  context = this;
 
-  /**
-* returns an object containing all targeting parameters
-* @memberof Targeting
-* @lends Targeting
-*/
-    function targeting() {
-        var item,
-        config = {
-          metadata: context.getFromMetaData,
-          krux: context.fetchKrux,
-          socialReferrer: context.getSocialReferrer,
-          pageReferrer: context.getPageReferrer,
-          cookieConsent:  context.cookieConsent,
-          timestamp: context.timestamp,
-          version : context.version
-        };
 
-        parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
-
-        for (item in config)  {
-          if (config.hasOwnProperty(item) && ads.config(item)) {
-            ads.utils.extend(parameters, config[item]());
-          }
-        }
-
-        proto.initialised = true;
-        return parameters;
-    }
-
-    targeting.add = proto.add;
-
-    targeting.init = proto.init;
-
-    return targeting;
-
-    //FT.ads.config('targeting') could hold switches for each Targeting function
+  return this;
 }
 
 proto.add = function (obj){
@@ -266,6 +233,25 @@ proto.version = function(){
 
 proto.init = function (impl) {
   ads = impl;
+          var item,
+  config = {
+    metadata: context.getFromMetaData,
+    krux: context.fetchKrux,
+    socialReferrer: context.getSocialReferrer,
+    pageReferrer: context.getPageReferrer,
+    cookieConsent:  context.cookieConsent,
+    timestamp: context.timestamp,
+    version : context.version
+  };
+
+  parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+
+  for (item in config)  {
+    if (config.hasOwnProperty(item) && ads.config(item)) {
+      ads.utils.extend(parameters, config[item]());
+    }
+  }
+  return context;
 };
 
-module.exports = new Targeting();
+module.exports = new Targeting;
