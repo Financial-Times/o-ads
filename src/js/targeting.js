@@ -58,7 +58,7 @@ function Targeting() {
 
     targeting.add = function (obj){
       if (ads.utils.isPlainObject(obj)){
-        ads.extend(parameters, obj);
+        ads.utils.extend(parameters, obj);
       }
     };
 
