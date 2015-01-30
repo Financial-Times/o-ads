@@ -16,7 +16,7 @@
 "use strict";
 var ads;
 var proto = Targeting.prototype;
-
+var parameters = {};
 proto.initialised = false;
 
 /**
@@ -26,7 +26,7 @@ proto.initialised = false;
 */
 function Targeting() {
   var context = this;
-  var parameters = {};
+
   /**
 * returns an object containing all targeting parameters
 * @memberof Targeting
@@ -56,11 +56,7 @@ function Targeting() {
         return parameters;
     }
 
-    targeting.add = function (obj){
-      if (ads.utils.isPlainObject(obj)){
-        ads.utils.extend(parameters, obj);
-      }
-    };
+    targeting.add = proto.add;
 
     targeting.init = proto.init;
 
@@ -69,7 +65,11 @@ function Targeting() {
     //FT.ads.config('targeting') could hold switches for each Targeting function
 }
 
-
+proto.add = function (obj){
+  if (ads.utils.isPlainObject(obj)){
+    ads.utils.extend(parameters, obj);
+  }
+};
 
 proto.getFromMetaData =  function () {
   var page = ads.metadata.page(),
