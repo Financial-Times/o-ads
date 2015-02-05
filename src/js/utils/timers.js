@@ -1,4 +1,4 @@
-
+'use strict';
 
 function now() {
     return (new Date()).valueOf();
@@ -120,7 +120,7 @@ function Timers() {
             fn = hasExecutionPaused(fn);
         }
 
-        timer  = new Timer(interval, fn, maxTicks, opts);
+        var timer  = new Timer(interval, fn, maxTicks, opts);
         scope.timers.push(timer);
         return timer;
     }
