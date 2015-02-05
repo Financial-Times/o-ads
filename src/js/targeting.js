@@ -30,6 +30,24 @@ function Targeting() {
 }
 
 proto.get = function(){
+  var item,
+  config = {
+    metadata: context.getFromMetaData,
+    krux: context.fetchKrux,
+    socialReferrer: context.getSocialReferrer,
+    pageReferrer: context.getPageReferrer,
+    cookieConsent:  context.cookieConsent,
+    timestamp: context.timestamp,
+    version : context.version
+  };
+
+  parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+
+  for (item in config)  {
+    if (config.hasOwnProperty(item) && ads.config(item)) {
+      ads.utils.extend(parameters, config[item]());
+    }
+  }
   return parameters;
 };
 
@@ -234,25 +252,7 @@ proto.version = function(){
 
 proto.init = function (impl) {
   ads = impl;
-          var item,
-  config = {
-    metadata: context.getFromMetaData,
-    krux: context.fetchKrux,
-    socialReferrer: context.getSocialReferrer,
-    pageReferrer: context.getPageReferrer,
-    cookieConsent:  context.cookieConsent,
-    timestamp: context.timestamp,
-    version : context.version
-  };
-
-  parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
-
-  for (item in config)  {
-    if (config.hasOwnProperty(item) && ads.config(item)) {
-      ads.utils.extend(parameters, config[item]());
-    }
-  }
-  return context;
+  return this;
 };
 
 module.exports = new Targeting();

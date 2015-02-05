@@ -380,8 +380,6 @@ proto.init = function (impl) {
     var context = this,
     responsive = ads.config('responsive');
     ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
-    this.setPageTargeting();
-    ads.targeting = this.setPageTargeting();
 
     //TODO: this is FT specific content needs to be removed
     if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
@@ -435,6 +433,9 @@ proto.init = function (impl) {
                 ads.renderEnded(event);
             }
         });
+
+        context.setPageTargeting();
+        ads.targeting = context.setPageTargeting();
         googletag.enableServices();
     });
 
