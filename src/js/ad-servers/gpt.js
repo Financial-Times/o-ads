@@ -435,7 +435,11 @@ proto.init = function (impl) {
         });
 
         context.setPageTargeting();
-        ads.targeting = context.setPageTargeting();
+        var _add = ads.targeting.add;
+        ads.targeting.add = function (targetingObj) {
+            _add(targetingObj);
+            context.setPageTargeting(targetingObj);
+        };
         googletag.enableServices();
     });
 
