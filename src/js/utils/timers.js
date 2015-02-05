@@ -81,6 +81,9 @@ Timer.prototype.stop = function(){
 };
 
 function Timers() {
+    if (!(this instanceof Timers)){
+        return new Timers();
+    }
     var scope =  this;
     this.timers = [];
 
