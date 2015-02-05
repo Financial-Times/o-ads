@@ -428,7 +428,7 @@ module.exports.cookies = utils.hash(document.cookie, ';', '=');
 
 extend(module.exports, require('./cookie.js'));
 module.exports.responsive = require('./responsive.js');
-module.exports.timers = require('./timers.js')();
+module.exports.timers = new (require('./timers.js'))();
 module.exports.queue = require('./queue.js');
 module.exports.extend = extend;
 curryIsMethods(module.exports);
