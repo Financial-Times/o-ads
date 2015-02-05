@@ -89,13 +89,12 @@ proto.resolve = function (response) {
 
     //parse required targetting data from the response
     if(response) {
-        for(collection in collections){
+        for(collection in collections) {
             if (collections.hasOwnProperty(collection) && collections[collection] && response[collection]) {
                 shortName = collection.substr(0, 2);
                 targetingObj[shortName] = context.processCollection(response[collection], collections[collection]);
             }
         }
-        ads.config();
         ads.targeting.add(targetingObj);
     }
     context.queue.process();

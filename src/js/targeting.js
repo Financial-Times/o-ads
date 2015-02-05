@@ -41,7 +41,7 @@ proto.get = function(){
     version : context.version
   };
 
-  parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+  ads.utils.extend(parameters, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
 
   for (item in config)  {
     if (config.hasOwnProperty(item) && ads.config(item)) {
