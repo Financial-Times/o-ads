@@ -37,6 +37,30 @@ proto.init = function (impl){
 * @memberof Slots
 * @lends Slots
 */
+
+
+proto.lazyLoad = function(slotName) {
+    var handler =  function() {
+        console.log('visibility ' + ads.slots[slotName].inView()); 
+        if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
+    };
+    if (window.addEventListener) {
+        addEventListener('DOMContentLoaded', handler, false); 
+        addEventListener('load', handler, false); 
+        addEventListener('scroll', handler, false); 
+        addEventListener('resize', handler, false); 
+    } else if (window.attachEvent)  {
+        attachEvent('onDOMContentLoaded', handler); // IE9+ :(
+        attachEvent('onload', handler);
+        attachEvent('onscroll', handler);
+        attachEvent('onresize', handler);
+    }
+};
+
+
+
+
+
 proto.fetchSlotConfig = function  (container, slotName, config) {
     if (slotName === "searchbox") {slotName = "newssubs";}
     var attrs, attr, attrObj, name, matches, parser,
@@ -95,7 +119,8 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
         outOfPage: config.outOfPage || false,
         collapseEmpty: config.collapseEmpty,
         targeting: targeting,
-        cbTrack: config.cbTrack
+        cbTrack: config.cbTrack,
+        lazyLoad: config.lazyLoad
     };
 };
 
@@ -223,6 +248,7 @@ proto.initSlot = function (slotName) {
 
     this.centerContainer(container, config.sizes);
     if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
+    if (config.lazyLoad) {this.lazyLoad(slotName);}
 
     this[slotName] = {
         container: container,
@@ -234,10 +260,19 @@ proto.initSlot = function (slotName) {
         uncollapse: function(){
             ads.utils.removeClass(this.container, 'empty');
             ads.utils.removeClass(document.body, 'no-' + container.id);
+        },
+
+        inView : function() {
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            console.log(h);
+            var rect = container.getBoundingClientRect();
+            console.log(rect.top);
+            return (rect.top <= h);
         }
+
     };
 
-    ads.gpt.defineSlot(slotName);
+    if (!config.lazyLoad) {ads.gpt.defineSlot(slotName);}
     return this[slotName];
 };
 
