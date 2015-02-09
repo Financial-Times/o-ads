@@ -54,7 +54,7 @@ proto.makeAPIRequest = function () {
         "key": context.config.id,
         "method":"descriptor",
         "mode":"async",
-        "decorator":"json",
+        "decorator":"template.ft",
         "filter":["default"],
         "type":"URL",
         "body": ads.utils.getLocation()
@@ -68,7 +68,7 @@ proto.processCollection = function(collection, max){
     var i = 0;
     var j = ads.utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
     for (;i < j; i++) {
-        names.push(collection[i].name);
+        names.push(collection[i].name || collection[i]);
     }
     return names;
 };
