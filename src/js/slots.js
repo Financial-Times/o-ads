@@ -41,7 +41,6 @@ proto.init = function (impl){
 
 proto.lazyLoad = function(slotName) {
     var handler =  function() {
-        console.log('visibility ' + ads.slots[slotName].inView()); 
         if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
     };
     if (window.addEventListener) {
@@ -264,9 +263,7 @@ proto.initSlot = function (slotName) {
 
         inView : function() {
             var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            console.log(h);
             var rect = container.getBoundingClientRect();
-            console.log(rect.top);
             return (rect.top <= h);
         }
 
