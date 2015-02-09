@@ -28,20 +28,20 @@ Ads.prototype.buildURLForVideo = require('./src/js/video');
 Ads.prototype.utils = require('./src/js/utils');
 
 Ads.prototype.init = function (config){
-    // use `this` as our internal namespace
-    // it's passed into each module so we can to maintain state in each module
-    this.config.init(this);
-    this.config(config);
-    this.metadata.init(this);
-    this.targeting.init(this);
-    this.slots.init(this);
-    this.krux.init(this);
-    this.cb.init(this);
-    this.rubicon.init(this);
-    this.admantx.init(this);
-    this.gpt.init(this);
-    this.buildURLForVideo.init(this);
-    return this;
+	// use `this` as our internal namespace
+	// it's passed into each module so we can to maintain state in each module
+	this.config.init(this);
+	this.config(config);
+	this.metadata.init(this);
+	this.targeting.init(this);
+	this.slots.init(this);
+	this.krux.init(this);
+	this.cb.init(this);
+	this.rubicon.init(this);
+	this.admantx.init(this);
+	this.gpt.init(this);
+	this.buildURLForVideo.init(this);
+	return this;
 };
 
 module.exports = new Ads();

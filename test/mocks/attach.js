@@ -1,9 +1,7 @@
 /*
 * This script is use to test the attach script method from FT._ads.utils
 */
+'use strict';
 
-if (!window.attached) {
-    function attached(){}
-}
-
-attached('hello');
+window.attached = window.attached || function attached(){};
+window.attached('hello');

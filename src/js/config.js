@@ -1,4 +1,3 @@
-/* globals FT */
 //TODO remove all ft.com specific stuff so we can remove this as a global
 // currently all FT specific stuff is wrapped in an if window.FT
 
@@ -33,81 +32,81 @@ function Config() {
 /**
 * Default configuration set in the constructor.
 */
-    var defaults =  {
-        network: '5887',
-        formats: {
-            intro: {
+	var defaults =  {
+		network: '5887',
+		formats: {
+			intro: {
 
-            },
-            leaderboard: {
-                sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
-                outOfPage: true
-            },
-            mpu: {
-                sizes: [[300,250],[336,280]]
-            },
-            doublet: {
-                sizes: [[352,230]]
-            },
-            hlfmpu: {
-                sizes: [[300,250],[300,600],[336,850],[336,280],[300,1050]]
-            },
-            newssubs: {
-                sizes: [[270,42]]
-            },
-            refresh: {
-                'sz': '1x1'
-            },
-            searchbox: {
-                sizes: [[270,42]]
-            },
-            tlbxrib: {
-                sizes: [[336,60]]
-            },
-            marketingrib: {
-                sizes: [[336,60]]
-            },
-            lhn: {
-                sizes: [[136,64]]
-            },
-            tradcent: {
-                sizes: [[336,260]]
-            },
-            mktsdata: { // also matches mktsdata2 and mktsdata3
-                sizes: [[88,31], [75,25]]
-            },
-            mpusky: {
-                sizes: [[300,250], [336,280],[160,60]]
-            },
-            wdesky: {
-                sizes: [[160,600]]
-            }
-        },
-        collapseEmpty: 'ft'
-    };
+			},
+			leaderboard: {
+				sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
+				outOfPage: true
+			},
+			mpu: {
+				sizes: [[300,250],[336,280]]
+			},
+			doublet: {
+				sizes: [[352,230]]
+			},
+			hlfmpu: {
+				sizes: [[300,250],[300,600],[336,850],[336,280],[300,1050]]
+			},
+			newssubs: {
+				sizes: [[270,42]]
+			},
+			refresh: {
+				'sz': '1x1'
+			},
+			searchbox: {
+				sizes: [[270,42]]
+			},
+			tlbxrib: {
+				sizes: [[336,60]]
+			},
+			marketingrib: {
+				sizes: [[336,60]]
+			},
+			lhn: {
+				sizes: [[136,64]]
+			},
+			tradcent: {
+				sizes: [[336,260]]
+			},
+			mktsdata: { // also matches mktsdata2 and mktsdata3
+				sizes: [[88,31], [75,25]]
+			},
+			mpusky: {
+				sizes: [[300,250], [336,280],[160,60]]
+			},
+			wdesky: {
+				sizes: [[160,600]]
+			}
+		},
+		collapseEmpty: 'ft'
+	};
 
-    var store = {};
+	var store = {};
 /**
 * @private
 * @function
 * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
 */
-    var fetchMetaConfig = function() {
-        var meta,
-            results = {},
-            metas = document.getElementsByTagName('meta');
-        for (var i= 0; i < metas.length; i++) {
-            meta = metas[i];
-            if (meta.name) {
-                if (meta.getAttribute("data-contenttype") === "json"){
-                    results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
-                } else {
-                    results[meta.name] = meta.content;
-                }
-            }
-        }
-        return results;
-    };
+	var fetchMetaConfig = function() {
+		var meta,
+			results = {},
+			metas = document.getElementsByTagName('meta');
+		for (var i= 0; i < metas.length; i++) {
+			meta = metas[i];
+			if (meta.name) {
+				if (meta.getAttribute("data-contenttype") === "json"){
+					results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+				} else {
+					results[meta.name] = meta.content;
+				}
+			}
+		}
+		return results;
+	};
 
 
 /**
@@ -115,14 +114,14 @@ function Config() {
 * @function
 * fetchCanonicalURL Grabs the canonical URL of the page.
 */
-    var fetchCanonicalURL = function() {
-        var canonical,
-            canonicalTag = document.querySelector('link[rel="canonical"]');
-        if(canonicalTag) {
-           canonical = canonicalTag.href;
-        }
-        return { canonical: canonical };
-    };
+	var fetchCanonicalURL = function() {
+		var canonical,
+			canonicalTag = document.querySelector('link[rel="canonical"]');
+		if(canonicalTag) {
+		   canonical = canonicalTag.href;
+		}
+		return { canonical: canonical };
+	};
 
 /**
 * @private
@@ -130,69 +129,69 @@ function Config() {
 * fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
 */
 //TODO update this function to only pull out cookies related to ad config rather than the entire object
-    var fetchCookieConfig = function(){
-        return ads.utils.cookies;
-    };
+	var fetchCookieConfig = function(){
+		return ads.utils.cookies;
+	};
 
 /**
 * @function
 * access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
 */
-    var access = function(k, v){
-        var result;
-        if (ads.utils.isPlainObject(k)) {
-            store = ads.utils.extend(store, k);
-            result = store;
-        } else if (typeof v === "undefined") {
-            if (typeof k === "undefined"){
-                result = store;
-            } else {
-                result = store[k];
-            }
-        } else {
-            store[k] = v;
-            result = v;
-        }
+	var access = function(k, v){
+		var result;
+		if (ads.utils.isPlainObject(k)) {
+			store = ads.utils.extend(store, k);
+			result = store;
+		} else if (typeof v === "undefined") {
+			if (typeof k === "undefined"){
+				result = store;
+			} else {
+				result = store[k];
+			}
+		} else {
+			store[k] = v;
+			result = v;
+		}
 
-        return result;
-    };
+		return result;
+	};
 
-    access.clear = function(key){
-        if (key) {
-            delete store[key];
-        } else {
-            store = {};
-        }
-    };
+	access.clear = function(key){
+		if (key) {
+			delete store[key];
+		} else {
+			store = {};
+		}
+	};
 
-    access.init = function(impl, clear){
-        ads = impl;
-        if (!!clear) {
-            access.clear();
-        }
+	access.init = function(impl, clear){
+		ads = impl;
+		if (!!clear) {
+			access.clear();
+		}
 
 /**
 * if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
 * this allows QA Testers to over-ride global and meta config.
 */
-        if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
-            if (ads.utils.cookie('ftads:mode_t') === "testuser"){
-                store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchCookieConfig());
+		if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
+			if (ads.utils.cookie('ftads:mode_t') === "testuser"){
+				store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchCookieConfig());
 
-                var siteCookie = ads.utils.cookie('ftads:dfpsite');
-                if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
-                    var splitSite = (store.dfp_site || '').split('.');
-                    splitSite[0] = siteCookie;
-                    store.dfp_site = splitSite.join('.');
-                }
-            }
-        } else {
-            store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
-        }
-        return store;
-    };
+				var siteCookie = ads.utils.cookie('ftads:dfpsite');
+				if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
+					var splitSite = (store.dfp_site || '').split('.');
+					splitSite[0] = siteCookie;
+					store.dfp_site = splitSite.join('.');
+				}
+			}
+		} else {
+			store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
+		}
+		return store;
+	};
 
-    //access.init();
-    return access;
+	//access.init();
+	return access;
 }
 module.exports = new Config();

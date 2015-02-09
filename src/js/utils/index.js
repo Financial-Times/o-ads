@@ -9,43 +9,43 @@
 // add an ECMAScript5 compliant trim to String
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
 if(!String.prototype.trim) {
-  String.prototype.trim = function () {
-    return this.replace(/^\s+|\s+$/g,'');
-  };
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g,'');
+	};
 }
 
 // add an ECMAScript5 compliant indexOf to Array
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (searchElement, fromIndex) {
-        if (this === null) {
-            throw new TypeError();
-        }
-        var t = Object(this);
-        var len = t.length >>> 0;
-        if (len === 0) {
-            return -1;
-        }
-        var n = 0;
-        if (arguments.length > 1) {
-            n = Number(arguments[1]);
-            if (n != n) { // shortcut for verifying if it's NaN
-                n = 0;
-            } else if (n !== 0 && n != Infinity && n != -Infinity) {
-                n = (n > 0 || -1) * Math.floor(Math.abs(n));
-            }
-        }
-        if (n >= len) {
-            return -1;
-        }
-        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-        for (; k < len; k++) {
-            if (k in t && t[k] === searchElement) {
-                return k;
-            }
-        }
-        return -1;
-    };
+		Array.prototype.indexOf = function (searchElement, fromIndex) {
+				if (this === null) {
+						throw new TypeError();
+				}
+				var t = Object(this);
+				var len = t.length >>> 0;
+				if (len === 0) {
+						return -1;
+				}
+				var n = 0;
+				if (arguments.length > 1) {
+						n = Number(arguments[1]);
+						if (n != n) { // shortcut for verifying if it's NaN
+								n = 0;
+						} else if (n !== 0 && n != Infinity && n != -Infinity) {
+								n = (n > 0 || -1) * Math.floor(Math.abs(n));
+						}
+				}
+				if (n >= len) {
+						return -1;
+				}
+				var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+				for (; k < len; k++) {
+						if (k in t && t[k] === searchElement) {
+								return k;
+						}
+				}
+				return -1;
+		};
 }
 
 
@@ -59,16 +59,16 @@ var utils = module.exports;
  * @returns The type of the object e.g Array, String, Object
  */
 function is(object) {
-  var type = Object.prototype.toString.call(object)
-    .match(/^\[object\s(.*)\]$/)[1];
+	var type = Object.prototype.toString.call(object)
+		.match(/^\[object\s(.*)\]$/)[1];
 
-  if (object === null) {
-    return "Null";
-  } else if (object === undefined) {
-    return "Undefined";
-  } else {
-    return type;
-  }
+	if (object === null) {
+		return "Null";
+	} else if (object === undefined) {
+		return "Undefined";
+	} else {
+		return type;
+	}
 }
 
 /**
@@ -79,9 +79,9 @@ function is(object) {
  * the supplied className
  */
 function createIsTest(className){
-  return function (obj) {
-    return is(obj) === className;
-  };
+	return function (obj) {
+		return is(obj) === className;
+	};
 }
 
 /**
@@ -92,20 +92,20 @@ function createIsTest(className){
  * @returns The object supplied in the first param with is{ClassName} Methods Added
  */
 function curryIsMethods(obj, classNames) {
-  classNames = classNames || [
-    "Array",
-    "Object",
-    "String",
-    "Function",
-    "Storage"
-  ];
+	classNames = classNames || [
+		"Array",
+		"Object",
+		"String",
+		"Function",
+		"Storage"
+	];
 
-  while(!!classNames.length) {
-    var className = classNames.pop();
-    obj['is' + className] = createIsTest(className);
-  }
+	while(!!classNames.length) {
+		var className = classNames.pop();
+		obj['is' + className] = createIsTest(className);
+	}
 
-  return obj;
+	return obj;
 }
 
 /**
@@ -114,7 +114,7 @@ function curryIsMethods(obj, classNames) {
  * @returns Boolean true if the object is the window obj false otherwise
  */
 module.exports.isWindow = function (obj) {
-  return obj && obj !== null && obj === window;
+	return obj && obj !== null && obj === window;
 };
 
 /**
@@ -125,33 +125,33 @@ module.exports.isWindow = function (obj) {
  * @returns Boolean true if the object is plain false otherwise
  */
 module.exports.isPlainObject = function (obj) {
-  var obj_hop = Object.prototype.hasOwnProperty;
-  // Must be an Object.
-  // Because of IE, we also have to check the presence of the constructor property.
-  // Make sure that DOM nodes and window objects don't pass through, as well
-  if (!obj || !utils.isObject(obj) || obj.nodeType || utils.isWindow(obj)) {
-      return false;
-  }
+	var obj_hop = Object.prototype.hasOwnProperty;
+	// Must be an Object.
+	// Because of IE, we also have to check the presence of the constructor property.
+	// Make sure that DOM nodes and window objects don't pass through, as well
+	if (!obj || !utils.isObject(obj) || obj.nodeType || utils.isWindow(obj)) {
+			return false;
+	}
 
-  try {
-      // Not own constructor property must be Object
-      if ( obj.constructor &&
-          !obj_hop.call(obj, "constructor") &&
-          !obj_hop.call(obj.constructor.prototype, "isPrototypeOf") ) {
-          return false;
-      }
-  } catch ( e ) {
-      // IE8,9 Will throw exceptions on certain host objects
-      return false;
-  }
+	try {
+			// Not own constructor property must be Object
+			if ( obj.constructor &&
+					!obj_hop.call(obj, "constructor") &&
+					!obj_hop.call(obj.constructor.prototype, "isPrototypeOf") ) {
+					return false;
+			}
+	} catch ( e ) {
+			// IE8,9 Will throw exceptions on certain host objects
+			return false;
+	}
 
-  // Own properties are enumerated firstly, so to speed up,
-  // if last one is own, then all properties are own.
+	// Own properties are enumerated firstly, so to speed up,
+	// if last one is own, then all properties are own.
 
-  var key;
-  for ( key in obj ) {}
+	var key;
+	for ( key in obj ) {}
 
-  return key === undefined || obj_hop.call( obj, key );
+	return key === undefined || obj_hop.call( obj, key );
 };
 
 /**
@@ -160,7 +160,7 @@ module.exports.isPlainObject = function (obj) {
  * @returns Boolean true if the object is a string with a length greater than 0
  */
 module.exports.isNonEmptyString = function (str) {
-  return utils.isString(str) && !!str.length;
+	return utils.isString(str) && !!str.length;
 };
 
 /**
@@ -169,7 +169,7 @@ module.exports.isNonEmptyString = function (str) {
  * @returns Boolean true if the object is a finite number, can be a float or int but not NaN or Infinity
  */
 module.exports.isNumeric = function (num) {
-  return !isNaN(parseFloat(num)) && isFinite(num);
+	return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
 /**
@@ -180,101 +180,101 @@ module.exports.isNumeric = function (num) {
  * @returns The target object extended with the other params
  */
 function extend() {
-  var options, name, src, copy, copyIsArray, clone,
-      target = arguments[0] || {},
-      i = 1,
-      length = arguments.length,
-      deep = false;
+	var options, name, src, copy, copyIsArray, clone,
+			target = arguments[0] || {},
+			i = 1,
+			length = arguments.length,
+			deep = false;
 
-  // Handle a deep copy situation
-  if (typeof target === "boolean") {
-      deep = target;
-      target = arguments[1] || {};
-      // skip the boolean and the target
-      i = 2;
-  }
+	// Handle a deep copy situation
+	if (typeof target === "boolean") {
+			deep = target;
+			target = arguments[1] || {};
+			// skip the boolean and the target
+			i = 2;
+	}
 
-  // Handle case when target is a string or something (possible in deep copy)
-  if (typeof target !== "object" && !utils.isFunction(target)) {
-      target = {};
-  }
+	// Handle case when target is a string or something (possible in deep copy)
+	if (typeof target !== "object" && !utils.isFunction(target)) {
+			target = {};
+	}
 
-  // do nothing if only one argument is passed (or 2 for a deep copy)
-  if (length === i) {
-      return target;
-  }
+	// do nothing if only one argument is passed (or 2 for a deep copy)
+	if (length === i) {
+			return target;
+	}
 
-  for ( ; i < length; i++ ) {
-      // Only deal with non-null/undefined values
-      if ((options = arguments[i]) !== null) {
-          // Extend the base object
-          for (name in options) {
-              src = target[name];
-              copy = options[name];
+	for ( ; i < length; i++ ) {
+			// Only deal with non-null/undefined values
+			if ((options = arguments[i]) !== null) {
+					// Extend the base object
+					for (name in options) {
+							src = target[name];
+							copy = options[name];
 
-              // Prevent never-ending loop
-              if (target === copy) {
-                  continue;
-              }
+							// Prevent never-ending loop
+							if (target === copy) {
+									continue;
+							}
 
-              // Recurse if we're merging arrays
-              if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
-                  copyIsArray = utils.isArray(copy);
-                  if (copyIsArray) {
-                      copyIsArray = false;
-                      clone = src && utils.isArray(src) ? src : [];
-                  } else {
-                      clone = src && utils.isObject(src) ? src : {};
-                  }
+							// Recurse if we're merging arrays
+							if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
+									copyIsArray = utils.isArray(copy);
+									if (copyIsArray) {
+											copyIsArray = false;
+											clone = src && utils.isArray(src) ? src : [];
+									} else {
+											clone = src && utils.isObject(src) ? src : {};
+									}
 
-                  // Never move original objects, clone them
-                  target[name] = extend(deep, clone, copy);
+									// Never move original objects, clone them
+									target[name] = extend(deep, clone, copy);
 
-              // Don't bring in undefined values
-              } else if ( copy !== undefined ) {
-                  target[name] = copy;
-              }
-          }
-      }
-  }
+							// Don't bring in undefined values
+							} else if ( copy !== undefined ) {
+									target[name] = copy;
+							}
+					}
+			}
+	}
 
-  // Return the modified object
-  return target;
+	// Return the modified object
+	return target;
 }
 
 module.exports.hasClass = function(node, className){
-  if(node.nodeType === 1){
-      return node.className.split(' ').indexOf(className) > -1 ? true : false;
-  }
-  return false;
+	if(node.nodeType === 1){
+			return node.className.split(' ').indexOf(className) > -1 ? true : false;
+	}
+	return false;
 };
 
 module.exports.addClass = function(node, className){
-  if(node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)){
-      node.className += ' ' + className.trim();
-  }
-  return true;
+	if(node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)){
+			node.className += ' ' + className.trim();
+	}
+	return true;
 };
 
 module.exports.removeClass = function(node, className){
-  var index, classes;
-  if(node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)){
-      classes = node.className.split(' ');
-      index = classes.indexOf(className);
-      classes.splice(index, 1);
-      node.className = classes.join(' ');
-  }
-  return true;
+	var index, classes;
+	if(node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)){
+			classes = node.className.split(' ');
+			index = classes.indexOf(className);
+			classes.splice(index, 1);
+			node.className = classes.join(' ');
+	}
+	return true;
 };
 
 
 //TODO: remove this
 module.exports.writeScript = function (url) {
-  // Stop document.write() from happening after page load (unless QUnit is present)
-  if (document.readyState !== "complete" || typeof QUnit === "object") {
-    /*jshint evil:true*/
-    document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
-  }
+	// Stop document.write() from happening after page load (unless QUnit is present)
+	if (document.readyState !== "complete" || typeof QUnit === "object") {
+		/*jshint evil:true*/
+		document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
+	}
 };
 
 
@@ -287,20 +287,20 @@ module.exports.writeScript = function (url) {
  * @return {object}
  */
 module.exports.hash = function (str, delimiter, pairing) {
-  var pair, value, idx, len,
-    hash = {};
-  if (str && str.split) {
-    str = str.split(delimiter);
+	var pair, value, idx, len,
+		hash = {};
+	if (str && str.split) {
+		str = str.split(delimiter);
 
-    for (idx = 0, len = str.length; idx < len; idx += 1) {
-      value = str[idx];
-      pair = value.split(pairing);
-      if (pair.length > 1) {
-        hash[pair[0].trim()] = pair.slice(1).join(pairing);
-      }
-    }
-  }
-  return hash;
+		for (idx = 0, len = str.length; idx < len; idx += 1) {
+			value = str[idx];
+			pair = value.split(pairing);
+			if (pair.length > 1) {
+				hash[pair[0].trim()] = pair.slice(1).join(pairing);
+			}
+		}
+	}
+	return hash;
 };
 
 /**
@@ -312,82 +312,82 @@ module.exports.hash = function (str, delimiter, pairing) {
 * @lends FT._ads.utils
 */
 module.exports.attach = function (scriptUrl, async, callback, errorcb) {
-  var tag = document.createElement('script'),
-  obj_hop = Object.prototype.hasOwnProperty,
-  node = document.getElementsByTagName('script')[0],
-  hasRun = false;
-  tag.setAttribute('src', scriptUrl);
-  tag.setAttribute('o-ads', '');
-  if (async){
-    tag.async = 'true';
-  }
+	var tag = document.createElement('script'),
+	obj_hop = Object.prototype.hasOwnProperty,
+	node = document.getElementsByTagName('script')[0],
+	hasRun = false;
+	tag.setAttribute('src', scriptUrl);
+	tag.setAttribute('o-ads', '');
+	if (async){
+		tag.async = 'true';
+	}
 
-  if (utils.isFunction(callback)) {
+	if (utils.isFunction(callback)) {
 
-    if(obj_hop.call(tag, 'onreadystatechange')) {
-      tag.onreadystatechange = function () {
-        if (tag.readyState === "loaded") {
-          if(!hasRun) {
-            callback();
-            hasRun = true;
-          }
-        }
-      };
-    } else {
-      tag.onload =  function () {
-        if(!hasRun) {
-          callback();
-          hasRun = true;
-        }
-      };
+		if(obj_hop.call(tag, 'onreadystatechange')) {
+			tag.onreadystatechange = function () {
+				if (tag.readyState === "loaded") {
+					if(!hasRun) {
+						callback();
+						hasRun = true;
+					}
+				}
+			};
+		} else {
+			tag.onload =  function () {
+				if(!hasRun) {
+					callback();
+					hasRun = true;
+				}
+			};
 
-      if (utils.isFunction(errorcb)) {
-        tag.onerror = function () {
-          if(!hasRun) {
-            errorcb();
-            hasRun = true;
-          }
-        };
-      }
-    }
-  }
+			if (utils.isFunction(errorcb)) {
+				tag.onerror = function () {
+					if(!hasRun) {
+						errorcb();
+						hasRun = true;
+					}
+				};
+			}
+		}
+	}
 
-  // Use insert before, append child has issues with script tags in some browsers.
-  node.parentNode.insertBefore(tag, node);
-  return tag;
+	// Use insert before, append child has issues with script tags in some browsers.
+	node.parentNode.insertBefore(tag, node);
+	return tag;
 };
 
 module.exports.isScriptAlreadyLoaded = function(url) {
-  var scripts = document.getElementsByTagName('script');
-  for (var i = scripts.length; i--;) {
-      if (scripts[i].src == url) return true;
-  }
-  return false;
+	var scripts = document.getElementsByTagName('script');
+	for (var i = scripts.length; i--;) {
+			if (scripts[i].src == url) return true;
+	}
+	return false;
 };
 
 utils.createCORSRequest = function (url, method, callback, errorcb) {
-    var xhr = new XMLHttpRequest();
-    if ('withCredentials' in xhr) {
-        xhr.open(method, url, true);
-        xhr.responseType = 'json';
-    } else if (typeof XDomainRequest != "undefined") {
-        xhr = new XDomainRequest();
-        xhr.open(method, url, true);
-    } else {
-        xhr = null;
-        errorcb();
-    }
+		var xhr = new XMLHttpRequest();
+		if ('withCredentials' in xhr) {
+				xhr.open(method, url, true);
+				xhr.responseType = 'json';
+		} else if (typeof XDomainRequest != "undefined") {
+				xhr = new XDomainRequest();
+				xhr.open(method, url, true);
+		} else {
+				xhr = null;
+				errorcb();
+		}
 
-    xhr.onload = function (xhrEvent){
-      callback.call(this, this.response || this.responseText, xhrEvent);
-    };
+		xhr.onload = function (xhrEvent){
+			callback.call(this, this.response || this.responseText, xhrEvent);
+		};
 
-    if (utils.isFunction(errorcb)) {
-      xhr.onerror = errorcb;
-      xhr.ontimeout = errorcb;
-    }
-    xhr.send();
-    return xhr;
+		if (utils.isFunction(errorcb)) {
+			xhr.onerror = errorcb;
+			xhr.ontimeout = errorcb;
+		}
+		xhr.send();
+		return xhr;
 };
 
 /**
@@ -398,7 +398,7 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
 * @lends FT._ads.utils
 */
 module.exports.getReferrer = function () {
-  return document.referrer || '';
+	return document.referrer || '';
 };
 
 
@@ -411,7 +411,7 @@ module.exports.getReferrer = function () {
 * @lends FT._ads.utils
 */
 module.exports.getLocation = function () {
-  return document.location.href || '';
+	return document.location.href || '';
 };
 
 /**
@@ -423,7 +423,7 @@ module.exports.getLocation = function () {
 * @lends FT._ads.utils
 */
 module.exports.getQueryString = function () {
-  return document.location.search.substring(1) || '';
+	return document.location.search.substring(1) || '';
 };
 
 /**
@@ -433,23 +433,23 @@ module.exports.getQueryString = function () {
 * @lends FT._ads.utils
 */
 module.exports.getTimestamp = function () {
-  var now = new Date();
-  return [
-      now.getFullYear(),
-      ('0' + (now.getMonth() + 1)).slice(-2),
-      ('0' + now.getDate()).slice(-2),
-      ('0' + now.getHours()).slice(-2),
-      ('0' + now.getMinutes()).slice(-2),
-      ('0' + now.getSeconds()).slice(-2)
-    ].join("");
+	var now = new Date();
+	return [
+			now.getFullYear(),
+			('0' + (now.getMonth() + 1)).slice(-2),
+			('0' + now.getDate()).slice(-2),
+			('0' + now.getHours()).slice(-2),
+			('0' + now.getMinutes()).slice(-2),
+			('0' + now.getSeconds()).slice(-2)
+		].join("");
 };
 
 module.exports.nodeListToArray = function(obj) {
-  var array = [];
-  for (var i = 0; i < obj.length; i++) {
-    array[i] = obj[i];
-  }
-  return array;
+	var array = [];
+	for (var i = 0; i < obj.length; i++) {
+		array[i] = obj[i];
+	}
+	return array;
 };
 
 module.exports.cookies = utils.hash(document.cookie, ';', '=');

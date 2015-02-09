@@ -30,16 +30,16 @@ function Chartbeat() {
 * @lends ChartBeat
 */
 proto.init = function (impl) {
-    ads = impl;
-    this.decorateRefresh();
+	ads = impl;
+	this.decorateRefresh();
 };
 
 proto.decorateRefresh = function () {
-    if (ads.utils.isFunction(ads.gpt.refresh)) {
-        var _refresh = ads.gpt.refresh;
-            ads.gpt.refresh =  this.refresh(_refresh);
-        return true;
-    }
+	if (ads.utils.isFunction(ads.gpt.refresh)) {
+		var _refresh = ads.gpt.refresh;
+			ads.gpt.refresh =  this.refresh(_refresh);
+		return true;
+	}
 };
 
 
@@ -50,23 +50,23 @@ proto.decorateRefresh = function () {
 * @lends ChartBeat
 */
 proto.refresh = function (fn) {
-    return function (slotsForRefresh) {
-        if (window.pSUPERFLY){
-            var slot, slotName, cbName,
-                slots = ads.slots;
-            slotsForRefresh = slotsForRefresh || slots;
-            for (slotName in slotsForRefresh) {
-                slot = slots[slotName];
-                if (slot.gptSlot && slot.timer === undefined) {
-                    if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-                        window.pSUPERFLY.refreshAd(cbName);
-                    }
-                }
-            }
-        }
+	return function (slotsForRefresh) {
+		if (window.pSUPERFLY){
+			var slot, slotName, cbName,
+				slots = ads.slots;
+			slotsForRefresh = slotsForRefresh || slots;
+			for (slotName in slotsForRefresh) {
+				slot = slots[slotName];
+				if (slot.gptSlot && slot.timer === undefined) {
+					if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
+						window.pSUPERFLY.refreshAd(cbName);
+					}
+				}
+			}
+		}
 
-        fn.apply(this, arguments);
-    };
+		fn.apply(this, arguments);
+	};
 };
 
 module.exports = new Chartbeat();

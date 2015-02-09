@@ -12,13 +12,12 @@ var ads;
 * @constructor
 */
 function Slots() {
-    //this.slots = {};
 }
 
 var proto = Slots.prototype;
 
 proto.init = function (impl){
-    ads = impl;
+	ads = impl;
 };
 
 /**
@@ -40,20 +39,20 @@ proto.init = function (impl){
 
 
 proto.lazyLoad = function(slotName) {
-    var handler =  function() {
-        if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
-    };
-    if (window.addEventListener) {
-        addEventListener('DOMContentLoaded', handler, false); 
-        addEventListener('load', handler, false); 
-        addEventListener('scroll', handler, false); 
-        addEventListener('resize', handler, false); 
-    } else if (window.attachEvent)  {
-        attachEvent('onDOMContentLoaded', handler); // IE9+ :(
-        attachEvent('onload', handler);
-        attachEvent('onscroll', handler);
-        attachEvent('onresize', handler);
-    }
+	var handler =  function() {
+		if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
+	};
+	if (window.addEventListener) {
+		addEventListener('DOMContentLoaded', handler, false);
+		addEventListener('load', handler, false);
+		addEventListener('scroll', handler, false);
+		addEventListener('resize', handler, false);
+	} else if (window.attachEvent)  {
+		window.attachEvent('onDOMContentLoaded', handler); // IE9+ :(
+		window.attachEvent('onload', handler);
+		window.attachEvent('onscroll', handler);
+		window.attachEvent('onresize', handler);
+	}
 };
 
 
@@ -61,66 +60,66 @@ proto.lazyLoad = function(slotName) {
 
 
 proto.fetchSlotConfig = function  (container, slotName, config) {
-    if (slotName === "searchbox") {slotName = "newssubs";}
-    var attrs, attr, attrObj, name, matches, parser,
-        sizes = [],
-        targeting = {pos: slotName},
-        parsers = {
-            'size': function (name, value){
-                value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
-                  sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
-                });
+	if (slotName === "searchbox") {slotName = "newssubs";}
+	var attrs, attr, attrObj, name, matches, parser,
+		sizes = [],
+		targeting = {pos: slotName},
+		parsers = {
+			'size': function (name, value){
+				value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
+					sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
+				});
 
-                return !!sizes.length ? sizes : false;
-            },
-            'position': function (name, value){
-                targeting.pos = value;
-                return value;
-            },
-            'out-of-page':  function (){
-                config.outOfPage = true;
-                return true;
-            },
-            'page-type':  function (name, value){
-                targeting.pt = value;
-                return value;
-            },
-            'targeting': function (name, value) {
-                if (value !== undefined) {
-                    value = ads.utils.hash(value, ';', '=');
-                    targeting = ads.utils.extend(targeting, value);
-                }
-                return value;
-            },
-            'default': function (name, value) {
-                targeting[name] = value;
-                return value;
-            }
-        };
+				return !!sizes.length ? sizes : false;
+			},
+			'position': function (name, value){
+				targeting.pos = value;
+				return value;
+			},
+			'out-of-page':  function (){
+				config.outOfPage = true;
+				return true;
+			},
+			'page-type':  function (name, value){
+				targeting.pt = value;
+				return value;
+			},
+			'targeting': function (name, value) {
+				if (value !== undefined) {
+					value = ads.utils.hash(value, ';', '=');
+					targeting = ads.utils.extend(targeting, value);
+				}
+				return value;
+			},
+			'default': function (name, value) {
+				targeting[name] = value;
+				return value;
+			}
+		};
 
-    attrs = container.attributes;
-    for(attr in attrs) {
-        attrObj = attrs[attr];
-        /**
-        /* the below is needed to make the code work in IE8,
-        /* because host Objects don't inherit has own property in IE8
-        /* we have to call it from the Object prototype
-        */
-        if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(o-ads|ad|ftads)-(.+)/)) ) {
-            name = matches[3];
-            parser = ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
-            parser(name, attrObj.value);
-        }
-    }
+	attrs = container.attributes;
+	for(attr in attrs) {
+		attrObj = attrs[attr];
+		/**
+		/* the below is needed to make the code work in IE8,
+		/* because host Objects don't inherit has own property in IE8
+		/* we have to call it from the Object prototype
+		*/
+		if(Object.prototype.hasOwnProperty.call(attrs, attr) && attrObj.name && !!(matches = attrObj.name.match(/(data-)?(o-ads|ad|ftads)-(.+)/)) ) {
+			name = matches[3];
+			parser = ads.utils.isFunction(parsers[name]) ? parsers[name] : parsers['default'];
+			parser(name, attrObj.value);
+		}
+	}
 
-    return {
-        sizes: !!(sizes.length) ? sizes : config.sizes,
-        outOfPage: config.outOfPage || false,
-        collapseEmpty: config.collapseEmpty,
-        targeting: targeting,
-        cbTrack: config.cbTrack,
-        lazyLoad: config.lazyLoad
-    };
+	return {
+		sizes: !!(sizes.length) ? sizes : config.sizes,
+		outOfPage: config.outOfPage || false,
+		collapseEmpty: config.collapseEmpty,
+		targeting: targeting,
+		cbTrack: config.cbTrack,
+		lazyLoad: config.lazyLoad
+	};
 };
 
 /**
@@ -132,20 +131,20 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
 * @lends Slots
 */
 proto.addContainer = function(node, id) {
-    var container = document.createElement('div');
+	var container = document.createElement('div');
 
-    container.setAttribute('id', id);
+	container.setAttribute('id', id);
 
-    if (node.tagName === 'SCRIPT') {
-        if (node.id === id) {
-            node.removeAttribute('id');
-        }
-        node.parentNode.insertBefore(container, node);
-    } else {
-        node.appendChild(container);
-    }
+	if (node.tagName === 'SCRIPT') {
+		if (node.id === id) {
+			node.removeAttribute('id');
+		}
+		node.parentNode.insertBefore(container, node);
+	} else {
+		node.appendChild(container);
+	}
 
-    return container;
+	return container;
 };
 
 
@@ -160,7 +159,7 @@ proto.addContainer = function(node, id) {
 * @lends Slots
 */
 proto.centerContainer = function (container) {
-    ads.utils.addClass(container, 'center');
+	ads.utils.addClass(container, 'center');
 };
 
 /**
@@ -171,7 +170,7 @@ proto.centerContainer = function (container) {
 */
 //TODO Refactor this code into the chartbeat module
 proto.addChartBeatTracking = function(container, slotName) {
-    container.setAttribute('data-cb-ad-id', slotName);
+	container.setAttribute('data-cb-ad-id', slotName);
 };
 /**
 * Given an array of slotnames will collapse the slots using the collapse method on the slot
@@ -180,19 +179,19 @@ proto.addChartBeatTracking = function(container, slotName) {
 * @lends Slots
 */
 proto.collapse = function (slotNames) {
-    var slotName, result = false;
-    if (!ads.utils.isArray(slotNames)){
-        slotNames = [slotNames];
-    }
+	var slotName, result = false;
+	if (!ads.utils.isArray(slotNames)){
+		slotNames = [slotNames];
+	}
 
-    while(slotName = slotNames.pop()) {
-        if(this[slotName] && ads.utils.isFunction(this[slotName].collapse)) {
-            this[slotName].collapse();
-            result = true;
-        }
-    }
+	while(slotName = slotNames.pop()) {
+		if(this[slotName] && ads.utils.isFunction(this[slotName].collapse)) {
+			this[slotName].collapse();
+			result = true;
+		}
+	}
 
-    return result;
+	return result;
 };
 
 /**
@@ -202,18 +201,18 @@ proto.collapse = function (slotNames) {
 * @lends Slots
 */
 proto.uncollapse = function (slotNames) {
-    var slotName, result = false;
-    if (!ads.utils.isArray(slotNames)){
-        slotNames = [slotNames];
-    }
+	var slotName, result = false;
+	if (!ads.utils.isArray(slotNames)){
+		slotNames = [slotNames];
+	}
 
-    while(slotName = slotNames.pop()) {
-        if(this[slotName] && ads.utils.isFunction(this[slotName].uncollapse)) {
-            this[slotName].uncollapse();
-            result = true;
-        }
-    }
-    return result;
+	while(slotName = slotNames.pop()) {
+		if(this[slotName] && ads.utils.isFunction(this[slotName].uncollapse)) {
+			this[slotName].uncollapse();
+			result = true;
+		}
+	}
+	return result;
 };
 
 /**
@@ -224,53 +223,53 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
-    if (this[slotName]) {
-        return false;
-    }
+	if (this[slotName]) {
+		return false;
+	}
 
-    var container = document.getElementById(slotName),
-        formats =  ads.config('formats');
+	var container = document.getElementById(slotName),
+		formats =  ads.config('formats');
 
-    if (!container) {
-        return false;
-    }
+	if (!container) {
+		return false;
+	}
 
-    var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
-    if (!config.sizes){
-        return false;
-    }
+	var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
+	if (!config.sizes){
+		return false;
+	}
 
-    if (container.tagName === 'SCRIPT') {
-        container = this.addContainer(container, slotName);
-    }
+	if (container.tagName === 'SCRIPT') {
+		container = this.addContainer(container, slotName);
+	}
 
 
-    this.centerContainer(container, config.sizes);
-    if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
-    if (config.lazyLoad) {this.lazyLoad(slotName);}
+	this.centerContainer(container, config.sizes);
+	if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
+	if (config.lazyLoad) {this.lazyLoad(slotName);}
 
-    this[slotName] = {
-        container: container,
-        config: config,
-        collapse: function(){
-            ads.utils.addClass(this.container, 'empty');
-            ads.utils.addClass(document.body, 'no-' + container.id);
-        },
-        uncollapse: function(){
-            ads.utils.removeClass(this.container, 'empty');
-            ads.utils.removeClass(document.body, 'no-' + container.id);
-        },
+	this[slotName] = {
+		container: container,
+		config: config,
+		collapse: function(){
+			ads.utils.addClass(this.container, 'empty');
+			ads.utils.addClass(document.body, 'no-' + container.id);
+		},
+		uncollapse: function(){
+			ads.utils.removeClass(this.container, 'empty');
+			ads.utils.removeClass(document.body, 'no-' + container.id);
+		},
 
-        inView : function() {
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            var rect = container.getBoundingClientRect();
-            return (rect.top <= h);
-        }
+		inView : function() {
+			var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+			var rect = container.getBoundingClientRect();
+			return (rect.top <= h);
+		}
 
-    };
+	};
 
-    if (!config.lazyLoad) {ads.gpt.defineSlot(slotName);}
-    return this[slotName];
+	if (!config.lazyLoad) {ads.gpt.defineSlot(slotName);}
+	return this[slotName];
 };
 
 module.exports = new Slots();
