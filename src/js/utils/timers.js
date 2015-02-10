@@ -1,4 +1,4 @@
-
+'use strict';
 
 function now() {
     return (new Date()).valueOf();
@@ -81,6 +81,9 @@ Timer.prototype.stop = function(){
 };
 
 function Timers() {
+    if (!(this instanceof Timers)){
+        return new Timers();
+    }
     var scope =  this;
     this.timers = [];
 
@@ -117,7 +120,7 @@ function Timers() {
             fn = hasExecutionPaused(fn);
         }
 
-        timer  = new Timer(interval, fn, maxTicks, opts);
+        var timer  = new Timer(interval, fn, maxTicks, opts);
         scope.timers.push(timer);
         return timer;
     }
