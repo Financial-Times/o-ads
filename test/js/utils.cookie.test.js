@@ -213,5 +213,5 @@
 		});
 	}
 
-   $(cookieTests);
+	$(cookieTests);
 }(window, document, jQuery));

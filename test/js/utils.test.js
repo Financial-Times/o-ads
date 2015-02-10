@@ -362,18 +362,16 @@
 				}, interval);
 		});  */
 
-	   test("writeScript method",function(){
+		test("writeScript method", function(){
 			expect(1);
 			ok($.type(FT._ads.utils.writeScript) === 'function', 'The function exists');
 		});
 
-
-	   test("isScriptAlreadyLoaded method when script is not present", function(){
+		test("isScriptAlreadyLoaded method when script is not present", function(){
 			expect(1);
 			var url = "http://local.ft.com/null.js";
 			ok(!FT._ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
-			  }
-		);
+		});
 
 		test("isScriptAlreadyLoaded method when script is present", function(){
 			expect(1);
@@ -384,8 +382,7 @@
 			node.parentNode.insertBefore(tag, node);
 			ok(FT._ads.utils.isScriptAlreadyLoaded(url), "The function returns true when a script with the given url is present in the page dom");
 			node.parentNode.removeChild(tag);
-			}
-		);
+		});
 	}
 
 	$(runTests);

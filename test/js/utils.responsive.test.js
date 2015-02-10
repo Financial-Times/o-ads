@@ -99,5 +99,5 @@
 		});
 	}
 
-   $(responsiveTests);
+	$(responsiveTests);
 }(window, document, jQuery));

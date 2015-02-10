@@ -20,10 +20,7 @@
 			ok(cbRefresh.called, 'whenever gpt refresh is called cb refresh is called too.');
 			ok(gptRefresh.called, 'whenever gpt refresh is called cb refresh is called too.');
 		});
-
 	}
 
 	$(runTests);
 }(window, document, jQuery));
-
-

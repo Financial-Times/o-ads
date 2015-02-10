@@ -1,8 +1,7 @@
 /* jshint strict:false */
-/* globals sinon:false, jQuery:false, $: false, FT, googletag */
+/* globals QUnit, sinon:false, $: false, FT, googletag */
 // we turn of strict here because in order to mock certain things we have to do things strict won't allow
 
-var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
 window.FT = {};
 window.FT._ads = window.FT.ads = require('./../../../main.js');
 
@@ -29,7 +28,7 @@ test = {
 	fireEvent : function (element, event) {
 		var evt;
 		function isString(it) {
-			return typeof it == "string" || it instanceof String;
+			return typeof it === "string" || it instanceof String;
 		}
 		element = (isString(element)) ? document.getElementById(element) : element;
 		if (document.createEventObject) {
@@ -43,7 +42,7 @@ test = {
 			evt.initEvent(event, true, true); // event type,bubbling,cancelable
 			return !element.dispatchEvent(evt);
 		}
-	 },
+	},
 
 	/* methods for mocking things */
 	mock: {
@@ -70,7 +69,7 @@ test = {
 		window: function(data){
 			var prop;
 			for (prop in data){
-				 if(data.hasOwnProperty(prop)){
+				if(data.hasOwnProperty(prop)){
 					window[prop] = data[prop];
 					globalVars[prop]=data[prop];
 				}
@@ -84,29 +83,30 @@ test = {
 			var name;
 			if (data) {
 				for (name in data) {
-					var content, other = "", metatag;
-					if (FT.ads.utils.isString(data[name])){
-						content = data[name];
-					} else {
-						content = data[name].content;
-						other = data[name].other;
+					if (data.hasOwnProperty(name)) {
+						var content, other = "", metatag;
+						if (FT.ads.utils.isString(data[name])){
+							content = data[name];
+						} else {
+							content = data[name].content;
+							other = data[name].other;
+						}
+						metatag = '<meta name="' + name + "\" content='" + content + "' " + other + ' remove>';
+						$(metatag).appendTo('head');
 					}
-					metatag = '<meta name="' + name + "\" content='" + content + "' " + other + ' remove>';
-					$(metatag).appendTo('head');
 				}
 			}
 			return data;
 		},
 		canonical: function(url){
-			linktag = '<link rel="canonical" href="' + url + '" remove>';
+			var linktag = '<link rel="canonical" href="' + url + '" remove>';
 			$(linktag).appendTo('head');
 		},
 		container: function(data) {
-		  var name;
-		  if (data) {
-			$('<div id="' + data + '" o-ads></div>').appendTo(document.body);
-		  }
-		  return data;
+			if (data) {
+				$('<div id="' + data + '" o-ads></div>').appendTo(document.body);
+			}
+			return data;
 		},
 		cookie: function (name, value){
 			cookies[encodeURIComponent(name)] = value;
@@ -116,7 +116,9 @@ test = {
 			cookies = {};
 			if ($.isPlainObject(data)) {
 				for (cookie in data) {
-					test.mock.cookie(cookie, data[cookie]);
+					if (data.hasOwnProperty(cookie)) {
+						test.mock.cookie(cookie, data[cookie]);
+					}
 				}
 			}
 			FT.ads.utils.cookies = cookies;
@@ -159,8 +161,10 @@ test = {
 						}
 					}
 
-					for(stub in stubs) {
-						test.sinon.localStorage[stub] = sinon.stub(window.localStorage, stub, stubs[stub]);
+					for (stub in stubs) {
+						if (stubs.hasOwnProperty(stub)) {
+							test.sinon.localStorage[stub] = sinon.stub(window.localStorage, stub, stubs[stub]);
+						}
 					}
 				}
 			}
@@ -240,8 +244,8 @@ test = {
 	/* methods for clearing things */
 	clear: {
 		viewport: function (){
-			if (TEST.winWidth !== window.innerWidth) {
-				TEST.mock.viewport(TEST.winWidth, TEST.winHeight);
+			if (window.TEST.winWidth !== window.innerWidth) {
+				window.TEST.mock.viewport(window.TEST.winWidth, window.TEST.winHeight);
 			}
 		},
 		meta: function () {
@@ -269,14 +273,16 @@ test = {
 				restore = ['clock'];
 			mocks = mocks || test.sinon;
 
-			for(mock in mocks) {
-				func = mocks[mock];
-				if (~mock.indexOf(restore)) {
-					func.restore();
-				} else if ($.isFunction(func.reset)) {
-					func.reset();
-				} else if($.isPlainObject(mock)) {
-					test.clear.sinon(mock);
+			for (mock in mocks) {
+				if (mocks.hasOwnProperty(mock)) {
+					func = mocks[mock];
+					if (~mock.indexOf(restore)) {
+						func.restore();
+					} else if ($.isFunction(func.reset)) {
+						func.reset();
+					} else if($.isPlainObject(mock)) {
+						test.clear.sinon(mock);
+					}
 				}
 			}
 		},
@@ -291,8 +297,10 @@ test = {
 		window: function(){
 			var prop;
 			for(prop in globalVars){
-				window[prop] = undefined;
-				//delete globalVars[prop];
+				if (window.hasOwnPorperty(prop)) {
+					window[prop] = undefined;
+					//delete globalVars[prop];
+				}
 			}
 		},
 		gptCmd: function () {
@@ -302,12 +310,14 @@ test = {
 		},
 		all: function all() {
 			var func, funcName, funcStr;
-			for(funcName in test.clear) {
-				func = test.clear[funcName];
-				funcStr = func.toString() || '';
+			for (funcName in test.clear) {
+				if (test.clear.hasOwnProperty(funcName)) {
+					func = test.clear[funcName];
+					funcStr = func.toString() || '';
 
-				if ($.isFunction(func) && !(/function\sall\(/.test(funcStr))) {
-					func();
+					if ($.isFunction(func) && !(/function\sall\(/.test(funcStr))) {
+						func();
+					}
 				}
 			}
 		}
@@ -333,9 +343,11 @@ test = {
 			}, mockData);
 
 			for (method in mockData) {
-				data = mockData[method];
-				if (method !== 'config'){
-					test.mock[method](data);
+				if (mockData.hasOwnProperty(method)) {
+					data = mockData[method];
+					if (method !== 'config'){
+						test.mock[method](data);
+					}
 				}
 			}
 			test.mock.config(mockData.config || {});

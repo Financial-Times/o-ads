@@ -16,4 +16,3 @@ module.exports = {
 			return " version: " + this.artifactVersion + " Build life id: " + this.buildLifeId + " Build date: " + this.buildLifeDate + " git revision: " + this.gitRev;
 	}
 };
-

@@ -15,19 +15,21 @@ function getViewportDims() {
 
 
 function getNearestBreakpoint() {
-	var viewPort, viewPortDims, current, winner,
+	var viewPort, viewPortDims, winner,
 		dims = getViewportDims();
 
 	for (viewPort in viewPorts){
-		viewPortDims = viewPorts[viewPort];
-		if( dims.w > viewPortDims[0] && dims.h > viewPortDims[1] ){
-			if(!winner || viewPortDims[0] > viewPorts[winner][0]) {
-				winner = viewPort;
+		if(viewPorts.hasOwnProperty(viewPort)){
+			viewPortDims = viewPorts[viewPort];
+			if( dims.w > viewPortDims[0] && dims.h > viewPortDims[1] ){
+				if(!winner || viewPortDims[0] > viewPorts[winner][0]) {
+					winner = viewPort;
+				}
 			}
 		}
 	}
 
-   return winner;
+	return winner;
 }
 
 function fire() {
@@ -44,7 +46,9 @@ function setCurrent(name){
 }
 
 function onResize() {
-	if (timer) { clearTimeout(timer); }
+	if (timer) {
+		clearTimeout(timer);
+	}
 	timer = setTimeout(fire, 200);
 }
 

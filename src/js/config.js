@@ -118,7 +118,7 @@ function Config() {
 		var canonical,
 			canonicalTag = document.querySelector('link[rel="canonical"]');
 		if(canonicalTag) {
-		   canonical = canonicalTag.href;
+			canonical = canonicalTag.href;
 		}
 		return { canonical: canonical };
 	};

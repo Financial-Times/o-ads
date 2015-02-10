@@ -138,6 +138,3 @@
 
 	$(runTests);
 }(window, document, jQuery));
-
-
-
