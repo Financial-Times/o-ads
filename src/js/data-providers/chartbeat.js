@@ -52,14 +52,16 @@ proto.decorateRefresh = function () {
 proto.refresh = function (fn) {
 	return function (slotsForRefresh) {
 		if (window.pSUPERFLY){
-			var slot, slotName, cbName,
-				slots = ads.slots;
+			var slot, slotName, cbName;
+			var slots = ads.slots;
 			slotsForRefresh = slotsForRefresh || slots;
 			for (slotName in slotsForRefresh) {
-				slot = slots[slotName];
-				if (slot.gptSlot && slot.timer === undefined) {
-					if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-						window.pSUPERFLY.refreshAd(cbName);
+				if (slots.hasOwnProperty(slotName)) {
+					slot = slots[slotName];
+					if (slot.gptSlot && slot.timer === undefined) {
+						if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
+							window.pSUPERFLY.refreshAd(cbName);
+						}
 					}
 				}
 			}

@@ -83,8 +83,7 @@ proto.segments = function () {
 * @lends Krux
 */
 proto.targeting = function (){
-	var bht = false,
-	segs = this.segments();
+	var segs = this.segments();
 	if (segs) {
 		segs = segs.split(',');
 		if (ads.config('krux').limit) {
@@ -125,15 +124,18 @@ proto.events = {
 		if (window.addEventListener) {
 			if (config) {
 				var fire = this.fire;
+				var eventScope = function (kEvnt) {
+					return function(e, t){
+						fire(config[kEvnt].id);
+					};
+				};
+
 				window.addEventListener('load', function(){
 						var delEvnt = new delegate(document.body);
 						for (var kEvnt in config){
-
-							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, function (kEvnt) {
-								return function(e, t){
-									fire(config[kEvnt].id);
-								};
-						}(kEvnt));
+							if (config.hasOwnProperty(kEvnt)) {
+								delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
+							}
 					}
 				}, false);
 			}

@@ -1,6 +1,5 @@
 'use strict';
 
-var utils = require('./index.js');
 function Queue(processor){
 	if(!(this instanceof Queue)) {
 	  return new Queue(processor);

@@ -1,4 +1,5 @@
 /* jshint strict:false */
+/* globals sinon:false, jQuery:false, $: false, FT, googletag */
 // we turn of strict here because in order to mock certain things we have to do things strict won't allow
 
 var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);

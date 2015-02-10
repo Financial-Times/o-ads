@@ -1,4 +1,4 @@
-/*globals googletag: true */
+/*globals googletag: true, FT: false */
 
 /**
 * @fileOverview
@@ -16,7 +16,6 @@
 "use strict";
 var ads;
 var proto = GPT.prototype;
-var slots = require('../slots');
 /**
 * The GPT class defines an FT.ads.gpt instance.
 * @class
@@ -41,7 +40,7 @@ proto.defineSlot = function (slotName) {
 		canonical = context.canonical = ads.config('canonical');
 
 	ads.utils.addClass(wrap, 'wrap');
-	googletag.cmd.push(function (context, slot, slotName, slotId) {
+	googletag.cmd.push((function (context, slot, slotName, slotId) {
 		return function () {
 			var currentSize;
 			if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.config.sizes)) {
@@ -65,7 +64,7 @@ proto.defineSlot = function (slotName) {
 			}
 
 		};
-	}(this, slot, slotName, slotId));
+	})(this, slot, slotName, slotId));
 
 	if (slot.config.outOfPage) {
 		googletag.cmd.push(
@@ -143,7 +142,9 @@ proto.setPageTargeting = function (targeting) {
 	}
 
 	for (param in targeting) {
-		googletag.cmd.push(setTargeting(param, targeting[param]));
+		if (targeting.hasOwnProperty(param)) {
+			googletag.cmd.push(setTargeting(param, targeting[param]));
+		}
 	}
 
 	return targeting;
@@ -181,10 +182,12 @@ proto.refresh = function (slotsForRefresh) {
 	slotsForRefresh = slotsForRefresh || [];
 	if ( slotsForRefresh.length === 0 ) {
 		for (slot in slots) {
-			slot = slots[slot];
-			if (slot.gptSlot && slot.timer === undefined) {
-				slot.gptSlot.setTargeting('rfrsh', 'true');
-				slotsForRefresh.push(slot.gptSlot);
+			if (slots.hasOwnProperty(slot)) {
+				slot = slots[slot];
+				if (slot.gptSlot && slot.timer === undefined) {
+					slot.gptSlot.setTargeting('rfrsh', 'true');
+					slotsForRefresh.push(slot.gptSlot);
+				}
 			}
 		}
 	}
@@ -293,16 +296,16 @@ proto.enableCompanions = function () {
 };
 
 proto.buildSizeMapping = function (viewports, slotSizes) {
-  var size, viewport,
-	mapping = googletag.sizeMapping();
-  for ( viewport in slotSizes) {
-	if (slotSizes[viewport]) {
-	  mapping.addSize(viewports[viewport], slotSizes[viewport]);
+	var viewport;
+	var mapping = googletag.sizeMapping();
+	for ( viewport in slotSizes) {
+		if (slotSizes[viewport]) {
+			mapping.addSize(viewports[viewport], slotSizes[viewport]);
+		}
 	}
-  }
 
-  mapping = mapping.build();
-  return mapping;
+	mapping = mapping.build();
+	return mapping;
 };
 
 /**
@@ -316,8 +319,7 @@ proto.buildSizeMapping = function (viewports, slotSizes) {
 * @lends GPT
 */
 proto.setSlotCollapseEmpty = function (gptSlot, config) {
-	var globalMode = ads.config('collapseEmpty'),
-		mode = config.collapseEmpty;
+	var mode = config.collapseEmpty;
 
 	if (mode === true || mode === 'after') {
 		gptSlot.setCollapseEmptyDiv(true);
@@ -389,18 +391,20 @@ proto.init = function (impl) {
 	function onViewportChange(viewport){
 		var slot, slotName, slots = ads.slots, slotsForRefresh = [];
 		for (slotName in slots) {
-			slot = slots[slotName];
-			if (slot.gptSlot && ads.utils.isObject(slot.config.sizes)) {
-				if (slot.config.sizes[viewport] === false) {
-					slot.collapse();
-				} else {
-					if (!slot.isDisplayed) {
-					  slot.isDisplayed = true;
-					  googletag.display(slot.gptSlot.getSlotId().getDomId());
+			if (slots.hasOwnProperty(slotName)) {
+				slot = slots[slotName];
+				if (slot.gptSlot && ads.utils.isObject(slot.config.sizes)) {
+					if (slot.config.sizes[viewport] === false) {
+						slot.collapse();
 					} else {
-					  slotsForRefresh.push(slot.gptSlot);
+						if (!slot.isDisplayed) {
+						  slot.isDisplayed = true;
+						  googletag.display(slot.gptSlot.getSlotId().getDomId());
+						} else {
+						  slotsForRefresh.push(slot.gptSlot);
+						}
+						slot.uncollapse();
 					}
-					slot.uncollapse();
 				}
 			}
 		}
