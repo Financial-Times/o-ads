@@ -250,7 +250,6 @@ proto.initSlot = function (slotName) {
 
     this.centerContainer(container, config.sizes);
     if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
-    if (config.lazyLoad) {this.lazyLoad(slotName);}
 
     this[slotName] = {
         container: container,
@@ -272,7 +271,11 @@ proto.initSlot = function (slotName) {
 
     };
 
-    if (!config.lazyLoad) {ads.gpt.defineSlot(slotName);}
+    if (config.lazyLoad) {
+        this.lazyLoad(slotName);
+    } else {
+        ads.gpt.defineSlot(slotName);
+    }
     return this[slotName];
 };
 
