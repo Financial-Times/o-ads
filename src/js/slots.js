@@ -41,18 +41,21 @@ proto.init = function (impl){
 
 proto.lazyLoad = function(slotName) {
     var handler =  function() {
-        if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
+        if (!ads.slots[slotName].gptSlot && ads.slots[slotName].inView()) {
+            ads.gpt.defineSlot(slotName);
+        }
     };
+
     if (window.addEventListener) {
-        addEventListener('DOMContentLoaded', handler, false); 
-        addEventListener('load', handler, false); 
-        addEventListener('scroll', handler, false); 
-        addEventListener('resize', handler, false); 
+        window.addEventListener('DOMContentLoaded', handler, false);
+        window.addEventListener('load', handler, false);
+        window.addEventListener('scroll', handler, false);
+        window.addEventListener('resize', handler, false);
     } else if (window.attachEvent)  {
-        attachEvent('onDOMContentLoaded', handler); // IE9+ :(
-        attachEvent('onload', handler);
-        attachEvent('onscroll', handler);
-        attachEvent('onresize', handler);
+        window.attachEvent('onDOMContentLoaded', handler); // IE9+ :(
+        window.attachEvent('onload', handler);
+        window.attachEvent('onscroll', handler);
+        window.attachEvent('onresize', handler);
     }
 };
 
@@ -262,7 +265,7 @@ proto.initSlot = function (slotName) {
         },
 
         inView : function() {
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            var h = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
             var rect = container.getBoundingClientRect();
             return (rect.top <= h);
         }
