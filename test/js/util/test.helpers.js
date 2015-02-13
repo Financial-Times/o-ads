@@ -1,15 +1,11 @@
-/* jshint strict:true */
+/* jshint strict:false */
 // we turn of strict here because in order to mock certain things we have to do things strict won't allow
 
 var ua = navigator.userAgent, browser = jQuery.uaMatch(ua);
 window.FT = {};
 window.FT._ads = window.FT.ads = require('./../../../main.js');
 
-if ((browser.browser === 'msie' && browser.version < 10) || (browser.browser !== 'msie' && !ua.match(/Trident.*rv\:(\d+)/))) "use strict";
-
-if(!window.opener){
-    $('<div id="qunit"></div>').appendTo(document.body);
-}
+$('<div id="qunit"></div>').appendTo(document.body);
 
 var localstorage = {},
 globalVars = {},
@@ -204,7 +200,7 @@ test = {
         date: function (data) {
             if (data === false || data === undefined){
                 // if it's false don't fake times
-                return false
+                return false;
             } else if(isNaN(parseInt(data, 10))){
                 // if it's not a number just start the fake timer from now
                 test.sinon.clock = sinon.useFakeTimers();
@@ -277,7 +273,7 @@ test = {
                 if (~mock.indexOf(restore)) {
                     func.restore();
                 } else if ($.isFunction(func.reset)) {
-                    func.reset()
+                    func.reset();
                 } else if($.isPlainObject(mock)) {
                     test.clear.sinon(mock);
                 }
@@ -336,7 +332,7 @@ test = {
             }, mockData);
 
             for (method in mockData) {
-                var data = mockData[method];
+                data = mockData[method];
                 if (method !== 'config'){
                     test.mock[method](data);
                 }
@@ -368,6 +364,9 @@ $(function () {
 
     test.mode();
     test.mock.attach();
+
+    // mocks admantx service response for use in tests
+    test.mock.admantx = require('../../fixtures/admantx-response.json');
 
     FT.ads.init({
         collapseEmpty: 'ft',

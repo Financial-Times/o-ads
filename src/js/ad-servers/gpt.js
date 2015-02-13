@@ -132,9 +132,9 @@ proto.getUnitName = function (slotName) {
 * @memberof GPT
 * @lends GPT
 */
-proto.setPageTargeting = function () {
-    var param,
-        targeting = ads.targeting();
+proto.setPageTargeting = function (targeting) {
+    var param;
+    targeting = ads.utils.isPlainObject(targeting) ? targeting : ads.targeting.get();
 
     function setTargeting(key, value) {
         return function () {
@@ -380,7 +380,7 @@ proto.init = function (impl) {
     var context = this,
     responsive = ads.config('responsive');
     ads.utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
-    this.setPageTargeting();
+
     //TODO: this is FT specific content needs to be removed
     if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
           this.startRefresh();
@@ -433,6 +433,13 @@ proto.init = function (impl) {
                 ads.renderEnded(event);
             }
         });
+
+        context.setPageTargeting();
+        var _add = ads.targeting.add;
+        ads.targeting.add = function (targetingObj) {
+            _add(targetingObj);
+            context.setPageTargeting(targetingObj);
+        };
         googletag.enableServices();
     });
 

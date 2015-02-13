@@ -9,6 +9,7 @@
  * @name targeting
  * @memberof ads
 */
+"use strict";
 var ads;
 var proto = Rubicon.prototype;
 // used to store a local copy of ads.slots.initSlot

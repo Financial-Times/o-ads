@@ -4,7 +4,7 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-
+'use strict';
 //TODO Use polyfils service for these instead
 // add an ECMAScript5 compliant trim to String
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
@@ -164,6 +164,15 @@ module.exports.isNonEmptyString = function (str) {
 };
 
 /**
+ * Test if an object is a finite number
+ * @param {object} The object to be tested
+ * @returns Boolean true if the object is a finite number, can be a float or int but not NaN or Infinity
+ */
+module.exports.isNumeric = function (num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
+};
+
+/**
  * Used to merge or clone objects
  * @param If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
  * @param If deep copy is true will be the target object of the copy
@@ -258,6 +267,8 @@ module.exports.removeClass = function(node, className){
   return true;
 };
 
+
+//TODO: remove this
 module.exports.writeScript = function (url) {
   // Stop document.write() from happening after page load (unless QUnit is present)
   if (document.readyState !== "complete" || typeof QUnit === "object") {
@@ -292,16 +303,6 @@ module.exports.hash = function (str, delimiter, pairing) {
   return hash;
 };
 
-
-
-function scriptOnloadFallback(tag, callback) {
-  if (tag.readyState=='loaded' || scriptElement.readyState=='completed') {
-       callback();
-   } else {
-       setTimeout(function() {ieLoadBugFix(scriptElement, callback); }, 100);
-   }
-}
-
 /**
 * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
 * The async value of the script can be set by the seccond parameter, which is a boolean
@@ -322,21 +323,23 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
   }
 
   if (utils.isFunction(callback)) {
-    function loaded() {
-      if(!hasRun) {
-        callback();
-        hasRun = true;
-      }
-    }
 
     if(obj_hop.call(tag, 'onreadystatechange')) {
       tag.onreadystatechange = function () {
         if (tag.readyState === "loaded") {
-          loaded();
+          if(!hasRun) {
+            callback();
+            hasRun = true;
+          }
         }
       };
-    } else{
-      tag.onload =  loaded;
+    } else {
+      tag.onload =  function () {
+        if(!hasRun) {
+          callback();
+          hasRun = true;
+        }
+      };
 
       if (utils.isFunction(errorcb)) {
         tag.onerror = function () {
@@ -360,6 +363,31 @@ module.exports.isScriptAlreadyLoaded = function(url) {
       if (scripts[i].src == url) return true;
   }
   return false;
+};
+
+utils.createCORSRequest = function (url, method, callback, errorcb) {
+    var xhr = new XMLHttpRequest();
+    if ('withCredentials' in xhr) {
+        xhr.open(method, url, true);
+        xhr.responseType = 'json';
+    } else if (typeof XDomainRequest != "undefined") {
+        xhr = new XDomainRequest();
+        xhr.open(method, url, true);
+    } else {
+        xhr = null;
+        errorcb();
+    }
+
+    xhr.onload = function (xhrEvent){
+      callback.call(this, this.response || this.responseText, xhrEvent);
+    };
+
+    if (utils.isFunction(errorcb)) {
+      xhr.onerror = errorcb;
+      xhr.ontimeout = errorcb;
+    }
+    xhr.send();
+    return xhr;
 };
 
 /**

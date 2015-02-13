@@ -58,30 +58,32 @@
             ok(window.Krux.calledWith('admEvent', eventId, attrs), 'firing an event with attributes works!');
         });
 
-        test('delegated', function(){
-            TEST.beginNewPage({
-                config: {
-                    krux: {
-                        id: '112233',
-                        events: {
-                            delegated: {
-                                shareTwitter : {
-                                    selector : '#kevents',
-                                    eType: 'click',
-                                    id : 'xyz'
+        if (document.addEventListener){
+            test('delegated', function(){
+                TEST.beginNewPage({
+                    config: {
+                        krux: {
+                            id: '112233',
+                            events: {
+                                delegated: {
+                                    shareTwitter : {
+                                        selector : '#kevents',
+                                        eType: 'click',
+                                        id : 'xyz'
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                });
+                window.Krux = TEST.sinon.Krux = sinon.stub();
+                FT.ads.krux.events.init();
+                $('body').append('<div id="kevents">event</div>');
+                TEST.fireEvent(window, 'load');
+                TEST.fireEvent('kevents', 'click');
+                ok(window.Krux.calledWith('admEvent', 'xyz'), 'dom delegated event fired');
             });
-            window.Krux = TEST.sinon.Krux = sinon.stub();
-            FT.ads.krux.events.init();
-            $('body').append('<div id="kevents">event</div>');
-            TEST.fireEvent(window, 'load');
-            TEST.fireEvent('kevents', 'click');
-            ok(window.Krux.calledWith('admEvent', 'xyz'), 'dom delegated event fired');
-        });
+        }
 
         test('event pixel - dwell time', function () {
             var dwellTimeId = 'JCadw18P',

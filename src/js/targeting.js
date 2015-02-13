@@ -16,7 +16,8 @@
 "use strict";
 var ads;
 var proto = Targeting.prototype;
-
+var context;
+var parameters = {};
 proto.initialised = false;
 
 /**
@@ -25,45 +26,36 @@ proto.initialised = false;
 * @constructor
 */
 function Targeting() {
-  var context = this;
-  var parameters = {};
-  /**
-* returns an object containing all targeting parameters
-* @memberof Targeting
-* @lends Targeting
-*/
-    function targeting() {
-        var item,
-        config = {
-          metadata: context.getFromMetaData,
-          krux: context.fetchKrux,
-          socialReferrer: context.getSocialReferrer,
-          pageReferrer: context.getPageReferrer,
-          cookieConsent:  context.cookieConsent,
-          timestamp: context.timestamp,
-          version : context.version
-        };
-
-        parameters = ads.utils.extend({}, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
-
-        for (item in config)  {
-          if (config.hasOwnProperty(item) && ads.config(item)) {
-            ads.utils.extend(parameters, config[item]());
-          }
-        }
-
-        proto.initialised = true;
-        return parameters;
-    }
-    
-    targeting.init = proto.init;
-
-    return targeting;
-
-    //FT.ads.config('targeting') could hold switches for each Targeting function
+  context = this;
 }
 
+proto.get = function(){
+  var item,
+  config = {
+    metadata: context.getFromMetaData,
+    krux: context.fetchKrux,
+    socialReferrer: context.getSocialReferrer,
+    pageReferrer: context.getPageReferrer,
+    cookieConsent:  context.cookieConsent,
+    timestamp: context.timestamp,
+    version : context.version
+  };
 
+  ads.utils.extend(parameters, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+
+  for (item in config)  {
+    if (config.hasOwnProperty(item) && ads.config(item)) {
+      ads.utils.extend(parameters, config[item]());
+    }
+  }
+  return parameters;
+};
+
+proto.add = function (obj){
+  if (ads.utils.isPlainObject(obj)){
+    ads.utils.extend(parameters, obj);
+  }
+};
 
 proto.getFromMetaData =  function () {
   var page = ads.metadata.page(),
@@ -200,25 +192,25 @@ proto.cookieConsent = function () {
 };
 
 proto.getAysc = function () {
-var exclusions =  ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
-var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1, '20': 1, '21': 1};
-var remove_res_pvt = {'14': 1, 'cn': 1, '27': 1};
-var returnObj = {};
-var AllVars = ads.metadata.getAyscVars({});
+  var exclusions =  ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
+  var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1, '20': 1, '21': 1};
+  var remove_res_pvt = {'14': 1, 'cn': 1, '27': 1};
+  var returnObj = {};
+  var AllVars = ads.metadata.getAyscVars({});
 
-function excludeFields(exclusions, obj) {
-  var idx, keyvalsplit, prop;
-  // TODO: clean this up later -- val is now unused so this could be simpler.
-    for(prop in obj){
-          for (idx = 0; idx < exclusions.length; idx++) {
-            keyvalsplit = exclusions[idx].split("=");
-            if (((keyvalsplit[0] === "key") && (prop === keyvalsplit[1])) || ((keyvalsplit[0] === "val") && (obj[prop] === keyvalsplit[1]))) {
-               delete obj[prop];
-            }
+  function excludeFields(exclusions, obj) {
+    var idx, keyvalsplit, prop;
+    // TODO: clean this up later -- val is now unused so this could be simpler.
+      for(prop in obj){
+        for (idx = 0; idx < exclusions.length; idx++) {
+          keyvalsplit = exclusions[idx].split("=");
+          if (((keyvalsplit[0] === "key") && (prop === keyvalsplit[1])) || ((keyvalsplit[0] === "val") && (obj[prop] === keyvalsplit[1]))) {
+             delete obj[prop];
           }
         }
-      return obj;
-}
+      }
+    return obj;
+  }
 
     AllVars = excludeFields(exclusions, AllVars);
     for (var ayscVar in AllVars){
@@ -230,6 +222,7 @@ function excludeFields(exclusions, obj) {
     return returnObj;
 };
 
+//TODO is this still relevant maybe we should remove it
 proto.behaviouralFlag = function () {
     var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
     return flag;
@@ -259,6 +252,7 @@ proto.version = function(){
 
 proto.init = function (impl) {
   ads = impl;
+  return this;
 };
 
 module.exports = new Targeting();

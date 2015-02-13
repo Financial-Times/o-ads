@@ -19,6 +19,7 @@ Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
+Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.metadata = require('./src/js/metadata');
@@ -37,6 +38,7 @@ Ads.prototype.init = function (config){
     this.krux.init(this);
     this.cb.init(this);
     this.rubicon.init(this);
+    this.admantx.init(this);
     this.gpt.init(this);
     this.buildURLForVideo.init(this);
     return this;
