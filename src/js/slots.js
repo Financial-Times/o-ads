@@ -264,9 +264,10 @@ proto.initSlot = function (slotName) {
         },
 
         inView : function() {
-            var h = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+            var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+            var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
             var rect = container.getBoundingClientRect();
-            return (rect.top <= h);
+            return (rect.top <= height) && (rect.left <= width);
         }
 
     };
