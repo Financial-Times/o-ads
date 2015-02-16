@@ -91,7 +91,6 @@ function buildURLForVideo(zone, pos, vidKV){
 			additionalAdTargetingParams: encodeBaseAdvertProperties('videoExtra', vidKV)
 		};
 	};
->>>>>>> master
 
 	if (ads.config('video')) {
 		return gptVideoURL();
