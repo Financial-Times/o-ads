@@ -39,6 +39,7 @@ proto.init = function (impl){
 
 
 proto.lazyLoad = function(slotName) {
+<<<<<<< HEAD
 	var handler =  function() {
 		if (ads.slots[slotName].inView()) {ads.gpt.defineSlot(slotName);}
 	};
@@ -53,6 +54,25 @@ proto.lazyLoad = function(slotName) {
 		window.attachEvent('onscroll', handler);
 		window.attachEvent('onresize', handler);
 	}
+=======
+    var handler =  function() {
+        if (!ads.slots[slotName].gptSlot && ads.slots[slotName].inView()) {
+            ads.gpt.defineSlot(slotName);
+        }
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener('DOMContentLoaded', handler, false);
+        window.addEventListener('load', handler, false);
+        window.addEventListener('scroll', handler, false);
+        window.addEventListener('resize', handler, false);
+    } else if (window.attachEvent)  {
+        window.attachEvent('onDOMContentLoaded', handler); // IE9+ :(
+        window.attachEvent('onload', handler);
+        window.attachEvent('onscroll', handler);
+        window.attachEvent('onresize', handler);
+    }
+>>>>>>> master
 };
 
 
@@ -223,6 +243,7 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
+<<<<<<< HEAD
 	if (this[slotName]) {
 		return false;
 	}
@@ -270,6 +291,58 @@ proto.initSlot = function (slotName) {
 
 	if (!config.lazyLoad) {ads.gpt.defineSlot(slotName);}
 	return this[slotName];
+=======
+    if (this[slotName]) {
+        return false;
+    }
+
+    var container = document.getElementById(slotName),
+        formats =  ads.config('formats');
+
+    if (!container) {
+        return false;
+    }
+
+    var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
+    if (!config.sizes){
+        return false;
+    }
+
+    if (container.tagName === 'SCRIPT') {
+        container = this.addContainer(container, slotName);
+    }
+
+
+    this.centerContainer(container, config.sizes);
+    if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
+
+    this[slotName] = {
+        container: container,
+        config: config,
+        collapse: function(){
+            ads.utils.addClass(this.container, 'empty');
+            ads.utils.addClass(document.body, 'no-' + container.id);
+        },
+        uncollapse: function(){
+            ads.utils.removeClass(this.container, 'empty');
+            ads.utils.removeClass(document.body, 'no-' + container.id);
+        },
+
+        inView : function() {
+            var h = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+            var rect = container.getBoundingClientRect();
+            return (rect.top <= h);
+        }
+
+    };
+
+    if (config.lazyLoad) {
+        this.lazyLoad(slotName);
+    } else {
+        ads.gpt.defineSlot(slotName);
+    }
+    return this[slotName];
+>>>>>>> master
 };
 
 module.exports = new Slots();

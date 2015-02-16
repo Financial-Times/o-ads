@@ -18,7 +18,7 @@ function buildURLForVideo(zone, pos, vidKV){
 	var gptVideoURL = function(){
 		var URL, additionalAdTargetingParams, fullURL;
 		var buildCustomParams = function (vkv) {
-			var allTargeting = ads.targeting();
+			var allTargeting = ads.targeting.get();
 						var results = '',
 						kruxSegs = allTargeting.ksg,
 						includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
@@ -42,7 +42,6 @@ function buildURLForVideo(zone, pos, vidKV){
 			return encodeURIComponent(buildCustomParams(vkv));
 		};
 
-
 		URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/"+ ads.config('dfp_site') + "/" + ads.config('dfp_zone') + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
 		additionalAdTargetingParams = encodeCustParams(vidKV);
 		fullURL = (buildCustomParams(vidKV) === "") ? URL : URL + '&' + buildCustomParams(vidKV);
@@ -59,7 +58,7 @@ function buildURLForVideo(zone, pos, vidKV){
 		var keyOrderVideo = ['dcopt', 'pos'];
 		var keyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh'];
 		var encodeBaseAdvertProperties = function (mode, vidKV) {
-			var allTargeting = ads.targeting();
+			var allTargeting = ads.targeting.get();
 			var results = '',
 			dfp_targeting = ads.config('dfp_targeting'),
 			kruxSegs = allTargeting.ksg,
@@ -92,6 +91,7 @@ function buildURLForVideo(zone, pos, vidKV){
 			additionalAdTargetingParams: encodeBaseAdvertProperties('videoExtra', vidKV)
 		};
 	};
+>>>>>>> master
 
 	if (ads.config('video')) {
 		return gptVideoURL();
