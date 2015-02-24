@@ -267,7 +267,7 @@ proto.initSlot = function (slotName) {
             var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
             var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
             var rect = container.getBoundingClientRect();
-            return (((rect.top <= width) && (rect.vottom > 0)) && (rect.left <= width) && (rect.right > 0)));
+            return (((rect.top <= width) && (rect.bottom > 0)) && ((rect.left <= width) && (rect.right > 0)));
         }
 
     };
