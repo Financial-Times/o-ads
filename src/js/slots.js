@@ -54,7 +54,7 @@ function iOSversion() {
 }
 var ver = iOSversion();
 
-if ((typeof ver !== 'undefined') && (ver[0] >= 8)) {
+if ((typeof ver === 'undefined') || (ver[0] >= 8)) {
     if (window.addEventListener) {
         window.addEventListener('DOMContentLoaded', handler, false);
         window.addEventListener('load', handler, false);
