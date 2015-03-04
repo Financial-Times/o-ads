@@ -52,7 +52,7 @@ function iOSversion() {
     return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
   }
 }
-ver = iOSversion();
+var ver = iOSversion();
 if (ver[0] >= 8) {
     if (window.addEventListener) {
         window.addEventListener('DOMContentLoaded', handler, false);
