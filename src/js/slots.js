@@ -45,16 +45,6 @@ proto.lazyLoad = function(slotName) {
             ads.gpt.defineSlot(slotName);
         }
     };
-//detect iOS version and only run for version >=8.
-function iOSversion() {
-  if (/iP(hone|od|ad)/.test(navigator.platform)) {
-    var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-    return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
-  }
-}
-var ver = iOSversion();
-
-if ((typeof ver === 'undefined') || (ver[0] >= 8)) {
     if (window.addEventListener) {
         window.addEventListener('DOMContentLoaded', handler, false);
         window.addEventListener('load', handler, false);
@@ -66,7 +56,6 @@ if ((typeof ver === 'undefined') || (ver[0] >= 8)) {
         window.attachEvent('onscroll', handler);
         window.attachEvent('onresize', handler);
     }
-}
 };
 
 
@@ -282,9 +271,11 @@ proto.initSlot = function (slotName) {
 
     };
 
-    if (config.lazyLoad) {
-        this.lazyLoad(slotName);
-    } else {
+    var ver =  ads.utils.getiOSversion(); //Disable lazy-loading from iOS7 and below.
+    if (config.lazyLoad && ((typeof ver === 'undefined') || (ver[0] >= 8))) {
+            this.lazyLoad(slotName);
+        }
+    else {
         ads.gpt.defineSlot(slotName);
     }
     return this[slotName];
