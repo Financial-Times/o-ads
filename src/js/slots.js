@@ -270,9 +270,7 @@ proto.initSlot = function (slotName) {
         }
 
     };
-
-    var ver =  ads.utils.getiOSversion(); //Disable lazy-loading from iOS7 and below.
-    if (config.lazyLoad && ((typeof ver === 'undefined') || (ver[0] >= 8))) {
+    if (config.lazyLoad) {
             this.lazyLoad(slotName);
         }
     else {
