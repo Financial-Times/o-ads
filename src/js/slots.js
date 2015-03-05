@@ -271,9 +271,9 @@ proto.initSlot = function (slotName) {
 
     };
     if (config.lazyLoad) {
-            this.lazyLoad(slotName);
+        this.lazyLoad(slotName);
         }
-    else {
+    else{
         ads.gpt.defineSlot(slotName);
     }
     return this[slotName];
