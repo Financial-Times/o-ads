@@ -45,7 +45,6 @@ proto.lazyLoad = function(slotName) {
             ads.gpt.defineSlot(slotName);
         }
     };
-
     if (window.addEventListener) {
         window.addEventListener('DOMContentLoaded', handler, false);
         window.addEventListener('load', handler, false);
@@ -264,16 +263,17 @@ proto.initSlot = function (slotName) {
         },
 
         inView : function() {
-            var h = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+            var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+            var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
             var rect = container.getBoundingClientRect();
-            return (rect.top <= h);
+            return (((rect.top <= height) && (rect.bottom > 0)) && ((rect.left <= width) && (rect.right > 0)));
         }
 
     };
-
     if (config.lazyLoad) {
         this.lazyLoad(slotName);
-    } else {
+        }
+    else{
         ads.gpt.defineSlot(slotName);
     }
     return this[slotName];
