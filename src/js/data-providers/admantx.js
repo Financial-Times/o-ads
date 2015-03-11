@@ -52,12 +52,12 @@ proto.init = function (impl) {
 proto.makeAPIRequest = function () {
     var requestData = {
         "key": context.config.id,
-        "method":"descriptor",
-        "mode":"async",
-        "decorator":"template.ft",
+        "method": "descriptor",
+        "mode": "async",
+        "decorator": "template.ft",
         "filter":["default"],
-        "type":"URL",
-        "body": ads.utils.getLocation()
+        "type": "URL",
+        "body": encodeURIComponent(ads.config('canonical') || ads.utils.getLocation())
     };
     var url = context.api + encodeURIComponent(JSON.stringify(requestData));
     context.xhr = ads.utils.createCORSRequest(url, 'GET', context.resolve, context.resolve);
