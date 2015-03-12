@@ -16,6 +16,28 @@
          FT.ads.slots.initSlot = initSlot;
       });
 
+      test('encode categories to be DFP compatiable', function () {
+         var result = 'C/C++';
+         var expected = 'C%20C%2B%2B';
+         strictEqual(FT.ads.admantx.cleanSpecialChars(result), expected, 'the special char / is removed and ++ is encoded');
+
+         result = 'shareware/freeware';
+         expected = 'shareware%20freeware';
+         strictEqual(FT.ads.admantx.cleanSpecialChars(result), expected, 'the special chars / is removed and ++ is encoded');
+
+         result = 'children\'s books';
+         expected = 'children%27s%20books';
+         strictEqual(FT.ads.admantx.cleanSpecialChars(result), expected, 'the special chars / is removed and \' is encoded');
+
+         result = 'IBS/crohn\'s disease';
+         expected = 'IBS%20crohn%27s%20disease';
+         strictEqual(FT.ads.admantx.cleanSpecialChars(result), expected, 'the special chars / is removed and \' is encoded');
+
+         result = FT.ads.admantx.cleanSpecialChars('law, gov\'t and politics');
+         expected = 'law%2C%20gov%27t%20and%20politics';
+         strictEqual(FT.ads.admantx.cleanSpecialChars(result), expected, 'the special chars , and \' are encoded');
+      });
+
       test('process categories', function () {
          var given = [
             { "name": "US", "origin": "NORMAL", "score": 12, "type": "MAINLEMMAS" },
