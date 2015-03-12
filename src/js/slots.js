@@ -229,9 +229,8 @@ proto.initSlot = function (slotName) {
     if (this[slotName]) {
         return false;
     }
-
-    var container = document.getElementById(slotName),
-        formats =  ads.config('formats');
+    var container = document.querySelector("[data-o-ads-slotname='"+slotName+"']");
+    var formats =  ads.config('formats');
 
     if (!container) {
         return false;
