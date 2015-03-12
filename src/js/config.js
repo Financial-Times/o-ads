@@ -35,53 +35,12 @@ function Config() {
 */
     var defaults =  {
         network: '5887',
-        formats: {
-            intro: {
-
-            },
-            leaderboard: {
-                sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
-                outOfPage: true
-            },
-            mpu: {
-                sizes: [[300,250],[336,280]]
-            },
-            doublet: {
-                sizes: [[352,230]]
-            },
-            hlfmpu: {
-                sizes: [[300,250],[300,600],[336,850],[336,280],[300,1050]]
-            },
-            newssubs: {
-                sizes: [[270,42]]
-            },
-            refresh: {
-                'sz': '1x1'
-            },
-            searchbox: {
-                sizes: [[270,42]]
-            },
-            tlbxrib: {
-                sizes: [[336,60]]
-            },
-            marketingrib: {
-                sizes: [[336,60]]
-            },
-            lhn: {
-                sizes: [[136,64]]
-            },
-            tradcent: {
-                sizes: [[336,260]]
-            },
-            mktsdata: { // also matches mktsdata2 and mktsdata3
-                sizes: [[88,31], [75,25]]
-            },
-            mpusky: {
-                sizes: [[300,250], [336,280],[160,60]]
-            },
-            wdesky: {
-                sizes: [[160,600]]
-            }
+        formats : {
+          'MediumRectangle':  {sizes :[300,250]},
+          'Rectangle':  {sizes :[180,50]},
+          'WideSkyscraper':  {sizes :[160,600]},
+          'Leaderboard'   :  {sizes :[728,90]},
+          'SuperLeaderboard': {sizes: [[970,90], [970,66]]}
         },
         collapseEmpty: 'ft'
     };
