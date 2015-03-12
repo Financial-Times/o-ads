@@ -67,7 +67,6 @@ proto.cleanSpecialChars = function (value) {
    value = value.trim();
    value = value.replace(/\//g, ' ');
    value = value.replace(/\s+/g, ' ');
-   //value = encodeURIComponent(value);
    value = value.replace(/\./g, '%2E');
    value = value.replace(/\'/g, '%27');
    return value;
