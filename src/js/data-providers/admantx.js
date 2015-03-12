@@ -48,7 +48,6 @@ proto.init = function (impl) {
     }
 };
 
-
 proto.makeAPIRequest = function () {
     var requestData = {
         "key": context.config.id,
@@ -63,12 +62,23 @@ proto.makeAPIRequest = function () {
     context.xhr = ads.utils.createCORSRequest(url, 'GET', context.resolve, context.resolve);
 };
 
+proto.cleanSpecialChars = function (value) {
+   value = decodeURIComponent(value);
+   value = value.trim();
+   value = value.replace(/\//g, ' ');
+   value = value.replace(/\s+/g, ' ');
+   value = encodeURIComponent(value);
+   value = value.replace(/\./g, '%2E');
+   value = value.replace(/\'/g, '%27');
+   return value;
+};
+
 proto.processCollection = function(collection, max){
     var names = [];
     var i = 0;
     var j = ads.utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
     for (;i < j; i++) {
-        names.push(collection[i].name || collection[i]);
+        names.push(this.cleanSpecialChars(collection[i].name || collection[i]));
     }
     return names;
 };
