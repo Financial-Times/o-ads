@@ -114,6 +114,11 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
             parser(name, attrObj.value);
         }
     }
+    if (sizes.length === 0) {
+      for (var i = 0; i < config.length; i++){
+       sizes= sizes.concat(config[i].sizes);
+      }
+    }
 
     return {
         sizes: !!(sizes.length) ? sizes : config.sizes,
@@ -226,17 +231,17 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
-    if (this[slotName]) {
-        return false;
-    }
     var container = document.querySelector("[data-o-ads-slotname='"+slotName+"']");
     var formats =  ads.config('formats');
-
+    var slotFormats = container.dataset.oAdsFormats.split(',');
+    for (var i = 0; i < slotFormats.length; i++) {
+        slotFormats[i] = slotFormats[i].trim();
+        slotFormats[i] = formats[slotFormats[i]];
+     }
     if (!container) {
         return false;
     }
-
-    var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
+    var config = this.fetchSlotConfig(container, slotName, slotFormats || {});
     if (!config.sizes){
         return false;
     }
@@ -244,7 +249,6 @@ proto.initSlot = function (slotName) {
     if (container.tagName === 'SCRIPT') {
         container = this.addContainer(container, slotName);
     }
-
 
     this.centerContainer(container, config.sizes);
     if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
