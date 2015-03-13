@@ -231,7 +231,7 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
-    var container = document.querySelector("[data-o-ads-slotname='"+slotName+"']");
+    var container = document.getElementById(slotName) || document.querySelector("[data-o-ads-slotname='"+slotName+"']");
     var formats =  ads.config('formats');
     var slotFormats = container.dataset.oAdsFormats.split(',');
     for (var i = 0; i < slotFormats.length; i++) {
