@@ -45,7 +45,7 @@ function Config() {
             'Billboard' :  {sizes: [970,250]},
             'Portrait'  :  {sizes: [300,1050]},
             'Pushdown'  :  {sizes: [[970,90], [970,66]]},
-            'Sidekick'  :  {sizes: [300,250], [300,600], [970,250]]},
+            'Sidekick'  :  {sizes: [[300,250], [300,600], [970,250]]},
             'AdhesionBanner' : {sizes: [320,50]}
         },
         collapseEmpty: 'ft'
