@@ -46,7 +46,8 @@ Ads.prototype.init = function (config){
 
 var ads = new Ads();
 var initAll = function() {
-    ads.init();
+    ads.init({dfp_site: 'test.5887.origami', eid: 'oads'});
+    ads.slots.initSlot('SuperLeaderboard');
     document.removeEventListener('o.DOMContentLoaded', initAll);
 };
 

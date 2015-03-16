@@ -1,7 +1,6 @@
 'use strict';
 
-var ads = require('../../main.js').init({
-    dfp_site: 'test.5887.origami', 
-    eid: 'oads'
+require('../../main.js');
+document.addEventListener("DOMContentLoaded", function() {
+	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 });
-ads.slots.initSlot('SuperLeaderboard');
