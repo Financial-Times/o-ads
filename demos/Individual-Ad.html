@@ -13,29 +13,16 @@
 <body class="o-hoverable-on">
     <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
     <span class="o-registry-demo-chunk">
-
-<!-- include the o-ads origami module - can use require instead -->
-<script src="/bundles/js?modules=o-ads"></script>
-<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
-
-<div id="leaderboard" class="advertising " ></div>
-
+    <!-- include the o-ads origami module - can use require instead -->
+    <script src="/bundles/js?modules=o-ads"></script>
     <script>
-    // initialise the configuration for o-ads with a leaderboard
-    var ads = Origami["o-ads"].init({
-        dfp_site: 'test.5887.origami',
-        formats: {
-            leaderboard: {
-                sizes: [[970,90]]
-            }
-        }
-    });
-
-    ads.slots.initSlot('leaderboard');
+        // initialise the configuration for o-ads
+        var ads = Origami["o-ads"].init({dfp_site: 'test.5887.origami'});
     </script>
-
-</span>
-    
+    <link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
+    <div data-o-ads-slotname="SuperLeaderboard" data-o-ads-formats="SuperLeaderboard, Leaderboard" class="o-ads">
+        <script>ads.slots.initSlot('SuperLeaderboard');</script>
+    </div>
     <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>
