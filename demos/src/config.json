@@ -6,7 +6,7 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"Leaderboard", "formats" : "Leaderboard, SuperLeaderboard"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",

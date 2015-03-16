@@ -4,8 +4,8 @@
 <script src="/bundles/js?modules=o-ads"></script>
 <link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
 
-<div id="{{pos}}" class="advertising {{classes}}" {{{o-ads-data-attr}}}></div>
 
+<div data-o-ads-slotname="{{pos}}" data-o-ads-formats="{{formats}}" class="o-ads {{classes}}">    
     <script>
     // initialise the configuration for o-ads with a leaderboard
     var ads = Origami["o-ads"].init({
