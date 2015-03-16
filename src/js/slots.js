@@ -234,10 +234,15 @@ proto.initSlot = function (slotName) {
     var container = document.getElementById(slotName) || document.querySelector("[data-o-ads-slotname='"+slotName+"']");
     var formats =  ads.config('formats');
     var slotFormats = container.dataset.oAdsFormats.split(',');
+    if (slotFormats) { 
     for (var i = 0; i < slotFormats.length; i++) {
-        slotFormats[i] = slotFormats[i].trim();
-        slotFormats[i] = formats[slotFormats[i]];
-     }
+            slotFormats[i] = slotFormats[i].trim();
+            slotFormats[i] = formats[slotFormats[i]];
+         }
+    }
+    else {
+        slotFormats = formats[slotName];
+    }
     if (!container) {
         return false;
     }
