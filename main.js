@@ -46,8 +46,15 @@ Ads.prototype.init = function (config){
 
 var ads = new Ads();
 var initAll = function() {
-    ads.init({dfp_site: 'test.5887.origami', eid: 'oads'});
-    ads.slots.initSlot('SuperLeaderboard');
+    ads.init();
+    var slots = document.querySelectorAll(".o-ads-slot");
+    console.log(slots);
+    for (var i = 0; i < slots.length; i++) {
+        console.log(slots[i].dataset.oAdsSlotname);
+        if (slots[i].dataset.oAdsSlotname){
+            ads.slots.initSlot(slots[i].dataset.oAdsSlotname);
+        }
+    }
     document.removeEventListener('o.DOMContentLoaded', initAll);
 };
 
