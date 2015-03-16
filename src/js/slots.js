@@ -232,15 +232,16 @@ proto.uncollapse = function (slotNames) {
 */
 proto.initSlot = function (slotName) {
     var container = document.getElementById(slotName) || document.querySelector("[data-o-ads-slotname='"+slotName+"']");
+    if (!container) {
+        return false;
+    }
     var formats =  ads.config('formats');
     var slotFormats = (container.dataset.oAdsFormats) ?  container.dataset.oAdsFormats.split(',') : formats[slotName];
     for (var i = 0; i < slotFormats.length; i++) {
             slotFormats[i] = slotFormats[i].trim();
             slotFormats[i] = formats[slotFormats[i]];
          }
-    if (!container) {
-        return false;
-    }
+
     var config = this.fetchSlotConfig(container, slotName, slotFormats || {});
     if (!config.sizes){
         return false;
