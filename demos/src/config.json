@@ -8,7 +8,7 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"Leaderboard", "formats" : "Leaderboard, SuperLeaderboard"}
+         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",

@@ -44,4 +44,12 @@ Ads.prototype.init = function (config){
     return this;
 };
 
-module.exports = new Ads();
+var ads = new Ads();
+var initAll = function() {
+    ads.init();
+    document.removeEventListener('o.DOMContentLoaded', initAll);
+};
+
+document.addEventListener('o.DOMContentLoaded', initAll);
+
+module.exports = ads;
