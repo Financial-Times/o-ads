@@ -62,8 +62,10 @@ proto.lazyLoad = function(slotName) {
 
 
 
-proto.fetchSlotConfig = function  (container, slotName, config) {
+proto.fetchSlotConfig = function  (container, slotName) {
+    //TO DO: Remove reference to FT.com newssub / searchbox ad position.
     if (slotName === "searchbox") {slotName = "newssubs";}
+    var config = ads.config('formats');
     var attrs, attr, attrObj, name, matches, parser,
         sizes = [],
         targeting = {pos: slotName},
@@ -94,10 +96,19 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
                 }
                 return value;
             },
+            'formats' : function(name, value) {
+                var formats = value.split(',');
+                for (var i = 0; i < slotFormats.length; i++) {
+                    formats[i] = formats[i].trim();
+                    formats[i] = config[formats[i]];
+                    sizes.push(formats[i]);
+                }
+            },
             'default': function (name, value) {
                 targeting[name] = value;
                 return value;
             }
+
         };
 
     attrs = container.attributes;
@@ -114,12 +125,6 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
             parser(name, attrObj.value);
         }
     }
-    if (sizes.length === 0) {
-      for (var i = 0; i < config.length; i++){
-       sizes= sizes.concat(config[i].sizes);
-      }
-    }
-
     return {
         sizes: !!(sizes.length) ? sizes : config.sizes,
         outOfPage: config.outOfPage || false,
@@ -235,14 +240,7 @@ proto.initSlot = function (slotName) {
     if (!container) {
         return false;
     }
-    var formats =  ads.config('formats');
-    var slotFormats = (container.dataset.oAdsFormats) ?  container.dataset.oAdsFormats.split(',') : formats[slotName];
-    for (var i = 0; i < slotFormats.length; i++) {
-            slotFormats[i] = slotFormats[i].trim();
-            slotFormats[i] = formats[slotFormats[i]];
-         }
-
-    var config = this.fetchSlotConfig(container, slotName, slotFormats || {});
+    var config = this.fetchSlotConfig(container, slotName);
     if (!config.sizes){
         return false;
     }
