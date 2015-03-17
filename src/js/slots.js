@@ -98,7 +98,7 @@ proto.fetchSlotConfig = function  (container, slotName) {
             },
             'formats' : function(name, value) {
                 var formats = value.split(',');
-                for (var i = 0; i < slotFormats.length; i++) {
+                for (var i = 0; i < formats.length; i++) {
                     formats[i] = formats[i].trim();
                     formats[i] = config[formats[i]];
                     sizes.push(formats[i]);
