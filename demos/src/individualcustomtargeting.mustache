@@ -1,24 +1,4 @@
-<span class="o-registry-demo-chunk">
-
-<!-- include the o-ads origami module - can use require instead -->
-<script src="/bundles/js?modules=o-ads"></script>
-<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
-
-<div id="{{pos}}" class="advertising {{classes}}" {{{o-ads-data-attr}}}></div>
-
-    <script>
-    // initialise the configuration for o-ads with a leaderboard
-    var ads = Origami["o-ads"].init({
-        dfp_site: 'test.5887.origami',
-        dfp_targeting: 'auuid=articleid',
-        formats: {
-            leaderboard: {
-                sizes: [[728,90]]
-            }
-        }
-    });
-
-    ads.slots.initSlot('leaderboard');
-    </script>
-
-</span>
+<meta name="dfp_site" content="{{dfp-site}}">
+<meta name="dfp_targeting" content="auuid=articleid">
+<div data-o-ads-slotname="Leaderboard" data-o-ads-formats="Leaderboard" class="o-ads o-ads-slot {{classes}}" >    
+</div>

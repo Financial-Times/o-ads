@@ -8,17 +8,17 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard, Leaderboard", "dfp-site" : "test.5887.origami", "eid" : "oads"}
+         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"halfpage"}
+         "data": {"pos":"Halfpage", "formats": "HalfPage",  "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"Leaderboard", "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Master-and-Companion",
