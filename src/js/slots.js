@@ -101,7 +101,15 @@ proto.fetchSlotConfig = function  (container, slotName) {
                 for (var i = 0; i < formats.length; i++) {
                     formats[i] = formats[i].trim();
                     formats[i] = config[formats[i]];
-                    sizes.push(formats[i]);
+                    if (ads.utils.isArray(formats[i].sizes[0])) {
+                        for (var j = 0; j < formats[i].sizes.length; j++){
+                            sizes.push(formats[i].sizes[j]);
+                        }
+                    }
+                    else { 
+                        sizes.push(formats[i].sizes);
+                        console.log(sizes);
+                    }
                 }
             },
             'default': function (name, value) {
@@ -126,7 +134,7 @@ proto.fetchSlotConfig = function  (container, slotName) {
         }
     }
     return {
-        sizes: !!(sizes.length) ? sizes : config.sizes,
+        sizes: !!(sizes.length) ? sizes : config[slotName].sizes,
         outOfPage: config.outOfPage || false,
         collapseEmpty: config.collapseEmpty,
         targeting: targeting,

@@ -8,7 +8,7 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami", "eid" : "oads"}
+         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard, Leaderboard", "dfp-site" : "test.5887.origami", "eid" : "oads"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",

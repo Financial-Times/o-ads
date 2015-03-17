@@ -48,9 +48,9 @@ var ads = new Ads();
 var initAll = function() {
     ads.init();
     var slots = document.querySelectorAll(".o-ads-slot");
-    console.log(slots);
+  //  console.log(slots);
     for (var i = 0; i < slots.length; i++) {
-        console.log(slots[i].dataset.oAdsSlotname);
+   //     console.log(slots[i].dataset.oAdsSlotname);
         if (slots[i].dataset.oAdsSlotname){
             ads.slots.initSlot(slots[i].dataset.oAdsSlotname);
         }
