@@ -63,7 +63,7 @@ proto.lazyLoad = function(slotName) {
 
 
 proto.fetchSlotConfig = function  (container, slotName) {
-    //TO DO: Remove reference to FT.com newssub / searchbox ad position.
+    //TODO: Remove reference to FT.com newssub / searchbox ad position.
     if (slotName === "searchbox") {slotName = "newssubs";}
     var config = ads.config('formats');
     var attrs, attr, attrObj, name, matches, parser,
@@ -244,6 +244,7 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
+    //TODO: remove reliance on div id for slotname when cms changes can be made on FT.com
     var container = document.getElementById(slotName) || document.querySelector("[data-o-ads-slotname='"+slotName+"']");
     if (!container) {
         return false;
