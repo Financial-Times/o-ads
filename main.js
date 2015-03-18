@@ -46,11 +46,16 @@ Ads.prototype.init = function (config){
 
 var ads = new Ads();
 var initAll = function() {
+
+   var metas = document.getElementsByTagName('meta'); 
+   for (i=0; i<metas.length; i++) { 
+      if (metas[i].getAttribute("property") == "o-ads-declarative-init") { 
+         return false;
+      } 
+   } 
     ads.init();
     var slots = document.querySelectorAll(".o-ads-slot");
-  //  console.log(slots);
     for (var i = 0; i < slots.length; i++) {
-   //     console.log(slots[i].dataset.oAdsSlotname);
         if (slots[i].dataset.oAdsSlotname){
             ads.slots.initSlot(slots[i].dataset.oAdsSlotname);
         }
