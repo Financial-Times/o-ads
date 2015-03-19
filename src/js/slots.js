@@ -66,6 +66,7 @@ proto.fetchSlotConfig = function  (container, slotName) {
     //TODO: Remove reference to FT.com newssub / searchbox ad position.
     if (slotName === "searchbox") {slotName = "newssubs";}
     var config = ads.config('formats');
+    if (!config[slotName]) {return false;}
     var attrs, attr, attrObj, name, matches, parser,
         sizes = [],
         targeting = {pos: slotName},
@@ -108,7 +109,6 @@ proto.fetchSlotConfig = function  (container, slotName) {
                     }
                     else { 
                         sizes.push(formats[i].sizes);
-                        console.log(sizes);
                     }
                 }
             },
