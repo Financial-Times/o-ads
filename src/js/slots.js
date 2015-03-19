@@ -268,14 +268,13 @@ proto.initSlot = function (slotName) {
         uncollapse: function(){
             ads.utils.removeClass(this.container, 'empty');
             ads.utils.removeClass(document.body, 'no-' + container.id);
-        }
+        },
         inView : function() {
             var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
             var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
             var rect = container.getBoundingClientRect();
             return (((rect.top <= height) && (rect.bottom > 0)) && ((rect.left <= width) && (rect.right > 0)));
         }
-
     };
     if (config.lazyLoad) {
         this.lazyLoad(slotName);
