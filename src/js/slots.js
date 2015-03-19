@@ -135,11 +135,11 @@ proto.fetchSlotConfig = function  (container, slotName) {
     }
     return {
         sizes: !!(sizes.length) ? sizes : config[slotName].sizes,
-        outOfPage: config.outOfPage || false,
-        collapseEmpty: config.collapseEmpty,
+        outOfPage: config[slotName].outOfPage || false,
+        collapseEmpty: config[slotName].collapseEmpty,
         targeting: targeting,
-        cbTrack: config.cbTrack,
-        lazyLoad: config.lazyLoad
+        cbTrack: config[slotName].cbTrack,
+        lazyLoad: config[slotName].lazyLoad
     };
 };
 
@@ -250,9 +250,6 @@ proto.initSlot = function (slotName) {
         return false;
     }
     var config = this.fetchSlotConfig(container, slotName);
-    if (!config.sizes){
-        return false;
-    }
 
     if (container.tagName === 'SCRIPT') {
         container = this.addContainer(container, slotName);
@@ -271,8 +268,7 @@ proto.initSlot = function (slotName) {
         uncollapse: function(){
             ads.utils.removeClass(this.container, 'empty');
             ads.utils.removeClass(document.body, 'no-' + container.id);
-        },
-
+        }
         inView : function() {
             var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
             var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
