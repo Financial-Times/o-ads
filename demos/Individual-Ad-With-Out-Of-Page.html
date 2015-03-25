@@ -10,35 +10,13 @@
 	<script src="//polyfill.webservices.ft.com/v1/polyfill.min.js?features=default"></script>
 	<style>body { margin: 0; } .demo-js .o--if-nojs { display: none; }</style>
 	<script>(function(d) { d.className = d.className + ' demo-js'; })(document.documentElement);</script>
-	
+	<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
 </head>
-<body class="o-hoverable-on">
-<span class="o-registry-demo-chunk">
-
-<!-- include the o-ads origami module - can use require instead -->
-<script src="/bundles/js?modules=o-ads"></script>
-<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
-
-<div id="halfpage" class="advertising " ></div>
-
-    <script>
-    // initialise the configuration for o-ads with a leaderboard and out of page (overlay)
-    var ads = Origami["o-ads"].init({
-        dfp_site: 'test.5887.origami',
-        formats: {
-            halfpage: {
-                sizes: [[300,600]],
-                outOfPage: true
-            }
-        }
-    });
-
-    ads.slots.initSlot('halfpage');
-    </script>
-
-</span>
-
-
+<body class="">
+<meta name="dfp_site" content="test.5887.origami">
+<div data-o-ads-slotname="Halfpage" data-o-ads-formats="HalfPage" data-o-ads-out-of-page="true" class="o-ads o-ads-slot " >    
+</div>
+<script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

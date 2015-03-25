@@ -1,19 +1,7 @@
 /*global require*/
 'use strict';
 
-var ads = require('../../main.js').init({
-		dfp_site: 'test.5887.origami',
-		eid: 'oads',
-		formats: {
-			leaderboard: {
-				sizes: [[970,90]]
-			},
-			leaderboardOop: {
-				sizes: [[970,90]],
-				outOfPage: true
-			}
-		}
+require('../../main.js');
+document.addEventListener("DOMContentLoaded", function() {
+	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 });
-
-ads.slots.initSlot('leaderboard');
-ads.slots.initSlot('leaderboardOop');

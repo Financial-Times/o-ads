@@ -1,22 +1,23 @@
 {
    "options": {
-      "bodyClasses": "o-hoverable-on"
+      "js": "demos/src/demo.js",
+       "sass" : "demos/src/demo.scss"
    },
    "demos": [
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"halfpage"}
+         "data": {"pos":"Halfpage", "formats": "HalfPage",  "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"pos":"Leaderboard", "dfp-site" : "test.5887.origami"}
       },
       {
          "name": "Master-and-Companion",
@@ -24,7 +25,8 @@
       },
       {
          "name": "Responsive-Positions",
-         "template": "demos/src/responsive.mustache"
+         "template": "demos/src/responsive.mustache",
+         "js": "demos/src/demo-responsive.js"
       },
       {
          "name": "Video-Advertising",

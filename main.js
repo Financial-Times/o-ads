@@ -12,7 +12,6 @@
 function Ads() {
 }
 
-
 // bung all our modules on the protoype
 Ads.prototype.config = require('./src/js/config');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
@@ -44,4 +43,25 @@ Ads.prototype.init = function (config){
 	return this;
 };
 
-module.exports = new Ads();
+var ads = new Ads();
+var initAll = function() {
+
+	var metas = document.getElementsByTagName('meta');
+	for (i=0; i<metas.length; i++) {
+		if (metas[i].getAttribute("property") === "o-ads-declarative-init") {
+			return false;
+		}
+	}
+	ads.init();
+	var slots = document.querySelectorAll(".o-ads-slot");
+	for (var i = 0; i < slots.length; i++) {
+		if (slots[i].dataset.oAdsSlotname){
+			ads.slots.initSlot(slots[i].dataset.oAdsSlotname);
+		}
+	}
+	document.removeEventListener('o.DOMContentLoaded', initAll);
+};
+
+document.addEventListener('o.DOMContentLoaded', initAll);
+
+module.exports = ads;

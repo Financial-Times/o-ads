@@ -58,19 +58,17 @@ proto.lazyLoad = function(slotName) {
 	}
 };
 
-
-
-
-
-proto.fetchSlotConfig = function  (container, slotName, config) {
+proto.fetchSlotConfig = function  (container, slotName) {
+	//TODO: Remove reference to FT.com newssub / searchbox ad position.
 	if (slotName === "searchbox") {slotName = "newssubs";}
+	var config = ads.config('formats');
 	var attrs, attr, attrObj, name, matches, parser,
 		sizes = [],
 		targeting = {pos: slotName},
 		parsers = {
 			'size': function (name, value){
 				value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
-					sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
+				  sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
 				});
 
 				return !!sizes.length ? sizes : false;
@@ -94,6 +92,25 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
 				}
 				return value;
 			},
+			'lazy':  function (){
+				config.lazyLoad = true;
+				return true;
+			},
+			'formats' : function(name, value) {
+				var formats = value.split(',');
+				for (var i = 0; i < formats.length; i++) {
+					formats[i] = formats[i].trim();
+					formats[i] = config[formats[i]];
+					if (ads.utils.isArray(formats[i].sizes[0])) {
+						for (var j = 0; j < formats[i].sizes.length; j++){
+							sizes.push(formats[i].sizes[j]);
+						}
+					}
+					else {
+						sizes.push(formats[i].sizes);
+					}
+				}
+			},
 			'default': function (name, value) {
 				targeting[name] = value;
 				return value;
@@ -114,14 +131,13 @@ proto.fetchSlotConfig = function  (container, slotName, config) {
 			parser(name, attrObj.value);
 		}
 	}
-
 	return {
-		sizes: !!(sizes.length) ? sizes : config.sizes,
-		outOfPage: config.outOfPage || false,
-		collapseEmpty: config.collapseEmpty,
+		sizes: !!(sizes.length) ? sizes : config[slotName].sizes,
+		outOfPage: config[slotName].outOfPage || false,
+		collapseEmpty: config[slotName].collapseEmpty,
 		targeting: targeting,
-		cbTrack: config.cbTrack,
-		lazyLoad: config.lazyLoad
+		cbTrack: config[slotName].cbTrack,
+		lazyLoad: config[slotName].lazyLoad
 	};
 };
 
@@ -226,26 +242,20 @@ proto.uncollapse = function (slotNames) {
 * @lends Slots
 */
 proto.initSlot = function (slotName) {
-	if (this[slotName]) {
+	if (!slotName) {
 		return false;
 	}
 
-	var container = document.getElementById(slotName),
-		formats =  ads.config('formats');
-
+	//TODO: remove reliance on div id for slotname when cms changes can be made on FT.com
+	var container = document.getElementById(slotName) || document.querySelector("[data-o-ads-slotname='"+slotName+"']");
 	if (!container) {
 		return false;
 	}
-
-	var config = this.fetchSlotConfig(container, slotName, formats[slotName] || {});
-	if (!config.sizes){
-		return false;
-	}
+	var config = this.fetchSlotConfig(container, slotName);
 
 	if (container.tagName === 'SCRIPT') {
 		container = this.addContainer(container, slotName);
 	}
-
 
 	this.centerContainer(container, config.sizes);
 	if (config.cbTrack) {this.addChartBeatTracking(container, slotName);}
@@ -261,17 +271,17 @@ proto.initSlot = function (slotName) {
 			ads.utils.removeClass(this.container, 'empty');
 			ads.utils.removeClass(document.body, 'no-' + container.id);
 		},
-
 		inView : function() {
-			var h = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+			var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
+			var width = Math.min(document.documentElement.clientWidth, window.innerWidth || Infinity);
 			var rect = container.getBoundingClientRect();
-			return (rect.top <= h);
+			return (((rect.top <= height) && (rect.bottom > 0)) && ((rect.left <= width) && (rect.right > 0)));
 		}
 	};
-
 	if (config.lazyLoad) {
 		this.lazyLoad(slotName);
-	} else {
+		}
+	else{
 		ads.gpt.defineSlot(slotName);
 	}
 	return this[slotName];

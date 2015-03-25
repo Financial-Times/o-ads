@@ -5,6 +5,7 @@
 QUnit.module('Slots');
 
 QUnit.test('fetchSlotConfig sizes', function (assert) {
+	this.ads.init();
 	var container = $('<script data-o-ads-size="1x1">FT.env.advert(\'refresh\')</script>')[0];
 	var result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
 	var expected = [[1, 1]];
@@ -31,6 +32,7 @@ QUnit.test('fetchSlotConfig sizes', function (assert) {
 	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
 
 	container = $('<div data-o-ads-size="">')[0];
+	this.ads.
 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
 	expected = [[5, 5]];
 	assert.deepEqual(result.sizes, expected, 'Empty string returns size from passed config');
