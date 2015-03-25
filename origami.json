@@ -5,40 +5,40 @@
     "support": "origami.advertising.technology@ft.com",
     "supportStatus": "experimental",
     "demos": [
-      {
-         "path": "/demos/Individual-Ad.html",
-         "expanded": true,
-         "description": "individual ad on a page"
-      },
-      {
-         "path": "/demos/Individual-Ad-With-Out-Of-Page.html",
-         "expanded": false,
-         "description": "ad with a overlay position"
-      },
-      {
-         "path": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
-         "expanded": false,
-         "description": "additional custom to product targeting values"
-      },
-      {
-         "path": "/demos/Master-and-Companion.html",
-         "expanded": false,
-         "description": "two ads configured to be linked so the same campaign can be targeted across both"
-      },
-      {
-         "path": "/demos/Responsive-Positions.html",
-         "expanded": false,
-         "description": "configuration of ads which display depending on screen size"
-      },
-      {
-         "path": "/demos/Video-Advertising.html",
-         "expanded": false,
-         "description": "video advertising"
-      },
-      {
-         "path": "/demos/Video-Advertising-with-Companion.html",
-         "expanded": false,
-         "description": "video advertising with syncronsied companions"
-      }
-   ]
+        {
+            "path": "/demos/Individual-Ad.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Individual-Ad-With-Out-Of-Page.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Master-and-Companion.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Responsive-Positions.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Video-Advertising.html",
+            "expanded": true,
+            "description": ""
+        },
+        {
+            "path": "/demos/Video-Advertising-with-Companion.html",
+            "expanded": true,
+            "description": ""
+        }
+    ]
 }
