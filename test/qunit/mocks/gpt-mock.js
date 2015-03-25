@@ -2,10 +2,10 @@
 
 "use strict";
 
-var fn, googletag = window.googletag || {};
+var googletag = {};
 
-var stubs = googletag.sinon = sinon.sandbox.create();
-//var stubs = sinon;
+var stubs = sinon.sandbox.create();
+
 googletag.getEventLog = stubs.stub();
 googletag.defineSizeMapping = stubs.stub();
 googletag.display = stubs.stub();
@@ -15,18 +15,19 @@ googletag.content = stubs.stub();
 googletag.disablePublisherConsole = stubs.stub();
 googletag.sizeMapping = stubs.stub();
 googletag.getVersion = stubs.stub();
-var gptSlot = {
-	addService: stubs.stub(),
-	setCollapseEmptyDiv: stubs.stub(),
-	renderEnded: stubs.stub(),
-	setTargeting: stubs.stub(),
-	defineSizeMapping: stubs.stub(),
-	set: stubs.stub()
-};
 
-googletag.defineUnit = stubs.stub().returns(gptSlot);
-googletag.defineSlot = stubs.stub().returns(gptSlot);
-googletag.defineOutOfPageSlot = stubs.stub().returns(gptSlot);
+function Slot(){
+	this.addService = stubs.stub();
+	this.setCollapseEmptyDiv = stubs.stub();
+	this.renderEnded = stubs.stub();
+	this.setTargeting = stubs.stub();
+	this.defineSizeMapping = stubs.stub();
+	this.set = stubs.stub();
+}
+
+googletag.defineUnit = stubs.stub().returns(new Slot());
+googletag.defineSlot = stubs.stub().returns(new Slot());
+googletag.defineOutOfPageSlot = stubs.stub().returns(new Slot());
 
 googletag.sizeMapping = stubs.stub().returns({
 	addSize: stubs.stub(),
@@ -34,7 +35,7 @@ googletag.sizeMapping = stubs.stub().returns({
 });
 
 
-googletag.pubads = stubs.stub().returns({
+var pubads = {
 	getName : stubs.stub(),
 	fillSlot : stubs.stub(),
 	setCookieOptions : stubs.stub(),
@@ -76,22 +77,24 @@ googletag.pubads = stubs.stub().returns({
 	getAttributeKeys : stubs.stub(),
 	addEventListener : stubs.stub(),
 	updateCorrelator : stubs.stub()
-});
+};
 
+googletag.pubads = stubs.stub().returns(pubads);
 
 googletag.cmd =  googletag.cmd || [];
-
 googletag.cmd.push = function(fn){
 	if($.isFunction(fn)) {
 		fn.call(googletag);
+		googletag.cmd.shift();
 	}
 };
 
-stubs.cmdPush = sinon.spy(googletag.cmd, 'push');
+window.googletag = module.exports.mock = googletag;
+module.exports.restore = function (){
+	(stubs.fakes || []).forEach(function(fake) {
+		if (typeof fake.reset === 'function') {
+			fake.reset();
+		}
+	});
+};
 
-for (var i = 0, j = googletag.cmd.length; i < j; i++) {
-	var fn = googletag.cmd.pop();
-	if($.isFunction(fn)) {
-		fn.call(googletag);
-	}
-}

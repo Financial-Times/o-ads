@@ -35,11 +35,9 @@ function Config() {
 	var defaults =  {
 		network: '5887',
 		formats: {
-			intro: {
-
-			},
+			intro: {},
 			leaderboard: {
-				sizes: [[728,90], [468,60], [970,90], [970,66], [970, 250]],
+				sizes: [[728, 90], [468, 60], [970, 90], [970, 66], [970, 250]],
 				outOfPage: true
 			},
 			mpu: {
@@ -118,7 +116,7 @@ function Config() {
 		var canonical,
 			canonicalTag = document.querySelector('link[rel="canonical"]');
 		if(canonicalTag) {
-		   canonical = canonicalTag.href;
+			canonical = canonicalTag.href;
 		}
 		return { canonical: canonical };
 	};
@@ -166,8 +164,9 @@ function Config() {
 
 	access.init = function(impl, clear){
 		ads = impl;
-		if (!!clear) {
+		if (clear) {
 			access.clear();
+			return store;
 		}
 
 /**

@@ -60,7 +60,7 @@ proto.defineSlot = function (slotName) {
 			context.setSlotURL(slot.gptSlot, canonical);
 			context.addCompanionService(slot);
 			if (currentSize !== false) {
-			  googletag.cmd.push(googletag.display(slotId));
+				googletag.cmd.push(googletag.display(slotId));
 			}
 
 		};
@@ -385,8 +385,8 @@ proto.init = function (impl) {
 
 	//TODO: this is FT specific content needs to be removed
 	if (window.FT && FT.env && (!ads.utils.isFunction(FT.env.refreshCancelFilter) || !FT.env.refreshCancelFilter())) {
-		  this.startRefresh();
-	 }
+		this.startRefresh();
+	}
 
 	function onViewportChange(viewport){
 		var slot, slotName, slots = ads.slots, slotsForRefresh = [];
@@ -398,10 +398,10 @@ proto.init = function (impl) {
 						slot.collapse();
 					} else {
 						if (!slot.isDisplayed) {
-						  slot.isDisplayed = true;
-						  googletag.display(slot.gptSlot.getSlotId().getDomId());
+							slot.isDisplayed = true;
+							googletag.display(slot.gptSlot.getSlotId().getDomId());
 						} else {
-						  slotsForRefresh.push(slot.gptSlot);
+							slotsForRefresh.push(slot.gptSlot);
 						}
 						slot.uncollapse();
 					}
@@ -410,7 +410,7 @@ proto.init = function (impl) {
 		}
 
 		if (!!slotsForRefresh.length) {
-		  context.refresh(slotsForRefresh);
+			context.refresh(slotsForRefresh);
 		}
 	}
 

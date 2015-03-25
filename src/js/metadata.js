@@ -110,20 +110,20 @@ Metadata.getAyscVars = function(obj){
 				}
 			}
 		}
-	  return obj;
+		return obj;
 	}
 
 	function prepareAdVars(AllVars) {
-		  //now we filter the AYSC values prior to adding them to the baseAdvert
-		  //define fields where we need to strip leading zeros - should be in config
-		  AllVars = stripLeadingZeros(leading_zero_key_names, AllVars);
-		  //now assign new corporate codes based on certain regex of old code values
-		  AllVars = fieldRegex(regex_key_names, AllVars);
-		  //now take a substring of an input value - used for creating new continent codes - put in config?
-		  AllVars = fieldSubstr(substr_key_names, AllVars);
-		  //now add any erights value from the FT_U cookie
-		  AllVars = detectERights(AllVars);
-		  return AllVars;
+		//now we filter the AYSC values prior to adding them to the baseAdvert
+		//define fields where we need to strip leading zeros - should be in config
+		AllVars = stripLeadingZeros(leading_zero_key_names, AllVars);
+		//now assign new corporate codes based on certain regex of old code values
+		AllVars = fieldRegex(regex_key_names, AllVars);
+		//now take a substring of an input value - used for creating new continent codes - put in config?
+		AllVars = fieldSubstr(substr_key_names, AllVars);
+		//now add any erights value from the FT_U cookie
+		AllVars = detectERights(AllVars);
+		return AllVars;
 	}
 
 
@@ -209,7 +209,7 @@ Metadata.user= function () {
 Metadata.page = function(){
 	var result = {};
 	result.uuid = window.pageUUID ? window.pageUUID :
-				  ads.utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
+								ads.utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
 	result.auuid = window.articleUUID || undefined;
 	result.dfpSite = ads.config('dfp_site');
 	result.dfpZone = ads.config('dfp_zone');
@@ -229,13 +229,13 @@ Metadata.page = function(){
 */
 
 Metadata.getPageType = function () {
-  var targeting = ads.config('dfp_targeting') || {};
-  if (!ads.utils.isPlainObject(targeting)) {
-	  if (ads.utils.isString(targeting)) {
-		  targeting = ads.utils.hash(targeting, ';', '=') || {};
-	  }
-  }
-  return targeting.pt || 'unknown';
+	var targeting = ads.config('dfp_targeting') || {};
+	if (!ads.utils.isPlainObject(targeting)) {
+		if (ads.utils.isString(targeting)) {
+			targeting = ads.utils.hash(targeting, ';', '=') || {};
+		}
+	}
+	return targeting.pt || 'unknown';
 };
 
 

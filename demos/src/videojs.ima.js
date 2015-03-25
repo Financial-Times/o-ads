@@ -203,7 +203,7 @@
 				adsManager.setVolume(player.muted() ? 0 : player.volume());
 				adsManager.start();
 			} catch (adError) {
-				 player.ima.onAdError_(adError);
+				player.ima.onAdError_(adError);
 			}
 		};
 

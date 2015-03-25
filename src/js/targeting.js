@@ -7,6 +7,7 @@
 *
 * @author Robin Marr, robin.marr@ft.com
 */
+
 /**
 * FT.ads.targeting is an object providing properties and methods for accessing targeting parameters from various sources including FT Track and Audience Science and passing them into DFP
 * @name targeting
@@ -84,36 +85,36 @@ proto.encodedIp =  function () {
 		};
 
 		function getIP () {
-			 var ip, tmp, ftUserTrackVal = ads.utils.cookie('FTUserTrack'), ipTemp;
+			var ip, tmp, ftUserTrackVal = ads.utils.cookie('FTUserTrack'), ipTemp;
 
-			 // sample FTUserTrackValue = 203.190.72.182.1344916650137365
-			 if (ftUserTrackVal) {
-					ip = ftUserTrackVal;
-					tmp = ftUserTrackVal.match(/^\w{1,3}\.\w{1,3}\.\w{1,3}\.\w{1,3}\.\w+$/);
-					if (tmp) {
-						 tmp = tmp[0];
-						 ipTemp = tmp.match(/\w{1,3}/g);
-						 if (ipTemp) {
-								ip = ipTemp[0] + "." + ipTemp[1] + "." + ipTemp[2] + "." + ipTemp[3];
-						 }
+			// sample FTUserTrackValue = 203.190.72.182.1344916650137365
+			if (ftUserTrackVal) {
+				ip = ftUserTrackVal;
+				tmp = ftUserTrackVal.match(/^\w{1,3}\.\w{1,3}\.\w{1,3}\.\w{1,3}\.\w+$/);
+				if (tmp) {
+					tmp = tmp[0];
+					ipTemp = tmp.match(/\w{1,3}/g);
+					if (ipTemp) {
+						ip = ipTemp[0] + "." + ipTemp[1] + "." + ipTemp[2] + "." + ipTemp[3];
 					}
-			 }
-			 return ip;
+				}
+			}
+			return ip;
 		}
 
 		function encodeIP(ip) {
-			 var encodedIP, lookupKey;
+			var encodedIP, lookupKey;
 
-			 if (ip) {
-					encodedIP = ip;
-					for (lookupKey in DFPPremiumIPReplaceLookup) {
-						if(DFPPremiumIPReplaceLookup.hasOwnProperty(lookupKey)){
-							encodedIP = encodedIP.replace(new RegExp(DFPPremiumIPReplaceLookup[lookupKey].replaceRegex), DFPPremiumIPReplaceLookup[lookupKey].replaceValue);
-						}
+			if (ip) {
+				encodedIP = ip;
+				for (lookupKey in DFPPremiumIPReplaceLookup) {
+					if(DFPPremiumIPReplaceLookup.hasOwnProperty(lookupKey)){
+						encodedIP = encodedIP.replace(new RegExp(DFPPremiumIPReplaceLookup[lookupKey].replaceRegex), DFPPremiumIPReplaceLookup[lookupKey].replaceValue);
 					}
-			 }
+				}
+			}
 
-			 return encodedIP;
+			return encodedIP;
 		}
 
 /**
@@ -132,13 +133,13 @@ proto.encodedIp =  function () {
 * @lends Targeting
 */
 proto.getFromConfig = function () {
-		var targeting = ads.config('dfp_targeting') || {};
-		if (!ads.utils.isPlainObject(targeting)) {
-				if (ads.utils.isString(targeting)) {
-						targeting = ads.utils.hash(targeting, ';', '=') || {};
-				}
-		}
-		return targeting;
+	var targeting = ads.config('dfp_targeting') || {};
+	if (!ads.utils.isPlainObject(targeting)) {
+			if (ads.utils.isString(targeting)) {
+					targeting = ads.utils.hash(targeting, ';', '=') || {};
+			}
+	}
+	return targeting;
 };
 
 proto.fetchKrux = function (){
@@ -146,20 +147,20 @@ proto.fetchKrux = function (){
 };
 
 proto.getPageReferrer = function () {
-	 var match = null,
-			referrer = ads.utils.getReferrer(),
-			hostRegex;
-	 //referrer is not article
-	 if (referrer !== '') {
-			hostRegex = /^.*?:\/\/.*?(\/.*)$/;
-			//remove hostname from results
-			match = hostRegex.exec(referrer)[1];
+	var match = null,
+		referrer = ads.utils.getReferrer(),
+		hostRegex;
+	//referrer is not article
+	if (referrer !== '') {
+		hostRegex = /^.*?:\/\/.*?(\/.*)$/;
+		//remove hostname from results
+		match = hostRegex.exec(referrer)[1];
 
-			 if (match !== null) {
-					match.substring(1);
-			 }
-	 }
-	 return match && {rf: match.substring(1)} || {};
+		if (match !== null) {
+			match.substring(1);
+		}
+	}
+	return match && {rf: match.substring(1)} || {};
 };
 
 proto.getSocialReferrer = function () {
@@ -178,8 +179,8 @@ proto.getSocialReferrer = function () {
 					if(lookup.hasOwnProperty(refUrl)){
 						var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
 						if (refUrl !== undefined && refererRegex.test(referrer)) {
-							 codedValue = lookup[refUrl];
-							 break;
+							codedValue = lookup[refUrl];
+							break;
 						}
 					}
 				}
@@ -201,31 +202,31 @@ proto.getAysc = function () {
 	function excludeFields(exclusions, obj) {
 		var idx, keyvalsplit, prop;
 		// TODO: clean this up later -- val is now unused so this could be simpler.
-			for(prop in obj){
-				for (idx = 0; idx < exclusions.length; idx++) {
-					keyvalsplit = exclusions[idx].split("=");
-					if (((keyvalsplit[0] === "key") && (prop === keyvalsplit[1])) || ((keyvalsplit[0] === "val") && (obj[prop] === keyvalsplit[1]))) {
-						 delete obj[prop];
-					}
+		for(prop in obj){
+			for (idx = 0; idx < exclusions.length; idx++) {
+				keyvalsplit = exclusions[idx].split("=");
+				if (((keyvalsplit[0] === "key") && (prop === keyvalsplit[1])) || ((keyvalsplit[0] === "val") && (obj[prop] === keyvalsplit[1]))) {
+					delete obj[prop];
 				}
 			}
+		}
 		return obj;
 	}
 
-		AllVars = excludeFields(exclusions, AllVars);
-		for (var ayscVar in AllVars){
-				if (!AllVars[ayscVar]){continue;}
-				if (remove_exes[ayscVar] && /^x+$/i.test(AllVars[ayscVar])) {continue;}
-				if (remove_res_pvt[ayscVar] && /^pvt|res$/i.test(AllVars[ayscVar])) {continue;}
-				returnObj[ayscVar] = AllVars[ayscVar].toString().toLowerCase();
-		}
-		return returnObj;
+	AllVars = excludeFields(exclusions, AllVars);
+	for (var ayscVar in AllVars){
+			if (!AllVars[ayscVar]){continue;}
+			if (remove_exes[ayscVar] && /^x+$/i.test(AllVars[ayscVar])) {continue;}
+			if (remove_res_pvt[ayscVar] && /^pvt|res$/i.test(AllVars[ayscVar])) {continue;}
+			returnObj[ayscVar] = AllVars[ayscVar].toString().toLowerCase();
+	}
+	return returnObj;
 };
 
 //TODO is this still relevant maybe we should remove it
 proto.behaviouralFlag = function () {
-		var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
-		return flag;
+	var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
+	return flag;
 };
 
 proto.searchTerm = function () {
@@ -252,6 +253,7 @@ proto.version = function(){
 
 proto.init = function (impl) {
 	ads = impl;
+	parameters = {};
 	return this;
 };
 

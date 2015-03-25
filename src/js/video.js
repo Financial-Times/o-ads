@@ -18,7 +18,7 @@ function buildURLForVideo(zone, pos, vidKV){
 	var gptVideoURL = function(){
 		var URL, additionalAdTargetingParams, fullURL;
 		var buildCustomParams = function (vkv) {
-			var allTargeting = ads.targeting();
+			var allTargeting = ads.targeting.get();
 						var results = '',
 						kruxSegs = allTargeting.ksg,
 						includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
@@ -59,7 +59,7 @@ function buildURLForVideo(zone, pos, vidKV){
 		var keyOrderVideo = ['dcopt', 'pos'];
 		var keyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh'];
 		var encodeBaseAdvertProperties = function (mode, vidKV) {
-			var allTargeting = ads.targeting();
+			var allTargeting = ads.targeting.get();
 			var results = '',
 			dfp_targeting = ads.config('dfp_targeting'),
 			kruxSegs = allTargeting.ksg,

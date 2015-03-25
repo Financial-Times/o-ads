@@ -5,6 +5,7 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 'use strict';
+
 //TODO Use polyfils service for these instead
 // add an ECMAScript5 compliant trim to String
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
@@ -47,7 +48,6 @@ if (!Array.prototype.indexOf) {
 				return -1;
 		};
 }
-
 
 var utils = module.exports;
 /**
@@ -180,6 +180,7 @@ module.exports.isNumeric = function (num) {
  * @returns The target object extended with the other params
  */
 function extend() {
+	
 	var options, name, src, copy, copyIsArray, clone,
 			target = arguments[0] || {},
 			i = 1,
@@ -204,36 +205,37 @@ function extend() {
 			return target;
 	}
 
+
 	for ( ; i < length; i++ ) {
 			// Only deal with non-null/undefined values
 			if ((options = arguments[i]) !== null) {
 					// Extend the base object
 					for (name in options) {
-							src = target[name];
-							copy = options[name];
+								src = target[name];
+								copy = options[name];
 
-							// Prevent never-ending loop
-							if (target === copy) {
-									continue;
-							}
+								// Prevent never-ending loop
+								if (target === copy) {
+										continue;
+								}
 
-							// Recurse if we're merging arrays
-							if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
-									copyIsArray = utils.isArray(copy);
-									if (copyIsArray) {
-											copyIsArray = false;
-											clone = src && utils.isArray(src) ? src : [];
-									} else {
-											clone = src && utils.isObject(src) ? src : {};
-									}
+								// Recurse if we're merging arrays
+								if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
+										copyIsArray = utils.isArray(copy);
+										if (copyIsArray) {
+												copyIsArray = false;
+												clone = src && utils.isArray(src) ? src : [];
+										} else {
+												clone = src && utils.isObject(src) ? src : {};
+										}
 
-									// Never move original objects, clone them
-									target[name] = extend(deep, clone, copy);
+										// Never move original objects, clone them
+										target[name] = extend(deep, clone, copy);
 
-							// Don't bring in undefined values
-							} else if ( copy !== undefined ) {
-									target[name] = copy;
-							}
+								// Don't bring in undefined values
+								} else if ( copy !== undefined ) {
+										target[name] = copy;
+								}
 					}
 			}
 	}
@@ -360,7 +362,7 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
 module.exports.isScriptAlreadyLoaded = function(url) {
 	var scripts = document.getElementsByTagName('script');
 	for (var i = scripts.length; i--;) {
-			if (scripts[i].src == url) return true;
+			if (scripts[i].src === url) return true;
 	}
 	return false;
 };
@@ -370,7 +372,7 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
 		if ('withCredentials' in xhr) {
 				xhr.open(method, url, true);
 				xhr.responseType = 'json';
-		} else if (typeof XDomainRequest != "undefined") {
+		} else if (typeof XDomainRequest !== "undefined") {
 				xhr = new XDomainRequest();
 				xhr.open(method, url, true);
 		} else {

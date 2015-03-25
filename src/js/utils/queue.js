@@ -2,7 +2,7 @@
 
 function Queue(processor){
 	if(!(this instanceof Queue)) {
-	  return new Queue(processor);
+		return new Queue(processor);
 	}
 	this.items = [];
 	this.processed = false;

@@ -63,7 +63,7 @@ proto.makeAPIRequest = function () {
 	context.xhr = ads.utils.createCORSRequest(url, 'GET', context.resolve, context.resolve);
 };
 
-proto.processCollection = function(collection, max){
+proto.processCollection = function(collection, max) {
 	var names = [];
 	var i = 0;
 	var j = ads.utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
