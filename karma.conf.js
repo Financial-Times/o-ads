@@ -1,11 +1,17 @@
 /* jshint node: true */
-// if you want to make local changes to this file run
-// `git update-index --assume-unchanged karma.config.js`
-// to prevent the file from being commited
-// run `git update-index --no-assume-unchanged karma.config.js` to undo
+// if you want a different local configuration create a file called karma.local.js
+// the file should export a function that takes the current options object and
+// returns an amended one e.g.
+// module.exports = function (options) {
+// 	var options = {
+// 		test: "it works!"
+// 	};
+// 	return options;
+// }
+
+
 
 'use strict';
-
 var options = {
 	basePath: '',
 	autoWatch: true,
@@ -40,7 +46,7 @@ var options = {
 if(/^win/.test(process.platform)){
 	options.browsers.push('IE');
 } else if (process.platform === 'darwin') {
-	options.browsers.push('Safari');
+	//options.browsers.push('Safari');
 }
 
 // In the CI environment set an environment variable CI = 'true'
@@ -73,6 +79,17 @@ if (process.env.JENKINS_URL) {
 	// Jenkins options go here
 	options.reporters.push('junit');
 	options.junitReporter = {outputFile: './reports/test-results.xml' };
+}
+
+try {
+	options = require('./karma.local.js')(options);
+	console.log('Local config loaded');
+} catch(err){
+	if (err.code === "MODULE_NOT_FOUND") {
+		console.log('No local config found');
+	} else {
+		console.error('%s:%s', err.code, err.toString().replace('Error:', ''))
+	}
 }
 
 module.exports = function(config) {
