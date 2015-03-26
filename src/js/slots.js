@@ -61,7 +61,8 @@ proto.lazyLoad = function(slotName) {
 proto.fetchSlotConfig = function  (container, slotName) {
 	//TODO: Remove reference to FT.com newssub / searchbox ad position.
 	if (slotName === "searchbox") {slotName = "newssubs";}
-	var config = ads.config('formats');
+
+	var config = ads.config('slots') || {};
 	var attrs, attr, attrObj, name, matches, parser,
 		sizes = [],
 		targeting = {pos: slotName},
@@ -100,7 +101,7 @@ proto.fetchSlotConfig = function  (container, slotName) {
 				var formats = value.split(',');
 				for (var i = 0; i < formats.length; i++) {
 					formats[i] = formats[i].trim();
-					formats[i] = config[formats[i]];
+					formats[i] = ads.config('formats')[formats[i]];
 					if (ads.utils.isArray(formats[i].sizes[0])) {
 						for (var j = 0; j < formats[i].sizes.length; j++){
 							sizes.push(formats[i].sizes[j]);
@@ -132,12 +133,12 @@ proto.fetchSlotConfig = function  (container, slotName) {
 		}
 	}
 	return {
-		sizes: !!(sizes.length) ? sizes : config[slotName].sizes,
-		outOfPage: config[slotName].outOfPage || false,
-		collapseEmpty: config[slotName].collapseEmpty,
+		sizes: !!(sizes.length) ? sizes : config.sizes,
+		outOfPage: config.outOfPage || false,
+		collapseEmpty: config.collapseEmpty,
 		targeting: targeting,
-		cbTrack: config[slotName].cbTrack,
-		lazyLoad: config[slotName].lazyLoad
+		cbTrack: config.cbTrack,
+		lazyLoad: config.lazyLoad
 	};
 };
 
@@ -265,11 +266,11 @@ proto.initSlot = function (slotName) {
 		config: config,
 		collapse: function(){
 			ads.utils.addClass(this.container, 'empty');
-			ads.utils.addClass(document.body, 'no-' + container.id);
+			ads.utils.addClass(document.body, 'no-' + slotName);
 		},
 		uncollapse: function(){
 			ads.utils.removeClass(this.container, 'empty');
-			ads.utils.removeClass(document.body, 'no-' + container.id);
+			ads.utils.removeClass(document.body, 'no-' + slotName);
 		},
 		inView : function() {
 			var height = Math.min(document.documentElement.clientHeight, window.innerHeight || Infinity);
