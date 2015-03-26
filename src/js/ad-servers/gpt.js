@@ -22,6 +22,9 @@ var proto = GPT.prototype;
 * @constructor
 */
 function GPT() {
+	document.body.addEventListener('oAds.ready', function (event){
+		defineSlot(event.detail.slot);
+	}.bind(this))
 	return this;
 }
 /**
@@ -31,31 +34,29 @@ function GPT() {
 * @memberof GPT
 * @lends GPT
 */
-proto.defineSlot = function (slotName) {
-	var context = this,
-		slot = ads.slots[slotName],
-		slotId = slotName + '-gpt',
-		wrap = ads.slots.addContainer(slot.container, slotId),
-		responsive = ads.config('responsive'),
-		canonical = context.canonical = ads.config('canonical');
+proto.defineSlot = function (slot) {
+	var context = this;
+	var responsive = ads.config('responsive');
+	var canonical = context.canonical = ads.config('canonical');
+	var slotId = slot.name + '-gpt';
+	slot.inner.setAttribute('id', slotId);
 
-	ads.utils.addClass(wrap, 'wrap');
-	googletag.cmd.push((function (context, slot, slotName, slotId) {
+	googletag.cmd.push((function (context, slot, slotId) {
 		return function () {
 			var currentSize;
-			if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.config.sizes)) {
-				currentSize = slot.config.sizes[context.responsive()];
-				var sizeMapping = context.buildSizeMapping(responsive, slot.config.sizes);
-				slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), [0,0], slotId);
+			if(ads.utils.isObject(responsive) && ads.utils.isObject(slot.sizes)) {
+				currentSize = slot.sizes[context.responsive()];
+				var sizeMapping = context.buildSizeMapping(responsive, slot.sizes);
+				slot.gptSlot = googletag.defineSlot(context.getUnitName(slot.name), [0,0], slotId);
 				slot.gptSlot.defineSizeMapping(sizeMapping);
 			} else {
-				currentSize = slot.config.sizes;
-				slot.gptSlot = googletag.defineSlot(context.getUnitName(slotName), slot.config.sizes, slotId);
+				currentSize = slot.sizes;
+				slot.gptSlot = googletag.defineSlot(context.getUnitName(slot.name), slot.sizes, slotId);
 			}
 			slot.gptSlot.addService(googletag.pubads());
 
-			context.setSlotCollapseEmpty(slot.gptSlot, slot.config);
-			context.setSlotTargeting(slot.gptSlot, slot.config.targeting);
+			context.setSlotCollapseEmpty(slot.gptSlot, slot.collapseEmpty);
+			context.setSlotTargeting(slot.gptSlot, slot.targeting);
 
 			context.setSlotURL(slot.gptSlot, canonical);
 			context.addCompanionService(slot);
@@ -66,7 +67,7 @@ proto.defineSlot = function (slotName) {
 		};
 	})(this, slot, slotName, slotId));
 
-	if (slot.config.outOfPage) {
+	if (slot.outOfPage) {
 		googletag.cmd.push(
 			this.defineOutOfPage(this, slotName)
 		);
@@ -95,7 +96,7 @@ proto.defineOutOfPage = function (context, slotName) {
 
 		slot.oopSlot = oopSlot;
 
-		context.setSlotTargeting(oopSlot, slot.config.targeting);
+		context.setSlotTargeting(oopSlot, slot.targeting);
 		context.setSlotURL(oopSlot, context.canonical);
 
 		googletag.cmd.push(googletag.display(slotId));
@@ -158,7 +159,7 @@ proto.setPageTargeting = function (targeting) {
 * @lends GPT
 */
 proto.addCompanionService = function (slot) {
-	if (ads.config('companions') && slot.config.companion !== false) {
+	if (ads.config('companions') && slot.companion !== false) {
 		slot.gptSlot.addService(googletag.companionAds());
 	}
 	return slot;
@@ -393,8 +394,8 @@ proto.init = function (impl) {
 		for (slotName in slots) {
 			if (slots.hasOwnProperty(slotName)) {
 				slot = slots[slotName];
-				if (slot.gptSlot && ads.utils.isObject(slot.config.sizes)) {
-					if (slot.config.sizes[viewport] === false) {
+				if (slot.gptSlot && ads.utils.isObject(slot.sizes)) {
+					if (slot.sizes[viewport] === false) {
 						slot.collapse();
 					} else {
 						if (!slot.isDisplayed) {
@@ -425,15 +426,18 @@ proto.init = function (impl) {
 		context.enableCompanions();
 		googletag.pubads().enableAsyncRendering();
 		googletag.pubads().addEventListener('slotRenderEnded', function(event) {
-			if (ads.utils.isFunction(ads.renderEnded)) {
-				var gptSlotId = event.slot.getSlotId();
-				var domId = gptSlotId.getDomId().split('-');
-				var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+			var gptSlotId = event.slot.getSlotId();
+			var domId = gptSlotId.getDomId().split('-');
+			var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 
-				event.iframe = document.getElementById(iframeId);
-				var name = event.name = domId[0];
-				event.slotType = domId[1];
-				event.slot = ads.slots[name];
+			event.iframe = document.getElementById(iframeId);
+			var name = event.name = domId[0];
+			event.slotType = domId[1];
+			event.slot = ads.slots[name];
+			ads.slots.rendered++;
+
+
+			if (ads.utils.isFunction(ads.renderEnded)) {
 				ads.renderEnded(event);
 			}
 		});
