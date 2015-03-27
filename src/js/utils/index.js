@@ -166,6 +166,8 @@ module.exports.isNonEmptyString = function (str) {
 	return utils.isString(str) && !!str.length;
 };
 
+module.exports.isElement = require('lodash/lang/isElement');
+
 /**
  * Test if an object is a finite number
  * @param {object} The object to be tested
@@ -408,6 +410,36 @@ module.exports.getReferrer = function () {
 };
 
 
+/**
+* Remove hyphens from a string and upper case the following letter
+* @name dehyphenise
+* @memberof FT._ads.utils
+* @lends FT._ads.utils
+*/
+utils.dehyphenise = function (string){
+	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter){
+		return letter.toUpperCase();
+	});
+};
+
+/**
+* Find uppercase characters in a string, lower case them and add a preceding hyphen
+* @name hyphenise
+* @memberof FT._ads.utils
+* @lends FT._ads.utils
+*/
+utils.hyphenise = function (string){
+	return string.replace(/([A-Z])/g, function(match, letter){
+		return '-' + letter.toLowerCase();
+	});
+};
+
+utils.parseAttributeName = function(name){
+	return utils.dehyphenise(
+		name.replace(/(data-)?o-ads-/, '').replace(/(data-)?o-ads-/, '')
+	);
+};
+
 
 /**
 * return the current documents url or an empty string if non exists
@@ -461,8 +493,10 @@ module.exports.nodeListToArray = function(obj) {
 module.exports.cookies = utils.hash(document.cookie, ';', '=');
 
 extend(module.exports, require('./cookie.js'));
+extend(module.exports, require('./events.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();
 module.exports.queue = require('./queue.js');
 module.exports.extend = extend;
+module.exports.log = require('./log');
 curryIsMethods(module.exports);

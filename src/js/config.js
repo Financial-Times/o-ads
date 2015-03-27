@@ -22,56 +22,51 @@
  * @function
 */
 "use strict";
-var ads;
-/**
-* The Config class defines an FT.ads.config instance.
-* @class
-* @constructor
-*/
-function Config() {
+var utils = require('./utils');
 /**
 * Default configuration set in the constructor.
 */
-	var defaults =  {
-		network: '5887',
-		formats : {
-			'MediumRectangle':  {sizes :[300,250]},
-			'Rectangle':  {sizes :[180,50]},
-			'WideSkyscraper':  {sizes :[160,600]},
-			'Leaderboard'   :  {sizes :[728,90]},
-			'SuperLeaderboard': {sizes: [[970,90], [970,66]]},
-			'HalfPage'  : {sizes: [300,600]},
-			'Billboard' :  {sizes: [970,250]},
-			'Portrait'  :  {sizes: [300,1050]},
-			'Pushdown'  :  {sizes: [[970,90], [970,66]]},
-			'Sidekick'  :  {sizes: [[300,250], [300,600], [970,250]]},
-			'AdhesionBanner' : {sizes: [320,50]}
-		},
-		collapseEmpty: 'ft'
-	};
+var defaults =  {
+	network: '5887',
+	formats : {
+		'MediumRectangle':  {sizes :[300,250]},
+		'Rectangle':  {sizes :[180,50]},
+		'WideSkyscraper':  {sizes :[160,600]},
+		'Leaderboard'   :  {sizes :[728,90]},
+		'SuperLeaderboard': {sizes: [[970,90], [970,66]]},
+		'HalfPage'  : {sizes: [300,600]},
+		'Billboard' :  {sizes: [970,250]},
+		'Portrait'  :  {sizes: [300,1050]},
+		'Pushdown'  :  {sizes: [[970,90], [970,66]]},
+		'Sidekick'  :  {sizes: [[300,250], [300,600], [970,250]]},
+		'AdhesionBanner' : {sizes: [320,50]}
+	},
+	collapseEmpty: 'ft'
+};
 
-	var store = {};
+var store = {};
+
 /**
 * @private
 * @function
 * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
 */
-	var fetchMetaConfig = function() {
-		var meta,
-			results = {},
-			metas = document.getElementsByTagName('meta');
-		for (var i= 0; i < metas.length; i++) {
-			meta = metas[i];
-			if (meta.name) {
-				if (meta.getAttribute("data-contenttype") === "json"){
-					results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
-				} else {
-					results[meta.name] = meta.content;
-				}
+function fetchMetaConfig() {
+	var meta,
+		results = {},
+		metas = document.getElementsByTagName('meta');
+	for (var i= 0; i < metas.length; i++) {
+		meta = metas[i];
+		if (meta.name) {
+			if (meta.getAttribute("data-contenttype") === "json"){
+				results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+			} else {
+				results[meta.name] = meta.content;
 			}
 		}
-		return results;
-	};
+	}
+	return results;
+}
 
 
 /**
@@ -79,33 +74,27 @@ function Config() {
 * @function
 * fetchCanonicalURL Grabs the canonical URL of the page.
 */
-	var fetchCanonicalURL = function() {
-		var canonical,
-			canonicalTag = document.querySelector('link[rel="canonical"]');
-		if(canonicalTag) {
-			canonical = canonicalTag.href;
-		}
-		return { canonical: canonical };
-	};
+function fetchCanonicalURL() {
+	var canonical,
+		canonicalTag = document.querySelector('link[rel="canonical"]');
+	if(canonicalTag) {
+		canonical = canonicalTag.href;
+	}
+	return { canonical: canonical };
+}
 
 /**
-* @private
-* @function
-* fetchCookieConfig pulls out all cookie name/value pairs and returns them as an object.
+* The Config class defines an FT.ads.config instance.
+* @class
+* @constructor
 */
-//TODO update this function to only pull out cookies related to ad config rather than the entire object
-	var fetchCookieConfig = function(){
-		return ads.utils.cookies;
-	};
+function Config() {
+}
 
-/**
-* @function
-* access is returned by the Config constructor and acts as an accessor method for getting and setting config values.
-*/
-	var access = function(k, v){
+Config.prototype.access = function (k, v) {
 		var result;
-		if (ads.utils.isPlainObject(k)) {
-			store = ads.utils.extend(store, k);
+		if (utils.isPlainObject(k)) {
+			store = utils.extend(store, k);
 			result = store;
 		} else if (typeof v === "undefined") {
 			if (typeof k === "undefined"){
@@ -119,45 +108,22 @@ function Config() {
 		}
 
 		return result;
-	};
+};
 
-	access.clear = function(key){
-		if (key) {
-			delete store[key];
-		} else {
-			store = {};
-		}
-	};
+Config.prototype.clear = function (key) {
+	if (key) {
+		delete store[key];
+	} else {
+		store = {};
+	}
+};
 
-	access.init = function(impl, clear){
-		ads = impl;
-		if (clear) {
-			access.clear();
-			return store;
-		}
+Config.prototype.init = function () {
+	store = utils.extend(defaults, fetchMetaConfig(), fetchCanonicalURL());
+	return store;
+};
 
-/**
-* if the 'ftads:mode_t' cookie is set with the value 'testuser' then the cookie config takes priority over all over tiers of configuration
-* this allows QA Testers to over-ride global and meta config.
-*/
-		if (ads.utils.isString(ads.utils.cookie('ftads:mode_t'))) {
-			if (ads.utils.cookie('ftads:mode_t') === "testuser"){
-				store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchCookieConfig());
-
-				var siteCookie = ads.utils.cookie('ftads:dfpsite');
-				if (siteCookie && (siteCookie === 'test' || siteCookie === 'ftcom')) {
-					var splitSite = (store.dfp_site || '').split('.');
-					splitSite[0] = siteCookie;
-					store.dfp_site = splitSite.join('.');
-				}
-			}
-		} else {
-			store = ads.utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
-		}
-		return store;
-	};
-
-	//access.init();
-	return access;
-}
-module.exports = new Config();
+var config = new Config();
+module.exports = config.access;
+module.exports.init = config.init.bind(config);
+module.exports.clear = config.clear.bind(config);

@@ -1,8 +1,6 @@
 'use strict';
 var utils = require('./utils');
-var ads = require('../../main.js');
-var slots = require('./slots.js');
-var config = ads.config();
+var config = require('./config');
 var baseProperties  = {
 	server: 'gpt',
 	targeting: {},
@@ -72,14 +70,17 @@ var attributeParsers = {
 * @constructor
 */
 function Slot(container) {
+	var slotConfig = config('slots') || {};
 	// store the container
 	this.container = container;
 	// setup slot dom structure
 	this.outer = this.addContainer(container, { class: 'outer' });
 	this.inner = this.addContainer(this.outer, { class: 'inner'});
-	utils.extend(this, baseProperties, config.slots[this.name] || {});
 	// make sure the slot has a name
 	this.setName();
+	utils.extend(this, baseProperties, slotConfig[this.name] || {});
+	this.parseAttributeConfig();
+
 
 	this.addChartBeatTracking();
 	this.centerContainer();
@@ -93,7 +94,6 @@ function Slot(container) {
 * parse slot attribute config
 */
 Slot.prototype.parseAttributeConfig = function(){
-	var result = {};
 	[].slice.call(this.container.attributes).forEach(function (attribute) {
 		var name = utils.parseAttributeName(attribute.name);
 		var value = attribute.value;
@@ -106,8 +106,7 @@ Slot.prototype.parseAttributeConfig = function(){
 		} else if(this[name]) {
 			this[name] = attributeParsers.default(value);
 		}
-	});
-	return result;
+	}.bind(this));
 };
 
 
@@ -115,7 +114,11 @@ Slot.prototype.parseAttributeConfig = function(){
 *	If the slot doesn't have a name give it one
 */
 Slot.prototype.setName = function () {
-	this.name = this.name || 'o-ads-slot-' + (Object.keys(slots).length + 1);
+	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
+	if(!this.name){
+		this.name = 'o-ads-slot-' + (document.querySelectorAll('[data-o-ads-name],[o-ads-name]').length + 1);
+		this.container.setAttribute('data-o-ads-name', this.name);
+	}
 };
 
 /**
@@ -205,4 +208,4 @@ Slot.prototype.centerContainer = function () {
 
 //TODO: Remove reference to FT.com newssub / searchbox ad position.
 // if (slotName === "searchbox") {slotName = "newssubs";}
-
+module.exports = Slot;

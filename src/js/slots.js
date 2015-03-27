@@ -4,9 +4,9 @@
 
 
 "use strict";
-var ads = require('../../main.js');
-var Slot = require('./slot');
 var utils = require('./utils');
+var Slot = require('./slot');
+
 /**
 * The Slots class defines an FT.ads.slots instance.
 * @class
@@ -102,15 +102,14 @@ Slots.prototype.initSlot = function (container) {
 		return false;
 	}
 
-	var config = ads.config('slots') || {};
-	var slot = new Slot(name, container, {
-		formats: ads.config('formats'),
-		responsive: ads.config('responsive'),
-		slot: config[name] || {}
-	});
+	var slot = new Slot(container);
 
-	this[slot.name] = slot;
-	return slot;
+	if (slot.sizes.length){
+		this[slot.name] = slot;
+		return slot;
+	} else {
+		utils.log.error('slot %s has no configured sizes!', slot.name);
+	}
 };
 
 module.exports = new Slots();

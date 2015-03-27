@@ -7,7 +7,8 @@
   ],
   "ignore": [],
   "dependencies": {
-    "dom-delegate": "https://github.com/ftlabs/ftdomdelegate.git#^2.0.3"
+    "dom-delegate": "https://github.com/ftlabs/ftdomdelegate.git#^2.0.3",
+    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#element-tracking"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",

@@ -5,7 +5,8 @@
 QUnit.module('config');
 
 QUnit.test('Config get/set', function (assert) {
-	this.ads.config.init(this.ads, true);
+	this.ads.config.init();
+	this.ads.config.clear();
 	var result, obj,
 		key = 'key',
 		invalid = 'invalid',
@@ -36,7 +37,8 @@ QUnit.test('Config get/set', function (assert) {
 });
 
 QUnit.test('Config get/set - mulitple', function (assert) {
-	this.ads.config.init(this.ads, true);
+	this.ads.config.init(true);
+	this.ads.config.clear();
 	var obj = {
 		'some': 'config',
 		'parameters': 'to',
@@ -54,7 +56,7 @@ QUnit.test('Config fetchMetaConfig', function (assert) {
 	this.meta({
 		metaconf1: 'I&#39;m so meta, even this acronym.'
 	});
-	this.ads.config.init(this.ads);
+	this.ads.config.init(true);
 	var result = this.ads.config();
 
 	assert.ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
@@ -70,7 +72,7 @@ QUnit.test('Config fetchMetaConfigJSON', function (assert) {
 			}
 		});
 
-		this.ads.config.init(this.ads);
+		this.ads.init();
 		var result = this.ads.config();
 
 		assert.ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
@@ -81,7 +83,7 @@ QUnit.test('Config fetchMetaConfigJSON', function (assert) {
 });
 
 QUnit.test('Config defaults', function (assert) {
-	this.ads.config.init(this.ads);
+	this.ads.init();
 	var result =  this.ads.config();
 	assert.ok(result.hasOwnProperty('network'), 'default properties have been added to config');
 	assert.equal(this.ads.config('network'), '5887', 'Config returns the correct value');

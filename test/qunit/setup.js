@@ -1,6 +1,12 @@
 /* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
 "use strict";
+QUnit.config.urlConfig.push({
+	id: 'DEBUG',
+	value: 'OADS',
+	label: 'Debug Mode',
+	tooltip: 'Show debug log messages'
+});
 
 // change the karma debug page title to something more fitting
 document.querySelector('title').innerHTML = 'o-ads unit tests';
