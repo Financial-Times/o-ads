@@ -33,7 +33,6 @@ Ads.prototype.init = function (config){
 	this.config(config);
 	this.metadata.init(this);
 	this.targeting.init(this);
-	this.slots.init(this);
 	this.krux.init(this);
 	this.cb.init(this);
 	this.rubicon.init(this);
