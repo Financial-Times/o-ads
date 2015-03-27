@@ -8,6 +8,7 @@ module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
 /* container for fixtures */
 module.exports.fixturesContainer = document.getElementById('qunit-fixtures');
 
+/* the google library mock*/
 var gpt = require('./mocks/gpt-mock');
 
 module.exports.gpt = gpt.mock;
@@ -53,6 +54,29 @@ module.exports.stub = function () {
 
 module.exports.mock = function () {
 	return sandbox.mock.apply(sandbox, [].slice.call(arguments));
+};
+
+/* decorate document.body add/remove EventListener so we can remove any attached events */
+var _addEventListener = document.body.addEventListener;
+var _removeEventListener = document.body.removeEventListener;
+sandbox._eventListeners = [];
+document.body.addEventListener = function(type, listener){
+	sandbox._eventListeners.push({type: type, listener: listener});
+	_addEventListener.apply(document.body, [].slice.call(arguments));
+};
+
+document.body.removeEventListener = function(type, listener){
+	var remove;
+	sandbox._eventListeners.forEach(function(item, index){
+		if(item.type === type && listener === listener) {
+			remove = index;
+		}
+	});
+
+	if (remove) {
+		sandbox._eventListeners.splice(remove, 1);
+	}
+	_removeEventListener.apply(document.body, [].slice.call(arguments));
 };
 
 /* mock dates */
@@ -219,6 +243,11 @@ module.exports.clear = function () {
 			delete window[name];
 		});
 	}
+
+	sandbox._eventListeners.forEach(function (item) {
+		_removeEventListener.call(document.body, item.type, item.listener);
+	});
+	sandbox._eventListeners = [];
 
 	gpt.restore();
 	sandbox.restore();

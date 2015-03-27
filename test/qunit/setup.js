@@ -1,6 +1,7 @@
 /* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
 "use strict";
+QUnit.config.testTimeout = 2000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
 	value: 'OADS',

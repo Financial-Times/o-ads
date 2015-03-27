@@ -14,12 +14,23 @@ function broadcast(name, data, target) {
 	target.dispatchEvent(customEvent(name, opts));
 }
 
+
+/**
+* Sets a one time event listener
+* @name once
+*/
 function once(name, callback, target) {
 	target = target || document.body;
-	target.addEventListener(name, function(event){
-		target.removeEventListner(name, callback);
-		callback(event);
-	});
+	var handler = function(event){
+		target.removeEventListener(name, callback);
+		if (callback) {
+			callback(event);
+			// we set callback to null so if for some reason the listener isn't removed the callback will still only be called once
+			callback = null;
+		}
+	};
+
+	target.addEventListener(name, handler);
 }
 
 
@@ -35,4 +46,4 @@ function customEvent(name, opts) {
 }
 
 module.exports.broadcast = broadcast;
-module.exports.broadcast = once;
+module.exports.once = once;

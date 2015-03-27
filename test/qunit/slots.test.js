@@ -3,7 +3,8 @@
 "use strict";
 
 QUnit.module('Slots');
-QUnit.test('create a slot with imperative configuration', function (assert) {
+QUnit.test('create a basic slot with imperative configuration', function (assert) {
+	var done = assert.async();
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb"></div>');
 	var expected = {
 		outOfPage: true,
@@ -18,51 +19,52 @@ QUnit.test('create a slot with imperative configuration', function (assert) {
 	assert.ok(banlb, 'a banlb slot is created');
 	assert.equal(banlb.sizes, expected.sizes, 'the correct sizes are configured');
 	assert.equal(banlb.outOfPage, expected.outOfPage, 'the correct outOfPage are configured');
+	this.fixturesContainer.lastChild.
 });
 
-// QUnit.test('fetchSlotConfig sizes', function (assert) {
-// 	this.ads.init();
-// 	var container = $('<script data-o-ads-size="1x1">FT.env.advert(\'refresh\')</script>')[0];
-// 	var result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	var expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a script tag');
+QUnit.test('create a basic slot  sizes', function (assert) {
+	this.ads.init();
+	var container = $('<script data-o-ads-size="1x1">FT.env.advert(\'refresh\')</script>')[0];
+	var result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	var expected = [[1, 1]];
+	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a script tag');
 
-// 	container = $('<div data-o-ads-size="1x1"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container,'', {sizes: [[5,5]]});
-// 	expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a div tag');
+	container = $('<div data-o-ads-size="1x1"></div>')[0];
+	result = this.ads.slots.fetchSlotConfig(container,'', {sizes: [[5,5]]});
+	expected = [[1, 1]];
+	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a div tag');
 
-// 	container = $('<div data-ad-size="1x1"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-ad-size attribute on a div tag');
+	container = $('<div data-ad-size="1x1"></div>')[0];
+	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	expected = [[1, 1]];
+	assert.deepEqual(result.sizes, expected, 'data-ad-size attribute on a div tag');
 
-// 	container = $('<div data-o-ads-size="600x300,300x600,720x30">')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[600, 300], [300, 600], [720, 30]];
-// 	assert.deepEqual(result.sizes, expected, 'Multiple sizes are parsed');
+	container = $('<div data-o-ads-size="600x300,300x600,720x30">')[0];
+	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	expected = [[600, 300], [300, 600], [720, 30]];
+	assert.deepEqual(result.sizes, expected, 'Multiple sizes are parsed');
 
-// 	container = $('<div data-o-ads-size="600x300,invalidxsize,100x200,720x30">')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', '', {sizes: [[5,5]]});
-// 	expected = [[600, 300], [100, 200], [720, 30]];
-// 	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
+	container = $('<div data-o-ads-size="600x300,invalidxsize,100x200,720x30">')[0];
+	result = this.ads.slots.fetchSlotConfig(container, '', '', {sizes: [[5,5]]});
+	expected = [[600, 300], [100, 200], [720, 30]];
+	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
 
-// 	container = $('<div data-o-ads-size="">')[0];
-// 	this.ads.
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'Empty string returns size from passed config');
+	container = $('<div data-o-ads-size="">')[0];
+	this.ads.
+	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	expected = [[5, 5]];
+	assert.deepEqual(result.sizes, expected, 'Empty string returns size from passed config');
 
-// 	container = $('<div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'No attribute returns size from passed config');
+	container = $('<div>')[0];
+	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	expected = [[5, 5]];
+	assert.deepEqual(result.sizes, expected, 'No attribute returns size from passed config');
 
-// 	container = $('<div data-o-ads-size="invalidxsize">')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'Single invalid size returns size passed from config');
-// });
+	container = $('<div data-o-ads-size="invalidxsize">')[0];
+	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
+	expected = [[5, 5]];
+	assert.deepEqual(result.sizes, expected, 'Single invalid size returns size passed from config');
+});
 
 // QUnit.test('Add container', function (assert) {
 // 	this.ads.slots.addContainer(this.fixturesContainer, 'container');

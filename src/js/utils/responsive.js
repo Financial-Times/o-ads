@@ -1,33 +1,22 @@
 'use strict';
 
-var callback, viewPorts, current,
-	timer = false,
-	utils = require('./index.js');
-
-function getViewportDims() {
-	var e = window, a = 'inner';
-	if (!('innerWidth' in window)) {
-		a = 'client';
-		e = document.documentElement || document.body;
-	}
-	return {w : e[a + 'Width'], h: e[a + 'Height']};
-}
-
+var callback, breakpoints, current;
+var utils = require('./index.js');
+var oViewport =  require('o-viewport');
 
 function getNearestBreakpoint() {
-	var viewPort, viewPortDims, winner,
-		dims = getViewportDims();
-
-	for (viewPort in viewPorts){
-		if(viewPorts.hasOwnProperty(viewPort)){
-			viewPortDims = viewPorts[viewPort];
-			if( dims.w > viewPortDims[0] && dims.h > viewPortDims[1] ){
-				if(!winner || viewPortDims[0] > viewPorts[winner][0]) {
-					winner = viewPort;
-				}
+	var winner;
+	var dims = oViewport.getSize();
+	function findCurrentBreakpoint(breakpoint) {
+		var breakpointDims = breakpoints[breakpoint];
+		if( dims.w > breakpointDims[0] && dims.h > breakpointDims[1] ){
+			if(!winner || breakpointDims[0] > breakpoints[winner][0]) {
+				winner = breakpoint;
 			}
 		}
 	}
+
+	Object.keys(breakpoints).forEach(findCurrentBreakpoint);
 
 	return winner;
 }
@@ -45,35 +34,26 @@ function setCurrent(name){
 	current = name;
 }
 
-function onResize() {
-	if (timer) {
-		clearTimeout(timer);
-	}
-	timer = setTimeout(fire, 200);
+function getCurrent() {
+	return current;
 }
 
-function init(vps, cb) {
+function init(brps, cb) {
 
 	if(!utils.isFunction(cb)) {
 		// must have a call back function
 		return false;
 	}
 
-	viewPorts = vps;
+	breakpoints = brps;
 	callback = cb;
 
 	setCurrent(getNearestBreakpoint());
+	document.body.addEventListener('oViewport.orientation', fire);
+	document.body.addEventListener('oViewport.resize', fire);
 
-	if (window.addEventListener) {
-		window.addEventListener("resize", onResize, false);
-	}
-	else if (document.body.attachEvent) {
-		document.body.attachEvent("onresize", onResize);
-	}
-
-	return function() {
-		return current;
-	};
+	return getCurrent;
 }
 
-module.exports = init;
+module.exports.init = init;
+module.exports.getCurrent = getCurrent;

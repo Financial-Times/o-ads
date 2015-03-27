@@ -25,7 +25,8 @@ var options = {
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
-		'test/qunit/*.test.js'
+		'test/qunit/config.test.js',
+		'test/qunit/utils.events.test.js'
 	],
 	customLaunchers: {
 		Chrome_with_flags: {
@@ -88,7 +89,7 @@ try {
 	if (err.code === "MODULE_NOT_FOUND") {
 		console.log('No local config found');
 	} else {
-		console.error('%s:%s', err.code, err.toString().replace('Error:', ''))
+		console.error('%s:%s', err.code, err.toString().replace('Error:', ''));
 	}
 }
 
