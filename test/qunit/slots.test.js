@@ -15,7 +15,7 @@ QUnit.test('create a basic slot with imperative configuration', function (assert
 		assert.strictEqual(event.detail.name, 'banlb', 'the slot name is available');
 		assert.ok(event.detail.slot, 'the slot object is available');
 		assert.equal(event.detail.slot.sizes, expected.sizes, 'the correct sizes are configured');
-		assert.equal(event.detail.slot.outOfPage, expected.outOfPage, 'the correct outOfPage are configured');
+		assert.equal(event.detail.slot.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
 		done();
 	}.bind(this));
 
