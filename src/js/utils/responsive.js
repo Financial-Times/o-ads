@@ -9,7 +9,7 @@ function getNearestBreakpoint() {
 	var dims = oViewport.getSize();
 	function findCurrentBreakpoint(breakpoint) {
 		var breakpointDims = breakpoints[breakpoint];
-		if( dims.w > breakpointDims[0] && dims.h > breakpointDims[1] ){
+		if( dims.width > breakpointDims[0] && dims.height > breakpointDims[1] ){
 			if(!winner || breakpointDims[0] > breakpoints[winner][0]) {
 				winner = breakpoint;
 			}
@@ -51,9 +51,12 @@ function init(brps, cb) {
 	setCurrent(getNearestBreakpoint());
 	document.body.addEventListener('oViewport.orientation', fire);
 	document.body.addEventListener('oViewport.resize', fire);
+	oViewport.listenTo('orientation');
+	oViewport.listenTo('resize');
 
 	return getCurrent;
 }
 
-module.exports.init = init;
+module.exports = init;
 module.exports.getCurrent = getCurrent;
+module.exports.setThrottleInterval = oViewport.setThrottleInterval;
