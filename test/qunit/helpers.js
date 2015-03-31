@@ -1,5 +1,5 @@
 /* jshint globalstrict: true, browser: true */
-/* global sinon: false, $: false, module: true, QUnit: false, require: false */
+/* global sinon: false, $: false, module: true, QUnit: false, require: true */
 "use strict";
 
 /* a URL that can be used in tests without causing 404 errors */
@@ -81,11 +81,13 @@ document.body.removeEventListener = function(type, listener){
 
 /* mock dates */
 module.exports.date = function (time) {
+	var clock;
 	if (isNaN(time)){
-		return sandbox.useFakeTimers();
+		clock = sandbox.useFakeTimers();
 	} else {
-		return sandbox.useFakeTimers(time);
+		clock = sandbox.useFakeTimers(time);
 	}
+	return clock;
 };
 
 /* mock xml http requests */
@@ -98,27 +100,26 @@ module.exports.server = function (clock) {
 };
 
 /* mock viewport dimensions */
-/* Warning once you mock you can't stop */
+// In order to mock the results from oViewport.getSize we stub Math.max
+// and return the mocked width or height when the actual width and height are provided as arguments
+// this could go bad if your code is using Math.max and happens to provide the window width/height as an argument
 module.exports.viewport = function (width, height) {
-	window.innerWidth = width;
-	window.innerHeight = height;
-
-	// in firefox we can't overwrite these props so need to use defineProperty
-	if (Object.defineProperty && (window.innerWidth || window.innerHeight !== height) ) {
-		Object.defineProperty(window, 'innerWidth', {
-			value: width,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		});
-
-		Object.defineProperty(window, 'innerHeight', {
-			value: height,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		});
+	if (Math.max.restore) {
+		Math.max.restore();
 	}
+
+	var _max = Math.max;
+	this.stub(Math, 'max', function (){
+		if(document.documentElement.clientWidth === arguments[0] || window.innerWidth === arguments[0]){
+			return width;
+		}
+
+		if (document.documentElement.clientHeight === arguments[0] || window.innerHeight === arguments[0]) {
+			return height;
+		}
+
+		return _max.apply(null, [].slice.call(arguments));
+	});
 };
 
 /* Add meta data to the page */
