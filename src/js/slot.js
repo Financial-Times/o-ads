@@ -22,6 +22,8 @@ var attributeParsers = {
 		return sizes;
 	},
 	formats: function(value, sizes){
+		console.log(value);
+		console.log(sizes);
 		if(utils.isArray(sizes) && utils.isString(value)){
 			value.split(',').forEach(function (format) {
 				var size = config.formats[format.trim()];

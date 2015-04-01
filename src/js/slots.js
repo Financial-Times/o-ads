@@ -90,20 +90,17 @@ Slots.prototype.initSlot = function (container) {
 	// if container is a string this is a legacy implementation using ids
 	// find the element and remove the ID in favour of a data attribute
 	if (utils.isString(container)){
-		container = document.getElementById(container) || container.querySelector('data-o-ads-name="' + container + '"');
-		if (container.id) {
+		container = document.getElementById(container) ||document.querySelector('[data-o-ads-name="'+ container +'"]');
+		if (container && container.id) {
 			container.setAttribute('data-o-ads-name', container.id);
 			container.removeAttribute('id');
 		}
 	}
-
 	//if not an element or we can't find it in the DOM exit
 	if (!utils.isElement(container)) {
 		return false;
 	}
-
 	var slot = new Slot(container);
-
 	if (slot.sizes.length){
 		this[slot.name] = slot;
 		return slot;
