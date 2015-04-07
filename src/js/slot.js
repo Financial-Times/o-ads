@@ -14,6 +14,7 @@ var baseProperties  = {
 
 var attributeParsers = {
 	sizes: function(value, sizes){
+	
 		if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
 				sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
@@ -29,14 +30,14 @@ var attributeParsers = {
                     formats[i] = conf[formats[i]];
                     if (utils.isArray(formats[i].sizes[0])) {
                         for (var j = 0; j < formats[i].sizes.length; j++){
-                           baseProperties.sizes.push(formats[i].sizes[j]);
+                           this.sizes.push(formats[i].sizes[j]);
                         }
                     }
                     else { 
-                      baseProperties.sizes.push(formats[i].sizes);
+                      this.sizes.push(formats[i].sizes);
                     }
                 }
-                return baseProperties.sizes;
+                return this.sizes;
             },
 	responsiveSizes: function(name, value, sizes){
 		var screenName = name.replace(/^sizes/, '');
@@ -85,7 +86,6 @@ function Slot(container) {
 	utils.extend(this, baseProperties, slotConfig[this.name] || {});
 	this.parseAttributeConfig();
 
-
 	this.addChartBeatTracking();
 	this.centerContainer();
 	// if we're not lazy loading fire the ready event
@@ -99,6 +99,7 @@ function Slot(container) {
 */
 Slot.prototype.parseAttributeConfig = function(){
 	[].slice.call(this.container.attributes).forEach(function (attribute) {
+		console.log(this);
 		var name = utils.parseAttributeName(attribute.name);
 		var value = attribute.value;
 		if(attributeParsers[name]){
