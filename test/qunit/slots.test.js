@@ -7,9 +7,10 @@ QUnit.test('create a basic slot with imperative configuration', function (assert
 	var done = assert.async();
 	var expected = {
 		outOfPage: true,
-		sizes: [[1,1]]
+		sizes: [[2,2]]
 	};
 	this.ads.init({'slots': { banlb: expected }});
+	this.ads.test= 1;
 
 	document.body.addEventListener('oAds.ready', function (event){
 		assert.strictEqual(event.detail.name, 'banlb', 'the slot name is available');
@@ -23,22 +24,49 @@ QUnit.test('create a basic slot with imperative configuration', function (assert
 	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
 });
 
-// QUnit.test('create a basic slot  sizes', function (assert) {
-// 	this.ads.init();
-// 	var container = $('<script data-o-ads-size="1x1">FT.env.advert(\'refresh\')</script>')[0];
-// 	var result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	var expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a script tag');
 
-// 	container = $('<div data-o-ads-size="1x1"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container,'', {sizes: [[5,5]]});
-// 	expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute on a div tag');
 
-// 	container = $('<div data-ad-size="1x1"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[1, 1]];
-// 	assert.deepEqual(result.sizes, expected, 'data-ad-size attribute on a div tag');
+QUnit.test('create a slot set size', function (assert) {
+	var done = assert.async();
+	var expected = [[1,1]];
+	document.body.addEventListener('oAds.ready', function (event){
+		var result = event.detail.slot;
+		assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
+		done();
+	}.bind(this));
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="test" data-o-ads-sizes="1x1"></div>');
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+});
+
+//QUnit.test('create a basic slot  sizes', function (assert) {
+	//console.log(this.ads);
+	//var done = assert.async();
+	//this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb" data-o-ads-size="1x1"></div>');
+	//this.ads.init();
+	//this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	//var result= this.ads.slots.banlb;
+	//var expected = [[1,1]];
+	//assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
+//});
+
+
+QUnit.test('create a slot with Mult---iple sizes', function (assert) {
+	//console.log(this.ads.test);
+	var done = assert.async();
+	var expected = [[600, 300], [300, 600], [720, 30]];
+	document.body.addEventListener('oAds.ready', function (event){
+	//	console.log(event.detail);
+		var result= event.detail.slot;
+		console.log('name:' + event.detail.slot.name);
+		console.log('sizes: ' + event.detail.slot.sizes);
+		assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
+		done();
+	}.bind(this));
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+});
 
 // 	container = $('<div data-o-ads-size="600x300,300x600,720x30">')[0];
 // 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
@@ -65,7 +93,7 @@ QUnit.test('create a basic slot with imperative configuration', function (assert
 // 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
 // 	expected = [[5, 5]];
 // 	assert.deepEqual(result.sizes, expected, 'Single invalid size returns size passed from config');
-// });
+//});
 
 // QUnit.test('Add container', function (assert) {
 // 	this.ads.slots.addContainer(this.fixturesContainer, 'container');
