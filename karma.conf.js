@@ -3,15 +3,13 @@
 // the file should export a function that takes the current options object and
 // returns an amended one e.g.
 // module.exports = function (options) {
-// 	var options = {
-// 		test: "it works!"
-// 	};
+// 	var options.test = "it works!";
 // 	return options;
 // }
-
-
-
 'use strict';
+
+process.env['BROWSERIFYSWAP_ENV'] = 'karma';
+
 var options = {
 	basePath: '',
 	autoWatch: true,
@@ -25,8 +23,7 @@ var options = {
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
-		'test/qunit/config.test.js',
-		'test/qunit/utils.events.test.js'
+		'test/qunit/*.test.js'
 	],
 	customLaunchers: {
 		Chrome_with_flags: {
@@ -35,7 +32,7 @@ var options = {
 		}
 	},
 	browsers: ['Chrome_with_flags'],
-	browserify: { transform: ['debowerify'] },
+	browserify: { transform: ['debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
 	preprocessors: {
 		'test/qunit/setup.js': 'browserify',
