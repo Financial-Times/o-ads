@@ -68,7 +68,7 @@ QUnit.test('We can listen to a one time event', function (assert) {
 	setTimeout(function(){
 		assert.equal(listened, 1, 'We only reacted to the first event');
 		done();
-	}, 1000);
+	}, 750);
 
 	utils.broadcast('ahoy', {
 		there: 'matey',
