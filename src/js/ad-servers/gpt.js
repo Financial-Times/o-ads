@@ -234,8 +234,8 @@ var slotMethods = {
 * define a GPT slot
 */
 	defineSlot: function () {
-		var slotId = this.name + '-gpt';
-		this.inner.setAttribute('id', slotId);
+		this.gpt.id = this.name + '-gpt';
+		this.inner.setAttribute('id', this.gpt.id);
 		this.setUnitName();
 
 		if (responsive && utils.isObject(this.sizes)) {
@@ -247,11 +247,10 @@ var slotMethods = {
 					mapping.addSize(breakpoint, this.sizes[breakpoint]);
 				}
 			}.bind(this));
-
-			googletag.defineSlot(this.gpt.unitName, [0,0], slotId)
+			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0,0], this.gpt.id)
 			         .defineSizeMapping(mapping.build());
 		} else {
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, slotId);
+			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
 		}
 
 		return this;
