@@ -47,6 +47,7 @@ var attributeParsers = {
 	targeting: function (value, targeting) {
 		value = utils.hash(value, ';', '=');
 		utils.extend(targeting, value);
+		return targeting;
 	},
 	"default": function (value) {
 		if (value === '' || value === 'true'){

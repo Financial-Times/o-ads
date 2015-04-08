@@ -76,6 +76,7 @@ function setup(gptConfig){
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty(gptConfig);
 	setRenderEnded();
+	googletag.enableServices();
 }
 
 /*
@@ -186,10 +187,10 @@ function onReady(slotMethods, event){
 		// setup the gpt configuration and display the ad
 		googletag.cmd.push(function (slot){
 			slot.defineSlot()
+		    .addServices()
 		    .setCollapseEmpty()
 		    .setTargeting()
 		    .setURL()
-		    .addServices()
 		    .display();
 		}.bind(null, slot));
 	}
