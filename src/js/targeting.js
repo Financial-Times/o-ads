@@ -15,9 +15,13 @@
 */
 
 "use strict";
-var ads;
 var proto = Targeting.prototype;
 var context;
+var config = require('./config');
+var metadata = require('./metadata');
+var krux = require('./data-providers/krux');
+var krux = require('./version');
+var utils = require('./utils');
 var parameters = {};
 proto.initialised = false;
 
@@ -32,7 +36,7 @@ function Targeting() {
 
 proto.get = function(){
 	var item,
-	config = {
+	methods = {
 		metadata: context.getFromMetaData,
 		krux: context.fetchKrux,
 		socialReferrer: context.getSocialReferrer,
@@ -42,25 +46,25 @@ proto.get = function(){
 		version : context.version
 	};
 
-	ads.utils.extend(parameters, context.getFromConfig(), context.encodedIp(), context.getAysc(), context.searchTerm());
+	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.getAysc(), this.searchTerm());
 
-	for (item in config)  {
-		if (config.hasOwnProperty(item) && ads.config(item)) {
-			ads.utils.extend(parameters, config[item]());
+	for (item in methods)  {
+		if (methods.hasOwnProperty(item) && config(item)) {
+			utils.extend(parameters, methods[item]());
 		}
 	}
 	return parameters;
 };
 
 proto.add = function (obj){
-	if (ads.utils.isPlainObject(obj)){
-		ads.utils.extend(parameters, obj);
+	if (utils.isPlainObject(obj)){
+		utils.extend(parameters, obj);
 	}
 };
 
 proto.getFromMetaData =  function () {
-	var page = ads.metadata.page(),
-	user = ads.metadata.user();
+	var page = metadata.page(),
+	user = metadata.user();
 	return {
 		eid: user.eid || null,
 		fts: user.loggedIn + '',
@@ -85,7 +89,7 @@ proto.encodedIp =  function () {
 		};
 
 		function getIP () {
-			var ip, tmp, ftUserTrackVal = ads.utils.cookie('FTUserTrack'), ipTemp;
+			var ip, tmp, ftUserTrackVal = utils.cookie('FTUserTrack'), ipTemp;
 
 			// sample FTUserTrackValue = 203.190.72.182.1344916650137365
 			if (ftUserTrackVal) {
@@ -133,22 +137,22 @@ proto.encodedIp =  function () {
 * @lends Targeting
 */
 proto.getFromConfig = function () {
-	var targeting = ads.config('dfp_targeting') || {};
-	if (!ads.utils.isPlainObject(targeting)) {
-			if (ads.utils.isString(targeting)) {
-					targeting = ads.utils.hash(targeting, ';', '=') || {};
+	var targeting = config('dfp_targeting') || {};
+	if (!utils.isPlainObject(targeting)) {
+			if (utils.isString(targeting)) {
+					targeting = utils.hash(targeting, ';', '=') || {};
 			}
 	}
 	return targeting;
 };
 
 proto.fetchKrux = function (){
-		return ads.krux.targeting();
+		return krux.targeting();
 };
 
 proto.getPageReferrer = function () {
 	var match = null,
-		referrer = ads.utils.getReferrer(),
+		referrer = utils.getReferrer(),
 		hostRegex;
 	//referrer is not article
 	if (referrer !== '') {
@@ -165,7 +169,7 @@ proto.getPageReferrer = function () {
 
 proto.getSocialReferrer = function () {
 		var codedValue, refUrl,
-		referrer = ads.utils.getReferrer(),
+		referrer = utils.getReferrer(),
 		lookup = {
 				't.co': 'twi',
 				'facebook.com': 'fac',
@@ -174,7 +178,7 @@ proto.getSocialReferrer = function () {
 		},
 		refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
 
-		if (ads.utils.isString(referrer)) {
+		if (utils.isString(referrer)) {
 				for(refUrl in lookup) {
 					if(lookup.hasOwnProperty(refUrl)){
 						var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
@@ -189,15 +193,15 @@ proto.getSocialReferrer = function () {
 };
 
 proto.cookieConsent = function () {
-		return {cc: ads.utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
+		return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
 };
 
 proto.getAysc = function () {
-	var exclusions =  ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
+	var exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
 	var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1, '20': 1, '21': 1};
 	var remove_res_pvt = {'14': 1, 'cn': 1, '27': 1};
 	var returnObj = {};
-	var AllVars = ads.metadata.getAyscVars({});
+	var AllVars = metadata.getAyscVars({});
 
 	function excludeFields(exclusions, obj) {
 		var idx, keyvalsplit, prop;
@@ -230,7 +234,7 @@ proto.behaviouralFlag = function () {
 };
 
 proto.searchTerm = function () {
-	var qs = ads.utils.hash(ads.utils.getQueryString(), /\&|\;/, '='),
+	var qs = utils.hash(utils.getQueryString(), /\&|\;/, '='),
 	keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
 	if (keywords && keywords !== '') {
@@ -244,17 +248,11 @@ proto.searchTerm = function () {
 };
 
 proto.timestamp = function () {
-	return { ts: ads.utils.getTimestamp() };
+	return { ts: utils.getTimestamp() };
 };
 
 proto.version = function(){
 	return {ver : ads.version.artifactVersion};
-};
-
-proto.init = function (impl) {
-	ads = impl;
-	parameters = {};
-	return this;
 };
 
 module.exports = new Targeting();
