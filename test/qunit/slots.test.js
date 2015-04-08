@@ -33,7 +33,10 @@ QUnit.test('create a slot set size', function (assert) {
 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
 });
 
+
+
 QUnit.test('create a slot with Multiple sizes', function (assert) {
+	var done = assert.async();
 	var expected = [[600, 300], [300, 600], [720, 30]];
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
