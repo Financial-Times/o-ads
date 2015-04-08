@@ -51,18 +51,16 @@ QUnit.test('create a slot set size', function (assert) {
 //});
 
 
-QUnit.test('create a slot with Mult---iple sizes', function (assert) {
-	//console.log(this.ads.test);
+QUnit.test('create a slot with Multiple sizes', function (assert) {
 	var done = assert.async();
 	var expected = [[600, 300], [300, 600], [720, 30]];
+
 	document.body.addEventListener('oAds.ready', function (event){
-	//	console.log(event.detail);
-		var result= event.detail.slot;
-		console.log('name:' + event.detail.slot.name);
-		console.log('sizes: ' + event.detail.slot.sizes);
+		var result = event.detail.slot;
 		assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
 		done();
 	}.bind(this));
+
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
