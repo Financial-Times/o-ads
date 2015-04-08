@@ -4,23 +4,23 @@
 // I'm not sure what affect moving the myState var will have (it's used above too) so this need to be refactored at some point
 
 "use strict";
-var ads;
-
 var Metadata = {};
+var config = require('./config');
+var utils = require('./utils');
 
 Metadata.getLoginInfo = function () {
 	var loggedIn = false,
-	eid = ads.utils.getCookieParam('FT_U', 'EID') || null,
-	remember = ads.utils.cookie('FT_Remember');
+	eid = utils.getCookieParam('FT_U', 'EID') || null,
+	remember = utils.cookie('FT_Remember');
 
 	//TODO fix the utils hash method to not error when undefined is passed
 	// then we can get rid of the test for the split method
-	if (!eid && remember && ads.utils.isFunction(remember.split)) {
+	if (!eid && remember && utils.isFunction(remember.split)) {
 		remember = remember.split(':');
 		eid = !!(remember[0].length) ? remember[0] : eid;
 	}
 
-	if (eid || ads.utils.cookie('FTSession')) {
+	if (eid || utils.cookie('FTSession')) {
 		loggedIn = true;
 	}
 
@@ -44,7 +44,7 @@ Metadata.getAyscVars = function(obj){
 		var i, value;
 
 		for(i=0; i < SubStrKeyNames.length; i++){
-			value = ads.utils.isString(obj) ? obj.charAt(i) : obj[i];
+			value = utils.isString(obj) ? obj.charAt(i) : obj[i];
 			if (value === false) {
 				continue;
 			}
@@ -63,8 +63,8 @@ Metadata.getAyscVars = function(obj){
 	}
 
 	function detectERights(obj) {
-		if (ads.utils.cookie("FT_U")) {
-			var erights = ads.utils.cookie("FT_U").split("="),
+		if (utils.cookie("FT_U")) {
+			var erights = utils.cookie("FT_U").split("="),
 			keyname = erights[0],
 			val = erights[1];
 			if ((keyname !== undefined) && (val === undefined)) {
@@ -130,8 +130,8 @@ Metadata.getAyscVars = function(obj){
 
 	var out = {},
 	item, q;
-	if (ads.utils.cookie("AYSC")) {
-		q = ads.utils.cookie("AYSC").split("_");
+	if (utils.cookie("AYSC")) {
+		q = utils.cookie("AYSC").split("_");
 
 		for (var i = 0, j = q.length; i < j; i++) {
 			item = q.pop();
@@ -149,7 +149,7 @@ Metadata.getAyscVars = function(obj){
 	}
 
 	var x = prepareAdVars(out);
-	return ads.utils.extend({}, obj, x);
+	return utils.extend({}, obj, x);
 };
 
 
@@ -209,14 +209,14 @@ Metadata.user= function () {
 Metadata.page = function(){
 	var result = {};
 	result.uuid = window.pageUUID ? window.pageUUID :
-								ads.utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
+								utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
 	result.auuid = window.articleUUID || undefined;
-	result.dfpSite = ads.config('dfp_site');
-	result.dfpZone = ads.config('dfp_zone');
-	if (ads.utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
-	if (ads.utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
-	if (ads.utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
-	if (ads.utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
+	result.dfpSite = config('dfp_site');
+	result.dfpZone = config('dfp_zone');
+	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
+	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
+	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
+	if (utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
 	return result;
 };
 
@@ -224,23 +224,18 @@ Metadata.page = function(){
 * return the current documents url or an empty string if non exists
 * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
 * @name getReferrer
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @memberof FT._utils
+* @lends FT._utils
 */
 
 Metadata.getPageType = function () {
-	var targeting = ads.config('dfp_targeting') || {};
-	if (!ads.utils.isPlainObject(targeting)) {
-		if (ads.utils.isString(targeting)) {
-			targeting = ads.utils.hash(targeting, ';', '=') || {};
+	var targeting = config('dfp_targeting') || {};
+	if (!utils.isPlainObject(targeting)) {
+		if (utils.isString(targeting)) {
+			targeting = utils.hash(targeting, ';', '=') || {};
 		}
 	}
 	return targeting.pt || 'unknown';
-};
-
-
-Metadata.init = function (impl) {
-	ads = impl;
 };
 
 module.exports = Metadata;
