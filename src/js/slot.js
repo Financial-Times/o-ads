@@ -1,20 +1,10 @@
 'use strict';
 var utils = require('./utils');
 var config = require('./config');
-var baseProperties  = {
-	server: 'gpt',
-	targeting: {},
-	sizes: [],
-	center: false,
-	rendered: false,
-	outOfPage: false,
-	lazyLoad: false,
-	collapseEmpty: false
-};
 
 var attributeParsers = {
 	sizes: function(value, sizes){
-	
+
 		if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
 				sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
@@ -33,7 +23,7 @@ var attributeParsers = {
                            this.sizes.push(formats[i].sizes[j]);
                         }
                     }
-                    else { 
+                    else {
                       this.sizes.push(formats[i].sizes);
                     }
                 }
@@ -83,7 +73,20 @@ function Slot(container) {
 	this.inner = this.addContainer(this.outer, { class: 'inner'});
 	// make sure the slot has a name
 	this.setName();
-	utils.extend(this, baseProperties, slotConfig[this.name] || {});
+
+	// default configuration properties
+	this.server = 'gpt';
+	this.targeting = {};
+	this.sizes = [];
+	this.center = false;
+	this.rendered = false;
+	this.outOfPage = false;
+	this.lazyLoad = false;
+	this.collapseEmpty = false;
+
+	// extend with declaritive configuration options
+	utils.extend(this, slotConfig[this.name] || {});
+	// extend with imperative configuration options
 	this.parseAttributeConfig();
 
 	this.addChartBeatTracking();
