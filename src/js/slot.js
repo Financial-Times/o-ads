@@ -99,11 +99,10 @@ function Slot(container) {
 */
 Slot.prototype.parseAttributeConfig = function(){
 	[].slice.call(this.container.attributes).forEach(function (attribute) {
-		console.log(this);
 		var name = utils.parseAttributeName(attribute.name);
 		var value = attribute.value;
 		if(attributeParsers[name]){
-			this[name] = attributeParsers[name](value, this[name]);
+			this[name] = attributeParsers[name].bind(this)(value, this[name]);
 		} else if (/^formats\w*/.test(name)) {
 			this.sizes = attributeParsers.responsiveFormat(name, value, this.sizes);
 		} else if (/^sizes\w*/.test(name)) {
