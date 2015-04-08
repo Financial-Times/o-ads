@@ -101,7 +101,6 @@ Slots.prototype.initSlot = function (container) {
 		return false;
 	}
 	var slot = new Slot(container);
-	console.log(slot);
 	if (slot.sizes.length){
 		this[slot.name] = slot;
 		return slot;

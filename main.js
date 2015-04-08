@@ -15,7 +15,7 @@ function Ads() {
 // bung all our modules on the protoype
 Ads.prototype.config = require('./src/js/config');
 Ads.prototype.slots = require('./src/js/slots');
-// Ads.prototype.krux = require('./src/js/data-providers/krux');
+Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 // Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 // Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 // Ads.prototype.admantx = require('./src/js/data-providers/admantx');
@@ -30,6 +30,8 @@ Ads.prototype.init = function (config){
 	// it's passed into each module so we can to maintain state in each module
 	this.config.init();
 	this.config(config);
+//	console.log(this.gpt);
+	this.gpt();
 	// this.metadata.init(this);
 	// this.targeting.init(this);
 	// this.krux.init(this);

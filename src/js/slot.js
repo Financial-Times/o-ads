@@ -4,7 +4,6 @@ var config = require('./config');
 
 var attributeParsers = {
 	sizes: function(value, sizes){
-
 		if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
 				sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
@@ -13,22 +12,22 @@ var attributeParsers = {
 		return sizes;
 	},
 	'formats' : function(value, name) {
-                var formats = value.split(',');
-                var conf = config().formats;
-                for (var i = 0; i < formats.length; i++) {
-                    formats[i] = formats[i].trim();
-                    formats[i] = conf[formats[i]];
-                    if (utils.isArray(formats[i].sizes[0])) {
-                        for (var j = 0; j < formats[i].sizes.length; j++){
-                           this.sizes.push(formats[i].sizes[j]);
-                        }
-                    }
-                    else {
-                      this.sizes.push(formats[i].sizes);
-                    }
-                }
-                return this.sizes;
-            },
+		var formats = value.split(',');
+		var conf = config().formats;
+		for (var i = 0; i < formats.length; i++) {
+			formats[i] = formats[i].trim();
+			formats[i] = conf[formats[i]];
+			if (utils.isArray(formats[i].sizes[0])) {
+				for (var j = 0; j < formats[i].sizes.length; j++){
+					this.sizes.push(formats[i].sizes[j]);
+				}
+			}
+			else {
+				this.sizes.push(formats[i].sizes);
+			}
+		}
+		return this.sizes;
+	},
 	responsiveSizes: function(name, value, sizes){
 		var screenName = name.replace(/^sizes/, '');
 		if (!utils.isPlainObject(sizes)) {
