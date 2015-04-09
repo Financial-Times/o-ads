@@ -4,11 +4,11 @@
 // I'm not sure what affect moving the myState var will have (it's used above too) so this need to be refactored at some point
 
 "use strict";
-var Metadata = {};
 var config = require('./config');
 var utils = require('./utils');
 
-Metadata.getLoginInfo = function () {
+
+function getLoginInfo() {
 	var loggedIn = false,
 	eid = utils.getCookieParam('FT_U', 'EID') || null,
 	remember = utils.cookie('FT_Remember');
@@ -25,9 +25,9 @@ Metadata.getLoginInfo = function () {
 	}
 
 	return {eid: eid, loggedIn: loggedIn};
-};
+}
 
-Metadata.getAyscVars = function(obj){
+function getAyscVars(obj) {
 	var subsLevelReplaceLookup = {
 		'edt': { '22': /^edit$/, '97': /^.*/ },
 		'int': { '22': /^Ftemp$/, '97': /^.*/ },
@@ -150,24 +150,25 @@ Metadata.getAyscVars = function(obj){
 
 	var x = prepareAdVars(out);
 	return utils.extend({}, obj, x);
+}
+
+module.exports.getPageType = function () {
+	var targeting = config('dfp_targeting') || {};
+	if (!utils.isPlainObject(targeting)) {
+		if (utils.isString(targeting)) {
+			targeting = utils.hash(targeting, ';', '=') || {};
+		}
+	}
+	return targeting.pt || 'unknown';
 };
 
 
-/**
-* getEid derives the eid of the current user first from the FT_U cookie then
-* the FT_Remember cookie if FT_U is unset. An object with the key eid and the derived eid value is
-* returned, if no value is availble null will be returned as the object value
-* @name fetchEid
-* @memberof Targeting
-* @lends Targeting
-*/
-
-Metadata.user= function () {
+module.exports.user = function () {
 	var ayscProp, ayscVal,
-	asyc = this.getAyscVars({}),
+	asyc = getAyscVars({}),
 	result = {},
 	valueFilter = /(PVT)|(x+)/i,
-	loginInfo = this.getLoginInfo(),
+	loginInfo = getLoginInfo(),
 	ayscProps = {
 		homepage_edition: '28',
 		corporate_access_id_code: '27',
@@ -206,7 +207,7 @@ Metadata.user= function () {
 	return result;
 };
 
-Metadata.page = function(){
+module.exports.page = function(){
 	var result = {};
 	result.uuid = window.pageUUID ? window.pageUUID :
 								utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
@@ -220,22 +221,5 @@ Metadata.page = function(){
 	return result;
 };
 
-/**
-* return the current documents url or an empty string if non exists
-* This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
-* @name getReferrer
-* @memberof FT._utils
-* @lends FT._utils
-*/
-
-Metadata.getPageType = function () {
-	var targeting = config('dfp_targeting') || {};
-	if (!utils.isPlainObject(targeting)) {
-		if (utils.isString(targeting)) {
-			targeting = utils.hash(targeting, ';', '=') || {};
-		}
-	}
-	return targeting.pt || 'unknown';
-};
-
-module.exports = Metadata;
+module.exports.getAyscVars = getAyscVars;
+module.exports.getLoginInfo = getLoginInfo;

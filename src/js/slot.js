@@ -89,6 +89,11 @@ function Slot(container) {
 	// extend with imperative configuration options
 	this.parseAttributeConfig();
 
+	if (!this.sizes.length) {
+		utils.log.error('slot %s has no configured sizes!', this.name);
+		return false;
+	}
+
 	this.addChartBeatTracking();
 	this.centerContainer();
 	// if we're not lazy loading fire the ready event

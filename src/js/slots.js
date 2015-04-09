@@ -82,9 +82,6 @@ Slots.prototype.refresh = function (slotNames) {
 /**
 * creates a container for the ad in the page and gathers slot config then
 * calls the GPT module to define the slot in the GPT service
-* @name createSlot
-* @memberof Slots
-* @lends Slots
 */
 Slots.prototype.initSlot = function (container) {
 	// if container is a string this is a legacy implementation using ids
@@ -96,19 +93,18 @@ Slots.prototype.initSlot = function (container) {
 			container.removeAttribute('id');
 		}
 	}
-	//if not an element or we can't find it in the DOM exit
+
+	// if not an element or we can't find it in the DOM exit
 	if (!utils.isElement(container)) {
 		utils.log.error('slot container must be an element!', container);
 		return false;
 	}
 
 	var slot = new Slot(container);
-	if (slot.sizes.length){
+	if (slot){
 		this[slot.name] = slot;
-		return slot;
-	} else {
-		utils.log.error('slot %s has no configured sizes!', slot.name);
 	}
+	return slot;
 };
 
 module.exports = new Slots();

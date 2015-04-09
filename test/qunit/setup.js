@@ -64,7 +64,7 @@ function decorateModule() {
 				}
 				// reset sinon sandbox and remove elements added to dom
 				this.clear();
-				this.ads.config.clear();
+				//this.ads.config.clear();
 				// explicitly delete the ads object used in the test so it is GCed
 				delete this.ads;
 			}

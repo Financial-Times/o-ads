@@ -13,22 +13,22 @@ QUnit.test('getFromConfig', function (assert) {
 	var result = this.ads.targeting.get();
 	assert.deepEqual(result, {}, 'No dfp_targeting returns no targetting params');
 
+	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
-	this.ads.targeting.init(this.ads);
 	result = this.ads.targeting.get();
 	assert.deepEqual(result, {}, 'Empty string dfp_targeting returns no params');
 
+	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;targeting=params');
-	this.ads.targeting.init(this.ads);
 	result = this.ads.targeting.get();
 	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Simple params are parsed correctly');
 
+	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;;targeting=params');
-	this.ads.targeting.init(this.ads);
 	result = this.ads.targeting.get();
 	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Double semi-colons still parse correctly');
 
-	this.ads.targeting.init(this.ads);
+	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 's@me=test;targeting=par@ms$\'');
 	result = this.ads.targeting.get();
 

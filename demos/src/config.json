@@ -7,7 +7,7 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami"}
+         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami", "targeting": "pos=leaderboard"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",

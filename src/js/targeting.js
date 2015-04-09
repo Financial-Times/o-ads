@@ -15,35 +15,31 @@
 */
 
 "use strict";
-var proto = Targeting.prototype;
-var context;
 var config = require('./config');
 var metadata = require('./metadata');
 var krux = require('./data-providers/krux');
-var krux = require('./version');
+var version = require('./version');
 var utils = require('./utils');
 var parameters = {};
-proto.initialised = false;
 
 /**
-* The Targeting class defines an FT.ads.targeting instance
+* The Targeting class defines an ads.targeting instance
 * @class
 * @constructor
 */
 function Targeting() {
-	context = this;
 }
 
-proto.get = function(){
+Targeting.prototype.get = function(){
 	var item,
 	methods = {
-		metadata: context.getFromMetaData,
-		krux: context.fetchKrux,
-		socialReferrer: context.getSocialReferrer,
-		pageReferrer: context.getPageReferrer,
-		cookieConsent:  context.cookieConsent,
-		timestamp: context.timestamp,
-		version : context.version
+		metadata: this.getFromMetaData,
+		krux: this.fetchKrux,
+		socialReferrer: this.getSocialReferrer,
+		pageReferrer: this.getPageReferrer,
+		cookieConsent:  this.cookieConsent,
+		timestamp: this.timestamp,
+		version : this.version
 	};
 
 	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.getAysc(), this.searchTerm());
@@ -56,13 +52,17 @@ proto.get = function(){
 	return parameters;
 };
 
-proto.add = function (obj){
+Targeting.prototype.add = function (obj){
 	if (utils.isPlainObject(obj)){
 		utils.extend(parameters, obj);
 	}
 };
 
-proto.getFromMetaData =  function () {
+Targeting.prototype.clear = function (){
+	parameters = {};
+};
+
+Targeting.prototype.getFromMetaData =  function () {
 	var page = metadata.page(),
 	user = metadata.user();
 	return {
@@ -73,7 +73,7 @@ proto.getFromMetaData =  function () {
 	};
 };
 
-proto.encodedIp =  function () {
+Targeting.prototype.encodedIp =  function () {
 		var DFPPremiumIPReplaceLookup = {
 			'0': {'replaceRegex': /0/g, 'replaceValue': 'a'},
 			'1': {'replaceRegex': /1/g, 'replaceValue': 'b'},
@@ -136,7 +136,7 @@ proto.encodedIp =  function () {
 * @memberof Targeting
 * @lends Targeting
 */
-proto.getFromConfig = function () {
+Targeting.prototype.getFromConfig = function () {
 	var targeting = config('dfp_targeting') || {};
 	if (!utils.isPlainObject(targeting)) {
 			if (utils.isString(targeting)) {
@@ -146,11 +146,11 @@ proto.getFromConfig = function () {
 	return targeting;
 };
 
-proto.fetchKrux = function (){
+Targeting.prototype.fetchKrux = function (){
 		return krux.targeting();
 };
 
-proto.getPageReferrer = function () {
+Targeting.prototype.getPageReferrer = function () {
 	var match = null,
 		referrer = utils.getReferrer(),
 		hostRegex;
@@ -167,7 +167,7 @@ proto.getPageReferrer = function () {
 	return match && {rf: match.substring(1)} || {};
 };
 
-proto.getSocialReferrer = function () {
+Targeting.prototype.getSocialReferrer = function () {
 		var codedValue, refUrl,
 		referrer = utils.getReferrer(),
 		lookup = {
@@ -192,11 +192,11 @@ proto.getSocialReferrer = function () {
 		return codedValue && { socref: codedValue } || {};
 };
 
-proto.cookieConsent = function () {
+Targeting.prototype.cookieConsent = function () {
 		return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
 };
 
-proto.getAysc = function () {
+Targeting.prototype.getAysc = function () {
 	var exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
 	var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, '19': 1, '20': 1, '21': 1};
 	var remove_res_pvt = {'14': 1, 'cn': 1, '27': 1};
@@ -228,12 +228,12 @@ proto.getAysc = function () {
 };
 
 //TODO is this still relevant maybe we should remove it
-proto.behaviouralFlag = function () {
+Targeting.prototype.behaviouralFlag = function () {
 	var flag = (typeof this.rsiSegs() === "undefined") ? "false" : "true";
 	return flag;
 };
 
-proto.searchTerm = function () {
+Targeting.prototype.searchTerm = function () {
 	var qs = utils.hash(utils.getQueryString(), /\&|\;/, '='),
 	keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
@@ -247,12 +247,12 @@ proto.searchTerm = function () {
 	return {kw: keywords};
 };
 
-proto.timestamp = function () {
+Targeting.prototype.timestamp = function () {
 	return { ts: utils.getTimestamp() };
 };
 
-proto.version = function(){
-	return {ver : ads.version.artifactVersion};
+Targeting.prototype.version = function(){
+	return {ver : version.artifactVersion};
 };
 
 module.exports = new Targeting();

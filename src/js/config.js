@@ -44,8 +44,6 @@ var defaults =  {
 	collapseEmpty: 'ft'
 };
 
-var store = {};
-
 /**
 * @private
 * @function
@@ -89,21 +87,22 @@ function fetchCanonicalURL() {
 * @constructor
 */
 function Config() {
+	this.store = {};
 }
 
 Config.prototype.access = function (k, v) {
 		var result;
 		if (utils.isPlainObject(k)) {
-			store = utils.extend(store, k);
-			result = store;
+			utils.extend(this.store, k);
+			result = this.store;
 		} else if (typeof v === "undefined") {
 			if (typeof k === "undefined"){
-				result = store;
+				result = this.store;
 			} else {
-				result = store[k];
+				result = this.store[k];
 			}
 		} else {
-			store[k] = v;
+			this.store[k] = v;
 			result = v;
 		}
 
@@ -112,18 +111,18 @@ Config.prototype.access = function (k, v) {
 
 Config.prototype.clear = function (key) {
 	if (key) {
-		delete store[key];
+		delete this.store[key];
 	} else {
-		store = {};
+		this.store = {};
 	}
 };
 
 Config.prototype.init = function () {
-	store = utils.extend(defaults, fetchMetaConfig(), fetchCanonicalURL());
-	return store;
+	this.store = utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
+	return this.store;
 };
 
 var config = new Config();
-module.exports = config.access;
+module.exports = config.access.bind(config);
 module.exports.init = config.init.bind(config);
 module.exports.clear = config.clear.bind(config);
