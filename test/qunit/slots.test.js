@@ -4,24 +4,19 @@
 
 QUnit.module('Slots');
 QUnit.test('create a basic slot with imperative configuration', function (assert) {
-	var done = assert.async();
+	//var done = assert.async();
 	var expected = {
 		outOfPage: true,
 		sizes: [[2,2]]
 	};
-	this.ads.init({'slots': { banlb: expected }});
-	this.ads.test= 1;
-
-	document.body.addEventListener('oAds.ready', function (event){
-		assert.strictEqual(event.detail.name, 'banlb', 'the slot name is available');
-		assert.ok(event.detail.slot, 'the slot object is available');
-		assert.equal(event.detail.slot.sizes, expected.sizes, 'the correct sizes are configured');
-		assert.equal(event.detail.slot.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
-		done();
-	}.bind(this));
-
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb"></div>');
+	this.ads.init({'slots': { banlb: expected }});
 	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	var result = this.ads.slots.banlb;
+	assert.strictEqual(result.name, 'banlb', 'the slot name is available');
+	assert.ok(result, 'the slot object is available');
+	assert.equal(result.sizes, expected.sizes, 'the correct sizes are configured');
+	assert.equal(result.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
 });
 
 QUnit.test('create a slot set size', function (assert) {
@@ -33,10 +28,7 @@ QUnit.test('create a slot set size', function (assert) {
 	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
 });
 
-
-
 QUnit.test('create a slot with Multiple sizes', function (assert) {
-	var done = assert.async();
 	var expected = [[600, 300], [300, 600], [720, 30]];
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
@@ -46,7 +38,7 @@ QUnit.test('create a slot with Multiple sizes', function (assert) {
 });
 
 QUnit.test('create a slot with an invalid size among multiple sizes', function (assert) {
-	var expected = [[600, 300], [300, 600], [720, 30]];
+	var expected = [[600, 300], [100, 200], [720, 30]];
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb" data-o-ads-sizes="600x300,invalidxsize,100x200,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
