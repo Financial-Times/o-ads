@@ -98,9 +98,8 @@ Slots.prototype.initSlot = function (container) {
 	}
 	//if not an element or we can't find it in the DOM exit
 	if (!utils.isElement(container)) {
-		return false;
-	} else {
 		utils.log.error('slot container must be an element!', container);
+		return false;
 	}
 
 	var slot = new Slot(container);
