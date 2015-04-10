@@ -115,7 +115,7 @@ Slot.prototype.parseAttributeConfig = function(){
 			this.sizes = attributeParsers.responsiveFormat(name, value, this.sizes);
 		} else if (/^sizes\w*/.test(name)) {
 			this.sizes = attributeParsers.responsiveSize(name, value, this.sizes);
-		} else if(this[name]) {
+		} else if(this.hasOwnProperty(name)) {
 			this[name] = attributeParsers.default(value);
 		}
 	}.bind(this));
