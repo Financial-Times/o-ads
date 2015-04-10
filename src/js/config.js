@@ -66,6 +66,16 @@ function fetchMetaConfig() {
 	return results;
 }
 
+function fetchDeclaritiveConfig() {
+	var script;
+	var scripts = document.querySelectorAll('script[data-o-ads-config]');
+	var results = {};
+	for (var i= 0; i < scripts.length; i++){
+			script = scripts[i];
+				results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : "UNSUPPORTED";
+	}
+	return results;
+}
 
 /**
 * @private
@@ -118,7 +128,7 @@ Config.prototype.clear = function (key) {
 };
 
 Config.prototype.init = function () {
-	this.store = utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL());
+	this.store = utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
 	return this.store;
 };
 
