@@ -10,17 +10,7 @@
 * @memberof FT.ads
 */
 "use strict";
-var ads;
-var proto = Chartbeat.prototype;
-/**
-* The ChartBeat class defines an FT.ads.chartbeat instance
-* @class
-* @constructor
-*/
-function Chartbeat() {
-
-}
-
+var utils = require('../utils');
 
 /**
 * initialise chartbeat functionality
@@ -29,46 +19,17 @@ function Chartbeat() {
 * @memberof ChartBeat
 * @lends ChartBeat
 */
-proto.init = function (impl) {
-	ads = impl;
-	this.decorateRefresh();
-};
-
-proto.decorateRefresh = function () {
-	if (ads.utils.isFunction(ads.gpt.refresh)) {
-		var _refresh = ads.gpt.refresh;
-			ads.gpt.refresh =  this.refresh(_refresh);
-		return true;
-	}
-};
-
-
-/**
-* Alerts chartbeat that a refresh is about ot happen on multiple slots
-* @name refresh
-* @memberof ChartBeat
-* @lends ChartBeat
-*/
-proto.refresh = function (fn) {
-	return function (slotsForRefresh) {
-		if (window.pSUPERFLY){
-			var slot, slotName, cbName;
-			var slots = ads.slots;
-			slotsForRefresh = slotsForRefresh || slots;
-			for (slotName in slotsForRefresh) {
-				if (slots.hasOwnProperty(slotName)) {
-					slot = slots[slotName];
-					if (slot.gptSlot && slot.timer === undefined) {
-						if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-							window.pSUPERFLY.refreshAd(cbName);
-						}
-					}
-				}
-			}
+module.exports.init = function () {
+	utils.on('ready', function(event){
+		var slot = event.detail.slot;
+		if(slot.cbTrack !== false){
+			slot.container.setAttribute('data-cb-ad-id', slot.name);
 		}
+	});
 
-		fn.apply(this, arguments);
-	};
+	utils.on('refresh', function(event){
+		if (window.pSUPERFLY) {
+			window.pSUPERFLY.refreshAd(event.detail.name);
+		}
+	});
 };
-
-module.exports = new Chartbeat();

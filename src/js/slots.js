@@ -1,14 +1,10 @@
-/* jshint forin: false, boss: true */
-//see line ~76 for explaination on for in
-// boos mode used in this file, we should replace instaces with Array.map when polyfils are available
-
-
 "use strict";
 var utils = require('./utils');
 var Slot = require('./slot');
 
 /**
-* The Slots class defines an FT.ads.slots instance.
+* The Slots class defines an slots instance.
+* the instance tracks all ad slots on the page
 * @class
 * @constructor
 */
@@ -16,72 +12,58 @@ function Slots() {
 }
 
 /**
-* Given an array of slotnames will collapse the slots using the collapse method on the slot
-* @name collapse
-* @memberof Slots
-* @lends Slots
+* Given a slot name or an array of slot names will collapse the slots using the collapse method on the slot
 */
-Slots.prototype.collapse = function (slotNames) {
-	var slotName, result = false;
-	if (!utils.isArray(slotNames)){
-		slotNames = [slotNames];
+Slots.prototype.collapse = function (names) {
+	if (!utils.isArray(names)){
+		names = [names];
 	}
 
-	while(slotName = slotNames.pop()) {
-		if(this[slotName] && utils.isFunction(this[slotName].collapse)) {
-			this[slotName].collapse();
-			result = true;
+	names.forEach(function(name){
+		if(this[name] && utils.isFunction(this[name].collapse)) {
+			this[name].collapse();
+		} else {
+			utils.log.warn('Attempted to collapse non-existant slot %s', name);
 		}
-	}
-
-	return result;
+	});
 };
 
 /**
-* Given an array of slotnames will uncollapse the slots using the uncollapse method on the slot
-* @name uncollapse
-* @memberof Slots
-* @lends Slots
+* Given a slot name or an array of slot names will uncollapse the slots using the uncollapse method on the slot
 */
-Slots.prototype.uncollapse = function (slotNames) {
-	var slotName, result = false;
-	if (!utils.isArray(slotNames)){
-		slotNames = [slotNames];
+Slots.prototype.uncollapse = function (names) {
+	if (!utils.isArray(names)){
+		names = [names];
 	}
 
-	while(slotName = slotNames.pop()) {
-		if(this[slotName] && utils.isFunction(this[slotName].uncollapse)) {
-			this[slotName].uncollapse();
-			result = true;
+	names.forEach(function(name){
+		if(this[name] && utils.isFunction(this[name].collapse)) {
+			this[name].collapse();
+		} else {
+			utils.log.warn('Attempted to uncollapse non-existant slot %s', name);
 		}
-	}
-	return result;
+	});
 };
 
 /**
-* Given an array of slotnames will refresh the slots using the refresh method on the slot
-* @name uncollapse
-* @memberof Slots
-* @lends Slots
+* Given a slot name or an array of slot names of slotnames will refresh the slots using the refresh method on the slot
 */
-Slots.prototype.refresh = function (slotNames) {
-	var slotName, result = false;
-	if (!utils.isArray(slotNames)){
-		slotNames = [slotNames];
+Slots.prototype.refresh = function (names) {
+	if (!utils.isArray(names)){
+		names = [names];
 	}
 
-	while(slotName = slotNames.pop()) {
-		if(this[slotName] && utils.isFunction(this[slotName].uncollapse)) {
-			this[slotName].refresh();
-			result = true;
+	names.forEach(function(name){
+		if(this[name] && utils.isFunction(this[name].collapse)) {
+			this[name].refresh();
+		} else {
+			utils.log.warn('Attempted to refresh non-existant slot %s', name);
 		}
-	}
-	return result;
+	});
 };
 
 /**
-* creates a container for the ad in the page and gathers slot config then
-* calls the GPT module to define the slot in the GPT service
+* Confirms a container in the page exists and creates a Slot object
 */
 Slots.prototype.initSlot = function (container) {
 	// if container is a string this is a legacy implementation using ids
@@ -106,5 +88,9 @@ Slots.prototype.initSlot = function (container) {
 	}
 	return slot;
 };
+
+Slots.prototype.init = function () {
+};
+
 
 module.exports = new Slots();

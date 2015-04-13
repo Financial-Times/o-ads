@@ -116,3 +116,5 @@ module.exports.getCookieParam = function (name, param) {
 	}
 	return (matches && matches.length) ? matches[1] : undefined;
 };
+
+module.exports.cookies = utils.hash(document.cookie, ';', '=');

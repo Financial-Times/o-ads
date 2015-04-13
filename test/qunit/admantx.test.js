@@ -5,14 +5,8 @@
 QUnit.module('Adamantx', {
 	beforeEach: function () {
 		this.server = this.server();
+		this.server.autoRespond = true;
 	}
-});
-
-QUnit.test('decorate InitSlot', function (assert) {
-	this.ads.config.init(this.ads);
-	this.ads.admantx.init(this.ads);
-	this.ads.admantx.decorateInitSlot();
-	assert.equal(this.ads.slots.initSlot, this.ads.admantx.initSlotDecorator, 'InitSlot is decorated with the correct method');
 });
 
 QUnit.test('process categories', function (assert) {
@@ -31,11 +25,14 @@ QUnit.test('process categories', function (assert) {
 	assert.deepEqual(this.ads.admantx.processCollection(given, 3), returns, 'Given a set from Adamantx and a numerical max argument returns the correct number of name nodes');
 });
 
-QUnit.test('resolve', function (assert) {
+QUnit.test('admantx configured to make request and add targeting', function (assert) {
+	var done = assert.async();
 	var given = JSON.stringify(require('../fixtures/admantx-response.json'));
-	this.ads.config.init(this.ads);
-	this.ads.targeting.init(this.ads);
-	this.ads.config({
+	this.server.respondWith("GET", {test: function (reqUrl) {
+		return (new RegExp('usasync01.admantx.com/admantx/service')).test(reqUrl);
+	}}, [200, { "Content-Type": "application/json" }, given]);
+
+	this.ads.init({
 		admantx: {
 			id: 'someAdmantxID',
 			collections: {
@@ -44,25 +41,12 @@ QUnit.test('resolve', function (assert) {
 		}
 	});
 
-	this.ads.admantx.init(this.ads);
-	var targetingAdd = this.spy(this.ads.targeting.add);
-	var queueProcess = this.stub(this.ads.admantx.queue, 'process');
-
-	this.ads.admantx.resolve(given);
-	assert.ok(targetingAdd.withArgs({ ad: ["Professional Education", "car_lifestyle", "joy_saving", "mercedes_fashion", "safe_choices", "share_promise"]}), 'all admants are added to targeting with ad as the key');
-	assert.ok(queueProcess.calledOnce, 'the queue of slots is process');
-
-	this.ads.config({
-		admantx: {
-			id: 'someAdmantxID',
-			collections: {
-				admants: 3
-			}
-		}
-	});
-
-	this.ads.admantx.init(this.ads);
-	this.ads.admantx.resolve(given);
-	assert.ok(targetingAdd.withArgs({ ad: ["Professional Education", "car_lifestyle", "joy_saving"]}), '3 admants are added to targeting with ad as the key');
-	assert.ok(queueProcess.calledOnce, 'the queue of slots is process');
+	var targeting = this.ads.targeting;
+	var admants = ["Professional Education", "appreciation_income", "car_lifestyle"];
+	setTimeout(function () {
+		var result = targeting.get();
+		assert.deepEqual(result.ad, admants, 'the admants are added as targeting');
+		done();
+	}, 20);
 });
+

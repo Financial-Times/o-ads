@@ -61,7 +61,7 @@ QUnit.test('We can listen to a one time event', function (assert) {
 	var done = assert.async();
 	var listened = 0;
 
-	utils.once('oAds.ahoy', function(ev) {
+	utils.once('ahoy', function(ev) {
 		listened++;
 	});
 

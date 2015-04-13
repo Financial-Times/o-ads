@@ -14,15 +14,23 @@ function broadcast(name, data, target) {
 	target.dispatchEvent(customEvent(name, opts));
 }
 
+/**
+* Sets an event listener for an oAds event
+* @name on
+*/
+function on(name, callback, target) {
+	name = 'oAds.' + name;
+	target = target || document.body;
+	target.addEventListener(name, callback);
+}
 
 /**
-* Sets a one time event listener
+* Sets a one time event listener for an oAds event
 * @name once
 */
 function once(name, callback, target) {
-	target = target || document.body;
 	var handler = function(event){
-		target.removeEventListener(name, callback);
+		event.srcElement.removeEventListener('oAds.' + name, callback);
 		if (callback) {
 			callback(event);
 			// we set callback to null so if for some reason the listener isn't removed the callback will still only be called once
@@ -30,9 +38,8 @@ function once(name, callback, target) {
 		}
 	};
 
-	target.addEventListener(name, handler);
+	on(name, handler, target);
 }
-
 
 /*
 * custom event fix for safari
@@ -46,4 +53,5 @@ function customEvent(name, opts) {
 }
 
 module.exports.broadcast = broadcast;
+module.exports.on = on;
 module.exports.once = once;

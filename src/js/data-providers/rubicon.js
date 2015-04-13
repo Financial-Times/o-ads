@@ -10,11 +10,11 @@
  * @memberof ads
 */
 "use strict";
-var ads;
-var proto = Rubicon.prototype;
-// used to store a local copy of ads.slots.initSlot
+var utils = require('../utils');
+var config = require('../config');
+var slots = require('../slots');
+// used to store a local copy of slots.initSlot
 var _initSlot = null;
-var context;
 
 /**
  * The Rubicon class defines an ads.rubicon instance
@@ -22,7 +22,6 @@ var context;
  * @constructor
 */
 function Rubicon() {
-	context = this;
 }
 
 /**
@@ -33,21 +32,17 @@ function Rubicon() {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.init = function (impl) {
-	ads = impl;
-	context.queue = ads.utils.queue(context.initValuation);
-	var config = context.config = ads.config('rubicon');
-	if (config && config.id && config.site) {
-		ads.utils.attach('http://tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=' + config.id + '/' + config.site, true, function(){
-			context.queue.process();
-		}, function () {
-			if(config.target){
-				context.queue.setProcessor(function (slotName){
-					_initSlot.call(ads.slots, slotName);
-				}).process();
-			}
-		});
-		context.decorateInitSlot();
+Rubicon.prototype.init = function () {
+	this.queue = utils.queue(this.initValuation);
+	this.config = config('rubicon') || {};
+	if (this.config.id && this.config.site) {
+		var api = this.config.api || '//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=';
+		api += this.config.id + '/' + this.config.site;
+		utils.attach(api, true);
+
+		utils.on('ready', function (event){
+			this.initValuation(event.detail.slot);
+		}.bind(this));
 	}
 };
 
@@ -58,15 +53,15 @@ proto.init = function (impl) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.initValuation = function (slotName) {
-	var config = context.config;
-	var zone = (config && config.zones) ? config.zones[slotName] : false;
-	var size = (config && config.formats) ? config.formats[slotName] : false;
+Rubicon.prototype.initValuation = function (slot) {
+	var config = this.config || {};
+	var zone = (config.zones) ? config.zones[slot.name] : false;
+	var size = (config.formats) ? config.formats[slot.name] : false;
 
 	if (zone && size) {
 		// rubicon loves globals
 		window.oz_api = 'valuation';
-		window.oz_callback = context.valuationCallbackFactory(slotName, config.target);
+		window.oz_callback = this.valuationCallbackFactory.bind(null, slot, config.target);
 		window.oz_ad_server = 'gpt';
 		window.oz_async = true;
 		window.oz_cached_only = config.cached || true;
@@ -74,8 +69,6 @@ proto.initValuation = function (slotName) {
 		window.oz_ad_slot_size = size;
 		window.oz_zone = zone;
 		window.oz_insight();
-	} else if(config.target){
-		_initSlot.call(ads.slots, slotName);
 	}
 };
 
@@ -86,24 +79,23 @@ proto.initValuation = function (slotName) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.valuationCallbackFactory = function (slotName, target) {
-	return function (results) {
-		// add results to slot targeting and run initSlot
-		document.getElementById(slotName).setAttribute('data-o-ads-rtp', results.estimate.tier);
-		if(target){
-			_initSlot.call(ads.slots, slotName);
-		}
-	};
+Rubicon.prototype.valuationCallbackFactory = function (slot, target, results) {
+	// add results to slot targeting and run initSlot
+	if (target){
+		slot.targeting.rtp = results.estimate.tier;
+	} else {
+		slot.container.setAttribute('data-o-ads-rtp', results.estimate.tier);
+	}
 };
 
-proto.decoratorTarget = function (slotName){
-	context.queue.add(slotName);
+Rubicon.prototype.decoratorTarget = function (slotName){
+	this.queue.add(slotName);
 };
 
 
-proto.decoratorNoTarget = function (slotName){
-	context.queue.add(slotName);
-	_initSlot.call(ads.slots, slotName);
+Rubicon.prototype.decoratorNoTarget = function (slotName){
+	this.queue.add(slotName);
+	_initSlot.call(slots, slotName);
 };
 
 
@@ -113,15 +105,15 @@ proto.decoratorNoTarget = function (slotName){
  * @memberof Rubicon
  * @lends Rubicon
 */
-proto.decorateInitSlot = function () {
-	if (ads.utils.isFunction(ads.slots.initSlot)) {
-		_initSlot = ads.slots.initSlot;
-		if(!context.config.target){
-			ads.slots.initSlot = context.decoratorNoTarget;
+Rubicon.prototype.decorateInitSlot = function () {
+	if (utils.isFunction(slots.initSlot)) {
+		_initSlot = slots.initSlot;
+		if(!this.config.target){
+			slots.initSlot = this.decoratorNoTarget;
 		} else {
-			ads.slots.initSlot = context.decoratorTarget;
+			slots.initSlot = this.decoratorTarget;
 		}
-		return ads.slots.initSlot;
+		return slots.initSlot;
 	}
 };
 

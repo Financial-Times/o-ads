@@ -4,32 +4,37 @@ var config = require('./config');
 
 var attributeParsers = {
 	sizes: function(value, sizes){
-		if (utils.isArray(sizes)) {
+		if (value === false || value === 'false'){
+			return false;
+		} else if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function (match, width, height) {
 				sizes.push([ parseInt(width, 10), parseInt(height, 10)]);
 			});
 		}
 		return sizes;
 	},
-	'formats' : function(value, name) {
-		var formats = value.split(',');
-		var conf = config().formats;
-		for (var i = 0; i < formats.length; i++) {
-			formats[i] = formats[i].trim();
-			formats[i] = conf[formats[i]];
-			if (utils.isArray(formats[i].sizes[0])) {
-				for (var j = 0; j < formats[i].sizes.length; j++){
-					this.sizes.push(formats[i].sizes[j]);
+	'formats' : function(value, sizes) {
+		if (value === false || value === 'false') {
+			sizes = false;
+		} else {
+			var mapping = config().formats;
+			var formats = utils.isArray(value) ? value : value.split(',');
+			formats.forEach(function (format) {
+				format = mapping[format];
+				if (utils.isArray(format.sizes[0])) {
+					for (var j = 0; j < format.sizes.length; j++){
+						sizes.push(format.sizes[j]);
+					}
 				}
-			}
-			else {
-				this.sizes.push(formats[i].sizes);
-			}
+				else {
+					sizes.push(format.sizes);
+				}
+			});
 		}
-		return this.sizes;
+		return sizes;
 	},
 	responsiveSizes: function(name, value, sizes){
-		var screenName = name.replace(/^sizes/, '');
+		var screenName = name.replace(/^sizes/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -37,11 +42,11 @@ var attributeParsers = {
 		return sizes;
 	},
 	responsiveFormats: function(name, value, sizes){
-		var screenName = name.replace(/^formats/, '');
+		var screenName = name.replace(/^formats/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
-		sizes[screenName] = attributeParsers.formats(value, sizes[screenName] || []);
+		sizes[screenName] = attributeParsers.formats(value, []);
 		return sizes;
 	},
 	targeting: function (value, targeting) {
@@ -73,33 +78,37 @@ function Slot(container) {
 	this.inner = this.addContainer(this.outer, { class: 'inner'});
 	// make sure the slot has a name
 	this.setName();
+	slotConfig = slotConfig[this.name] || {};
 
 	// default configuration properties
 	this.server = 'gpt';
-	this.targeting = {};
-	this.sizes = [];
-	this.center = false;
 	this.rendered = false;
-	this.outOfPage = false;
-	this.lazyLoad = false;
-	this.collapseEmpty = false;
+	//
+	this.targeting = slotConfig.targeting || {};
+	this.sizes = slotConfig.sizes || [];
+	this.center = slotConfig.center || false;
+	this.outOfPage = slotConfig.outOfPage || false;
+	this.lazyLoad = slotConfig.lazyLoad || false;
+	this.collapseEmpty = slotConfig.collapseEmpty || false;
+	if(utils.isArray(slotConfig.formats)){
+		attributeParsers.formats(slotConfig.formats, this.sizes);
+	}	else if (utils.isPlainObject(slotConfig.formats)) {
+		this.sizes = {};
+		Object.keys(slotConfig.formats).forEach(function (screenName) {
+			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
+		}.bind(this));
+	}
 
-	// extend with declaritive configuration options
-	utils.extend(this, slotConfig[this.name] || {});
 	// extend with imperative configuration options
 	this.parseAttributeConfig();
 
-	if (!this.sizes.length) {
+	if (!this.sizes.length && !utils.isPlainObject(this.sizes)) {
 		utils.log.error('slot %s has no configured sizes!', this.name);
 		return false;
 	}
 
-	this.addChartBeatTracking();
 	this.centerContainer();
-	// if we're not lazy loading fire the ready event
-	if (!this.lazyLoad) {
-		this.ready();
-	}
+	this.ready();
 }
 
 /**
@@ -109,12 +118,14 @@ Slot.prototype.parseAttributeConfig = function(){
 	[].slice.call(this.container.attributes).forEach(function (attribute) {
 		var name = utils.parseAttributeName(attribute.name);
 		var value = attribute.value;
-		if(attributeParsers[name]){
-			this[name] = attributeParsers[name].bind(this)(value, this[name]);
+		if(name === 'formats'){
+			this[name] = attributeParsers[name](value, this.sizes);
+		} else if (attributeParsers[name]){
+			this[name] = attributeParsers[name](value, this[name]);
 		} else if (/^formats\w*/.test(name)) {
-			this.sizes = attributeParsers.responsiveFormat(name, value, this.sizes);
+			this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
 		} else if (/^sizes\w*/.test(name)) {
-			this.sizes = attributeParsers.responsiveSize(name, value, this.sizes);
+			this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
 		} else if(this.hasOwnProperty(name)) {
 			this[name] = attributeParsers.default(value);
 		}
@@ -194,15 +205,6 @@ Slot.prototype.addContainer = function(node, attrs){
 	container += '></div>';
 	node.insertAdjacentHTML('beforeend', container);
 	return node.lastChild;
-};
-
-/*
-*	add the slot name as an attribute for chartbeat tracking
-*/
-Slot.prototype.addChartBeatTracking = function() {
-	if(config.cbTrack){
-		this.container.setAttribute('data-cb-ad-id', this.name);
-	}
 };
 
 /**

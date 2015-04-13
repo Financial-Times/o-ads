@@ -72,7 +72,7 @@ function fetchDeclaritiveConfig() {
 	var results = {};
 	for (var i= 0; i < scripts.length; i++){
 			script = scripts[i];
-				results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : "UNSUPPORTED";
+			results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : "UNSUPPORTED";
 	}
 	return results;
 }

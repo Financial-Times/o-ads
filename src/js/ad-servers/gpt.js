@@ -11,7 +11,7 @@
 var config = require('../config');
 var utils = require('../utils');
 var targeting = require('../targeting');
-var responsiveConfig = false;
+var breakpoints = false;
 var responsive;
 
 /*
@@ -27,10 +27,8 @@ function init() {
 	var gptConfig = config('gpt') || {};
 	initGoogleTag();
 	initResponsive();
-
+	utils.on('ready', onReady.bind(null, slotMethods), document.Element);
 	googletag.cmd.push(setup.bind(null, gptConfig));
-	document.body.addEventListener('oAds.ready', onReady.bind(null, slotMethods));
-	document.body.addEventListener('oAds.refresh', onRefresh);
 }
 
 /*
@@ -52,9 +50,9 @@ function initGoogleTag() {
 * if responsive configurations exist start listening for breakpoint changes
 */
 function initResponsive() {
-	responsiveConfig = config('responsive');
-	if (utils.isObject(responsive) ) {
-		responsive = utils.responsive(responsiveConfig, onBreakpointChange);
+	breakpoints = config('responsive');
+	if (utils.isObject(breakpoints) ) {
+		responsive = utils.responsive(breakpoints, onBreakpointChange);
 	}
 }
 
@@ -138,7 +136,7 @@ function setPageCollapseEmpty(gptConfig) {
 /*
 * Set an the event handler for the gpt render ended event
 */
-function setRenderEnded(gptConfig){
+function setRenderEnded(){
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
 }
 
@@ -184,23 +182,32 @@ function onReady(slotMethods, event){
 		// extend the slot with gpt methods
 		utils.extend(slot, slotMethods);
 
-		// setup the gpt configuration and display the ad
+		// setup the gpt configuration the ad
 		googletag.cmd.push(function (slot){
 			slot.defineSlot()
-		    .addServices()
-		    .setCollapseEmpty()
-		    .setTargeting()
-		    .setURL()
-		    .display();
+			   .addServices()
+			   .setCollapseEmpty()
+			   .setTargeting()
+			   .setURL();
+
+			utils.broadcast('defined', {
+				name: slot.name,
+				slot: slot
+			}, slot.container);
 		}.bind(null, slot));
 	}
+}
+
+
+function onRender(event){
+	event.detail.slot.display();
 }
 
 /*
 * Event handler for when a slot requests the ad be flipped
 */
 function onRefresh(event){
-	googletag.pubads().refresh(event.detail.slot.gptId);
+	googletag.pubads().refresh(event.detail.slot.gpt.id);
 }
 
 /*
@@ -231,6 +238,10 @@ var slotMethods = {
 * object to hold all gpt options
 */
 	gpt: {},
+	addListeners: function(){
+		utils.on('render', onRender, this.container);
+		utils.on('refresh', onRefresh, this.container);
+	},
 /**
 * define a GPT slot
 */
@@ -239,17 +250,15 @@ var slotMethods = {
 		this.inner.setAttribute('id', this.gpt.id);
 		this.setUnitName();
 
-		if (responsive && utils.isObject(this.sizes)) {
-			var breakpoints = config('repsonsive');
+		if (breakpoints && utils.isObject(this.sizes)) {
 			var mapping = googletag.sizeMapping();
 
 			Object.keys(breakpoints).forEach(function (breakpoint) {
 				if (this.sizes[breakpoint]){
-					mapping.addSize(breakpoint, this.sizes[breakpoint]);
+					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
 			}.bind(this));
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0,0], this.gpt.id)
-			         .defineSizeMapping(mapping.build());
+			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0,0], this.gpt.id).defineSizeMapping(mapping.build());
 		} else {
 			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
 		}
@@ -274,7 +283,7 @@ var slotMethods = {
 		return this;
 	},
 /*
-*	Tell the gpt to request an ad
+*	Tell gpt to request an ad
 */
 	display: function (id) {
 		id = id || this.gpt.id;
@@ -301,10 +310,8 @@ var slotMethods = {
 		this.gpt.unitName = unitName;
 		return this;
 	},
-
 /**
-* Add a companion service to the GPT slot if companions are on and the slot
-* configuration doesn't exclude the slot
+* Add the slot to the pub ads service and add a companion service if configured
 */
 	addServices: function (gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
@@ -349,7 +356,7 @@ var slotMethods = {
 	},
 
 /**
-* Adds key values from a given object to the slot
+* Adds key values from a given object to the slot targeting
 */
 	setTargeting: function (gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
@@ -361,65 +368,6 @@ var slotMethods = {
 		return this;
 	}
 };
-
-// /**
-//  * Starts a timer to refresh all ads on the page after
-//  * a time specified in config refreshTime, maximum number of
-//  * refreshes defaults to infinity but can be set via the
-//  * maxRefresh config property
-//  * @name setPageRefresh
-//  * @memberof GPT
-//  * @lends GPT
-// */
-// GPT.prototype.startRefresh = function () {
-// 	var refreshConfig = ads.config('refresh') || {},
-// 		pageType = ads.metadata.getPageType(),
-// 		time = (refreshConfig[pageType] && refreshConfig[pageType].time) || refreshConfig.time || false,
-// 		max = (refreshConfig[pageType] && refreshConfig[pageType].max) || refreshConfig.max || 0;
-
-// 	if (time) {
-// 		this.refreshTimer = ads.utils.timers.create(time, function() {
-// 			ads.gpt.refresh();
-// 		}, max);
-// 	}
-// };
-
-// GPT.prototype.pauseRefresh = function  () {
-// 	if (this.refreshTimer) {
-// 		this.refreshTimer.pause();
-// 	}
-// };
-
-// GPT.prototype.resumeRefresh = function  () {
-// 	if (this.refreshTimer) {
-// 		this.refreshTimer.resume();
-// 	}
-// };
-
-// GPT.prototype.stopRefresh = function  () {
-// 	if (this.refreshTimer) {
-// 		this.refreshTimer.stop();
-// 	}
-// };
-
-// // /**
-// // * Initialises GPT on the page
-// // * @name setSlotTargeting
-// // * @memberof GPT
-// // * @lends GPT
-// // */
-// function init(impl) {
-
-// 	googletag.cmd.push(function () {
-// 		var _add = ads.targeting.add;
-// 		ads.targeting.add = function (targetingObj) {
-// 			_add(targetingObj);
-// 			context.setPageTargeting(targetingObj);
-// 		};
-// 	});
-
-// 	return this;
-// };
 
 /*
 ######################

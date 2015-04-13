@@ -24,6 +24,7 @@ decorateModule();
 // constructor gives each test access to a unique instance
 // this is added to the test context via the module decorator
 var Ads = require('../../main.js').constructor;
+var utils = require('../../src/js/utils');
 var helpers = require('./helpers.js');
 
 // Curry helper methods
@@ -51,7 +52,7 @@ function decorateModule() {
 				}
 				addHelpers(this);
 				// stub out the attach method to prevent external files being loaded
-				this.stub(this.ads.utils, 'attach');
+				this.attach = this.stub(utils, 'attach');
 				// run beforeEach hook from module in test file
 				if (hooks.beforeEach && hooks.beforeEach.apply) {
 					hooks.beforeEach.apply(this, [].slice.call(arguments));
@@ -64,6 +65,7 @@ function decorateModule() {
 				}
 				// reset sinon sandbox and remove elements added to dom
 				this.clear();
+				this.ads.targeting.clear();
 				//this.ads.config.clear();
 				// explicitly delete the ads object used in the test so it is GCed
 				delete this.ads;

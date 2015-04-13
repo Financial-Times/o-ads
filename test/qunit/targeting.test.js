@@ -16,6 +16,7 @@ QUnit.test('getFromConfig', function (assert) {
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
+
 	assert.deepEqual(result, {}, 'Empty string dfp_targeting returns no params');
 
 	this.ads.targeting.clear();
@@ -140,22 +141,32 @@ QUnit.test('Page referrer', function (assert) {
 });
 
 
-QUnit.test("AYSC", function (assert) {
+QUnit.test("All AYSC values", function (assert) {
 	var result;
 	this.cookies({AYSC : "_011967_02M_04greater%2520london_05ITT_06TEC_07MA_12SE19HL_13GBR_14GBR_15UK_17london_18london_190500_20n_2112_22P0P2Tools_24europe_25PVT_26PVT_273f5a2e_40forty_41fortyone_42fortytwo_43fortythree_44fortyfour_45fortyfive_46fortysix_47fortyseven_48fortyeight_49fortynine_50fifty_51fiftyone_52fiftytwo_53fiftythree_54fiftyfour_55fiftyfive_56fiftysix_57fiftyseven_58fiftyeight_59fiftynine_60sixty_"});
+	var expected = {'14': "gbr", '19': "500", '20': "n", '21': "12", '27': "3f5a2e", '40': "forty", '41': "fortyone", '42': "fortytwo", '43': "fortythree", '44': "fortyfour", '45': "fortyfive", '46': "fortysix", '47': "fortyseven", 48: "fortyeight", 49: "fortynine", '50': "fifty", '51': "fiftyone", '52': "fiftytwo", '53': "fiftythree", '54': "fiftyfour", '55': "fiftyfive", '56': "fiftysix", '57': "fiftyseven", '58': "fiftyeight", '59': "fiftynine", '60': "sixty", '07': "ma", '06': "tec", '05': "itt", '02': "m", '01': "1967", slv: "lv2", cn: "eur"};
 	this.ads.init();
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {'14': "gbr", '19': "500", '20': "n", '21': "12", '27': "3f5a2e", '40': "forty", '41': "fortyone", '42': "fortytwo", '43': "fortythree", '44': "fortyfour", '45': "fortyfive", '46': "fortysix", '47': "fortyseven", 48: "fortyeight", 49: "fortynine", '50': "fifty", '51': "fiftyone", '52': "fiftytwo", '53': "fiftythree", '54': "fiftyfour", '55': "fiftyfive", '56': "fiftysix", '57': "fiftyseven", '58': "fiftyeight", '59': "fiftynine", '60': "sixty", '07': "ma", '06': "tec", '05': "itt", '02': "m", '01': "1967", slv: "lv2", cn: "eur"}, "AYSC values are returned correctly.");
+	assert.deepEqual(result, expected, "AYSC values are returned correctly.");
+});
 
+QUnit.test("Realistic AYSC values", function (assert) {
 	this.cookies({AYSC : "_01_02X_04greater%2Blondon_05MAP_06TEC_07TS_12_13GBR_14GBR_15gb_17london_18islington_19xxxx_20x_22P0P2Tools_24europe_25PVT_26PVT_27PVT_96PVT_97_98PVT_"});
+	var expected = {"05": "map","06": "tec","07": "ts","14": "gbr","cn": "eur","slv": "lv2"};
 	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.deepEqual(result, {"05": "map","06": "tec","07": "ts","14": "gbr","cn": "eur","slv": "lv2"}, "AYSC values are returned correctly; using 'real' aysc values");
+	var result = this.ads.targeting.get();
+
+	assert.deepEqual(result, expected, "AYSC values are returned correctly; using 'real' aysc values");
 });
 
 QUnit.test("search term", function (assert) {
 	var result;
 	var querystring = this.stub(this.ads.utils, 'getQueryString');
+
+	querystring.returns();
+	this.ads.init();
+	result = this.ads.targeting.get();
+	assert.equal(result.kw, undefined, "no query string, kw param should be undefined");
 
 	querystring.returns('q=  this  is  ');
 	this.ads.init();
@@ -196,11 +207,6 @@ QUnit.test("search term", function (assert) {
 	this.ads.init();
 	result = this.ads.targeting.get();
 	assert.equal(result.kw, "pson.gb:plu", "PSON.GB:PLU from tearsheet");
-
-	querystring.returns("");
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.kw, undefined, "no query string, kw param should be undefined");
 
 	querystring.returns("searchField=power%20my%20world&null=&termId=");
 	this.ads.init();

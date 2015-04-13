@@ -490,8 +490,6 @@ module.exports.nodeListToArray = function(obj) {
 	return array;
 };
 
-module.exports.cookies = utils.hash(document.cookie, ';', '=');
-
 extend(module.exports, require('./cookie.js'));
 extend(module.exports, require('./events.js'));
 module.exports.responsive = require('./responsive.js');

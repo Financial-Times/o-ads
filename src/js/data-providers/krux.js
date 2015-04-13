@@ -11,8 +11,8 @@
 
 */
 "use strict";
-var ads;
-var proto = Krux.prototype;
+var utils = require('../utils');
+var config = require('../config');
 var delegate;
 delegate = require('dom-delegate');
 
@@ -25,9 +25,8 @@ function Krux() {
 
 }
 
-proto.init = function (impl) {
-	ads = impl;
-	if (ads.config('krux') && ads.config('krux').id) {
+Krux.prototype.init = function (impl) {
+	if (config('krux') && config('krux').id) {
 		if (!window.Krux) {
 			((window.Krux = function(){
 					window.Krux.q.push(arguments);
@@ -37,9 +36,9 @@ proto.init = function (impl) {
 
 		var m,
 		src= (m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + ads.config('krux').id;
+		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + config('krux').id;
 
-		ads.utils.attach(finalSrc, true);
+		utils.attach(finalSrc, true);
 		this.events.init();
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
@@ -52,14 +51,14 @@ proto.init = function (impl) {
 * @memberof Krux
 * @lends Krux
 */
-proto.retrieve = function (name) {
+Krux.prototype.retrieve = function (name) {
 	var value;
 	name ='kx'+ name;
 
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
-	}  else if (ads.utils.cookie(name)) {
-		value = ads.utils.cookie(name);
+	}  else if (utils.cookie(name)) {
+		value = utils.cookie(name);
 	}
 
 	return value;
@@ -71,7 +70,7 @@ proto.retrieve = function (name) {
 * @memberof Krux
 * @lends Krux
 */
-proto.segments = function () {
+Krux.prototype.segments = function () {
 	return this.retrieve('segs');
 };
 
@@ -82,12 +81,12 @@ proto.segments = function () {
 * @memberof Krux
 * @lends Krux
 */
-proto.targeting = function (){
+Krux.prototype.targeting = function (){
 	var segs = this.segments();
 	if (segs) {
 		segs = segs.split(',');
-		if (ads.config('krux').limit) {
-			segs = segs.slice(0, ads.config('krux').limit);
+		if (config('krux').limit) {
+			segs = segs.slice(0, config('krux').limit);
 		}
 	}
 
@@ -106,14 +105,14 @@ proto.targeting = function (){
 * @memberof Krux
 * @lends Krux
 */
-proto.events = {
+Krux.prototype.events = {
 	dwell_time: function (config) {
 		if (config) {
 			var fire = this.fire,
 				interval = config.interval || 5,
 			max = (config.total / interval) || 120,
 			uid = config.id;
-			ads.utils.timers.create(interval, (function () {
+			utils.timers.create(interval, (function () {
 				return function () {
 					fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
 				};
@@ -143,9 +142,9 @@ proto.events = {
 	}
 };
 
-proto.events.fire = function (id, attrs) {
+Krux.prototype.events.fire = function (id, attrs) {
 	if(id) {
-		attrs = ads.utils.isPlainObject(attrs) ? attrs : {};
+		attrs = utils.isPlainObject(attrs) ? attrs : {};
 		return window.Krux('admEvent', id, attrs);
 	}
 	return false;
@@ -153,13 +152,13 @@ proto.events.fire = function (id, attrs) {
 
 
 
-proto.events.init = function() {
-	var event, configured = ads.config('krux') && ads.config('krux').events;
-	if (ads.utils.isPlainObject(configured)) {
+Krux.prototype.events.init = function() {
+	var event, configured = config('krux') && config('krux').events;
+	if (utils.isPlainObject(configured)) {
 		for(event in configured) {
-			if(ads.utils.isFunction(this[event])) {
+			if(utils.isFunction(this[event])) {
 				this[event](configured[event]);
-			} else if (ads.utils.isFunction(configured[event].fn)) {
+			} else if (utils.isFunction(configured[event].fn)) {
 				configured[event].fn(configured[event]);
 			}
 		}

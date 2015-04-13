@@ -17,12 +17,12 @@ googletag.sizeMapping = stubs.stub();
 googletag.getVersion = stubs.stub();
 
 function Slot(){
-	this.addService = stubs.stub();
-	this.setCollapseEmptyDiv = stubs.stub();
-	this.renderEnded = stubs.stub();
-	this.setTargeting = stubs.stub();
-	this.defineSizeMapping = stubs.stub();
-	this.set = stubs.stub();
+	this.addService = stubs.stub().returns(this);
+	this.setCollapseEmptyDiv = stubs.stub().returns(this);
+	this.renderEnded = stubs.stub().returns(this);
+	this.setTargeting = stubs.stub().returns(this);
+	this.defineSizeMapping = stubs.stub().returns(this);
+	this.set = stubs.stub().returns(this);
 }
 
 googletag.defineUnit = stubs.stub().returns(new Slot());

@@ -13,6 +13,11 @@ var gpt = require('./mocks/gpt-mock');
 
 module.exports.gpt = gpt.mock;
 
+/* the rubicon library mock*/
+var rubicon = require('./mocks/rubicon-mock');
+
+module.exports.rubicon = rubicon.mock;
+
 /* A method for logging warnings about tests that didn't run for some reason */
 /* such as tests that mock read only properties in a browser that doesn't allow this */
 module.exports.warn = function (message) {
@@ -151,9 +156,10 @@ module.exports.meta = function (data) {
 
 /* Mock cookies */
 module.exports.cookies = function (data) {
-	if ($.isPlainObject(data)){
-		sandbox._cookies = this.ads.utils.cookies;
-		this.ads.utils.cookies = data;
+	var utils = require('../../src/js/utils');
+	if ($.isPlainObject(data)) {
+		sandbox._cookies = utils.cookies;
+		utils.cookies = data;
 	} else {
 		throw new CookiesException('Invalid data for cookies.');
 	}
@@ -251,6 +257,7 @@ module.exports.clear = function () {
 	sandbox._eventListeners = [];
 
 	gpt.restore();
+	rubicon.restore();
 	sandbox.restore();
 };
 

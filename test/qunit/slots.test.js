@@ -3,32 +3,29 @@
 "use strict";
 
 QUnit.module('Slots');
-QUnit.test('create a basic slot with imperative configuration', function (assert) {
-	//var done = assert.async();
+QUnit.test('create a basic slot with js configuration', function (assert) {
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb"></div>');
+
 	var expected = {
 		outOfPage: true,
 		sizes: [[2,2]]
 	};
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb"></div>');
+
 	this.ads.init({'slots': { banlb: expected }});
 	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
 	var result = this.ads.slots.banlb;
+	var container = result.container;
+	var outer = container.querySelector('.outer');
+	var inner = outer.querySelector('.inner');
 	assert.strictEqual(result.name, 'banlb', 'the slot name is available');
 	assert.ok(result, 'the slot object is available');
 	assert.equal(result.sizes, expected.sizes, 'the correct sizes are configured');
 	assert.equal(result.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
+	assert.ok(outer, 'the outer div is rendered');
+	assert.ok(inner, 'the inner div is rendered');
 });
 
-QUnit.test('create a slot set size', function (assert) {
-	var expected = [[1,1]];
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="test" data-o-ads-sizes="1x1"></div>');
-	this.ads.init();
-	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
-	var result = this.ads.slots.test;
-	assert.deepEqual(result.sizes, expected, 'data-o-ads-size attribute');
-});
-
-QUnit.test('create a slot with Multiple sizes', function (assert) {
+QUnit.test('create a slot with sizes via sizes attribute', function (assert) {
 	var expected = [[600, 300], [300, 600], [720, 30]];
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
@@ -46,7 +43,17 @@ QUnit.test('create a slot with an invalid size among multiple sizes', function (
 	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
 });
 
-QUnit.test('get sizes via format configuration', function (assert) {
+QUnit.test('create a slot with responsive sizes via sizes attributes', function (assert) {
+	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
+	var expected = { "small":false, "medium":[[300, 400], [300, 600]], "large":[[300,600],[300, 1050]]};
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	var result = this.ads.slots.mpu;
+	assert.deepEqual(result.sizes, expected, 'sizes are parsed into slot config.');
+});
+
+QUnit.test('create a slot with sizes via format attribute', function (assert) {
 	var expected = [[300,250]];
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init();
@@ -55,36 +62,15 @@ QUnit.test('get sizes via format configuration', function (assert) {
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
-
-
-
-
-// 	container = $('<div data-o-ads-size="">')[0];
-// 	this.ads.
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'Empty string returns size from passed config');
-
-// 	container = $('<div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'No attribute returns size from passed config');
-
-// 	container = $('<div data-o-ads-size="invalidxsize">')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {sizes: [[5,5]]});
-// 	expected = [[5, 5]];
-// 	assert.deepEqual(result.sizes, expected, 'Single invalid size returns size passed from config');
-//});
-
-// QUnit.test('Add container', function (assert) {
-// 	this.ads.slots.addContainer(this.fixturesContainer, 'container');
-// 	assert.ok($('#container').size(), 'the container is appended to the div');
-// 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script id="slot" class="slot"></script>');
-// 	var scriptTag = document.getElementById('slot');
-// 	this.ads.slots.addContainer(scriptTag, 'script');
-// 	assert.ok($('div#script').size(), 'the container exists and the id has been moved');
-// 	assert.ok($('div#script').next().hasClass('slot'), 'the container is inserted before the script tag');
-// });
+QUnit.test('create a slot with responsive sizes via formats attributes', function (assert) {
+	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	var expected = { "small":false, "medium":[[300,250]], "large":[[728,90]]};
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	var result = this.ads.slots.mpu;
+	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
+});
 
 // QUnit.test('Center container', function (assert) {
 // 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div id="center-test"></div>');
