@@ -192,6 +192,9 @@ function onReady(slotMethods, event){
 			   .setCollapseEmpty()
 			   .setTargeting()
 			   .setURL();
+			if (slot.outOfPage) {
+				slot.defineOutOfPage();
+			}
 
 			if(slot.render){
 				slot.display();
@@ -276,24 +279,22 @@ var slotMethods = {
 * creates a container for an out of page ad and then makes the ad request
 */
 	defineOutOfPage: function () {
-		var oopId = this.name + '-oop';
-		if (this.outOfPage){
-			this.addContainer(this.container, {id: oopId});
+		var oop = this.gpt.oop = {};
+		oop.id = this.name + '-oop';
+		this.addContainer(this.container, {id: oop.id});
 
-			this.gpt.oop = googletag.defineOutOfPageSlot(this.gpt.unitName, this.oopId)
-			           .addService(googletag.pubads());
+		oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
+		           .addService(googletag.pubads());
 
-			this.setTargeting(this.gpt.oop);
-			this.setURL(this.gpt.oop);
-			googletag.display(oopId);
-		}
+		this.setTargeting(oop.slot);
+		this.setURL(oop.slot);
+		googletag.display(oop.id);
 		return this;
 	},
 /*
 *	Tell gpt to request an ad
 */
-	display: function (id) {
-		id = id || this.gpt.id;
+	display: function () {
 		googletag.display(this.gpt.id);
 		return this;
 	},
