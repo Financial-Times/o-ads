@@ -112,7 +112,7 @@ function setupInview(slots){
 			if (name) {
 				var slot = slots[name];
 				slot.inview = event.detail.inViewPercentage;
-				slots[name].fire(slots[name], 'refresh');
+				slots[name].fire('refresh');
 			}
 		});
 	}
