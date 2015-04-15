@@ -106,7 +106,7 @@ function setupRefresh(slots){
 
 function setupInview(slots){
 	if(config('flags').inview){
-		document.body.addEventListener('oViewport.inView', function (event){
+		document.documentElement.addEventListener('oViewport.inView', function (event){
 			var element = event.detail.element;
 			var name = element.getAttribute('data-o-ads-name');
 			if (name) {
