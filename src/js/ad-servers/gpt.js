@@ -28,9 +28,9 @@ function init() {
 	initGoogleTag();
 	initResponsive();
 
-	utils.on('ready', onReady.bind(null, slotMethods), document.Element);
-	utils.on('render', onRender, document.Element);
-	utils.on('refresh', onRefresh, document.Element);
+	utils.on('ready', onReady.bind(null, slotMethods), document.documentElement);
+	utils.on('render', onRender, document.documentElement);
+	utils.on('refresh', onRefresh, document.documentElement);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
