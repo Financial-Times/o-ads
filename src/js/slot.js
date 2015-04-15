@@ -82,7 +82,7 @@ function Slot(container) {
 
 	// default configuration properties
 	this.server = 'gpt';
-	this.rendered = false;
+	this.render = true;
 
 	// global slots configuration
 	this.targeting = slotConfig.targeting || {};
@@ -110,12 +110,12 @@ function Slot(container) {
 	}
 
 	this.centerContainer();
-	this.fire('ready');
 	if (!this.lazyLoad){
-		this.render = true;
+		this.render = false;
 	} else {
 		utils.once('inview', this.fire.bind(this, 'render'), this.container);
 	}
+	this.fire('ready');
 }
 
 /**
