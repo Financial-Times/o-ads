@@ -27,6 +27,7 @@ function init() {
 	var gptConfig = config('gpt') || {};
 	initGoogleTag();
 	initResponsive();
+
 	utils.on('ready', onReady.bind(null, slotMethods), document.Element);
 	utils.on('render', onRender, document.Element);
 	utils.on('refresh', onRefresh, document.Element);
