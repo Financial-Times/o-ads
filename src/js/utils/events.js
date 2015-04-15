@@ -20,7 +20,7 @@ function broadcast(name, data, target) {
 */
 function on(name, callback, target) {
 	name = 'oAds.' + name;
-	target = target || document.body;
+	target = target || document.body || document.documentElement;
 	target.addEventListener(name, callback);
 }
 
