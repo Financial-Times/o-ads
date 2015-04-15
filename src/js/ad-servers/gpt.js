@@ -28,6 +28,8 @@ function init() {
 	initGoogleTag();
 	initResponsive();
 	utils.on('ready', onReady.bind(null, slotMethods), document.Element);
+	utils.on('render', onRender, document.Element);
+	utils.on('refresh', onRefresh, document.Element);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -121,16 +123,16 @@ function setPageTargeting(targeting) {
 * false is synonymous with never
 */
 function setPageCollapseEmpty(gptConfig) {
-	var mode = gptConfig.collapseEmpty;
+	var mode = (config('gpt') || {}).collapseEmpty;
 
-	if (mode === 'after' || mode === undefined) {
-		mode = undefined;
-	} else if (mode === 'before' || mode === true) {
-		mode = true;
+	if (mode === 'before' || mode === true) {
+		googletag.pubads().collapseEmptyDivs(true, true);
 	} else if (mode === 'never' || mode === false) {
-		mode = false;
+		googletag.pubads().collapseEmptyDivs(false);
+	} else {
+		googletag.pubads().collapseEmptyDivs(true);
 	}
-	googletag.pubads().collapseEmptyDivs(mode);
+
 }
 
 /*
@@ -190,10 +192,9 @@ function onReady(slotMethods, event){
 			   .setTargeting()
 			   .setURL();
 
-			utils.broadcast('defined', {
-				name: slot.name,
-				slot: slot
-			}, slot.container);
+			if(slot.render){
+				slot.display();
+			}
 		}.bind(null, slot));
 	}
 }
@@ -224,7 +225,7 @@ function onRenderEnded(event) {
 
 	event.iframe = document.getElementById(iframeId);
 	event.name = domId[0];
-	utils.broadcast('renderEnded', event);
+	utils.broadcast('rendered', event);
 }
 
 /*
@@ -238,10 +239,6 @@ var slotMethods = {
 * object to hold all gpt options
 */
 	gpt: {},
-	addListeners: function(){
-		utils.on('render', onRender, this.container);
-		utils.on('refresh', onRefresh, this.container);
-	},
 /**
 * define a GPT slot
 */
@@ -295,10 +292,10 @@ var slotMethods = {
 */
 	setUnitName: function () {
 		var unitName;
-		var gptUnitName = config('gptUnitName');
+		var gpt = config('gpt') || {};
 
-		if (utils.isNonEmptyString(gptUnitName)) {
-			unitName = gptUnitName;
+		if (utils.isNonEmptyString(gpt.unitName)) {
+			unitName = gpt.unitName;
 		} else {
 			var network = config('network');
 			var site = config('dfp_site');

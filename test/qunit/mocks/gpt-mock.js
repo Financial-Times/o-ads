@@ -57,7 +57,6 @@ var pubads = {
 	definePassback : stubs.stub(),
 	enableSyncRendering : stubs.stub(),
 	enableVideoAds : stubs.stub(),
-	forceExperiment : stubs.stub(),
 	getVideoContent : stubs.stub(),
 	noFetch : stubs.stub(),
 	onGoogleAdsJsLoad : stubs.stub(),
@@ -71,12 +70,21 @@ var pubads = {
 	clearTagForChildDirectedTreatment : stubs.stub(),
 	isEnabled : stubs.stub(),
 	enable : stubs.stub(),
-	display : stubs.stub(),
 	getSlots : stubs.stub(),
 	getSlotIdMap : stubs.stub(),
 	getAttributeKeys : stubs.stub(),
 	addEventListener : stubs.stub(),
 	updateCorrelator : stubs.stub()
+};
+
+var listener;
+
+pubads.addEventListener = function(method, func){
+	listener = func;
+};
+
+pubads.display = function(name){
+	listener({test: 89});
 };
 
 googletag.pubads = stubs.stub().returns(pubads);

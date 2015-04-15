@@ -1,5 +1,5 @@
 /* jshint globalstrict: true, browser: true */
-/* globals QUnit: false */
+/* globals QUnit: false, $: false */
 "use strict";
 
 QUnit.module('Slots');
@@ -72,52 +72,148 @@ QUnit.test('create a slot with responsive sizes via formats attributes', functio
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
-// QUnit.test('Center container', function (assert) {
-// 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div id="center-test"></div>');
-// 	this.ads.slots.init(this.ads);
-// 	var div = document.getElementById('center-test');
-// 	this.ads.slots.centerContainer(div, [[1,4], [2,5], [3,6]]);
-// 	assert.ok($(div).hasClass('center'), 'the centering class has been added');
-// });
+QUnit.test('Center container', function (assert) {
+	var slotHTML = '<div data-o-ads-name="center-test" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	this.ads.init({slots: {
+		'center-test': {
+			center: true
+		}
+	}});
+	var result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
 
-// QUnit.test('fetchSlotConfig out of page', function (assert) {
-// 	var container = $('<div data-o-ads-out-of-page></div>')[0];
-// 	var result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	assert.ok(result.outOfPage, 'data-o-ads-out-of-page attribute is present returns true');
+	assert.ok($(result.container).hasClass('o-ads__center'), 'the centering class has been added');
+});
 
-// 	container = $('<div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {outOfPage: true});
-// 	assert.ok(result.outOfPage, 'No attribute returns value from passed config');
+QUnit.test('configure out of page slot', function (assert) {
+	var slotHTML = '<div data-o-ads-name="out-of-page-test" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	this.ads.init({
+		slots: {
+		'out-of-page-test': {
+			outOfPage: true
+		}
+	}});
+	var result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	assert.ok(result.outOfPage, 'data-o-ads-out-of-page attribute is present returns true');
 
+	this.ads.init({
+		slots: {
+			'out-of-page-test': {
+				outOfPage: true
+			}
+	}});
+  result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	assert.ok(result.outOfPage, 'No attribute returns value from passed config');
 
-// 	container = $('<div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	assert.ok(!result.outOfPage, 'No attribute and no config returns false');
-// });
+	this.ads.init({});
+	result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	assert.ok(!result.outOfPage, 'No attribute and no config returns false');
+});
 
-// QUnit.test('fetchSlotConfig targeting', function (assert) {
+QUnit.test('configure slot level targeting', function (assert) {
+	var slotHTML = '<div data-o-ads-name="targeting-test" data-o-ads-formats="MediumRectangle" data-o-ads-targeting="some=test;targeting=params;"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
 
-// 	var container = $('<div data-o-ads-targeting="some=test;targeting=params;"></div>')[0];
-// 	var result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	var expected = { pos: "", some: 'test', targeting: 'params'};
+	var result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	var expected = { some: 'test', targeting: 'params'};
 
-// 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting attribute is parsed');
+	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting attribute is parsed');
 
-// 	container = $('<div data-o-ads-targeting="some=test; ;targeting=params;"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	expected = { pos: "", some: 'test', targeting: 'params'};
+	slotHTML = '<div data-o-ads-name="malformed-test" data-o-ads-formats="MediumRectangle" data-o-ads-targeting="some=test; ;targeting=params;"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	result = this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	expected = { some: 'test', targeting: 'params'};
 
-// 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
+	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
 
-// 	container = $('<div data-o-ads-position="banlb"></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	expected = { pos: 'banlb'};
+});
 
-// 	assert.deepEqual(result.targeting, expected, 'position is parsed to pos');
+QUnit.test('configure refresh globally on a timer', function (assert) {
+	var done = assert.async();
+	var clock = this.date();
+	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
 
-// 	container = $('<div data-ad-whatever="happened" data-></div>')[0];
-// 	result = this.ads.slots.fetchSlotConfig(container, '', {});
-// 	expected = { pos: "", whatever: 'happened'};
+	document.body.addEventListener('oAds.refresh', function (event){
+		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
+		done();
+	});
 
-// 	assert.deepEqual(result.targeting, expected, 'other attributes are set as is');
-// });
+	this.ads.init({ refresh: { time: 1 }});
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	clock.tick(1025);
+});
+
+QUnit.test('inview tracking', function (assert) {
+	var done = assert.async();
+	var slotHTML = '<div data-o-ads-name="inview-test" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+
+	document.body.addEventListener('oAds.inview', function (event){
+		assert.equal(event.detail.name, 'inview-test', 'our test slot is inview');
+		done();
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+});
+
+QUnit.test('lazy loading', function (assert) {
+	var done = assert.async();
+	var done2 = assert.async();
+	var slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	document.body.addEventListener('oAds.inview', function (event){
+		assert.equal(event.detail.name, 'lazy-test', 'our test slot is inview');
+		done();
+	});
+
+	document.body.addEventListener('oAds.render', function (event){
+		assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+		done2();
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+});
+
+QUnit.test('refresh inview', function (assert) {
+	var clock = this.date();
+	var done = assert.async();
+	var done2 = assert.async();
+	var slotHTML = '<div data-o-ads-name="refresh-inview-test" data-o-ads-refresh-time="5" data-o-ads-refresh-inview="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	document.body.addEventListener('oAds.inview', function (event){
+		assert.equal(event.detail.name, 'refresh-inview-test', 'our test slot is inview');
+		done();
+	});
+
+	document.body.addEventListener('oAds.refresh', function (event){
+		assert.equal(event.detail.name, 'refresh-inview-test', 'our test slot fired the render event');
+		done2();
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+	clock.tick(5025);
+});
+
+QUnit.test('sticky', function (assert) {
+	var done = assert.async();
+	var done2 = assert.async();
+	var slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', slotHTML);
+	document.body.addEventListener('oAds.inview', function (event){
+		assert.equal(event.detail.name, 'lazy-test', 'our test slot is inview');
+		done();
+	});
+
+	document.body.addEventListener('oAds.render', function (event){
+		assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+		done2();
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
+});

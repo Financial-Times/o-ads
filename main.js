@@ -31,6 +31,7 @@ Ads.prototype.init = function (config){
     // it's passed into each module so we can to maintain state in each module
     this.config.init();
     this.config(config);
+    this.slots.init();
     this.gpt.init();
     this.krux.init();
     this.cb.init();

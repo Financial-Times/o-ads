@@ -41,7 +41,11 @@ var defaults =  {
 		'Sidekick'  :  {sizes: [[300,250], [300,600], [970,250]]},
 		'AdhesionBanner' : {sizes: [320,50]}
 	},
-	collapseEmpty: 'ft'
+	flags: {
+		refresh: true,
+		sticky: true,
+		inview: true
+	}
 };
 
 /**

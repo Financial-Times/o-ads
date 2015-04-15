@@ -19,43 +19,43 @@ QUnit.test('set page targeting', function (assert) {
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
-// QUnit.test('getUnitName', function (assert) {
-// 	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: 'some-dfp-zone'});
-// 	var result = this.ads.gpt.getUnitName();
-// 	var expected = '/5887/some-dfp-site/some-dfp-zone';
+QUnit.test('set unit name', function (assert) {
+	var html ='<div data-o-ads-name="unit-name" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
 
-// 	assert.strictEqual(result, expected, 'setting unit name with site and zone works');
+	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: 'some-dfp-zone'});
+	var expected = '/5887/some-dfp-site/some-dfp-zone';
+	var result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and zone works');
 
-// 	this.ads.init({network: '5887', dfp_site: 'some-dfp-site'});
-// 	result = this.ads.gpt.getUnitName();
-// 	expected = '/5887/some-dfp-site';
 
-// 	assert.strictEqual(result, expected, 'setting unit name with site and no zone works');
+	this.ads.init({network: '5887', dfp_site: 'some-dfp-site'});
+	expected = '/5887/some-dfp-site';
+	result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and no zone works');
 
-// 	this.ads.init({network: '5887'});
-// 	result = this.ads.gpt.getUnitName();
-// 	expected = '/5887';
+	this.ads.init({network: '5887'});
+	expected = '/5887';
+	result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with empty site and empty zone  just returns network');
 
-// 	assert.strictEqual(result, expected, 'setting unit name with empty site and empty zone  just returns network');
+	this.ads.init({network: '5887', dfp_site: '', dfp_zone: ''});
+	expected = '/5887';
+	result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with empty string site and zone just returns network');
 
-// 	this.ads.init({network: '5887', dfp_site: '', dfp_zone: ''});
-// 	result = this.ads.gpt.getUnitName();
-// 	expected = '/5887';
+	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: ''});
+	expected = '/5887/some-dfp-site';
+	result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and empty string zone works');
 
-// 	assert.strictEqual(result, expected, 'setting unit name with empty string site and zone just returns network');
-
-// 	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: ''});
-// 	result = this.ads.gpt.getUnitName();
-// 	expected = '/5887/some-dfp-site';
-
-// 	assert.strictEqual(result, expected, 'setting unit name with site and empty string zone works');
-
-// 	this.ads.init({gptUnitName: '/hello-there/stranger'});
-// 	result = this.ads.gpt.getUnitName();
-// 	expected = '/hello-there/stranger';
-
-// 	assert.strictEqual(result, expected, 'unit name override works');
-// });
+	this.ads.init({gpt: {
+		unitName: '/hello-there/stranger'
+	}});
+	expected = '/hello-there/stranger';
+	result = this.ads.slots.initSlot('unit-name');
+	assert.strictEqual(result.gpt.unitName, expected, 'unit name override works');
+});
 
 // QUnit.test('refresh', function (assert) {
 //     var clock = this.date();
@@ -67,31 +67,33 @@ QUnit.test('set page targeting', function (assert) {
 //     assert.ok(GPTrefreshTimer.called);
 // });
 
-// QUnit.test('collapse empty', function (assert) {
-// 	var result;
-// 	this.ads.init({});
+QUnit.test('collapse empty', function (assert) {
 
-// 	result  = this.ads.gpt.setPageCollapseEmpty();
-// 	assert.equal(result, 'ft', 'No config set defaults to ft');
-// 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith('ft'), 'the correct mode is set in gpt');
+	this.ads.init({gpt: {'collapseEmpty': 'after'}});
+	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(true), 'after mode is set in gpt');
+	googletag.pubads().collapseEmptyDivs.reset();
 
-// 	googletag.pubads().collapseEmptyDivs.reset();
-// 	this.ads.config('collapseEmpty', 'after');
-// 	result  = this.ads.gpt.setPageCollapseEmpty();
-// 	assert.equal(result, undefined, 'Config set to "after" mode is undefined!');
-// 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(undefined), 'the correct mode is set in gpt');
+	this.ads.init({gpt: {'collapseEmpty': 'before'}});
+	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(true, true), 'before mode is set in gpt');
+	googletag.pubads().collapseEmptyDivs.reset();
 
-// 	googletag.pubads().collapseEmptyDivs.reset();
-// 	this.ads.config('collapseEmpty', 'before');
-// 	result  = this.ads.gpt.setPageCollapseEmpty();
-// 	assert.equal(result, true, 'Config set to "before" mode is true!');
+	this.ads.init({gpt: {'collapseEmpty': 'never'}});
+	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(false), 'never mode is set in gpt');
+});
 
-// 	googletag.pubads().collapseEmptyDivs.reset();
-// 	this.ads.config('collapseEmpty', 'never');
-// 	result  = this.ads.gpt.setPageCollapseEmpty();
-// 	assert.equal(result, false, 'setting the value with false works');
-// 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(false), 'the correct mode is set in gpt');
-// });
+
+QUnit.test('define a basic slot', function (assert) {
+	var html ='<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
+	this.ads.init();
+
+
+	this.ads.slots.initSlot('no-responsive-mpu');
+	var gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
+	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
+	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+});
+
 
 QUnit.test('define responsive slot', function (assert) {
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="responsive-mpu"></div>');
@@ -118,16 +120,19 @@ QUnit.test('define responsive slot', function (assert) {
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
-QUnit.test('define a basic slot', function (assert) {
-	var html ='<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
+QUnit.test('rendered event fires on slot', function (assert) {
+	var done = assert.async();
+	var html ='<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
 	this.ads.init();
 
+	document.body.addEventListener('oAds.rendered', function (event){
+		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the render event');
+		done();
+	});
 
-	this.ads.slots.initSlot('no-responsive-mpu');
-	var gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
-	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
-	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+
+	this.ads.slots.initSlot('rendered-test');
 });
 
 

@@ -83,13 +83,15 @@ function Slot(container) {
 	// default configuration properties
 	this.server = 'gpt';
 	this.rendered = false;
-	//
+
+	// global slots configuration
 	this.targeting = slotConfig.targeting || {};
 	this.sizes = slotConfig.sizes || [];
 	this.center = slotConfig.center || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
 	this.collapseEmpty = slotConfig.collapseEmpty || false;
+
 	if(utils.isArray(slotConfig.formats)){
 		attributeParsers.formats(slotConfig.formats, this.sizes);
 	}	else if (utils.isPlainObject(slotConfig.formats)) {
@@ -108,7 +110,12 @@ function Slot(container) {
 	}
 
 	this.centerContainer();
-	this.ready();
+	this.fire('ready');
+	if (!this.lazyLoad){
+		this.render = true;
+	} else {
+		utils.once('inview', this.fire.bind(this, 'render'), this.container);
+	}
 }
 
 /**
@@ -138,7 +145,7 @@ Slot.prototype.parseAttributeConfig = function(){
 */
 Slot.prototype.setName = function () {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
-	if(!this.name){
+	if(!this.name) {
 		this.name = 'o-ads-slot-' + (document.querySelectorAll('[data-o-ads-name],[o-ads-name]').length + 1);
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
@@ -161,23 +168,19 @@ Slot.prototype.uncollapse = function(){
 };
 
 /**
-*	fire the refresh event on the slot
+*	fire an event on the slot
 */
-Slot.prototype.refresh = function(){
-	utils.broadcast('refresh', {
+Slot.prototype.fire = function(name, data){
+	var details = {
 		name: this.name,
 		slot: this
-	}, this.container);
-};
+	};
 
-/**
-*	fire the ready event on the slot
-*/
-Slot.prototype.ready = function(){
-	utils.broadcast('ready', {
-		name: this.name,
-		slot: this
-	}, this.container);
+	if(utils.isPlainObject(data)) {
+		utils.extend(details, data);
+	}
+
+	utils.broadcast(name, details, this.container);
 };
 
 /**

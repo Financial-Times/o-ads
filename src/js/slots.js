@@ -1,6 +1,8 @@
 "use strict";
 var utils = require('./utils');
+var config = require('./config');
 var Slot = require('./slot');
+var oViewport = require('o-viewport');
 
 /**
 * The Slots class defines an slots instance.
@@ -49,17 +51,19 @@ Slots.prototype.uncollapse = function (names) {
 * Given a slot name or an array of slot names of slotnames will refresh the slots using the refresh method on the slot
 */
 Slots.prototype.refresh = function (names) {
+	names = names || Object.keys(this);
 	if (!utils.isArray(names)){
 		names = [names];
 	}
 
-	names.forEach(function(name){
-		if(this[name] && utils.isFunction(this[name].collapse)) {
-			this[name].refresh();
+	names.forEach(function(slots, name){
+		var slot = slots[name];
+		if(slot && utils.isFunction(slot.refresh)) {
+			slot.refresh();
 		} else {
 			utils.log.warn('Attempted to refresh non-existant slot %s', name);
 		}
-	});
+	}.bind(null, this));
 };
 
 /**
@@ -85,12 +89,41 @@ Slots.prototype.initSlot = function (container) {
 	var slot = new Slot(container);
 	if (slot){
 		this[slot.name] = slot;
+		oViewport.trackElements('[data-o-ads-name="' + slot.name + '"]');
 	}
 	return slot;
 };
 
+
+function setupRefresh(slots){
+	if(config('flags').refresh && config('refresh')){
+		var data = config('refresh');
+		if (data.time && !data.inview) {
+			slots.timers.refresh = utils.timers.create(data.time, slots.fire.bind(slots, 'refresh'), data.max || 0);
+		}
+	}
+}
+
+function setupInview(slots){
+	if(config('flags').inview){
+		document.body.addEventListener('oViewport.inView', function (event){
+			var element = event.detail.element;
+			var name = element.getAttribute('data-o-ads-name');
+			if (name) {
+				var slot = slots[name];
+				slot.inview = event.detail.inViewPercentage;
+				slots[name].fire(slots[name], 'refresh');
+			}
+		});
+	}
+}
+
+
 Slots.prototype.init = function () {
+	setupRefresh(this);
+	setupInview(this);
 };
 
+Slots.prototype.timers = {};
 
 module.exports = new Slots();

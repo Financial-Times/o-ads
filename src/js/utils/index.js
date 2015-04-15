@@ -252,14 +252,14 @@ function extend() {
 
 module.exports.hasClass = function(node, className){
 	if(node.nodeType === 1){
-		return node.className.split(' ').indexOf(className) > -1 ? true : false;
+		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
 	}
 	return false;
 };
 
 module.exports.addClass = function(node, className){
 	if(node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)){
-		node.className += ' ' + className.trim();
+		node.className += ' o-ads__' + className.trim();
 	}
 	return true;
 };
@@ -268,7 +268,7 @@ module.exports.removeClass = function(node, className){
 	var index, classes;
 	if(node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)){
 		classes = node.className.split(' ');
-		index = classes.indexOf(className);
+		index = classes.indexOf('o-ads__' + className);
 		classes.splice(index, 1);
 		node.className = classes.join(' ');
 	}
