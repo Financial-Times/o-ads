@@ -110,7 +110,7 @@ function Slot(container) {
 	}
 
 	this.centerContainer();
-	if (!this.lazyLoad){
+	if (this.lazyLoad){
 		this.render = false;
 	} else {
 		utils.once('inview', this.fire.bind(this, 'render'), this.container);
