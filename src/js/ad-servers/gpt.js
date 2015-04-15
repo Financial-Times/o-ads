@@ -220,13 +220,22 @@ function onBreakpointChange(breakpoint){
 }
 
 function onRenderEnded(event) {
+	var detail = {
+		gpt:{}
+	};
+
 	var gptSlotId = event.slot.getSlotId();
 	var domId = gptSlotId.getDomId().split('-');
 	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 
-	event.iframe = document.getElementById(iframeId);
-	event.name = domId[0];
-	utils.broadcast('rendered', event);
+	detail.gpt.isEmpty = event.isEmpty;
+	detail.gpt.size = event.size;
+	detail.gpt.creativeId = event.creativeId;
+	detail.gpt.lineItemId = event.lineItemId;
+	detail.gpt.serviceName = event.serviceName;
+	detail.gpt.iframe = document.getElementById(iframeId);
+	detail.name = domId[0];
+	utils.broadcast('rendered', detail);
 }
 
 /*

@@ -95,33 +95,42 @@ Slots.prototype.initSlot = function (container) {
 };
 
 
-function setupRefresh(slots){
+Slots.prototype.setupRefresh = function (){
 	if(config('flags').refresh && config('refresh')){
 		var data = config('refresh');
 		if (data.time && !data.inview) {
-			slots.timers.refresh = utils.timers.create(data.time, slots.fire.bind(slots, 'refresh'), data.max || 0);
+			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
 		}
 	}
-}
+};
 
-function setupInview(slots){
+Slots.prototype.setupInview = function(){
 	if(config('flags').inview){
-		document.documentElement.addEventListener('oViewport.inView', function (event){
+		document.documentElement.addEventListener('oViewport.inView', function (slots, event){
 			var element = event.detail.element;
 			var name = element.getAttribute('data-o-ads-name');
 			if (name) {
 				var slot = slots[name];
 				slot.inview = event.detail.inViewPercentage;
-				slots[name].fire('inview');
+				if(slot.inview > 0){
+					slots[name].fire('inview');
+				}
 			}
-		});
+		}.bind(null, this));
 	}
-}
+};
 
 
 Slots.prototype.init = function () {
-	setupRefresh(this);
-	setupInview(this);
+	this.setupRefresh();
+	this.setupInview();
+	utils.on('rendered', function(slots, event){
+		var slot = slots[event.detail.name];
+		if(slot) {
+			utils.extend(slot[slot.server], event.detail[slot.server]);
+			slot.fire('finished', event.detail, slot.container);
+		}
+	}.bind(null, this));
 };
 
 Slots.prototype.timers = {};
