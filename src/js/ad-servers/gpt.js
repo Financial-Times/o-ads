@@ -182,6 +182,7 @@ function enableVideo(gptConfig) {
 function onReady(slotMethods, event){
 	var slot = event.detail.slot;
 	if (slot.server === 'gpt') {
+		slot.gpt = {};
 		// extend the slot with gpt methods
 		utils.extend(slot, slotMethods);
 
@@ -223,22 +224,32 @@ function onBreakpointChange(breakpoint){
 }
 
 function onRenderEnded(event) {
-	var detail = {
-		gpt:{}
+	var detail;
+	var data = {
+		gpt: {}
 	};
 
 	var gptSlotId = event.slot.getSlotId();
 	var domId = gptSlotId.getDomId().split('-');
 	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+	data.name = domId[0];
+	data.type = domId[1];
 
-	detail.gpt.isEmpty = event.isEmpty;
-	detail.gpt.size = event.size;
-	detail.gpt.creativeId = event.creativeId;
-	detail.gpt.lineItemId = event.lineItemId;
-	detail.gpt.serviceName = event.serviceName;
-	detail.gpt.iframe = document.getElementById(iframeId);
-	detail.name = domId[0];
-	utils.broadcast('rendered', detail);
+	if (data.type === 'gpt') {
+		detail = data.gpt;
+	} else {
+		data.gpt.oop = {};
+		detail = data.gpt.oop;
+	}
+
+	detail.isEmpty = event.isEmpty;
+	detail.size = event.size;
+	detail.creativeId = event.creativeId;
+	detail.lineItemId = event.lineItemId;
+	detail.serviceName = event.serviceName;
+	detail.iframe = document.getElementById(iframeId);
+
+	utils.broadcast('rendered', data);
 }
 
 /*
@@ -248,10 +259,6 @@ function onRenderEnded(event) {
 * Set of methods extended on to the slot constructor for GPT served slots
 */
 var slotMethods = {
-/*
-* object to hold all gpt options
-*/
-	gpt: {},
 /**
 * define a GPT slot
 */

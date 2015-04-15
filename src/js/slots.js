@@ -104,7 +104,7 @@ Slots.prototype.setupRefresh = function (){
 	}
 };
 
-Slots.prototype.setupInview = function(){
+Slots.prototype.setupInview = function() {
 	if(config('flags').inview){
 		document.documentElement.addEventListener('oViewport.inView', function (slots, event){
 			var element = event.detail.element;
@@ -120,10 +120,7 @@ Slots.prototype.setupInview = function(){
 	}
 };
 
-
-Slots.prototype.init = function () {
-	this.setupRefresh();
-	this.setupInview();
+Slots.prototype.setupRendered = function(){
 	utils.on('rendered', function(slots, event){
 		var slot = slots[event.detail.name];
 		if(slot) {
@@ -131,6 +128,13 @@ Slots.prototype.init = function () {
 			slot.fire('finished', event.detail, slot.container);
 		}
 	}.bind(null, this));
+};
+
+Slots.prototype.init = function () {
+	this.setupRefresh();
+	this.setupInview();
+	this.setupRendered();
+
 };
 
 Slots.prototype.timers = {};
