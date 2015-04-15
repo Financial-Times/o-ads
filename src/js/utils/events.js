@@ -4,7 +4,7 @@
 * @name broadcast
 */
 function broadcast(name, data, target) {
-	target = target || document.body;
+	target = target || document.body ||document.documentElement;
 	name = 'oAds.' + name;
 	var opts = {
 		bubbles: true,
