@@ -204,6 +204,7 @@ function onRender(event){
 * Event handler for when a slot requests the ad be flipped
 */
 function onRefresh(event){
+	event.detail.slot.gpt.slot.setTargeting('rfrsh', 'true');
 	googletag.pubads().refresh(event.detail.slot.gpt.id);
 }
 
@@ -281,7 +282,6 @@ var slotMethods = {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
 			if(utils.isArray(slot.sizes[screensize])) {
-				slot.targeting.rfsh = 't';
 				slot.setTargeting().fire('refresh');
 			}
 		}, this.container);
