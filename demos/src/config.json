@@ -7,34 +7,37 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"SuperLeaderboard", "formats" : "SuperLeaderboard", "dfp-site" : "test.5887.origami", "targeting": "pos=leaderboard"}
+         "data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami", "targeting": "pos=leaderboard"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"Halfpage", "formats": "HalfPage",  "dfp-site" : "test.5887.origami"}
+         "data": {"name":"halfpage", "formats": "HalfPage",  "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"Leaderboard", "dfp-site" : "test.5887.origami"}
+         "data": {"name":"leaderboard", "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Master-and-Companion",
-         "template": "demos/src/masterandcompanion.mustache"
+         "template": "demos/src/masterandcompanion.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Responsive-Positions",
          "template": "demos/src/responsive.mustache",
-         "js": "demos/src/demo-responsive.js"
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Video-Advertising",
-         "template": "demos/src/video.mustache"
+         "template": "demos/src/video.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Video-Advertising-with-Companion",
-         "template": "demos/src/videocompanions.mustache"
+         "template": "demos/src/videocompanions.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       }
    ]
 }

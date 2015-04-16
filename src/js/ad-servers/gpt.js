@@ -12,7 +12,6 @@ var config = require('../config');
 var utils = require('../utils');
 var targeting = require('../targeting');
 var breakpoints = false;
-var responsive;
 
 /*
 #############################
@@ -25,8 +24,8 @@ var responsive;
 */
 function init() {
 	var gptConfig = config('gpt') || {};
+	breakpoints = config('responsive');
 	initGoogleTag();
-	initResponsive();
 
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
@@ -47,16 +46,6 @@ function initGoogleTag() {
 		window.googletag.cmd = [];
 	}
 	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
-}
-
-/*
-* if responsive configurations exist start listening for breakpoint changes
-*/
-function initResponsive() {
-	breakpoints = config('responsive');
-	if (utils.isObject(breakpoints) ) {
-		responsive = utils.responsive(breakpoints, onBreakpointChange);
-	}
 }
 
 /*
@@ -193,18 +182,20 @@ function onReady(slotMethods, event){
 			   .setCollapseEmpty()
 			   .setTargeting()
 			   .setURL();
+
 			if (slot.outOfPage) {
 				slot.defineOutOfPage();
 			}
 
-			if(slot.render){
+			if(!slot.deffer){
 				slot.display();
 			}
 		}.bind(null, slot));
 	}
 }
-
-
+/*
+* Render is called when a slot is not rendered when the ready event fires
+*/
 function onRender(event){
 	event.detail.slot.display();
 }
@@ -214,13 +205,6 @@ function onRender(event){
 */
 function onRefresh(event){
 	googletag.pubads().refresh(event.detail.slot.gpt.id);
-}
-
-/*
-* Event handler for when a breakpoint is hit
-*/
-function onBreakpointChange(breakpoint){
-
 }
 
 function onRenderEnded(event) {
@@ -268,14 +252,8 @@ var slotMethods = {
 		this.setUnitName();
 
 		if (breakpoints && utils.isObject(this.sizes)) {
-			var mapping = googletag.sizeMapping();
-
-			Object.keys(breakpoints).forEach(function (breakpoint) {
-				if (this.sizes[breakpoint]){
-					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
-				}
-			}.bind(this));
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0,0], this.gpt.id).defineSizeMapping(mapping.build());
+			this.initResponsive();
+			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0,0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
 		} else {
 			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
 		}
@@ -298,6 +276,26 @@ var slotMethods = {
 		googletag.display(oop.id);
 		return this;
 	},
+	initResponsive: function () {
+		utils.on('breakpoint', function (event) {
+			var slot = event.detail.slot;
+			var screensize = event.detail.screensize;
+			if(utils.isArray(slot.sizes[screensize])) {
+				slot.targeting.rfsh = 't';
+				slot.setTargeting().fire('refresh');
+			}
+		}, this.container);
+
+		var mapping = googletag.sizeMapping();
+		Object.keys(breakpoints).forEach(function (breakpoint) {
+			if (this.sizes[breakpoint]){
+				mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
+			}
+		}.bind(this));
+
+		this.gpt.sizes = mapping.build();
+		return this;
+	},
 /*
 *	Tell gpt to request an ad
 */
@@ -315,9 +313,9 @@ var slotMethods = {
 		if (utils.isNonEmptyString(gpt.unitName)) {
 			unitName = gpt.unitName;
 		} else {
-			var network = config('network');
-			var site = config('dfp_site');
-			var zone = config('dfp_zone');
+			var network = gpt.network;
+			var site = gpt.site;
+			var zone = gpt.zone;
 			unitName = '/' + network;
 			unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 			unitName += utils.isNonEmptyString(zone ) ? '/' + zone : '';
@@ -331,7 +329,7 @@ var slotMethods = {
 	addServices: function (gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
 		gptSlot.addService(googletag.pubads());
-		if (config('companions') && this.companion !== false) {
+		if (config('gpt').companions && this.companion !== false) {
 			gptSlot.addService(googletag.companionAds());
 		}
 		return this;

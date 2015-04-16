@@ -3,7 +3,10 @@ var utils = require('./utils');
 var config = require('./config');
 var Slot = require('./slot');
 var oViewport = require('o-viewport');
-
+var screensize = null;
+var total = 0;
+var complete = 0;
+var deffered = 0;
 /**
 * The Slots class defines an slots instance.
 * the instance tracks all ad slots on the page
@@ -86,16 +89,20 @@ Slots.prototype.initSlot = function (container) {
 		return false;
 	}
 
-	var slot = new Slot(container);
+	var slot = new Slot(container, screensize);
 	if (slot){
 		this[slot.name] = slot;
+		total++;
+		if (slot.deffer){
+			deffered++;
+		}
 		oViewport.trackElements('[data-o-ads-name="' + slot.name + '"]');
 	}
 	return slot;
 };
 
 
-Slots.prototype.setupRefresh = function (){
+Slots.prototype.initRefresh = function (){
 	if(config('flags').refresh && config('refresh')){
 		var data = config('refresh');
 		if (data.time && !data.inview) {
@@ -104,7 +111,7 @@ Slots.prototype.setupRefresh = function (){
 	}
 };
 
-Slots.prototype.setupInview = function() {
+Slots.prototype.initInview = function() {
 	if(config('flags').inview){
 		document.documentElement.addEventListener('oViewport.inView', function (slots, event){
 			var element = event.detail.element;
@@ -120,22 +127,63 @@ Slots.prototype.setupInview = function() {
 	}
 };
 
-Slots.prototype.setupRendered = function(){
+Slots.prototype.initRendered = function(){
+	utils.on('rendered', function(slots, event){
+		complete++;
+
+		var slot = slots[event.detail.name];
+		if(slot) {
+			utils.extend(slot[slot.server], event.detail[slot.server]);
+			slot.fire('complete', event.detail, slot.container);
+		}
+
+		if (total === (complete + deffered)) {
+			utils.broadcast('all-complete', { slots: slots });
+		}
+	}.bind(null, this));
+
+
 	utils.on('rendered', function(slots, event){
 		var slot = slots[event.detail.name];
 		if(slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
-			slot.fire('finished', event.detail, slot.container);
+			slot.fire('complete', event.detail, slot.container);
 		}
 	}.bind(null, this));
 };
 
-Slots.prototype.init = function () {
-	this.setupRefresh();
-	this.setupInview();
-	this.setupRendered();
-
+/*
+* if responsive configurations exist start listening for breakpoint changes
+*/
+Slots.prototype.initResponsive = function() {
+	var breakpoints = config('responsive');
+	if (utils.isObject(breakpoints) ) {
+		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
+	}
 };
+
+function onBreakpointChange(slots, screensize) {
+	Object.keys(slots).forEach(function(name){
+		var slot = slots[name];
+		if(slot) {
+			slot.screensize = screensize;
+			slot.fire('breakpoint', {
+				name: name,
+				slot: slot,
+				screensize: screensize
+			}, slot.container);
+		}
+	});
+}
+
+Slots.prototype.init = function () {
+	this.initRefresh();
+	this.initInview();
+	this.initRendered();
+	this.initResponsive();
+};
+
+Slots.prototype.screensize = null;
 
 Slots.prototype.timers = {};
 

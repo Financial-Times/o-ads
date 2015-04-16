@@ -49,7 +49,7 @@ var initAll = function() {
         }
     }
     ads.init();
-    var slots = document.querySelectorAll(".o-ads-slot");
+    var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
     for (var i = 0; i < slots.length; i++) {
         if (slots[i].dataset.oAdsName){
             ads.slots.initSlot(slots[i].dataset.oAdsName);

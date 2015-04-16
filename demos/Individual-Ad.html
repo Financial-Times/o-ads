@@ -13,9 +13,16 @@
 	<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
 </head>
 <body class="">
-<script data-o-ads-config type="application/json">{"dfp_site" : "test.5887.origami"}</script>
-<div data-o-ads-name="SuperLeaderboard" data-o-ads-targeting="pos=leaderboard" data-o-ads-formats="SuperLeaderboard" class="o-ads o-ads-slot " >
-</div>
+<script data-o-ads-config type="application/json">
+	{
+		"gpt": {
+			"network": 5887,
+			"site": "test.5887.origami"
+		}
+	}
+</script>
+
+<div data-o-ads-name="leaderboard" data-o-ads-formats="SuperLeaderboard" data-o-ads-targeting="pos=leaderboard"></div>
 
 <script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>

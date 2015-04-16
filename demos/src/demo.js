@@ -1,4 +1,3 @@
-/*global require*/
 'use strict';
 
 window.oads = require('../../main.js');

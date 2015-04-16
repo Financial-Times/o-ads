@@ -54,7 +54,7 @@ function init(brps, cb) {
 	oViewport.listenTo('orientation');
 	oViewport.listenTo('resize');
 
-	return getCurrent;
+	return getCurrent();
 }
 
 module.exports = init;

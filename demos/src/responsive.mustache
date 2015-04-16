@@ -1,2 +1,34 @@
-<div data-o-ads-slotname="responsivePos1" class="o-ads o-ads-slot {{classes}}" ></div>
-<div data-o-ads-slotname="responsivePos2" class="o-ads o-ads-slot {{classes}}" ></div>
+<script data-o-ads-config type="application/json">
+{
+	"gpt": {
+		"network": {{network}},
+		"site": "{{site}}"
+	},
+	"responsive": {
+		"large": [400, 0],
+		"small": [0, 0]
+	},
+	"slots": {
+		"responsive-pos-1": {
+			"sizes": {
+				"large": [[300, 600]],
+				"small": [[300, 250]]
+			},
+			"targeting": {
+				"pos": "responsivePos1"
+			}
+		},
+		"responsive-pos-2": {
+			"sizes": {
+				"large": [[728, 90]],
+				"small": false
+			},
+			"targeting": {
+				"pos": "responsivePos2"
+			}
+		}
+	}
+}
+</script>
+<div data-o-ads-name="responsive-pos-2"></div>
+<div data-o-ads-name="responsive-pos-1"></div>

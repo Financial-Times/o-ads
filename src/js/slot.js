@@ -69,20 +69,24 @@ var attributeParsers = {
 * @class
 * @constructor
 */
-function Slot(container) {
+function Slot(container, screensize) {
 	var slotConfig = config('slots') || {};
 	// store the container
 	this.container = container;
-	// setup slot dom structure
-	this.outer = this.addContainer(container, { class: 'outer' });
-	this.inner = this.addContainer(this.outer, { class: 'inner'});
+	// the current responsive screensize
+	if (screensize){
+		this.screensize = screensize;
+	}
+	// init slot dom structure
+	this.outer = this.addContainer(container, { class: 'o-ads__outer' });
+	this.inner = this.addContainer(this.outer, { class: 'o-ads__inner'});
 	// make sure the slot has a name
 	this.setName();
 	slotConfig = slotConfig[this.name] || {};
 
 	// default configuration properties
 	this.server = 'gpt';
-	this.render = true;
+	this.defer = false;
 
 	// global slots configuration
 	this.targeting = slotConfig.targeting || {};
@@ -109,10 +113,12 @@ function Slot(container) {
 		return false;
 	}
 
+	this.initResponsive();
+
 	this.centerContainer();
+
 	if (this.lazyLoad){
-		this.render = false;
-	} else {
+		this.deffer = true;
 		utils.once('inview', this.fire.bind(this, 'render'), this.container);
 	}
 	this.fire('ready');
@@ -139,6 +145,26 @@ Slot.prototype.parseAttributeConfig = function(){
 	}.bind(this));
 };
 
+/**
+*	If the slot doesn't have a name give it one
+*/
+Slot.prototype.initResponsive = function () {
+	if (utils.isPlainObject(this.sizes)){
+
+		if (this.sizes[this.screensize] === false) {
+			this.collapse();
+		}
+
+		utils.on('breakpoint' ,function (event) {
+			var slot = event.detail.slot;
+			if(slot.sizes[event.detail.screensize] === false) {
+				slot.collapse();
+			} else {
+				slot.uncollapse();
+			}
+		}, this.container);
+	}
+};
 
 /**
 *	If the slot doesn't have a name give it one
@@ -181,18 +207,6 @@ Slot.prototype.fire = function(name, data){
 	}
 
 	utils.broadcast(name, details, this.container);
-};
-
-/**
-*	fire the complete event on the slot
-* this should be fired by the ad server module
-* when it's finished rendering the slot
-*/
-Slot.prototype.complete = function(){
-	utils.broadcast('complete', {
-		name: this.name,
-		slot: this
-	}, this.container);
 };
 
 /**

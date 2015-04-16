@@ -212,8 +212,8 @@ module.exports.page = function(){
 	result.uuid = window.pageUUID ? window.pageUUID :
 								utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
 	result.auuid = window.articleUUID || undefined;
-	result.dfpSite = config('dfp_site');
-	result.dfpZone = config('dfp_zone');
+	result.dfpSite = config('gpt').site;
+	result.dfpZone = config('gpt').zone;
 	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
 	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
 	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}

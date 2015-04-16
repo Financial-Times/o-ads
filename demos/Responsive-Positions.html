@@ -13,10 +13,42 @@
 	<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
 </head>
 <body class="">
-<div data-o-ads-slotname="responsivePos1" class="o-ads o-ads-slot " ></div>
-<div data-o-ads-slotname="responsivePos2" class="o-ads o-ads-slot " ></div>
+<script data-o-ads-config type="application/json">
+{
+	"gpt": {
+		"network": 5887,
+		"site": "test.5887.origami"
+	},
+	"responsive": {
+		"large": [400, 0],
+		"small": [0, 0]
+	},
+	"slots": {
+		"responsive-pos-1": {
+			"sizes": {
+				"large": [[300, 600]],
+				"small": [[300, 250]]
+			},
+			"targeting": {
+				"pos": "responsivePos1"
+			}
+		},
+		"responsive-pos-2": {
+			"sizes": {
+				"large": [[728, 90]],
+				"small": false
+			},
+			"targeting": {
+				"pos": "responsivePos2"
+			}
+		}
+	}
+}
+</script>
+<div data-o-ads-name="responsive-pos-2"></div>
+<div data-o-ads-name="responsive-pos-1"></div>
 
-<script src="/bundles/js?modules=o-ads:/demos/src/demo-responsive.js"></script>
+<script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

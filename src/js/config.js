@@ -27,7 +27,6 @@ var utils = require('./utils');
 * Default configuration set in the constructor.
 */
 var defaults =  {
-	network: '5887',
 	formats : {
 		'MediumRectangle':  {sizes :[300,250]},
 		'Rectangle':  {sizes :[180,50]},
