@@ -60,12 +60,12 @@ function initGoogleTag() {
 * when the library is available
 */
 function setup(gptConfig){
+	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
 	enableVideo(gptConfig);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty(gptConfig);
-	setRenderEnded();
 	googletag.enableServices();
 }
 
@@ -78,6 +78,8 @@ function setRenderingMode(gptConfig){
 	var rendering = gptConfig.rendering;
 	if(rendering === 'sync') {
 		googletag.pubads().enableSyncRendering();
+	} else if(rendering === 'sra') {
+		googletag.pubads().enableSingleRequest();
 	} else {
 		googletag.pubads().enableAsyncRendering();
 	}
@@ -106,30 +108,23 @@ function setPageTargeting(targeting) {
 }
 
 /**
-* Sets the GPT collapse empty mode for the page
-* values can be 'after', 'before', 'never', 'ft'
-* after as in after ads have rendered is the default
+* Sets behaviour of empty slots can be 'after', 'before' or 'never'
+* * after collapse slots that return an empty ad
+* * before collapses all slots and only displays them on
 * true is synonymous with before
 * false is synonymous with never
 */
 function setPageCollapseEmpty(gptConfig) {
-	var mode = (config('gpt') || {}).collapseEmpty;
+	var mode = (config('collapseEmpty'));
 
 	if (mode === 'before' || mode === true) {
 		googletag.pubads().collapseEmptyDivs(true, true);
 	} else if (mode === 'never' || mode === false) {
 		googletag.pubads().collapseEmptyDivs(false);
-	} else {
+	} else { //default is after
 		googletag.pubads().collapseEmptyDivs(true);
 	}
 
-}
-
-/*
-* Set an the event handler for the gpt render ended event
-*/
-function setRenderEnded(){
-	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
 }
 
 /**
@@ -204,8 +199,13 @@ function onRender(event){
 * Event handler for when a slot requests the ad be flipped
 */
 function onRefresh(event){
-	event.detail.slot.gpt.slot.setTargeting('rfrsh', 'true');
-	googletag.pubads().refresh(event.detail.slot.gpt.id);
+	var targeting = event.detail.targeting;
+	if (utils.isPlainObject(targeting)){
+		Object.keys(targeting).forEach(function (name) {
+			event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
+		});
+	}
+	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
 }
 
 function onRenderEnded(event) {
@@ -282,7 +282,7 @@ var slotMethods = {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
 			if(utils.isArray(slot.sizes[screensize])) {
-				slot.setTargeting().fire('refresh');
+				slot.fire('refresh');
 			}
 		}, this.container);
 
@@ -319,6 +319,7 @@ var slotMethods = {
 			unitName = '/' + network;
 			unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 			unitName += utils.isNonEmptyString(zone ) ? '/' + zone : '';
+			unitName += '/' + this.name;
 		}
 		this.gpt.unitName = unitName;
 		return this;

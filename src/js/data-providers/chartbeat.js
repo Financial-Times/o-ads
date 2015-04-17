@@ -22,7 +22,7 @@ var utils = require('../utils');
 module.exports.init = function () {
 	utils.on('ready', function(event){
 		var slot = event.detail.slot;
-		if(slot.cbTrack !== false){
+		if(slot.chartbeat !== false){
 			slot.container.setAttribute('data-cb-ad-id', slot.name);
 		}
 	});

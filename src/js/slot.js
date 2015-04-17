@@ -94,7 +94,7 @@ function Slot(container, screensize) {
 	this.center = slotConfig.center || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
-	this.collapseEmpty = slotConfig.collapseEmpty || false;
+	this.collapseEmpty = slotConfig.collapseEmpty;
 
 	if(utils.isArray(slotConfig.formats)){
 		attributeParsers.formats(slotConfig.formats, this.sizes);

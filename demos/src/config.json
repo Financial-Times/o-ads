@@ -7,7 +7,7 @@
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami", "targeting": "pos=leaderboard"}
+         "data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
