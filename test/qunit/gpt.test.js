@@ -9,8 +9,16 @@ QUnit.module('gpt', {
 });
 
 QUnit.test('init', function (assert) {
-		this.ads.init();
-		assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.ads.init();
+	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
+	assert.ok(window.googletag, 'placeholder googletag object is created');
+	assert.ok(window.googletag.cmd.length, 'library setup is added tothe command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
 });
 
 QUnit.test('set page targeting', function (assert) {
@@ -19,42 +27,123 @@ QUnit.test('set page targeting', function (assert) {
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
-QUnit.test('set unit name', function (assert) {
-	var html ='<div data-o-ads-name="unit-name" data-o-ads-formats="MediumRectangle"></div>';
-	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
-
-	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: 'some-dfp-zone'});
+var htmlstart ='<div data-o-ads-name="';
+var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
+QUnit.test('set unit names', function (assert) {
+	var done = assert.async();
 	var expected = '/5887/some-dfp-site/some-dfp-zone';
-	var result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and zone works');
+	this.fixturesContainer.add(htmlstart + 'unit-name-full' + htmlend);
+	document.addEventListener('oAds.complete', function (event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-full'){
+			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with site and zone works');
+			done();
+		}
+	});
+
+	this.ads.init({
+		gpt: {
+			network: '5887',
+			site: 'some-dfp-site',
+			zone: 'some-dfp-zone'
+		}
+	});
+	this.ads.slots.initSlot('unit-name-full');
+});
+
+QUnit.test('set unit name site only', function (assert) {
+	var done = assert.async();
+	var expected = '/5887/some-dfp-site';
+	this.fixturesContainer.add(htmlstart + 'unit-name-site-only' + htmlend);
+
+	document.addEventListener('oAds.complete', function (event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-site-only'){
+			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with site and no zone works');
+			done();
+		}
+	});
+
+	this.ads.init({
+		gpt: {
+			network: '5887',
+			site: 'some-dfp-site'
+		}});
+	this.ads.slots.initSlot('unit-name-site-only');
+});
+
+QUnit.test('set unit names network only', function (assert) {
+	var done = assert.async();
+	var expected = '/5887';
+	this.fixturesContainer.add(htmlstart + 'unit-name-network-only' + htmlend);
+
+	document.addEventListener('oAds.complete', function (event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-network-only'){
+			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty site and empty zone  just returns network');
+			done();
+		}
+	});
+
+	this.ads.init({
+		gpt: {
+			network: '5887'
+		}
+	});
+	this.ads.slots.initSlot('unit-name-network-only');
+});
+
+QUnit.test('unit names with empty strings', function (assert) {
+
+	var done = assert.async();
+	var expected = '/5887';
+	this.fixturesContainer.add(htmlstart + 'unit-name-empty-string' + htmlend);
 
 
-	this.ads.init({network: '5887', dfp_site: 'some-dfp-site'});
-	expected = '/5887/some-dfp-site';
-	result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and no zone works');
+	document.addEventListener('oAds.complete', function (event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-empty-string'){
+			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty string site and zone just returns network');
+			done();
+		}
+	});
 
-	this.ads.init({network: '5887'});
-	expected = '/5887';
-	result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with empty site and empty zone  just returns network');
 
-	this.ads.init({network: '5887', dfp_site: '', dfp_zone: ''});
-	expected = '/5887';
-	result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with empty string site and zone just returns network');
+	this.ads.init({
+		gpt: {
+			network: '5887',
+			site: '',
+			zone:''
+		}
+	});
+	this.ads.slots.initSlot('unit-name-empty-string');
+});
 
-	this.ads.init({network: '5887', dfp_site: 'some-dfp-site', dfp_zone: ''});
-	expected = '/5887/some-dfp-site';
-	result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'setting unit name with site and empty string zone works');
+QUnit.test('set unit name with override', function (assert) {
+	var done = assert.async();
+	var expected = '/hello-there/stranger';
+	this.fixturesContainer.add(htmlstart + 'unit-name-custom' + htmlend);
 
-	this.ads.init({gpt: {
-		unitName: '/hello-there/stranger'
-	}});
-	expected = '/hello-there/stranger';
-	result = this.ads.slots.initSlot('unit-name');
-	assert.strictEqual(result.gpt.unitName, expected, 'unit name override works');
+
+	document.addEventListener('oAds.complete', function (event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-custom'){
+			assert.strictEqual(slot.gpt.unitName, expected, 'unit name override works');
+			done();
+		}
+	});
+
+	this.ads.init({
+		gpt: {
+			unitName: '/hello-there/stranger'
+		}
+	});
+	this.ads.slots.initSlot('unit-name-custom');
 });
 
 // QUnit.test('refresh', function (assert) {
@@ -127,10 +216,9 @@ QUnit.test('rendered event fires on slot', function (assert) {
 	this.ads.init();
 
 	document.body.addEventListener('oAds.rendered', function (event){
-		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the render event');
+		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the rendered event');
 		done();
 	});
-
 
 	this.ads.slots.initSlot('rendered-test');
 });

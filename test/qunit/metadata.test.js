@@ -89,7 +89,14 @@ QUnit.test("User not logged in", function (assert) {
 QUnit.test("Page", function (assert) {
 	this.window({siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"});
 
-	this.ads.init({dfp_site: 'test.site', dfp_zone: 'test.zone'});
+	this.ads.init({
+		gpt: {
+			network: '5887',
+			site: 'test.site',
+			zone: 'test.zone'
+		}
+	});
+
 	var result = this.ads.metadata.page();
 	var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", uuid: undefined, auuid: undefined, dfpSite: 'test.site', dfpZone: 'test.zone'};
 	assert.deepEqual(result, expected, "The correct values are returned");
@@ -106,7 +113,13 @@ QUnit.test("Page UUID & AUUID from window", function (assert) {
 	this.window({ getUUIDFromString: function(){}});
 	this.stub(window, 'getUUIDFromString').returns('some-legacy-uuid');
 
-	this.ads.init();
+	this.ads.init({
+		gpt: {
+			network: '5887',
+			site: 'test.site',
+			zone: 'test.zone'
+		}
+	});
 	var result = this.ads.metadata.page();
 	assert.equal(result.uuid, 'some-legacy-uuid', 'uuid set as on legacy pages');
 });

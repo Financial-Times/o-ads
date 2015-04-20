@@ -274,22 +274,22 @@ QUnit.test("extend method", function (assert) {
 });
 
 QUnit.module('utils miscellanious methods');
-QUnit.test("css class methods", function (assert) {
+
+QUnit.test("css class methods for working with .o-ads__ classes", function (assert) {
 	/* jshint -W044 */
 	//just hint complains about all the crazy string escaping in here, but that's what we're testing
-	var $node = $('<div class="test cr@zy-c|-|@r/\cter$">'),
-	node = $node[0];
+	var node = this.fixturesContainer.add('<div class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$">');
 
-	assert.ok( this.ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), "the node has the class cr@zy-c|-|@r/\cter$" );
-	assert.ok( this.ads.utils.hasClass(node, 'test'), "the node has the class test" );
-	assert.ok( !this.ads.utils.hasClass(node, 'tes'), "the node doesn't the class tes" );
-	assert.ok( !this.ads.utils.hasClass(node, 'r/\cter$'), "the node doesn't the class r/\cter$" );
+	assert.ok( this.ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), "the node has the class o-ads__cr@zy-c|-|@r/\cter$" );
+	assert.ok( this.ads.utils.hasClass(node, 'test'), "the node has the class o-ads__test" );
+	assert.ok( !this.ads.utils.hasClass(node, 'o-ads__tes'), "the node doesn't the class tes" );
+	assert.ok( !this.ads.utils.hasClass(node, 'o-ads__r/\cter$'), "the node doesn't the class r/\cter$" );
 
 	this.ads.utils.addClass(node, 'hello');
-	assert.ok( $node.hasClass('hello'), "the node hello was added" );
+	assert.ok( $(node).hasClass('o-ads__hello'), "the node hello was added" );
 
 	this.ads.utils.removeClass(node, 'hello');
-	assert.ok( !$node.hasClass('hello'), "the node hello was removed" );
+	assert.ok( !$(node).hasClass('o-ads__hello'), "the node hello was removed" );
 	/* jshint +W044 */
 });
 

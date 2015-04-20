@@ -7,6 +7,11 @@ module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
 
 /* container for fixtures */
 module.exports.fixturesContainer = document.getElementById('qunit-fixtures');
+module.exports.fixturesContainer.add = function (html) {
+	this.insertAdjacentHTML('beforeend', html);
+	return this.lastChild;
+};
+
 
 /* the google library mock*/
 var gpt = require('./mocks/gpt-mock');

@@ -68,7 +68,7 @@ Rubicon.prototype.initValuation = function (slot) {
 		window.oz_site = config.id + '/' + config.site;
 		window.oz_ad_slot_size = size;
 		window.oz_zone = zone;
-		// window.oz_insight();
+		window.oz_insight();
 	}
 };
 

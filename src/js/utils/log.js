@@ -13,12 +13,14 @@ function log(){
 
 	args = [].slice.call(arguments, argsIndex);
 
-	if(location.search.indexOf('DEBUG=OADS') === -1 || !window.console || !window.console[type]){
-		return;
+	if(log.isOn(type)){
+		window.console[type].apply(window.console, args);
 	}
-
-	window.console[type].apply(window.console, args);
 }
+
+log.isOn = function(type){
+	return location.search.indexOf('DEBUG=OADS') !== -1 && window.console && window.console[type];
+};
 
 log.warn = function(){
 	var args = ['warn'].concat([].slice.call(arguments, 0));
