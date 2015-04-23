@@ -3,11 +3,26 @@
 'use strict';
 
 printAscii();
-var gulp = require('gulp'),
-	git = require('gulp-git'),
-	bump = require('gulp-bump'),
-	filter = require('gulp-filter'),
-	tag_version = require('gulp-tag-version');
+var gulp = require('gulp');
+var obt = require('origami-build-tools');
+var git = require('gulp-git');
+var bump = require('gulp-bump');
+var filter = require('gulp-filter');
+var plato = require('gulp-plato');
+var tag_version = require('gulp-tag-version');
+var ssg = require('gulp-ssg');
+var rename = require('gulp-rename');
+var data = require('gulp-data');
+var matter = require('gray-matter');
+var markdown = require('gulp-markdown');
+var wrap = require('gulp-wrap');
+
+
+var config = {
+	origami: require('./origami.json'),
+	bower: require('./bower.json'),
+	jshint: require('./node_modules/origami-build-tools/config/jshint.json')
+};
 
 /**
  * Bumping version number and tagging the repository with it.
@@ -52,9 +67,49 @@ function inc(importance, callback) {
 
 }
 
-gulp.task('patch', function(callback) { inc('patch', callback); });
-gulp.task('feature', function(callback) { inc('minor', callback); });
-gulp.task('release', function(callback) { inc('major', callback); });
+gulp.task('release:patch', function(callback) { inc('patch', callback); });
+gulp.task('release:minor', function(callback) { inc('minor', callback); });
+gulp.task('release:major', function(callback) { inc('major', callback); });
+
+
+gulp.task('report:plato', function(){
+	var dest = './reports/plato';
+	gulp.src(['./main.js', './src/js/*.js']).pipe(plato(dest, {
+		jshint: {
+			options: config.jshint
+		},
+		complexity: {
+			trycatch: true
+		}
+	}));
+});
+
+gulp.task('build', function () {
+	obt.build(gulp, {
+		sourcemaps: true
+	});
+});
+
+gulp.task('reports', ['build', 'report:plato']);
+
+gulp.task('docs:otech', function () {
+	return gulp.src('./docs/*.md')
+		.pipe(data(function(file) {
+			console.log(file);
+			var m = matter(String(file.contents));
+			file.contents = new Buffer(m.content);
+			return m.data;
+		}))
+		.pipe(markdown())
+		.pipe(rename({ extname: '.html' }))
+		.pipe(ssg())
+		.pipe(wrap(
+			{ src: './docs/templates/basic.html' },
+			{ siteTitle: 'Example Website'},
+			{ engine: 'hogan' }
+		))
+		.pipe(gulp.dest('./docs/o-tech/'));
+});
 
 function printAscii() {
 	console.log("                                  __           ");

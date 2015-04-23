@@ -86,7 +86,7 @@ function Slot(container, screensize) {
 
 	// default configuration properties
 	this.server = 'gpt';
-	this.defer = false;
+	this.deffer = false;
 
 	// global slots configuration
 	this.targeting = slotConfig.targeting || {};
@@ -114,14 +114,11 @@ function Slot(container, screensize) {
 	}
 
 	this.initResponsive();
-
 	this.centerContainer();
 
 	if (this.lazyLoad){
 		this.deffer = true;
-		utils.once('inview', this.fire.bind(this, 'render'), this.container);
 	}
-	this.fire('ready');
 }
 
 /**
@@ -178,7 +175,7 @@ Slot.prototype.setName = function () {
 };
 
 /**
-* add the empty class to the slot signifying there was no ad to load into the slot
+* add the empty class to the slot
 */
 Slot.prototype.collapse = function(){
 	utils.addClass(this.container, 'empty');

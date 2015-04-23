@@ -208,12 +208,13 @@ module.exports.user = function () {
 };
 
 module.exports.page = function(){
+	var gpt = config('gpt') || {};
 	var result = {};
 	result.uuid = window.pageUUID ? window.pageUUID :
 								utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
 	result.auuid = window.articleUUID || undefined;
-	result.dfpSite = config('gpt').site;
-	result.dfpZone = config('gpt').zone;
+	result.dfpSite = gpt.site;
+	result.dfpZone = gpt.zone;
 	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
 	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
 	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}

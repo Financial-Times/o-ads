@@ -13,17 +13,31 @@ QUnit.test("Video Miniplayer Targeting with Krux, AYSC and eid set", function (a
 		kxuser: 'kxuser'
 	});
 
-	this.ads.init({ krux: {id: '112233'}, metadata: true, kruxLimit: 3});
+	this.ads.init({
+		metadata: true,
+		kruxLimit: 3,
+		gpt: {
+			network: '1234',
+			site: 'ftcom.5887.home',
+			zone: 'dev'
+		},
+		krux: {
+				id: '112233'
+		}
+	});
 	var result = this.ads.buildURLForVideo("uk", "video", {});
 	assert.strictEqual(result.additionalAdTargetingParams, expected, 'the url is what we expect');
 });
 
 QUnit.test("Video Miniplayer URL Stem", function (assert) {
-	var expect = 'http://ad.uk.doubleclick.net/N5887/pfadx/ftcom.5887.home/dev;sz=592x333,400x225;pos=video;XXXX;pt=ind';
+	var expect = 'http://ad.uk.doubleclick.net/N1234/pfadx/ftcom.5887.home/dev;sz=592x333,400x225;pos=video;XXXX;pt=ind';
 	this.ads.init({
-		'dfp_site': 'ftcom.5887.home',
-		'dfp_zone': 'dev',
-		'dfp_targeting': 'XXXX;pt=ind'
+		dfp_targeting: 'XXXX;pt=ind',
+		gpt: {
+			network: '1234',
+			site: 'ftcom.5887.home',
+			zone: 'dev'
+		}
 	});
 	var result = this.ads.buildURLForVideo("uk","video",{});
 	assert.strictEqual(result.urlStem, expect, 'the url is what we expect');

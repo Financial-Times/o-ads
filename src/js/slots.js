@@ -2,11 +2,9 @@
 var utils = require('./utils');
 var config = require('./config');
 var Slot = require('./slot');
-var oViewport = require('o-viewport');
+var elementvis = require('o-element-visibility');
 var screensize = null;
-var total = 0;
-var complete = 0;
-var deffered = 0;
+
 /**
 * The Slots class defines an slots instance.
 * the instance tracks all ad slots on the page
@@ -61,8 +59,8 @@ Slots.prototype.refresh = function (names) {
 
 	names.forEach(function(slots, name){
 		var slot = slots[name];
-		if(slot && utils.isFunction(slot.refresh)) {
-			slot.refresh();
+		if(slot) {
+			slot.fire('refresh');
 		} else {
 			utils.log.warn('Attempted to refresh non-existant slot %s', name);
 		}
@@ -76,7 +74,7 @@ Slots.prototype.initSlot = function (container) {
 	// if container is a string this is a legacy implementation using ids
 	// find the element and remove the ID in favour of a data attribute
 	if (utils.isString(container)){
-		container = document.getElementById(container) ||document.querySelector('[data-o-ads-name="'+ container +'"]');
+		container = document.getElementById(container) || document.querySelector('[data-o-ads-name="'+ container +'"]');
 		if (container && container.id) {
 			container.setAttribute('data-o-ads-name', container.id);
 			container.removeAttribute('id');
@@ -90,13 +88,17 @@ Slots.prototype.initSlot = function (container) {
 	}
 
 	var slot = new Slot(container, screensize);
-	if (slot){
+	if (slot && !this[slot.name]){
 		this[slot.name] = slot;
-		total++;
+		slot.fire('ready');
 		if (slot.deffer){
-			deffered++;
+			utils.once('inview', function (slot) {
+				if(slot){
+					slot.fire('render');
+				}
+			}.bind(null, slot), slot.container);
+			elementvis.track(slot.container);
 		}
-		oViewport.trackElements('[data-o-ads-name="' + slot.name + '"]');
 	}
 	return slot;
 };
@@ -113,14 +115,14 @@ Slots.prototype.initRefresh = function (){
 
 Slots.prototype.initInview = function() {
 	if(config('flags').inview){
-		document.documentElement.addEventListener('oViewport.inView', function (slots, event){
+		document.documentElement.addEventListener('oVisibility.inview', function (slots, event){
 			var element = event.detail.element;
-			var name = element.getAttribute('data-o-ads-name');
-			if (name) {
+			var name = element.node.getAttribute('data-o-ads-name');
+			if (slots[name]) {
 				var slot = slots[name];
 				slot.inview = event.detail.inViewPercentage;
 				if(slot.inview > 0){
-					slots[name].fire('inview');
+					slot.fire('inview', {percentage: slot.inview});
 				}
 			}
 		}.bind(null, this));
@@ -129,25 +131,10 @@ Slots.prototype.initInview = function() {
 
 Slots.prototype.initRendered = function(){
 	utils.on('rendered', function(slots, event){
-		complete++;
-
 		var slot = slots[event.detail.name];
 		if(slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
-			slot.fire('complete', event.detail, slot.container);
-		}
-
-		if (total === (complete + deffered)) {
-			utils.broadcast('all-complete', { slots: slots });
-		}
-	}.bind(null, this));
-
-
-	utils.on('rendered', function(slots, event){
-		var slot = slots[event.detail.name];
-		if(slot) {
-			utils.extend(slot[slot.server], event.detail[slot.server]);
-			slot.fire('complete', event.detail, slot.container);
+			slot.fire('complete', event.detail);
 		}
 	}.bind(null, this));
 };
@@ -171,10 +158,12 @@ function onBreakpointChange(slots, screensize) {
 				name: name,
 				slot: slot,
 				screensize: screensize
-			}, slot.container);
+			});
 		}
 	});
 }
+
+Slots.prototype.timers = {};
 
 Slots.prototype.init = function () {
 	this.initRefresh();
@@ -182,9 +171,5 @@ Slots.prototype.init = function () {
 	this.initRendered();
 	this.initResponsive();
 };
-
-Slots.prototype.screensize = null;
-
-Slots.prototype.timers = {};
 
 module.exports = new Slots();

@@ -30,6 +30,11 @@
          "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
+         "name": "Sticky",
+         "template": "demos/src/sticky.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
+      },
+      {
          "name": "Video-Advertising",
          "template": "demos/src/video.mustache",
          "data": {"network": 5887, "site" : "test.5887.origami"}

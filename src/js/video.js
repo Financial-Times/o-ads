@@ -13,6 +13,7 @@ var config = require('./config');
 var targeting = require('./targeting');
 
 function gptVideoURL(pos, vkv){
+	var gpt = config('gpt');
 	var URL, additionalAdTargetingParams, fullURL;
 	var buildCustomParams = function (vkv) {
 		var allTargeting = targeting.get();
@@ -38,8 +39,7 @@ function gptVideoURL(pos, vkv){
 	var encodeCustParams = function (vkv) {
 		return encodeURIComponent(buildCustomParams(vkv));
 	};
-
-	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/"+ config('dfp_site') + "/" + config('dfp_zone') + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
+	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/" + gpt.network + "/" + gpt.site + "/" + gpt.zone + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
 	additionalAdTargetingParams = encodeCustParams(vkv);
 	fullURL = (buildCustomParams(vkv) === "") ? URL : URL + '&' + buildCustomParams(vkv);
 
@@ -51,6 +51,7 @@ function gptVideoURL(pos, vkv){
 }
 
 function legacyVideoURL(mode, vkv){
+	var gpt = config('gpt');
 	var URL;
 	var keyOrderVideo = ['dcopt', 'pos'];
 	var keyOrderVideoExtra = ['dcopt', 'brand', 'section', 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh'];
@@ -81,7 +82,7 @@ function legacyVideoURL(mode, vkv){
 		}
 		return results.replace(/;$/, '');
 	};
-	URL = "http://ad.uk.doubleclick.net/N5887/pfadx/" + config('dfp_site') + "/" + config('dfp_zone') + ";sz=592x333,400x225;pos=video;";
+	URL = "http://ad.uk.doubleclick.net/N" + gpt.network + "/pfadx/" + gpt.site + "/" + gpt.zone + ";sz=592x333,400x225;pos=video;";
 	URL += encodeBaseAdvertProperties('video');
 	return  {
 		urlStem: URL,
@@ -91,13 +92,14 @@ function legacyVideoURL(mode, vkv){
 
 
 function buildURLForVideo(zone, pos, vidKV){
+	var gpt = config('gpt');
 	pos = pos || 'video';
 	vidKV = vidKV || {};
 
-	if (config('video')) {
+	if (gpt.video) {
 		return gptVideoURL(pos, vidKV);
 	}
-	if (!config('video')) {
+	if (!gpt.video) {
 		return legacyVideoURL('video', vidKV);
 	}
 }

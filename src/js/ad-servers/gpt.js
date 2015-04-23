@@ -115,7 +115,7 @@ function setPageTargeting(targeting) {
 * false is synonymous with never
 */
 function setPageCollapseEmpty(gptConfig) {
-	var mode = (config('collapseEmpty'));
+	var mode = gptConfig.collapseEmpty;
 
 	if (mode === 'before' || mode === true) {
 		googletag.pubads().collapseEmptyDivs(true, true);
@@ -217,8 +217,8 @@ function onRenderEnded(event) {
 	var gptSlotId = event.slot.getSlotId();
 	var domId = gptSlotId.getDomId().split('-');
 	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
-	data.name = domId[0];
-	data.type = domId[1];
+	data.type = domId.pop();
+	data.name = domId.join('-');
 
 	if (data.type === 'gpt') {
 		detail = data.gpt;
@@ -319,7 +319,7 @@ var slotMethods = {
 			unitName = '/' + network;
 			unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 			unitName += utils.isNonEmptyString(zone ) ? '/' + zone : '';
-			unitName += '/' + this.name;
+			// unitName += '/' + this.name;
 		}
 		this.gpt.unitName = unitName;
 		return this;
@@ -328,9 +328,10 @@ var slotMethods = {
 * Add the slot to the pub ads service and add a companion service if configured
 */
 	addServices: function (gptSlot) {
+		var gpt = config('gpt') || {};
 		gptSlot = gptSlot || this.gpt.slot;
 		gptSlot.addService(googletag.pubads());
-		if (config('gpt').companions && this.companion !== false) {
+		if (gpt.companions && this.companion !== false) {
 			gptSlot.addService(googletag.companionAds());
 		}
 		return this;

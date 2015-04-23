@@ -3,31 +3,85 @@
 "use strict";
 
 var googletag = {};
-
+var handler;
+var slotRenderEnded;
+var slots = {};
+var isArray = require('lodash/lang/isArray');
 var stubs = sinon.sandbox.create();
 
-googletag.getEventLog = stubs.stub();
 googletag.defineSizeMapping = stubs.stub();
-googletag.display = stubs.stub();
-googletag.enableServices = stubs.stub();
 googletag.companionAds = stubs.stub();
-googletag.content = stubs.stub();
-googletag.disablePublisherConsole = stubs.stub();
-googletag.sizeMapping = stubs.stub();
-googletag.getVersion = stubs.stub();
+googletag.enableServices = stubs.stub();
 
-function Slot(){
+function Slot(name, sizes, id){
+	this.name = name;
+	if(typeof sizes === 'string'){
+		// out of page slot
+		id = sizes;
+		this.sizes = [[1,1]];
+	} else {
+		this.sizes = sizes;
+	}
+	this.id = id;
 	this.addService = stubs.stub().returns(this);
 	this.setCollapseEmptyDiv = stubs.stub().returns(this);
 	this.renderEnded = stubs.stub().returns(this);
 	this.setTargeting = stubs.stub().returns(this);
 	this.defineSizeMapping = stubs.stub().returns(this);
 	this.set = stubs.stub().returns(this);
+	this.getSlotId = function(){ return {getDomId: this.getDomId, getId: this.getId};};
+	this.getId = function(){ return name + '/' + id; };
+	this.getDomId = function(){ return id; };
+	slots[id] = this;
 }
 
-googletag.defineUnit = stubs.stub().returns(new Slot());
-googletag.defineSlot = stubs.stub().returns(new Slot());
-googletag.defineOutOfPageSlot = stubs.stub().returns(new Slot());
+function slotRender(slot) {
+	slot = slots[slot];
+	var size;
+	if (isArray(slot.sizes)) {
+		size = slot.sizes[0];
+	} else {
+		var screens = Object.keys(slot.sizes);
+		size = slot.sizes[screens[0]][0];
+	}
+	var iframe = document.createElement('iframe');
+	iframe.width = size[0];
+	iframe.height = size[1];
+	iframe.id = 'google_ads_iframe_' + slot.getId();
+	iframe.src = 'javascript:\'<html><body style="background:transparent"><div style="width:100%; height: 100%; background: #333;"></div></body></html>\'';
+	document.getElementById(slot.id).appendChild(iframe);
+}
+
+function slotRenderEnded(slot){
+	slot = slots[slot];
+	var size = slot.sizes[0];
+	var event = {
+		isEmpty: false,
+		creativeId: 53576339449,
+		lineItemId: 236265289,
+		serviceName: "publisher_ads",
+		size: size,
+		slot: slot
+	};
+	handler(event);
+}
+googletag.defineSlot = function () {};
+googletag.defineOutOfPageSlot = function () {};
+
+stubs.stub(googletag, 'defineSlot', function (name, sizes, id){
+	return new Slot(name, sizes, id);
+});
+
+stubs.stub(googletag, 'defineOutOfPageSlot', function (name, id){
+	return new Slot(name, id);
+});
+
+
+googletag.display = function () {};
+stubs.stub(googletag, 'display', function (slot) {
+	slotRender(slot);
+	slotRenderEnded(slot);
+});
 
 googletag.sizeMapping = stubs.stub().returns({
 	addSize: stubs.stub(),
@@ -36,56 +90,28 @@ googletag.sizeMapping = stubs.stub().returns({
 
 
 var pubads = {
-	getName : stubs.stub(),
-	fillSlot : stubs.stub(),
-	setCookieOptions : stubs.stub(),
-	setTagForChildDirectedTreatment : stubs.stub(),
 	disableInitialLoad : stubs.stub(),
 	enableSingleRequest : stubs.stub(),
 	enableAsyncRendering : stubs.stub(),
-	setPublisherProvidedId : stubs.stub(),
 	refresh : stubs.stub(),
-	getCorrelator : stubs.stub(),
-	getVideoStreamCorrelator : stubs.stub(),
-	isAdRequestFinished : stubs.stub(),
-	isSlotAPersistentRoadblock : stubs.stub(),
 	collapseEmptyDivs : stubs.stub(),
 	clear : stubs.stub(),
-	clearNoRefreshState : stubs.stub(),
 	clearSlotTargeting : stubs.stub(),
-	setLocation : stubs.stub(),
 	definePassback : stubs.stub(),
 	enableSyncRendering : stubs.stub(),
 	enableVideoAds : stubs.stub(),
-	getVideoContent : stubs.stub(),
-	noFetch : stubs.stub(),
-	onGoogleAdsJsLoad : stubs.stub(),
 	setTargeting : stubs.stub(),
 	clearTargeting : stubs.stub(),
-	setCategoryExclusion : stubs.stub(),
-	clearCategoryExclusions : stubs.stub(),
-	setVideoContent : stubs.stub(),
-	videoRefresh : stubs.stub(),
-	setCentering : stubs.stub(),
-	clearTagForChildDirectedTreatment : stubs.stub(),
-	isEnabled : stubs.stub(),
-	enable : stubs.stub(),
-	getSlots : stubs.stub(),
-	getSlotIdMap : stubs.stub(),
-	getAttributeKeys : stubs.stub(),
-	addEventListener : stubs.stub(),
+	addEventListener : function() {},
 	updateCorrelator : stubs.stub()
 };
 
-var listener;
+stubs.stub(pubads, 'addEventListener', function (eventName, fn) {
+	if (eventName === 'slotRenderEnded'){
+		handler = fn;
+	}
+});
 
-pubads.addEventListener = function(method, func){
-	listener = func;
-};
-
-pubads.display = function(name){
-	listener({test: 89});
-};
 
 googletag.pubads = stubs.stub().returns(pubads);
 

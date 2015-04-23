@@ -12,9 +12,11 @@ QUnit.test('init - enabling rubicon attaches the RTP library', function (assert)
 QUnit.test('rubicon configured to make request but not add targeting', function (assert) {
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="rubicon-no-target"></div>');
 	this.ads.init({
-		network: 1234,
-		dfp_site: 'rubicon',
-		dfp_zone: 'rubicon',
+		gpt:{
+			network: 1234,
+			site: 'rubicon',
+			zone: 'rubicon'
+		},
 		slots: {
 			'rubicon-no-target': {
 				sizes: [[728,90]]
@@ -40,9 +42,11 @@ QUnit.test('rubicon configured to make request and add targeting', function (ass
 	var done = assert.async();
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="rubicon-target"></div>');
 	this.ads.init({
-		network: 1234,
-		dfp_site: 'rubicon',
-		dfp_zone: 'rubicon',
+		gpt: {
+			network: 1234,
+			site: 'rubicon',
+			zone: 'rubicon'
+		},
 		slots: {
 			'rubicon-target': {
 				sizes: [[728,90]]

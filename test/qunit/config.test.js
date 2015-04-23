@@ -84,9 +84,14 @@ QUnit.test('Config fetchMetaConfigJSON', function (assert) {
 
 QUnit.test('Config defaults', function (assert) {
 	this.ads.init();
+	var flags = {
+		refresh: true,
+		sticky: true,
+		inview: true
+	};
 	var result =  this.ads.config();
-	assert.ok(result.hasOwnProperty('network'), 'default properties have been added to config');
-	assert.equal(this.ads.config('network'), '5887', 'Config returns the correct value');
+	assert.ok(result.hasOwnProperty('flags'), 'default properties have been added to config');
+	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');
 });
 
 QUnit.test('Config fetchDeclaritive', function (assert) {

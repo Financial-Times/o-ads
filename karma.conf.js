@@ -41,6 +41,7 @@ var options = {
 	}
 };
 
+
 // add OS specific browsers
 if(/^win/.test(process.platform)){
 	options.browsers.push('IE');
@@ -51,7 +52,7 @@ if(/^win/.test(process.platform)){
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
 	// CI options go here
-	options.browsers.push('PhamtomJS');
+	options.browsers = ['PhamtomJS2'];
 	options.singleRun = true;
 	options.autoWatch = false;
 } else {
@@ -60,14 +61,29 @@ if (process.env.CI === 'true') {
 }
 
 if (process.env.COVERAGE) {
-	// options.preprocessors = {
-	// 	'**/src/**.js': 'coverage'
-	// };
+	console.log('running coverage report...');
+	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
+	options.reporters.push('coverage');
 
-	// options.coverageReporter = {
-	// 	type : ['html'],
-	// 	dir : 'reports/'
-	// };
+
+	options.coverageReporter = {
+		dir : 'reports/coverage/',
+		reporters: [
+			{
+				type: 'html',
+				subdir: function(browser) {
+					return browser.toLowerCase().split(/[ /-]/)[0];
+				},
+				watermarks: {
+					statements: [0, 85],
+					lines: [0, 85],
+					functions: [0, 85],
+					branches:[0, 85]
+				}
+			},
+			{ type: 'json', subdir: '.', file: 'summary.json' }
+		]
+	};
 }
 
 if (process.env.CI_NAME === 'codeship') {

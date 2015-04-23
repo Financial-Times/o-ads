@@ -44,6 +44,7 @@ function decorateModule() {
 			beforeEach: function () {
 				var mod;
 				this.ads = new Ads();
+				this.utils = utils;
 				// we also have to clone all submodules that are constructors
 				for(mod in Ads.prototype){
 					if (new RegExp(mod, 'i').test(Ads.prototype[mod].constructor.toString())) {
