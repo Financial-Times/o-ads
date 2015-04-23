@@ -30,7 +30,8 @@ function on(name, callback, target) {
 */
 function once(name, callback, target) {
 	var handler = function(event){
-		event.srcElement.removeEventListener('oAds.' + name, callback);
+    var targ = event.target || event.srcElement;
+		targ.removeEventListener('oAds.' + name, callback);
 		if (callback) {
 			callback(event);
 			// we set callback to null so if for some reason the listener isn't removed the callback will still only be called once
