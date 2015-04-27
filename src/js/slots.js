@@ -120,9 +120,11 @@ Slots.prototype.initInview = function() {
 			var name = element.node.getAttribute('data-o-ads-name');
 			if (slots[name]) {
 				var slot = slots[name];
-				slot.inview = event.detail.inViewPercentage;
-				if(slot.inview > 0){
-					slot.fire('inview', {percentage: slot.inview});
+
+				slot.inviewport = event.detail.inviewport;
+				slot.percentage = event.detail.percentage;
+				if(slot.inviewport){
+					slot.fire('inview', event.detail);
 				}
 			}
 		}.bind(null, this));
