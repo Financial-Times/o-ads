@@ -40,7 +40,7 @@ Rubicon.prototype.init = function () {
 		}.bind(this));
 
 		utils.on('ready', function (event){
-			this.queue.add(event.detail.name);
+			this.queue.add(event.detail.slot);
 		}.bind(this));
 	}
 };
