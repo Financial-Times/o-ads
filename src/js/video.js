@@ -19,7 +19,7 @@ function gptVideoURL(pos, vkv){
 		var allTargeting = targeting.get();
 		var results = '',
 		kruxSegs = allTargeting.ksg,
-		includeParams = [ 'playlistid', 'playerid', '07', 'ksg', 'a', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
+		includeParams = [ 'playlistid', 'playerid', '07', 'ksg', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01','rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging', 'kuid'];
 		var i;
 		for (i=0;i<includeParams.length;i++){
 			var key= includeParams[i];
@@ -39,7 +39,7 @@ function gptVideoURL(pos, vkv){
 	var encodeCustParams = function (vkv) {
 		return encodeURIComponent(buildCustomParams(vkv));
 	};
-	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/" + gpt.network + "/" + gpt.site + "/" + gpt.zone + "&sz=592x333&unviewed_position_start=1&scp=pos%3D" + pos;
+	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/" + gpt.network + "/" + gpt.site + "/" + gpt.zone + "&sz=592x333%2C400x225&unviewed_position_start=1&scp=pos%3D" + pos;
 	additionalAdTargetingParams = encodeCustParams(vkv);
 	fullURL = (buildCustomParams(vkv) === "") ? URL : URL + '&' + buildCustomParams(vkv);
 
