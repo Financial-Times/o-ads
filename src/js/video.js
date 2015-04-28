@@ -39,7 +39,7 @@ function gptVideoURL(pos, vkv){
 	var encodeCustParams = function (vkv) {
 		return encodeURIComponent(buildCustomParams(vkv));
 	};
-	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/" + gpt.network + "/" + gpt.site + "/" + gpt.zone + "&sz=592x333,400x225&unviewed_position_start=1&scp=pos%3D" + pos;
+	URL = "http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/" + gpt.network + "/" + gpt.site + "/" + gpt.zone + "&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3D" + pos;
 	additionalAdTargetingParams = encodeCustParams(vkv);
 	fullURL = (buildCustomParams(vkv) === "") ? URL : URL + '&' + buildCustomParams(vkv);
 
