@@ -54,7 +54,7 @@ var attributeParsers = {
 		utils.extend(targeting, value);
 		return targeting;
 	},
-	"default": function (value) {
+	base: function (value) {
 		if (value === '' || value === 'true'){
 			value = true;
 		} else if (value === 'false') {
@@ -137,7 +137,7 @@ Slot.prototype.parseAttributeConfig = function(){
 		} else if (/^sizes\w*/.test(name)) {
 			this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
 		} else if(this.hasOwnProperty(name)) {
-			this[name] = attributeParsers.default(value);
+			this[name] = attributeParsers.base(value);
 		}
 	}.bind(this));
 };
