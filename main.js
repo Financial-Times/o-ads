@@ -27,37 +27,37 @@ Ads.prototype.buildURLForVideo = require('./src/js/video');
 Ads.prototype.utils = require('./src/js/utils');
 
 Ads.prototype.init = function (config){
-    // use `this` as our internal namespace
-    // it's passed into each module so we can to maintain state in each module
-    this.config.init();
-    this.config(config);
-    this.slots.init();
-    this.gpt.init();
-    this.krux.init();
-    this.cb.init();
-    this.rubicon.init();
-    this.admantx.init();
-    return this;
+	// use `this` as our internal namespace
+	// it's passed into each module so we can to maintain state in each module
+	this.config.init();
+	this.config(config);
+	this.slots.init();
+	this.gpt.init();
+	this.krux.init();
+	this.cb.init();
+	this.rubicon.init();
+	this.admantx.init();
+	return this;
 };
 
 var ads = new Ads();
 var initAll = function() {
-    var metas = document.getElementsByTagName('meta');
-    for (i=0; i<metas.length; i++) {
-        if (metas[i].getAttribute("property") === "o-ads-declarative-init") {
-            return false;
-        }
-    }
-    ads.init();
-    var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
-    for (var i = 0; i < slots.length; i++) {
-        if (slots[i].dataset.oAdsName){
-            ads.slots.initSlot(slots[i].dataset.oAdsName);
-        }
-    }
-    document.removeEventListener('o.DOMContentLoaded', initAll);
+	var metas = document.getElementsByTagName('meta');
+	for (i=0; i<metas.length; i++) {
+		if (metas[i].getAttribute("property") === "o-ads-declarative-init") {
+			return false;
+		}
+	}
+	ads.init();
+	var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
+	for (var i = 0; i < slots.length; i++) {
+		if (slots[i].dataset.oAdsName){
+			ads.slots.initSlot(slots[i].dataset.oAdsName);
+		}
+	}
+	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
 };
 
-document.addEventListener('o.DOMContentLoaded', initAll);
+document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
 
 module.exports = ads;
