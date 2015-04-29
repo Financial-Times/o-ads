@@ -377,7 +377,7 @@ var slotMethods = {
 		gptSlot = gptSlot || this.gpt.slot;
 		if (utils.isPlainObject(this.targeting)) {
 			Object.keys(this.targeting).forEach(function(param){
-				this.gpt.slot.setTargeting(param, this.targeting[param]);
+				gptSlot.setTargeting(param, this.targeting[param]);
 			}.bind(this));
 		}
 		return this;
