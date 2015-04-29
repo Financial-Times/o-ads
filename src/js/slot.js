@@ -78,8 +78,8 @@ function Slot(container, screensize) {
 		this.screensize = screensize;
 	}
 	// init slot dom structure
-	this.outer = this.addContainer(container, { class: 'o-ads__outer' });
-	this.inner = this.addContainer(this.outer, { class: 'o-ads__inner'});
+	this.outer = this.addContainer(container, { 'class': 'o-ads__outer' });
+	this.inner = this.addContainer(this.outer, { 'class': 'o-ads__inner'});
 	// make sure the slot has a name
 	this.setName();
 	slotConfig = slotConfig[this.name] || {};
