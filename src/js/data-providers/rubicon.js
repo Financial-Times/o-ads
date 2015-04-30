@@ -37,6 +37,10 @@ Rubicon.prototype.init = function () {
 		api += this.config.id + '/' + this.config.site;
 		utils.attach(api, true, function () {
 			this.queue.process();
+		}.bind(this), function () {
+			this.queue.setProcessor(function(slot){
+				utils.log.error('%s rtp valuation call failed', slot.name);
+			}).process();
 		}.bind(this));
 
 		utils.on('ready', function (event){
