@@ -80,6 +80,9 @@ Rubicon.prototype.initValuation = function (slot) {
 */
 Rubicon.prototype.valuationCallbackFactory = function (slot, target, results) {
 	slot.container.setAttribute('data-o-ads-rtp', results.estimate.tier);
+	if (target) {
+		slot.targeting.rtp = results.estimate.tier;
+	}
 };
 
 module.exports = new Rubicon();

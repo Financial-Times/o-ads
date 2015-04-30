@@ -91,14 +91,9 @@ Slots.prototype.initSlot = function (container) {
 	if (slot && !this[slot.name]){
 		this[slot.name] = slot;
 		slot.fire('ready');
-		if (slot.deffer){
-			utils.once('inview', function (slot) {
-				if(slot){
-					slot.fire('render');
-				}
-			}.bind(null, slot), slot.container);
-			elementvis.track(slot.container);
-		}
+		elementvis.track(slot.container);
+	} else if (this[slot.name]) {
+		utils.log.error('slot %s is already defined!', slot.name);
 	}
 	return slot;
 };
@@ -121,9 +116,9 @@ Slots.prototype.initInview = function() {
 			if (slots[name]) {
 				var slot = slots[name];
 
-				slot.inviewport = event.detail.inviewport;
+				slot.inviewport = event.detail.inviewport || event.detail.visible;
 				slot.percentage = event.detail.percentage;
-				if(slot.inviewport){
+				if(slot.inviewport) {
 					slot.fire('inview', event.detail);
 				}
 			}
@@ -156,11 +151,7 @@ function onBreakpointChange(slots, screensize) {
 		var slot = slots[name];
 		if(slot) {
 			slot.screensize = screensize;
-			slot.fire('breakpoint', {
-				name: name,
-				slot: slot,
-				screensize: screensize
-			});
+			slot.fire('breakpoint', { screensize: screensize });
 		}
 	});
 }

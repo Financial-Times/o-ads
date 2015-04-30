@@ -166,7 +166,9 @@ module.exports.isNonEmptyString = function (str) {
 	return utils.isString(str) && !!str.length;
 };
 
-module.exports.isElement = require('lodash/lang/isElement');
+module.exports.isElement = function (element) {
+	return element && element.nodeType === 1 && element.tagName || false;
+};
 
 /**
  * Test if an object is a finite number
@@ -482,10 +484,14 @@ module.exports.getTimestamp = function () {
 	].join("");
 };
 
-module.exports.nodeListToArray = function(obj) {
+module.exports.arrayLikeToArray = function(obj) {
 	var array = [];
-	for (var i = 0; i < obj.length; i++) {
-		array[i] = obj[i];
+	try{
+		array = Array.prototype.slice.call(obj);
+	} catch(error){
+		for (var i = 0; i < obj.length; i++) {
+			array[i] = obj[i];
+		}
 	}
 	return array;
 };

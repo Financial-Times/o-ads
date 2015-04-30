@@ -51,8 +51,9 @@ var initAll = function() {
 	ads.init();
 	var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
 	for (var i = 0; i < slots.length; i++) {
-		if (slots[i].dataset.oAdsName){
-			ads.slots.initSlot(slots[i].dataset.oAdsName);
+		var name = slots[i].getAttribute('data-o-ads-name');
+		if (name){
+			ads.slots.initSlot(name);
 		}
 	}
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);

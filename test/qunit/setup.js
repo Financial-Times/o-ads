@@ -1,7 +1,7 @@
 /* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
 "use strict";
-QUnit.config.testTimeout = 2000;
+QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
 	value: 'OADS',
@@ -53,7 +53,11 @@ function decorateModule() {
 				}
 				addHelpers(this);
 				// stub out the attach method to prevent external files being loaded
-				this.attach = this.stub(utils, 'attach');
+				this.attach = this.stub(utils, 'attach', function (url, async, fn){
+					if(typeof fn === "function") {
+						fn();
+					}
+				});
 				// run beforeEach hook from module in test file
 				if (hooks.beforeEach && hooks.beforeEach.apply) {
 					hooks.beforeEach.apply(this, [].slice.call(arguments));
