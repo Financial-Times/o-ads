@@ -113,12 +113,10 @@ function Slot(container, screensize) {
 		return false;
 	}
 
-	this.initResponsive();
 	this.centerContainer();
 
-	if (this.lazyLoad){
-		this.deffer = true;
-	}
+	this.initResponsive();
+	this.initLazyLoad();
 }
 
 /**
@@ -143,7 +141,20 @@ Slot.prototype.parseAttributeConfig = function(){
 };
 
 /**
-*	If the slot doesn't have a name give it one
+*	Load a slot when it appears in the viewport
+*/
+Slot.prototype.initLazyLoad = function () {
+	if (this.lazyLoad){
+		utils.once('inview', function (slot) {
+			slot.fire('render');
+		}.bind(null, this), this.container);
+	}
+};
+
+
+/**
+*	Listen to responsive breakpoints and collapse slots
+* where the configured size is set to false
 */
 Slot.prototype.initResponsive = function () {
 	if (utils.isPlainObject(this.sizes)){
@@ -221,11 +232,9 @@ Slot.prototype.addContainer = function(node, attrs){
 	return node.lastChild;
 };
 
+
 /**
-* Add a data-attribute for chartbeat tracking to the div element which contains the slot
-* @name addChartBeatTracking
-* @memberof Slot
-* @lends Slot
+* Add a center class to the main container
 */
 Slot.prototype.centerContainer = function () {
 	if(this.center){
@@ -233,7 +242,4 @@ Slot.prototype.centerContainer = function () {
 	}
 };
 
-
-//TODO: Remove reference to FT.com newssub / searchbox ad position.
-// if (slotName === "searchbox") {slotName = "newssubs";}
 module.exports = Slot;
