@@ -125,7 +125,7 @@ function Slot(container, screensize) {
 * parse slot attribute config
 */
 Slot.prototype.parseAttributeConfig = function(){
-	[].slice.call(this.container.attributes).forEach(function (attribute) {
+	utils.arrayLikeToArray(this.container.attributes).forEach(function (attribute) {
 		var name = utils.parseAttributeName(attribute.name);
 		var value = attribute.value;
 		if(name === 'formats'){
