@@ -4,11 +4,13 @@
  *
  * @author Robin Marr, robin.marr@com
  */
+
 /**
  * ads.admantx provides admantx contextual data target information
  * @name targeting
  * @memberof ads
-*/
+ */
+
 'use strict';
 
 var utils = require('../utils');

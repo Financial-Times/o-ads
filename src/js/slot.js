@@ -145,12 +145,12 @@ Slot.prototype.parseAttributeConfig = function(){
 */
 Slot.prototype.initLazyLoad = function () {
 	if (this.lazyLoad){
+		this.deffer = true;
 		utils.once('inview', function (slot) {
 			slot.fire('render');
 		}.bind(null, this), this.container);
 	}
 };
-
 
 /**
 *	Listen to responsive breakpoints and collapse slots

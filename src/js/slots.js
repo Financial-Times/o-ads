@@ -14,38 +14,47 @@ var screensize = null;
 function Slots() {
 }
 
+/*
+* Either run a method or fire an event on the named slot.
+*/
+function run(action, name){
+	var slot = this[name];
+	if(slot){
+		if(utils.isFunction(slot[action])) {
+			slot[action]();
+		} else if(utils.isNonEmptyString(slot[action])) {
+			slot.fire(action);
+		}
+	} else {
+		utils.log.warn('Attempted to %s non-existant slot %s', action, name);
+	}
+}
+
 /**
 * Given a slot name or an array of slot names will collapse the slots using the collapse method on the slot
 */
 Slots.prototype.collapse = function (names) {
-	if (!utils.isArray(names)){
-		names = [names];
+	names = names || Object.keys(this);
+	if (utils.isNonEmptyString(names)){
+		run.call(this, 'uncollapse', names);
+	} else if (utils.isArray(names)){
+		names.forEach(run.bind(null, 'collapse'));
 	}
 
-	names.forEach(function(name){
-		if(this[name] && utils.isFunction(this[name].collapse)) {
-			this[name].collapse();
-		} else {
-			utils.log.warn('Attempted to collapse non-existant slot %s', name);
-		}
-	});
+	return this;
 };
 
 /**
 * Given a slot name or an array of slot names will uncollapse the slots using the uncollapse method on the slot
 */
 Slots.prototype.uncollapse = function (names) {
+	names = names || Object.keys(this);
 	if (!utils.isArray(names)){
-		names = [names];
+		run.call(this, 'uncollapse', names);
 	}
 
-	names.forEach(function(name){
-		if(this[name] && utils.isFunction(this[name].collapse)) {
-			this[name].collapse();
-		} else {
-			utils.log.warn('Attempted to uncollapse non-existant slot %s', name);
-		}
-	});
+	names.forEach(run.bind(this, 'uncollapse'));
+	return this;
 };
 
 /**
@@ -57,14 +66,8 @@ Slots.prototype.refresh = function (names) {
 		names = [names];
 	}
 
-	names.forEach(function(slots, name){
-		var slot = slots[name];
-		if(slot) {
-			slot.fire('refresh');
-		} else {
-			utils.log.warn('Attempted to refresh non-existant slot %s', name);
-		}
-	}.bind(null, this));
+	names.forEach(run.bind(this, 'refresh'));
+	return this;
 };
 
 /**
@@ -106,6 +109,7 @@ Slots.prototype.initRefresh = function (){
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
 		}
 	}
+	return this;
 };
 
 Slots.prototype.initInview = function() {
@@ -124,8 +128,13 @@ Slots.prototype.initInview = function() {
 			}
 		}.bind(null, this));
 	}
+	return this;
 };
 
+/*
+*	listens for the rendered event from a slot and fires the complete event,
+* after extending the slot with information from the server.
+*/
 Slots.prototype.initRendered = function(){
 	utils.on('rendered', function(slots, event){
 		var slot = slots[event.detail.name];
@@ -134,18 +143,23 @@ Slots.prototype.initRendered = function(){
 			slot.fire('complete', event.detail);
 		}
 	}.bind(null, this));
+	return this;
 };
 
 /*
-* if responsive configurations exist start listening for breakpoint changes
+* if responsive configuration exists listen for breakpoint changes
 */
 Slots.prototype.initResponsive = function() {
 	var breakpoints = config('responsive');
 	if (utils.isObject(breakpoints) ) {
 		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
 	}
+	return this;
 };
 
+/*
+* called when a responsive breakpoint is crossed though window resizing or orientation change.
+*/
 function onBreakpointChange(slots, screensize) {
 	Object.keys(slots).forEach(function(name){
 		var slot = slots[name];
@@ -156,8 +170,9 @@ function onBreakpointChange(slots, screensize) {
 	});
 }
 
-Slots.prototype.timers = {};
-
+/*
+* Initialise slots
+*/
 Slots.prototype.init = function () {
 	this.initRefresh();
 	this.initInview();
