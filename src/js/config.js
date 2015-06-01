@@ -21,24 +21,24 @@
  * @memberof FT.ads
  * @function
 */
-"use strict";
+'use strict';
 var utils = require('./utils');
 /**
 * Default configuration set in the constructor.
 */
 var defaults =  {
-	formats : {
-		'MediumRectangle':  {sizes :[300,250]},
-		'Rectangle':  {sizes :[180,50]},
-		'WideSkyscraper':  {sizes :[160,600]},
-		'Leaderboard'   :  {sizes :[728,90]},
-		'SuperLeaderboard': {sizes: [[970,90], [970,66]]},
-		'HalfPage'  : {sizes: [300,600]},
-		'Billboard' :  {sizes: [970,250]},
-		'Portrait'  :  {sizes: [300,1050]},
-		'Pushdown'  :  {sizes: [[970,90], [970,66]]},
-		'Sidekick'  :  {sizes: [[300,250], [300,600], [970,250]]},
-		'AdhesionBanner' : {sizes: [320,50]}
+	formats: {
+		MediumRectangle:  {sizes:[300, 250]},
+		Rectangle:  {sizes:[180, 50]},
+		WideSkyscraper:  {sizes:[160, 600]},
+		Leaderboard:  {sizes:[728, 90]},
+		SuperLeaderboard: {sizes: [[970, 90], [970, 66]]},
+		HalfPage: {sizes: [300, 600]},
+		Billboard:  {sizes: [970, 250]},
+		Portrait:  {sizes: [300, 1050]},
+		Pushdown:  {sizes: [[970, 90], [970, 66]]},
+		Sidekick:  {sizes: [[300, 250], [300, 600], [970, 250]]},
+		AdhesionBanner: {sizes: [320, 50]}
 	},
 	flags: {
 		refresh: true,
@@ -53,19 +53,20 @@ var defaults =  {
 * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
 */
 function fetchMetaConfig() {
-	var meta,
-		results = {},
-		metas = document.getElementsByTagName('meta');
-	for (var i= 0; i < metas.length; i++) {
+	var meta;
+	var results = {};
+	var metas = document.getElementsByTagName('meta');
+	for (var i = 0; i < metas.length; i++) {
 		meta = metas[i];
 		if (meta.name) {
-			if (meta.getAttribute("data-contenttype") === "json"){
-				results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : "UNSUPPORTED";
+			if (meta.getAttribute('data-contenttype') === 'json') {
+				results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : 'UNSUPPORTED';
 			} else {
 				results[meta.name] = meta.content;
 			}
 		}
 	}
+
 	return results;
 }
 
@@ -73,10 +74,11 @@ function fetchDeclaritiveConfig() {
 	var script;
 	var scripts = document.querySelectorAll('script[data-o-ads-config]');
 	var results = {};
-	for (var i= 0; i < scripts.length; i++){
-			script = scripts[i];
-			results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : "UNSUPPORTED";
+	for (var i = 0; i < scripts.length; i++) {
+		script = scripts[i];
+		results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
 	}
+
 	return results;
 }
 
@@ -86,11 +88,12 @@ function fetchDeclaritiveConfig() {
 * fetchCanonicalURL Grabs the canonical URL of the page.
 */
 function fetchCanonicalURL() {
-	var canonical,
-		canonicalTag = document.querySelector('link[rel="canonical"]');
-	if(canonicalTag) {
+	var canonical;
+	var canonicalTag = document.querySelector('link[rel="canonical"]');
+	if (canonicalTag) {
 		canonical = canonicalTag.href;
 	}
+
 	return { canonical: canonical };
 }
 
@@ -103,26 +106,26 @@ function Config() {
 	this.store = {};
 }
 
-Config.prototype.access = function (k, v) {
-		var result;
-		if (utils.isPlainObject(k)) {
-			utils.extend(this.store, k);
+Config.prototype.access = function(k, v) {
+	var result;
+	if (utils.isPlainObject(k)) {
+		utils.extend(this.store, k);
+		result = this.store;
+	} else if (typeof v === 'undefined') {
+		if (typeof k === 'undefined') {
 			result = this.store;
-		} else if (typeof v === "undefined") {
-			if (typeof k === "undefined"){
-				result = this.store;
-			} else {
-				result = this.store[k];
-			}
 		} else {
-			this.store[k] = v;
-			result = v;
+			result = this.store[k];
 		}
+	} else {
+		this.store[k] = v;
+		result = v;
+	}
 
-		return result;
+	return result;
 };
 
-Config.prototype.clear = function (key) {
+Config.prototype.clear = function(key) {
 	if (key) {
 		delete this.store[key];
 	} else {
@@ -130,7 +133,7 @@ Config.prototype.clear = function (key) {
 	}
 };
 
-Config.prototype.init = function () {
+Config.prototype.init = function() {
 	this.store = utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
 	return this.store;
 };

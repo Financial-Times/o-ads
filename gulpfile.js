@@ -1,27 +1,50 @@
 /* jshint node: true */
-
 'use strict';
 
 printAscii();
+var path = require('path');
 var gulp = require('gulp');
 var obt = require('origami-build-tools');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var plato = require('gulp-plato');
-var tag_version = require('gulp-tag-version');
+var tagVersion = require('gulp-tag-version');
 var ssg = require('gulp-ssg');
 var rename = require('gulp-rename');
 var data = require('gulp-data');
 var matter = require('gray-matter');
 var markdown = require('gulp-markdown');
 var wrap = require('gulp-wrap');
-
+var sequence = require('run-sequence');
+var clean = require('rimraf');
 
 var config = {
 	origami: require('./origami.json'),
 	bower: require('./bower.json'),
-	jshint: require('./node_modules/origami-build-tools/config/jshint.json')
+	docs: {
+		filters: {
+			js: filter('**/*.js'),
+			md: filter('**/*.md')
+		},
+		templates: {
+			main: path.join(__dirname, './docs/templates/o-tech.html'),
+			js: path.join(__dirname, './docs/templates/src.html')
+		}
+	},
+	reports: {
+		plato: {
+			dest: './build/reports/plato',
+			options: {
+				jshint: {
+					options: require('./node_modules/origami-build-tools/config/jshint.json')
+				},
+				complexity: {
+					trycatch: true
+				}
+			}
+		}
+	}
 };
 
 /**
@@ -38,88 +61,121 @@ var config = {
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc(importance, callback) {
+function inc(type, callback) {
+
 	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
-	git.checkout('master', function (err) {
+	git.checkout('master', function(err) {
 		if (err) throw err;
-		// get all the files to bump version in
+
 		gulp.src(['./package.json', './bower.json'])
-			// bump the version number in those files
-			.pipe(bump({type: importance}))
-			// save it back to filesystem
+			.pipe(bump({type: type}))
 			.pipe(gulp.dest('./'))
-			// commit the changed version number
 			.pipe(git.commit('bumps package version'))
-			// read only one file to get the version number
 			.pipe(filter('bower.json'))
-			// **tag it in the repository**
-			.pipe(tag_version({prefix:""}))
-			.on('end', function () {
-				git.push('origin', 'master', function (err) {
+			.pipe(tagVersion({prefix: ''}))
+			.on('end', function() {
+				git.push('origin', 'master', function(err) {
 					if (err) throw err;
-					git.push('origin', '--tag', function (err) {
+					git.push('origin', '--tag', function(err) {
 						if (err) throw err;
 						callback();
 					});
 				});
 			});
 	});
-
 }
 
 gulp.task('release:patch', function(callback) { inc('patch', callback); });
 gulp.task('release:minor', function(callback) { inc('minor', callback); });
 gulp.task('release:major', function(callback) { inc('major', callback); });
 
-
-gulp.task('report:plato', function(){
-	var dest = './reports/plato';
-	gulp.src(['./main.js', './src/js/*.js']).pipe(plato(dest, {
-		jshint: {
-			options: config.jshint
-		},
-		complexity: {
-			trycatch: true
-		}
-	}));
+gulp.task('report:plato', function() {
+	var conf = config.reports.plato;
+	gulp.src(['./main.js', './src/js/**/*.js'])
+		.pipe(plato(conf.dest, conf.options));
 });
 
-gulp.task('build', function () {
+gulp.task('build', function() {
 	obt.build(gulp, {
+		sourcemaps: true
+	});
+});
+
+gulp.task('report:qunit', function() {
+	obt.build(gulp, {
+		files: ['test/qunit/setup.js', 'test/qunit/*.test.js'],
 		sourcemaps: true
 	});
 });
 
 gulp.task('reports', ['build', 'report:plato']);
 
-gulp.task('docs:otech', function () {
-	return gulp.src('./docs/*.md')
+gulp.task('docs:build', function() {
+	var filters = config.docs.filters;
+	var templates = config.docs.templates;
+	return gulp.src(['./docs/**/*.md', './src/js/**/*.js'])
+		.pipe(filters.md)
+			.pipe(data(function(file) {
+				var m = matter(String(file.contents));
+				file.matter = matter.stringify('', m.data);
+				file.contents = new Buffer(m.content);
+				return m.data;
+			}))
+			.pipe(markdown())
+		.pipe(filters.md.restore())
+		.pipe(filters.js)
+			.pipe(data(function(file) {
+				var data = {
+					title: path.parse(file.path).name
+				};
+				file.matter = matter.stringify('', data);
+				return data;
+			}))
+			.pipe(wrap({ src: templates.js }, {}, { engine: 'hogan' }))
+			.pipe(rename(function(file) {
+				file.dirname = path.join('developer-guide/src/', file.dirname);
+			}))
+		.pipe(filters.js.restore())
+		.pipe(wrap('{{file.matter}}{{{contents}}}', {}, { engine: 'hogan' }))
+		.pipe(rename({ extname: '.html' }))
+		.pipe(gulp.dest('./build/site/base'));
+});
+
+gulp.task('docs:gh', function() {
+	var templates = config.docs.templates;
+
+	return gulp.src('./build/site/base/**/*.html')
 		.pipe(data(function(file) {
-			console.log(file);
 			var m = matter(String(file.contents));
 			file.contents = new Buffer(m.content);
 			return m.data;
 		}))
-		.pipe(markdown())
-		.pipe(rename({ extname: '.html' }))
 		.pipe(ssg())
 		.pipe(wrap(
-			{ src: './docs/templates/basic.html' },
-			{ siteTitle: 'Example Website'},
+			{ src: templates.main },
+			{ siteTitle: config.origami.description},
 			{ engine: 'hogan' }
 		))
-		.pipe(gulp.dest('./docs/o-tech/'));
+		.pipe(gulp.dest('./build/site/gh'));
+});
+
+gulp.task('clean:docs', function(cb) {
+	clean('build/site', cb);
+});
+
+gulp.task('docs', function() {
+	sequence('clean:docs', 'docs:build', 'docs:gh');
 });
 
 function printAscii() {
-	console.log("                                  __           ");
-	console.log("                                 /  |          ");
-	console.log("  ______           ______    ____$$ |  _______ ");
-	console.log(" /      \\  ______ /      \\  /    $$ | /       |");
-	console.log("/$$$$$$  |/      |$$$$$$  |/$$$$$$$ |/$$$$$$$/ ");
-	console.log("$$ |  $$ |$$$$$$/ /    $$ |$$ |  $$ |$$      \\ ");
-	console.log("$$ \\__$$ |       /$$$$$$$ |$$ \\__$$ | $$$$$$  |");
-	console.log("$$    $$/        $$    $$ |$$    $$ |/     $$/ ");
-	console.log("$$$$$$/          $$$$$$$/  $$$$$$$/ $$$$$$$/");
-	console.log("");
+	console.log('                                  __           ');
+	console.log('                                 /  |          ');
+	console.log('  ______           ______    ____$$ |  _______ ');
+	console.log(' /      \\  ______ /      \\  /    $$ | /       |');
+	console.log('/$$$$$$  |/      |$$$$$$  |/$$$$$$$ |/$$$$$$$/ ');
+	console.log('$$ |  $$ |$$$$$$/ /    $$ |$$ |  $$ |$$      \\ ');
+	console.log('$$ \\__$$ |       /$$$$$$$ |$$ \\__$$ | $$$$$$  |');
+	console.log('$$    $$/        $$    $$ |$$    $$ |/     $$/ ');
+	console.log('$$$$$$/          $$$$$$$/  $$$$$$$/ $$$$$$$/');
+	console.log('');
 }

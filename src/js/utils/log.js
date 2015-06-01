@@ -1,9 +1,24 @@
+/**
+ * Utility methods for logging.
+ * @author Origami Advertising, origami.advertising@ft.com
+ * @module utils/log
+ * @see utils
+ */
+
 /* jshint devel: true */
 'use strict';
 
-function log(){
+module.exports = log;
+
+/**
+ * Safe logger for the browser
+ * @exports utils/log
+ * @param {string} type Sets the type of log message log, warn, error or info, if not set to one of these values log will be used
+ * @param {any} args the arguments to be passed to console[type]
+ */
+function log() {
 	var type, args, argsIndex;
-	if('log warn error info'.indexOf(arguments[0]) === -1){
+	if ('log warn error info'.indexOf(arguments[0]) === -1) {
 		type = 'log';
 		argsIndex = 0;
 	} else {
@@ -13,44 +28,62 @@ function log(){
 
 	args = [].slice.call(arguments, argsIndex);
 
-	if(log.isOn(type)){
+	if (log.isOn(type)) {
 		window.console[type].apply(window.console, args);
 	}
 }
 
-log.isOn = function(type){
+/**
+ * Determine if debug logging is on and if the type if supported
+ * @param {string} type
+ */
+module.exports.isOn = function(type) {
 	return location.search.indexOf('DEBUG=OADS') !== -1 && window.console && window.console[type];
 };
 
-log.warn = function(){
+/**
+ * Log a warning message
+ */
+module.exports.warn = function() {
 	var args = ['warn'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
-log.error = function(){
+/**
+ * Log an error message
+ */
+module.exports.error = function() {
 	var args = ['error'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
-log.info = function(){
+/**
+ * Log an info message
+ */
+module.exports.info = function() {
 	var args = ['info'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
-log.start = function(group){
-	if(!window.console || !window.console.groupCollapsed){
+/**
+ * Start a collapsed group
+ * @param {string} group the name of the group, defaults to o-ads
+ */
+module.exports.start = function(group) {
+	if (!window.console || !window.console.groupCollapsed) {
 		return;
 	}
 
 	window.console.groupCollapsed(group || 'o-ads');
 };
 
-log.end = function(){
-	if(!window.console || !window.console.groupEnd){
+/**
+ * End a collapsed group
+ */
+module.exports.end = function() {
+	if (!window.console || !window.console.groupEnd) {
 		return;
 	}
 
 	window.console.groupEnd();
 };
-
-module.exports = log;

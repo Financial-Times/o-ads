@@ -1,31 +1,66 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
+'use strict';
 
-QUnit.module('Chartbeat');
-
-QUnit.test('create a basic slot with js configuration', function (assert) {
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb"></div>');
-
-
-	this.ads.init({'slots': { banlb: { sizes: [[2,2]]} }});
-	this.ads.slots.initSlot(this.fixturesContainer.lastChild);
-	var slot = this.ads.slots.banlb;
-	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'banlb', 'the chartbeat id attribute has been added to the slot');
+QUnit.module('Chartbeat', {
+	beforeEach: function() {
+		window.pSUPERFLY = {refreshAd: this.stub() };
+		this.node = this.fixturesContainer.add('<div data-o-ads-name="advert"></div>');
+		this.basic = {
+			slots: {
+				advert: { formats: ['Rectangle'] }
+			}
+		};
+	},
+	afterEach: function() {
+		delete window.pSUPERFLY;
+	}
 });
 
-// QUnit.test('the refreshAd method is called when refreshing the ad', function (assert) {
-// 	this.ads.init();
+QUnit.test('global configuration', function(assert) {
+	var config = this.basic;
+	config.chartbeat = true;
 
-// 	var decorateRefresh = this.spy(this.ads.cb, 'decorateRefresh');
-// 	var cbRefresh = this.spy(this.ads.cb, 'refresh');
-// 	var gptRefresh = this.spy(this.ads.gpt, 'refresh');
+	this.ads.init(config);
+	this.ads.slots.initSlot(this.node);
+	var slot = this.ads.slots.advert;
+	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
+});
 
-// 	window.pSUPERFLY = {refreshAd: this.stub};
-// 	this.ads.cb.init(this.ads);
-// 	assert.ok(decorateRefresh.called, 'initialising chartbeat decorates the gpt refresh method.');
+QUnit.test('slot configuration', function(assert) {
+	var config = this.basic;
+	config.slots.advert.chartbeat = true;
 
-// 	this.ads.gpt.refresh();
-// 	assert.ok(cbRefresh.called, 'whenever gpt refresh is called cb refresh is called too.');
-// 	assert.ok(gptRefresh.called, 'whenever gpt refresh is called cb refresh is called too.');
-// });
+	this.ads.init(config);
+	this.ads.slots.initSlot(this.node);
+	var slot = this.ads.slots.advert;
+	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
+});
+
+QUnit.test('override name', function(assert) {
+	var config = this.basic;
+	config.slots.advert.chartbeat = 'override';
+
+	this.ads.init(config);
+	this.ads.slots.initSlot(this.node);
+	var slot = this.ads.slots.advert;
+	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'override', 'the chartbeat id attribute has been added to the slot');
+});
+
+QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
+	var done = assert.async();
+	var config = this.basic;
+	config.slots.advert.chartbeat = true;
+
+	document.body.addEventListener('oAds.refresh', function(event) {
+		// assertions on next tick to make sure the refresh event has run
+		setTimeout(function() {
+			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');
+			done();
+		}, 0);
+	});
+
+	this.ads.init(config);
+	this.ads.slots.initSlot(this.node);
+	this.ads.slots.advert.fire('refresh');
+});

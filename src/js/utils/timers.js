@@ -16,7 +16,7 @@ function Timer(interval, fn, maxTicks, opts) {
 
 Timer.prototype.tick = function() {
 	var Timer = this;
-	return function () {
+	return function() {
 		Timer.ticks++;
 		Timer.fn.apply(Timer);
 		Timer.lastTick = now();
@@ -27,27 +27,29 @@ Timer.prototype.tick = function() {
 	};
 };
 
-Timer.prototype.start = function(){
+Timer.prototype.start = function() {
 	this.startTime = this.lastTick = now();
 	this.id = setInterval(this.tick(), this.interval);
 	return true;
 };
 
-Timer.prototype.resume = function(){
-	if (this.timeLeft){
+Timer.prototype.resume = function() {
+	if (this.timeLeft) {
 		this.id = setInterval(this.tick(), this.timeLeft);
 		delete this.timeLeft;
 		return true;
 	}
+
 	return false;
 };
 
-Timer.prototype.pause = function(){
-	if (this.id){
+Timer.prototype.pause = function() {
+	if (this.id) {
 		this.timeLeft = (this.interval) - (now() - this.lastTick);
 		this.kill();
 		return true;
 	}
+
 	return false;
 };
 
@@ -56,39 +58,42 @@ Timer.prototype.reset = function() {
 		this.startTime = now();
 		this.ticks = 1; // ticks are set to 1 because we're about to execute the first tick again
 		return true;
-	} else{
+	} else {
 		return false;
 	}
 };
 
-Timer.prototype.kill = function(){
+Timer.prototype.kill = function() {
 	if (this.id) {
 		clearInterval(this.id);
 		delete this.id;
 		return true;
 	}
+
 	return false;
 };
 
-Timer.prototype.stop = function(){
-	if (this.id || this.timeLeft){
+Timer.prototype.stop = function() {
+	if (this.id || this.timeLeft) {
 		this.ticks = 0;
 		this.kill();
 		delete this.timeLeft;
 		return true;
 	}
+
 	return false;
 };
 
 function Timers() {
-	if (!(this instanceof Timers)){
+	if (!(this instanceof Timers)) {
 		return new Timers();
 	}
+
 	var scope =  this;
 	this.timers = [];
 
 	function all(method) {
-		return function () {
+		return function() {
 			var j = scope.timers.length;
 
 			for (var i = 0; i < j; i++) {
@@ -97,15 +102,15 @@ function Timers() {
 		};
 	}
 
-	function hasExecutionPaused(fn){
-		return function () {
+	function hasExecutionPaused(fn) {
+		return function() {
 			var Timer = this,
-				reset = Timer.opts.reset || false,
-				time = now() - Timer.lastTick - Timer.interval,
-				threshhold = Timer.interval * 1.5;
+			reset = Timer.opts.reset || false,
+			time = now() - Timer.lastTick - Timer.interval,
+			threshhold = Timer.interval * 1.5;
 
-			if ( threshhold < time) {
-				if (reset ){
+			if (threshhold < time) {
+				if (reset) {
 					Timer.reset();
 				}
 			}
@@ -115,7 +120,7 @@ function Timers() {
 	}
 
 	function create(interval, fn, maxTicks, opts) {
-		if( (opts && opts.reset) ){
+		if ((opts && opts.reset)) {
 			fn = hasExecutionPaused(fn);
 		}
 

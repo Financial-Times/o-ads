@@ -21,6 +21,7 @@
 }
 
 .o-ads, [data-oads-name] {
+	animation-name: none;
 	//remove background from iframes.
 	iframe {
 		background: none transparent;

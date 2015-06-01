@@ -7,6 +7,7 @@
 
 /**
  * Represents an instance of the o-ads on the page.
+ * All sub modules are available from the prototype
  * @constructor
  */
 function Ads() {
@@ -26,7 +27,12 @@ Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
 Ads.prototype.utils = require('./src/js/utils');
 
-Ads.prototype.init = function (config){
+/**
+* Initialises the ads library and all sub modules
+* @param config {object} a JSON object containing configuration for the current page
+*/
+
+Ads.prototype.init = function(config) {
 	// use `this` as our internal namespace
 	// it's passed into each module so we can to maintain state in each module
 	this.config.init();
@@ -43,19 +49,21 @@ Ads.prototype.init = function (config){
 var ads = new Ads();
 var initAll = function() {
 	var metas = document.getElementsByTagName('meta');
-	for (i=0; i<metas.length; i++) {
+	for (i = 0; i < metas.length; i++) {
 		if (metas[i].getAttribute("property") === "o-ads-declarative-init") {
 			return false;
 		}
 	}
+
 	ads.init();
 	var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
 	for (var i = 0; i < slots.length; i++) {
 		var name = slots[i].getAttribute('data-o-ads-name');
-		if (name){
+		if (name) {
 			ads.slots.initSlot(name);
 		}
 	}
+
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
 };
 

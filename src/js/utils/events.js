@@ -1,10 +1,20 @@
+/**
+ * Utility methods for o-ads events. Methods defined here are added to the utils object not the utils.event object.
+ * @author Origami Advertising, origami.advertising@ft.com
+ * @module utils/events
+ * @see utils
+ */
 'use strict';
+
 /**
 * Broadscasts an o-ads event
-* @name broadcast
+* @param {string} name The name of the cookie to be read/written
+* @param {object} data The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {HTMLElement} target The element to attach the event listener to
 */
+module.exports.broadcast = broadcast;
 function broadcast(name, data, target) {
-	target = target || document.body ||document.documentElement;
+	target = target || document.body || document.documentElement;
 	name = 'oAds.' + name;
 	var opts = {
 		bubbles: true,
@@ -16,8 +26,12 @@ function broadcast(name, data, target) {
 
 /**
 * Sets an event listener for an oAds event
-* @name on
+* @param {string} name The name of the cookie to be read/written
+* @param {function} callback The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {HTMLElement} target The element to attach the event listener to
 */
+
+module.exports.on = on;
 function on(name, callback, target) {
 	name = 'oAds.' + name;
 	target = target || document.body || document.documentElement;
@@ -26,14 +40,18 @@ function on(name, callback, target) {
 
 /**
 * Sets a one time event listener for an oAds event
-* @name once
+* @param {string} name The name of the cookie to be read/written
+* @param {function} callback The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {HTMLElement} target The element to attach the event listener to
 */
+module.exports.once = once;
 function once(name, callback, target) {
-	var handler = function(event){
-    var targ = event.target || event.srcElement;
+	var handler = function(event) {
+		var targ = event.target || event.srcElement;
 		targ.removeEventListener('oAds.' + name, callback);
 		if (callback) {
 			callback(event);
+
 			// we set callback to null so if for some reason the listener isn't removed the callback will still only be called once
 			callback = null;
 		}
@@ -46,13 +64,10 @@ function once(name, callback, target) {
 * custom event fix for safari
 */
 function customEvent(name, opts) {
-	try{
-			return new CustomEvent(name, opts);
-	} catch(e){
-			return CustomEvent.initCustomEvent(name, opts.bubbles, opts.cancelable, opts.detail);
+	try {
+		return new CustomEvent(name, opts);
+	} catch (e) {
+		return CustomEvent.initCustomEvent(name, opts.bubbles, opts.cancelable, opts.detail);
 	}
 }
 
-module.exports.broadcast = broadcast;
-module.exports.on = on;
-module.exports.once = once;

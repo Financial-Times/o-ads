@@ -23,7 +23,7 @@ This module adds display advertising functionality to your product. Using this m
  standard demographic targeting functionality, behavioural tracking features, useful custom targeting attributes, it is also
  aligned to the standard FT Advertising Technology stack so co-ordination with Ad Operations should be a breeze.
 
-  Having a sales model is important! See this document for pre-requisite steps required for adding advertising to your product:
+Having a sales model is important! See this document for pre-requisite steps required for adding advertising to your product:
    https://docs.google.com/a/ft.com/document/d/1a9Dyi-4VzN_gzhYn6scVLgKICEP1AEPR7A7-shefklU/edit
 
 ## Browser support <div id="title2"></div>

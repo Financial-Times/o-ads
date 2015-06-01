@@ -109,6 +109,7 @@ function Slot(container, screensize) {
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
 	this.collapseEmpty = slotConfig.collapseEmpty;
+	this.chartbeat = config('chartbeat') || slotConfig.chartbeat;
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
@@ -156,7 +157,7 @@ Slot.prototype.parseAttributeConfig = function() {
 
 Slot.prototype.getAttributes = function() {
 	this.attributes = {};
-	utils.arrayLikeToArray(this.container.attributes).forEach(function (attribute){
+	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
 		this.attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
 	return this;

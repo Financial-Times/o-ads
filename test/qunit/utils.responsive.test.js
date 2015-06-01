@@ -4,7 +4,7 @@
 
 QUnit.module('utils.responsive');
 
-QUnit.test('resizing the browser window, simple config', function (assert) {
+QUnit.test('resizing the browser window, simple config', function(assert) {
 	var clock = this.date();
 	this.viewport(1, 1);
 
@@ -12,7 +12,7 @@ QUnit.test('resizing the browser window, simple config', function (assert) {
 	var	viewports = {
 		large: [300, 200],
 		medium: [200, 100],
-		small: [0,0]
+		small: [0, 0]
 	};
 
 	this.ads.utils.responsive(viewports, callback);
@@ -35,15 +35,14 @@ QUnit.test('resizing the browser window, simple config', function (assert) {
 	assert.ok(callback.calledWith('large'), 'the first arument to the callback is the expected viewport size (large)');
 });
 
-
-QUnit.test('resizing the browser window, overlapping viewport sizes', function (assert) {
+QUnit.test('resizing the browser window, overlapping viewport sizes', function(assert) {
 	var clock = this.date('now');
 	var callback = this.spy(),
 		viewports = {
 			large: [300, 200],
 			medium: [200, 100],
 			other: [100, 200],
-			small: [0,0]
+			small: [0, 0]
 		};
 
 	this.viewport(1, 1);

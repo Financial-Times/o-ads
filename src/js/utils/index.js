@@ -1,56 +1,10 @@
 /**
- * @fileOverview
  * Utility methods for the advertising library.
- *
- * @author Robin Marr, robin.marr@ft.com
+ * @author Origami Advertising, origami.advertising@ft.com
+ * @module utils
  */
 'use strict';
-
-/* jshint ignore:start */
-/* ignore polyfils when linting */
-//TODO Use polyfils service for these instead
-// add an ECMAScript5 compliant trim to String
-// https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/Trim
-if(!String.prototype.trim) {
-	String.prototype.trim = function () {
-		return this.replace(/^\s+|\s+$/g,'');
-	};
-}
-
-// add an ECMAScript5 compliant indexOf to Array
-// https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function (searchElement, fromIndex) {
-		if (this === null) {
-			throw new TypeError();
-		}
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if (len === 0) {
-			return -1;
-		}
-		var n = 0;
-		if (arguments.length > 1) {
-			n = Number(arguments[1]);
-			if (n != n) { // shortcut for verifying if it's NaN
-				n = 0;
-			} else if (n !== 0 && n != Infinity && n != -Infinity) {
-				n = (n > 0 || -1) * Math.floor(Math.abs(n));
-			}
-		}
-		if (n >= len) {
-			return -1;
-		}
-		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-		for (; k < len; k++) {
-			if (k in t && t[k] === searchElement) {
-				return k;
-			}
-		}
-		return -1;
-	};
-}
-/* jshint ignore:end */
+var hop = Object.prototype.hasOwnProperty;
 
 var utils = module.exports;
 /**
@@ -63,7 +17,7 @@ var utils = module.exports;
  */
 function is(object) {
 	var type = Object.prototype.toString.call(object)
-		.match(/^\[object\s(.*)\]$/)[1];
+	.match(/^\[object\s(.*)\]$/)[1];
 
 	if (object === null) {
 		return "Null";
@@ -81,14 +35,14 @@ function is(object) {
  * @returns a method that takes any javascript object and tests if it is of
  * the supplied className
  */
-function createIsTest(className){
-	return function (obj) {
+function createIsTest(className) {
+	return function(obj) {
 		return is(obj) === className;
 	};
 }
 
 /**
- * Curries some useful is{ClassName}method into the supplied Object
+ * Curries some useful is{ClassName} methods into the supplied Object
  * @private
  * @param {object} The object to add the methods too
  * @param {array} A list of types to create methods for defaults to "Array", "Object", "String", "Function"
@@ -96,14 +50,14 @@ function createIsTest(className){
  */
 function curryIsMethods(obj, classNames) {
 	classNames = classNames || [
-		"Array",
-		"Object",
-		"String",
-		"Function",
-		"Storage"
+	'Array',
+	'Object',
+	'String',
+	'Function',
+	'Storage'
 	];
 
-	while(!!classNames.length) {
+	while (!!classNames.length) {
 		var className = classNames.pop();
 		obj['is' + className] = createIsTest(className);
 	}
@@ -113,10 +67,10 @@ function curryIsMethods(obj, classNames) {
 
 /**
  * Test if an object is the global window object
- * @param {object} The object to be tested
- * @returns Boolean true if the object is the window obj false otherwise
+ * @param {object} obj The object to be tested
+ * @returns {boolean} true if the object is the window obj, otherwise false
  */
-module.exports.isWindow = function (obj) {
+module.exports.isWindow = function(obj) {
 	return obj && obj !== null && obj === window;
 };
 
@@ -124,11 +78,12 @@ module.exports.isWindow = function (obj) {
  * Test if an object inherits from any other objects, used in extend
  * to protect against deep copies running out of memory and constructors
  * losing there prototypes when cloned
- * @param {object} The object to be tested
- * @returns Boolean true if the object is plain false otherwise
+ * @param {object} obj The object to be tested
+ * @returns {boolean} true if the object is plain false otherwise
  */
-module.exports.isPlainObject = function (obj) {
-	var obj_hop = Object.prototype.hasOwnProperty;
+module.exports.isPlainObject = function(obj) {
+	var hop = Object.prototype.hasOwnProperty;
+
 	// Must be an Object.
 	// Because of IE, we also have to check the presence of the constructor property.
 	// Make sure that DOM nodes and window objects don't pass through, as well
@@ -138,12 +93,10 @@ module.exports.isPlainObject = function (obj) {
 
 	try {
 		// Not own constructor property must be Object
-		if ( obj.constructor &&
-			!obj_hop.call(obj, "constructor") &&
-			!obj_hop.call(obj.constructor.prototype, "isPrototypeOf") ) {
+		if (obj.constructor && !hop.call(obj, 'constructor') && !hop.call(obj.constructor.prototype, 'isPrototypeOf')) {
 			return false;
 		}
-	} catch ( e ) {
+	} catch (e) {
 		// IE8,9 Will throw exceptions on certain host objects
 		return false;
 	}
@@ -152,53 +105,57 @@ module.exports.isPlainObject = function (obj) {
 	// if last one is own, then all properties are own.
 
 	var key;
-	for ( key in obj ) {}
+	for (key in obj) {}
 
-	return key === undefined || obj_hop.call( obj, key );
+	return key === undefined || hop.call(obj, key);
 };
 
 /**
  * Test if an object is a string with a length
- * @param {object} The object to be tested
- * @returns Boolean true if the object is a string with a length greater than 0
+ * @param {object} str The object to be tested
+ * @returns {boolean} true if the object is a string with a length greater than 0
  */
-module.exports.isNonEmptyString = function (str) {
+module.exports.isNonEmptyString = function(str) {
 	return utils.isString(str) && !!str.length;
 };
 
-module.exports.isElement = function (element) {
+module.exports.isElement = function(element) {
 	return element && element.nodeType === 1 && element.tagName || false;
 };
 
 /**
  * Test if an object is a finite number
  * @param {object} The object to be tested
- * @returns Boolean true if the object is a finite number, can be a float or int but not NaN or Infinity
+ * @returns {boolean} true if the object is a finite number, can be a float or int but not NaN or Infinity
  */
-module.exports.isNumeric = function (num) {
+module.exports.isNumeric = function(num) {
 	return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
 /**
- * Used to merge or clone objects
- * @param If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
- * @param If deep copy is true will be the target object of the copy
- * @param All other params are objects to be merged into the target
- * @returns The target object extended with the other params
+ * Merge or clone objects
+ * @function
+ * @param {boolean/object} deep/target If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
+ * @param {object} target If deep copy is true will be the target object of the copy
+ * @param {object} objects All other params are objects to be merged into the target
+ * @returns {object} The target object extended with the other params
  */
+module.exports.extend = extend;
+
 function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
 	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0] || {},
-		i = 1,
-		length = arguments.length,
-		deep = false;
+	target = arguments[0] || {},
+	i = 1,
+	length = arguments.length,
+	deep = false;
 
 	// Handle a deep copy situation
-	if (typeof target === "boolean") {
+	if (typeof target === 'boolean') {
 		deep = target;
 		target = arguments[1] || {};
+
 		// skip the boolean and the target
 		i = 2;
 	}
@@ -213,8 +170,7 @@ function extend() {
 		return target;
 	}
 
-
-	for ( ; i < length; i++ ) {
+	for (; i < length; i++) {
 		// Only deal with non-null/undefined values
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
@@ -241,7 +197,7 @@ function extend() {
 					target[name] = extend(deep, clone, copy);
 
 					// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
+				} else if (copy !== undefined) {
 					target[name] = copy;
 				}
 			}
@@ -252,53 +208,46 @@ function extend() {
 	return target;
 }
 
-module.exports.hasClass = function(node, className){
-	if(node.nodeType === 1){
+module.exports.hasClass = function(node, className) {
+	if (node.nodeType === 1) {
 		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
 	}
+
 	return false;
 };
 
-module.exports.addClass = function(node, className){
-	if(node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)){
+module.exports.addClass = function(node, className) {
+	if (node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)) {
 		node.className += ' o-ads__' + className.trim();
 	}
+
 	return true;
 };
 
-module.exports.removeClass = function(node, className){
+module.exports.removeClass = function(node, className) {
 	var index, classes;
-	if(node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)){
+	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
 		classes = node.className.split(' ');
 		index = classes.indexOf('o-ads__' + className);
 		classes.splice(index, 1);
 		node.className = classes.join(' ');
 	}
+
 	return true;
 };
 
-
-//TODO: remove this
-module.exports.writeScript = function (url) {
-	// Stop document.write() from happening after page load (unless QUnit is present)
-	if (document.readyState !== "complete" || typeof QUnit === "object") {
-		/*jshint evil:true*/
-		document.write('<scr' + 'ipt src="' + url + '"></scr' + 'ipt>');
-	}
-};
-
-
 /**
  * Create an object hash from a delimited string
- * Beware all properties on the resulting object will have  string values.
- * @param {String}        str       The string to transform
- * @param {String/RegExp} delimiter The character that delimits each name/value pair
- * @param {String}        pairing   The character that separates the name from the value
+ * Beware all properties on the resulting object will have string values.
+ * @param {string}        str       The string to transform
+ * @param {string|regexp} delimiter The character that delimits each name/value pair
+ * @param {string}        pairing   The character that separates the name from the value
  * @return {object}
+ *
  */
-module.exports.hash = function (str, delimiter, pairing) {
+module.exports.hash = function(str, delimiter, pairing) {
 	var pair, value, idx, len,
-		hash = {};
+	hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
@@ -310,6 +259,7 @@ module.exports.hash = function (str, delimiter, pairing) {
 			}
 		}
 	}
+
 	return hash;
 };
 
@@ -317,43 +267,44 @@ module.exports.hash = function (str, delimiter, pairing) {
 * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
 * The async value of the script can be set by the seccond parameter, which is a boolean
 * Note, we should use protocol-relative URL paths to ensure we don't run into http/https issues
-* @name attach
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @param {string} scriptUrl The url to the script file to be added
+* @param {boolean} async Set the async attribute on the script tag
+* @param {function} callback A function to run when the script loads
+* @param {function} errorcb A function to run if the script fails to load
+* @returns {HTMLElement} the created script tag
 */
-module.exports.attach = function (scriptUrl, async, callback, errorcb) {
+module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 	var tag = document.createElement('script'),
-	obj_hop = Object.prototype.hasOwnProperty,
 	node = document.getElementsByTagName('script')[0],
 	hasRun = false;
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
-	if (async){
+	if (async) {
 		tag.async = 'true';
 	}
 
 	if (utils.isFunction(callback)) {
 
-		if(obj_hop.call(tag, 'onreadystatechange')) {
-			tag.onreadystatechange = function () {
+		if (hop.call(tag, 'onreadystatechange')) {
+			tag.onreadystatechange = function() {
 				if (tag.readyState === "loaded") {
-					if(!hasRun) {
+					if (!hasRun) {
 						callback();
 						hasRun = true;
 					}
 				}
 			};
 		} else {
-			tag.onload =  function () {
-				if(!hasRun) {
+			tag.onload =  function() {
+				if (!hasRun) {
 					callback();
 					hasRun = true;
 				}
 			};
 
 			if (utils.isFunction(errorcb)) {
-				tag.onerror = function () {
-					if(!hasRun) {
+				tag.onerror = function() {
+					if (!hasRun) {
 						errorcb();
 						hasRun = true;
 					}
@@ -367,15 +318,29 @@ module.exports.attach = function (scriptUrl, async, callback, errorcb) {
 	return tag;
 };
 
+/*
+* Test to see if a script file is already referenced from the dom
+* @param {string} url The URL to look for
+* @return {boolean} true if the file is already referenced else false
+*/
 module.exports.isScriptAlreadyLoaded = function(url) {
 	var scripts = document.getElementsByTagName('script');
 	for (var i = scripts.length; i--;) {
 		if (scripts[i].src === url) return true;
 	}
+
 	return false;
 };
 
-utils.createCORSRequest = function (url, method, callback, errorcb) {
+/*
+* Make a cross domain XHR request
+* @param {string} The url to request
+* @param {string} THe method of the request (GET, POST).
+* @param {function} callback A function to run when the request succeeds
+* @param {function} A function to run if the request fails
+* @returns {HTMLElement} the created XHR object
+*/
+module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 	var xhr = new XMLHttpRequest();
 	if ('withCredentials' in xhr) {
 		xhr.open(method, url, true);
@@ -388,7 +353,7 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
 		errorcb();
 	}
 
-	xhr.onload = function (xhrEvent){
+	xhr.onload = function(xhrEvent) {
 		callback.call(this, this.response || this.responseText, xhrEvent);
 	};
 
@@ -396,6 +361,7 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
 		xhr.onerror = errorcb;
 		xhr.ontimeout = errorcb;
 	}
+
 	xhr.send();
 	return xhr;
 };
@@ -403,54 +369,61 @@ utils.createCORSRequest = function (url, method, callback, errorcb) {
 /**
 * return the current documents referrer or an empty string if non exists
 * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
-* @name getReferrer
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @returns {string} document.referrer
 */
-module.exports.getReferrer = function () {
+module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
 
+/**
+* Capitalise a string
+* @param {string} string the string to capitalise
+* @returns {string}
+*/
+module.exports.capitalise = function(string) {
+	return string.replace(/(^[a-z])/, function(match, letter) {
+		return letter.toUpperCase();
+	});
+};
 
 /**
 * Remove hyphens from a string and upper case the following letter
-* @name dehyphenise
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @param {string} string the string to parse
+* @returns {string}
 */
-utils.dehyphenise = function (string){
-	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter){
+module.exports.dehyphenise = function(string) {
+	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
 	});
 };
 
 /**
 * Find uppercase characters in a string, lower case them and add a preceding hyphen
-* @name hyphenise
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @param {string} string the string to parse
+* @returns {string}
 */
-utils.hyphenise = function (string){
-	return string.replace(/([A-Z])/g, function(match, letter){
+module.exports.hyphenise = function(string) {
+	return string.replace(/([A-Z])/g, function(match, letter) {
 		return '-' + letter.toLowerCase();
 	});
 };
 
-utils.parseAttributeName = function(name){
-	return utils.dehyphenise(
-		name.replace(/(data-)?o-ads-/, '').replace(/(data-)?o-ads-/, '')
-	);
+/**
+* remove prefixes from o-ads data attributes and dehyphenise the name
+* @param {string|} name the name of the attribute to parse
+* @returns {string}
+*/
+module.exports.parseAttributeName = function(attribute) {
+	var name = utils.isString(attribute) ? attribute : attribute.name;
+	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
-
 
 /**
 * return the current documents url or an empty string if non exists
 * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
-* @name getReferrer
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @returns {string}
 */
-module.exports.getLocation = function () {
+module.exports.getLocation = function() {
 	return document.location.href || '';
 };
 
@@ -458,41 +431,43 @@ module.exports.getLocation = function () {
 * return the current documents search or an empty string if non exists
 * also strips the initial ? from the search string for easier parsing
 * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
-* @name getReferrer
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* @returns {string}
 */
-module.exports.getQueryString = function () {
+module.exports.getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
 
 /**
-* returns a timestamp of the current time in the format YYYYMMDDHHMMSS
-* @name getReferrer
-* @memberof FT._ads.utils
-* @lends FT._ads.utils
+* returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
+* @returns {string}
 */
-module.exports.getTimestamp = function () {
+module.exports.getTimestamp = function() {
 	var now = new Date();
 	return [
-		now.getFullYear(),
-		('0' + (now.getMonth() + 1)).slice(-2),
-		('0' + now.getDate()).slice(-2),
-		('0' + now.getHours()).slice(-2),
-		('0' + now.getMinutes()).slice(-2),
-		('0' + now.getSeconds()).slice(-2)
+	now.getFullYear(),
+	('0' + (now.getMonth() + 1)).slice(-2),
+	('0' + now.getDate()).slice(-2),
+	('0' + now.getHours()).slice(-2),
+	('0' + now.getMinutes()).slice(-2),
+	('0' + now.getSeconds()).slice(-2)
 	].join("");
 };
 
+/**
+* Converts an array like object e.g arguments into a full array
+* @param {object}  obj an Array like object to convert
+* @returns {array}
+*/
 module.exports.arrayLikeToArray = function(obj) {
 	var array = [];
-	try{
+	try {
 		array = Array.prototype.slice.call(obj);
-	} catch(error){
+	} catch (error) {
 		for (var i = 0; i < obj.length; i++) {
 			array[i] = obj[i];
 		}
 	}
+
 	return array;
 };
 
@@ -501,6 +476,5 @@ extend(module.exports, require('./events.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();
 module.exports.queue = require('./queue.js');
-module.exports.extend = extend;
 module.exports.log = require('./log');
 curryIsMethods(module.exports);

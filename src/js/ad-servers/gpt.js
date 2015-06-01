@@ -379,15 +379,15 @@ var slotMethods = {
 		gptSlot = gptSlot || this.gpt.slot;
 		var canonical = config('canonical');
 		if (canonical) {
-			gptSlot.set("page_url", canonical || utils.getLocation());
+			gptSlot.set('page_url', canonical || utils.getLocation());
 		}
 
 		return this;
 	},
 
 	/**
-	  * Adds key values from a given object to the slot targeting
-*/
+	* Adds key values from a given object to the slot targeting
+	*/
 	setTargeting: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
 		if (utils.isPlainObject(this.targeting)) {

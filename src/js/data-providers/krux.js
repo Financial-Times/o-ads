@@ -10,7 +10,7 @@
  * @memberof FT.ads
 
 */
-"use strict";
+'use strict';
 var utils = require('../utils');
 var config = require('../config');
 var delegate;
@@ -25,17 +25,17 @@ function Krux() {
 
 }
 
-Krux.prototype.init = function (impl) {
+Krux.prototype.init = function(impl) {
 	if (config('krux') && config('krux').id) {
 		if (!window.Krux) {
-			((window.Krux = function(){
-					window.Krux.q.push(arguments);
-				}).q = []
+			((window.Krux = function() {
+				window.Krux.q.push(arguments);
+			}).q = []
 			);
 		}
 
 		var m,
-		src= (m=location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
+		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
 		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + config('krux').id;
 
 		utils.attach(finalSrc, true);
@@ -51,9 +51,9 @@ Krux.prototype.init = function (impl) {
 * @memberof Krux
 * @lends Krux
 */
-Krux.prototype.retrieve = function (name) {
+Krux.prototype.retrieve = function(name) {
 	var value;
-	name ='kx'+ name;
+	name = 'kx' + name;
 
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
@@ -70,7 +70,7 @@ Krux.prototype.retrieve = function (name) {
 * @memberof Krux
 * @lends Krux
 */
-Krux.prototype.segments = function () {
+Krux.prototype.segments = function() {
 	return this.retrieve('segs');
 };
 
@@ -81,7 +81,7 @@ Krux.prototype.segments = function () {
 * @memberof Krux
 * @lends Krux
 */
-Krux.prototype.targeting = function (){
+Krux.prototype.targeting = function() {
 	var segs = this.segments();
 	if (segs) {
 		segs = segs.split(',');
@@ -91,13 +91,12 @@ Krux.prototype.targeting = function (){
 	}
 
 	return {
-		"kuid" : this.retrieve('user'),
-		"ksg" : segs,
+		"kuid": this.retrieve('user'),
+		"ksg": segs,
 		"khost": encodeURIComponent(location.hostname),
 		"bht": segs && segs.length > 0 ? 'true' : 'false'
 	};
 };
-
 
 /**
 * An object holding methods used by krux event pixels
@@ -106,35 +105,35 @@ Krux.prototype.targeting = function (){
 * @lends Krux
 */
 Krux.prototype.events = {
-	dwell_time: function (config) {
+	dwell_time: function(config) {
 		if (config) {
 			var fire = this.fire,
-				interval = config.interval || 5,
+			interval = config.interval || 5,
 			max = (config.total / interval) || 120,
 			uid = config.id;
-			utils.timers.create(interval, (function () {
-				return function () {
-					fire(uid, {dwell_time: ( this.interval * this.ticks ) / 1000 });
+			utils.timers.create(interval, (function() {
+				return function() {
+					fire(uid, {dwell_time: (this.interval * this.ticks) / 1000 });
 				};
 			}()), max, {reset: true});
 		}
 	},
-	delegated : function(config) {
+	delegated: function(config) {
 		if (window.addEventListener) {
 			if (config) {
 				var fire = this.fire;
-				var eventScope = function (kEvnt) {
-					return function(e, t){
+				var eventScope = function(kEvnt) {
+					return function(e, t) {
 						fire(config[kEvnt].id);
 					};
 				};
 
-				window.addEventListener('load', function(){
-						var delEvnt = new delegate(document.body);
-						for (var kEvnt in config){
-							if (config.hasOwnProperty(kEvnt)) {
-								delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
-							}
+				window.addEventListener('load', function() {
+					var delEvnt = new delegate(document.body);
+					for (var kEvnt in config) {
+						if (config.hasOwnProperty(kEvnt)) {
+							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
+						}
 					}
 				}, false);
 			}
@@ -142,21 +141,20 @@ Krux.prototype.events = {
 	}
 };
 
-Krux.prototype.events.fire = function (id, attrs) {
-	if(id) {
+Krux.prototype.events.fire = function(id, attrs) {
+	if (id) {
 		attrs = utils.isPlainObject(attrs) ? attrs : {};
 		return window.Krux('admEvent', id, attrs);
 	}
+
 	return false;
 };
-
-
 
 Krux.prototype.events.init = function() {
 	var event, configured = config('krux') && config('krux').events;
 	if (utils.isPlainObject(configured)) {
-		for(event in configured) {
-			if(utils.isFunction(this[event])) {
+		for (event in configured) {
+			if (utils.isFunction(this[event])) {
 				this[event](configured[event]);
 			} else if (utils.isFunction(configured[event].fn)) {
 				configured[event].fn(configured[event]);
@@ -164,6 +162,5 @@ Krux.prototype.events.init = function() {
 		}
 	}
 };
-
 
 module.exports = new Krux();

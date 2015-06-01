@@ -3,13 +3,13 @@
 "use strict";
 
 QUnit.module('Adamantx', {
-	beforeEach: function () {
+	beforeEach: function() {
 		this.server = this.server();
 		this.server.autoRespond = true;
 	}
 });
 
-QUnit.test('process categories', function (assert) {
+QUnit.test('process categories', function(assert) {
 	var given = [
 		{ "name": "US", "origin": "NORMAL", "score": 12, "type": "MAINLEMMAS" },
 		{ "name": "Boris Johnson", "origin": "NORMAL", "score": 10, "type": "PEOPLE" },
@@ -25,10 +25,10 @@ QUnit.test('process categories', function (assert) {
 	assert.deepEqual(this.ads.admantx.processCollection(given, 3), returns, 'Given a set from Adamantx and a numerical max argument returns the correct number of name nodes');
 });
 
-QUnit.test('admantx configured to make request and add targeting', function (assert) {
+QUnit.test('admantx configured to make request and add targeting', function(assert) {
 	var done = assert.async();
 	var given = JSON.stringify(require('../fixtures/admantx-response.json'));
-	this.server.respondWith("GET", {test: function (reqUrl) {
+	this.server.respondWith("GET", {test: function(reqUrl) {
 		return (new RegExp('usasync01.admantx.com/admantx/service')).test(reqUrl);
 	}}, [200, { "Content-Type": "application/json" }, given]);
 
@@ -43,7 +43,7 @@ QUnit.test('admantx configured to make request and add targeting', function (ass
 
 	var targeting = this.ads.targeting;
 	var admants = ["Professional Education", "appreciation_income", "car_lifestyle"];
-	setTimeout(function () {
+	setTimeout(function() {
 		var result = targeting.get();
 		assert.deepEqual(result.ad, admants, 'the admants are added as targeting');
 		done();

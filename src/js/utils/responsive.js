@@ -9,8 +9,8 @@ function getNearestBreakpoint() {
 	var dims = oViewport.getSize();
 	function findCurrentBreakpoint(breakpoint) {
 		var breakpointDims = breakpoints[breakpoint];
-		if( dims.width > breakpointDims[0] && dims.height > breakpointDims[1] ){
-			if(!winner || breakpointDims[0] > breakpoints[winner][0]) {
+		if (dims.width > breakpointDims[0] && dims.height > breakpointDims[1]) {
+			if (!winner || breakpointDims[0] > breakpoints[winner][0]) {
 				winner = breakpoint;
 			}
 		}
@@ -30,7 +30,7 @@ function fire() {
 	}
 }
 
-function setCurrent(name){
+function setCurrent(name) {
 	current = name;
 }
 
@@ -40,7 +40,7 @@ function getCurrent() {
 
 function init(brps, cb) {
 
-	if(!utils.isFunction(cb)) {
+	if (!utils.isFunction(cb)) {
 		// must have a call back function
 		return false;
 	}

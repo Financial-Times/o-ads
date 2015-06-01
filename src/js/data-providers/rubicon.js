@@ -9,7 +9,7 @@
  * @name targeting
  * @memberof ads
 */
-"use strict";
+'use strict';
 var utils = require('../utils');
 var config = require('../config');
 
@@ -29,26 +29,25 @@ function Rubicon() {
  * @memberof Rubicon
  * @lends Rubicon
 */
-Rubicon.prototype.init = function () {
+Rubicon.prototype.init = function() {
 	this.queue = utils.queue(this.initValuation.bind(this));
 	this.config = config('rubicon') || {};
 	if (this.config.id && this.config.site) {
 		var api = this.config.api || '//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=';
 		api += this.config.id + '/' + this.config.site;
-		utils.attach(api, true, function () {
+		utils.attach(api, true, function() {
 			this.queue.process();
-		}.bind(this), function () {
-			this.queue.setProcessor(function(slot){
+		}.bind(this), function() {
+			this.queue.setProcessor(function(slot) {
 				utils.log.error('%s rtp valuation call failed', slot.name);
 			}).process();
 		}.bind(this));
 
-		utils.on('ready', function (event){
+		utils.on('ready', function(event) {
 			this.queue.add(event.detail.slot);
 		}.bind(this));
 	}
 };
-
 
 /**
  * initialise rubicon valuation for a slot
@@ -56,7 +55,7 @@ Rubicon.prototype.init = function () {
  * @memberof Rubicon
  * @lends Rubicon
 */
-Rubicon.prototype.initValuation = function (slot) {
+Rubicon.prototype.initValuation = function(slot) {
 	var config = this.config || {};
 	var zone = (config.zones) ? config.zones[slot.name] : false;
 	var size = (config.formats) ? config.formats[slot.name] : false;
@@ -82,7 +81,7 @@ Rubicon.prototype.initValuation = function (slot) {
  * @memberof Rubicon
  * @lends Rubicon
 */
-Rubicon.prototype.valuationCallbackFactory = function (slot, target, results) {
+Rubicon.prototype.valuationCallbackFactory = function(slot, target, results) {
 	slot.container.setAttribute('data-o-ads-rtp', results.estimate.tier);
 	if (target) {
 		slot.targeting.rtp = results.estimate.tier;

@@ -1,17 +1,27 @@
 /* jshint globalstrict: true, browser: true */
-/* globals QUnit: false, $: false */
-"use strict";
 
-QUnit.module('Slots');
-QUnit.test('create a basic slot with js configuration', function (assert) {
+/* globals QUnit: false, $: false */
+'use strict';
+
+QUnit.module('Slots', {
+	beforeEach: function() {
+		window.scrollTo(0, (document.documentElement.scrollHeight !== undefined) ? document.documentElement.scrollHeight : document.body.offsetHeight);
+	},
+
+	afterEach: function() {
+		window.scrollTo(0, 0);
+	}
+});
+
+QUnit.test('create a basic slot with js configuration', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb"></div>');
 
 	var expected = {
 		outOfPage: true,
-		sizes: [[2,2]]
+		sizes: [[2, 2]]
 	};
 
-	this.ads.init({'slots': { banlb: expected }});
+	this.ads.init({slots: { banlb: expected }});
 	this.ads.slots.initSlot(node);
 	var result = this.ads.slots.banlb;
 	var container = result.container;
@@ -25,16 +35,16 @@ QUnit.test('create a basic slot with js configuration', function (assert) {
 	assert.ok(inner, 'the inner div is rendered');
 });
 
-QUnit.test('create a slot with sizes via sizes attribute', function (assert) {
+QUnit.test('create a slot with sizes via sizes attribute', function(assert) {
 	var expected = [[600, 300], [300, 600], [720, 30]];
 	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
-	this.ads.slots.initSlot(node );
+	this.ads.slots.initSlot(node);
 	var result = this.ads.slots.banlb2;
 	assert.deepEqual(result.sizes, expected, 'Multiple sizes are parsed and added correctly');
 });
 
-QUnit.test('create a slot with an invalid size among multiple sizes', function (assert) {
+QUnit.test('create a slot with an invalid size among multiple sizes', function(assert) {
 	var expected = [[600, 300], [100, 200], [720, 30]];
 	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb" data-o-ads-sizes="600x300,invalidxsize,100x200,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
@@ -43,9 +53,9 @@ QUnit.test('create a slot with an invalid size among multiple sizes', function (
 	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
 });
 
-QUnit.test('create a slot with responsive sizes via sizes attributes', function (assert) {
+QUnit.test('create a slot with responsive sizes via sizes attributes', function(assert) {
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
-	var expected = { "small":false, "medium":[[300, 400], [300, 600]], "large":[[300,600],[300, 1050]]};
+	var expected = { small:false, medium:[[300, 400], [300, 600]], large:[[300, 600], [300, 1050]]};
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	this.ads.slots.initSlot(node);
@@ -53,8 +63,8 @@ QUnit.test('create a slot with responsive sizes via sizes attributes', function 
 	assert.deepEqual(result.sizes, expected, 'sizes are parsed into slot config.');
 });
 
-QUnit.test('create a slot with sizes via format attribute', function (assert) {
-	var expected = [[300,250]];
+QUnit.test('create a slot with sizes via format attribute', function(assert) {
+	var expected = [[300, 250]];
 	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot(node);
@@ -62,9 +72,9 @@ QUnit.test('create a slot with sizes via format attribute', function (assert) {
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
-QUnit.test('create a slot with responsive sizes via formats attributes', function (assert) {
+QUnit.test('create a slot with responsive sizes via formats attributes', function(assert) {
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
-	var expected = { "small":false, "medium":[[300,250]], "large":[[728,90]]};
+	var expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	this.ads.slots.initSlot(node);
@@ -72,7 +82,7 @@ QUnit.test('create a slot with responsive sizes via formats attributes', functio
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
-QUnit.test('Center container', function (assert) {
+QUnit.test('Center container', function(assert) {
 	var slotHTML = '<div data-o-ads-name="center-test" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({slots: {
@@ -85,7 +95,7 @@ QUnit.test('Center container', function (assert) {
 	assert.ok($(result.container).hasClass('o-ads__center'), 'the centering class has been added');
 });
 
-QUnit.test('configure out of page slot', function (assert) {
+QUnit.test('configure out of page slot', function(assert) {
 	var slotHTML = '<div data-o-ads-name="out-of-page-test" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
@@ -102,8 +112,8 @@ QUnit.test('configure out of page slot', function (assert) {
 			'out-of-page-test': {
 				outOfPage: true
 			}
-	}});
-  result = this.ads.slots.initSlot(node);
+		}});
+	result = this.ads.slots.initSlot(node);
 	assert.ok(result.outOfPage, 'No attribute returns value from passed config');
 
 	this.ads.init({});
@@ -111,7 +121,7 @@ QUnit.test('configure out of page slot', function (assert) {
 	assert.ok(!result.outOfPage, 'No attribute and no config returns false');
 });
 
-QUnit.test('configure slot level targeting', function (assert) {
+QUnit.test('configure slot level targeting', function(assert) {
 	var targeting = 'some=test;targeting=params;';
 	var node = this.fixturesContainer.add('<div data-o-ads-targeting="' + targeting + '" data-o-ads-name="targeting-test" data-o-ads-formats="MediumRectangle"></div>');
 
@@ -126,16 +136,15 @@ QUnit.test('configure slot level targeting', function (assert) {
 	expected = { some: 'test', targeting: 'params'};
 
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
-
 });
 
-QUnit.test('configure refresh globally on a timer', function (assert) {
+QUnit.test('configure refresh globally on a timer', function(assert) {
 	var done = assert.async();
 	var clock = this.date();
-	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>';
+	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.refresh', function (event){
+	document.body.addEventListener('oAds.refresh', function(event) {
 		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
 		done();
 	});
@@ -145,17 +154,19 @@ QUnit.test('configure refresh globally on a timer', function (assert) {
 	clock.tick(1025);
 });
 
-QUnit.test('lazy loading', function (assert) {
+QUnit.test('lazy loading', function(assert) {
 	var done = assert.async();
 	var done2 = assert.async();
 	var slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
-	document.body.addEventListener('oAds.inview', function (event){
-		assert.equal(event.detail.name, 'lazy-test', 'our test slot is inview');
-		done();
+	document.body.addEventListener('oAds.inview', function(event) {
+		if (event.detail.name === 'lazy-test') {
+			assert.ok('our test slot is inview');
+			done();
+		}
 	});
 
-	document.body.addEventListener('oAds.render', function (event){
+	document.body.addEventListener('oAds.render', function(event) {
 		assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
 		done2();
 	});
@@ -164,7 +175,28 @@ QUnit.test('lazy loading', function (assert) {
 	this.ads.slots.initSlot(node);
 });
 
-QUnit.test('complete events fire', function (assert) {
+// QUnit.test('sticky', function(assert) {
+// 	var done = assert.async();
+// 	var done2 = assert.async();
+// 	var clock = this.date();
+// 	var slotHTML = '<div data-o-ads-name="sticky-test" data-o-ads-sticky-time="5" data-o-ads-formats="Leaderboard"></div>';
+// 	var node = this.fixturesContainer.add(slotHTML);
+// 	document.body.addEventListener('oAds.stick', function(event) {
+// 		assert.equal(event.detail.name, 'sticky-test', 'stick event fired when our test slot is inview');
+// 		done();
+// 	});
+//
+// 	document.body.addEventListener('oAds.unstick', function(event) {
+// 		assert.equal(event.detail.name, 'sticky-test', 'The unstick event is fired after 5 seconds');
+// 		done2();
+// 	});
+//
+// 	this.ads.init();
+// 	this.ads.slots.initSlot(node);
+// 	clock.tick(5000);
+// });
+
+QUnit.test('complete events fire', function(assert) {
 	var done = assert.async();
 	var done2 = assert.async();
 
@@ -174,9 +206,9 @@ QUnit.test('complete events fire', function (assert) {
 	slotHTML = '<div data-o-ads-name="second" data-o-ads-formats="MediumRectangle"></div>';
 	var second = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.complete', function (event){
+	document.body.addEventListener('oAds.complete', function(event) {
 		assert.ok(event.detail.name, event.detail.name + ' completed.');
-		if(event.detail.name === 'first') {
+		if (event.detail.name === 'first') {
 			done();
 		} else {
 			done2();

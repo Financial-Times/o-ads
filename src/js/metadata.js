@@ -1,12 +1,12 @@
 /* jshint forin: false */
 /* globals getUUIDFromString */
+
 //todo: jshint complains about the for in loop on line ~102 because it set the myState var before filtering for hasOwnProperty
 // I'm not sure what affect moving the myState var will have (it's used above too) so this need to be refactored at some point
 
-"use strict";
+'use strict';
 var config = require('./config');
 var utils = require('./utils');
-
 
 function getLoginInfo() {
 	var loggedIn = false,
@@ -37,18 +37,18 @@ function getAyscVars(obj) {
 		'reg': { '22': /^[PL]0[A-Za-z][A-Za-z]/, '97': /^[^c]$/ }
 	},
 	regex_key_names = ['22', '97'],
-	leading_zero_key_names = [ '19', '21' ],
+	leading_zero_key_names = ['19', '21'],
 	substr_key_names = ['24=0=3=cn'];
 
 	function fieldSubstr(SubStrKeyNames, obj) {
 		var i, value;
 
-		for(i=0; i < SubStrKeyNames.length; i++){
+		for (i = 0; i < SubStrKeyNames.length; i++) {
 			value = utils.isString(obj) ? obj.charAt(i) : obj[i];
 			if (value === false) {
 				continue;
 			}
-			else{
+			else {
 				var SubStrItems = SubStrKeyNames[i].split("="),
 				ayscField = SubStrItems[0],
 				val = obj[ayscField],
@@ -58,6 +58,7 @@ function getAyscVars(obj) {
 					obj[newField] = val.substring(SubStrItems[1], SubStrItems[2]);
 				}
 			}
+
 			return obj;
 		}
 	}
@@ -71,6 +72,7 @@ function getAyscVars(obj) {
 				obj[keyname] = val;
 			}
 		}
+
 		return obj;
 	}
 
@@ -81,6 +83,7 @@ function getAyscVars(obj) {
 				obj[KeysToStrip[idx]] = obj[KeysToStrip[idx]].replace(/^0+/, "");
 			}
 		}
+
 		return obj;
 	}
 
@@ -98,10 +101,10 @@ function getAyscVars(obj) {
 			}
 		}
 
-		for(prop in subsLevelReplaceLookup){
+		for (prop in subsLevelReplaceLookup) {
 			var myState = "initial";
 			if (subsLevelReplaceLookup.hasOwnProperty(prop)) {
-				for(var i=0;i<RegexKeyNames.length;i++){
+				for (var i = 0; i < RegexKeyNames.length; i++) {
 					innerReplace(RegexKeyNames[i], subsLevelReplaceLookup[prop]);
 				}
 
@@ -110,6 +113,7 @@ function getAyscVars(obj) {
 				}
 			}
 		}
+
 		return obj;
 	}
 
@@ -117,16 +121,17 @@ function getAyscVars(obj) {
 		//now we filter the AYSC values prior to adding them to the baseAdvert
 		//define fields where we need to strip leading zeros - should be in config
 		AllVars = stripLeadingZeros(leading_zero_key_names, AllVars);
+
 		//now assign new corporate codes based on certain regex of old code values
 		AllVars = fieldRegex(regex_key_names, AllVars);
+
 		//now take a substring of an input value - used for creating new continent codes - put in config?
 		AllVars = fieldSubstr(substr_key_names, AllVars);
+
 		//now add any erights value from the FT_U cookie
 		AllVars = detectERights(AllVars);
 		return AllVars;
 	}
-
-
 
 	var out = {},
 	item, q;
@@ -152,18 +157,18 @@ function getAyscVars(obj) {
 	return utils.extend({}, obj, x);
 }
 
-module.exports.getPageType = function () {
+module.exports.getPageType = function() {
 	var targeting = config('dfp_targeting') || {};
 	if (!utils.isPlainObject(targeting)) {
 		if (utils.isString(targeting)) {
 			targeting = utils.hash(targeting, ';', '=') || {};
 		}
 	}
+
 	return targeting.pt || 'unknown';
 };
 
-
-module.exports.user = function () {
+module.exports.user = function() {
 	var ayscProp, ayscVal,
 	asyc = getAyscVars({}),
 	result = {},
@@ -194,7 +199,7 @@ module.exports.user = function () {
 	};
 
 	for (ayscProp in ayscProps) {
-		if(ayscProps.hasOwnProperty(ayscProp)){
+		if (ayscProps.hasOwnProperty(ayscProp)) {
 			ayscVal = asyc[ayscProps[ayscProp]];
 			if (ayscVal && !(valueFilter.test(ayscVal))) {
 				result[ayscProp] = ayscVal;
@@ -207,18 +212,22 @@ module.exports.user = function () {
 	return result;
 };
 
-module.exports.page = function(){
+module.exports.page = function() {
 	var gpt = config('gpt') || {};
 	var result = {};
 	result.uuid = window.pageUUID ? window.pageUUID :
-								utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
+	utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
 	result.auuid = window.articleUUID || undefined;
 	result.dfpSite = gpt.site;
 	result.dfpZone = gpt.zone;
 	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
+
 	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
+
 	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
+
 	if (utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
+
 	return result;
 };
 

@@ -24,7 +24,7 @@ function run(slots, action, name) {
 	if (slot) {
 		if (utils.isFunction(slot[action])) {
 			slot[action]();
-		} else if (utils.isNonEmptyString(slot[action])) {
+		} else {
 			slot.fire(action);
 		}
 	} else {
@@ -118,13 +118,13 @@ Slots.prototype.initRefresh = function() {
 };
 
 Slots.prototype.initInview = function() {
-	if (config('flags').inview){
+	if (config('flags').inview) {
 		window.addEventListener('load', onLoad.bind(null, this));
 	}
 
-	function onLoad(slots){
+	function onLoad(slots) {
 		document.documentElement.addEventListener('oVisibility.inview', onInview.bind(null, slots));
-		slots.forEach(function (slot) {
+		slots.forEach(function(slot) {
 			slot.elementvis.updatePosition();
 			slot.elementvis.update(true);
 		});
@@ -186,14 +186,14 @@ function onBreakpointChange(slots, screensize) {
 	});
 }
 
-Slots.prototype.forEach = function(fn){
-		Object.keys(this).forEach(function(name) {
-			var slot = this[name];
-			if(!utils.isFunction(slot)){
-				fn.call(this, slot);
-			}
-		}.bind(this));
-		return this;
+Slots.prototype.forEach = function(fn) {
+	Object.keys(this).forEach(function(name) {
+		var slot = this[name];
+		if (slot instanceof Slot) {
+			fn.call(this, slot);
+		}
+	}.bind(this));
+	return this;
 };
 
 
@@ -206,5 +206,7 @@ Slots.prototype.init = function() {
 	this.initRendered();
 	this.initResponsive();
 };
+
+Slots.prototype.timers = {};
 
 module.exports = new Slots();

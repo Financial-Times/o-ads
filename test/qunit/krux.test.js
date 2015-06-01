@@ -3,21 +3,20 @@
 "use strict";
 
 QUnit.module('Krux', {
-	beforeEach: function () {
+	beforeEach: function() {
 		window.Krux = this.stub();
 	},
-	afterEach: function () {
+	afterEach: function() {
 		delete window.Krux;
 	}
 });
 
-
-QUnit.test( "control tag is attached when initialised", function (assert) {
+QUnit.test("control tag is attached when initialised", function(assert) {
 	this.ads.init({krux: {id: 'hello'}});
 	assert.ok(this.ads.utils.attach.withArgs('oxnso'), 'the krux control tag file is attached to the page');
 });
 
-QUnit.test('targeting data is generated correctly from localStorage', function (assert) {
+QUnit.test('targeting data is generated correctly from localStorage', function(assert) {
 	var kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
 	var localstorageMock = this.localStorage(kruxData);
 	if (localstorageMock) {
@@ -33,7 +32,7 @@ QUnit.test('targeting data is generated correctly from localStorage', function (
 	}
 });
 
-QUnit.test('targeting data is generated correctly from cookies', function (assert) {
+QUnit.test('targeting data is generated correctly from cookies', function(assert) {
 	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
 	this.ads.init({ krux: {id: '112233'}});
 
@@ -43,7 +42,7 @@ QUnit.test('targeting data is generated correctly from cookies', function (asser
 	assert.equal(result.bht, "true", "Behavioural flag is set, when cookies are used");
 });
 
-QUnit.test('number of Krux segments can be limited', function (assert) {
+QUnit.test('number of Krux segments can be limited', function(assert) {
 	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
 	this.ads.init({ krux: {id: '112233', limit: 2}});
 
@@ -51,8 +50,7 @@ QUnit.test('number of Krux segments can be limited', function (assert) {
 	assert.deepEqual(result.ksg, ["seg1", "seg2"], "returns 2 segments");
 });
 
-
-QUnit.test('event pixels', function (assert) {
+QUnit.test('event pixels', function(assert) {
 	this.ads.init({ krux: {id: '112233'}});
 	var eventId = 'crunch',
 		attrs = {snap: 'crackle'};
@@ -64,17 +62,17 @@ QUnit.test('event pixels', function (assert) {
 	assert.ok(window.Krux.calledWith('admEvent', eventId, attrs), 'firing an event with attributes works!');
 });
 
-QUnit.test('events on DOM elements ', function(assert){
-	if (document.addEventListener){
+QUnit.test('events on DOM elements ', function(assert) {
+	if (document.addEventListener) {
 		this.ads.init({
 			krux: {
 				id: '112233',
 				events: {
 					delegated: {
-						shareTwitter : {
-							selector : '#' + this.fixturesContainer.id,
+						shareTwitter: {
+							selector: '#' + this.fixturesContainer.id,
 							eType: 'click',
-							id : 'xyz'
+							id: 'xyz'
 						}
 					}
 				}
@@ -90,7 +88,7 @@ QUnit.test('events on DOM elements ', function(assert){
 	}
 });
 
-QUnit.test('event pixel - dwell time', function (assert) {
+QUnit.test('event pixel - dwell time', function(assert) {
 	var dwellTimeId = 'dwell-time';
 	var dwellTimeInterval = 10;
 	var dwellTimeTotal = 30;

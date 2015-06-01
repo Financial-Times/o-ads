@@ -4,7 +4,7 @@
 
 QUnit.module('utils.events');
 
-QUnit.test('We can broadcast an event to the body', function (assert) {
+QUnit.test('We can broadcast an event to the body', function(assert) {
 	var utils = require('../../src/js/utils');
 	var done = assert.async();
 
@@ -19,7 +19,7 @@ QUnit.test('We can broadcast an event to the body', function (assert) {
 	});
 });
 
-QUnit.test('We can broadcast an from an element', function (assert) {
+QUnit.test('We can broadcast an from an element', function(assert) {
 	var utils = require('../../src/js/utils');
 	var done = assert.async();
 
@@ -36,12 +36,13 @@ QUnit.test('We can broadcast an from an element', function (assert) {
 	}, element);
 });
 
-QUnit.test('We can broadcast from an element and it bubbles to the body', function (assert) {
+QUnit.test('We can broadcast from an element and it bubbles to the body', function(assert) {
 	var utils = require('../../src/js/utils');
 	var done = assert.async();
 
 	var element = document.createElement('div');
-	function testFunc(){}
+	function testFunc() {}
+
 	this.fixturesContainer.appendChild(element);
 	document.body.addEventListener('oAds.ahoy', function(ev) {
 		assert.strictEqual(ev.type, 'oAds.ahoy', 'the event type is set');
@@ -56,7 +57,7 @@ QUnit.test('We can broadcast from an element and it bubbles to the body', functi
 	}, element);
 });
 
-QUnit.test('We can listen to a one time event', function (assert) {
+QUnit.test('We can listen to a one time event', function(assert) {
 	var utils = require('../../src/js/utils');
 	var done = assert.async();
 	var listened = 0;
@@ -65,7 +66,7 @@ QUnit.test('We can listen to a one time event', function (assert) {
 		listened++;
 	});
 
-	setTimeout(function(){
+	setTimeout(function() {
 		assert.equal(listened, 1, 'We only reacted to the first event');
 		done();
 	}, 750);

@@ -1,10 +1,10 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
-"use strict";
+'use strict';
 
 QUnit.module('utils.createCORSRequest');
 
-QUnit.test('We can make a CORS request', function (assert) {
+QUnit.test('We can make a CORS request', function(assert) {
 
 	var server = this.server();
 	server.respondWith("GET", "/some/article/comments.json",

@@ -4,7 +4,7 @@
 
 QUnit.module('utils.timers');
 
-QUnit.test('Timer', function (assert) {
+QUnit.test('Timer', function(assert) {
 	var clock = this.date('now');
 	var method = this.spy();
 
@@ -19,7 +19,6 @@ QUnit.test('Timer', function (assert) {
 	assert.equal(timer.id, undefined, 'Pause: the timeout is canceled');
 	clock.tick(4000);
 	assert.ok(method.calledOnce, "Pause: when the timer is paused the method doesn't run");
-
 
 	timer.resume();
 	clock.tick(980);
@@ -51,7 +50,7 @@ QUnit.test('Timer', function (assert) {
 	assert.equal(timer.id, undefined, 'Stop: the timeout is canceled');
 });
 
-QUnit.test('Timers', function (assert) {
+QUnit.test('Timers', function(assert) {
 	var clock = this.date('now');
 
 	var method1 = this.spy();

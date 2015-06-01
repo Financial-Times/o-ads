@@ -32,7 +32,7 @@ function Admantx() {
  * @memberof Admantx
  * @lends Admantx
 */
-Admantx.prototype.init = function () {
+Admantx.prototype.init = function() {
 	this.config = config('admantx') || {};
 	if (this.config.id) {
 		this.collections = this.config.collections || {admants: true};
@@ -41,8 +41,7 @@ Admantx.prototype.init = function () {
 	}
 };
 
-
-Admantx.prototype.makeAPIRequest = function () {
+Admantx.prototype.makeAPIRequest = function() {
 	var requestData = {
 		"key": this.config.id,
 		"method":"descriptor",
@@ -60,13 +59,14 @@ Admantx.prototype.processCollection = function(collection, max) {
 	var names = [];
 	var i = 0;
 	var j = utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
-	for (;i < j; i++) {
+	for (; i < j; i++) {
 		names.push(collection[i].name || collection[i]);
 	}
+
 	return names;
 };
 
-Admantx.prototype.resolve = function (response) {
+Admantx.prototype.resolve = function(response){
 	var collection;
 	var collections = this.collections;
 	var shortName;
@@ -74,20 +74,21 @@ Admantx.prototype.resolve = function (response) {
 	if (utils.isString(response)) {
 		try {
 			response = JSON.parse(response);
-		} catch (e){
+		} catch (e) {
 			// if the response is not valid JSON;
 			response = false;
 		}
 	}
 
 	//parse required targetting data from the response
-	if(response) {
-		for(collection in collections) {
+	if (response) {
+		for (collection in collections) {
 			if (collections.hasOwnProperty(collection) && collections[collection] && response[collection]) {
 				shortName = collection.substr(0, 2);
 				targetingObj[shortName] = this.processCollection(response[collection], collections[collection]);
 			}
 		}
+
 		targeting.add(targetingObj);
 	}
 };

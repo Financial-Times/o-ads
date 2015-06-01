@@ -4,7 +4,7 @@
 
 QUnit.module('config');
 
-QUnit.test('Config get/set', function (assert) {
+QUnit.test('Config get/set', function(assert) {
 	this.ads.config.init();
 	this.ads.config.clear();
 	var result, obj,
@@ -36,7 +36,7 @@ QUnit.test('Config get/set', function (assert) {
 	assert.deepEqual(result, value2, 'get returns the new value.');
 });
 
-QUnit.test('Config get/set - mulitple', function (assert) {
+QUnit.test('Config get/set - mulitple', function(assert) {
 	this.ads.config.init(true);
 	this.ads.config.clear();
 	var obj = {
@@ -52,7 +52,7 @@ QUnit.test('Config get/set - mulitple', function (assert) {
 	assert.deepEqual(result, obj, 'get returns the new values.');
 });
 
-QUnit.test('Config fetchMetaConfig', function (assert) {
+QUnit.test('Config fetchMetaConfig', function(assert) {
 	this.meta({
 		metaconf1: 'I&#39;m so meta, even this acronym.'
 	});
@@ -63,7 +63,7 @@ QUnit.test('Config fetchMetaConfig', function (assert) {
 	assert.equal(this.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
 });
 
-QUnit.test('Config fetchMetaConfigJSON', function (assert) {
+QUnit.test('Config fetchMetaConfigJSON', function(assert) {
 	if (window.JSON) {
 		this.meta({
 			metaconfjson1: {
@@ -82,7 +82,7 @@ QUnit.test('Config fetchMetaConfigJSON', function (assert) {
 	}
 });
 
-QUnit.test('Config defaults', function (assert) {
+QUnit.test('Config defaults', function(assert) {
 	this.ads.init();
 	var flags = {
 		refresh: true,
@@ -94,15 +94,14 @@ QUnit.test('Config defaults', function (assert) {
 	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');
 });
 
-QUnit.test('Config fetchDeclaritive', function (assert) {
+QUnit.test('Config fetchDeclaritive', function(assert) {
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"dfpsite" : "site.site","dfpzone" : "zone.zone"}</script>');
 	this.ads.init();
 	var result = this.ads.config();
 	assert.ok(result.dfpzone, 'Config has been fetched from the inline declarative script');
 });
 
-
-QUnit.test('Config fetchDeclaritive, multiple script tags', function (assert) {
+QUnit.test('Config fetchDeclaritive, multiple script tags', function(assert) {
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"athing" : "thing", "anotherthing" : "another"}</script>');
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"more" : "evenmore"}</script>');
 	this.ads.init();

@@ -4,12 +4,12 @@
 
 QUnit.module('Rubicon');
 
-QUnit.test('init - enabling rubicon attaches the RTP library', function (assert) {
+QUnit.test('init - enabling rubicon attaches the RTP library', function(assert) {
 	this.ads.init({rubicon: {id: 10232, site: 26290}});
 	assert.ok(this.attach.calledWith('//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
 });
 
-QUnit.test('rubicon configured to make request but not add targeting', function (assert) {
+QUnit.test('rubicon configured to make request but not add targeting', function(assert) {
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="rubicon-no-target"></div>');
 	this.ads.init({
 		gpt:{
@@ -19,7 +19,7 @@ QUnit.test('rubicon configured to make request but not add targeting', function 
 		},
 		slots: {
 			'rubicon-no-target': {
-				sizes: [[728,90]]
+				sizes: [[728, 90]]
 			}
 		},
 		rubicon: {

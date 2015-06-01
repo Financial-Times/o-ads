@@ -4,14 +4,14 @@
 
 QUnit.module('utils.queue');
 
-QUnit.test('We can create a queue', function (assert) {
+QUnit.test('We can create a queue', function(assert) {
 	var queue = this.ads.utils.queue();
 	assert.ok(queue instanceof this.ads.utils.queue, 'it is a queue without new');
 	queue = new this.ads.utils.queue();
 	assert.ok(queue instanceof this.ads.utils.queue, 'it is a queue with new');
 });
 
-QUnit.test('We can add things to the queue', function (assert) {
+QUnit.test('We can add things to the queue', function(assert) {
 	var queue = this.ads.utils.queue();
 	assert.equal(queue.items, 0, 'the queue is empty');
 
@@ -20,8 +20,7 @@ QUnit.test('We can add things to the queue', function (assert) {
 	assert.equal(queue.items[0], 'hello', 'the item is what we added');
 });
 
-
-QUnit.test('We can set and override the processor', function (assert) {
+QUnit.test('We can set and override the processor', function(assert) {
 	var ourProcessor = this.spy();
 	var overrideProcessor = this.spy();
 	var queue = this.ads.utils.queue(ourProcessor);
@@ -31,7 +30,7 @@ QUnit.test('We can set and override the processor', function (assert) {
 	assert.equal(queue.processor, overrideProcessor, 'the processor is overriden');
 });
 
-QUnit.test('We can process the queue with our processor', function (assert) {
+QUnit.test('We can process the queue with our processor', function(assert) {
 	var ourProcessor = this.spy();
 	var queue = this.ads.utils.queue(ourProcessor);
 	queue.add('hello');
@@ -49,7 +48,7 @@ QUnit.test('We can process the queue with our processor', function (assert) {
 	assert.ok(ourProcessor.withArgs('welcome'), 'our processor is called with the second item');
 });
 
-QUnit.test('Items added after processing are automatically called', function (assert){
+QUnit.test('Items added after processing are automatically called', function(assert) {
 	var ourProcessor = this.spy();
 	var queue = this.ads.utils.queue(ourProcessor);
 	queue.process();
