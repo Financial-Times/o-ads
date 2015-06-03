@@ -38,14 +38,14 @@ module.exports.trigger = function(element, eventType, bubble, cancelable) {
 	element = element || document.body;
 	element = $.type(element) === 'string' ? document.querySelector(element) : element;
 	if (document.createEvent) {
-		event = document.createEvent("HTMLEvents");
+		event = document.createEvent('HTMLEvents');
 		event.initEvent(eventType, bubble || true, cancelable || true);
 		element.dispatchEvent(event);
 	} else {
 		event = document.createEventObject();
 		event.eventType = eventType;
 		event.cancelBubble = bubble ? false : true ;
-		element.fireEvent("on" + event.eventType, event);
+		element.fireEvent('on' + event.eventType, event);
 	}
 
 	return event;

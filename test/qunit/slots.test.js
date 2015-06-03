@@ -1,11 +1,10 @@
 /* jshint globalstrict: true, browser: true */
-
 /* globals QUnit: false, $: false */
 'use strict';
 
 QUnit.module('Slots', {
 	beforeEach: function() {
-		window.scrollTo(0, (document.documentElement.scrollHeight !== undefined) ? document.documentElement.scrollHeight : document.body.offsetHeight);
+		window.scrollTo(0, 0);
 	},
 
 	afterEach: function() {
@@ -172,29 +171,9 @@ QUnit.test('lazy loading', function(assert) {
 	});
 
 	this.ads.init();
+	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
 });
-
-// QUnit.test('sticky', function(assert) {
-// 	var done = assert.async();
-// 	var done2 = assert.async();
-// 	var clock = this.date();
-// 	var slotHTML = '<div data-o-ads-name="sticky-test" data-o-ads-sticky-time="5" data-o-ads-formats="Leaderboard"></div>';
-// 	var node = this.fixturesContainer.add(slotHTML);
-// 	document.body.addEventListener('oAds.stick', function(event) {
-// 		assert.equal(event.detail.name, 'sticky-test', 'stick event fired when our test slot is inview');
-// 		done();
-// 	});
-//
-// 	document.body.addEventListener('oAds.unstick', function(event) {
-// 		assert.equal(event.detail.name, 'sticky-test', 'The unstick event is fired after 5 seconds');
-// 		done2();
-// 	});
-//
-// 	this.ads.init();
-// 	this.ads.slots.initSlot(node);
-// 	clock.tick(5000);
-// });
 
 QUnit.test('complete events fire', function(assert) {
 	var done = assert.async();
