@@ -24,10 +24,10 @@ var config = require('../config');
 
 module.exports.init = function() {
 	var gpt = config('gpt') || {};
-	this.config = config('chartbeat') || {};
-	if (config.uid && config.domain) {
+	this.config = config('chartbeat');
+	if (this.config) {
 
-	//CONFIGURATION
+		//CONFIGURATION
 		var _sf_async_config = {
 			uid: this.config.uid,
 			domain: this.config.domain,
@@ -35,11 +35,12 @@ module.exports.init = function() {
 			zone:gpt.site + "/" + gpt.zone
 		};
 
-	// LOAD LIBRARY
-		window._sf_endpt=(new Date()).getTime();
-		utils.attach('//static.chartbeat.com/js/chartbeat_pub.js', true);
-
-	// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
+		if (config.loadJS) {
+			// LOAD LIBRARY
+			window._sf_endpt=(new Date()).getTime();
+			utils.attach('//static.chartbeat.com/js/chartbeat_pub.js', true);
+		}
+		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
 		utils.on('ready', function(event) {
 			var slot = event.detail.slot;
 			if (slot.chartbeat) {
