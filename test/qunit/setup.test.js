@@ -109,4 +109,3 @@ QUnit.test('Cookies restored', function(assert) {
 	assert.strictEqual($.cookie('monkey'), 'see', 'Real cookie value is returned');
 	$.removeCookie('monkey');
 });
-

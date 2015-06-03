@@ -1,5 +1,5 @@
 /* jshint globalstrict: true, browser: true */
-/* globals QUnit: false, $: false */
+/* globals QUnit: false: false */
 "use strict";
 
 QUnit.module('Main');

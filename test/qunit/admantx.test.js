@@ -49,4 +49,3 @@ QUnit.test('admantx configured to make request and add targeting', function(asse
 		done();
 	}, 20);
 });
-

@@ -16,7 +16,6 @@ document.querySelector('title').innerHTML = 'o-ads unit tests';
 // Show the qunit ui only when viewing the karma debug page
 if (window.top === window) {
 	document.body.insertAdjacentHTML('afterbegin', '<div id="qunit"></div>');
-	var qunitDiv = document.querySelector('#qunit');
 }
 
 // div for attaching HTML fixtures, will be emptied after each test
