@@ -24,7 +24,7 @@ var config = require('../config');
 
 module.exports.init = function() {
 	var gpt = config('gpt') || {};
-	this.config = config('rubicon') || {};
+	this.config = config('chartbeat') || {};
 	if (config.uid && config.domain) {
 
 	//CONFIGURATION
