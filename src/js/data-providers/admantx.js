@@ -32,6 +32,7 @@ function Admantx() {
  * @memberof Admantx
  * @lends Admantx
 */
+
 Admantx.prototype.init = function() {
 	this.config = config('admantx') || {};
 	if (this.config.id) {

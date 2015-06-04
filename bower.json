@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": [
     "main.scss",
     "main.js"
@@ -8,8 +8,8 @@
   "ignore": [],
   "dependencies": {
     "dom-delegate": "https://github.com/ftlabs/ftdomdelegate.git#^2.0.3",
-    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#element-tracking",
-    "o-element-visibility": "https://github.com/Financial-Times/o-element-visibility.git#master"
+    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#^1.4.0",
+    "o-element-visibility": "https://github.com/Financial-Times/o-element-visibility.git#^1.0.0"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
