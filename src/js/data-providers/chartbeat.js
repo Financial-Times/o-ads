@@ -32,7 +32,8 @@ module.exports.init = function() {
 			uid: this.config.uid,
 			domain: this.config.domain,
 			useCanonical: true,
-			zone:gpt.site + "/" + gpt.zone
+			zone:gpt.site + "/" + gpt.zone,
+			sections : config.pageType
 		};
 
 		if (config.loadJS) {
