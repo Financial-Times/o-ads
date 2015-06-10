@@ -1,6 +1,6 @@
 # o-ads - Display Advertising <div id="title1"></div>
 
-This module enables display advertising from [Googles DFP Ad server(http://www.google.com/dfp), enables custom behavioural (via [Krux(http://www.krux.com/)), demographics and semantic (via [Admantx(http://admantx.com/)) targeting and audited ad tracking with [Chartbeat(https://chartbeat.com/).
+This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Chartbeat](https://chartbeat.com/).
 
 ## Browser support <div id="title2"></div>
 |  Browsers  | Primary Experience | Core Experience |
