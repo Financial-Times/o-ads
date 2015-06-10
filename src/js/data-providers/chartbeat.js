@@ -24,7 +24,9 @@ var config = require('../config');
 
 module.exports.init = function() {
 	var gpt = config('gpt') || {};
+	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
+
 	if (this.config) {
 
 		//CONFIGURATION
@@ -36,10 +38,10 @@ module.exports.init = function() {
 			sections: config.pageType
 		};
 
-		if (utils.scriptExists('//static.chartbeat.com/js/chartbeat_pub.js')) {
+		if (this.config.loadsJS && !utils.scriptExists(src)) {
 			// LOAD LIBRARY
-			window._sf_endpt=(new Date()).getTime();
-			utils.attach('//static.chartbeat.com/js/chartbeat_pub.js', true);
+			window._sf_endpt = (new Date()).getTime();
+			utils.attach(src, true);
 		}
 		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
 		utils.on('ready', function(event) {
