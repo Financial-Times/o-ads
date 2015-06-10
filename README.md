@@ -1,26 +1,5 @@
 # o-ads - Display Advertising <div id="title1"></div>
 
-##Contents
-
-* <a href="#title1">Introduction</a>
-* <a href="#title2">Browser Support</a>
-* <a href="#title3">Product Specific Configuration</a>
-    * <a href="#title4"> Configuration Object</a>
-    * <a href="#title5"> By Metatags</a>
-    * <a href="#title6"> Targeting Key/Values</a>
-    * <a href="#title7"> Collapsing Options</a>
-* <a href="#title8">Advanced Features</a>
-    * <a href="#title9"> Responsive Slots</a>
-    * <a href="#title9"> Krux (Behavioural Targeting)</a>
-    * <a href="#title10"> Video</a>
-* <a href="#title11">Creative Types and IAB guidelines</a>
-* <a href="#title12">Email</a>
-* <a href="#title13">Useful Links</a>
-
-# o-ads
-
-[![Build Status(https://travis-ci.org/Financial-Times/o-ads.svg?branch=master)(https://travis-ci.org/Financial-Times/o-ads)
-
 This module enables display advertising from [Googles DFP Ad server(http://www.google.com/dfp), enables custom behavioural (via [Krux(http://www.krux.com/)), demographics and semantic (via [Admantx(http://admantx.com/)) targeting and audited ad tracking with [Chartbeat(https://chartbeat.com/).
 
 ## Browser support <div id="title2"></div>
