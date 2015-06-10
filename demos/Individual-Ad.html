@@ -3,39 +3,28 @@
 <!--[if IE 8]>         <html class="o-useragent-ie8 o-hoverable-on"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="o-hoverable-on"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8" />
-    <title>o-ads: Individual-Ad demo</title>
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <script src="//polyfill.webservices.ft.com/v1/polyfill.min.js"></script>
-    <style>body { margin: 0; }.demo-js .o--if-nojs { display: none; }</style>
-    
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<title>o-ads: Individual-Ad demo</title>
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<script src="//polyfill.webservices.ft.com/v1/polyfill.min.js?features=default"></script>
+	<style>body { margin: 0; } .demo-js .o--if-nojs { display: none; }</style>
+	<script>(function(d) { d.className = d.className + ' demo-js'; })(document.documentElement);</script>
+	<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
 </head>
-<body class="o-hoverable-on">
-    <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
-    <span class="o-registry-demo-chunk">
+<body class="">
+<script data-o-ads-config type="application/json">
+	{
+		"gpt": {
+			"network": 5887,
+			"site": "test.5887.origami"
+		}
+	}
+</script>
 
-<!-- include the o-ads origami module - can use require instead -->
-<script src="/bundles/js?modules=o-ads"></script>
-<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
+<div data-o-ads-name="leaderboard" data-o-ads-formats="SuperLeaderboard"></div>
 
-<div id="leaderboard" class="advertising " ></div>
-
-    <script>
-    // initialise the configuration for o-ads with a leaderboard
-    var ads = Origami["o-ads"].init({
-        dfp_site: 'test.5887.origami',
-        formats: {
-            leaderboard: {
-                sizes: [[970,90]]
-            }
-        }
-    });
-
-    ads.slots.initSlot('leaderboard');
-    </script>
-
-</span>
-    
-    <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
+<script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
+<script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

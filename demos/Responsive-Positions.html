@@ -3,73 +3,40 @@
 <!--[if IE 8]>         <html class="o-useragent-ie8 o-hoverable-on"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="o-hoverable-on"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8" />
-    <title>o-ads: Responsive-Positions demo</title>
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <script src="//polyfill.webservices.ft.com/v1/polyfill.min.js"></script>
-    <style>body { margin: 0; }.demo-js .o--if-nojs { display: none; }</style>
-    
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<title>o-ads: Responsive-Positions demo</title>
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<script src="//polyfill.webservices.ft.com/v1/polyfill.min.js?features=default"></script>
+	<style>body { margin: 0; } .demo-js .o--if-nojs { display: none; }</style>
+	<script>(function(d) { d.className = d.className + ' demo-js'; })(document.documentElement);</script>
+	<link rel="stylesheet" href="/bundles/css?modules=o-ads:/demos/src/demo.scss" />
 </head>
-<body class="o-hoverable-on">
-    <script>(function(d) {var b = d.getElementsByTagName('body')[0];b.className = b.className + ' demo-js';})(document);</script>
-    <h2><a href="javascript:window.open(window.location.href, '_blank');">This responsive demo does not function within iframe on demo pane, click here to open in new window</a></h2>
+<body class="">
+<script data-o-ads-config type="application/json">
+{
+	"gpt": {
+		"network": 5887,
+		"site": "test.5887.origami"
+	},
+	"responsive": {
+		"large": [400, 0],
+		"small": [0, 0]
+	},
+	"slots": {
+		"responsive-1": {
+			"sizes": {
+				"large": [[728, 90]],
+				"small": false
+			}
+		}
+	}
+}
+</script>
+<div data-o-ads-name="responsive-1"></div>
+<div data-o-ads-name="responsive-2" data-o-ads-formats-large="HalfPage"  data-o-ads-formats-small="MediumRectangle"></div>
 
-<span class="o-registry-demo-chunk">
-
-<!-- include the o-ads origami module - can use require instead -->
-<script src="/bundles/js?modules=o-ads"></script>
-<!-- must include the css as this enables much of the functionality around showing and hiding ads on various screensizes -->
-<link rel="stylesheet" href="/bundles/css?modules=o-ads"/>
-
-    <!-- ######## AD PLACEMENTS ###########-->
-    <div id="responsiveBlock">
-        <div id="resposiveSlots">
-            On a wide screen format two ads will show. On the thin (e.g. phone) aspect only one will show.
-            <div id="responsivePos1" class="advertising " ></div>
-            <div id="responsivePos2" class="advertising " ></div>
-        </div>
-        <div id="responsiveAdvert">
-            This ad will reflow depending on screen size. <br />
-            Note: This is a specially produced format and as such volume sales may be difficult.
-            <div id="responsiveAd" class="advertising " ></div>
-        </div>
-    </div
-
-    <!-- ######## AD CONFIGURATION ###########-->
-    <script>
-    // initialise the configuration for o-ads with a leaderboard
-    var ads = Origami["o-ads"].init({
-        dfp_site: 'test.5887.origami',
-        responsive: {
-            large: [400, 0],
-            small: [0, 0]
-        },
-        formats: {
-            responsivePos1: {
-                sizes: {
-                    large: [[300, 600]],
-                    small: [[300, 600]]
-                }
-            },
-            responsivePos2: {
-                sizes: {
-                 large: [[728,90]],
-                 small: false
-                }
-            },
-            responsiveAd: {
-                sizes: [[2,2]]
-            }
-        }
-    });
-
-    ads.slots.initSlot('responsivePos1');
-    ads.slots.initSlot('responsivePos2');
-    ads.slots.initSlot('responsiveAd');
-    </script>
-
-</span>
-    
-    <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
+<script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
+<script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
 </body>
 </html>

@@ -5,6 +5,10 @@ demos/local/
 .editorconfig
 test-results.xml
 
+# Local config files #
+######################
+karma.local.js
+
 # Dependency Files #
 ####################
 node_modules/

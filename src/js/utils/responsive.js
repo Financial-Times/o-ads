@@ -1,73 +1,62 @@
-var callback, viewPorts, current,
-    timer = false,
-    utils = require('./index.js');
+'use strict';
 
-function getViewportDims() {
-    var e = window, a = 'inner';
-    if (!('innerWidth' in window)) {
-        a = 'client';
-        e = document.documentElement || document.body;
-    }
-    return {w : e[a + 'Width'], h: e[a + 'Height']};
-}
-
+var callback, breakpoints, current;
+var utils = require('./index.js');
+var oViewport =  require('o-viewport');
 
 function getNearestBreakpoint() {
-    var viewPort, viewPortDims, current, winner,
-        dims = getViewportDims();
+	var winner;
+	var dims = oViewport.getSize();
+	function findCurrentBreakpoint(breakpoint) {
+		var breakpointDims = breakpoints[breakpoint];
+		if (dims.width > breakpointDims[0] && dims.height > breakpointDims[1]) {
+			if (!winner || breakpointDims[0] > breakpoints[winner][0]) {
+				winner = breakpoint;
+			}
+		}
+	}
 
-    for (viewPort in viewPorts){
-        viewPortDims = viewPorts[viewPort];
-        if( dims.w > viewPortDims[0] && dims.h > viewPortDims[1] ){
-            if(!winner || viewPortDims[0] > viewPorts[winner][0]) {
-                winner = viewPort;
-            }
-        }
-    }
+	Object.keys(breakpoints).forEach(findCurrentBreakpoint);
 
-   return winner;
+	return winner;
 }
 
 function fire() {
-    var winner = getNearestBreakpoint();
+	var winner = getNearestBreakpoint();
 
-    if (current !== winner) {
-        setCurrent(winner);
-        callback(winner);
-    }
+	if (current !== winner) {
+		setCurrent(winner);
+		callback(winner);
+	}
 }
 
-function setCurrent(name){
-    current = name;
+function setCurrent(name) {
+	current = name;
 }
 
-function onResize() {
-    if (timer) { clearTimeout(timer); }
-    timer = setTimeout(fire, 200);
+function getCurrent() {
+	return current;
 }
 
-function init(vps, cb) {
+function init(brps, cb) {
 
-    if(!utils.isFunction(cb)) {
-        // must have a call back function
-        return false;
-    }
+	if (!utils.isFunction(cb)) {
+		// must have a call back function
+		return false;
+	}
 
-    viewPorts = vps;
-    callback = cb;
+	breakpoints = brps;
+	callback = cb;
 
-    setCurrent(getNearestBreakpoint());
+	setCurrent(getNearestBreakpoint());
+	document.body.addEventListener('oViewport.orientation', fire);
+	document.body.addEventListener('oViewport.resize', fire);
+	oViewport.listenTo('orientation');
+	oViewport.listenTo('resize');
 
-    if (window.addEventListener) {
-        window.addEventListener("resize", onResize, false);
-    }
-    else if (document.body.attachEvent) {
-        document.body.attachEvent("onresize", onResize);
-    }
-
-    return function() {
-        return current;
-    };
+	return getCurrent();
 }
 
 module.exports = init;
+module.exports.getCurrent = getCurrent;
+module.exports.setThrottleInterval = oViewport.setThrottleInterval;

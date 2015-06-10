@@ -9,18 +9,8 @@
 * @name targeting
 * @memberof FT.ads
 */
-"use strict";
-var ads;
-var proto = Chartbeat.prototype;
-/**
-* The ChartBeat class defines an FT.ads.chartbeat instance
-* @class
-* @constructor
-*/
-function Chartbeat() {
-
-}
-
+'use strict';
+var utils = require('../utils');
 
 /**
 * initialise chartbeat functionality
@@ -29,44 +19,18 @@ function Chartbeat() {
 * @memberof ChartBeat
 * @lends ChartBeat
 */
-proto.init = function (impl) {
-    ads = impl;
-    this.decorateRefresh();
+module.exports.init = function() {
+	utils.on('ready', function(event) {
+		var slot = event.detail.slot;
+		if (slot.chartbeat) {
+			var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
+			slot.container.setAttribute('data-cb-ad-id', name);
+		}
+	});
+
+	utils.on('refresh', function(event) {
+		if (window.pSUPERFLY) {
+			window.pSUPERFLY.refreshAd(event.detail.name);
+		}
+	});
 };
-
-proto.decorateRefresh = function () {
-    if (ads.utils.isFunction(ads.gpt.refresh)) {
-        var _refresh = ads.gpt.refresh;
-            ads.gpt.refresh =  this.refresh(_refresh);
-        return true;
-    }
-};
-
-
-/**
-* Alerts chartbeat that a refresh is about ot happen on multiple slots
-* @name refresh
-* @memberof ChartBeat
-* @lends ChartBeat
-*/
-proto.refresh = function (fn) {
-    return function (slotsForRefresh) {
-        if (window.pSUPERFLY){
-            var slot, slotName, cbName,
-                slots = ads.slots;
-            slotsForRefresh = slotsForRefresh || slots;
-            for (slotName in slotsForRefresh) {
-                slot = slots[slotName];
-                if (slot.gptSlot && slot.timer === undefined) {
-                    if ( ads.utils.isNonEmptyString(cbName = slot.container.getAttribute('data-cb-ad-id')) ) {
-                        window.pSUPERFLY.refreshAd(cbName);
-                    }
-                }
-            }
-        }
-
-        fn.apply(this, arguments);
-    };
-};
-
-module.exports = new Chartbeat();

@@ -1,27 +1,30 @@
-.advertising {
-    // center adverts in slots
-    &.center {
-        width: 100%;
-        text-align: center;
-    }
 
-    // remove this rule if transitions are added to all slots
-    &.empty {
-        width: 0;
-        height: 0;
-        display: none;
-        visibility: hidden;
-    }
+	// center adverts in slots
+.o-ads__center {
+	width: 100%;
+	text-align: center;
+}
 
-    // add a label above the ad slot
-    &.label > div.wrap::before {
-        content: "▼ Advertisement ▼";
-        float: right;
-        font-size: 80%;
-    }
+// remove this rule if transitions are added to all slots
+.o-ads__empty {
+	width: 0;
+	height: 0;
+	display: none;
+	visibility: hidden;
+}
 
-    //remove background from iframes.
-    iframe {
-        background: none transparent;
-    }
+// add a label above the ad slot
+.o-ads__label > .wrap::before {
+	content: "▼ Advertisement ▼";
+	float: right;
+	font-size: 80%;
+}
+
+.o-ads,
+[data-oads-name] {
+	animation-name: none;
+	//remove background from iframes.
+	iframe {
+		background: none transparent;
+	}
 }

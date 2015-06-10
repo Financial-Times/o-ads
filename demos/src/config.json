@@ -1,38 +1,48 @@
 {
    "options": {
-      "bodyClasses": "o-hoverable-on"
+      "js": "demos/src/demo.js",
+       "sass" : "demos/src/demo.scss"
    },
    "demos": [
       {
          "name": "Individual-Ad",
          "template": "demos/src/individual.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-With-Out-Of-Page",
          "template": "demos/src/individualoop.mustache",
-         "data": {"pos":"halfpage"}
+         "data": {"name":"halfpage", "formats": "HalfPage",  "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Individual-Ad-with-Custom-Targeting-Values",
          "template": "demos/src/individualcustomtargeting.mustache",
-         "data": {"pos":"leaderboard"}
+         "data": {"name":"leaderboard", "network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Master-and-Companion",
-         "template": "demos/src/masterandcompanion.mustache"
+         "template": "demos/src/masterandcompanion.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami", "zone": "master-companion-test"}
       },
       {
          "name": "Responsive-Positions",
-         "template": "demos/src/responsive.mustache"
+         "template": "demos/src/responsive.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
+      },
+      {
+         "name": "Sticky",
+         "template": "demos/src/sticky.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Video-Advertising",
-         "template": "demos/src/video.mustache"
+         "template": "demos/src/video.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       },
       {
          "name": "Video-Advertising-with-Companion",
-         "template": "demos/src/videocompanions.mustache"
+         "template": "demos/src/videocompanions.mustache",
+         "data": {"network": 5887, "site" : "test.5887.origami"}
       }
    ]
 }
