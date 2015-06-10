@@ -28,7 +28,7 @@ module.exports.init = function() {
 	if (this.config) {
 
 		//CONFIGURATION
-		var _sf_async_config = {
+		window._sf_async_config = {
 			uid: this.config.uid,
 			domain: this.config.domain,
 			useCanonical: true,
@@ -36,7 +36,7 @@ module.exports.init = function() {
 			sections : config.pageType
 		};
 
-		if (config.loadJS) {
+		if (this.config.loadJS) {
 			// LOAD LIBRARY
 			window._sf_endpt=(new Date()).getTime();
 			utils.attach('//static.chartbeat.com/js/chartbeat_pub.js', true);
