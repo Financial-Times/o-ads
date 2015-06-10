@@ -26,7 +26,7 @@ var utils = require('./utils');
 /**
 * Default configuration set in the constructor.
 */
-var defaults =  {
+var defaults = {
 	formats: {
 		MediumRectangle:  {sizes:[300, 250]},
 		Rectangle:  {sizes:[180, 50]},
@@ -85,7 +85,7 @@ function fetchDeclaritiveConfig() {
 /**
 * @private
 * @function
-* fetchCanonicalURL Grabs the canonical URL of the page.
+* fetchCanonicalURL Grabs the canonical URL from the page meta if it exists.
 */
 function fetchCanonicalURL() {
 	var canonical;
@@ -98,7 +98,7 @@ function fetchCanonicalURL() {
 }
 
 /**
-* The Config class defines an FT.ads.config instance.
+* Defines a store for configuration information and returns a getter/setter method for access.
 * @class
 * @constructor
 */
@@ -124,6 +124,7 @@ Config.prototype.access = function(k, v) {
 
 	return result;
 };
+
 
 Config.prototype.clear = function(key) {
 	if (key) {

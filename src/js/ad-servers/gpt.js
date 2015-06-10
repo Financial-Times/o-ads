@@ -319,8 +319,11 @@ var slotMethods = {
 	setUnitName: function() {
 		var unitName;
 		var gpt = config('gpt') || {};
+		var attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
 
-		if (utils.isNonEmptyString(gpt.unitName)) {
+		if (utils.isNonEmptyString(attr)) {
+			unitName = attr;
+		} else if (utils.isNonEmptyString(gpt.unitName)) {
 			unitName = gpt.unitName;
 		} else {
 			var network = gpt.network;

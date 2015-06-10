@@ -25,7 +25,7 @@ Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.metadata = require('./src/js/metadata');
 Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
-Ads.prototype.utils = require('./src/js/utils');
+var utils = Ads.prototype.utils = require('./src/js/utils');
 
 /**
 * Initialises the ads library and all sub modules
@@ -33,8 +33,6 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 Ads.prototype.init = function(config) {
-	// use `this` as our internal namespace
-	// it's passed into each module so we can to maintain state in each module
 	this.config.init();
 	this.config(config);
 	this.slots.init();
@@ -48,20 +46,15 @@ Ads.prototype.init = function(config) {
 
 var ads = new Ads();
 var initAll = function() {
-	var metas = document.getElementsByTagName('meta');
-	for (i = 0; i < metas.length; i++) {
-		if (metas[i].getAttribute("property") === "o-ads-declarative-init") {
-			return false;
-		}
-	}
+	var metas = utils.arrayLikeToArray(document.getElementsByTagName('meta'));
+	var stop = metas.filter(function(meta) {
+		return meta.name === 'o-ads-stop';
+	});
 
-	ads.init();
-	var slots = document.querySelectorAll(".o-ads, [data-o-ads-name]");
-	for (var i = 0; i < slots.length; i++) {
-		var name = slots[i].getAttribute('data-o-ads-name');
-		if (name) {
-			ads.slots.initSlot(name);
-		}
+	if (!stop.length) {
+		ads.init();
+		var slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	}
 
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);

@@ -1,6 +1,6 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false: false */
-"use strict";
+'use strict';
 
 QUnit.module('Main');
 
