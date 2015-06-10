@@ -30,13 +30,13 @@ module.exports.init = function() {
 		//CONFIGURATION
 		window._sf_async_config = {
 			uid: this.config.uid,
-			domain: this.config.domain,
-			useCanonical: true,
-			zone:gpt.site + "/" + gpt.zone,
-			sections : config.pageType
+			domain: this.config.domain || location.host,
+			useCanonical: this.config.canonical || true,
+			zone: this.config.zone ||  gpt.site + '/' + gpt.zone,
+			sections: config.pageType
 		};
 
-		if (this.config.loadJS) {
+		if (utils.scriptExists('//static.chartbeat.com/js/chartbeat_pub.js')) {
 			// LOAD LIBRARY
 			window._sf_endpt=(new Date()).getTime();
 			utils.attach('//static.chartbeat.com/js/chartbeat_pub.js', true);
@@ -44,10 +44,8 @@ module.exports.init = function() {
 		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
 		utils.on('ready', function(event) {
 			var slot = event.detail.slot;
-			if (slot.chartbeat) {
-				var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
-				slot.container.setAttribute('data-cb-ad-id', name);
-			}
+			var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
+			slot.container.setAttribute('data-cb-ad-id', name);
 		});
 
 		utils.on('refresh', function(event) {
@@ -55,6 +53,5 @@ module.exports.init = function() {
 				window.pSUPERFLY.refreshAd(event.detail.name);
 			}
 		});
-
 	}
 };
