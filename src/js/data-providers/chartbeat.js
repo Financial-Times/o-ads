@@ -38,7 +38,7 @@ module.exports.init = function() {
 			sections: config.pageType
 		};
 
-		if (this.config.loadsJS && !utils.scriptExists(src)) {
+		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
 			// LOAD LIBRARY
 			window._sf_endpt = (new Date()).getTime();
 			utils.attach(src, true);
