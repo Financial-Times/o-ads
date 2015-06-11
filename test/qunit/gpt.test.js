@@ -1,7 +1,10 @@
 
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, googletag: false */
-"use strict";
+'use strict';
+var htmlstart = '<div data-o-ads-name="';
+var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
+
 QUnit.module('gpt', {
 	beforeEach: function() {
 		this.cookies({});
@@ -27,9 +30,7 @@ QUnit.test('set page targeting', function(assert) {
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
-var htmlstart = '<div data-o-ads-name="';
-var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
-QUnit.test('set unit names', function(assert) {
+QUnit.test('set unit name', function(assert) {
 	var done = assert.async();
 	var expected = '/5887/some-dfp-site/some-dfp-zone';
 	this.fixturesContainer.add(htmlstart + 'unit-name-full' + htmlend);
@@ -130,7 +131,7 @@ QUnit.test('set unit name with override', function(assert) {
 		var name = event.detail.name;
 		var slot = event.detail.slot;
 		if (name === 'unit-name-custom') {
-			assert.strictEqual(slot.gpt.unitName, expected, 'unit name override works');
+			assert.strictEqual(slot.gpt.unitName, expected, 'global override works');
 			done();
 		}
 	});
@@ -141,6 +142,24 @@ QUnit.test('set unit name with override', function(assert) {
 		}
 	});
 	this.ads.slots.initSlot('unit-name-custom');
+});
+
+QUnit.test('set unit name with attribute', function(assert) {
+	var done = assert.async();
+	var expected = '/this-works';
+	var container = this.fixturesContainer.add(htmlstart + 'unit-name-attr" data-o-ads-gpt-unit-name="' + expected + htmlend);
+
+	document.addEventListener('oAds.complete', function(event) {
+		var name = event.detail.name;
+		var slot = event.detail.slot;
+		if (name === 'unit-name-attr') {
+			assert.strictEqual(slot.gpt.unitName, expected, 'attribute override works');
+			done();
+		}
+	});
+
+	this.ads.init({});
+	this.ads.slots.initSlot(container);
 });
 
 // QUnit.test('refresh', function (assert) {
@@ -155,21 +174,21 @@ QUnit.test('set unit name with override', function(assert) {
 
 QUnit.test('collapse empty', function(assert) {
 
-	this.ads.init({gpt: {'collapseEmpty': 'after'}});
+	this.ads.init({gpt: {collapseEmpty: 'after'}});
 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(true), 'after mode is set in gpt');
 	googletag.pubads().collapseEmptyDivs.reset();
 
-	this.ads.init({gpt: {'collapseEmpty': 'before'}});
+	this.ads.init({gpt: {collapseEmpty: 'before'}});
 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(true, true), 'before mode is set in gpt');
 	googletag.pubads().collapseEmptyDivs.reset();
 
-	this.ads.init({gpt: {'collapseEmpty': 'never'}});
+	this.ads.init({gpt: {collapseEmpty: 'never'}});
 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(false), 'never mode is set in gpt');
 });
 
 QUnit.test('define a basic slot', function(assert) {
 	var html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
-	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
+	this.fixturesContainer.add(html);
 	this.ads.init();
 
 	this.ads.slots.initSlot('no-responsive-mpu');
@@ -179,7 +198,7 @@ QUnit.test('define a basic slot', function(assert) {
 });
 
 QUnit.test('define responsive slot', function(assert) {
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="responsive-mpu"></div>');
+	this.fixturesContainer.add('<div data-o-ads-name="responsive-mpu"></div>');
 	this.ads.init({
 		responsive:{
 			large: [1280, 800],
@@ -206,7 +225,7 @@ QUnit.test('define responsive slot', function(assert) {
 QUnit.test('rendered event fires on slot', function(assert) {
 	var done = assert.async();
 	var html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
-	this.fixturesContainer.insertAdjacentHTML('beforeend', html);
+	this.fixturesContainer.add(html);
 	this.ads.init();
 
 	document.body.addEventListener('oAds.rendered', function(event) {
@@ -224,7 +243,7 @@ QUnit.test('update correlator', function(assert) {
 });
 
 QUnit.test('fix the url for ad requests', function(assert) {
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="url-slot" data-o-ads-formats="MediumRectangle"></div>');
+	this.fixturesContainer.add('<div data-o-ads-name="url-slot" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({
 		canonical: 'http://www.ft.com'
 	});
@@ -234,7 +253,7 @@ QUnit.test('fix the url for ad requests', function(assert) {
 	assert.ok(gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'page url set via config');
 
 	document.head.insertAdjacentHTML('beforeend', '<link href="http://www.random-inc.com/" rel="canonical" remove />');
-	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="canonical-slot" data-o-ads-formats="MediumRectangle"></div>');
+	this.fixturesContainer.add('<div data-o-ads-name="canonical-slot" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init();
 
 	this.ads.slots.initSlot('canonical-slot');

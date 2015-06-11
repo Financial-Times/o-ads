@@ -20,7 +20,8 @@
 	font-size: 80%;
 }
 
-.o-ads, [data-oads-name] {
+.o-ads,
+[data-oads-name] {
 	animation-name: none;
 	//remove background from iframes.
 	iframe {

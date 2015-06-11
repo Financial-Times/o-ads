@@ -6,7 +6,6 @@ var googletag = {};
 var handler;
 var slotRenderEnded;
 var slots = {};
-var colors = ['#800037', '#378000',	'#003780', '#800077'];
 var isArray = require('lodash/lang/isArray');
 var stubs = sinon.sandbox.create();
 
@@ -42,6 +41,8 @@ function Slot(name, sizes, id) {
 
 function slotRender(slot) {
 	var size;
+	/* jshint -W107 */
+	/* needs this to mock iframes */
 	var html = 'javascript:\'<html><body style="background:#800037;"></body></html>\'';
 	slot = slots[slot];
 

@@ -15,6 +15,6 @@ QUnit.test('buildURLForVideo returns correct URL base when vidoe-hub is set', fu
 	});
 
 	var result = this.ads.buildURLForVideo("uk","video",{});
-	var expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/ftcom.5887.video/video-hub&sz=592x333&unviewed_position_start=1&scp=pos%3Dvideo';
+	var expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/ftcom.5887.video/video-hub&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
 	assert.strictEqual(result.urlStem,expected, 'the url is what we expected');
 });
