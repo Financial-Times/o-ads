@@ -135,7 +135,7 @@ Config.prototype.clear = function(key) {
 };
 
 Config.prototype.init = function() {
-	this.store = utils.extend({}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
+	this.store = utils.extend(true, {}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
 	return this.store;
 };
 
