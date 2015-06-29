@@ -109,7 +109,7 @@ function Config() {
 Config.prototype.access = function(k, v) {
 	var result;
 	if (utils.isPlainObject(k)) {
-		utils.extend(this.store, k);
+		utils.extend(true, this.store, k);
 		result = this.store;
 	} else if (typeof v === 'undefined') {
 		if (typeof k === 'undefined') {

@@ -109,3 +109,10 @@ QUnit.test('Config fetchDeclaritive, multiple script tags', function(assert) {
 	assert.equal(result.athing, 'thing', 'data-o-ads-size attribute');
 	assert.equal(result.more, 'evenmore', 'data-o-ads-size attribute');
 });
+
+QUnit.test('Config deep extends so default options like formats aren\'t overwritten', function(assert) {
+	this.ads.init();
+	var result = this.ads.config({formats: { someNewFormat: { sizes: [[2, 2]]}}});
+	assert.ok(result.formats.HalfPage, 'predefined formats still exist');
+	assert.ok(result.formats.someNewFormat, 'new format is added');
+});
