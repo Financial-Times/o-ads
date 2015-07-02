@@ -28,8 +28,8 @@ QUnit.test('create a basic slot with js configuration', function(assert) {
 	var inner = outer.querySelector('.o-ads__inner');
 	assert.strictEqual(result.name, 'banlb', 'the slot name is available');
 	assert.ok(result, 'the slot object is available');
-	assert.equal(result.sizes, expected.sizes, 'the correct sizes are configured');
-	assert.equal(result.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
+	assert.deepEqual(result.sizes, expected.sizes, 'the correct sizes are configured');
+	assert.strictEqual(result.outOfPage, expected.outOfPage, 'the correct outOfPage is configured');
 	assert.ok(outer, 'the outer div is rendered');
 	assert.ok(inner, 'the inner div is rendered');
 });
