@@ -94,6 +94,32 @@ QUnit.test('Center container', function(assert) {
 	assert.ok($(result.container).hasClass('o-ads__center'), 'the centering class has been added');
 });
 
+QUnit.test('Label container', function(assert) {
+	var slotHTML = '<div data-o-ads-name="label-test" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({slots: {
+		'label-test': {
+			label: true
+		}
+	}});
+	var result = this.ads.slots.initSlot(node);
+
+	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
+});
+
+QUnit.test('Label right container', function(assert) {
+	var slotHTML = '<div data-o-ads-name="label-right-test" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({slots: {
+		'label-right-test': {
+			label: 'right'
+		}
+	}});
+	var result = this.ads.slots.initSlot(node);
+
+	assert.ok($(result.container).hasClass('o-ads__label-right'), 'the labeling class has been added');
+});
+
 QUnit.test('configure out of page slot', function(assert) {
 	var slotHTML = '<div data-o-ads-name="out-of-page-test" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
