@@ -110,7 +110,7 @@ function Slot(container, screensize) {
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
 	this.collapseEmpty = slotConfig.collapseEmpty;
-	this.chartbeat = config('chartbeat') || slotConfig.chartbeat;
+	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);

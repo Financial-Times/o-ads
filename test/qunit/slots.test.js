@@ -81,6 +81,16 @@ QUnit.test('create a slot with responsive sizes via formats attributes', functio
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
+QUnit.test('responsive slot should not make a call when ', function(assert) {
+	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	var expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	var result = this.ads.slots.mpu;
+	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
+});
+
 QUnit.test('Center container', function(assert) {
 	var slotHTML = '<div data-o-ads-name="center-test" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
@@ -118,6 +128,19 @@ QUnit.test('Label right container', function(assert) {
 	var result = this.ads.slots.initSlot(node);
 
 	assert.ok($(result.container).hasClass('o-ads__label-right'), 'the labeling class has been added');
+});
+
+QUnit.test('Label container via attribute', function(assert) {
+	var slotHTML = '<div data-o-ads-name="label-attr-test" data-o-ads-label="left" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({slots: {
+		'label-attr-test': {
+			label: 'right'
+		}
+	}});
+	var result = this.ads.slots.initSlot(node);
+
+	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
 });
 
 QUnit.test('configure out of page slot', function(assert) {
