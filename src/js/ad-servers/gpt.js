@@ -186,7 +186,7 @@ function onReady(slotMethods, event) {
 				slot.defineOutOfPage();
 			}
 
-			if (!slot.defer) {
+			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
 			}
 		}.bind(null, slot));
@@ -205,7 +205,7 @@ function onRender(event) {
 }
 
 /*
-* Event handler for when a slot requests the ad be flipped
+* refresh is called a slot requests the ad be flipped
 */
 function onRefresh(event) {
 	var targeting = event.detail.targeting;
@@ -218,6 +218,9 @@ function onRefresh(event) {
 	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
 }
 
+/*
+* function passed to the gpt library that is run when an ad completes rendering
+*/
 function onRenderEnded(event) {
 	var detail;
 	var data = {
@@ -291,8 +294,13 @@ var slotMethods = {
 		utils.on('breakpoint', function(event) {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
-			if (utils.isArray(slot.sizes[screensize])) {
-				slot.fire('refresh');
+
+			if (slot.hasValidSize(screensize)) {
+				if (slot.gpt.iframe) {
+					slot.fire('refresh');
+				} else if (!this.defer) {
+					slot.display();
+				}
 			}
 		}, this.container);
 

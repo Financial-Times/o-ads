@@ -56,7 +56,13 @@ QUnit.test('create a slot with responsive sizes via sizes attributes', function(
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
 	var expected = { small:false, medium:[[300, 400], [300, 600]], large:[[300, 600], [300, 1050]]};
 	var node = this.fixturesContainer.add(slotHTML);
-	this.ads.init();
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			medium: [400, 400],
+			large: [600, 600]
+		}
+	});
 	this.ads.slots.initSlot(node);
 	var result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'sizes are parsed into slot config.');
@@ -65,7 +71,13 @@ QUnit.test('create a slot with responsive sizes via sizes attributes', function(
 QUnit.test('create a slot with sizes via format attribute', function(assert) {
 	var expected = [[300, 250]];
 	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.init();
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			medium: [400, 400],
+			large: [600, 600]
+		}
+	});
 	this.ads.slots.initSlot(node);
 	var result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
@@ -75,20 +87,53 @@ QUnit.test('create a slot with responsive sizes via formats attributes', functio
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
 	var expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
 	var node = this.fixturesContainer.add(slotHTML);
-	this.ads.init();
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			medium: [400, 400],
+			large: [600, 600]
+		}
+	});
 	this.ads.slots.initSlot(node);
 	var result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
-QUnit.test('responsive slot should not make a call when ', function(assert) {
+QUnit.test('responsive slot should not make a call when size is false', function(assert) {
+	var clock = this.date();
+	this.viewport(200, 200);
+
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
-	var expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
 	var node = this.fixturesContainer.add(slotHTML);
-	this.ads.init();
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			medium: [400, 400],
+			large: [600, 600]
+		}
+	});
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.mpu;
-	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
+	var slot = this.ads.slots.mpu;
+	assert.ok(!this.gpt.display.called, 'When size is false no ad call is made.');
+	assert.ok($(slot.container).hasClass('o-ads__empty'), 'The ad slot is not displayed.');
+
+	this.viewport(500, 500);
+	window.dispatchEvent(new Event('resize'));
+	clock.tick(300);
+	assert.ok(this.gpt.display.calledOnce, 'When screen size is changed, ad call is made.');
+	assert.ok(!$(slot.container).hasClass('o-ads__empty'), 'The ad slot is displayed.');
+
+	this.viewport(700, 700);
+	window.dispatchEvent(new Event('resize'));
+	clock.tick(300);
+	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed to large, ad call is made.');
+	assert.ok(!$(slot.container).hasClass('o-ads__empty'), 'The ad slot is displayed.');
+
+	this.viewport(200, 200);
+	window.dispatchEvent(new Event('resize'));
+	clock.tick(300);
+	assert.ok(this.gpt.display.calledOnce, 'When screen size is change to, no ad call is made.');
+	assert.ok($(slot.container).hasClass('o-ads__empty'), 'The ad slot is not displayed.');
 });
 
 QUnit.test('Center container', function(assert) {

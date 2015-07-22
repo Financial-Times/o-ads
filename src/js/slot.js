@@ -185,16 +185,18 @@ Slot.prototype.initLazyLoad = function() {
 Slot.prototype.initResponsive = function() {
 	if (utils.isPlainObject(this.sizes)) {
 
-		if (this.sizes[this.screensize] === false) {
+		if (!this.hasValidSize()) {
 			this.collapse();
 		}
 
 		utils.on('breakpoint', function(event) {
 			var slot = event.detail.slot;
-			if (slot.sizes[event.detail.screensize] === false) {
-				slot.collapse();
-			} else {
+			slot.screensize = event.detail.screensize;
+
+			if (slot.hasValidSize()) {
 				slot.uncollapse();
+			} else {
+				slot.collapse();
 			}
 		}, this.container);
 	}
@@ -262,6 +264,16 @@ Slot.prototype.addContainer = function(node, attrs) {
 	container += '></div>';
 	node.insertAdjacentHTML('beforeend', container);
 	return node.lastChild;
+};
+
+
+Slot.prototype.hasValidSize = function(screensize) {
+	screensize = screensize || this.screensize;
+	if (screensize && utils.isPlainObject(this.sizes)) {
+		return this.sizes[screensize] !== false;
+	}
+
+	return true;
 };
 
 /**
