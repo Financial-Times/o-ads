@@ -29,6 +29,7 @@ QUnit.test('global configuration', function(assert) {
 
 QUnit.test('slot configuration', function(assert) {
 	var config = this.basic;
+	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
 	this.ads.init(config);
@@ -39,6 +40,7 @@ QUnit.test('slot configuration', function(assert) {
 
 QUnit.test('override name', function(assert) {
 	var config = this.basic;
+	config.chartbeat = true;
 	config.slots.advert.chartbeat = 'override';
 
 	this.ads.init(config);
@@ -50,6 +52,7 @@ QUnit.test('override name', function(assert) {
 QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
 	var done = assert.async();
 	var config = this.basic;
+	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
 	document.body.addEventListener('oAds.refresh', function(event) {

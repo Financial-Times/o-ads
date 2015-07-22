@@ -14,9 +14,16 @@
 }
 
 // add a label above the ad slot
-.o-ads__label > .wrap::before {
+.o-ads__label-right .o-ads__inner::before {
 	content: "▼ Advertisement ▼";
-	float: right;
+	display: block;
+	text-align: right;
+	font-size: 80%;
+}
+
+.o-ads__label-left .o-ads__inner::before {
+	content: "▼ Advertisement ▼";
+	display: block;
 	font-size: 80%;
 }
 

@@ -6,8 +6,24 @@ var googletag = {};
 var handler;
 var slotRenderEnded;
 var slots = {};
-var isArray = require('lodash/lang/isArray');
 var stubs = sinon.sandbox.create();
+var oViewport =  require('o-viewport');
+
+function getResponsiveSizes(mapping) {
+	var winner;
+	var dims = oViewport.getSize();
+	function findCurrentBreakpoint(breakpoint) {
+		var breakpointDims = breakpoint[0];
+		if (dims.width > breakpointDims[0] && dims.height > breakpointDims[1]) {
+			if (!winner || breakpointDims[0] > winner[0][0]) {
+				winner = breakpoint;
+			}
+		}
+	}
+
+	mapping.forEach(findCurrentBreakpoint);
+	return winner[1];
+}
 
 googletag.defineSizeMapping = stubs.stub();
 googletag.companionAds = stubs.stub();
@@ -28,8 +44,15 @@ function Slot(name, sizes, id) {
 	this.setCollapseEmptyDiv = stubs.stub().returns(this);
 	this.renderEnded = stubs.stub().returns(this);
 	this.setTargeting = stubs.stub().returns(this);
-	this.defineSizeMapping = stubs.stub().returns(this);
 	this.set = stubs.stub().returns(this);
+	this.defineSizeMapping = function() {};
+
+	stubs.stub(this, 'defineSizeMapping', function(mapping) {
+		this.sizes = mapping;
+		this.responsive = true;
+		return this;
+	});
+
 	this.getId = function() { return name + '/' + id; };
 
 	this.getDomId = function() { return id; };
@@ -39,26 +62,29 @@ function Slot(name, sizes, id) {
 	slots[id] = this;
 }
 
-function slotRender(slot) {
+function slotRender(slot, color) {
 	var size;
+	color = color || '#800037';
 	/* jshint -W107 */
 	/* needs this to mock iframes */
-	var html = 'javascript:\'<html><body style="background:#800037;"></body></html>\'';
+	var html = 'javascript:\'<html><body style="background:' + color + ';"></body></html>\'';
 	slot = slots[slot];
 
-	if (isArray(slot.sizes)) {
-		size = slot.sizes[0];
+	if (slot.responsive) {
+		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
-		var screens = Object.keys(slot.sizes);
-		size = slot.sizes[screens[0]][0];
+		size = slot.sizes[0];
 	}
 
-	var iframe = document.createElement('iframe');
-	iframe.width = size[0];
-	iframe.height = size[1];
-	iframe.id = 'google_ads_iframe_' + slot.getId();
-	iframe.src = html;
-	document.getElementById(slot.id).appendChild(iframe);
+	if (!slot.iframe) {
+		slot.iframe = document.createElement('iframe');
+		slot.iframe.id = 'google_ads_iframe_' + slot.getId();
+		document.getElementById(slot.id).appendChild(slot.iframe);
+	}
+
+	slot.iframe.width = size[0];
+	slot.iframe.height = size[1];
+	slot.iframe.src = html;
 }
 
 function slotRenderEnded(slot) {
@@ -66,9 +92,9 @@ function slotRenderEnded(slot) {
 	var size = slot.sizes[0];
 	var event = {
 		isEmpty: false,
-		creativeId: 53576339449,
-		lineItemId: 236265289,
-		serviceName: "publisher_ads",
+		creativeId: Math.floor(Math.random() * 1e11),
+		lineItemId: Math.floor(Math.random() * 1e9),
+		serviceName: 'publisher_ads',
 		size: size,
 		slot: slot
 	};
@@ -94,10 +120,17 @@ stubs.stub(googletag, 'display', function(slot) {
 	slotRenderEnded(slot);
 });
 
-googletag.sizeMapping = stubs.stub().returns({
-	addSize: stubs.stub(),
-	build: stubs.stub()
-});
+googletag.sizeMapping = function() {
+	var mapping = [];
+	return {
+		addSize: function() {
+			mapping.push([].slice.call(arguments));
+		},
+		build: function() {
+			return mapping;
+		}
+	};
+};
 
 var pubads = {
 	disableInitialLoad: stubs.stub(),
@@ -123,6 +156,9 @@ stubs.stub(pubads, 'addEventListener', function(eventName, fn) {
 });
 
 stubs.stub(pubads, 'refresh', function(slots) {
+	slots.forEach(function(slot) {
+		slotRender(slot.id, '#006D91');
+	});
 	return slots;
 });
 

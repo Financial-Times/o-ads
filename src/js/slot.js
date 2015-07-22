@@ -106,10 +106,11 @@ function Slot(container, screensize) {
 	this.targeting = slotConfig.targeting || {};
 	this.sizes = slotConfig.sizes || [];
 	this.center = slotConfig.center || false;
+	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
 	this.collapseEmpty = slotConfig.collapseEmpty;
-	this.chartbeat = config('chartbeat') || slotConfig.chartbeat;
+	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
@@ -129,6 +130,7 @@ function Slot(container, screensize) {
 	}
 
 	this.centerContainer();
+	this.labelContainer();
 
 	this.initResponsive();
 	this.initLazyLoad();
@@ -183,19 +185,22 @@ Slot.prototype.initLazyLoad = function() {
 Slot.prototype.initResponsive = function() {
 	if (utils.isPlainObject(this.sizes)) {
 
-		if (this.sizes[this.screensize] === false) {
+		if (!this.hasValidSize()) {
 			this.collapse();
 		}
 
 		utils.on('breakpoint', function(event) {
 			var slot = event.detail.slot;
-			if (slot.sizes[event.detail.screensize] === false) {
-				slot.collapse();
-			} else {
+			slot.screensize = event.detail.screensize;
+
+			if (slot.hasValidSize()) {
 				slot.uncollapse();
+			} else {
+				slot.collapse();
 			}
 		}, this.container);
 	}
+
 	return this;
 };
 
@@ -261,6 +266,16 @@ Slot.prototype.addContainer = function(node, attrs) {
 	return node.lastChild;
 };
 
+
+Slot.prototype.hasValidSize = function(screensize) {
+	screensize = screensize || this.screensize;
+	if (screensize && utils.isPlainObject(this.sizes)) {
+		return this.sizes[screensize] !== false;
+	}
+
+	return true;
+};
+
 /**
 * Add a center class to the main container
 */
@@ -268,6 +283,23 @@ Slot.prototype.centerContainer = function() {
 	if (this.center) {
 		utils.addClass(this.container, 'center');
 	}
+
+	return this;
+};
+
+
+/**
+* Add a label class to the main container
+*/
+Slot.prototype.labelContainer = function() {
+	var className;
+	if (this.label === true || this.label === 'left') {
+		className = 'label-left';
+	} else if (this.label === 'right') {
+		className = 'label-right';
+	}
+
+	utils.addClass(this.container, className);
 	return this;
 };
 
