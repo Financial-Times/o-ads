@@ -36,10 +36,7 @@ var options = {
 	browsers: ['Chrome_with_flags'],
 	browserify: { transform: ['debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
-	preprocessors: {
-		'test/qunit/setup.js': 'browserify',
-		'test/qunit/*.test.js': 'browserify'
-	}
+	preprocessors: { 'test/qunit/setup.js': 'browserify'}
 };
 
 
@@ -66,9 +63,8 @@ if (process.env.COVERAGE) {
 	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
 
-
 	options.coverageReporter = {
-		dir : 'reports/coverage/',
+		dir: 'reports/coverage/',
 		reporters: [
 			{
 				type: 'html',
@@ -100,8 +96,8 @@ if (process.env.JENKINS_URL) {
 try {
 	options = require('./karma.local.js')(options);
 	console.log('Local config loaded');
-} catch(err){
-	if (err.code === "MODULE_NOT_FOUND") {
+} catch (err) {
+	if (err.code === 'MODULE_NOT_FOUND') {
 		console.log('No local config found');
 	} else {
 		console.error('%s:%s', err.code, err.toString().replace('Error:', ''));

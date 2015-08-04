@@ -38,7 +38,8 @@ function log() {
  * @param {string} type
  */
 module.exports.isOn = function(type) {
-	return location.search.indexOf('DEBUG=OADS') !== -1 && window.console && window.console[type];
+	var debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
+	return debug && window.console && window.console[type];
 };
 
 /**
