@@ -12,6 +12,10 @@ module.exports.fixturesContainer.add = function(html) {
 	return this.lastChild;
 };
 
+module.exports.fixtures = {
+	admantx: require('../fixtures/admantx-response.json')
+};
+
 /* the google library mock*/
 var gpt = require('./mocks/gpt-mock');
 

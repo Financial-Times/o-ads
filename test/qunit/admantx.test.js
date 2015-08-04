@@ -27,7 +27,7 @@ QUnit.test('process categories', function(assert) {
 
 QUnit.test('admantx configured to make request and add targeting', function(assert) {
 	var done = assert.async();
-	var given = JSON.stringify(require('../fixtures/admantx-response.json'));
+	var given = JSON.stringify(this.fixtures.admantx);
 	this.server.respondWith("GET", {test: function(reqUrl) {
 		return (new RegExp('usasync01.admantx.com/admantx/service')).test(reqUrl);
 	}}, [200, { "Content-Type": "application/json" }, given]);

@@ -5,7 +5,7 @@
 QUnit.module('utils.events');
 
 QUnit.test('We can broadcast an event to the body', function(assert) {
-	var utils = require('../../src/js/utils');
+	var utils = this.ads.utils;
 	var done = assert.async();
 
 	document.body.addEventListener('oAds.ahoy', function(ev) {
@@ -20,7 +20,7 @@ QUnit.test('We can broadcast an event to the body', function(assert) {
 });
 
 QUnit.test('We can broadcast an from an element', function(assert) {
-	var utils = require('../../src/js/utils');
+	var utils = this.ads.utils;
 	var done = assert.async();
 
 	var element = document.createElement('div');
@@ -37,7 +37,7 @@ QUnit.test('We can broadcast an from an element', function(assert) {
 });
 
 QUnit.test('We can broadcast from an element and it bubbles to the body', function(assert) {
-	var utils = require('../../src/js/utils');
+	var utils = this.ads.utils;
 	var done = assert.async();
 
 	var element = document.createElement('div');
@@ -58,7 +58,7 @@ QUnit.test('We can broadcast from an element and it bubbles to the body', functi
 });
 
 QUnit.test('We can listen to a one time event', function(assert) {
-	var utils = require('../../src/js/utils');
+	var utils = this.ads.utils;
 	var done = assert.async();
 	var listened = 0;
 
