@@ -23,13 +23,17 @@ var attributeParsers = {
 			var formats = utils.isArray(value) ? value : value.split(',');
 			formats.forEach(function(format) {
 				format = mapping[format];
-				if (utils.isArray(format.sizes[0])) {
-					for (var j = 0; j < format.sizes.length; j++) {
-						sizes.push(format.sizes[j]);
+				if (format) {
+					if (format && utils.isArray(format.sizes[0])) {
+						for (var j = 0; j < format.sizes.length; j++) {
+							sizes.push(format.sizes[j]);
+						}
 					}
-				}
-				else {
-					sizes.push(format.sizes);
+					else {
+						sizes.push(format.sizes);
+					}
+				} else {
+					utils.log.error('Slot configured with unknown format ' + format);
 				}
 			});
 		}
