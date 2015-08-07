@@ -275,7 +275,7 @@ module.exports.hash = function(str, delimiter, pairing) {
 */
 module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 	var tag = document.createElement('script'),
-	node = document.getElementsByTagName('script')[0],
+	node = document.getElementsByTagName('script')[0] || document.head.childNodes[0],
 	hasRun = false;
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
