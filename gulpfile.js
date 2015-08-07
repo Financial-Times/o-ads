@@ -3,17 +3,17 @@
 
 printAscii();
 var gulp = require('gulp');
-var obt = require('origami-build-tools');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
 
-var browserify = require('browserify');
-var swap = require('browserify-swap');
-var debowerify = require('debowerify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+// var obt = require('origami-build-tools');
+// var browserify = require('browserify');
+// var swap = require('browserify-swap');
+// var debowerify = require('debowerify');
+// var source = require('vinyl-source-stream');
+// var buffer = require('vinyl-buffer');
 
 //var sourcemaps = require('gulp-sourcemaps');
 
@@ -55,28 +55,29 @@ function inc(type, callback) {
 	});
 }
 
-gulp.task('qunit:build', function() {
-	process.env.BROWSERIFYSWAP_ENV = 'karma';
-	var dest = './build/qunit/';
-
-	obt.build(gulp, {
-		js: './test/qunit/setup.js',
-		sourcemaps: true,
-		transforms: [swap],
-		buildFolder: dest
-	});
-});
-
-gulp.task('qunit:coverage', function() {
-	process.env.BROWSERIFYSWAP_ENV = 'karma';
-	var dest = './build/qunit-coverage/';
-
-	obt.build(gulp, {
-		js: './test/qunit/setup.js',
-		transforms: [swap, ['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]],
-		buildFolder: dest
-	});
-});
+//
+// gulp.task('qunit:build', function() {
+// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
+// 	var dest = './build/qunit/';
+//
+// 	obt.build(gulp, {
+// 		js: './test/qunit/setup.js',
+// 		sourcemaps: true,
+// 		transforms: [swap],
+// 		buildFolder: dest
+// 	});
+// });
+//
+// gulp.task('qunit:coverage', function() {
+// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
+// 	var dest = './build/qunit-coverage/';
+//
+// 	obt.build(gulp, {
+// 		js: './test/qunit/setup.js',
+// 		transforms: [swap, ['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]],
+// 		buildFolder: dest
+// 	});
+// });
 
 gulp.task('release:patch', function(callback) { inc('patch', callback); });
 gulp.task('release:minor', function(callback) { inc('minor', callback); });
