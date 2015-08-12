@@ -4,7 +4,25 @@
 
 QUnit.module('Chartbeat', {
 	beforeEach: function() {
-		window.pSUPERFLY = {refreshAd: this.stub() };
+		window.pSUPERFLY = {
+			refreshAd: this.stub(),
+			registerGptSlot: this.stub()
+		};
+
+		function process(item) {
+			item.call();
+		}
+
+		if (window._cba && window._cba.push) {
+			var _push = window._cba.push;
+
+			window._cba.forEach(process);
+			window._cba.push = function(item) {
+				process(item);
+				_push(item);
+			};
+		}
+
 		this.node = this.fixturesContainer.add('<div data-o-ads-name="advert"></div>');
 		this.basic = {
 			slots: {
@@ -49,23 +67,22 @@ QUnit.test('override name', function(assert) {
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'override', 'the chartbeat id attribute has been added to the slot');
 });
 
-QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
+QUnit.test('register gpt slots with the enaged refresh service', function(assert) {
 	var done = assert.async();
 	var config = this.basic;
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
-	document.body.addEventListener('oAds.refresh', function(event) {
+	document.body.addEventListener('oAds.complete', function(event) {
 		// assertions on next tick to make sure the refresh event has run
 		setTimeout(function() {
-			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');
+			assert.equal(window._cba.length, 1, 'the gpt slot is queued with chartbeat.');
 			done();
 		}, 0);
 	});
 
 	this.ads.init(config);
 	this.ads.slots.initSlot(this.node);
-	this.ads.slots.advert.fire('refresh');
 });
 
 QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
@@ -77,7 +94,7 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	document.body.addEventListener('oAds.refresh', function(event) {
 		// assertions on next tick to make sure the refresh event has run
 		setTimeout(function() {
-			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');
+			assert.ok(window.pSUPERFLY.refreshAd.called, 'the gpt slot is registered with chartbeat.');
 			done();
 		}, 0);
 	});
