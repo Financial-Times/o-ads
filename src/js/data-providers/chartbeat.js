@@ -29,7 +29,7 @@ module.exports.init = function() {
 
 	if (this.config) {
 
-		//CONFIGURATION
+		// config must be in a global var
 		window._sf_async_config = {
 			uid: this.config.uid,
 			domain: this.config.domain || location.host,
@@ -47,7 +47,8 @@ module.exports.init = function() {
 		// Array used to register ad slots with chartbeat
 		window._cba = [];
 
-		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
+		// add an id attribute to each slot
+		// id will be the slots name unless overidden
 		utils.on('ready', function(event) {
 			var slot = event.detail.slot;
 			var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
