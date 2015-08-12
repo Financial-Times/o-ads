@@ -35,8 +35,7 @@ module.exports.init = function() {
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
 			zone: this.config.zone ||  gpt.site + '/' + gpt.zone,
-			sections: this.config.pageType,
-			refresh: this.config.refresh
+			sections: this.config.pageType
 		};
 
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
