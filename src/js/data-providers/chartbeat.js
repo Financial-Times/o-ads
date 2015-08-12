@@ -35,7 +35,8 @@ module.exports.init = function() {
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
 			zone: this.config.zone ||  gpt.site + '/' + gpt.zone,
-			sections: this.config.pageType
+			sections: this.config.pageType,
+			refresh: this.config.refresh
 		};
 
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
@@ -43,11 +44,26 @@ module.exports.init = function() {
 			window._sf_endpt = (new Date()).getTime();
 			utils.attach(src, true);
 		}
+
+		// Array used to register ad slots with chartbeat
+		window._cba = [];
+
 		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
 		utils.on('ready', function(event) {
 			var slot = event.detail.slot;
 			var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
 			slot.container.setAttribute('data-cb-ad-id', name);
+		});
+
+		// ADD CB Refresh
+		utils.on('complete', function(event) {
+			var slot = event.detail.slot;
+			window._cba.push(function() {
+				window.pSUPERFLY.registerGptSlot(slot.gpt.slot, slot.gpt.id);
+
+				// TODO: where do we get this config?
+				//window.pSUPERFLY.addEngagedAdFilter({engagedSeconds:15, id: slot.gpt.id});
+			});
 		});
 
 		utils.on('refresh', function(event) {
