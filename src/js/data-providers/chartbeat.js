@@ -55,7 +55,7 @@ module.exports.init = function() {
 			slot.container.setAttribute('data-cb-ad-id', name);
 		});
 
-		// ADD CB Refresh
+		// Register slots after they're defined with gpt
 		utils.on('complete', function(event) {
 			var slot = event.detail.slot;
 			window._cba.push(function() {
@@ -66,6 +66,7 @@ module.exports.init = function() {
 			});
 		});
 
+		// Notify chartbeat when a refresh happens
 		utils.on('refresh', function(event) {
 			if (window.pSUPERFLY) {
 				window.pSUPERFLY.refreshAd(event.detail.name);
