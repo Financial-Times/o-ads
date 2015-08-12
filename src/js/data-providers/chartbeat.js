@@ -55,19 +55,21 @@ module.exports.init = function() {
 			slot.container.setAttribute('data-cb-ad-id', name);
 		});
 
-		// Register slots after they're defined with gpt
+		// Register GPT slots after they're defined with gpt
 		utils.on('complete', function(event) {
 			var slot = event.detail.slot;
-			window._cba.push(function() {
-				window.pSUPERFLY.registerGptSlot(slot.gpt.slot, slot.gpt.id);
+			if (slot.gpt) {
+				window._cba.push(function() {
+					window.pSUPERFLY.registerGptSlot(slot.gpt.slot, slot.gpt.id);
 
-				// TODO: where do we get this config?
-				// (12/8/15)
-				// from the call I'm on it would seem this config will come from data attributes on the creative
-				// using data attrs seems far more managable than using page configuration due to complexitities
-				// with master comapnions and such
-				//window.pSUPERFLY.addEngagedAdFilter({engagedSeconds:15, id: slot.gpt.id});
-			});
+					// TODO: where do we get this config?
+					// (12/8/15)
+					// from the call I'm on it would seem this config will come from data attributes on the creative
+					// using data attrs seems far more managable than using page configuration due to complexitities
+					// with master comapnions and such
+					//window.pSUPERFLY.addEngagedAdFilter({engagedSeconds:15, id: slot.gpt.id});
+				});
+			}
 		});
 
 		// Notify chartbeat when a refresh happens

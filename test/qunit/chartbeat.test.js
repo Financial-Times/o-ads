@@ -67,3 +67,22 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.slots.initSlot(this.node);
 	this.ads.slots.advert.fire('refresh');
 });
+
+QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
+	var done = assert.async();
+	var config = this.basic;
+	config.chartbeat = true;
+	config.slots.advert.chartbeat = true;
+
+	document.body.addEventListener('oAds.refresh', function(event) {
+		// assertions on next tick to make sure the refresh event has run
+		setTimeout(function() {
+			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');
+			done();
+		}, 0);
+	});
+
+	this.ads.init(config);
+	this.ads.slots.initSlot(this.node);
+	this.ads.slots.advert.fire('refresh');
+});
