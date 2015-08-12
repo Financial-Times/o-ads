@@ -94,7 +94,7 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	document.body.addEventListener('oAds.refresh', function(event) {
 		// assertions on next tick to make sure the refresh event has run
 		setTimeout(function() {
-			assert.ok(window.pSUPERFLY.refreshAd.called, 'the gpt slot is registered with chartbeat.');
+			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');
 			done();
 		}, 0);
 	});
