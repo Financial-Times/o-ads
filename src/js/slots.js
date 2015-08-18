@@ -186,6 +186,35 @@ function onBreakpointChange(slots, screensize) {
 	});
 }
 
+/*
+* Handle post messages sent to the page
+*/
+Slots.prototype.pmHandler = function(event) {
+	var data = event.data || event.message;
+	if (data.hasOwnProperty('oAds')) {
+		var type = data.oAds;
+		var slot = data.name;
+		if (type === 'whoami') {
+			var slotName = utils.iframeToSlotName(event.source.window);
+			if (slotName) {
+				event.source.postMessage({
+					oAds: 'whoami',
+					name: slotName
+				}, '*');
+			}
+		} else if (type === 'collapse' && this[slot]) {
+			this[slot].collapse();
+		}
+	}
+};
+
+/*
+* Initialise the postMessage API
+*/
+Slots.prototype.initPostMessage = function() {
+	window.addEventListener('message', this.pmHandler, false);
+};
+
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(function(name) {
 		var slot = this[name];

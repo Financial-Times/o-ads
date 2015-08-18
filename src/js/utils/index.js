@@ -471,6 +471,43 @@ module.exports.arrayLikeToArray = function(obj) {
 	return array;
 };
 
+// capture all iframes in the page in a live node list
+var iframes = document.getElementsByTagName('iframe');
+
+/**
+* Given the window object of an iframe this method returns the o-ads slot name
+* that rendered the iframe, if the iframe was not rendered by o-ads this will
+* return false
+* @param {window}  a window object
+* @returns {String|Boolean}
+*/
+module.exports.iframeToSlotName = function(iframeWindow) {
+	var slotName, node;
+	var i = iframes.length;
+
+	// Figure out which iframe DOM node we have the window for
+	while (i--) {
+		if (iframes[i].contentWindow === iframeWindow) {
+			node = iframes[i];
+			break;
+		}
+	}
+
+	if (node) {
+		// find the closest parent with a data-o-ads-name attribute, that's our slot name
+		while (node.parentNode) {
+			slotName = node.getAttribute('data-o-ads-name');
+			if (slotName) {
+				return slotName;
+			}
+
+			node = node.parentNode;
+		}
+	}
+
+	return false;
+};
+
 extend(module.exports, require('./cookie.js'));
 extend(module.exports, require('./events.js'));
 module.exports.responsive = require('./responsive.js');
