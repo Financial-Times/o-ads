@@ -214,7 +214,7 @@ Slot.prototype.initResponsive = function() {
 Slot.prototype.setName = function() {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
 	if (!this.name) {
-		this.name = 'o-ads-slot-' + + Math.random();
+		this.name = 'o-ads-slot-' + Math.random();
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
 	return this;
