@@ -231,6 +231,7 @@ Slots.prototype.init = function() {
 	this.initInview();
 	this.initRendered();
 	this.initResponsive();
+	this.initPostMessage();
 };
 
 Slots.prototype.timers = {};
