@@ -109,6 +109,8 @@ function setPageTargeting(targeting) {
 	return targeting;
 }
 
+
+function updatePageT
 /**
 * Sets behaviour of empty slots can be 'after', 'before' or 'never'
 * * after collapse slots that return an empty ad
@@ -430,3 +432,4 @@ function updateCorrelator() {
 
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
+module.exports.updatePageTargeting = setPageTargeting;
