@@ -109,8 +109,6 @@ function setPageTargeting(targeting) {
 	return targeting;
 }
 
-
-function updatePageT
 /**
 * Sets behaviour of empty slots can be 'after', 'before' or 'never'
 * * after collapse slots that return an empty ad
