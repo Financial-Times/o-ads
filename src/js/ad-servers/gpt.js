@@ -430,3 +430,4 @@ function updateCorrelator() {
 
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
+module.exports.updatePageTargeting = setPageTargeting;
