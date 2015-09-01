@@ -124,7 +124,7 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	clock.tick(300);
 	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed, ad call is made.');
 	iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
-	assert.deepEqual(iframeSize, ['300', '250'], 'The ad slot is not displayed.');
+	assert.deepEqual(iframeSize, ['300', '250'], 'The new size is displayed.');
 });
 
 QUnit.test('responsive slot should not make a call when size is false', function(assert) {
