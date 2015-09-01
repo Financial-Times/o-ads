@@ -9,8 +9,8 @@ function getNearestBreakpoint() {
 	var dims = oViewport.getSize();
 	function findCurrentBreakpoint(breakpoint) {
 		var breakpointDims = breakpoints[breakpoint];
-		if (dims.width > breakpointDims[0] && dims.height > breakpointDims[1]) {
-			if (!winner || breakpointDims[0] > breakpoints[winner][0]) {
+		if (dims.width >= breakpointDims[0] && dims.height >= breakpointDims[1]) {
+			if (!winner || breakpointDims[0] >= breakpoints[winner][0]) {
 				winner = breakpoint;
 			}
 		}
