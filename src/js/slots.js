@@ -201,7 +201,7 @@ Slots.prototype.initPostMessage = function() {
 				var slotName = utils.iframeToSlotName(event.source.window);
 				if (slotName) {
 					event.source.postMessage({
-						oAds: 'whoami',
+						oAds: 'youare',
 						name: slotName
 					}, '*');
 				}
