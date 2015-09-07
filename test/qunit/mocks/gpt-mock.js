@@ -89,7 +89,7 @@ function slotRender(slot, color) {
 
 function slotRenderEnded(slot) {
 	slot = slots[slot];
-	var size = slot.sizes[0];
+	var size = [slot.iframe.width, slot.iframe.height];
 	var event = {
 		isEmpty: false,
 		creativeId: Math.floor(Math.random() * 1e11),
