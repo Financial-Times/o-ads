@@ -242,7 +242,7 @@ QUnit.test('update correlator', function(assert) {
 	assert.ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
 });
 
-QUnit.test('fix the url for ad requests', function(assert) {
+QUnit.test('fixed url for ad requests', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="url-slot" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({
 		canonical: 'http://www.ft.com'
@@ -260,4 +260,15 @@ QUnit.test('fix the url for ad requests', function(assert) {
 
 	gptSlot = this.ads.slots['canonical-slot'].gpt.slot;
 	assert.ok(gptSlot.set.calledWith('page_url', 'http://www.random-inc.com/'), 'page url set via canonical link tag');
+});
+
+QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
+	var slotHTML = '<div data-o-ads-name="fullpage" data-o-ads-sizes="100x100"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({});
+	this.ads.slots.initSlot(node);
+	var slot = this.ads.slots.fullpage;
+	var iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
+
+	assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
 });
