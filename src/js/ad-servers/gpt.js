@@ -246,8 +246,10 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
-	detail.iframe.width = event.size[0] === 100 ? '100%' : event.size[0];
-	detail.iframe.height = event.size[1] === 100 ? '100%' : event.size[1];
+	if (event.size && event.size[0] === '100' && event.size[1] === '100') {
+		detail.iframe.width = '100%';
+		detail.iframe.height = '100%';
+	}
 
 	utils.broadcast('rendered', data);
 }
