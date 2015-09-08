@@ -246,7 +246,7 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
-	if (event.size && event.size[0] === '100' && event.size[1] === '100') {
+	if (event.size && +event.size[0] === 100 && +event.size[1] === 100) {
 		detail.iframe.width = '100%';
 		detail.iframe.height = '100%';
 	}
