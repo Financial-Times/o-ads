@@ -28,14 +28,14 @@ module.exports.init = function() {
 	this.config = config('chartbeat');
 
 	if (this.config) {
-
-		//CONFIGURATION
+		// config must be in a global var
 		window._sf_async_config = {
 			uid: this.config.uid,
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
 			zone: this.config.zone ||  gpt.site + '/' + gpt.zone,
-			sections: this.config.pageType
+			sections: this.config.pageType,
+			enableAdRefresh: this.config.enableAdRefresh || false
 		};
 
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
@@ -43,17 +43,40 @@ module.exports.init = function() {
 			window._sf_endpt = (new Date()).getTime();
 			utils.attach(src, true);
 		}
-		// ADD CB DATA-ATTRIBUTE TO CONTAINING DIV
-		utils.on('ready', function(event) {
-			var slot = event.detail.slot;
-			var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
-			slot.container.setAttribute('data-cb-ad-id', name);
-		});
-
-		utils.on('refresh', function(event) {
-			if (window.pSUPERFLY) {
-				window.pSUPERFLY.refreshAd(event.detail.name);
-			}
-		});
 	}
+
+	// Array used to register ad slots with chartbeat
+	window._cba = [];
+
+	// add an id attribute to each slot
+	// id will be the slots name unless overidden
+	utils.on('ready', function(event) {
+		var slot = event.detail.slot;
+		var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
+		slot.container.setAttribute('data-cb-ad-id', name);
+	});
+
+	// Register GPT slots after they're defined with gpt
+	utils.on('complete', function(event) {
+		var slot = event.detail.slot;
+		if (slot.gpt) {
+			window._cba.push(function() {
+				window.pSUPERFLY.registerGptSlot(slot.gpt.slot, slot.gpt.id);
+
+				// TODO: where do we get this config?
+				// (12/8/15)
+				// from the call I'm on it would seem this config will come from data attributes on the creative
+				// using data attrs seems far more managable than using page configuration due to complexitities
+				// with master comapnions and such
+				//window.pSUPERFLY.addEngagedAdFilter({engagedSeconds:15, id: slot.gpt.id});
+			});
+		}
+	});
+
+	// Notify chartbeat when a refresh happens
+	utils.on('refresh', function(event) {
+		if (window.pSUPERFLY) {
+			window.pSUPERFLY.refreshAd(event.detail.name);
+		}
+	});
 };
