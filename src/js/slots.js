@@ -213,7 +213,7 @@ Slots.prototype.initPostMessage = function() {
 				delete data.name;
 				slot.fire(type, data);
 			}
-		} else if (/^touch/.test(type)) {
+		} else if (/^touch/.test(event.data.type)) {
 			slot.fire('touch', data);
 		}
 	}
