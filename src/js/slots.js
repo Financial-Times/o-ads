@@ -207,14 +207,14 @@ Slots.prototype.initPostMessage = function() {
 				}, '*');
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
-			} else if (/^touch/.test(type)) {
-				slot.fire('touch', data);
 			} else {
 				var data = event.data;
 				delete data.type;
 				delete data.name;
 				slot.fire(type, data);
 			}
+		} else if (/^touch/.test(type)) {
+			slot.fire('touch', data);
 		}
 	}
 };
