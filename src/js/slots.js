@@ -193,20 +193,26 @@ Slots.prototype.initPostMessage = function() {
 	// Listen for messages coming from ads
 	window.addEventListener('message', pmHandler.bind(null, this), false);
 	function pmHandler(slots, event) {
-		var data = event.data || event.message;
-		if (data.hasOwnProperty('oAds')) {
-			var type = data.oAds;
-			var slot = data.name;
+		if (/^oAds\./.test(event.data.type)) {
+			var type = event.data.type.replace('oAds\.', '');
+			var slot = event.data.name ? slots[event.data.name] : false;
 			if (type === 'whoami') {
+				slot.impressionURL = event.data.impressionURL;
 				var slotName = utils.iframeToSlotName(event.source.window);
-				if (slotName) {
-					event.source.postMessage({
-						oAds: 'youare',
-						name: slotName
-					}, '*');
-				}
-			} else if (type === 'collapse' && slots[slot]) {
-				slots[slot].collapse();
+
+				event.source.postMessage({
+					type: 'oAds.youare',
+					name: slotName
+				}, '*');
+			} else if (utils.isFunction(slot[type])) {
+				slot[type]();
+			} else if (/^touch/.test(type)) {
+				slot.fire('touch', data);
+			} else {
+				var data = event.data;
+				delete data.type;
+				delete data.name;
+				slot.fire(type, data);
 			}
 		}
 	}
@@ -221,7 +227,6 @@ Slots.prototype.forEach = function(fn) {
 	}.bind(this));
 	return this;
 };
-
 
 /*
 * Initialise slots

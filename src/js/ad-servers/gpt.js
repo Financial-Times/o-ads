@@ -30,6 +30,7 @@ function init() {
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
+	utils.on('resize', onResize);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -180,6 +181,7 @@ function onReady(slotMethods, event) {
 			.addServices()
 			.setCollapseEmpty()
 			.setTargeting()
+			.delayImpression()
 			.setURL();
 
 			if (slot.outOfPage) {
@@ -216,6 +218,11 @@ function onRefresh(event) {
 	}
 
 	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
+}
+
+function onResize(event) {
+	this.gpt.iframe.width = event.size[0];
+	this.gpt.iframe.height = event.size[1];
 }
 
 /*
@@ -395,6 +402,18 @@ var slotMethods = {
 		var canonical = config('canonical');
 		if (canonical) {
 			gptSlot.set('page_url', canonical || utils.getLocation());
+		}
+
+		return this;
+	},
+
+	/**
+	  * Delays the impression until the impression viewed url is called
+*/
+	delayImpression: function(gptSlot) {
+		gptSlot = gptSlot || this.gpt.slot;
+		if (this.delayImpression) {
+			gptSlot.setTargeting('d_imp', 1);
 		}
 
 		return this;
