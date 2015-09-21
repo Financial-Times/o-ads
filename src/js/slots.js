@@ -197,9 +197,10 @@ Slots.prototype.initPostMessage = function() {
 			var type = event.data.type.replace('oAds\.', '');
 			var slot = event.data.name ? slots[event.data.name] : false;
 			if (type === 'whoami') {
-				slot.impressionURL = event.data.impressionURL;
 				var slotName = utils.iframeToSlotName(event.source.window);
-
+				if (slotName) {
+					slots[slotName].impressionURL = event.data.impressionURL;
+				}
 				event.source.postMessage({
 					type: 'oAds.youare',
 					name: slotName
