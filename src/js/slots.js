@@ -214,7 +214,6 @@ Slots.prototype.initPostMessage = function() {
 				slot.fire(type, data);
 			}
 		} else if (/^touch/.test(event.data.type)) {
-			delete event.data.name;
 			slots[event.data.name].fire('touch', event.data);
 		}
 	}
