@@ -181,7 +181,7 @@ function onReady(slotMethods, event) {
 			.addServices()
 			.setCollapseEmpty()
 			.setTargeting()
-			.delayImpression()
+			.setDelayImpression()
 			.setURL();
 
 			if (slot.outOfPage) {
@@ -410,7 +410,7 @@ var slotMethods = {
 	/**
 	  * Delays the impression until the impression viewed url is called
 */
-	delayImpression: function(gptSlot) {
+	setDelayImpression: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
 		if (this.delayImpression) {
 			gptSlot.setTargeting('d_imp', 1);
