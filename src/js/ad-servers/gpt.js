@@ -301,6 +301,10 @@ var slotMethods = {
 		googletag.display(oop.id);
 		return this;
 	},
+	clearSlot: function(gptSlot){
+		gptSlot = gptSlot || this.gpt.slot;
+		googletag.pubads().clear(gptSlot);
+	},
 	initResponsive: function() {
 		utils.on('breakpoint', function(event) {
 			var slot = event.detail.slot;
@@ -453,4 +457,7 @@ function updateCorrelator() {
 
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = setPageTargeting;
+module.exports.updatePageTargeting = function(override) {
+	var params = utils.isPlainObject(override) ? override : oAds.targeting.get();
+	setPageTargeting(params);
+};

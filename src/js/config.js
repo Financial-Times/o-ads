@@ -28,17 +28,17 @@ var utils = require('./utils');
 */
 var defaults = {
 	formats: {
-		MediumRectangle:  {sizes:[300, 250]},
-		Rectangle:  {sizes:[180, 50]},
-		WideSkyscraper:  {sizes:[160, 600]},
-		Leaderboard:  {sizes:[728, 90]},
-		SuperLeaderboard: {sizes: [[970, 90]]},
+		MediumRectangle:  {sizes: [300, 250]},
+		Rectangle:  {sizes: [180, 50]},
+		WideSkyscraper:  {sizes: [160, 600]},
+		Leaderboard:  {sizes: [728, 90]},
+		SuperLeaderboard: {sizes: [970, 90]},
 		HalfPage: {sizes: [300, 600]},
 		Billboard:  {sizes: [970, 250]},
 		Portrait:  {sizes: [300, 1050]},
-		Pushdown:  {sizes: [[970, 90], [970, 66]]},
-		Sidekick:  {sizes: [[300, 250], [300, 600], [970, 250]]},
-		AdhesionBanner: {sizes: [320, 50]}
+		AdhesionBanner: {sizes: [320, 50]},
+		MicroBar: {sizes: [88, 31]},
+		Button2: {sizes: [120, 60]}
 	},
 	flags: {
 		refresh: true,
