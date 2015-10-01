@@ -32,7 +32,7 @@ var defaults = {
 		Rectangle:  {sizes: [180, 50]},
 		WideSkyscraper:  {sizes: [160, 600]},
 		Leaderboard:  {sizes: [728, 90]},
-		SuperLeaderboard: {sizes: [970, 90]},
+		SuperLeaderboard: {sizes: [[970, 90], [970, 66]]},
 		HalfPage: {sizes: [300, 600]},
 		Billboard:  {sizes: [970, 250]},
 		Portrait:  {sizes: [300, 1050]},

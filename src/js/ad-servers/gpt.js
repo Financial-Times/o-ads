@@ -181,7 +181,6 @@ function onReady(slotMethods, event) {
 			.addServices()
 			.setCollapseEmpty()
 			.setTargeting()
-			.setDelayImpression()
 			.setURL();
 
 			if (slot.outOfPage) {
@@ -406,18 +405,6 @@ var slotMethods = {
 		var canonical = config('canonical');
 		if (canonical) {
 			gptSlot.set('page_url', canonical || utils.getLocation());
-		}
-
-		return this;
-	},
-
-	/**
-	  * Delays the impression until the impression viewed url is called
-*/
-	setDelayImpression: function(gptSlot) {
-		gptSlot = gptSlot || this.gpt.slot;
-		if (this.delayImpression) {
-			gptSlot.setTargeting('d_imp', 1);
 		}
 
 		return this;

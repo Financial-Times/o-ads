@@ -115,7 +115,6 @@ function Slot(container, screensize) {
 	this.lazyLoad = slotConfig.lazyLoad || false;
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
-	this.delayImpression = slotConfig.delayImpression || false;
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
