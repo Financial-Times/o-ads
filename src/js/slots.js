@@ -186,6 +186,39 @@ function onBreakpointChange(slots, screensize) {
 	});
 }
 
+/*
+* Initialise the postMessage API
+*/
+Slots.prototype.initPostMessage = function() {
+	// Listen for messages coming from ads
+	window.addEventListener('message', pmHandler.bind(null, this), false);
+	function pmHandler(slots, event) {
+		if (/^oAds\./.test(event.data.type)) {
+			var type = event.data.type.replace('oAds\.', '');
+			var slot = event.data.name ? slots[event.data.name] : false;
+			if (type === 'whoami') {
+				var slotName = utils.iframeToSlotName(event.source.window);
+				if (slotName) {
+					slots[slotName].impressionURL = event.data.impressionURL;
+				}
+				event.source.postMessage({
+					type: 'oAds.youare',
+					name: slotName
+				}, '*');
+			} else if (utils.isFunction(slot[type])) {
+				slot[type]();
+			} else {
+				var data = event.data;
+				delete data.type;
+				delete data.name;
+				slot.fire(type, data);
+			}
+		} else if (/^touch/.test(event.data.type)) {
+			slots[event.data.name].fire('touch', event.data);
+		}
+	}
+};
+
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(function(name) {
 		var slot = this[name];
@@ -196,7 +229,6 @@ Slots.prototype.forEach = function(fn) {
 	return this;
 };
 
-
 /*
 * Initialise slots
 */
@@ -205,6 +237,7 @@ Slots.prototype.init = function() {
 	this.initInview();
 	this.initRendered();
 	this.initResponsive();
+	this.initPostMessage();
 };
 
 Slots.prototype.timers = {};

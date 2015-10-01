@@ -30,6 +30,7 @@ function init() {
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
+	utils.on('resize', onResize);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -218,6 +219,11 @@ function onRefresh(event) {
 	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
 }
 
+function onResize(event) {
+	this.gpt.iframe.width = event.size[0];
+	this.gpt.iframe.height = event.size[1];
+}
+
 /*
 * function passed to the gpt library that is run when an ad completes rendering
 */
@@ -293,6 +299,10 @@ var slotMethods = {
 		this.setURL(oop.slot);
 		googletag.display(oop.id);
 		return this;
+	},
+	clearSlot: function(gptSlot){
+		gptSlot = gptSlot || this.gpt.slot;
+		googletag.pubads().clear(gptSlot);
 	},
 	initResponsive: function() {
 		utils.on('breakpoint', function(event) {
@@ -434,4 +444,7 @@ function updateCorrelator() {
 
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = setPageTargeting;
+module.exports.updatePageTargeting = function(override) {
+	var params = utils.isPlainObject(override) ? override : oAds.targeting.get();
+	setPageTargeting(params);
+};
