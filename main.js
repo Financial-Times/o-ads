@@ -60,6 +60,29 @@ var initAll = function() {
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
 };
 
+Ads.prototype.data = function (){
+	/* jshint devel: true */
+	if (window.console){
+		var table = [];
+
+		this.slots.forEach(function (slot) {
+			var row = {
+			name: slot.name,
+			'creative id': slot.gpt.creativeId || 'N/A',
+			'line item id': slot.gpt.lineItemId || 'N/A',
+			size: (slot.gpt.size && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A'
+			};
+			table.push(row);
+		});
+
+		if(console.table) {
+			console.table(table);
+		} else {
+			console.log(JSON.stringify(table, null, 2));
+		}
+	}
+};
+
 document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
 
 module.exports = ads;
