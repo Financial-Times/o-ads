@@ -69,10 +69,13 @@ Ads.prototype.debug = function (){
 		this.slots.forEach(function (slot) {
 			var row = {
 				name: slot.name,
+				'unit name': slot.gpt.unitName,
 				'creative id': slot.gpt.creativeId || 'N/A',
 				'line item id': slot.gpt.lineItemId || 'N/A',
-				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A'
+				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A',
+				targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
 			};
+
 			table.push(row);
 		});
 		console.group('Creatives');
