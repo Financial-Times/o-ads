@@ -75,12 +75,13 @@ Ads.prototype.debug = function (){
 			};
 			table.push(row);
 		});
-
+		console.group('Creatives');
 		if(console.table) {
 			console.table(table);
 		} else {
 			console.log(JSON.stringify(table, null, 2));
 		}
+		console.groupEnd('Creatives');
 	}
 };
 
