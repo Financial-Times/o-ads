@@ -41,6 +41,7 @@ Ads.prototype.init = function(config) {
 	this.cb.init();
 	this.rubicon.init();
 	this.admantx.init();
+	this.utils.on('debug', this.debug.bind(this));
 	return this;
 };
 
@@ -60,17 +61,17 @@ var initAll = function() {
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
 };
 
-Ads.prototype.data = function (){
+Ads.prototype.debug = function (){
 	/* jshint devel: true */
 	if (window.console){
 		var table = [];
 
 		this.slots.forEach(function (slot) {
 			var row = {
-			name: slot.name,
-			'creative id': slot.gpt.creativeId || 'N/A',
-			'line item id': slot.gpt.lineItemId || 'N/A',
-			size: (slot.gpt.size && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A'
+				name: slot.name,
+				'creative id': slot.gpt.creativeId || 'N/A',
+				'line item id': slot.gpt.lineItemId || 'N/A',
+				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A'
 			};
 			table.push(row);
 		});
