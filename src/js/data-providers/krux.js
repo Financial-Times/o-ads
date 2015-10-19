@@ -14,7 +14,7 @@
 var utils = require('../utils');
 var config = require('../config');
 var delegate;
-delegate = require('dom-delegate');
+delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
