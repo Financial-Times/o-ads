@@ -204,7 +204,8 @@ Slots.prototype.initPostMessage = function() {
 
 				event.source.postMessage({
 					type: 'oAds.youare',
-					name: slotName
+					name: slotName,
+					sizes: (slotName && slots[slotName].sizes)
 				}, '*');
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
