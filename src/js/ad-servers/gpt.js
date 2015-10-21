@@ -30,7 +30,7 @@ function init() {
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
-	utils.on('resize', onResize);
+	utils.on('resize', onResize.bind());
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -220,8 +220,9 @@ function onRefresh(event) {
 }
 
 function onResize(event) {
-	this.gpt.iframe.width = event.size[0];
-	this.gpt.iframe.height = event.size[1];
+	var slot = event.detail.slot;
+	slot.gpt.iframe.width = event.size[0];
+	slot.gpt.iframe.height = event.size[1];
 }
 
 /*
