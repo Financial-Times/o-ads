@@ -30,7 +30,7 @@ function init() {
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
-	utils.on('resize', onResize.bind());
+	utils.on('resize', onResize);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -221,13 +221,14 @@ function onRefresh(event) {
 
 function onResize(event) {
 	var slot = event.detail.slot;
-	if (+event.size[0] == 100 && +event.size[1] === 100){
-		slot.gpt.iframe.width = event.size[0] + '%';
-		slot.gpt.iframe.height = event.size[1] + '%';
-	} else {
-		slot.gpt.iframe.width = event.size[0];
-		slot.gpt.iframe.height = event.size[1];
+	var size = event.detail.size;
+	if (+size[0] == 100 && +size[1] === 100){
+		size[0] = size[0] + '%';
+		size[1] = size[1] + '%';
 	}
+
+	slot.gpt.iframe.width = size[0];
+	slot.gpt.iframe.height = size[1];
 }
 
 /*
