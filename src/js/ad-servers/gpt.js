@@ -221,8 +221,13 @@ function onRefresh(event) {
 
 function onResize(event) {
 	var slot = event.detail.slot;
-	slot.gpt.iframe.width = event.size[0];
-	slot.gpt.iframe.height = event.size[1];
+	if (+event.size[0] == 100 && +event.size[1] === 100){
+		slot.gpt.iframe.width = event.size[0] + '%';
+		slot.gpt.iframe.height = event.size[1] + '%';
+	} else {
+		slot.gpt.iframe.width = event.size[0];
+		slot.gpt.iframe.height = event.size[1];
+	}
 }
 
 /*
@@ -253,10 +258,9 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
-	if (event.size && +event.size[0] === 100 && +event.size[1] === 100) {
-		detail.iframe.width = '100%';
-		detail.iframe.height = '100%';
-	}
+	event.slot.fire('resize', {
+		size: [100, 100]
+	});
 
 	utils.broadcast('rendered', data);
 }
