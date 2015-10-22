@@ -41,6 +41,7 @@ Ads.prototype.init = function(config) {
 	this.cb.init();
 	this.rubicon.init();
 	this.admantx.init();
+	this.utils.on('debug', this.debug.bind(this));
 	return this;
 };
 
@@ -58,6 +59,34 @@ var initAll = function() {
 	}
 
 	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
+};
+
+Ads.prototype.debug = function (){
+	/* jshint devel: true */
+	if (window.console){
+		var table = [];
+
+		this.slots.forEach(function (slot) {
+			var row = {
+				name: slot.name,
+				'unit name': slot.gpt.unitName,
+				'creative id': slot.gpt.creativeId || 'N/A',
+				'line item id': slot.gpt.lineItemId || 'N/A',
+				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
+				sizes: slot.sizes.map(function(item){ return item.join('×'); }).join(', '),
+				targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
+			};
+
+			table.push(row);
+		});
+		console.group('Creatives');
+		if(console.table) {
+			console.table(table, ['name', 'unit name', 'creative id', 'line item id', 'size', 'sizes', 'targeting']);
+		} else {
+			console.log(JSON.stringify(table, null, 2));
+		}
+		console.groupEnd('Creatives');
+	}
 };
 
 document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
