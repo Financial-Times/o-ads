@@ -33,7 +33,7 @@ module.exports.init = function() {
 			uid: this.config.uid,
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
-			zone: this.config.zone ||  gpt.site + '/' + gpt.zone,
+			zone: this.config.zone || gpt.unitName || gpt.site + '/' + gpt.zone,
 			sections: this.config.pageType,
 			enableAdRefresh: this.config.enableAdRefresh || false
 		};
