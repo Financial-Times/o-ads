@@ -12,6 +12,7 @@
 'use strict';
 var utils = require('../utils');
 var config = require('../config');
+var metadata = require('../metadata');
 
 /**
 * initialise chartbeat functionality
@@ -42,6 +43,34 @@ module.exports.init = function() {
 			// LOAD LIBRARY
 			window._sf_endpt = (new Date()).getTime();
 			utils.attach(src, true);
+		}
+
+		if (this.config.demographics) {
+			window._cbq = window._cbq || [];
+			// Pass User metadata to chartbeat
+			var demographicData = "",
+			userObj = metadata.user(),
+			demographicCodes = {
+			'02' : userObj.gender, // Gender
+			'05' : userObj.industry, // Industry
+			'06' : userObj.job_responsibility, // Responsibility
+			'07' : userObj.job_position, // Position
+			'19' : userObj.company_size, // Company Size
+			'40' : userObj.DB_company_size, // DB Company Size
+			'41' : userObj.DB_industry, // DB Industry
+			'42' : userObj.DB_company_turnover, // DB Company Takeover
+			'46' : userObj.cameo_investor_code, // Cameo Investor
+			'51' : userObj.cameo_property_code, // Cameo Property
+			'slv' : ((userObj.subscription_level) ? userObj.subscription_level : 'anon'),
+			}; // subscriber level
+
+			// add demographics data
+			for (var key in demographicCodes) {
+			if (demographicData.length !== 0) demographicData += ",";
+			demographicData = demographicData + key + "=" +  (!demographicCodes[key] || demographicCodes[key].match(/(NULL)|(null)/)) ? "" : demographicCodes[key] ;
+			}
+			window._cbq.push(["_demo", demographicData]);
+
 		}
 	}
 

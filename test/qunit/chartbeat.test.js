@@ -103,3 +103,9 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.slots.initSlot(this.node);
 	this.ads.slots.advert.fire('refresh');
 });
+
+QUnit.test('demographics configuration', function(assert) {
+	var config = {chartbeat : {'demographics' : true}};
+	this.ads.init(config);
+	assert.deepEqual(window._cbq, [['_demo', ""]], 'the demo data has been pushed onto the chartbeat command queue');
+});
