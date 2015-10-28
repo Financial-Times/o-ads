@@ -111,8 +111,12 @@ QUnit.test('demographics configuration set', function(assert) {
 	var config = {chartbeat : {'demographics' : true}};
 	window._cbq.push = this.spy();
 	this.ads.init(config);
+
 	assert.ok((window._cbq.push.callCount > 0), 'a call has been made to chartbeat api');
-	assert.ok(window._cbq.push.calledWith(['_demo', '']), 'parameters sent to api are correct');
+
+	var firstCall = window._cbq.push.getCall(0);
+	assert.ok((firstCall.args[0][0] === '_demo'), 'first array entry in parameter is correct');
+	assert.ok((firstCall.args[0][1] !== ''), 'second array entry in the parameter is not empty');
 });
 
 QUnit.test('demographics configuration not set', function(assert) {

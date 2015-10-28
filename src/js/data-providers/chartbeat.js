@@ -66,11 +66,12 @@ module.exports.init = function() {
 
 			// add demographics data
 			for (var key in demographicCodes) {
-			if (demographicData.length !== 0) demographicData += ",";
-			demographicData = demographicData + key + "=" +  (!demographicCodes[key] || demographicCodes[key].match(/(NULL)|(null)/)) ? "" : demographicCodes[key] ;
+				if (demographicData.length !== 0) {
+					demographicData += ",";
+				}
+				demographicData = demographicData + key + "=" +  ((!demographicCodes[key] || demographicCodes[key].match(/(NULL)|(null)/)) ? "" : demographicCodes[key]);
 			}
 			window._cbq.push(["_demo", demographicData]);
-
 		}
 	}
 
