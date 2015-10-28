@@ -32,6 +32,7 @@ QUnit.module('Chartbeat', {
 	},
 	afterEach: function() {
 		delete window.pSUPERFLY;
+		delete window._cbq;
 	}
 });
 
@@ -104,8 +105,14 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.slots.advert.fire('refresh');
 });
 
-QUnit.test('demographics configuration', function(assert) {
+QUnit.test('demographics configuration set', function(assert) {
 	var config = {chartbeat : {'demographics' : true}};
 	this.ads.init(config);
 	assert.deepEqual(window._cbq, [['_demo', ""]], 'the demo data has been pushed onto the chartbeat command queue');
+});
+
+QUnit.test('demographics configuration not set', function(assert) {
+	var config = {};
+	this.ads.init(config);
+	assert.notOk(window._cbq, 'no chart beat queue api has been set');
 });
