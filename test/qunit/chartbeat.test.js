@@ -23,6 +23,8 @@ QUnit.module('Chartbeat', {
 			};
 		}
 
+		window._cbq = [];
+
 		this.node = this.fixturesContainer.add('<div data-o-ads-name="advert"></div>');
 		this.basic = {
 			slots: {
@@ -107,12 +109,15 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 
 QUnit.test('demographics configuration set', function(assert) {
 	var config = {chartbeat : {'demographics' : true}};
+	window._cbq.push = this.spy();
 	this.ads.init(config);
-	assert.deepEqual(window._cbq, [['_demo', ""]], 'the demo data has been pushed onto the chartbeat command queue');
+	assert.ok((window._cbq.push.callCount > 0), 'a call has been made to chartbeat api');
+	assert.ok(window._cbq.push.calledWith(['_demo', '']), 'parameters sent to api are correct');
 });
 
 QUnit.test('demographics configuration not set', function(assert) {
 	var config = {};
+	window._cbq.push = this.spy();
 	this.ads.init(config);
-	assert.notOk(window._cbq, 'no chart beat queue api has been set');
+	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
 });
