@@ -23,6 +23,8 @@ QUnit.module('Chartbeat', {
 			};
 		}
 
+		window._cbq = [];
+
 		this.node = this.fixturesContainer.add('<div data-o-ads-name="advert"></div>');
 		this.basic = {
 			slots: {
@@ -32,6 +34,7 @@ QUnit.module('Chartbeat', {
 	},
 	afterEach: function() {
 		delete window.pSUPERFLY;
+		delete window._cbq;
 	}
 });
 
@@ -102,4 +105,23 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.init(config);
 	this.ads.slots.initSlot(this.node);
 	this.ads.slots.advert.fire('refresh');
+});
+
+QUnit.test('demographics configuration set', function(assert) {
+	var config = {chartbeat : {'demographics' : true}};
+	window._cbq.push = this.spy();
+	this.ads.init(config);
+
+	assert.ok((window._cbq.push.callCount > 0), 'a call has been made to chartbeat api');
+
+	var firstCall = window._cbq.push.getCall(0);
+	assert.ok((firstCall.args[0][0] === '_demo'), 'first array entry in parameter is correct');
+	assert.ok((firstCall.args[0][1] !== ''), 'second array entry in the parameter is not empty');
+});
+
+QUnit.test('demographics configuration not set', function(assert) {
+	var config = {};
+	window._cbq.push = this.spy();
+	this.ads.init(config);
+	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
 });
