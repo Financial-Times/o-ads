@@ -65,10 +65,10 @@ var origin = packageJson.repository.url;
 					{
 						preset: 'jquery',
 						transform: function(commit, cb) {
-						var tagRegexp = /tag:\s*[v=]?(.+?)[,\)]/gi;
-						var match = tagRegexp.exec(commit.gitTags);
-						commit.version = 'v' + match[1];
-						cb(null, commit);
+							var tagRegexp = /tag:\s*[v=]?(.+?)[,\)]/gi;
+							var match = tagRegexp.exec(commit.gitTags);
+							commit.version = 'v' + match[1];
+							cb(null, commit);
 						}
 			  		},
 			  		callback);
