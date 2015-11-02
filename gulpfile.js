@@ -9,8 +9,6 @@ var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
 var argv = require('yargs').argv;
 var conventionalGithubReleaser = require('conventional-github-releaser');
-
-
 var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
 
 // var obt = require('origami-build-tools');
