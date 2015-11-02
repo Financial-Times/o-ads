@@ -204,11 +204,11 @@ Slots.prototype.initPostMessage = function() {
 					slots[slotName].collapse();
 				}
 
-				event.source.postMessage({
+				event.source.postMessage(JSON.stringify({
 					type: 'oAds.youare',
 					name: slotName,
 					sizes: (slotName && slots[slotName].sizes)
-				}, '*');
+				}), '*');
 			} else if(type === 'responsive') {
 				slot.responsive = true;
 			} else if (utils.isFunction(slot[type])) {
