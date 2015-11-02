@@ -10,6 +10,8 @@ var tagVersion = require('gulp-tag-version');
 var argv = require('yargs').argv;
 var conventionalGithubReleaser = require('conventional-github-releaser');
 var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
+var packageJson = require('./package.json');
+var origin = packageJson.repository.url;
 
 // var obt = require('origami-build-tools');
 // var browserify = require('browserify');
@@ -34,15 +36,14 @@ var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc(type, callback) {
-	if(!gitSecret){
-		throw 'gitSecret parameter is required in order to make a public release';
-	}
+ function inc(type, callback) {
+ 	if(!gitSecret){
+ 		throw 'gitSecret parameter is required in order to make a public release';
+ 	}
 
-	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
-	git.checkout('master', function(err) {
-		if (err) throw err;
-
+ 	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
+ 	git.checkout('master', function(err) {
+ 		if (err) throw err;
 		gulp.src(['./package.json', './bower.json'])
 			.pipe(bump({type: type}))
 			.pipe(gulp.dest('./'))
@@ -52,20 +53,31 @@ function inc(type, callback) {
 			.on('end', function() {
 				git.push('origin', 'master', function(err) {
 					if (err) throw err;
-					git.push('origin', '--tag', function(err) {
-						if (err) throw err;
-						// make the Github release
-						conventionalGithubReleaser({
-						    type: 'oauth',
-						    token: gitSecret
-						  }, {
-						    preset: 'jquery'
-						  }, callback);
-					});
+				git.push('origin', '--tag', function(err) {
+					if (err) throw err;
+
+					// make the Github release
+					conventionalGithubReleaser(
+					{
+							type: 'oauth',
+							token: gitSecret
+					},
+					{
+						preset: 'jquery',
+						transform: function(commit, cb) {
+						var tagRegexp = /tag:\s*[v=]?(.+?)[,\)]/gi;
+						var match = tagRegexp.exec(commit.gitTags);
+						commit.version = 'v' + match[1];
+						cb(null, commit);
+						}
+			  		},
+			  		callback);
+
 				});
 			});
-	});
-}
+		});
+ 	});
+ }
 
 //
 // gulp.task('qunit:build', function() {
