@@ -318,7 +318,7 @@ var slotMethods = {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
 
-			if (slot.hasValidSize(screensize)) {
+			if (slot.hasValidSize(screensize) && !slot.responsive) {
 				if (slot.gpt.iframe) {
 					slot.fire('refresh');
 				} else if (!this.defer) {

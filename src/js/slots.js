@@ -192,13 +192,15 @@ function onBreakpointChange(slots, screensize) {
 Slots.prototype.initPostMessage = function() {
 	// Listen for messages coming from ads
 	window.addEventListener('message', pmHandler.bind(null, this), false);
+
 	function pmHandler(slots, event) {
-		if (/^oAds\./.test(event.data.type)) {
-			var type = event.data.type.replace('oAds\.', '');
-			var slot = event.data.name ? slots[event.data.name] : false;
+		var data = JSON.parse(event.data);
+		if (/^oAds\./.test(data.type)) {
+			var type = data.type.replace('oAds\.', '');
+			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami') {
 				var slotName = utils.iframeToSlotName(event.source.window);
-				if (event.data.collapse) {
+				if (data.collapse) {
 					slots[slotName].collapse();
 				}
 
@@ -207,16 +209,17 @@ Slots.prototype.initPostMessage = function() {
 					name: slotName,
 					sizes: (slotName && slots[slotName].sizes)
 				}, '*');
+			} else if(type === 'responsive') {
+				slot.responsive = true;
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
 			} else {
-				var data = event.data;
 				delete data.type;
 				delete data.name;
 				slot.fire(type, data);
 			}
-		} else if (/^touch/.test(event.data.type)) {
-			slots[event.data.name].fire('touch', event.data);
+		} else if (/^touch/.test(data.type)) {
+			slots[data.name].fire('touch', data);
 		}
 	}
 };
