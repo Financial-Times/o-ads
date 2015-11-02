@@ -7,6 +7,11 @@ var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
+var argv = require('yargs').argv;
+var conventionalGithubReleaser = require('conventional-github-releaser');
+
+
+var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
 
 // var obt = require('origami-build-tools');
 // var browserify = require('browserify');
@@ -32,6 +37,9 @@ var tagVersion = require('gulp-tag-version');
  */
 
 function inc(type, callback) {
+	if(!gitSecret){
+		throw 'gitSecret parameter is required in order to make a public release';
+	}
 
 	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
 	git.checkout('master', function(err) {
@@ -48,7 +56,13 @@ function inc(type, callback) {
 					if (err) throw err;
 					git.push('origin', '--tag', function(err) {
 						if (err) throw err;
-						callback();
+						// make the Github release
+						conventionalGithubReleaser({
+						    type: 'oauth',
+						    token: gitSecret
+						  }, {
+						    preset: 'jquery'
+						  }, callback);
 					});
 				});
 			});
