@@ -215,19 +215,12 @@ module.exports.user = function() {
 module.exports.page = function() {
 	var gpt = config('gpt') || {};
 	var result = {};
-	result.uuid = window.pageUUID ? window.pageUUID :
-	utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
-	result.auuid = window.articleUUID || undefined;
-	result.dfpSite = gpt.site;
-	result.dfpZone = gpt.zone;
-	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
-
-	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
-
-	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
-
-	if (utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
-
+	//result.uuid = window.pageUUID ? window.pageUUID :
+	//utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
+	// result.auuid = window.articleUUID || undefined;
+	// result.dfpSite = gpt.site;
+	// result.dfpZone = gpt.zone;
+	result.unitName = gpt.unitName;
 	return result;
 };
 
