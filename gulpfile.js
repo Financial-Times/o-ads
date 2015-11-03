@@ -58,12 +58,21 @@ function processRelease(type, callback){
 }
 
 
-gulp.task('add-remote', function(){
-	git.addRemote('origin', origin, function (err) {
-		// do not throw error if it says same origin already exists
-		if (err && err.message.indexOf('remote origin already exists') === -1) {
+gulp.task('add-github-remote', function(){
+	git.addRemote('github', origin, function (err) {
+		if (err && err.message.indexOf('remote github already exists') === -1) {
 			throw err;
 		}
+	});
+});
+
+gulp.task('push-to-github', function(callback){
+	git.push('github', 'master', function(err) {
+		if (err) throw err;
+		git.push('github', '--tag', function(err) {
+			if (err) throw err;
+			callback();
+		});
 	});
 });
 
@@ -91,9 +100,9 @@ gulp.task('process-release-patch', function(callback) { processRelease('type', c
 gulp.task('process-release-minor', function(callback) { processRelease('minor', callback) });
 gulp.task('process-release-major', function(callback) { processRelease('major', callback) });
 
-gulp.task('release:patch', function(done) {runSequence('add-remote', 'process-release-patch', 'github-release', done);});
-gulp.task('release:minor', function(done) {runSequence('add-remote', 'process-release-minor', 'github-release', done);});
-gulp.task('release:major', function(done) {runSequence('add-remote', 'process-release-major', 'github-release', done);});
+gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', done);});
+gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', done);});
+gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', done);});
 
 
 
