@@ -213,13 +213,13 @@ Slots.prototype.initPostMessage = function() {
 				slot.responsive = true;
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
+			} else if (/^touch/.test(data.type)) {
+				slots[data.name].fire('touch', data);
 			} else {
 				delete data.type;
 				delete data.name;
 				slot.fire(type, data);
 			}
-		} else if (/^touch/.test(data.type)) {
-			slots[data.name].fire('touch', data);
 		}
 	}
 };
