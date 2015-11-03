@@ -212,11 +212,5 @@ module.exports.user = function() {
 	return result;
 };
 
-module.exports.page = function() {
-	var gpt = config('gpt') || {};
-	var result = {};
-	return result;
-};
-
 module.exports.getAyscVars = getAyscVars;
 module.exports.getLoginInfo = getLoginInfo;
