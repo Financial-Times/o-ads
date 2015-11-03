@@ -194,8 +194,8 @@ Slots.prototype.initPostMessage = function() {
 	window.addEventListener('message', pmHandler.bind(null, this), false);
 
 	function pmHandler(slots, event) {
-		var data = JSON.parse(event.data);
-		if (/^oAds\./.test(data.type)) {
+		if (/^\{.*\}$/.test(event.data) && /oAds\./.test(event.data)) {
+			var data = JSON.parse(event.data);
 			var type = data.type.replace('oAds\.', '');
 			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami') {
