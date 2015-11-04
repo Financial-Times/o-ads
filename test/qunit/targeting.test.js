@@ -274,3 +274,22 @@ QUnit.test("Library Version", function(assert) {
 	var result = this.ads.targeting.get();
 	assert.equal(result.ver, '${project.version}', "library version returned correctly");
 });
+
+QUnit.test("get from Metadata", function(assert) {
+	this.ads.init();
+	var stub = this.stub(this.ads.metadata, 'user')
+
+	var user = stub.returns({eid: '123', loggedIn: true});
+	var result = this.ads.targeting.getFromMetaData();
+	assert.deepEqual(result, {eid: '123', fts: "true"});
+
+	user = stub.returns({eid: '456', loggedIn: false});
+	result = this.ads.targeting.getFromMetaData();
+	assert.deepEqual(result, {eid: '456', fts: "false"});
+
+	user = stub.returns({loggedIn: false});
+	result = this.ads.targeting.getFromMetaData();
+	assert.deepEqual(result, {eid: null, fts: "false"});
+
+
+});

@@ -65,13 +65,10 @@ Targeting.prototype.clear = function() {
 };
 
 Targeting.prototype.getFromMetaData =  function() {
-	var page = metadata.page();
 	var user = metadata.user();
 	return {
 		eid: user.eid || null,
-		fts: user.loggedIn + '',
-		uuid: page.uuid,
-		auuid: page.auuid
+		fts: user.loggedIn + ''
 	};
 };
 
