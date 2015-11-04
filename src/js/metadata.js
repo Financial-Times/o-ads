@@ -212,5 +212,11 @@ module.exports.user = function() {
 	return result;
 };
 
+// TODO: remove this from o-ads version 3
+module.exports.page = function() {
+	utils.log.warn('The metadata page method has been deprecated and will not available in future major versions of o-ads.');
+	return {};
+};
+
 module.exports.getAyscVars = getAyscVars;
 module.exports.getLoginInfo = getLoginInfo;
