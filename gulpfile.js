@@ -7,15 +7,12 @@ var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
-
-// var obt = require('origami-build-tools');
-// var browserify = require('browserify');
-// var swap = require('browserify-swap');
-// var debowerify = require('debowerify');
-// var source = require('vinyl-source-stream');
-// var buffer = require('vinyl-buffer');
-
-//var sourcemaps = require('gulp-sourcemaps');
+var argv = require('yargs').argv;
+var conventionalGithubReleaser = require('conventional-github-releaser');
+var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
+var packageJson = require('./package.json');
+var origin = packageJson.repository.url;
+var runSequence = require('run-sequence');
 
 /**
  * Bumping version number and tagging the repository with it.
@@ -31,12 +28,10 @@ var tagVersion = require('gulp-tag-version');
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc(type, callback) {
-
+function release(type, callback) {
 	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
-	git.checkout('master', function(err) {
+	git.checkout('master', function (err) {
 		if (err) throw err;
-
 		gulp.src(['./package.json', './bower.json'])
 			.pipe(bump({type: type}))
 			.pipe(gulp.dest('./'))
@@ -46,42 +41,70 @@ function inc(type, callback) {
 			.on('end', function() {
 				git.push('origin', 'master', function(err) {
 					if (err) throw err;
-					git.push('origin', '--tag', function(err) {
-						if (err) throw err;
-						callback();
-					});
+				git.push('origin', '--tag', function(err) {
+					if (err) throw err;
+					callback();
 				});
 			});
+		});
 	});
 }
 
-//
-// gulp.task('qunit:build', function() {
-// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
-// 	var dest = './build/qunit/';
-//
-// 	obt.build(gulp, {
-// 		js: './test/qunit/setup.js',
-// 		sourcemaps: true,
-// 		transforms: [swap],
-// 		buildFolder: dest
-// 	});
-// });
-//
-// gulp.task('qunit:coverage', function() {
-// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
-// 	var dest = './build/qunit-coverage/';
-//
-// 	obt.build(gulp, {
-// 		js: './test/qunit/setup.js',
-// 		transforms: [swap, ['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]],
-// 		buildFolder: dest
-// 	});
-// });
+function processRelease(type, callback){
+	if(!gitSecret){
+		throw 'gitSecret parameter is required in order to make a public release';
+	}
+	release(type, callback);
+}
 
-gulp.task('release:patch', function(callback) { inc('patch', callback); });
-gulp.task('release:minor', function(callback) { inc('minor', callback); });
-gulp.task('release:major', function(callback) { inc('major', callback); });
+
+gulp.task('add-github-remote', function(){
+	git.addRemote('github', origin, function (err) {
+		if (err && err.message.indexOf('remote github already exists') === -1) {
+			throw err;
+		}
+	});
+});
+
+gulp.task('push-to-github', function(callback){
+	git.push('github', 'master', function(err) {
+		if (err) throw err;
+		git.push('github', '--tag', function(err) {
+			if (err) throw err;
+			callback();
+		});
+	});
+});
+
+
+gulp.task('github-release', function(callback){
+	// make the Github release
+	conventionalGithubReleaser(
+	{
+			type: 'oauth',
+			token: gitSecret
+	},
+	{
+		preset: 'jquery',
+		transform: function(commit, cb) {
+			var tagRegexp = /tag:\s*[v=]?(.+?)[,\)]/gi;
+			var match = tagRegexp.exec(commit.gitTags);
+			commit.version = 'v' + match[1];
+			cb(null, commit);
+		}
+	},
+	callback);
+});
+
+gulp.task('process-release-patch', function(callback) { processRelease('type', callback) });
+gulp.task('process-release-minor', function(callback) { processRelease('minor', callback) });
+gulp.task('process-release-major', function(callback) { processRelease('major', callback) });
+
+gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', done);});
+gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', done);});
+gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', done);});
+
+
 
 function printAscii() {
 	console.log('                                  __           ');

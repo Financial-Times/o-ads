@@ -23,3 +23,7 @@ Include o-ads in the build and and add the following markup to the page:
 <div class="o-ads" data-o-ads-gpt-unit-name="/6355419/Travel" data-o-ads-formats="MediumRectangle"></div>
 ```
 o-ads will initialise on `o.DOMContentLoaded` and request a 300x250 (see Formats below) advert targeted from googles test network.
+
+## Developer notes
+Make sure that you check out the source and that the origin is set to the internal Git repository. The release process will automatically push it to Github.
+Original Git reference: http://git.svc.ft.com/scm/ads/o-ads.git
