@@ -84,3 +84,10 @@ QUnit.test("User not logged in", function(assert) {
 	assert.ok(!result.hasOwnProperty('gender'), 'properties with value X are not present');
 	assert.ok(!result.hasOwnProperty('homepage_edition'), 'properties with value undefined are not present');
 });
+
+QUnit.test("Page method warns it has been deprecated", function(assert) {
+	var warn = this.spy(this.utils.log, 'warn');
+	var result = this.ads.metadata.page();
+	assert.deepEqual(result, {}, "An empty object is returned");
+	assert.ok(warn.calledWith('The metadata page method has been deprecated and will not available in future major versions of o-ads.'), 'The warning is logged')
+});
