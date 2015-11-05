@@ -2,6 +2,8 @@
 'use strict';
 
 printAscii();
+
+var path = require('path');
 var gulp = require('gulp');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
@@ -9,8 +11,10 @@ var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
 var argv = require('yargs').argv;
 var conventionalGithubReleaser = require('conventional-github-releaser');
-var packageJson = require('./package.json');
+var packageJsonPath = path.join(__dirname, 'package.json');
+var packageJson =  readPackageJSON(packageJsonPath) ;
 var runSequence = require('run-sequence');
+
 
 var yargs = require('yargs')
         .usage('Release automation for Stash and Github')
@@ -28,8 +32,15 @@ var githubToken = args.t;
 var origin = packageJson.repository.url;
 
 
+function readPackageJSON(path) {
+	if (require.cache[path]){
+		delete require.cache[path];
+	}
+	return require(path);
+}
+
 // expects a HTTPS Github repo URL
-function generateAuthenticatedGithubUrl(url, email,token){
+function generateAuthenticatedGithubUrl(url, email, token){
 	var parts = encodeURI(url).split('//');
 	return parts[0] + '//' + encodeURIComponent(email) + ':' + token + '@' + parts[1];
 }
@@ -98,6 +109,8 @@ gulp.task('push-to-github', function(callback){
 
 
 gulp.task('github-release', function(callback){
+	// get updated version number
+	packageJson = readPackageJSON(packageJsonPath);
 	// make the Github release
 	conventionalGithubReleaser(
 	{
@@ -107,9 +120,7 @@ gulp.task('github-release', function(callback){
 	{
 		preset: 'jquery',
 		transform: function(commit, cb) {
-			var tagRegexp = /tag:\s*[v=]?(.+?)[,\)]/gi;
-			var match = tagRegexp.exec(commit.gitTags);
-			commit.version = 'v' + match[1];
+			commit.version = 'v' + packageJson.version;
 			cb(null, commit);
 		}
 	},
