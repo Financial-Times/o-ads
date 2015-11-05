@@ -80,12 +80,6 @@ gulp.task('add-github-remote', function(){
 	});
 });
 
-gulp.task('remove-github-remote', function(){
-	git.removeRemote('github', function (err) {
-	  if (err) throw err;
-	});
-});
-
 gulp.task('push-to-github', function(callback){
 	git.push('github', 'master', function(err) {
 		if (err) throw err;
@@ -120,9 +114,9 @@ gulp.task('process-release-patch', function(callback) { release('type', callback
 gulp.task('process-release-minor', function(callback) { release('minor', callback) });
 gulp.task('process-release-major', function(callback) { release('major', callback) });
 
-gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', 'remove-github-remote', done);});
-gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', 'remove-github-remote', done);});
-gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', 'remove-github-remote', done);});
+gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', done);});
+gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', done);});
+gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', done);});
 
 
 
