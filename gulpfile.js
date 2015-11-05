@@ -9,10 +9,32 @@ var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
 var argv = require('yargs').argv;
 var conventionalGithubReleaser = require('conventional-github-releaser');
-var gitSecret = (argv.gitSecret === undefined) ? false : argv.gitSecret;
 var packageJson = require('./package.json');
-var origin = packageJson.repository.url;
 var runSequence = require('run-sequence');
+
+var yargs = require('yargs')
+        .usage('Release automation for Stash and Github')
+        .alias('e', 'email')
+        .describe('email', 'Github login email')
+        .demand('e', 'Please provide Github login email')
+        .alias('t', 'token')
+        .describe('token', 'Github personal access token')
+        .demand('t', 'Please provide Github personal access token');
+
+
+var args = yargs.argv;
+var githubEmail = args.e;
+var githubToken = args.t;
+var origin = packageJson.repository.url;
+
+
+// expects a HTTPS Github repo URL
+function generateAuthenticatedGithubUrl(url, email,token){
+	var parts = encodeURI(url).split('//');
+	return parts[0] + '//' + encodeURIComponent(email) + ':' + token + '@' + parts[1];
+}
+
+var githubOrigin = generateAuthenticatedGithubUrl(origin, githubEmail, githubToken);
 
 /**
  * Bumping version number and tagging the repository with it.
@@ -50,19 +72,17 @@ function release(type, callback) {
 	});
 }
 
-function processRelease(type, callback){
-	if(!gitSecret){
-		throw 'gitSecret parameter is required in order to make a public release';
-	}
-	release(type, callback);
-}
-
-
 gulp.task('add-github-remote', function(){
-	git.addRemote('github', origin, function (err) {
+	git.addRemote('github', githubOrigin, function (err) {
 		if (err && err.message.indexOf('remote github already exists') === -1) {
 			throw err;
 		}
+	});
+});
+
+gulp.task('remove-github-remote', function(){
+	git.removeRemote('github', function (err) {
+	  if (err) throw err;
 	});
 });
 
@@ -82,7 +102,7 @@ gulp.task('github-release', function(callback){
 	conventionalGithubReleaser(
 	{
 			type: 'oauth',
-			token: gitSecret
+			token: githubToken
 	},
 	{
 		preset: 'jquery',
@@ -96,13 +116,13 @@ gulp.task('github-release', function(callback){
 	callback);
 });
 
-gulp.task('process-release-patch', function(callback) { processRelease('type', callback) });
-gulp.task('process-release-minor', function(callback) { processRelease('minor', callback) });
-gulp.task('process-release-major', function(callback) { processRelease('major', callback) });
+gulp.task('process-release-patch', function(callback) { release('type', callback) });
+gulp.task('process-release-minor', function(callback) { release('minor', callback) });
+gulp.task('process-release-major', function(callback) { release('major', callback) });
 
-gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', done);});
-gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', done);});
-gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', done);});
+gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', 'remove-github-remote', done);});
+gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', 'remove-github-remote', done);});
+gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', 'remove-github-remote', done);});
 
 
 
