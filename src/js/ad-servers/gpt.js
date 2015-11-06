@@ -445,6 +445,9 @@ function updateCorrelator() {
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = function(override) {
-	var params = utils.isPlainObject(override) ? override : targeting.get();
-	setPageTargeting(params);
+	if (window.googletag) {
+		var params = utils.isPlainObject(override) ? override : targeting.get();
+		setPageTargeting(params);
+	}
+	else {utils.log.warn('Attempting to set page targeting before the GPT library has initialized');}
 };
