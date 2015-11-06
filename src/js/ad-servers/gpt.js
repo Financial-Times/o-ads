@@ -445,6 +445,6 @@ function updateCorrelator() {
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = function(override) {
-	var params = utils.isPlainObject(override) ? override : oAds.targeting.get();
+	var params = utils.isPlainObject(override) ? override : targeting.get();
 	setPageTargeting(params);
 };
