@@ -37,17 +37,8 @@ Krux.prototype.init = function(impl) {
 			);
 		}
 
-		if(metadata.page){
-			Object.keys(metadata.page).forEach(function(item) {
-				Krux('set', 'page_attr_' + item, metadata.page[item]);
-			});
-		}
-
-		if(metadata.user) {
-			Object.keys(metadata.user).forEach(function(item) {
-				Krux('set', 'user_attr_' + item, metadata.user[item]);
-			});
-		}
+		this.setPageAttributes(metadata)
+		this.setUserAttributes(metadata)
 
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
@@ -175,6 +166,22 @@ Krux.prototype.events.init = function() {
 				configured[event].fn(configured[event]);
 			}
 		}
+	}
+};
+
+Krux.prototype.setPageAttributes = function (metadata) {
+	if(metadata.page){
+		Object.keys(metadata.page).forEach(function(item) {
+			Krux('set', 'page_attr_' + item, metadata.page[item]);
+		});
+	}
+};
+
+Krux.prototype.setUserAttributes = function (metadata) {
+	if(metadata.user){
+		Object.keys(metadata.user).forEach(function(item) {
+			Krux('set', 'page_attr_' + item, metadata.user[item]);
+		});
 	}
 };
 
