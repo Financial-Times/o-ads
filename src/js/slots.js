@@ -195,7 +195,7 @@ Slots.prototype.initPostMessage = function() {
 
 	function pmHandler(slots, event) {
 		if (/^\{.*\}$/.test(event.data) && /oAds\./.test(event.data)) {
-			var data = JSON.parse(event.data);
+			var data = utils.messenger.parse(event.data);
 			var type = data.type.replace('oAds\.', '');
 			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami') {
@@ -203,12 +203,12 @@ Slots.prototype.initPostMessage = function() {
 				if (data.collapse) {
 					slots[slotName].collapse();
 				}
-
-				event.source.postMessage(JSON.stringify({
+				var messageToSend = {
 					type: 'oAds.youare',
 					name: slotName,
 					sizes: (slotName && slots[slotName].sizes)
-				}), '*');
+				}
+				utils.messenger.post(messageToSend, event.source);
 			} else if(type === 'responsive') {
 				slot.responsive = true;
 			} else if (utils.isFunction(slot[type])) {
