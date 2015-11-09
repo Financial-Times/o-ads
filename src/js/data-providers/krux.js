@@ -26,12 +26,27 @@ function Krux() {
 }
 
 Krux.prototype.init = function(impl) {
+	var conf = config('krux');
+	var metadata = config('metadata');
 	if (config('krux') && config('krux').id) {
+
 		if (!window.Krux) {
 			((window.Krux = function() {
 				window.Krux.q.push(arguments);
 			}).q = []
 			);
+		}
+
+		if(metadata.page){
+			Object.keys(metadata.page).forEach(function(item) {
+				Krux('set', 'page_attr_' + item, metadata.page[item]);
+			});
+		}
+
+		if(metadata.user) {
+			Object.keys(metadata.user).forEach(function(item) {
+				Krux('set', 'user_attr_' + item, metadata.user[item]);
+			});
 		}
 
 		var m,
