@@ -22,7 +22,6 @@ var metadata = require('../metadata');
 * @lends ChartBeat
 */
 
-
 module.exports.init = function() {
 	var gpt = config('gpt') || {};
 	var src = '//static.chartbeat.com/js/chartbeat_pub.js';

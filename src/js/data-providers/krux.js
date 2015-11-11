@@ -170,7 +170,7 @@ Krux.prototype.events.init = function() {
 };
 
 Krux.prototype.setPageAttributes = function (metadata) {
-	if(metadata.page){
+	if(metadata && metadata.page){
 		Object.keys(metadata.page).forEach(function(item) {
 			Krux('set', 'page_attr_' + item, metadata.page[item]);
 		});
@@ -178,9 +178,9 @@ Krux.prototype.setPageAttributes = function (metadata) {
 };
 
 Krux.prototype.setUserAttributes = function (metadata) {
-	if(metadata.user){
+	if(metadata && metadata.user){
 		Object.keys(metadata.user).forEach(function(item) {
-			Krux('set', 'page_attr_' + item, metadata.user[item]);
+			Krux('set', 'user_attr_' + item, metadata.user[item]);
 		});
 	}
 };
