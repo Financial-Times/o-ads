@@ -28,21 +28,22 @@ function Krux() {
 Krux.prototype.init = function(impl) {
 	var conf = config('krux');
 	var metadata = config('metadata');
-	if (config('krux') && config('krux').id) {
+	if (conf.id) {
 
 		if (!window.Krux) {
 			((window.Krux = function() {
 				window.Krux.q.push(arguments);
 			}).q = []
 			);
+			this.api = window.Krux;
 		}
 
-		this.setPageAttributes(metadata)
-		this.setUserAttributes(metadata)
+		this.setPageAttributes(metadata);
+		this.setUserAttributes(metadata);
 
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + config('krux').id;
+		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + conf.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -172,7 +173,7 @@ Krux.prototype.events.init = function() {
 Krux.prototype.setPageAttributes = function (metadata) {
 	if(metadata && metadata.page){
 		Object.keys(metadata.page).forEach(function(item) {
-			Krux('set', 'page_attr_' + item, metadata.page[item]);
+			this.api('set', 'page_attr_' + item, metadata.page[item]);
 		});
 	}
 };
@@ -180,7 +181,7 @@ Krux.prototype.setPageAttributes = function (metadata) {
 Krux.prototype.setUserAttributes = function (metadata) {
 	if(metadata && metadata.user){
 		Object.keys(metadata.user).forEach(function(item) {
-			Krux('set', 'user_attr_' + item, metadata.user[item]);
+			this.api('set', 'user_attr_' + item, metadata.user[item]);
 		});
 	}
 };
