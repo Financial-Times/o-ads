@@ -30,7 +30,7 @@ function Krux() {
 Krux.prototype.init = function(impl) {
 	var conf = config('krux');
 	var metadata = config('metadata');
-	if (conf.id) {
+	if (conf && conf.id) {
 
 		if (!window.Krux) {
 			((window.Krux = function() {
