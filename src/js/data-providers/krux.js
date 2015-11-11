@@ -14,6 +14,8 @@
 var utils = require('../utils');
 var config = require('../config');
 var delegate;
+var self;
+
 delegate = require('ftdomdelegate');
 
 /**
@@ -35,8 +37,10 @@ Krux.prototype.init = function(impl) {
 				window.Krux.q.push(arguments);
 			}).q = []
 			);
-			this.api = window.Krux;
 		}
+
+		this.api = window.Krux;
+
 
 		this.setPageAttributes(metadata);
 		this.setUserAttributes(metadata);
@@ -174,7 +178,7 @@ Krux.prototype.setPageAttributes = function (metadata) {
 	if(metadata && metadata.page){
 		Object.keys(metadata.page).forEach(function(item) {
 			this.api('set', 'page_attr_' + item, metadata.page[item]);
-		});
+		}.bind(this));
 	}
 };
 
@@ -182,7 +186,7 @@ Krux.prototype.setUserAttributes = function (metadata) {
 	if(metadata && metadata.user){
 		Object.keys(metadata.user).forEach(function(item) {
 			this.api('set', 'user_attr_' + item, metadata.user[item]);
-		});
+		}.bind(this));
 	}
 };
 
