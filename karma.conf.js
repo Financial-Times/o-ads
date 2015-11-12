@@ -66,6 +66,7 @@ if (process.env.COVERAGE) {
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
 		reporters: [
+
 			{
 				type: 'html',
 				subdir: function(browser) {

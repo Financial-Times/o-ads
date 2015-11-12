@@ -12,7 +12,6 @@
 'use strict';
 var utils = require('../utils');
 var config = require('../config');
-var metadata = require('../metadata');
 
 /**
 * initialise chartbeat functionality
@@ -21,11 +20,16 @@ var metadata = require('../metadata');
 * @memberof ChartBeat
 * @lends ChartBeat
 */
+function ChartBeat() {
 
-module.exports.init = function() {
+}
+
+ChartBeat.prototype.init = function() {
 	var gpt = config('gpt') || {};
+	var metadata = config('metadata');
 	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
+
 
 	if (this.config) {
 		// config must be in a global var
@@ -37,6 +41,7 @@ module.exports.init = function() {
 			sections: this.config.pageType,
 			enableAdRefresh: this.config.enableAdRefresh || false
 		};
+		window._cbq = window._cbq || [];
 
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
 			// LOAD LIBRARY
@@ -44,33 +49,8 @@ module.exports.init = function() {
 			utils.attach(src, true);
 		}
 
-		if (this.config.demographics) {
-			window._cbq = window._cbq || [];
-			// Pass User metadata to chartbeat
-			var demographicData = "",
-			userObj = metadata.user(),
-			demographicCodes = {
-			'02' : userObj.gender, // Gender
-			'05' : userObj.industry, // Industry
-			'06' : userObj.job_responsibility, // Responsibility
-			'07' : userObj.job_position, // Position
-			'19' : userObj.company_size, // Company Size
-			'40' : userObj.DB_company_size, // DB Company Size
-			'41' : userObj.DB_industry, // DB Industry
-			'42' : userObj.DB_company_turnover, // DB Company Takeover
-			'46' : userObj.cameo_investor_code, // Cameo Investor
-			'51' : userObj.cameo_property_code, // Cameo Property
-			'slv' : ((userObj.subscription_level) ? userObj.subscription_level : 'anon'),
-			}; // subscriber level
-
-			// add demographics data
-			for (var key in demographicCodes) {
-				if (demographicData.length !== 0) {
-					demographicData += ",";
-				}
-				demographicData = demographicData + key + "=" +  ((!demographicCodes[key] || demographicCodes[key].match(/(NULL)|(null)/)) ? "" : demographicCodes[key]);
-			}
-			window._cbq.push(["_demo", demographicData]);
+		if (this.config.demographics && metadata) {
+			this.addDemographics(metadata);
 		}
 	}
 
@@ -109,3 +89,33 @@ module.exports.init = function() {
 		}
 	});
 };
+
+ChartBeat.prototype.addDemographics = function(metadata) {
+	// Pass User metadata to chartbeat
+	var demographicCodes = {
+		'02': metadata.user.gender,
+		'05': metadata.user.industry,
+		'06': metadata.user.job_responsibility,
+		'07': metadata.user.job_position,
+		'19': metadata.user.company_size,
+		'40': metadata.user.DB_company_size,
+		'41': metadata.user.DB_industry,
+		'42': metadata.user.DB_company_turnover,
+		'46': metadata.user.cameo_investor_code,
+		'51': metadata.user.cameo_property_code,
+		'slv': metadata.user.subscription_level
+	};
+
+	function filterNulls(key) {
+		return demographicCodes[key] && /^null$/i.test(demographicCodes[key]);
+	}
+
+	function format(item) {
+		return item + '=' + demographicCodes[item];
+	}
+
+	demographicCodes = Object.keys(demographicCodes).filter(filterNulls).map(format).join(',');
+	window._cbq.push(["_demo", demographicCodes]);
+};
+
+module.exports = new ChartBeat();
