@@ -107,7 +107,7 @@ ChartBeat.prototype.addDemographics = function(metadata) {
 	};
 
 	function filterNulls(key) {
-		return demographicCodes[key] && /^null$/i.test(demographicCodes[key]);
+		return demographicCodes[key] && !/^null$/i.test(demographicCodes[key]);
 	}
 
 	function format(item) {
