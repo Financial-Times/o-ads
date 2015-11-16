@@ -26,7 +26,6 @@ function ChartBeat() {
 
 ChartBeat.prototype.init = function() {
 	var gpt = config('gpt') || {};
-	var metadata = config('metadata');
 	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
 
@@ -49,8 +48,8 @@ ChartBeat.prototype.init = function() {
 			utils.attach(src, true);
 		}
 
-		if (this.config.demographics && metadata) {
-			this.addDemographics(metadata);
+		if (this.config.demographics) {
+			this.addDemographics(this.config.demographics);
 		}
 	}
 
@@ -90,31 +89,16 @@ ChartBeat.prototype.init = function() {
 	});
 };
 
-ChartBeat.prototype.addDemographics = function(metadata) {
+ChartBeat.prototype.addDemographics = function(demographicsObject) {
 	// Pass User metadata to chartbeat
-	var demographicCodes = {
-		'02': metadata.user.gender,
-		'05': metadata.user.industry,
-		'06': metadata.user.job_responsibility,
-		'07': metadata.user.job_position,
-		'19': metadata.user.company_size,
-		'40': metadata.user.DB_company_size,
-		'41': metadata.user.DB_industry,
-		'42': metadata.user.DB_company_turnover,
-		'46': metadata.user.cameo_investor_code,
-		'51': metadata.user.cameo_property_code,
-		'slv': metadata.user.subscription_level
-	};
+	var demographicsArray = [];
 
-	function filterNulls(key) {
-		return demographicCodes[key] && !/^null$/i.test(demographicCodes[key]);
-	}
+	Object.keys(demographicsObject).forEach(function (key) {
+		demographicsArray.push(key + "=" + demographicsObject[key]);
+	});
 
-	function format(item) {
-		return item + '=' + demographicCodes[item];
-	}
+	var demographicCodes = demographicsArray.join(",");
 
-	demographicCodes = Object.keys(demographicCodes).filter(filterNulls).map(format).join(',');
 	window._cbq.push(["_demo", demographicCodes]);
 };
 

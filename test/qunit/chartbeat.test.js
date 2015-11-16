@@ -107,16 +107,12 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.slots.advert.fire('refresh');
 });
 
-QUnit.test('demographics configuration set', function(assert) {
-	var config = {chartbeat : {'demographics' : {27 : 'PVT'} }};
+QUnit.only('demographics configuration set', function(assert) {
+	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
 	window._cbq.push = this.spy();
 	this.ads.init(config);
 
-	assert.ok((window._cbq.push.callCount > 0), 'a call has been made to chartbeat api');
-
-	var firstCall = window._cbq.push.getCall(0);
-	assert.ok((firstCall.args[0][0] === '_demo'), 'first array entry in parameter is correct');
-	assert.ok((firstCall.args[0][1].indexOf('27=PVT,') > -1), 'second array entry in the parameter contains object key and value');
+	assert.ok(window._cbq.push.withArgs(["_demo", "18=TEST,27=PVT"]).calledOnce, 'demographic data has been queue on the chartbeat api');
 });
 
 QUnit.test('demographics configuration not set', function(assert) {
