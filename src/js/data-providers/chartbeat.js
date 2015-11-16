@@ -91,15 +91,11 @@ ChartBeat.prototype.init = function() {
 
 ChartBeat.prototype.addDemographics = function(demographicsObject) {
 	// Pass User metadata to chartbeat
-	var demographicsArray = [];
+	var demographicCodes = Object.keys(demographicsObject).map(function (key) {
+			return key + '=' + demographicsObject[key];
+		}).join(',');
 
-	Object.keys(demographicsObject).forEach(function (key) {
-		demographicsArray.push(key + "=" + demographicsObject[key]);
-	});
-
-	var demographicCodes = demographicsArray.join(",");
-
-	window._cbq.push(["_demo", demographicCodes]);
+	window._cbq.push(['_demo', demographicCodes]);
 };
 
 module.exports = new ChartBeat();
