@@ -107,7 +107,7 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	this.ads.slots.advert.fire('refresh');
 });
 
-QUnit.only('demographics configuration set', function(assert) {
+QUnit.test('demographics configuration set', function(assert) {
 	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
 	window._cbq.push = this.spy();
 	this.ads.init(config);
