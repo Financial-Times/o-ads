@@ -212,23 +212,10 @@ module.exports.user = function() {
 	return result;
 };
 
+// TODO: remove this from o-ads version 3
 module.exports.page = function() {
-	var gpt = config('gpt') || {};
-	var result = {};
-	result.uuid = window.pageUUID ? window.pageUUID :
-	utils.isFunction(window.getUUIDFromString) ? getUUIDFromString(document.location.href) : undefined;
-	result.auuid = window.articleUUID || undefined;
-	result.dfpSite = gpt.site;
-	result.dfpZone = gpt.zone;
-	if (utils.isNonEmptyString(window.siteMapTerm)) {result.siteMapTerm = window.siteMapTerm;}
-
-	if (utils.isNonEmptyString(window.navEdition)) {result.navEdition = window.navEdition;}
-
-	if (utils.isNonEmptyString(window.brandName)) {result.brandName = window.brandName;}
-
-	if (utils.isNonEmptyString(window.primaryThemeName)) {result.primaryThemeName = window.primaryThemeName;}
-
-	return result;
+	utils.log.warn('The metadata page method has been deprecated and will not available in future major versions of o-ads.');
+	return {};
 };
 
 module.exports.getAyscVars = getAyscVars;

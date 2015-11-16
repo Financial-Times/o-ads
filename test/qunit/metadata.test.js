@@ -85,40 +85,9 @@ QUnit.test("User not logged in", function(assert) {
 	assert.ok(!result.hasOwnProperty('homepage_edition'), 'properties with value undefined are not present');
 });
 
-QUnit.test("Page", function(assert) {
-	this.window({siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring"});
-
-	this.ads.init({
-		gpt: {
-			network: '5887',
-			site: 'test.site',
-			zone: 'test.zone'
-		}
-	});
-
+QUnit.test("Page method warns it has been deprecated", function(assert) {
+	var warn = this.spy(this.utils.log, 'warn');
 	var result = this.ads.metadata.page();
-	var expected = {siteMapTerm: "Sections.Front page", navEdition: "UK", brandName:"teststring", uuid: undefined, auuid: undefined, dfpSite: 'test.site', dfpZone: 'test.zone'};
-	assert.deepEqual(result, expected, "The correct values are returned");
-});
-
-QUnit.test("Page UUID & AUUID from window", function(assert) {
-	this.window({pageUUID: 'some-test-uuid', articleUUID: 'some-test-auuid'});
-	var result = this.ads.metadata.page();
-	assert.equal(result.uuid, 'some-test-uuid', 'uuid set as a global');
-	assert.equal(result.auuid, 'some-test-auuid', 'auuid set as a global');
-});
-
-QUnit.test("Page UUID & AUUID from window", function(assert) {
-	this.window({ getUUIDFromString: function() {}});
-	this.stub(window, 'getUUIDFromString').returns('some-legacy-uuid');
-
-	this.ads.init({
-		gpt: {
-			network: '5887',
-			site: 'test.site',
-			zone: 'test.zone'
-		}
-	});
-	var result = this.ads.metadata.page();
-	assert.equal(result.uuid, 'some-legacy-uuid', 'uuid set as on legacy pages');
+	assert.deepEqual(result, {}, "An empty object is returned");
+	assert.ok(warn.calledWith('The metadata page method has been deprecated and will not available in future major versions of o-ads.'), 'The warning is logged')
 });

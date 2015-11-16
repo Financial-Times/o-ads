@@ -72,8 +72,8 @@ Ads.prototype.debug = function (){
 				'unit name': slot.gpt.unitName,
 				'creative id': slot.gpt.creativeId || 'N/A',
 				'line item id': slot.gpt.lineItemId || 'N/A',
-				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join()) || (slot.gpt.isEmpty && 'empty') || 'N/A',
-				sizes: (utils.isArray(slot.sizes) && slot.sizes.join()),
+				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
+				sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
 				targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
 			};
 
@@ -81,7 +81,7 @@ Ads.prototype.debug = function (){
 		});
 		console.group('Creatives');
 		if(console.table) {
-			console.table(table);
+			console.table(table, ['name', 'unit name', 'creative id', 'line item id', 'size', 'sizes', 'targeting']);
 		} else {
 			console.log(JSON.stringify(table, null, 2));
 		}

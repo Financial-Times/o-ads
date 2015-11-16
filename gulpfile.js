@@ -2,20 +2,50 @@
 'use strict';
 
 printAscii();
+
+var path = require('path');
 var gulp = require('gulp');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
+var argv = require('yargs').argv;
+var conventionalGithubReleaser = require('conventional-github-releaser');
+var packageJsonPath = path.join(__dirname, 'package.json');
+var packageJson =  readPackageJSON(packageJsonPath) ;
+var runSequence = require('run-sequence');
 
-// var obt = require('origami-build-tools');
-// var browserify = require('browserify');
-// var swap = require('browserify-swap');
-// var debowerify = require('debowerify');
-// var source = require('vinyl-source-stream');
-// var buffer = require('vinyl-buffer');
 
-//var sourcemaps = require('gulp-sourcemaps');
+var yargs = require('yargs')
+        .usage('Release automation for Stash and Github')
+        .alias('e', 'email')
+        .describe('email', 'Github login email')
+        .demand('e', 'Please provide Github login email')
+        .alias('t', 'token')
+        .describe('token', 'Github personal access token')
+        .demand('t', 'Please provide Github personal access token');
+
+
+var args = yargs.argv;
+var githubEmail = args.e;
+var githubToken = args.t;
+var origin = packageJson.repository.url;
+
+
+function readPackageJSON(path) {
+	if (require.cache[path]){
+		delete require.cache[path];
+	}
+	return require(path);
+}
+
+// expects a HTTPS Github repo URL
+function generateAuthenticatedGithubUrl(url, email, token){
+	var parts = encodeURI(url).split('//');
+	return parts[0] + '//' + encodeURIComponent(email) + ':' + token + '@' + parts[1];
+}
+
+var githubOrigin = generateAuthenticatedGithubUrl(origin, githubEmail, githubToken);
 
 /**
  * Bumping version number and tagging the repository with it.
@@ -31,12 +61,10 @@ var tagVersion = require('gulp-tag-version');
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc(type, callback) {
-
+function release(type, callback) {
 	// make sure we're on the master branch, otherwise the release could end up on the wrong branch or worse an orphaned head
-	git.checkout('master', function(err) {
+	git.checkout('master', function (err) {
 		if (err) throw err;
-
 		gulp.src(['./package.json', './bower.json'])
 			.pipe(bump({type: type}))
 			.pipe(gulp.dest('./'))
@@ -46,42 +74,62 @@ function inc(type, callback) {
 			.on('end', function() {
 				git.push('origin', 'master', function(err) {
 					if (err) throw err;
-					git.push('origin', '--tag', function(err) {
-						if (err) throw err;
-						callback();
-					});
+				git.push('origin', '--tag', function(err) {
+					if (err) throw err;
+					callback();
 				});
 			});
+		});
 	});
 }
 
-//
-// gulp.task('qunit:build', function() {
-// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
-// 	var dest = './build/qunit/';
-//
-// 	obt.build(gulp, {
-// 		js: './test/qunit/setup.js',
-// 		sourcemaps: true,
-// 		transforms: [swap],
-// 		buildFolder: dest
-// 	});
-// });
-//
-// gulp.task('qunit:coverage', function() {
-// 	process.env.BROWSERIFYSWAP_ENV = 'karma';
-// 	var dest = './build/qunit-coverage/';
-//
-// 	obt.build(gulp, {
-// 		js: './test/qunit/setup.js',
-// 		transforms: [swap, ['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]],
-// 		buildFolder: dest
-// 	});
-// });
+gulp.task('add-github-remote', function(){
+	git.addRemote('github', githubOrigin, function (err) {
+		if (err && err.message.indexOf('remote github already exists') === -1) {
+			throw err;
+		}
+	});
+});
 
-gulp.task('release:patch', function(callback) { inc('patch', callback); });
-gulp.task('release:minor', function(callback) { inc('minor', callback); });
-gulp.task('release:major', function(callback) { inc('major', callback); });
+gulp.task('push-to-github', function(callback){
+	git.push('github', 'master', function(err) {
+		if (err) throw err;
+		git.push('github', '--tag', function(err) {
+			if (err) throw err;
+			callback();
+		});
+	});
+});
+
+
+gulp.task('github-release', function(callback){
+	// get updated version number
+	packageJson = readPackageJSON(packageJsonPath);
+	// make the Github release
+	conventionalGithubReleaser(
+	{
+			type: 'oauth',
+			token: githubToken
+	},
+	{
+		preset: 'jquery',
+		transform: function(commit, cb) {
+			commit.version = 'v' + packageJson.version;
+			cb(null, commit);
+		}
+	},
+	callback);
+});
+
+gulp.task('process-release-patch', function(callback) { release('type', callback) });
+gulp.task('process-release-minor', function(callback) { release('minor', callback) });
+gulp.task('process-release-major', function(callback) { release('major', callback) });
+
+gulp.task('release:patch', function(done) {runSequence('add-github-remote', 'process-release-patch', 'push-to-github', 'github-release', done);});
+gulp.task('release:minor', function(done) {runSequence('add-github-remote', 'process-release-minor', 'push-to-github', 'github-release', done);});
+gulp.task('release:major', function(done) {runSequence('add-github-remote', 'process-release-major', 'push-to-github', 'github-release', done);});
+
+
 
 function printAscii() {
 	console.log('                                  __           ');
