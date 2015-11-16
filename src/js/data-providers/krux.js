@@ -13,10 +13,7 @@
 'use strict';
 var utils = require('../utils');
 var config = require('../config');
-var delegate;
-var self;
-
-delegate = require('ftdomdelegate');
+var delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
