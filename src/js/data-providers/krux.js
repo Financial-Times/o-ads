@@ -26,7 +26,6 @@ function Krux() {
 
 Krux.prototype.init = function(impl) {
 	var conf = config('krux');
-	var metadata = config('metadata');
 	if (conf && conf.id) {
 
 		if (!window.Krux) {
@@ -38,9 +37,8 @@ Krux.prototype.init = function(impl) {
 
 		this.api = window.Krux;
 
-
-		this.setPageAttributes(metadata);
-		this.setUserAttributes(metadata);
+		this.setPageAttributes(conf.attributes);
+		this.setUserAttributes(conf.attributes);
 
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
@@ -171,18 +169,18 @@ Krux.prototype.events.init = function() {
 	}
 };
 
-Krux.prototype.setPageAttributes = function (metadata) {
-	if(metadata && metadata.page){
-		Object.keys(metadata.page).forEach(function(item) {
-			this.api('set', 'page_attr_' + item, metadata.page[item]);
+Krux.prototype.setPageAttributes = function (attributes) {
+	if(attributes && attributes.page){
+		Object.keys(attributes.page).forEach(function(item) {
+			this.api('set', 'page_attr_' + item, attributes.page[item]);
 		}.bind(this));
 	}
 };
 
-Krux.prototype.setUserAttributes = function (metadata) {
-	if(metadata && metadata.user){
-		Object.keys(metadata.user).forEach(function(item) {
-			this.api('set', 'user_attr_' + item, metadata.user[item]);
+Krux.prototype.setUserAttributes = function (attributes) {
+	if(attributes && attributes.user){
+		Object.keys(attributes.user).forEach(function(item) {
+			this.api('set', 'user_attr_' + item, attributes.user[item]);
 		}.bind(this));
 	}
 };
