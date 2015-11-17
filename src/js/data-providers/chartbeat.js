@@ -12,7 +12,6 @@
 'use strict';
 var utils = require('../utils');
 var config = require('../config');
-var metadata = require('../metadata');
 
 /**
 * initialise chartbeat functionality
@@ -21,12 +20,15 @@ var metadata = require('../metadata');
 * @memberof ChartBeat
 * @lends ChartBeat
 */
+function ChartBeat() {
 
+}
 
-module.exports.init = function() {
+ChartBeat.prototype.init = function() {
 	var gpt = config('gpt') || {};
 	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
+
 
 	if (this.config) {
 		// config must be in a global var
@@ -38,6 +40,7 @@ module.exports.init = function() {
 			sections: this.config.pageType,
 			enableAdRefresh: this.config.enableAdRefresh || false
 		};
+		window._cbq = window._cbq || [];
 
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
 			// LOAD LIBRARY
@@ -46,32 +49,7 @@ module.exports.init = function() {
 		}
 
 		if (this.config.demographics) {
-			window._cbq = window._cbq || [];
-			// Pass User metadata to chartbeat
-			var demographicData = "",
-			userObj = metadata.user(),
-			demographicCodes = {
-			'02' : userObj.gender, // Gender
-			'05' : userObj.industry, // Industry
-			'06' : userObj.job_responsibility, // Responsibility
-			'07' : userObj.job_position, // Position
-			'19' : userObj.company_size, // Company Size
-			'40' : userObj.DB_company_size, // DB Company Size
-			'41' : userObj.DB_industry, // DB Industry
-			'42' : userObj.DB_company_turnover, // DB Company Takeover
-			'46' : userObj.cameo_investor_code, // Cameo Investor
-			'51' : userObj.cameo_property_code, // Cameo Property
-			'slv' : ((userObj.subscription_level) ? userObj.subscription_level : 'anon'),
-			}; // subscriber level
-
-			// add demographics data
-			for (var key in demographicCodes) {
-				if (demographicData.length !== 0) {
-					demographicData += ",";
-				}
-				demographicData = demographicData + key + "=" +  ((!demographicCodes[key] || demographicCodes[key].match(/(NULL)|(null)/)) ? "" : demographicCodes[key]);
-			}
-			window._cbq.push(["_demo", demographicData]);
+			this.addDemographics(this.config.demographics);
 		}
 	}
 
@@ -110,3 +88,14 @@ module.exports.init = function() {
 		}
 	});
 };
+
+ChartBeat.prototype.addDemographics = function(demographicsObject) {
+	// Pass User metadata to chartbeat
+	var demographicCodes = Object.keys(demographicsObject).map(function (key) {
+			return key + '=' + demographicsObject[key];
+		}).join(',');
+
+	window._cbq.push(['_demo', demographicCodes]);
+};
+
+module.exports = new ChartBeat();

@@ -125,3 +125,30 @@ QUnit.test('event pixel - dwell time', function(assert) {
 	clock.tick(11000);
 	assert.ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 40}), 'doesn\'t fire once max interval is reached');
 });
+
+QUnit.test('page attributes are set correctly and sent to Krux', function(assert) {
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+
+	assert.ok(window.Krux.withArgs("set", "page_attr_uuid", "123").calledOnce, "page attributes sent to Krux");
+});
+
+QUnit.test('user attributes are set correctly and sent to Krux', function(assert) {
+	this.ads.init({ krux: {id: '112233', attributes: {user: {eid: '123'}} }});
+
+	assert.ok(window.Krux.withArgs("set", "user_attr_eid", "123").calledOnce, "user attributes sent to Krux");
+});
+
+QUnit.test('custom attributes are set correctly and sent to Krux', function(assert) {
+	this.ads.init({ krux: {id: '112233', attributes: {custom: {test: '123'}} }});
+
+	assert.ok(window.Krux.withArgs("set", "test", "123").calledOnce, "custom attributes sent to Krux");
+});
+
+QUnit.test('page & user attributes are set correctly and sent to Krux', function(assert) {
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}, user: {eid: '456'}, custom: {test: '789'}} }});
+
+	assert.ok(window.Krux.withArgs("set", "page_attr_uuid", "123").calledOnce, "page attributes sent to Krux");
+	assert.ok(window.Krux.withArgs("set", "user_attr_eid", "456").calledOnce, "user attributes sent to Krux");
+	assert.ok(window.Krux.withArgs("set", "test", "789").calledOnce, "custom attributes sent to Krux");
+	assert.ok(window.Krux.calledThrice, "Three calls made to Krux");
+});

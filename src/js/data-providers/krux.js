@@ -13,8 +13,7 @@
 'use strict';
 var utils = require('../utils');
 var config = require('../config');
-var delegate;
-delegate = require('ftdomdelegate');
+var delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -26,7 +25,9 @@ function Krux() {
 }
 
 Krux.prototype.init = function(impl) {
-	if (config('krux') && config('krux').id) {
+	var conf = config('krux');
+	if (conf && conf.id) {
+
 		if (!window.Krux) {
 			((window.Krux = function() {
 				window.Krux.q.push(arguments);
@@ -34,9 +35,15 @@ Krux.prototype.init = function(impl) {
 			);
 		}
 
+		this.api = window.Krux;
+		if(conf.attributes) {
+			this.setAttributes('page_attr_',  conf.attributes.page || {});
+			this.setAttributes('user_attr_',  conf.attributes.user || {});
+			this.setAttributes('',  conf.attributes.custom || {});
+		}
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + config('krux').id;
+		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + conf.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -160,6 +167,14 @@ Krux.prototype.events.init = function() {
 				configured[event].fn(configured[event]);
 			}
 		}
+	}
+};
+
+Krux.prototype.setAttributes = function (prefix, attributes) {
+	if(attributes){
+		Object.keys(attributes).forEach(function(item) {
+			this.api('set',  prefix + item, attributes[item]);
+		}.bind(this));
 	}
 };
 
