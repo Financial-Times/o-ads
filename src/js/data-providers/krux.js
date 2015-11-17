@@ -36,10 +36,11 @@ Krux.prototype.init = function(impl) {
 		}
 
 		this.api = window.Krux;
-
-		this.setPageAttributes(conf.attributes);
-		this.setUserAttributes(conf.attributes);
-
+		if(conf.attributes) {
+			this.setAttributes('page_attr_',  conf.attributes.page || {});
+			this.setAttributes('user_attr_',  conf.attributes.user || {});
+			this.setAttributes('',  conf.attributes.custom || {});
+		}
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
 		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + conf.id;
@@ -169,18 +170,10 @@ Krux.prototype.events.init = function() {
 	}
 };
 
-Krux.prototype.setPageAttributes = function (attributes) {
-	if(attributes && attributes.page){
-		Object.keys(attributes.page).forEach(function(item) {
-			this.api('set', 'page_attr_' + item, attributes.page[item]);
-		}.bind(this));
-	}
-};
-
-Krux.prototype.setUserAttributes = function (attributes) {
-	if(attributes && attributes.user){
-		Object.keys(attributes.user).forEach(function(item) {
-			this.api('set', 'user_attr_' + item, attributes.user[item]);
+Krux.prototype.setAttributes = function (prefix, attributes) {
+	if(attributes){
+		Object.keys(attributes).forEach(function(item) {
+			this.api('set',  prefix + item, attributes[item]);
 		}.bind(this));
 	}
 };
