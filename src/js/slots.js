@@ -242,4 +242,27 @@ Slots.prototype.init = function() {
 
 Slots.prototype.timers = {};
 
+Slots.prototype.debug = function (){
+	var log = utils.log;
+	var data = [];
+
+	this.forEach(function (slot) {
+		var row = {
+			name: slot.name,
+			'unit name': slot.gpt.unitName,
+			'creative id': slot.gpt.creativeId || 'N/A',
+			'line item id': slot.gpt.lineItemId || 'N/A',
+			size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
+			sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
+			targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
+		};
+		data.push(row);
+	});
+
+	log.start('Creatives');
+	log.table(data);
+	log.end();
+	}
+};
+
 module.exports = new Slots();
