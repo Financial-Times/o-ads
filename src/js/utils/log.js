@@ -88,3 +88,13 @@ module.exports.end = function() {
 
 	window.console.groupEnd();
 };
+
+module.exports.table = function() {
+	if (window.console) {
+		if(console.table) {
+			console.table.apply(window.console, arguments);
+		} else {
+			console.log.apply(window.console, arguments);
+		}
+	}
+};
