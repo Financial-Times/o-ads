@@ -242,8 +242,6 @@ Slots.prototype.init = function() {
 
 Slots.prototype.timers = {};
 
-};
-
 Slots.prototype.debug = function (){
 	var log = utils.log;
 	var data = [];
