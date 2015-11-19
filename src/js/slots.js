@@ -242,6 +242,8 @@ Slots.prototype.init = function() {
 
 Slots.prototype.timers = {};
 
+};
+
 Slots.prototype.debug = function (){
 	var log = utils.log;
 	var data = [];
@@ -262,7 +264,6 @@ Slots.prototype.debug = function (){
 	log.start('Creatives');
 	log.table(data);
 	log.end();
-	}
 };
 
 module.exports = new Slots();
