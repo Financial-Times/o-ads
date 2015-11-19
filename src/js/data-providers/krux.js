@@ -25,8 +25,8 @@ function Krux() {
 }
 
 Krux.prototype.init = function(impl) {
-	var conf = config('krux');
-	if (conf && conf.id) {
+	this.config = config('krux');
+	if (this.config && this.config.id) {
 
 		if (!window.Krux) {
 			((window.Krux = function() {
@@ -37,12 +37,12 @@ Krux.prototype.init = function(impl) {
 
 		this.api = window.Krux;
 
-		this.setPageAttributes(conf.attributes);
-		this.setUserAttributes(conf.attributes);
+		this.setPageAttributes(this.config.attributes);
+		this.setUserAttributes(this.config.attributes);
 
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + conf.id;
+		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -183,6 +183,21 @@ Krux.prototype.setUserAttributes = function (attributes) {
 			this.api('set', 'user_attr_' + item, attributes.user[item]);
 		}.bind(this));
 	}
+};
+
+Krux.prototype.debug = function () {
+	var log = utils.log;
+
+	log.start('Krux');
+		log.debug(this.this.config.id)
+
+		log.start('Page');
+		log.end();
+
+		log.start('User');
+		log.end();
+
+	log.end();
 };
 
 module.exports = new Krux();
