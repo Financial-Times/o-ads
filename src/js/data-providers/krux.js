@@ -36,10 +36,10 @@ Krux.prototype.init = function(impl) {
 		}
 
 		this.api = window.Krux;
-		if(conf.attributes) {
-			this.setAttributes('page_attr_',  conf.attributes.page || {});
-			this.setAttributes('user_attr_',  conf.attributes.user || {});
-			this.setAttributes('',  conf.attributes.custom || {});
+		if(this.config.attributes) {
+			this.setAttributes('page_attr_',  this.config.attributes.page || {});
+			this.setAttributes('user_attr_',  this.config.attributes.user || {});
+			this.setAttributes('',  this.config.attributes.custom || {});
 		}
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
