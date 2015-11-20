@@ -198,6 +198,6 @@ FT.ads.krux.debug = function() {
 	log.end();
 
 	log.end();
-}.bind(this));
+}.bind(this);
 
 module.exports = new Krux();
