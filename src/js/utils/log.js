@@ -92,9 +92,9 @@ module.exports.end = function() {
 module.exports.table = function() {
 	if (window.console) {
 		if(console.table) {
-			console.table.apply(window.console, arguments);
+			console.table(arguments);
 		} else {
-			console.log.apply(window.console, arguments);
+			console.log(arguments);
 		}
 	}
 };
@@ -108,9 +108,9 @@ module.exports.attributeTable = function(object) {
 					value: object[item]
 				};
 			});
-			console.table.apply(window.console, data);
+			console.table(data);
 		} else {
-			console.log.apply(window.console, object);
+			console.log(object);
 		}
 	}
 };
