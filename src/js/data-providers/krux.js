@@ -178,7 +178,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	}
 };
 
-FT.ads.krux.debug = function() {
+Krux.prototype.debug = function() {
 	var log = utils.log;
 	var attributes = this.config.attributes
 
