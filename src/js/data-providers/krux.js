@@ -183,7 +183,7 @@ Krux.prototype.debug = function() {
 	if (!this.config && !this.config.id) {
 		return;
 	}
-	log.start('Krux');
+	log.start('Krux©');
 		log('%c id: ' + this.config.id, 'font-weight: bold');
 
 		if (this.config.limit) {
@@ -225,6 +225,14 @@ Krux.prototype.debug = function() {
 			var targeting = this.targeting();
 			log.start('Targeting');
 				log.attributeTable(targeting);
+			log.end();
+		}
+		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
+		if (tags.length) {
+			log.start(tags.length + " Supertag© scripts");
+				tags.forEach(function(tag) {
+				  log(tag.dataset.alias, tag.querySelector("script"));
+				});
 			log.end();
 		}
 	log.end();
