@@ -98,3 +98,19 @@ module.exports.table = function() {
 		}
 	}
 };
+
+module.exports.attributeTable = function(object) {
+	if (window.console) {
+		if(console.table) {
+			var data = Object.keys(object).map(function(item) {
+				return {
+					key: item,
+					value: object[item]
+				};
+			});
+			console.table.apply(window.console, data);
+		} else {
+			console.log.apply(window.console, object);
+		}
+	}
+};
