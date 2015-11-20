@@ -184,10 +184,10 @@ Krux.prototype.debug = function() {
 		return;
 	}
 	log.start('Krux©');
-		log('%c id: ' + this.config.id, 'font-weight: bold');
+		log('%c id:', 'font-weight: bold', this.config.id);
 
 		if (this.config.limit) {
-			log('%c segment limit: ' + this.config.limit, 'font-weight: bold');
+			log('%c segment limit:', 'font-weight: bold', this.config.limit);
 		}
 
 		if (this.config.attributes) {
@@ -211,9 +211,9 @@ Krux.prototype.debug = function() {
 			log.start('Events');
 				if (events.dwell_time) {
 					log.start('Dwell Time');
-						log('%c interval: ' + events.dwell_time.interval, 'font-weight: bold');
-						log('%c id: ' + events.dwell_time.id, 'font-weight: bold');
-						log('%c total: ' + events.dwell_time.total, 'font-weight: bold');
+						log('%c interval:', 'font-weight: bold', events.dwell_time.interval);
+						log('%c id:', 'font-weight: bold', events.dwell_time.id);
+						log('%c total:', 'font-weight: bold', events.dwell_time.total);
 					log.end();
 				}
 				log.start('Delegated');
