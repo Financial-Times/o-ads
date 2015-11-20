@@ -180,23 +180,49 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 
 Krux.prototype.debug = function() {
 	var log = utils.log;
-	var attributes = this.config.attributes
-
+	if (!this.config && !this.config.id) {
+		return;
+	}
 	log.start('Krux');
-	log('%c id: ' + this.config.id, 'font-weight: bold')
+		log('%c id: ' + this.config.id, 'font-weight: bold');
 
-	log.start('Page');
-		log.attributeTable(attributes.page)
-	log.end();
+		if (this.config.attributes) {
+			var attributes = this.config.attributes
+			log.start('Attributes');
+				log.start('Page');
+					log.attributeTable(attributes.page);
+				log.end();
 
-	log.start('User');
-		log.attributeTable(attributes.user)
-	log.end();
+				log.start('User');
+					log.attributeTable(attributes.user);
+				log.end();
 
-	log.start('Custom');
-		log.attributeTable(attributes.custom)
-	log.end();
-
+				log.start('Custom');
+					log.attributeTable(attributes.custom);
+				log.end();
+			log.end();
+		}
+		if (this.config.events) {
+			var events = this.config.events;
+			log.start('Events');
+				if (events.dwell_time) {
+					log.start('Dwell Time');
+						log('%c interval: ' + events.dwell_time.interval, 'font-weight: bold');
+						log('%c id: ' + events.dwell_time.id, 'font-weight: bold');
+						log('%c total: ' + events.dwell_time.total, 'font-weight: bold');
+					log.end();
+				}
+				log.start('Delegated');
+					log.table(events.delegated);
+				log.end();
+			log.end();
+		}
+		if (this.targeting) {
+			var targeting = this.targeting();
+			log.start('Targeting');
+				log.attributeTable(targeting)
+			log.end();
+		}
 	log.end();
 };
 
