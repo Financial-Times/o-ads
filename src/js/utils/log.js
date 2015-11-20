@@ -99,7 +99,7 @@ module.exports.table = function(data, columns) {
 	}
 };
 
-module.exports.attributeTable = function(object) {
+module.exports.attributeTable = function(object, columns) {
 	if (window.console) {
 		if(console.table) {
 			var data = Object.keys(object).map(function(item) {
@@ -108,7 +108,7 @@ module.exports.attributeTable = function(object) {
 					value: object[item]
 				};
 			});
-			console.table(data);
+			console.table(data, columns);
 		} else {
 			console.log(object);
 		}
