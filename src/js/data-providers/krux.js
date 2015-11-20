@@ -178,19 +178,26 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	}
 };
 
-Krux.prototype.debug = function () {
+FT.ads.krux.debug = function() {
 	var log = utils.log;
+	var attributes = this.config.attributes
 
 	log.start('Krux');
-		log.debug(this.this.config.id)
+	log('%c id: ' + this.config.id, 'font-weight: bold')
 
-		log.start('Page');
-		log.end();
+	log.start('Page');
+		log.attributeTable(attributes.page)
+	log.end();
 
-		log.start('User');
-		log.end();
+	log.start('User');
+		log.attributeTable(attributes.user)
+	log.end();
+
+	log.start('Custom');
+		log.attributeTable(attributes.custom)
+	log.end();
 
 	log.end();
-};
+}.bind(this));
 
 module.exports = new Krux();
