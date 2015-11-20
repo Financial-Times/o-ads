@@ -89,12 +89,12 @@ module.exports.end = function() {
 	window.console.groupEnd();
 };
 
-module.exports.table = function() {
+module.exports.table = function(data, columns) {
 	if (window.console) {
 		if(console.table) {
-			console.table(arguments);
+			console.table(data, columns);
 		} else {
-			console.log(arguments);
+			console.log(data);
 		}
 	}
 };
