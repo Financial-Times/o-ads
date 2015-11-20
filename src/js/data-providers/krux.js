@@ -198,6 +198,6 @@ Krux.prototype.debug = function() {
 	log.end();
 
 	log.end();
-}.bind(this);
+};
 
 module.exports = new Krux();
