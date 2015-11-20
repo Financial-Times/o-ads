@@ -68,8 +68,9 @@ Ads.prototype.debug = function (){
 	} else {
 		localStorage.setItem('oAds', true);
 	}
-	this.slots.debug();
+	this.admantx.debug();
 	this.krux.debug();
+	this.slots.debug();
 
 	if (remove) {
 		localStorage.removeItem('oAds');
