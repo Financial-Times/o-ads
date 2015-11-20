@@ -186,8 +186,12 @@ Krux.prototype.debug = function() {
 	log.start('Krux');
 		log('%c id: ' + this.config.id, 'font-weight: bold');
 
+		if (this.config.limit) {
+			log('%c segment limit: ' + this.config.limit, 'font-weight: bold');
+		}
+
 		if (this.config.attributes) {
-			var attributes = this.config.attributes
+			var attributes = this.config.attributes;
 			log.start('Attributes');
 				log.start('Page');
 					log.attributeTable(attributes.page);
@@ -220,7 +224,7 @@ Krux.prototype.debug = function() {
 		if (this.targeting) {
 			var targeting = this.targeting();
 			log.start('Targeting');
-				log.attributeTable(targeting)
+				log.attributeTable(targeting);
 			log.end();
 		}
 	log.end();
