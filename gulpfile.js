@@ -9,7 +9,6 @@ var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tagVersion = require('gulp-tag-version');
-var argv = require('yargs').argv;
 var conventionalGithubReleaser = require('conventional-github-releaser');
 var packageJsonPath = path.join(__dirname, 'package.json');
 var packageJson =  readPackageJSON(packageJsonPath) ;
@@ -17,13 +16,13 @@ var runSequence = require('run-sequence');
 
 
 var yargs = require('yargs')
-        .usage('Release automation for Stash and Github')
-        .alias('e', 'email')
-        .describe('email', 'Github login email')
-        .demand('e', 'Please provide Github login email')
-        .alias('t', 'token')
-        .describe('token', 'Github personal access token')
-        .demand('t', 'Please provide Github personal access token');
+		.usage('Release automation for Stash and Github')
+		.alias('e', 'email')
+		.describe('email', 'Github login email')
+		.demand('e', 'Please provide Github login email')
+		.alias('t', 'token')
+		.describe('token', 'Github personal access token')
+		.demand('t', 'Please provide Github personal access token');
 
 
 var args = yargs.argv;
