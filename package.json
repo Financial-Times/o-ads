@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "install": "bower install --config.interactive=false"
+    "install": "bower install --config.interactive=false",
+    "coverage": "export COVERAGE=true && karma start && unset COVERAGE"
   },
   "repository": {
     "type": "git",
