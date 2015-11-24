@@ -69,6 +69,7 @@ Ads.prototype.debug = function (){
 		localStorage.setItem('oAds', true);
 	}
 	this.admantx.debug();
+	this.cb.debug();
 	this.krux.debug();
 	this.slots.debug();
 
