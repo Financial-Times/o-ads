@@ -451,3 +451,11 @@ module.exports.updatePageTargeting = function(override) {
 	}
 	else {utils.log.warn('Attempting to set page targeting before the GPT library has initialized');}
 };
+
+module.exports.debug = function(){
+  var log = utils.log;
+
+  log.start('gpt');
+    log.attributeTable(window.FT.ads.config().gpt);
+  log.end();
+};
