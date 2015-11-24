@@ -62,9 +62,9 @@ var initAll = function() {
 };
 
 Ads.prototype.debug = function (){
-	var remove = true
+	var remove = true;
 	if (localStorage.getItem('oAds')) {
-		remove = false
+		remove = false;
 	} else {
 		localStorage.setItem('oAds', true);
 	}

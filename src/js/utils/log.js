@@ -102,15 +102,20 @@ module.exports.table = function(data, columns) {
 module.exports.attributeTable = function(object, columns) {
 	if (log.isOn('log') && window.console) {
 		if(console.table) {
-			var data = Object.keys(object).map(function(item) {
-				return {
-					key: item,
-					value: object[item]
-				};
-			});
-			console.table(data, columns);
+			var val;
+			if (FT.ads.utils.isArray(object[item]) || FT.ads.utils.isObject(object[item])) {
+				val = JSON.stringify(object[item]);
+			} else {
+				val = object[item];
+			}
+			return {
+				key: item,
+				value: val
+			};
+		}
+		console.table(data, columns);
 		} else {
 			console.log(object);
 		}
-	}
+	};
 };
