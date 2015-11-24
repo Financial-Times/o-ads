@@ -74,6 +74,7 @@ Ads.prototype.debug = function (){
 	this.krux.debug();
 	this.slots.debug();
 	this.targeting.debug();
+	this.buildURLForVideo.debug();
 
 	if (remove) {
 		localStorage.removeItem('oAds');
