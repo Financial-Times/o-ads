@@ -98,4 +98,29 @@ ChartBeat.prototype.addDemographics = function(demographicsObject) {
 	window._cbq.push(['_demo', demographicCodes]);
 };
 
+ChartBeat.prototype.debug = function () {
+	var log = utils.log;
+
+	if (this.config) {
+	log.start('ChartBeat');
+
+		var asyncConfig = utils.extend({}, window._sf_async_config);
+
+		var attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
+
+		attrs.forEach(function(attribute) {
+				log('%c' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+				delete asyncConfig[attribute];
+		});
+
+		log.start('Superfly Async Config');
+			log.attributeTable(asyncConfig);
+		log.end();
+
+		log.start('Demographic Codes');
+			log.attributeTable(this.demographicCodes);
+		log.end();
+	log.end();
+	}
+};
 module.exports = new ChartBeat();
