@@ -70,6 +70,7 @@ Ads.prototype.debug = function (){
 	}
 	this.admantx.debug();
 	this.cb.debug();
+	this.gpt.debug();
 	this.krux.debug();
 	this.slots.debug();
 
