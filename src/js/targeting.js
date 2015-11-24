@@ -275,4 +275,12 @@ Targeting.prototype.version = function() {
 	return {ver: version.artifactVersion};
 };
 
+Targeting.prototype.debug = function () {
+	var log = utils.log;
+
+	log.start('Targeting');
+		log.attributeTable(this.get());
+	log.end();
+};
+
 module.exports = new Targeting();
