@@ -70,4 +70,3 @@ function customEvent(name, opts) {
 		return CustomEvent.initCustomEvent(name, opts.bubbles, opts.cancelable, opts.detail);
 	}
 }
-

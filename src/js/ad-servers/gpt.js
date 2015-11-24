@@ -220,8 +220,9 @@ function onRefresh(event) {
 }
 
 function onResize(event) {
-	this.gpt.iframe.width = event.size[0];
-	this.gpt.iframe.height = event.size[1];
+	var slot = event.detail.slot;
+	slot.gpt.iframe.width = event.size[0];
+	slot.gpt.iframe.height = event.size[1];
 }
 
 /*

@@ -17,7 +17,6 @@
 
 'use strict';
 var config = require('./config');
-var metadata = require('./metadata');
 var krux = require('./data-providers/krux');
 var version = require('./version');
 var utils = require('./utils');
@@ -34,7 +33,6 @@ function Targeting() {
 Targeting.prototype.get = function() {
 	var item;
 	var methods = {
-		metadata: this.getFromMetaData,
 		krux: this.fetchKrux,
 		socialReferrer: this.getSocialReferrer,
 		pageReferrer: this.getPageReferrer,
@@ -43,7 +41,7 @@ Targeting.prototype.get = function() {
 		version: this.version
 	};
 
-	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.getAysc(), this.searchTerm());
+	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.searchTerm());
 
 	for (item in methods)  {
 		if (methods.hasOwnProperty(item) && config(item)) {
@@ -62,14 +60,6 @@ Targeting.prototype.add = function(obj) {
 
 Targeting.prototype.clear = function() {
 	parameters = {};
-};
-
-Targeting.prototype.getFromMetaData =  function() {
-	var user = metadata.user();
-	return {
-		eid: user.eid || null,
-		fts: user.loggedIn + ''
-	};
 };
 
 Targeting.prototype.encodedIp =  function() {
@@ -204,45 +194,6 @@ Targeting.prototype.getSocialReferrer = function() {
 
 Targeting.prototype.cookieConsent = function() {
 	return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
-};
-
-Targeting.prototype.getAysc = function() {
-	var exclusions = ['key=03', 'key=04', 'key=08', 'key=09', 'key=10', 'key=11', 'key=12', 'key=13', 'key=15', 'key=16', 'key=17', 'key=18', 'key=22', 'key=23', 'key=24', 'key=25', 'key=26', 'key=28', 'key=29', 'key=30', 'key=96', 'key=98'];
-	var remove_exes = {'02': 1, '05': 1, '06': 1, '07': 1, 19: 1, 20: 1, 21: 1};
-	var remove_res_pvt = { 14: 1, cn: 1, 27: 1};
-	var returnObj = {};
-	var AllVars = metadata.getAyscVars({});
-
-	function excludeFields(exclusions, obj) {
-		var idx;
-		var keyvalsplit;
-		var prop;
-
-		// TODO: clean this up later -- val is now unused so this could be simpler.
-		for (prop in obj) {
-			for (idx = 0; idx < exclusions.length; idx++) {
-				keyvalsplit = exclusions[idx].split('=');
-				if (((keyvalsplit[0] === 'key') && (prop === keyvalsplit[1])) || ((keyvalsplit[0] === 'val') && (obj[prop] === keyvalsplit[1]))) {
-					delete obj[prop];
-				}
-			}
-		}
-
-		return obj;
-	}
-
-	AllVars = excludeFields(exclusions, AllVars);
-	for (var ayscVar in AllVars) {
-		if (!AllVars[ayscVar]) {continue;}
-
-		if (remove_exes[ayscVar] && /^x+$/i.test(AllVars[ayscVar])) {continue;}
-
-		if (remove_res_pvt[ayscVar] && /^pvt|res$/i.test(AllVars[ayscVar])) {continue;}
-
-		returnObj[ayscVar] = AllVars[ayscVar].toString().toLowerCase();
-	}
-
-	return returnObj;
 };
 
 //TODO is this still relevant maybe we should remove it
