@@ -73,6 +73,7 @@ Ads.prototype.debug = function (){
 	this.gpt.debug();
 	this.krux.debug();
 	this.slots.debug();
+	this.targeting.debug();
 
 	if (remove) {
 		localStorage.removeItem('oAds');
