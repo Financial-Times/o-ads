@@ -63,6 +63,8 @@ function buildURLForVideo(zone, pos, vidKV) {
 	return gptVideoURL();
 }
 
+module.exports = buildURLForVideo;
+
 module.exports.debug = function(){
 	var utils = require('../utils');
   var log = utils.log;
@@ -71,5 +73,3 @@ module.exports.debug = function(){
     log.attributeTable(buildURLForVideo());
   log.end();
 };
-
-module.exports = buildURLForVideo;
