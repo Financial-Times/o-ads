@@ -62,30 +62,22 @@ var initAll = function() {
 };
 
 Ads.prototype.debug = function (){
-	/* jshint devel: true */
-	if (window.console){
-		var table = [];
+	var remove = true;
+	if (localStorage.getItem('oAds')) {
+		remove = false;
+	} else {
+		localStorage.setItem('oAds', true);
+	}
+	this.admantx.debug();
+	this.cb.debug();
+	this.gpt.debug();
+	this.krux.debug();
+	this.slots.debug();
+	this.targeting.debug();
+	this.buildURLForVideo.debug();
 
-		this.slots.forEach(function (slot) {
-			var row = {
-				name: slot.name,
-				'unit name': slot.gpt.unitName,
-				'creative id': slot.gpt.creativeId || 'N/A',
-				'line item id': slot.gpt.lineItemId || 'N/A',
-				size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
-				sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
-				targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
-			};
-
-			table.push(row);
-		});
-		console.group('Creatives');
-		if(console.table) {
-			console.table(table, ['name', 'unit name', 'creative id', 'line item id', 'size', 'sizes', 'targeting']);
-		} else {
-			console.log(JSON.stringify(table, null, 2));
-		}
-		console.groupEnd('Creatives');
+	if (remove) {
+		localStorage.removeItem('oAds');
 	}
 };
 

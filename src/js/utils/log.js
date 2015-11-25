@@ -71,7 +71,7 @@ module.exports.info = function() {
  * @param {string} group the name of the group, defaults to o-ads
  */
 module.exports.start = function(group) {
-	if (!window.console || !window.console.groupCollapsed) {
+	if (!log.isOn('groupCollapsed')) {
 		return;
 	}
 
@@ -82,9 +82,42 @@ module.exports.start = function(group) {
  * End a collapsed group
  */
 module.exports.end = function() {
-	if (!window.console || !window.console.groupEnd) {
+	if (!log.isOn('groupEnd')) {
 		return;
 	}
 
 	window.console.groupEnd();
+};
+
+module.exports.table = function(data, columns) {
+	if (log.isOn('log') && window.console) {
+		if(console.table) {
+			console.table(data, columns);
+		} else {
+			console.log(data);
+		}
+	}
+};
+
+module.exports.attributeTable = function(object, columns) {
+  var utils = require('../utils');
+  if (log.isOn('log') && window.console) {
+    if (console.table) {
+      var data = Object.keys(object).map(function(item) {
+        var val;
+        if (utils.isArray(object[item]) || utils.isObject(object[item])) {
+          val = JSON.stringify(object[item]);
+        } else {
+          val = object[item];
+        }
+        return {
+          key: item,
+          value: val
+        };
+      });
+      console.table(data, columns);
+    } else {
+      console.log(object);
+    }
+  }
 };

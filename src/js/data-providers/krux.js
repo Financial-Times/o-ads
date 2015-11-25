@@ -25,8 +25,8 @@ function Krux() {
 }
 
 Krux.prototype.init = function(impl) {
-	var conf = config('krux');
-	if (conf && conf.id) {
+	this.config = config('krux');
+	if (this.config && this.config.id) {
 
 		if (!window.Krux) {
 			((window.Krux = function() {
@@ -36,14 +36,14 @@ Krux.prototype.init = function(impl) {
 		}
 
 		this.api = window.Krux;
-		if(conf.attributes) {
-			this.setAttributes('page_attr_',  conf.attributes.page || {});
-			this.setAttributes('user_attr_',  conf.attributes.user || {});
-			this.setAttributes('',  conf.attributes.custom || {});
+		if(this.config.attributes) {
+			this.setAttributes('page_attr_',  this.config.attributes.page || {});
+			this.setAttributes('user_attr_',  this.config.attributes.user || {});
+			this.setAttributes('',  this.config.attributes.custom || {});
 		}
 		var m,
 		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + conf.id;
+		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -176,6 +176,66 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 			this.api('set',  prefix + item, attributes[item]);
 		}.bind(this));
 	}
+};
+
+Krux.prototype.debug = function() {
+	var log = utils.log;
+	if (!this.config && !this.config.id) {
+		return;
+	}
+	log.start('Krux©');
+		log('%c id:', 'font-weight: bold', this.config.id);
+
+		if (this.config.limit) {
+			log('%c segment limit:', 'font-weight: bold', this.config.limit);
+		}
+
+		if (this.config.attributes) {
+			var attributes = this.config.attributes;
+			log.start('Attributes');
+				log.start('Page');
+					log.attributeTable(attributes.page);
+				log.end();
+
+				log.start('User');
+					log.attributeTable(attributes.user);
+				log.end();
+
+				log.start('Custom');
+					log.attributeTable(attributes.custom);
+				log.end();
+			log.end();
+		}
+		if (this.config.events) {
+			var events = this.config.events;
+			log.start('Events');
+				if (events.dwell_time) {
+					log.start('Dwell Time');
+						log('%c interval:', 'font-weight: bold', events.dwell_time.interval);
+						log('%c id:', 'font-weight: bold', events.dwell_time.id);
+						log('%c total:', 'font-weight: bold', events.dwell_time.total);
+					log.end();
+				}
+				log.start('Delegated');
+					log.table(events.delegated);
+				log.end();
+			log.end();
+		}
+		if (this.targeting) {
+			var targeting = this.targeting();
+			log.start('Targeting');
+				log.attributeTable(targeting);
+			log.end();
+		}
+		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
+		if (tags.length) {
+			log.start(tags.length + " Supertag© scripts");
+				tags.forEach(function(tag) {
+				  log(tag.dataset.alias, tag.querySelector("script"));
+				});
+			log.end();
+		}
+	log.end();
 };
 
 module.exports = new Krux();

@@ -452,3 +452,15 @@ module.exports.updatePageTargeting = function(override) {
 	}
 	else {utils.log.warn('Attempting to set page targeting before the GPT library has initialized');}
 };
+
+module.exports.debug = function(){
+  var log = utils.log;
+	var conf = config('gpt');
+	if(!conf){
+		return;
+	}
+
+  log.start('gpt');
+    log.attributeTable(conf);
+  log.end();
+};
