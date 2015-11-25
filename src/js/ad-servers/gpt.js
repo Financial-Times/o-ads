@@ -457,6 +457,6 @@ module.exports.debug = function(){
   var log = utils.log;
 
   log.start('gpt');
-    log.attributeTable(window.FT.ads.config().gpt);
+    log.attributeTable(config.gpt);
   log.end();
 };
