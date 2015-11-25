@@ -1,6 +1,7 @@
 # Build Generated Files #
 #########################
 build/
+reports/
 demos/local/
 .editorconfig
 test-results.xml
@@ -39,3 +40,8 @@ Thumbs.db
 *.sublime*
 *.bak
 *.swp
+
+# Linter config files #
+##############################
+.jshintrc
+.eslintrc

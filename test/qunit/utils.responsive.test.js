@@ -65,4 +65,3 @@ QUnit.test('resizing the browser window, overlapping viewport sizes', function(a
 	assert.ok(callback.calledThrice, 'When a breakpoint is crossed the callback function is called');
 	assert.ok(callback.calledWith('large'), 'the first argument to the callback is the expected viewport size (large)');
 });
-
