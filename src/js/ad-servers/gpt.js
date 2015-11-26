@@ -221,8 +221,14 @@ function onRefresh(event) {
 
 function onResize(event) {
 	var slot = event.detail.slot;
-	slot.gpt.iframe.width = event.size[0];
-	slot.gpt.iframe.height = event.size[1];
+	var size = event.detail.size;
+	if (+size[0] == 100 && +size[1] === 100){
+		size[0] = size[0] + '%';
+		size[1] = size[1] + '%';
+	}
+
+	slot.gpt.iframe.width = size[0];
+	slot.gpt.iframe.height = size[1];
 }
 
 /*
@@ -253,9 +259,11 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
+
 	if (event.size && +event.size[0] === 100 && +event.size[1] === 100) {
-		detail.iframe.width = '100%';
-		detail.iframe.height = '100%';
+		event.slot.fire('resize', {
+			size: [100, 100]
+		});
 	}
 
 	utils.broadcast('rendered', data);
@@ -310,7 +318,7 @@ var slotMethods = {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
 
-			if (slot.hasValidSize(screensize)) {
+			if (slot.hasValidSize(screensize) && !slot.responsive) {
 				if (slot.gpt.iframe) {
 					slot.fire('refresh');
 				} else if (!this.defer) {
