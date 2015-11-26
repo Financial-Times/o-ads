@@ -228,6 +228,10 @@ Targeting.prototype.version = function() {
 
 Targeting.prototype.debug = function () {
 	var log = utils.log;
+	var parameters = this.get();
+	if (!parameters) {
+		return;
+	}
 
 	log.start('Targeting');
 		log.attributeTable(this.get());
