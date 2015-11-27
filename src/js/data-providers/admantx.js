@@ -72,6 +72,7 @@ Admantx.prototype.resolve = function(response){
 	var collections = this.collections;
 	var shortName;
 	var targetingObj = {};
+	/* istanbul ignore else  */
 	if (utils.isString(response)) {
 		try {
 			response = JSON.parse(response);
@@ -82,8 +83,10 @@ Admantx.prototype.resolve = function(response){
 	}
 
 	//parse required targetting data from the response
+	/* istanbul ignore else  */
 	if (response) {
 		for (collection in collections) {
+			/* istanbul ignore else  */
 			if (collections.hasOwnProperty(collection) && collections[collection] && response[collection]) {
 				shortName = collection.substr(0, 2);
 				targetingObj[shortName] = this.processCollection(response[collection], collections[collection]);

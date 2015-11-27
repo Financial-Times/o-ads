@@ -196,12 +196,6 @@ Targeting.prototype.cookieConsent = function() {
 	return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
 };
 
-//TODO is this still relevant maybe we should remove it
-Targeting.prototype.behaviouralFlag = function() {
-	var flag = (typeof this.rsiSegs() === 'undefined') ? 'false' : 'true';
-	return flag;
-};
-
 Targeting.prototype.searchTerm = function() {
 	var qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
 	var keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
@@ -211,8 +205,6 @@ Targeting.prototype.searchTerm = function() {
 		.replace(/[';\^\+]/g, ' ')
 		.replace(/\s+/g, ' ')
 		.trim();
-
-		//.replace(/\./g, '%2E');
 	}
 
 	return {kw: keywords};

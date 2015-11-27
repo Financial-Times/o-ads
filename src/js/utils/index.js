@@ -161,11 +161,13 @@ function extend() {
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
+	/* istanbul ignore else  */
 	if (typeof target !== "object" && !utils.isFunction(target)) {
 		target = {};
 	}
 
 	// do nothing if only one argument is passed (or 2 for a deep copy)
+	/* istanbul ignore else  */
 	if (length === i) {
 		return target;
 	}
@@ -209,6 +211,7 @@ function extend() {
 }
 
 module.exports.hasClass = function(node, className) {
+	/* istanbul ignore else  */
 	if (node.nodeType === 1) {
 		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
 	}
@@ -279,6 +282,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 	hasRun = false;
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
+	/* istanbul ignore else  */
 	if (async) {
 		tag.async = 'true';
 	}

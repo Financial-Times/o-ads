@@ -6,7 +6,9 @@ var attributeParsers = {
 	sizes: function(value, sizes) {
 		if (value === false || value === 'false') {
 			return false;
-		} else if (utils.isArray(sizes)) {
+		}
+		/* istanbul ignore else  */
+		else if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function(match, width, height) {
 				sizes.push([parseInt(width, 10), parseInt(height, 10)]);
 			});
@@ -173,6 +175,7 @@ Slot.prototype.getAttributes = function() {
 *	Load a slot when it appears in the viewport
 */
 Slot.prototype.initLazyLoad = function() {
+	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
 		utils.once('inview', function(slot) {
@@ -187,6 +190,7 @@ Slot.prototype.initLazyLoad = function() {
 * where the configured size is set to false
 */
 Slot.prototype.initResponsive = function() {
+	/* istanbul ignore else  */
 	if (utils.isPlainObject(this.sizes)) {
 
 		if (!this.hasValidSize()) {

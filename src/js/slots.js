@@ -37,6 +37,7 @@ function run(slots, action, name) {
 */
 Slots.prototype.collapse = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'collapse', names);
 	} else if (utils.isArray(names)) {
@@ -95,6 +96,7 @@ Slots.prototype.initSlot = function(container) {
 	}
 
 	var slot = new Slot(container, screensize);
+	/* istanbul ignore else  */
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
 		slot.elementvis = elementvis.track(slot.container);
@@ -109,6 +111,7 @@ Slots.prototype.initSlot = function(container) {
 Slots.prototype.initRefresh = function() {
 	if (config('flags').refresh && config('refresh')) {
 		var data = config('refresh');
+		/* istanbul ignore else  */
 		if (data.time && !data.inview) {
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
 		}
@@ -118,6 +121,7 @@ Slots.prototype.initRefresh = function() {
 };
 
 Slots.prototype.initInview = function() {
+	/* istanbul ignore else  */
 	if (config('flags').inview) {
 		window.addEventListener('load', onLoad.bind(null, this));
 	}
@@ -138,6 +142,7 @@ Slots.prototype.initInview = function() {
 
 			slot.inviewport = event.detail.inviewport || event.detail.visible;
 			slot.percentage = event.detail.percentage;
+			/* istanbul ignore else  */
 			if (slot.inviewport) {
 				slot.fire('inview', event.detail);
 			}
@@ -154,6 +159,7 @@ Slots.prototype.initInview = function() {
 Slots.prototype.initRendered = function() {
 	utils.on('rendered', function(slots, event) {
 		var slot = slots[event.detail.name];
+		/* istanbul ignore else  */
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
 			slot.fire('complete', event.detail);
@@ -167,6 +173,7 @@ Slots.prototype.initRendered = function() {
 */
 Slots.prototype.initResponsive = function() {
 	var breakpoints = config('responsive');
+	/* istanbul ignore else  */
 	if (utils.isObject(breakpoints)) {
 		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
 	}
@@ -179,6 +186,7 @@ Slots.prototype.initResponsive = function() {
 */
 function onBreakpointChange(slots, screensize) {
 	slots.forEach(function(slot) {
+		/* istanbul ignore else  */
 		if (slot) {
 			slot.screensize = screensize;
 			slot.fire('breakpoint', { screensize: screensize });
@@ -227,6 +235,7 @@ Slots.prototype.initPostMessage = function() {
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(function(name) {
 		var slot = this[name];
+		/* istanbul ignore else  */
 		if (slot instanceof Slot) {
 			fn.call(this, slot);
 		}
