@@ -9,6 +9,7 @@ QUnit.test('Config get/set', function(assert) {
 	this.ads.config.clear();
 	var result, obj,
 		key = 'key',
+		key2 = 'key2',
 		invalid = 'invalid',
 		value = 'value',
 		value2 = 'value2';
@@ -34,6 +35,16 @@ QUnit.test('Config get/set', function(assert) {
 
 	result = this.ads.config(key);
 	assert.deepEqual(result, value2, 'get returns the new value.');
+
+	this.ads.config(key, value2);
+	this.ads.config(key2, value2);
+	result = this.ads.config();
+	assert.ok(result[key], 'configuration has got first key set');
+	assert.ok(result[key2], 'configuration has got second key set');
+	this.ads.config.clear(key);
+	result = this.ads.config();
+	assert.notOk(result[key], 'first key has been removed');
+	assert.ok(result[key2], 'second key is still set');
 });
 
 QUnit.test('Config get/set - mulitple', function(assert) {
@@ -62,6 +73,7 @@ QUnit.test('Config fetchMetaConfig', function(assert) {
 	assert.ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
 	assert.equal(this.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
 });
+
 
 QUnit.test('Config fetchMetaConfigJSON', function(assert) {
 	if (window.JSON) {

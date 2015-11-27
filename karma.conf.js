@@ -36,7 +36,12 @@ var options = {
 	browsers: ['Chrome_with_flags'],
 	browserify: { transform: ['debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
-	preprocessors: { 'test/qunit/setup.js': 'browserify'}
+	preprocessors: {
+		'test/qunit/setup.js': 'browserify',
+		'test/qunit/video.mainplayer.test.js': 'browserify',
+		'test/qunit/version.test.js': 'browserify',
+		'test/qunit/slots.test.js': 'browserify'
+	}
 };
 
 

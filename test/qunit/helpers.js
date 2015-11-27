@@ -37,18 +37,20 @@ module.exports.warn = function(message) {
 };
 
 /* trigger a dom event */
-module.exports.trigger = function(element, eventType, bubble, cancelable) {
+module.exports.trigger = function(element, eventType, bubble, cancelable, data) {
 	var event;
 	element = element || document.body;
 	element = $.type(element) === 'string' ? document.querySelector(element) : element;
 	if (document.createEvent) {
 		event = document.createEvent('HTMLEvents');
 		event.initEvent(eventType, bubble || true, cancelable || true);
+		event.data = data;
 		element.dispatchEvent(event);
 	} else {
 		event = document.createEventObject();
 		event.eventType = eventType;
 		event.cancelBubble = bubble ? false : true ;
+		event.data = data;
 		element.fireEvent('on' + event.eventType, event);
 	}
 
