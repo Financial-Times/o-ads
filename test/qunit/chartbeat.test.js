@@ -135,12 +135,30 @@ QUnit.test('debug starts logging Chartbeat data', function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 	var log = this.spy(this.utils, 'log');
 
-	this.ads.cb.demographicCodes = {};
-
 	this.ads.cb.debug();
 
 	assert.ok(start.calledWith('ChartBeat'));
 	assert.ok(start.calledWith('Superfly Async Config'));
-	assert.ok(start.calledWith('Demographic Codes'));
 	assert.ok(log.calledWith('%c uid:'));
+});
+
+QUnit.test("debug doesn't log demographic data if not set", function(assert) {
+	this.ads.init({chartbeat: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'));
+	assert.notOk(start.calledWith('Demographic Codes'));
+});
+
+QUnit.test('debug logs demographic data if set', function(assert) {
+	this.ads.init({chartbeat: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.cb.demographicCodes = {};
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'));
+	assert.ok(start.calledWith('Demographic Codes'));
 });
