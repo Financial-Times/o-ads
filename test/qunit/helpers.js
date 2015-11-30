@@ -12,6 +12,14 @@ module.exports.fixturesContainer.add = function(html) {
 	return this.lastChild;
 };
 
+/* create an iframe and return it's context for testing post message */
+module.exports.createPostMessageFrame = function () {
+	iframe = document.createElement('iframe');
+	iframe.id = 'postMessage';
+	document.getElementById('qunit-fixtures').appendChild(iframe);
+	return iframe.contentWindow;
+};
+
 module.exports.fixtures = {
 	admantx: require('../fixtures/admantx-response.json')
 };
