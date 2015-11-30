@@ -156,6 +156,8 @@ Slots.prototype.initRendered = function() {
 		var slot = slots[event.detail.name];
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
+			var size = event.detail.gpt.size;
+			slot.maximise(size);
 			slot.fire('complete', event.detail);
 		}
 	}.bind(null, this));

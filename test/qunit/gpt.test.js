@@ -263,12 +263,17 @@ QUnit.test('fixed url for ad requests', function(assert) {
 });
 
 QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
+	var done = assert.async();
+	document.body.addEventListener('oAds.complete', function(event) {
+		var iframe = event.detail.slot.gpt.iframe;
+		var iframeSize = [iframe.width, iframe.height];
+			assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
+			done();
+	});
+
 	var slotHTML = '<div data-o-ads-name="fullpage" data-o-ads-sizes="100x100"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
 	var slot = this.ads.slots.fullpage;
-	var iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
-
-	assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
 });
