@@ -76,11 +76,16 @@ QUnit.test("debug doesn't log response data if none is received", function(asser
 	assert.notOk(start.calledWith('Categories'));
 });
 
-QUnit.test('debug starts logs Admantx response', function(assert) {
+QUnit.test('debug logs Admantx response', function(assert) {
 	this.ads.init({admantx: {collections: {}}});
 	var start = this.spy(this.utils.log, 'start');
 
-	this.ads.admantx.xhr = {response: {}};
+	this.ads.admantx.xhr = {
+		response: {
+			admants: {},
+			categories: {}
+		}
+	};
 
 	this.ads.admantx.debug();
 	assert.ok(start.calledWith('Response'));

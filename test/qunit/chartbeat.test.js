@@ -135,6 +135,8 @@ QUnit.test('debug starts logging Chartbeat data', function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 	var log = this.spy(this.utils, 'log');
 
+	this.ads.cb.demographicCodes = {}
+
 	this.ads.cb.debug();
 
 	assert.ok(start.calledWith('ChartBeat'));
