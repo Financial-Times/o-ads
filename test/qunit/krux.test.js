@@ -152,3 +152,90 @@ QUnit.test('page & user attributes are set correctly and sent to Krux', function
 	assert.ok(window.Krux.withArgs("set", "test", "789").calledOnce, "custom attributes sent to Krux");
 	assert.ok(window.Krux.calledThrice, "Three calls made to Krux");
 });
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.krux.debug();
+	assert.notOk(start.called);
+});
+
+QUnit.test('debug starts logging Krux data', function(assert) {
+	this.ads.init({krux: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.ok(start.calledWith('Krux©'));
+	assert.ok(start.calledWith('Targeting'));
+});
+
+QUnit.test("debug doesn't log attributes data if none is set", function(assert) {
+	this.ads.init({krux: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.notOk(start.calledWith('Attributes'));
+});
+
+QUnit.test("debug logs attributes data if set", function(assert) {
+	this.ads.init({krux: {attributes: {page: {}, user: {}, custom: {}}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.ok(start.calledWith('Attributes'));
+	assert.ok(start.calledWith('Page'));
+	assert.ok(start.calledWith('User'));
+	assert.ok(start.calledWith('Custom'));
+});
+
+QUnit.test("debug doesn't log events data if none is set", function(assert) {
+	this.ads.init({krux: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.notOk(start.calledWith('Events'));
+});
+
+QUnit.test("debug logs events data if set", function(assert) {
+	this.ads.init({krux: {events: {}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.ok(start.calledWith('Events'));
+	assert.ok(start.calledWith('Delegated'));
+});
+
+QUnit.test("debug doesn't log dwell time data if none is set", function(assert) {
+	this.ads.init({krux: {events: {}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.notOk(start.calledWith('Dwell Time'));
+});
+
+QUnit.test("debug logs dwell time data if set", function(assert) {
+	this.ads.init({krux: {events: {dwell_time: {}}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.ok(start.calledWith('Dwell Time'));
+});
+
+QUnit.test('debug logs number of supertag scripts', function(assert) {
+	this.fixturesContainer.add('<div class="kxinvisible"></div>');
+	this.fixturesContainer.add('<div class="kxinvisible"></div>');
+	this.ads.init({krux: {events: {dwell_time: {}}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.krux.debug();
+	assert.ok(start.calledWith('2 Supertag© scripts'));
+});
+
+QUnit.test("debug logs segment limit data if set", function(assert) {
+	this.ads.init({krux: {limit: 10}});
+	var log = this.spy(this.utils, 'log');
+
+	this.ads.krux.debug();
+	assert.ok(log.calledWith('%c segment limit:'));
+});

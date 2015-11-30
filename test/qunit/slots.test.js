@@ -357,3 +357,11 @@ QUnit.test('complete events fire', function(assert) {
 
 	clock.tick(1025);
 });
+
+QUnit.test('debug logs creatives', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.slots.debug();
+	assert.ok(start.calledWith('Creatives'));
+});

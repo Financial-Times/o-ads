@@ -16,3 +16,44 @@ QUnit.test('init All', function(assert) {
 	this.trigger(document.body, 'o.DOMContentLoaded');
 
 });
+
+QUnit.test("debug calls modules' debug functions", function(assert) {
+	this.ads.init({
+		admantx: {collections: {}},
+		gpt: {}
+	});
+
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+	var cbDebug = this.spy(this.ads.cb, 'debug');
+	var gptDebug = this.spy(this.ads.gpt, 'debug');
+	var kruxDebug = this.spy(this.ads.krux, 'debug');
+	var slotsDebug = this.spy(this.ads.slots, 'debug');
+	var targetingDebug = this.spy(this.ads.targeting, 'debug');
+	var videoDebug = this.spy(this.ads.buildURLForVideo, 'debug');
+
+	this.ads.debug();
+
+	assert.ok(admantxDebug.called);
+	assert.ok(cbDebug.called);
+	assert.ok(gptDebug.called);
+	assert.ok(kruxDebug.called);
+	assert.ok(slotsDebug.called);
+	assert.ok(targetingDebug.called);
+	assert.ok(videoDebug.called);
+
+});
+
+QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
+	this.ads.init({
+		admantx: {collections: {}},
+		gpt: {}
+	});
+
+	localStorage.setItem('oAds', true);
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+
+	this.ads.debug();
+	assert.ok(admantxDebug.called);
+
+	assert.ok(localStorage.getItem('oAds'));
+});

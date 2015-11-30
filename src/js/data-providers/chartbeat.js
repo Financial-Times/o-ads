@@ -104,7 +104,9 @@ ChartBeat.prototype.addDemographics = function(demographicsObject) {
 ChartBeat.prototype.debug = function () {
 	var log = utils.log;
 
-	if (this.config) {
+	if (!this.config) {
+		return;
+	}
 	log.start('ChartBeat');
 
 		var asyncConfig = utils.extend({}, window._sf_async_config);
@@ -112,7 +114,7 @@ ChartBeat.prototype.debug = function () {
 		var attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
 
 		attrs.forEach(function(attribute) {
-				log('%c' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+				log('%c ' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
 				delete asyncConfig[attribute];
 		});
 
@@ -124,6 +126,5 @@ ChartBeat.prototype.debug = function () {
 			log.attributeTable(this.demographicCodes);
 		log.end();
 	log.end();
-	}
 };
 module.exports = new ChartBeat();
