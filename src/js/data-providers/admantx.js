@@ -108,10 +108,12 @@ Admantx.prototype.debug = function() {
 		log('%c id:', 'font-weight: bold', this.config.id);
 		log('%c api:', 'font-weight: bold', this.api);
 
-		log.start('Collections');
-			log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
-			log('%c categories:', 'font-weight: bold', this.config.collections.categories);
-		log.end();
+		if (this.config.collections) {
+			log.start('Collections');
+				log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
+				log('%c categories:', 'font-weight: bold', this.config.collections.categories);
+			log.end();
+		}
 
 		if (this.xhr && this.xhr.response) {
 			log.start('Response');
