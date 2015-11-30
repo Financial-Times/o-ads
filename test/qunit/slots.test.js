@@ -3,7 +3,6 @@
 'use strict';
 
 var utils = require('../../src/js/utils');
-var helpers = require('./helpers');
 
 QUnit.module('Slots', {
 	beforeEach: function() {
@@ -30,19 +29,21 @@ QUnit.test('moves id attribute to data-o-ads-name attribute instead', function(a
 });
 
 
-// QUnit.test('slots reply to whoami message', function(assert) {
-// 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
-// 	this.ads.init();
-// 	var result = this.ads.slots.initSlot('banlb2');
-// 	// console.log(utils.broadcast);
-// 	var postMessageSpy = this.spy(utils.messenger, 'post');
-// 	this.stub(utils, 'iframeToSlotName', function (){
-// 			return 'banlb2';
-// 	});
-//
-// 	helpers.trigger(window, 'message', true, true, '{"type": "oAds.whoami", "source": {"window": true}}');
-// 	assert.ok(postMessageSpy.calledOnce, 'failed to find an ad slot');
-// });
+QUnit.test('slots reply to whoami message', function(assert) {
+	var done = assert.async();
+	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+	this.ads.init();
+	var result = this.ads.slots.initSlot('banlb2');
+	var postMessageSpy = this.stub(utils.messenger, 'post').returns(true);
+	this.stub(utils, 'iframeToSlotName', function (){
+			return 'banlb2';
+	});
+	window.top.addEventListener('message', function() {
+			assert.ok(postMessageSpy.calledOnce, 'sends a reply back');
+			done();
+	});
+	this.trigger(window, 'message', true, true, {"data": '{"type": "oAds.whoami"}', "source": {"window": window}});
+});
 
 
 
