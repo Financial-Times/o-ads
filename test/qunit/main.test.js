@@ -49,7 +49,7 @@ QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 		gpt: {}
 	});
 
-	localStorage.setItem('oAds', true)
+	localStorage.setItem('oAds', true);
 	var admantxDebug = this.spy(this.ads.admantx, 'debug');
 
 	this.ads.debug();
