@@ -275,5 +275,5 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
-	var slot = this.ads.slots.fullpage;
+	this.ads.slots.fullpage;
 });
