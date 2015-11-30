@@ -109,7 +109,7 @@ ChartBeat.prototype.debug = function () {
 		var attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
 
 		attrs.forEach(function(attribute) {
-				log('%c' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+				log('%c ' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
 				delete asyncConfig[attribute];
 		});
 
