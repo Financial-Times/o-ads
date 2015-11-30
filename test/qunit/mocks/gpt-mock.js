@@ -79,7 +79,7 @@ function slotRender(slot, color) {
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
-		size = slot.sizes[0];
+		size = slot.sizes[0] || [];
 	}
 
 	if (!slot.iframe) {
@@ -88,8 +88,8 @@ function slotRender(slot, color) {
 		document.getElementById(slot.id).appendChild(slot.iframe);
 	}
 
-	slot.iframe.width = size[0];
-	slot.iframe.height = size[1];
+	slot.iframe.width = size[0] || 0;
+	slot.iframe.height = size[1] || 0;
 	slot.iframe.src = html;
 }
 
