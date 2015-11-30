@@ -1,5 +1,5 @@
 /* jshint globalstrict: true, browser: true */
-/* global sinon: false, $: false, module: true, QUnit: false, require: true */
+/* global QUnit: false */
 "use strict";
 
 QUnit.module('Messenger');

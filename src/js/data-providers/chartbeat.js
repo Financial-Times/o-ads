@@ -122,9 +122,11 @@ ChartBeat.prototype.debug = function () {
 			log.attributeTable(asyncConfig);
 		log.end();
 
-		log.start('Demographic Codes');
-			log.attributeTable(this.demographicCodes);
-		log.end();
+		if (this.demographicCodes) {
+			log.start('Demographic Codes');
+				log.attributeTable(this.demographicCodes);
+			log.end();
+		}
 	log.end();
 };
 module.exports = new ChartBeat();

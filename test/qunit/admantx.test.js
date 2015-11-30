@@ -51,19 +51,30 @@ QUnit.test('admantx configured to make request and add targeting', function(asse
 });
 
 QUnit.test('debug returns early if no config is set', function(assert) {
-	var start = this.spy(this.utils.log, "start");
+	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.admantx.debug();
 	assert.notOk(start.called);
 });
 
 QUnit.test('debug starts logging Admantx data', function(assert) {
+	this.ads.init({admantx: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.admantx.debug();
+	assert.ok(start.calledWith('Admantx'));
+	assert.notOk(start.calledWith('Collections'));
+	assert.notOk(start.calledWith('Response'));
+});
+
+QUnit.test('debug logs collections data if it is set', function(assert) {
 	this.ads.init({admantx: {collections: {}}});
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.admantx.debug();
 	assert.ok(start.calledWith('Admantx'));
 	assert.ok(start.calledWith('Collections'));
+	assert.notOk(start.calledWith('Response'));
 });
 
 QUnit.test("debug doesn't log response data if none is received", function(assert) {

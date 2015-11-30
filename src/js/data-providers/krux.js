@@ -243,7 +243,7 @@ Krux.prototype.debug = function() {
 		if (tags.length) {
 			log.start(tags.length + " Supertag© scripts");
 				tags.forEach(function(tag) {
-				  log(tag.dataset.alias, tag.querySelector("script"));
+					log(tag.dataset.alias, tag.querySelector("script"));
 				});
 			log.end();
 		}

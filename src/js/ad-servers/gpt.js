@@ -222,7 +222,7 @@ function onRefresh(event) {
 function onResize(event) {
 	var slot = event.detail.slot;
 	var size = event.detail.size;
-	if (+size[0] == 100 && +size[1] === 100){
+	if (+size[0] === 100 && +size[1] === 100){
 		size[0] = size[0] + '%';
 		size[1] = size[1] + '%';
 	}
@@ -462,13 +462,13 @@ module.exports.updatePageTargeting = function(override) {
 };
 
 module.exports.debug = function(){
-  var log = utils.log;
+	var log = utils.log;
 	var conf = config('gpt');
 	if(!conf){
 		return;
 	}
 
-  log.start('gpt');
-    log.attributeTable(conf);
-  log.end();
+	log.start('gpt');
+		log.attributeTable(conf);
+	log.end();
 };

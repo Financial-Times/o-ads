@@ -57,9 +57,7 @@ QUnit.test('catches when the ads format is not correct', function(assert) {
 QUnit.test('catches when the ads sizes are not correct', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes></div>');
 	this.ads.init();
-	var errorSpy = this.stub(utils.log, 'error', function(){
-		console.log(arguments)
-	});
+	var errorSpy = this.spy(utils.log, 'error');
 	this.ads.slots.initSlot(node);
 	assert.ok(errorSpy.called, 'logs error when using wrong sizes');
 	assert.ok(errorSpy.calledWith('slot %s has no configured sizes!'), 'missing size config logs correct error message');
