@@ -5,19 +5,20 @@
 QUnit.module('Messenger');
 
 QUnit.test('post', function(assert) {
-	window.top.postMessage = this.spy();
-	window.postMessage = this.spy();
+	var frame = this.createPostMessageFrame();
+	var top = window.top || window;
+	top.postMessage = this.spy();
+	frame.postMessage = this.spy();
 
 	// make a default call
 	this.utils.messenger.post({test: 'message'});
 
 	assert.equal(window.top.postMessage.callCount, 1, 'Make sure when a source is not passed to the post call it uses a default value')
-	assert.equal(window.postMessage.callCount, 0, 'Make sure the main window postMessage has not been called')
 	assert.strictEqual(window.top.postMessage.firstCall.args[0], '{"test":"message"}', 'Make sure the object was transformed to a string')
 	assert.equal(window.top.postMessage.firstCall.args[1], '*', 'Make sure source url is set to wildcard')
 
 	// make a call and pass a source
-	this.utils.messenger.post('key: value', window);
+	this.utils.messenger.post('key: value', frame);
 
 	assert.equal(window.top.postMessage.callCount, 1, 'Make sure default source postMessage has still been called only once')
 	assert.equal(window.postMessage.callCount, 1, 'Make sure the main window postMessage has been called')
