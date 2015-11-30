@@ -8,7 +8,6 @@ var slotRenderEnded;
 var slots = {};
 var stubs = sinon.sandbox.create();
 var oViewport = require('o-viewport');
-var utils = require('../../../src/js/utils/events');
 
 function getResponsiveSizes(mapping) {
 	var winner;
@@ -59,11 +58,6 @@ function Slot(name, sizes, id) {
 	this.getDomId = function() { return id; };
 
 	this.getSlotId = function() { return {getDomId: this.getDomId, getId: this.getId};};
-
-	this.fire = function() {
-		var data = {slot: {gpt: this}, size: this.sizes[0]}
-		utils.broadcast('resize', data);
-	}
 
 	slots[id] = this;
 }

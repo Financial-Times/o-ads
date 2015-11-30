@@ -214,8 +214,8 @@ Slots.prototype.initPostMessage = function() {
 				var messageToSend = {
 					type: 'oAds.youare',
 					name: slotName,
-					// sizes: (slotName && slots[slotName].sizes)
-				}
+					sizes: (slotName && slots[slotName].sizes)
+				};
 				utils.messenger.post(messageToSend, event.source);
 			} else if(type === 'responsive') {
 				slot.responsive = true;

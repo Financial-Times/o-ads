@@ -2,7 +2,6 @@
 /* globals QUnit: false */
 "use strict";
 
-var config = require('../../src/js/config');
 var targeting = require('../../src/js/targeting');
 
 QUnit.module('Video Main-player tests');
