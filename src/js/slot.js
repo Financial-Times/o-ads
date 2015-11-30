@@ -213,7 +213,16 @@ Slot.prototype.initResponsive = function() {
 	return this;
 };
 
-
+/**
+* Maximise the slot when size is 100x100
+*/
+Slot.prototype.maximise = function (size) {
+	if (size && +size[0] === 100 && +size[1] === 100) {
+		this.fire('resize', {
+			size: ['100%', '100%']
+		});
+	}
+};
 
 /**
 *	If the slot doesn't have a name give it one

@@ -29,7 +29,7 @@ googletag.defineSizeMapping = stubs.stub();
 googletag.companionAds = stubs.stub();
 googletag.enableServices = stubs.stub();
 
-function Slot(name, sizes, id) {
+function GPTSlot(name, sizes, id) {
 	this.name = name;
 	if (typeof sizes === 'string') {
 		// out of page slot
@@ -106,11 +106,11 @@ googletag.defineSlot = function() {};
 googletag.defineOutOfPageSlot = function() {};
 
 stubs.stub(googletag, 'defineSlot', function(name, sizes, id) {
-	return new Slot(name, sizes, id);
+	return new GPTSlot(name, sizes, id);
 });
 
 stubs.stub(googletag, 'defineOutOfPageSlot', function(name, id) {
-	return new Slot(name, id);
+	return new GPTSlot(name, id);
 });
 
 googletag.display = function() {};
