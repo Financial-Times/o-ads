@@ -24,8 +24,8 @@ var attributeParsers = {
 			var mapping = config().formats;
 			var formats = utils.isArray(value) ? value : value.split(',');
 			formats.forEach(function(format) {
-				format = mapping[format];
-				if (format) {
+				if (mapping[format]) {
+					format = mapping[format];
 					if (format && utils.isArray(format.sizes[0])) {
 						for (var j = 0; j < format.sizes.length; j++) {
 							sizes.push(format.sizes[j]);
@@ -164,10 +164,11 @@ Slot.prototype.parseAttributeConfig = function() {
 };
 
 Slot.prototype.getAttributes = function() {
-	this.attributes = {};
+	var attributes = {};
 	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
-		this.attributes[utils.parseAttributeName(attribute)] = attribute.value;
+		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
+	this.attributes = attributes;
 	return this;
 };
 

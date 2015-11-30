@@ -28,22 +28,55 @@ QUnit.test('moves id attribute to data-o-ads-name attribute instead', function(a
 	assert.ok(result, 'ad slot inited correctly');
 });
 
-
-QUnit.test('slots reply to whoami message', function(assert) {
-	var done = assert.async();
-	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+QUnit.test('generates new name for a slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var result = this.ads.slots.initSlot('banlb2');
-	var postMessageSpy = this.stub(utils.messenger, 'post').returns(true);
-	this.stub(utils, 'iframeToSlotName', function (){
-			return 'banlb2';
-	});
-	window.top.addEventListener('message', function() {
-			assert.ok(postMessageSpy.calledOnce, 'sends a reply back');
-			done();
-	});
-	this.trigger(window, 'message', true, true, {"data": '{"type": "oAds.whoami"}', "source": {"window": window}});
+	var slot = this.ads.slots.initSlot(node);
+	var result = slot.container.getAttribute('data-o-ads-name');
+	assert.ok(result, 'ad slot inited correctly');
 });
+
+QUnit.test('sets all attributes on slot object', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.notOk(slot.attributes, 'attributes are not set on slot object');
+	slot.getAttributes();
+	assert.ok(slot.attributes, 'attributes are set on slot object');
+});
+
+QUnit.test('catches when the ads format is not correct', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30" ></div>');
+	this.ads.init();
+	var errorSpy = this.spy(utils.log, 'error');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(errorSpy.calledOnce, 'logs error when using wrong format');
+});
+
+
+QUnit.test('catches when the ads sizes are not correct', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="Rectangle"></div>');
+	this.ads.init();
+	var errorSpy = this.spy(utils.log, 'error');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(errorSpy.calledOnce, 'logs error when using wrong format');
+});
+
+// QUnit.test('slots reply to whoami message', function(assert) {
+// 	var done = assert.async();
+// 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+// 	this.ads.init();
+// 	var result = this.ads.slots.initSlot('banlb2');
+// 	var postMessageSpy = this.stub(utils.messenger, 'post').returns(true);
+// 	this.stub(utils, 'iframeToSlotName', function (){
+// 			return 'banlb2';
+// 	});
+// 	window.addEventListener('message', function() {
+// 			assert.ok(postMessageSpy.calledOnce, 'sends a reply back');
+// 			done();
+// 	});
+// 	this.trigger(window, 'message', true, true, {"data": '{"type": "oAds.whoami"}', "source": {"window": window}});
+// });
 
 
 
