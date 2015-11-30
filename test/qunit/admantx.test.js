@@ -49,3 +49,46 @@ QUnit.test('admantx configured to make request and add targeting', function(asse
 		done();
 	}, 20);
 });
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.admantx.debug();
+	assert.notOk(start.called);
+});
+
+QUnit.test('debug starts logging Admantx data', function(assert) {
+	this.ads.init({admantx: {collections: {}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.admantx.debug();
+	assert.ok(start.calledWith('Admantx'));
+	assert.ok(start.calledWith('Collections'));
+});
+
+QUnit.test("debug doesn't log response data if none is received", function(assert) {
+	this.ads.init({admantx: {collections: {}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.admantx.debug();
+	assert.notOk(start.calledWith('Response'));
+	assert.notOk(start.calledWith('Admants'));
+	assert.notOk(start.calledWith('Categories'));
+});
+
+QUnit.test('debug logs Admantx response', function(assert) {
+	this.ads.init({admantx: {collections: {}}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.admantx.xhr = {
+		response: {
+			admants: {},
+			categories: {}
+		}
+	};
+
+	this.ads.admantx.debug();
+	assert.ok(start.calledWith('Response'));
+	assert.ok(start.calledWith('Admants'));
+	assert.ok(start.calledWith('Categories'));
+});

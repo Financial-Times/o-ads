@@ -192,7 +192,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 
 Krux.prototype.debug = function() {
 	var log = utils.log;
-	if (!this.config && !this.config.id) {
+	if (!this.config) {
 		return;
 	}
 	log.start('Krux©');
@@ -233,12 +233,12 @@ Krux.prototype.debug = function() {
 				log.end();
 			log.end();
 		}
-		if (this.targeting) {
-			var targeting = this.targeting();
-			log.start('Targeting');
-				log.attributeTable(targeting);
-			log.end();
-		}
+
+		var targeting = this.targeting();
+		log.start('Targeting');
+			log.attributeTable(targeting);
+		log.end();
+
 		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
 			log.start(tags.length + " Supertag© scripts");

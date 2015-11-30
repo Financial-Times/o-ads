@@ -98,32 +98,32 @@ Admantx.prototype.resolve = function(response){
 };
 
 Admantx.prototype.debug = function() {
-  var log = utils.log;
+	var log = utils.log;
 
-  if (!this.config && !this.config.id) {
-      return;
-  }
+	if (!this.config) {
+			return;
+	}
 
-  log.start('Admantx');
-    log('%c id:', 'font-weight: bold', this.config.id);
-    log('%c api:', 'font-weight: bold', this.api);
+	log.start('Admantx');
+		log('%c id:', 'font-weight: bold', this.config.id);
+		log('%c api:', 'font-weight: bold', this.api);
 
-    log.start('Collections');
-      log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
-      log('%c categories:', 'font-weight: bold', this.config.collections.categories);
-    log.end();
+		log.start('Collections');
+			log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
+			log('%c categories:', 'font-weight: bold', this.config.collections.categories);
+		log.end();
 
-    if (this.xhr && this.xhr.response) {
-      log.start('Response');
-        log.start('Admants');
-          log.attributeTable(this.xhr.response.admants, ['value']);
-        log.end();
-        log.start('Categories');
-          log.attributeTable(this.xhr.response.categories, ['value']);
-        log.end();
-      log.end();
-    }
-  log.end();
+		if (this.xhr && this.xhr.response) {
+			log.start('Response');
+				log.start('Admants');
+					log.attributeTable(this.xhr.response.admants, ['value']);
+				log.end();
+				log.start('Categories');
+					log.attributeTable(this.xhr.response.categories, ['value']);
+				log.end();
+			log.end();
+		}
+	log.end();
 };
 
 module.exports = new Admantx();

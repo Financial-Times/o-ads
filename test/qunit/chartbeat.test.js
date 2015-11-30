@@ -121,3 +121,26 @@ QUnit.test('demographics configuration not set', function(assert) {
 	this.ads.init(config);
 	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
 });
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.cb.debug();
+	assert.notOk(start.called);
+});
+
+QUnit.test('debug starts logging Chartbeat data', function(assert) {
+	this.ads.init({chartbeat: {uid: '123'}});
+	var start = this.spy(this.utils.log, 'start');
+	var log = this.spy(this.utils, 'log');
+
+	this.ads.cb.demographicCodes = {};
+
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'));
+	assert.ok(start.calledWith('Superfly Async Config'));
+	assert.ok(start.calledWith('Demographic Codes'));
+	assert.ok(log.calledWith('%c uid:'));
+});
