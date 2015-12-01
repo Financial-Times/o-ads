@@ -24,9 +24,9 @@ var attributeParsers = {
 			var mapping = config().formats;
 			var formats = utils.isArray(value) ? value : value.split(',');
 			formats.forEach(function(format) {
-				if (mapping[format]) {
+				if (mapping && mapping[format]) {
 					format = mapping[format];
-					if (format && utils.isArray(format.sizes[0])) {
+					if (utils.isArray(format.sizes[0])) {
 						for (var j = 0; j < format.sizes.length; j++) {
 							sizes.push(format.sizes[j]);
 						}
@@ -276,11 +276,13 @@ Slot.prototype.fire = function(name, data) {
 **/
 Slot.prototype.addContainer = function(node, attrs) {
 	var container = '<div ';
-	Object.keys(attrs || {}).forEach(function(attr) {
-		var value = attrs[attr];
-		container += attr + '=' + value + ' ';
-	});
-
+	/* istanbul ignore else  */
+	if(attrs) {
+		Object.keys(attrs).forEach(function(attr) {
+			var value = attrs[attr];
+			container += attr + '=' + value + ' ';
+		});
+	}
 	container += '></div>';
 	node.insertAdjacentHTML('beforeend', container);
 	return node.lastChild;

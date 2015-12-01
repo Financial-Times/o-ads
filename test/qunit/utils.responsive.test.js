@@ -65,3 +65,16 @@ QUnit.test('resizing the browser window, overlapping viewport sizes', function(a
 	assert.ok(callback.calledThrice, 'When a breakpoint is crossed the callback function is called');
 	assert.ok(callback.calledWith('large'), 'the first argument to the callback is the expected viewport size (large)');
 });
+
+QUnit.test('resizing the browser window, simple config', function(assert) {
+	this.viewport(1, 1);
+
+	var	viewports = {
+		large: [300, 200],
+		medium: [200, 100],
+		small: [0, 0]
+	};
+
+	var result = this.ads.utils.responsive(viewports, 'string');
+	assert.notOk(result, 'responsive init returns early if the callback is not a function');
+});

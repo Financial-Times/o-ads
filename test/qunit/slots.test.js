@@ -46,7 +46,7 @@ QUnit.test('sets all attributes on slot object', function(assert) {
 });
 
 QUnit.test('catches when the ads format is not correct', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30" ></div>');
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
 	var errorSpy = this.spy(utils.log, 'error');
 	this.ads.slots.initSlot(node);
@@ -61,6 +61,39 @@ QUnit.test('catches when the ads sizes are not correct', function(assert) {
 	this.ads.slots.initSlot(node);
 	assert.ok(errorSpy.called, 'logs error when using wrong sizes');
 	assert.ok(errorSpy.calledWith('slot %s has no configured sizes!'), 'missing size config logs correct error message');
+});
+
+QUnit.test('creates add based on a format with multiple sies defined', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="TestFormat" data-o-ads-sizes></div>');
+	var sizes = [[970, 90], [970, 66], [180, 50]];
+	this.ads.init({
+		formats: {
+			TestFormat: {sizes: sizes}
+		}
+	});
+	var slot = this.ads.slots.initSlot(node);
+	assert.deepEqual(slot.sizes, sizes, 'slot contains all sizes defined in the format defined');
+});
+
+QUnit.test('converts false string value of a property to a boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="false" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.notOk(slot.center, 'the center value is a boolean');
+});
+
+QUnit.test('converts false string value of a property to a boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(slot.center, 'the center value is a boolean');
+});
+
+QUnit.test('defaults empty string value of a property to a true boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(slot.center, 'the center value is a boolean');
 });
 
 // QUnit.test('slots reply to whoami message', function(assert) {
