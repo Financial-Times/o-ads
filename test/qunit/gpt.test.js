@@ -1,6 +1,6 @@
-
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, googletag: false */
+
 'use strict';
 var htmlstart = '<div data-o-ads-name="';
 var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
@@ -29,6 +29,90 @@ QUnit.test('set page targeting', function(assert) {
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
+
+QUnit.test('catches and warns when targeting is not set', function(assert) {
+	this.stub(this.utils, 'isPlainObject', function(url, async, fn) {
+		return false;
+	});
+	var warnSpy = this.spy(this.utils.log, 'warn');
+	this.ads.init();
+	assert.ok(warnSpy.calledOnce, 'logs a warning for invalid targeting');
+});
+
+
+QUnit.test('set sync rendering', function(assert) {
+	this.ads.init({ gpt: {rendering: 'sync'}});
+	assert.ok(googletag.pubads().enableSyncRendering.calledOnce, 'sync rendering has been enabled');
+});
+
+
+QUnit.test('enabled single request', function(assert) {
+	this.ads.init({ gpt: {rendering: 'sra'}});
+	assert.ok(googletag.pubads().enableSingleRequest.calledOnce, 'single request has been enabled');
+});
+
+QUnit.test('default to async rendering', function(assert) {
+	this.ads.init({ gpt: {rendering: 'random'}});
+	assert.ok(googletag.pubads().enableAsyncRendering.calledOnce, 'async rendering has been enabled by default');
+});
+
+QUnit.test('enables companion ads', function(assert) {
+	this.ads.init({ gpt: {companions: true}});
+	assert.ok(googletag.pubads().disableInitialLoad.calledOnce, 'disabled the initial load');
+	assert.ok(googletag.companionAds.calledOnce, 'companion ads called');
+	assert.ok(googletag.companionAds().setRefreshUnfilledSlots.calledOnce, 'companion ads api called');
+	assert.ok(googletag.companionAds().setRefreshUnfilledSlots.calledWith(true), 'companion ads api called with correct param');
+});
+
+
+QUnit.test('set correct collapse mode when collapseEmpty is true', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({collapseEmpty: true});
+	var slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+
+QUnit.test('set correct collapse mode when collapseEmpty is after', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({collapseEmpty: true});
+	var slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('set correct collapse mode when collapseEmpty is before', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({collapseEmpty: 'before'});
+	var slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true, true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+
+QUnit.test('set correct collapse mode when collapseEmpty is false', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({collapseEmpty: false});
+	var slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('set correct collapse mode when collapseEmpty is never', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({collapseEmpty: 'never'});
+	var slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
+});
+
+// QUnit.test('adds companion service', function(assert) {
+// 	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
+// 	this.ads.init({gpt: {companions: true}});
+// 	var slot = this.ads.slots.initSlot('mpu');
+// 	assert.ok(slot.companion, 'the center value is a boolean');
+// });
 
 QUnit.test('set unit name', function(assert) {
 	var done = assert.async();

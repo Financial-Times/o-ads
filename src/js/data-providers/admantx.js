@@ -77,6 +77,7 @@ Admantx.prototype.resolve = function(response){
 		try {
 			response = JSON.parse(response);
 		} catch (e) {
+			/* istanbul ignore next  */
 			// if the response is not valid JSON;
 			response = false;
 		}

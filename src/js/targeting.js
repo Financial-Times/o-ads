@@ -138,7 +138,7 @@ Targeting.prototype.getFromConfig = function() {
 	if (!utils.isPlainObject(targeting)) {
 		/* istanbul ignore else  */
 		if (utils.isString(targeting)) {
-			targeting = utils.hash(targeting, ';', '=') || {};
+			targeting = utils.hash(targeting, ';', '=');
 		}
 	}
 
@@ -159,9 +159,8 @@ Targeting.prototype.getPageReferrer = function() {
 		hostRegex = /^.*?:\/\/.*?(\/.*)$/;
 
 		//remove hostname from results
-		/* istanbul ignore else  */
 		match = hostRegex.exec(referrer)[1];
-
+		/* istanbul ignore else  */
 		if (match !== null) {
 			match.substring(1);
 		}

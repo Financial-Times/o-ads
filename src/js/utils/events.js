@@ -21,7 +21,7 @@ function broadcast(name, data, target) {
 		cancelable: true,
 		detail: data
 	};
-	target.dispatchEvent(customEvent(name, opts));
+	target.dispatchEvent(new CustomEvent(name, opts));
 }
 
 /**
@@ -58,15 +58,4 @@ function once(name, callback, target) {
 	};
 
 	on(name, handler, target);
-}
-
-/*
-* custom event fix for safari
-*/
-function customEvent(name, opts) {
-	try {
-		return new CustomEvent(name, opts);
-	} catch (e) {
-		return CustomEvent.initCustomEvent(name, opts.bubbles, opts.cancelable, opts.detail);
-	}
 }

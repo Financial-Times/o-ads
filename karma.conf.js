@@ -41,8 +41,7 @@ var options = {
 		'src/**/*.js': 'browserify',
 		'test/qunit/setup.js': 'browserify',
 		'test/qunit/video.mainplayer.test.js': 'browserify',
-		'test/qunit/version.test.js': 'browserify',
-		'test/qunit/slots.test.js': 'browserify'
+		'test/qunit/version.test.js': 'browserify'
 	}
 };
 
@@ -85,6 +84,7 @@ if (process.env.COVERAGE) {
 					branches:[0, 85]
 				}
 			},
+			{ type: 'text' },
 			{ type: 'json', subdir: '.', file: 'summary.json' }
 		]
 	};

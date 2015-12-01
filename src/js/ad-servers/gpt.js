@@ -150,6 +150,7 @@ function enableCompanions(gptConfig) {
 function enableVideo(gptConfig) {
 	if (gptConfig.video) {
 		var url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
+		/* istanbul ignore else  */
 		if (!utils.isScriptAlreadyLoaded(url)) {
 			utils.attach(url, true);
 		}
@@ -169,6 +170,7 @@ function enableVideo(gptConfig) {
 */
 function onReady(slotMethods, event) {
 	var slot = event.detail.slot;
+	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
 

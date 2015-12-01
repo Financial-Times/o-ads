@@ -97,6 +97,7 @@ module.exports.isPlainObject = function(obj) {
 			return false;
 		}
 	} catch (e) {
+		/* istanbul ignore next  */
 		// IE8,9 Will throw exceptions on certain host objects
 		return false;
 	}
@@ -467,6 +468,7 @@ module.exports.arrayLikeToArray = function(obj) {
 	try {
 		array = Array.prototype.slice.call(obj);
 	} catch (error) {
+		/* istanbul ignore next  */
 		for (var i = 0; i < obj.length; i++) {
 			array[i] = obj[i];
 		}
