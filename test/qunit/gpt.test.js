@@ -30,6 +30,43 @@ QUnit.test('set page targeting', function(assert) {
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
+QUnit.test('override page targeting', function(assert) {
+	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
+	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
+	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
+
+	this.ads.gpt.updatePageTargeting({overrideKey: 'overrideValue'});
+	assert.ok(googletag.pubads().setTargeting.calledWith('overrideKey', 'overrideValue'), 'the params are queued with GPT');
+
+	this.ads.gpt.updatePageTargeting('anotherOverrideKey=anotherOverrideValue');
+	assert.ok(googletag.pubads().setTargeting.neverCalledWith('anotherOverrideKey', 'anotherOverrideValue'), 'overreide paramerters passed as a string are not queued with GPT');
+
+});
+
+QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.ads.init();
+	// delete mock
+	delete window.googletag;
+	this.ads.gpt.updatePageTargeting({overrideKey: 'overrideValue'});
+	assert.ok(errorSpy.calledWith('Attempting to set page targeting before the GPT library has initialized'), 'warns that googletag is not available');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('override page targeting', function(assert) {
+	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
+	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
+	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
+
+	this.ads.gpt.updatePageTargeting({overrideKey: 'overrideValue'});
+	assert.ok(googletag.pubads().setTargeting.calledWith('overrideKey', 'overrideValue'), 'the params are queued with GPT');
+
+	this.ads.gpt.updatePageTargeting('anotherOverrideKey=anotherOverrideValue');
+	assert.ok(googletag.pubads().setTargeting.neverCalledWith('anotherOverrideKey', 'anotherOverrideValue'), 'the params are queued with GPT');
+});
+
 QUnit.test('catches and warns when targeting is not set', function(assert) {
 	this.stub(this.utils, 'isPlainObject', function(url, async, fn) {
 		return false;
@@ -107,11 +144,94 @@ QUnit.test('set correct collapse mode when collapseEmpty is never', function(ass
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
 });
 
-// QUnit.test('adds companion service', function(assert) {
-// 	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
-// 	this.ads.init({gpt: {companions: true}});
-// 	var slot = this.ads.slots.initSlot('mpu');
-// 	assert.ok(slot.companion, 'the center value is a boolean');
+
+QUnit.test('catches slot in view render event and display it if method is ready', function(assert) {
+	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	var displaySpy = this.spy(slot, 'display');
+	slot.fire('render');
+	assert.ok(displaySpy.calledOnce, 'slot dislpay method has been triggered');
+});
+
+QUnit.test('on slot refresh event updates targeting', function(assert) {
+	var slotHTML = '<div data-o-ads-formats="MediumRectangle" data-o-ads-targeting="random=1"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	slot.fire('refresh', {targeting: {test: true}});
+	assert.ok(googletag.pubads().refresh.calledOnce, 'googletag refresh method has been called');
+	assert.ok(slot.gpt.slot.setTargeting.calledTwice, 'setTargeting has been called on the slot');
+	assert.ok(slot.gpt.slot.setTargeting.calledWith('random', '1'), 'setTargeting has been passed correct argument');
+	assert.ok(slot.gpt.slot.setTargeting.calledWith('test', true), 'setTargeting has been passed correct argument');
+});
+
+QUnit.test('provides api to clear the slot', function(assert) {
+	var slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('test1');
+	slot.clearSlot();
+	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
+	assert.ok(googletag.pubads().clear.calledWith(slot.gpt.slot), 'defaults to slot that the method has been invoked on');
+});
+
+QUnit.test('provides api to clear another slot', function(assert) {
+	var slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div><div data-o-ads-name="test2" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('test1');
+	var slot2 = this.ads.slots.initSlot('test2');
+	slot.clearSlot(slot2.gpt.slot);
+	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
+	assert.ok(googletag.pubads().clear.calledWith(slot2.gpt.slot), 'one slot can clear ');
+});
+
+QUnit.test('companion service can be switched off per slot', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
+	this.ads.init({
+		formats: {
+			TestFormat: {sizes: [[970, 90]]}
+		},
+		gpt: {
+			companions: true
+		}
+	});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	assert.ok(googletag.companionAds.calledTwice, 'companionAds called correct number of times');
+
+	slot.companion = false;
+	slot.addServices();
+	assert.ok(googletag.companionAds.calledTwice, 'companion off switch stops a call to companionAds');
+
+	delete slot['companion'];
+	slot.addServices();
+	assert.ok(googletag.companionAds.calledThrice, 'when switch is not false it makes a call to companion ads');
+});
+
+// QUnit.only('adds companion service', function(assert) {
+// 	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
+// 	this.ads.init({
+// 		slots: {
+// 			TestFormat: {
+// 				companion: false,
+// 				formats: ['TestFormat']
+// 			}
+// 		},
+// 		formats: {
+// 			TestFormat: {sizes: [[970, 90]]}
+// 		},
+// 		gpt: {
+// 			companions: true
+// 		}
+// 	});
+// 	var slot = this.ads.slots.initSlot('TestFormat');
+//
+//
+// 	slot.companion = false;
+// 	slot.addServices();
+// 	assert.ok(googletag.companionAds.called, 'companion off switch on a slot makes sure the ');
 // });
 
 QUnit.test('set unit name', function(assert) {
@@ -246,16 +366,6 @@ QUnit.test('set unit name with attribute', function(assert) {
 	this.ads.slots.initSlot(container);
 });
 
-// QUnit.test('refresh', function (assert) {
-//     var clock = this.date();
-//     this.ads.init({ refresh: { time: 1 }});
-//     this.ads.gpt.startRefresh();
-//     var GPTrefreshTimer = this.spy(this.ads.gpt.refreshTimer, 'fn');
-
-//     clock.tick(1025);
-//     assert.ok(GPTrefreshTimer.called);
-// });
-
 QUnit.test('collapse empty', function(assert) {
 
 	this.ads.init({gpt: {collapseEmpty: 'after'}});
@@ -346,6 +456,16 @@ QUnit.test('fixed url for ad requests', function(assert) {
 	assert.ok(gptSlot.set.calledWith('page_url', 'http://www.random-inc.com/'), 'page url set via canonical link tag');
 });
 
+
+QUnit.test('pick up the slot URL from page address if config or canonical not available', function(assert) {
+	var urlUtilSpy = this.spy(this.utils, 'getLocation');
+	this.fixturesContainer.add('<div data-o-ads-name="url-slot" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init();
+	this.ads.slots.initSlot('url-slot');
+	assert.ok(urlUtilSpy.calledOnce, 'page url set via utils');
+});
+
+
 QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
 	var done = assert.async();
 	document.body.addEventListener('oAds.complete', function(event) {
@@ -360,4 +480,20 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
 	this.ads.slots.fullpage;
+});
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.gpt.debug();
+	assert.notOk(start.called);
+});
+
+QUnit.test('debug logs info when config is set', function(assert) {
+	this.ads.init({gpt: true});
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.gpt.debug();
+	assert.ok(start.called);
 });

@@ -310,6 +310,7 @@ var slotMethods = {
 			var screensize = event.detail.screensize;
 
 			if (slot.hasValidSize(screensize) && !slot.responsive) {
+				/* istanbul ignore else  */
 				if (slot.gpt.iframe) {
 					slot.fire('refresh');
 				} else if (!this.defer) {
@@ -403,10 +404,7 @@ var slotMethods = {
 	setURL: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
 		var canonical = config('canonical');
-		if (canonical) {
-			gptSlot.set('page_url', canonical || utils.getLocation());
-		}
-
+		gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
 		return this;
 	},
 
@@ -415,6 +413,7 @@ var slotMethods = {
 	*/
 	setTargeting: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
+		/* istanbul ignore else  */
 		if (utils.isPlainObject(this.targeting)) {
 			Object.keys(this.targeting).forEach(function(param) {
 				gptSlot.setTargeting(param, this.targeting[param]);
@@ -449,7 +448,9 @@ module.exports.updatePageTargeting = function(override) {
 		var params = utils.isPlainObject(override) ? override : targeting.get();
 		setPageTargeting(params);
 	}
-	else {utils.log.warn('Attempting to set page targeting before the GPT library has initialized');}
+	else {
+		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
+	}
 };
 
 module.exports.debug = function(){

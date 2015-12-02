@@ -61,7 +61,7 @@ QUnit.test('catches when the ads sizes are not correct', function(assert) {
 	assert.ok(errorSpy.calledWith('slot %s has no configured sizes!'), 'missing size config logs correct error message');
 });
 
-QUnit.test('creates add based on a format with multiple sies defined', function(assert) {
+QUnit.test('creates add based on a format with multiple sizes defined', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="TestFormat" data-o-ads-sizes></div>');
 	var sizes = [[970, 90], [970, 66], [180, 50]];
 	this.ads.init({
