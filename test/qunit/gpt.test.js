@@ -188,51 +188,36 @@ QUnit.test('provides api to clear another slot', function(assert) {
 	assert.ok(googletag.pubads().clear.calledWith(slot2.gpt.slot), 'one slot can clear ');
 });
 
-QUnit.test('companion service can be switched off per slot', function(assert) {
+QUnit.test('companion service is enabled globally on slots', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="test" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('test');
+	assert.ok(slot.gpt.slot.addService.calledWith(googletag.companionAds()), 'add companionAds service has been called on slot');
+});
+
+QUnit.test('companion service can be switched off per format', function(assert) {
 	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
 	this.ads.init({
-		formats: {
-			TestFormat: {sizes: [[970, 90]]}
+		slots: {
+			TestFormat: {
+				companion: false,
+				formats: ['Rectangle']
+			}
 		},
 		gpt: {
 			companions: true
 		}
 	});
 	var slot = this.ads.slots.initSlot('TestFormat');
-	assert.ok(googletag.companionAds.calledTwice, 'companionAds called correct number of times');
-
-	slot.companion = false;
-	slot.addServices();
-	assert.ok(googletag.companionAds.calledTwice, 'companion off switch stops a call to companionAds');
-
-	delete slot['companion'];
-	slot.addServices();
-	assert.ok(googletag.companionAds.calledThrice, 'when switch is not false it makes a call to companion ads');
+	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on format');
 });
 
-// QUnit.only('adds companion service', function(assert) {
-// 	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
-// 	this.ads.init({
-// 		slots: {
-// 			TestFormat: {
-// 				companion: false,
-// 				formats: ['TestFormat']
-// 			}
-// 		},
-// 		formats: {
-// 			TestFormat: {sizes: [[970, 90]]}
-// 		},
-// 		gpt: {
-// 			companions: true
-// 		}
-// 	});
-// 	var slot = this.ads.slots.initSlot('TestFormat');
-//
-//
-// 	slot.companion = false;
-// 	slot.addServices();
-// 	assert.ok(googletag.companionAds.called, 'companion off switch on a slot makes sure the ');
-// });
+QUnit.test('companion service can be switched off per slot', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
+});
 
 QUnit.test('set unit name', function(assert) {
 	var done = assert.async();
