@@ -131,6 +131,7 @@ function getRegExp(name, param) {
 module.exports.getCookieParam = function(name, param) {
 	var matches,
 	wholeValue = module.exports.cookie(name) || "";
+	/* istanbul ignore else  */
 	if (param) {
 		matches = wholeValue.match(getRegExp(name, param));
 	}
