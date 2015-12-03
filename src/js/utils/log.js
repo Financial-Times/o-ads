@@ -38,6 +38,7 @@ function log() {
  * @param {string} type
  */
 module.exports.isOn = function(type) {
+	/* istanbul ignore else  */
 	var debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
 };
