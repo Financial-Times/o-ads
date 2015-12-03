@@ -56,7 +56,7 @@ Rubicon.prototype.init = function() {
  * @lends Rubicon
 */
 Rubicon.prototype.initValuation = function(slot) {
-	var config = this.config || {};
+	var config = this.config;
 	var zone = (config.zones) ? config.zones[slot.name] : false;
 	var size = (config.formats) ? config.formats[slot.name] : false;
 
