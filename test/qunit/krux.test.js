@@ -16,6 +16,26 @@ QUnit.test("control tag is attached when initialised", function(assert) {
 	assert.ok(this.ads.utils.attach.withArgs('oxnso'), 'the krux control tag file is attached to the page');
 });
 
+QUnit.test('sets global Krux if one is not available yet', function(assert) {
+	delete window.Krux;
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+	assert.ok((window.Krux), 'Krux is set in the init');
+});
+
+QUnit.test('adds a script from url when location contains krux src', function(assert) {
+	var originalLocation = window.location.href;
+	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=http%3A%2F%2Fcdn.krxd.net%3A123%2F');
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
+});
+
+QUnit.test('does not add a script from url when location contains krux src that is set to disable', function(assert) {
+	var originalLocation = window.location.href;
+	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=disable');
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+	assert.ok(this.attach.calledWith('', true), 'the url passed to attach is empty');
+});
+
 QUnit.test('targeting data is generated correctly from localStorage', function(assert) {
 	var kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
 	var localstorageMock = this.localStorage(kruxData);
@@ -60,6 +80,11 @@ QUnit.test('event pixels', function(assert) {
 
 	this.ads.krux.events.fire(eventId, attrs);
 	assert.ok(window.Krux.calledWith('admEvent', eventId, attrs), 'firing an event with attributes works!');
+});
+
+QUnit.test('event pixels event not fire if no id is passed', function(assert) {
+	this.ads.krux.events.fire();
+	assert.notOk(window.Krux.calledOnce, 'does not fire and event');
 });
 
 QUnit.test('events on DOM elements ', function(assert) {
@@ -113,6 +138,9 @@ QUnit.test('event pixel - dwell time', function(assert) {
 	clock.tick(11000);
 	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
 
+	clock.tick(11000);
+	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
+
 	clock.tick(41000);
 	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'if js execution is paused the event resets');
 
@@ -124,6 +152,29 @@ QUnit.test('event pixel - dwell time', function(assert) {
 
 	clock.tick(11000);
 	assert.ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 40}), 'doesn\'t fire once max interval is reached');
+});
+
+QUnit.test('event pixel - dwell time defaults', function(assert) {
+	var dwellTimeId = 'dwell-time-default';
+	var clock = this.date();
+
+	this.ads.init({
+		krux: {
+			id: '112233',
+			events: {
+				dwell_time: {
+					id: dwellTimeId,
+				}
+			}
+		}
+	});
+
+	clock.tick(5100);
+	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 5}), 'fired after first interval');
+
+	clock.tick(1400000);
+	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 600}), 'fired the maximum interval');
+	assert.ok(window.Krux.neverCalledWith('admEvent', dwellTimeId, {dwell_time: 605}), 'doesn\'t fire once max interval is reached');
 });
 
 QUnit.test('page attributes are set correctly and sent to Krux', function(assert) {
