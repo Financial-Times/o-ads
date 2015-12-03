@@ -59,6 +59,12 @@ QUnit.test('slot configuration', function(assert) {
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
 });
 
+QUnit.test('loads chartbeat js file if configured', function(assert) {
+	var scriptLoadedSpy = this.stub(this.utils, 'isScriptAlreadyLoaded').returns(false);
+	this.ads.init({chartbeat: {loadsJS: true}});
+	assert.ok(this.attach.calledWith('//static.chartbeat.com/js/chartbeat_pub.js', true), 'loads chartbeat script if one is not loaded yet');
+});
+
 QUnit.test('override name', function(assert) {
 	var config = this.basic;
 	config.chartbeat = true;
@@ -120,6 +126,13 @@ QUnit.test('demographics configuration not set', function(assert) {
 	window._cbq.push = this.spy();
 	this.ads.init(config);
 	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
+});
+
+QUnit.test('sets global cbq if one is not available yet', function(assert) {
+	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
+	delete window._cbq;
+	this.ads.init(config);
+	assert.ok((window._cbq), 'cbq is set in the init');
 });
 
 QUnit.test('debug returns early if no config is set', function(assert) {
