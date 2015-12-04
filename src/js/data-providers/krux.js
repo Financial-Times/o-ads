@@ -43,9 +43,13 @@ Krux.prototype.init = function(impl) {
 			this.setAttributes('user_attr_',  this.config.attributes.user || {});
 			this.setAttributes('',  this.config.attributes.custom || {});
 		}
-		var m,
-		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+
+		var src;
+		var m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
+		if (m) {
+			src = decodeURIComponent(m[1]);
+		}
+		var finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();

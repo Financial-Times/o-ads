@@ -15,7 +15,7 @@ QUnit.test('post base context', function(assert) {
 });
 
 QUnit.test('post from different context', function(assert) {
-	var frame = this.createPostMessageFrame();
+	var frame = this.createDummyFrame();
 	var top = window.top || window;
 	top.postMessage = this.spy();
 	frame.postMessage = this.spy();

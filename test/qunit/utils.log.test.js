@@ -11,6 +11,7 @@ QUnit.module('utils.log', { beforeEach: function() {
 	this.stub(console, 'info');
 	this.stub(console, 'groupCollapsed');
 	this.stub(console, 'groupEnd');
+	this.stub(console, 'table');
 }});
 
 QUnit.test('We can log messages', function(assert) {
@@ -60,6 +61,11 @@ QUnit.test('We can log info messages', function(assert) {
 QUnit.test('We can start and end groups', function(assert) {
 	if (console && console.groupCollapsed) {
 		var log = this.utils.log;
+
+		this.utils.log.isOn.returns(false);
+		assert.notOk(console.groupCollapsed.called, 'if logging is off never make a call to console');
+
+		this.utils.log.isOn.returns(true);
 		log.start();
 		assert.ok(console.groupCollapsed.calledWith('o-ads'), 'by default  the group o-ads is started');
 
@@ -93,6 +99,44 @@ QUnit.test('We can turn logging on and off', function(assert) {
 		} else {
 			assert.ok(!console.log.called, 'the current page settings are respected');
 		}
+
+	} else {
+		assert.ok(true, 'console unavailable in this browser');
+		this.warn('Test skipped due to lack of console support!');
+	}
+});
+
+
+QUnit.test('Fall back to log when table method is not available', function(assert) {
+	if (console) {
+		var log = this.utils.log;
+		var save = window.console.table;
+
+		log.table('hello');
+		assert.ok(console.table.called, 'call table method when one is available');
+		assert.notOk(console.log.called, 'log method has not been called');
+
+		window.console['table'] = undefined;
+		log.table('hello');
+		assert.ok(console.log.calledOnce, 'falls back to calling log method');
+
+		log.attributeTable('test');
+		assert.ok(console.log.calledTwice, 'falls back to calling log method');
+
+		window.console['table'] = save;
+
+	} else {
+		assert.ok(true, 'console unavailable in this browser');
+		this.warn('Test skipped due to lack of console support!');
+	}
+});
+
+QUnit.test('When passing values passed to attribute table are arrays or objects it stringifies them', function(assert) {
+	if (console) {
+		var log = this.utils.log;
+		var jsonSpy = this.spy(JSON, 'stringify');
+		log.attributeTable({test: [1,2,3], test2: {key: 'value'}});
+		assert.ok(jsonSpy.calledTwice, 'falls back to calling log method');
 
 	} else {
 		assert.ok(true, 'console unavailable in this browser');

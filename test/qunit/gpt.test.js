@@ -213,7 +213,7 @@ QUnit.test('companion service can be switched off per format', function(assert) 
 });
 
 QUnit.test('companion service can be switched off per slot', function(assert) {
-	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	var slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
