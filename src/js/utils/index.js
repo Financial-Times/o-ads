@@ -498,16 +498,18 @@ module.exports.iframeToSlotName = function(iframeWindow) {
 
 	// Figure out which iframe DOM node we have the window for
 	while (i--) {
+		/* istanbul ignore else  */
 		if (iframes[i].contentWindow === iframeWindow) {
 			node = iframes[i];
 			break;
 		}
 	}
-
+	/* istanbul ignore else  */
 	if (node) {
 		// find the closest parent with a data-o-ads-name attribute, that's our slot name
 		while (node.parentNode) {
 			slotName = node.getAttribute('data-o-ads-name');
+			/* istanbul ignore else  */
 			if (slotName) {
 				return slotName;
 			}

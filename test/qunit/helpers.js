@@ -13,10 +13,12 @@ module.exports.fixturesContainer.add = function(html) {
 };
 
 /* create an iframe and return it's context for testing post message */
-module.exports.createPostMessageFrame = function () {
+module.exports.createDummyFrame = function (content, target) {
+	target = target || document.getElementById('qunit-fixtures');
 	var iframe = document.createElement('iframe');
 	iframe.id = 'postMessage';
-	document.getElementById('qunit-fixtures').appendChild(iframe);
+	target.appendChild(iframe);
+	iframe.contentDocument.body.insertAdjacentHTML('beforeEnd', content);
 	return iframe.contentWindow;
 };
 

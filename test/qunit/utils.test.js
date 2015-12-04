@@ -386,3 +386,16 @@ QUnit.test('string is capitalised', function(assert) {
 QUnit.test('hyphenises upper case characeters', function(assert) {
 	assert.equal(this.ads.utils.hyphenise('abcDEFghIjklmNOPQrestuvWxYz1234567890!'), 'abc-d-e-fgh-ijklm-n-o-p-qrestuv-wx-yz1234567890!', 'hyphenises and lower cases all upper case characters');
 });
+
+QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
+		var frameContentWindow = this.createDummyFrame('test');
+		var result = this.utils.iframeToSlotName(frameContentWindow);
+		assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
+});
+
+QUnit.test('find a name of the ad from an iframe', function(assert) {
+		var node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
+		var frameContentWindow = this.createDummyFrame('test', node);
+		var result = this.utils.iframeToSlotName(frameContentWindow);
+		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
+});
