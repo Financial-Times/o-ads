@@ -110,6 +110,7 @@ function Timers() {
 			threshhold = Timer.interval * 1.5;
 
 			if (threshhold < time) {
+				/* istanbul ignore else  */
 				if (reset) {
 					Timer.reset();
 				}
