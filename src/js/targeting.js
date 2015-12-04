@@ -227,7 +227,7 @@ Targeting.prototype.version = function() {
 Targeting.prototype.debug = function () {
 	var log = utils.log;
 	var parameters = this.get();
-	if (!parameters) {
+	if (Object.keys(parameters).length === 0) {
 		return;
 	}
 
