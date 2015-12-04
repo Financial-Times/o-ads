@@ -60,7 +60,7 @@ QUnit.test('slot configuration', function(assert) {
 });
 
 QUnit.test('loads chartbeat js file if configured', function(assert) {
-	var scriptLoadedSpy = this.stub(this.utils, 'isScriptAlreadyLoaded').returns(false);
+	this.stub(this.utils, 'isScriptAlreadyLoaded').returns(false);
 	this.ads.init({chartbeat: {loadsJS: true}});
 	assert.ok(this.attach.calledWith('//static.chartbeat.com/js/chartbeat_pub.js', true), 'loads chartbeat script if one is not loaded yet');
 });

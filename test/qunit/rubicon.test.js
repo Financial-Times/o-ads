@@ -50,10 +50,9 @@ QUnit.test('init - invokes failure callback when cannot attach the RTP script', 
 		}
 	});
 
-	var slot = this.ads.slots.initSlot('rubicon-no-target');
-
+	this.ads.slots.initSlot('rubicon-no-target');
 	assert.ok(this.attach.calledWith('//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=10232/26290'), 'rubicon library is attached to the page');
-	assert.ok(logSpy.calledOnce, 'script attachement failure logged')
+	assert.ok(logSpy.calledOnce, 'script attachement failure logged');
 });
 
 
@@ -142,7 +141,7 @@ QUnit.test('rubicon fails to init globals when the zone config is missing', func
 		}
 	});
 
-	var slot = this.ads.slots.initSlot('rubicon-no-target');
+	this.ads.slots.initSlot('rubicon-no-target');
 	assert.notOk(window.oz_api, 'did not init the global attributes');
 });
 
@@ -168,6 +167,6 @@ QUnit.test('rubicon fails to init globals when the zone config is missing', func
 		}
 	});
 
-	var slot = this.ads.slots.initSlot('rubicon-no-target');
+	this.ads.slots.initSlot('rubicon-no-target');
 	assert.notOk(window.oz_api, 'did not init the global attributes');
 });

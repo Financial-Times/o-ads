@@ -23,14 +23,12 @@ QUnit.test('sets global Krux if one is not available yet', function(assert) {
 });
 
 QUnit.test('adds a script from url when location contains krux src', function(assert) {
-	var originalLocation = window.location.href;
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=http%3A%2F%2Fcdn.krxd.net%3A123%2F');
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
 });
 
 QUnit.test('does not add a script from url when location contains krux src that is set to disable', function(assert) {
-	var originalLocation = window.location.href;
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=disable');
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 	assert.ok(this.attach.calledWith('', true), 'the url passed to attach is empty');
