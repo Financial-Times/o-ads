@@ -278,18 +278,18 @@ module.exports.hash = function(str, delimiter, pairing) {
 * @returns {HTMLElement} the created script tag
 */
 module.exports.attach = function(scriptUrl, async, callback, errorcb) {
-	var tag = document.createElement('script'),
-	node = document.getElementsByTagName('script')[0] || document.head.childNodes[0],
-	hasRun = false;
+	var tag = document.createElement('script');
+	var node = document.getElementsByTagName('script')[0];
+	var hasRun = false;
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
-	/* istanbul ignore else  */
+	/* istanbul ignore else */
 	if (async) {
 		tag.async = 'true';
 	}
-
+	/* istanbul ignore else  */
 	if (utils.isFunction(callback)) {
-
+		/* istanbul ignore if - legacy IE code, won't test */
 		if (hop.call(tag, 'onreadystatechange')) {
 			tag.onreadystatechange = function() {
 				if (tag.readyState === "loaded") {
@@ -301,14 +301,16 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 			};
 		} else {
 			tag.onload =  function() {
+				/* istanbul ignore else  */
 				if (!hasRun) {
 					callback();
 					hasRun = true;
 				}
 			};
-
+			/* istanbul ignore else  */
 			if (utils.isFunction(errorcb)) {
 				tag.onerror = function() {
+					/* istanbul ignore else  */
 					if (!hasRun) {
 						errorcb();
 						hasRun = true;
@@ -347,6 +349,7 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 */
 module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 	var xhr = new XMLHttpRequest();
+	/* istanbul ignore else - legacy IE code, won't test */
 	if ('withCredentials' in xhr) {
 		xhr.open(method, url, true);
 		xhr.responseType = 'json';
@@ -376,6 +379,7 @@ module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
 * @returns {string} document.referrer
 */
+/* istanbul ignore next - cannot reliably test value of referer */
 module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
@@ -428,6 +432,7 @@ module.exports.parseAttributeName = function(attribute) {
 * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
 * @returns {string}
 */
+/* istanbul ignore next - cannot reliably test value of location */
 module.exports.getLocation = function() {
 	return document.location.href || '';
 };
