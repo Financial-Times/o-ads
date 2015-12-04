@@ -26,7 +26,7 @@ function getResponsiveSizes(mapping) {
 }
 
 googletag.defineSizeMapping = stubs.stub();
-googletag.companionAds = stubs.stub();
+googletag.companionAds = stubs.stub().returns({setRefreshUnfilledSlots: stubs.stub()});
 googletag.enableServices = stubs.stub();
 
 function Slot(name, sizes, id) {
