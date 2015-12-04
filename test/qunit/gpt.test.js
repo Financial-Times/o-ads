@@ -273,13 +273,6 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
 });
 
-QUnit.test('companion service is enabled globally on slots', function(assert) {
-	var node = this.fixturesContainer.add('<div class="oads" data-o-ads-name="test-advert" data-o-ads-sizes="600x300,300x600,720x30">></div>');
-	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('test-advert');
-	assert.ok(slot.gpt.slot.addService.calledWith(googletag.companionAds()), 'add companionAds service has been called on slot');
-});
-
 QUnit.test('enables companion ads', function(assert) {
 	this.ads.init({ gpt: {companions: true}});
 	assert.ok(googletag.pubads().disableInitialLoad.calledOnce, 'disabled the initial load');
