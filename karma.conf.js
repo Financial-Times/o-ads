@@ -37,11 +37,11 @@ var options = {
 	browserify: { transform: ['debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
 	preprocessors: {
-		'main.js': 'browserify',
-		'src/**/*.js': 'browserify',
-		'test/qunit/setup.js': 'browserify',
-		'test/qunit/video.mainplayer.test.js': 'browserify',
-		'test/qunit/version.test.js': 'browserify'
+		'main.js': ['browserify'],
+		'src/**/*.js': ['browserify'],
+		'test/qunit/setup.js': ['browserify'],
+		'test/qunit/video.mainplayer.test.js': ['browserify'],
+		'test/qunit/version.test.js': ['browserify']
 	}
 };
 
@@ -56,32 +56,40 @@ if(/^win/.test(process.platform)){
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
 	// CI options go here
-	options.browsers = ['PhamtomJS2'];
+	options.browsers = ['PhamtomJS'];
 	options.singleRun = true;
 	options.autoWatch = false;
 } else {
 	//options for local go here
 	options.browserify.debug = true;
+	options.preprocessors['main.js'].unshift('jshint');
+	options.preprocessors['src/**/*.js'].unshift('jshint');
+	options.preprocessors['test/**/*.js'] = ['jshint'];
+	options.jshintPreprocessor = {
+		jshintrc: 'node_modules/origami-build-tools/config/jshint.json',
+		stopOnError: true
+	};
 }
 
+var coverageWatermarks = {
+	statements: [0, 85],
+	lines: [0, 85],
+	functions: [0, 85],
+	branches: [0, 85]
+};
+
 if (process.env.COVERAGE) {
-	console.log('running coverage report...');
+	options.files.push({ pattern: 'reports/**', included: false, watched: false });
 	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
-
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
 		reporters: [
 			{
 				type: 'html',
+				watermarks: coverageWatermarks,
 				subdir: function(browser) {
 					return browser.toLowerCase().split(/[ /-]/)[0];
-				},
-				watermarks: {
-					statements: [0, 85],
-					lines: [0, 85],
-					functions: [0, 85],
-					branches:[0, 85]
 				}
 			},
 			{ type: 'text' },
@@ -90,8 +98,7 @@ if (process.env.COVERAGE) {
 	};
 }
 
-if (process.env.CI_NAME === 'codeship') {
-	// we can't use codeship from stash but if this goes public codeship options go here
+if (process.env.CIRCLECI) {
 }
 
 if (process.env.JENKINS_URL) {
@@ -111,6 +118,7 @@ try {
 	}
 }
 
+console.log(options.preprocessors);
 module.exports = function(config) {
 	config.set(options);
 };
