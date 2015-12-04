@@ -482,3 +482,41 @@ QUnit.test('debug logs info when config is set', function(assert) {
 	this.ads.gpt.debug();
 	assert.ok(start.called);
 });
+
+QUnit.test('enables companion ads', function(assert) {
+	this.ads.init({ gpt: {companions: true}});
+	assert.ok(googletag.pubads().disableInitialLoad.calledOnce, 'disabled the initial load');
+	assert.ok(googletag.companionAds.calledOnce, 'companion ads called');
+	assert.ok(googletag.companionAds().setRefreshUnfilledSlots.calledOnce, 'companion ads api called');
+	assert.ok(googletag.companionAds().setRefreshUnfilledSlots.calledWith(true), 'companion ads api called with correct param');
+});
+QUnit.test('companion service is enabled globally on slots', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="test" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('test');
+	assert.ok(slot.gpt.slot.addService.calledWith(googletag.companionAds()), 'add companionAds service has been called on slot');
+});
+
+QUnit.test('companion service can be switched off per format', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="TestFormat" data-o-ads-formats="TestFormat"></div>');
+	this.ads.init({
+		slots: {
+			TestFormat: {
+				companion: false,
+				formats: ['Rectangle']
+			}
+		},
+		gpt: {
+			companions: true
+		}
+	});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on format');
+});
+
+QUnit.test('companion service can be switched off per slot', function(assert) {
+	var node = this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
+});
