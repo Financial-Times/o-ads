@@ -472,7 +472,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.gpt.debug();
-	assert.notOk(start.called);
+	assert.notOk(start.called, "`utils.start` wasn't called for 'gpt'");
 });
 
 QUnit.test('debug logs info when config is set', function(assert) {
@@ -480,7 +480,7 @@ QUnit.test('debug logs info when config is set', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.gpt.debug();
-	assert.ok(start.called);
+	assert.ok(start.calledWith('gpt'), "`utils.start` was called for 'gpt'");
 });
 
 QUnit.test('enables companion ads', function(assert) {
