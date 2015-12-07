@@ -207,7 +207,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.krux.debug();
-	assert.notOk(start.called);
+	assert.notOk(start.called, "`utils.start` wasn't called for 'Krux'");
 });
 
 QUnit.test('debug starts logging Krux data', function(assert) {
@@ -215,8 +215,8 @@ QUnit.test('debug starts logging Krux data', function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.ok(start.calledWith('Krux©'));
-	assert.ok(start.calledWith('Targeting'));
+	assert.ok(start.calledWith('Krux©'), "`utils.start` was called for 'Krux'");
+	assert.ok(start.calledWith('Targeting'), "`utils.start` was called for 'Targeting'");
 });
 
 QUnit.test("debug doesn't log attributes data if none is set", function(assert) {
@@ -224,7 +224,7 @@ QUnit.test("debug doesn't log attributes data if none is set", function(assert) 
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.notOk(start.calledWith('Attributes'));
+	assert.notOk(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
 });
 
 QUnit.test("debug logs attributes data if set", function(assert) {
@@ -232,10 +232,10 @@ QUnit.test("debug logs attributes data if set", function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.ok(start.calledWith('Attributes'));
-	assert.ok(start.calledWith('Page'));
-	assert.ok(start.calledWith('User'));
-	assert.ok(start.calledWith('Custom'));
+	assert.ok(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
+	assert.ok(start.calledWith('Page'), "`utils.start` was called for 'Page'");
+	assert.ok(start.calledWith('User'), "`utils.start` was called for 'User'");
+	assert.ok(start.calledWith('Custom'), "`utils.start` was called for 'Custom'");
 });
 
 QUnit.test("debug doesn't log events data if none is set", function(assert) {
@@ -243,7 +243,7 @@ QUnit.test("debug doesn't log events data if none is set", function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.notOk(start.calledWith('Events'));
+	assert.notOk(start.calledWith('Events'), "`utils.start` wasn't called for 'Events'");
 });
 
 QUnit.test("debug logs events data if set", function(assert) {
@@ -251,8 +251,8 @@ QUnit.test("debug logs events data if set", function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.ok(start.calledWith('Events'));
-	assert.ok(start.calledWith('Delegated'));
+	assert.ok(start.calledWith('Events'), "`utils.start` was called for 'Events'");
+	assert.ok(start.calledWith('Delegated'), "`utils.start` was called for 'Delegated'");
 });
 
 QUnit.test("debug doesn't log dwell time data if none is set", function(assert) {
@@ -260,7 +260,7 @@ QUnit.test("debug doesn't log dwell time data if none is set", function(assert) 
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.notOk(start.calledWith('Dwell Time'));
+	assert.notOk(start.calledWith('Dwell Time'), "`utils.start` wasn't called for 'Dwell Time'");
 });
 
 QUnit.test("debug logs dwell time data if set", function(assert) {
@@ -268,7 +268,7 @@ QUnit.test("debug logs dwell time data if set", function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.ok(start.calledWith('Dwell Time'));
+	assert.ok(start.calledWith('Dwell Time'), "`utils.start` was called for 'Dwell Time'");
 });
 
 QUnit.test('debug logs number of supertag scripts', function(assert) {
@@ -278,7 +278,7 @@ QUnit.test('debug logs number of supertag scripts', function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
-	assert.ok(start.calledWith('2 Supertag© scripts'));
+	assert.ok(start.calledWith('2 Supertag© scripts'), 'logs correct number of scripts');
 });
 
 QUnit.test("debug logs segment limit data if set", function(assert) {
@@ -286,5 +286,5 @@ QUnit.test("debug logs segment limit data if set", function(assert) {
 	var log = this.spy(this.utils, 'log');
 
 	this.ads.krux.debug();
-	assert.ok(log.calledWith('%c segment limit:'));
+	assert.ok(log.calledWith('%c segment limit:'), "segment limit was logged'");
 });
