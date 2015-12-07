@@ -18,11 +18,6 @@ QUnit.test('init All', function(assert) {
 });
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
-	this.ads.init({
-		admantx: {collections: {}},
-		gpt: {}
-	});
-
 	var admantxDebug = this.spy(this.ads.admantx, 'debug');
 	var cbDebug = this.spy(this.ads.cb, 'debug');
 	var gptDebug = this.spy(this.ads.gpt, 'debug');
@@ -44,15 +39,9 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 });
 
 QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
-	this.ads.init({
-		admantx: {collections: {}},
-		gpt: {}
-	});
-
-	this.localStorage({'oAds': true});
-
 	var admantxDebug = this.spy(this.ads.admantx, 'debug');
 
+	this.localStorage({'oAds': true});
 	this.ads.debug();
 
 	assert.ok(admantxDebug.called, 'Admantx debug function is called');
@@ -60,11 +49,6 @@ QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 });
 
 QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", function(assert) {
-	this.ads.init({
-		admantx: {collections: {}},
-		gpt: {}
-	});
-
 	var admantxDebug = this.spy(this.ads.admantx, 'debug');
 
 	this.ads.debug();
