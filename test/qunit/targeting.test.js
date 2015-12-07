@@ -262,7 +262,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.targeting.debug();
-	assert.notOk(start.called);
+	assert.notOk(start.called, "`utils.start` wasn't called for 'targeting'");
 });
 
 QUnit.test('debug starts logging data', function(assert) {
@@ -270,5 +270,5 @@ QUnit.test('debug starts logging data', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.targeting.debug();
-	assert.ok(start.called);
+	assert.ok(start.called, "`utils.start` was called for 'targeting'");
 });

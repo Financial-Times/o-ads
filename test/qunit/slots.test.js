@@ -428,5 +428,5 @@ QUnit.test('debug logs creatives', function(assert) {
 	var start = this.spy(this.utils.log, 'start');
 
 	this.ads.slots.debug();
-	assert.ok(start.calledWith('Creatives'));
+	assert.ok(start.calledWith('Creatives'), "`utils.start` was called for 'Creatives'");
 });
