@@ -20,6 +20,14 @@ QUnit.test('We can add things to the queue', function(assert) {
 	assert.equal(queue.items[0], 'hello', 'the item is what we added');
 });
 
+QUnit.test('Processor by default is an empty function', function(assert) {
+	var queue = this.ads.utils.queue();
+	assert.equal(queue.items, 0, 'the queue is empty');
+	queue.add('hello');
+	queue.process(); // run this to make sure you it doesn't throw
+	assert.ok(this.utils.isFunction(queue.processor), 'default processor is a function');
+});
+
 QUnit.test('We can set and override the processor', function(assert) {
 	var ourProcessor = this.spy();
 	var overrideProcessor = this.spy();

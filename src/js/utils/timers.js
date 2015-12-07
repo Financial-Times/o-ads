@@ -105,15 +105,11 @@ function Timers() {
 	function hasExecutionPaused(fn) {
 		return function() {
 			var Timer = this,
-			reset = Timer.opts.reset || false,
 			time = now() - Timer.lastTick - Timer.interval,
 			threshhold = Timer.interval * 1.5;
 
 			if (threshhold < time) {
-				/* istanbul ignore else  */
-				if (reset) {
 					Timer.reset();
-				}
 			}
 
 			fn.apply(Timer);

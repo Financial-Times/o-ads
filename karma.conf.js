@@ -118,7 +118,6 @@ try {
 	}
 }
 
-console.log(options.preprocessors);
 module.exports = function(config) {
 	config.set(options);
 };
