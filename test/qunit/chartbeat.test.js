@@ -140,7 +140,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 	var start = this.spy(this.utils.log, "start");
 
 	this.ads.cb.debug();
-	assert.notOk(start.called);
+	assert.notOk(start.called, "`utils.start` wasn't called");
 });
 
 QUnit.test('debug starts logging Chartbeat data', function(assert) {
@@ -150,9 +150,9 @@ QUnit.test('debug starts logging Chartbeat data', function(assert) {
 
 	this.ads.cb.debug();
 
-	assert.ok(start.calledWith('ChartBeat'));
-	assert.ok(start.calledWith('Superfly Async Config'));
-	assert.ok(log.calledWith('%c uid:'));
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.ok(start.calledWith('Superfly Async Config'), "`utils.start` was called for 'Superfly Async Config'");
+	assert.ok(log.calledWith('%c uid:'), "`utils.log` was called for 'uid'");
 });
 
 QUnit.test("debug doesn't log demographic data if not set", function(assert) {
@@ -161,8 +161,8 @@ QUnit.test("debug doesn't log demographic data if not set", function(assert) {
 
 	this.ads.cb.debug();
 
-	assert.ok(start.calledWith('ChartBeat'));
-	assert.notOk(start.calledWith('Demographic Codes'));
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.notOk(start.calledWith('Demographic Codes'), "`utils.start` wasn't called for 'Demographic Codes'");
 });
 
 QUnit.test('debug logs demographic data if set', function(assert) {
@@ -172,6 +172,6 @@ QUnit.test('debug logs demographic data if set', function(assert) {
 	this.ads.cb.demographicCodes = {};
 	this.ads.cb.debug();
 
-	assert.ok(start.calledWith('ChartBeat'));
-	assert.ok(start.calledWith('Demographic Codes'));
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.ok(start.calledWith('Demographic Codes'), "`utils.start` was called for 'Demographic Codes'");
 });
