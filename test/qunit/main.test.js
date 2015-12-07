@@ -33,13 +33,13 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 
 	this.ads.debug();
 
-	assert.ok(admantxDebug.called);
-	assert.ok(cbDebug.called);
-	assert.ok(gptDebug.called);
-	assert.ok(kruxDebug.called);
-	assert.ok(slotsDebug.called);
-	assert.ok(targetingDebug.called);
-	assert.ok(videoDebug.called);
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.ok(cbDebug.called, 'Chartbeat debug function is called');
+	assert.ok(gptDebug.called, 'gpt debug function is called');
+	assert.ok(kruxDebug.called, 'Krux debug function is called');
+	assert.ok(slotsDebug.called, 'Slots debug function is called');
+	assert.ok(targetingDebug.called, 'Targeting debug function is called');
+	assert.ok(videoDebug.called, 'Video debug function is called');
 
 });
 
@@ -49,11 +49,26 @@ QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 		gpt: {}
 	});
 
-	localStorage.setItem('oAds', true);
+	this.localStorage({'oAds': true});
+
 	var admantxDebug = this.spy(this.ads.admantx, 'debug');
 
 	this.ads.debug();
-	assert.ok(admantxDebug.called);
 
-	assert.ok(localStorage.getItem('oAds'));
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.ok(localStorage.getItem('oAds'), "oAds value in local storage wasn't removed");
+});
+
+QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", function(assert) {
+	this.ads.init({
+		admantx: {collections: {}},
+		gpt: {}
+	});
+
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+
+	this.ads.debug();
+
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.notOk(localStorage.getItem('oAds'), 'oAds value in local storage was removed');
 });
