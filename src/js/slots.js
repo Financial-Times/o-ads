@@ -206,7 +206,7 @@ Slots.prototype.initPostMessage = function() {
 	function pmHandler(slots, event) {
 		if (/^\{.*\}$/.test(event.data) && /oAds\./.test(event.data)) {
 			var data = utils.messenger.parse(event.data);
-			var type = data.type.replace('oAds\.', '');
+			var type = data.type.replace('oAds.', '');
 			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami') {
 				var slotName = utils.iframeToSlotName(event.source.window);

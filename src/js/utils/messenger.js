@@ -8,7 +8,7 @@
 module.exports.messenger = {
 	post: function(message, source) {
 		message = (typeof message === 'string') ? message : JSON.stringify(message);
-		source = (typeof source === 'undefined') ? window.top : source;
+		source = arguments[1] || window.top;
 		source.postMessage(message, '*');
 	},
 	parse: function(message) {

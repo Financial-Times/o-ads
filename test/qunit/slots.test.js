@@ -359,6 +359,38 @@ QUnit.test('configure slot level targeting', function(assert) {
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
 });
 
+QUnit.test('Post message whoami message can reply is sent', function (assert) {
+	var done = assert.async();
+	var node = this.fixturesContainer.add('<div data-name-o-ads="dummy-ad"></div>');
+	var frame = this.createDummyFrame(false, node);
+	frame.node.src = 'base/test/qunit/mocks/whoami-message.html';
+	frame.addEventListener('message', function (event) {
+		var data = JSON.parse(event.data);
+		assert.equal(data.type, 'oAds.youare');
+		assert.equal(data.name, 'dummy-ad');
+		done();
+	});
+
+	this.ads.init({
+		slots: {
+			'dummy-ad': {
+				formats: ['MediumRectangle']
+			}
+	}});
+});
+
+// Qunit.test('Post message reposonsive message sets the slot as respsonsive', function (assert) {
+//
+// });
+//
+// Qunit.test('Post message collapse message runs the collapse action', function (assert) {
+//
+// });
+//
+// Qunit.test('Post message resize message fire the resize event', function () {
+//
+// });
+
 QUnit.test('configure refresh globally on a timer', function(assert) {
 	var done = assert.async();
 	var clock = this.date();

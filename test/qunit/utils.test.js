@@ -388,14 +388,14 @@ QUnit.test('hyphenises upper case characeters', function(assert) {
 });
 
 QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
-		var frameContentWindow = this.createDummyFrame('test');
+		var frameContentWindow = this.createDummyFrame('test').window;
 		var result = this.utils.iframeToSlotName(frameContentWindow);
 		assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
 });
 
 QUnit.test('find a name of the ad from an iframe', function(assert) {
 		var node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
-		var frameContentWindow = this.createDummyFrame('test', node);
+		var frameContentWindow = this.createDummyFrame('test', node).window;
 		var result = this.utils.iframeToSlotName(frameContentWindow);
 		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
 });

@@ -18,14 +18,14 @@ QUnit.test('post from different context', function(assert) {
 	var frame = this.createDummyFrame();
 	var top = window.top || window;
 	top.postMessage = this.spy();
-	frame.postMessage = this.spy();
+	frame.window.postMessage = this.spy();
 
 	// make a call and pass a source
-	this.utils.messenger.post('key: value', frame);
+	this.utils.messenger.post('key: value', frame.window);
 
 	assert.ok(!top.postMessage.called, 'Make sure default source postMessage has not still been called only once');
-	assert.ok(frame.postMessage.calledOnce, 'Make sure the frame postMessage has been called');
-	assert.ok(frame.postMessage.withArgs( 'key: value', '*'), 'Make the expected arguments are supplied');
+	assert.ok(frame.window.postMessage.calledOnce, 'Make sure the frame postMessage has been called');
+	assert.ok(frame.window.postMessage.withArgs( 'key: value', '*'), 'Make the expected arguments are supplied');
 });
 
 QUnit.test('parse plain string', function(assert) {

@@ -18,8 +18,14 @@ module.exports.createDummyFrame = function (content, target) {
 	var iframe = document.createElement('iframe');
 	iframe.id = 'postMessage';
 	target.appendChild(iframe);
-	iframe.contentDocument.body.insertAdjacentHTML('beforeEnd', content);
-	return iframe.contentWindow;
+	if (content) {
+		iframe.contentDocument.body.insertAdjacentHTML('beforeEnd', content);
+	}
+
+	return {
+		node: iframe,
+		window: iframe.contentWindow
+	};
 };
 
 module.exports.fixtures = {
