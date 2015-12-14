@@ -52,6 +52,7 @@ Slots.prototype.collapse = function(names) {
 */
 Slots.prototype.uncollapse = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'uncollapse', names);
 	} else if (utils.isArray(names)) {
@@ -66,6 +67,7 @@ Slots.prototype.uncollapse = function(names) {
 */
 Slots.prototype.refresh = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'refresh', names);
 	} else if (utils.isArray(names)) {
@@ -140,7 +142,7 @@ Slots.prototype.initInview = function() {
 		if (slots[name]) {
 			var slot = slots[name];
 
-			slot.inviewport = event.detail.inviewport || event.detail.visible;
+			slot.inviewport = event.detail.inviewport;
 			slot.percentage = event.detail.percentage;
 			/* istanbul ignore else  */
 			if (slot.inviewport) {

@@ -341,6 +341,92 @@ QUnit.test('configure slot level targeting', function(assert) {
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
 });
 
+QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.collapse('collapse-test');
+	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+});
+
+QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+});
+
+QUnit.test('Slots.collapse with no args will collapse all slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse();
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+});
+
+QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.collapse('collapse-test');
+	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+	this.ads.slots.uncollapse('collapse-test');
+	assert.notOk($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+});
+
+QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	this.ads.slots.uncollapse(['collapse1-test', 'collapse2-test']);
+	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+});
+
+QUnit.test('Slots.uncollapse with no args will collapse all slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse();
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	this.ads.slots.uncollapse();
+	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+});
+
+QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
+	var done = assert.async();
+	var node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.refresh('refresh-test');
+	document.body.addEventListener('oAds.refresh', function(event) {
+		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
+		done();
+	});
+});
+
+QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
+	var warnSpy = this.spy(this.utils.log, 'warn');
+	this.ads.slots.collapse('unknown-test');
+	assert.ok(warnSpy.calledWith('Attempted to %s non-existant slot %s', 'collapse', 'unknown-test'), 'a warning is generated');
+});
+
 QUnit.test('configure refresh globally on a timer', function (assert) {
 	var done = assert.async();
 	var clock = this.date();
@@ -378,6 +464,8 @@ QUnit.test('lazy loading', function(assert) {
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
 });
+
+
 
 QUnit.test('complete events fire', function(assert) {
 	var done = assert.async();
