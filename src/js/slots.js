@@ -205,7 +205,8 @@ Slots.prototype.initPostMessage = function() {
 
 	function pmHandler(slots, event) {
 		var data = utils.messenger.parse(event.data);
-		if (data.type && /^oAds\./.test(data.type)) {
+		/* istanbul ignore else  don't process messages with a non oAds type*/
+		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
 			var type = data.type.replace('oAds\.', '');
 			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami' && event.source) {
