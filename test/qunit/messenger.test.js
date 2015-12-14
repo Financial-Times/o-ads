@@ -6,7 +6,7 @@ QUnit.module('Messenger');
 
 QUnit.test('post base context', function(assert) {
 	var top = window.top || window;
-	top.postMessage = this.spy();
+	this.spy(top, 'postMessage');
 
 	// make a default call
 	this.utils.messenger.post({test: 'message'});
@@ -17,8 +17,8 @@ QUnit.test('post base context', function(assert) {
 QUnit.test('post from different context', function(assert) {
 	var frame = this.createDummyFrame();
 	var top = window.top || window;
-	top.postMessage = this.spy();
-	frame.window.postMessage = this.spy();
+	this.spy(top, 'postMessage');
+	this.spy(frame.window, 'postMessage');
 
 	// make a call and pass a source
 	this.utils.messenger.post('key: value', frame.window);

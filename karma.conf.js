@@ -25,7 +25,7 @@ var options = {
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
-		'test/qunit/*.test.js'
+	 	'test/qunit/*.test.js',
 	],
 	customLaunchers: {
 		Chrome_with_flags: {

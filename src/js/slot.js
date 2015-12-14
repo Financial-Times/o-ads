@@ -102,6 +102,7 @@ function Slot(container, screensize) {
 
 	// make sure the slot has a name
 	this.setName();
+	this.setResponsiveCreative(false);
 	slotConfig = slotConfig[this.name] || {};
 
 	// default configuration properties
@@ -236,6 +237,15 @@ Slot.prototype.setName = function() {
 	}
 	return this;
 };
+
+/**
+*	If the slot doesn't have a name give it one
+*/
+Slot.prototype.setResponsiveCreative = function (value) {
+	this.responsiveCreative = value;
+	return this;
+};
+
 
 /**
 * add the empty class to the slot

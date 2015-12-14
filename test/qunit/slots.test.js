@@ -94,24 +94,6 @@ QUnit.test('defaults empty string value of a property to a true boolean', functi
 	assert.ok(slot.center, 'the center value is a boolean');
 });
 
-// QUnit.test('slots reply to whoami message', function(assert) {
-// 	var done = assert.async();
-// 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
-// 	this.ads.init();
-// 	var result = this.ads.slots.initSlot('banlb2');
-// 	var postMessageSpy = this.stub(utils.messenger, 'post').returns(true);
-// 	this.stub(utils, 'iframeToSlotName', function (){
-// 			return 'banlb2';
-// 	});
-// 	window.addEventListener('message', function() {
-// 			assert.ok(postMessageSpy.calledOnce, 'sends a reply back');
-// 			done();
-// 	});
-// 	this.trigger(window, 'message', true, true, {"data": '{"type": "oAds.whoami"}', "source": {"window": window}});
-// });
-
-
-
 QUnit.test('create a basic slot with js configuration', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb"></div>');
 
@@ -359,39 +341,7 @@ QUnit.test('configure slot level targeting', function(assert) {
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
 });
 
-QUnit.test('Post message whoami message can reply is sent', function (assert) {
-	var done = assert.async();
-	var node = this.fixturesContainer.add('<div data-name-o-ads="dummy-ad"></div>');
-	var frame = this.createDummyFrame(false, node);
-	frame.node.src = 'base/test/qunit/mocks/whoami-message.html';
-	frame.addEventListener('message', function (event) {
-		var data = JSON.parse(event.data);
-		assert.equal(data.type, 'oAds.youare');
-		assert.equal(data.name, 'dummy-ad');
-		done();
-	});
-
-	this.ads.init({
-		slots: {
-			'dummy-ad': {
-				formats: ['MediumRectangle']
-			}
-	}});
-});
-
-// Qunit.test('Post message reposonsive message sets the slot as respsonsive', function (assert) {
-//
-// });
-//
-// Qunit.test('Post message collapse message runs the collapse action', function (assert) {
-//
-// });
-//
-// Qunit.test('Post message resize message fire the resize event', function () {
-//
-// });
-
-QUnit.test('configure refresh globally on a timer', function(assert) {
+QUnit.test('configure refresh globally on a timer', function (assert) {
 	var done = assert.async();
 	var clock = this.date();
 	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';

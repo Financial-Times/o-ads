@@ -204,23 +204,30 @@ Slots.prototype.initPostMessage = function() {
 	window.addEventListener('message', pmHandler.bind(null, this), false);
 
 	function pmHandler(slots, event) {
-		if (/^\{.*\}$/.test(event.data) && /oAds\./.test(event.data)) {
-			var data = utils.messenger.parse(event.data);
-			var type = data.type.replace('oAds.', '');
+		var data = utils.messenger.parse(event.data);
+		if (data.type && /^oAds\./.test(data.type)) {
+			var type = data.type.replace('oAds\.', '');
 			var slot = data.name ? slots[data.name] : false;
-			if (type === 'whoami') {
+			if (type === 'whoami' && event.source) {
+				var messageToSend = { type: 'oAds.youare' };
 				var slotName = utils.iframeToSlotName(event.source.window);
-				if (data.collapse) {
-					slots[slotName].collapse();
+				slot = slots[slotName] || false;
+
+				if(slot) {
+					if (data.collapse) {
+						slot.collapse();
+					}
+
+					messageToSend.name = slotName;
+					messageToSend.sizes = slot.sizes;
+
+					utils.messenger.post(messageToSend, event.source);
+				} else {
+					utils.log.error('Message received from unidentified slot');
+					utils.messenger.post(messageToSend, event.source);
 				}
-				var messageToSend = {
-					type: 'oAds.youare',
-					name: slotName,
-					sizes: (slotName && slots[slotName].sizes)
-				};
-				utils.messenger.post(messageToSend, event.source);
 			} else if(type === 'responsive') {
-				slot.responsive = true;
+				slot.setResponsiveCreative(true);
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
 			} else if (/^touch/.test(data.type)) {
