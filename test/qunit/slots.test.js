@@ -415,7 +415,7 @@ QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
 
 	this.ads.slots.initSlot(node);
 	this.ads.slots.refresh('refresh-test');
-	document.body.addEventListener('oAds.refresh', function(event) {
+	node.addEventListener('oAds.refresh', function(event) {
 		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
 		done();
 	});
@@ -441,6 +441,19 @@ QUnit.test('configure refresh globally on a timer', function (assert) {
 	this.ads.init({ refresh: { time: 1 }});
 	this.ads.slots.initSlot(node);
 	clock.tick(1025);
+});
+
+QUnit.test('elementvisibility is update on load', function(assert) {
+	var slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	var updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
+	var updateSpy = this.spy(slot.elementvis, 'update');
+	this.trigger(window, 'load');
+	assert.ok(updatePositionSpy.called, 'position is updated on load');
+	assert.ok(updateSpy.called, 'visibility is updated on load');
 });
 
 QUnit.test('lazy loading', function(assert) {
@@ -486,17 +499,43 @@ QUnit.test('complete events fire', function(assert) {
 		}
 	});
 
-	this.ads.init({ refresh: { time: 1 }});
+	this.ads.init();
 	this.ads.slots.initSlot(first);
 	this.ads.slots.initSlot(second);
 
 	clock.tick(1025);
 });
 
-QUnit.test('debug logs creatives', function(assert) {
-	this.ads.init();
-	var start = this.spy(this.utils.log, 'start');
 
+QUnit.test('debug logs creatives', function(assert) {
+	var first = this.fixturesContainer.add('<div data-o-ads-name="first" data-o-ads-targeting="monkey=see;monkeys=do" data-o-ads-formats="MediumRectangle"></div>');
+	var second = this.fixturesContainer.add('<div data-o-ads-name="second" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	var third = this.fixturesContainer.add('<div data-o-ads-name="third" data-o-ads-formats-small="MediumRectangle" data-o-ads-formats-large="HalfPage,MediumRectangle"></div>');
+
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			large: [300, 0]
+		}
+	});
+	this.ads.slots.initSlot(first);
+	this.ads.slots.initSlot(second);
+	this.ads.slots.initSlot(third);
+
+	// change slot data to make it predictable
+	this.ads.slots.first.gpt.creativeId = '1234';
+	this.ads.slots.first.gpt.lineItemId = '5678';
+	delete this.ads.slots.second.gpt.creativeId;
+	delete this.ads.slots.second.gpt.lineItemId;
+	delete this.ads.slots.second.gpt.size;
+	this.ads.slots.second.gpt.isEmpty = true;
+	delete this.ads.slots.third.gpt.creativeId;
+	delete this.ads.slots.third.gpt.lineItemId;
+	delete this.ads.slots.third.gpt.size;
+
+	var start = this.spy(this.utils.log, 'start');
+ 	var table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();
-	assert.ok(start.calledWith('Creatives'), "`utils.start` was called for 'Creatives'");
+	assert.ok(start.calledWith('Creatives'), '`log.start` was called for `Creatives`');
+	assert.ok(table.called, '`log.table` was called with the expected data');
 });
