@@ -55,8 +55,8 @@ if(/^win/.test(process.platform)){
 
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
+	console.log('CI options activated');
 	// CI options go here
-	options.browsers = ['PhamtomJS'];
 	options.singleRun = true;
 	options.autoWatch = false;
 } else {
@@ -71,14 +71,23 @@ if (process.env.CI === 'true') {
 	};
 }
 
-var coverageWatermarks = {
-	statements: [0, 85],
-	lines: [0, 85],
-	functions: [0, 85],
-	branches: [0, 85]
+var coverageChecks = {
+	global: {
+		statements: 100,
+		branches: 100,
+		functions: 100,
+		lines: 100
+	},
+	each: {
+		statements: 100,
+		branches: 100,
+		functions: 100,
+		lines: 100
+	}
 };
 
 if (process.env.COVERAGE) {
+	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
 	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
@@ -87,7 +96,7 @@ if (process.env.COVERAGE) {
 		reporters: [
 			{
 				type: 'html',
-				watermarks: coverageWatermarks,
+				check: coverageChecks,
 				subdir: function(browser) {
 					return browser.toLowerCase().split(/[ /-]/)[0];
 				}
