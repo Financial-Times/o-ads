@@ -413,12 +413,12 @@ QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
 	var done = assert.async();
 	var node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
 
-	this.ads.slots.initSlot(node);
-	this.ads.slots.refresh('refresh-test');
 	node.addEventListener('oAds.refresh', function(event) {
 		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
 		done();
 	});
+	this.ads.slots.initSlot(node);
+	this.ads.slots.refresh('refresh-test');
 });
 
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
@@ -533,9 +533,36 @@ QUnit.test('debug logs creatives', function(assert) {
 	delete this.ads.slots.third.gpt.lineItemId;
 	delete this.ads.slots.third.gpt.size;
 
+	var slotTableData = [{
+		"name":"first",
+		"unit name":"/undefined",
+		"creative id":"1234",
+		"line item id":"5678",
+		"size":"300×250",
+		"sizes":"300×250",
+		"targeting":"monkey=see, monkeys=do"
+	},
+	{
+		"name":"second",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"empty",
+		"sizes":"300×600, 300×250",
+		"targeting":""
+	},
+	{
+		"name":"third",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"N/A",
+		"sizes":"responsive slot",
+		"targeting":""
+	}];
 	var start = this.spy(this.utils.log, 'start');
  	var table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();
 	assert.ok(start.calledWith('Creatives'), '`log.start` was called for `Creatives`');
-	assert.ok(table.called, '`log.table` was called with the expected data');
+	assert.ok(table.calledWith(slotTableData), '`log.table` was called with the expected data');
 });
