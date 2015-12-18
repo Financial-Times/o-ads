@@ -7,6 +7,7 @@
     "test": "karma start karma.conf.js",
     "install": "bower install --config.interactive=false",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
+    "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify"
   },
   "repository": {
@@ -34,6 +35,8 @@
     "karma-ie-launcher": "^0.2.0",
     "karma-jshint-preprocessor": "0.0.6",
     "karma-junit-reporter": "^0.3.8",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-phantomjs2-launcher": "^0.3.2",
     "karma-qunit": "^0.1.8",
     "karma-safari-launcher": "^0.1.1",
     "karma-webdriver-launcher": "^1.0.4",
