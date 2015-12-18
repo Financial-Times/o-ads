@@ -12,6 +12,88 @@ QUnit.module('Slots', {
 	}
 });
 
+QUnit.test('fails nicely if not slots found', function(assert) {
+	this.fixturesContainer.add('<div id="banlb2" class="o-ads o-ads-slot"></div>');
+	this.ads.init();
+	var result = this.ads.slots.initSlot('banlb1');
+	assert.notOk(result, 'failed to find an ad slot');
+});
+
+QUnit.test('moves id attribute to data-o-ads-name attribute instead', function(assert) {
+	this.fixturesContainer.add('<div id="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+	this.ads.init();
+	var result = this.ads.slots.initSlot('banlb2');
+	assert.ok(result, 'ad slot inited correctly');
+});
+
+QUnit.test('generates new name for a slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	var result = slot.container.getAttribute('data-o-ads-name');
+	assert.ok(result, 'ad slot inited correctly');
+});
+
+QUnit.test('sets all attributes on slot object', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.notOk(slot.attributes, 'attributes are not set on slot object');
+	slot.getAttributes();
+	assert.ok(slot.attributes, 'attributes are set on slot object');
+});
+
+QUnit.test('catches when the ads format is not correct', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var errorSpy = this.spy(this.utils.log, 'error');
+	this.ads.slots.initSlot(node);
+	assert.ok(errorSpy.calledOnce, 'logs error when using wrong format');
+});
+
+
+QUnit.test('catches when the ads sizes are not correct', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes></div>');
+	this.ads.init();
+	var errorSpy = this.spy(this.utils.log, 'error');
+	this.ads.slots.initSlot(node);
+	assert.ok(errorSpy.called, 'logs error when using wrong sizes');
+	assert.ok(errorSpy.calledWith('slot %s has no configured sizes!'), 'missing size config logs correct error message');
+});
+
+QUnit.test('creates add based on a format with multiple sizes defined', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="TestFormat" data-o-ads-sizes></div>');
+	var sizes = [[970, 90], [970, 66], [180, 50]];
+	this.ads.init({
+		formats: {
+			TestFormat: {sizes: sizes}
+		}
+	});
+	var slot = this.ads.slots.initSlot(node);
+	assert.deepEqual(slot.sizes, sizes, 'slot contains all sizes defined in the format defined');
+});
+
+QUnit.test('converts false string value of a property to a boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="false" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.notOk(slot.center, 'the center value is a boolean');
+});
+
+QUnit.test('converts false string value of a property to a boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(slot.center, 'the center value is a boolean');
+});
+
+QUnit.test('defaults empty string value of a property to a true boolean', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(slot.center, 'the center value is a boolean');
+});
+
 QUnit.test('create a basic slot with js configuration', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb"></div>');
 
@@ -259,7 +341,93 @@ QUnit.test('configure slot level targeting', function(assert) {
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting malformed string is ok');
 });
 
-QUnit.test('configure refresh globally on a timer', function(assert) {
+QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.collapse('collapse-test');
+	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+});
+
+QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+});
+
+QUnit.test('Slots.collapse with no args will collapse all slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse();
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+});
+
+QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.collapse('collapse-test');
+	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+	this.ads.slots.uncollapse('collapse-test');
+	assert.notOk($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+});
+
+QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	this.ads.slots.uncollapse(['collapse1-test', 'collapse2-test']);
+	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+});
+
+QUnit.test('Slots.uncollapse with no args will collapse all slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+	this.ads.slots.collapse();
+	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	this.ads.slots.uncollapse();
+	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+});
+
+QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
+	var done = assert.async();
+	var node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	node.addEventListener('oAds.refresh', function(event) {
+		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
+		done();
+	});
+	this.ads.slots.initSlot(node);
+	this.ads.slots.refresh('refresh-test');
+});
+
+QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
+	var warnSpy = this.spy(this.utils.log, 'warn');
+	this.ads.slots.collapse('unknown-test');
+	assert.ok(warnSpy.calledWith('Attempted to %s non-existant slot %s', 'collapse', 'unknown-test'), 'a warning is generated');
+});
+
+QUnit.test('configure refresh globally on a timer', function (assert) {
 	var done = assert.async();
 	var clock = this.date();
 	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
@@ -273,6 +441,19 @@ QUnit.test('configure refresh globally on a timer', function(assert) {
 	this.ads.init({ refresh: { time: 1 }});
 	this.ads.slots.initSlot(node);
 	clock.tick(1025);
+});
+
+QUnit.test('elementvisibility is update on load', function(assert) {
+	var slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	var updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
+	var updateSpy = this.spy(slot.elementvis, 'update');
+	this.trigger(window, 'load');
+	assert.ok(updatePositionSpy.called, 'position is updated on load');
+	assert.ok(updateSpy.called, 'visibility is updated on load');
 });
 
 QUnit.test('lazy loading', function(assert) {
@@ -297,6 +478,8 @@ QUnit.test('lazy loading', function(assert) {
 	this.ads.slots.initSlot(node);
 });
 
+
+
 QUnit.test('complete events fire', function(assert) {
 	var done = assert.async();
 	var done2 = assert.async();
@@ -316,9 +499,70 @@ QUnit.test('complete events fire', function(assert) {
 		}
 	});
 
-	this.ads.init({ refresh: { time: 1 }});
+	this.ads.init();
 	this.ads.slots.initSlot(first);
 	this.ads.slots.initSlot(second);
 
 	clock.tick(1025);
+});
+
+
+QUnit.test('debug logs creatives', function(assert) {
+	var first = this.fixturesContainer.add('<div data-o-ads-name="first" data-o-ads-targeting="monkey=see;monkeys=do" data-o-ads-formats="MediumRectangle"></div>');
+	var second = this.fixturesContainer.add('<div data-o-ads-name="second" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	var third = this.fixturesContainer.add('<div data-o-ads-name="third" data-o-ads-formats-small="MediumRectangle" data-o-ads-formats-large="HalfPage,MediumRectangle"></div>');
+
+	this.ads.init({
+		responsive: {
+			small: [0, 0],
+			large: [300, 0]
+		}
+	});
+	this.ads.slots.initSlot(first);
+	this.ads.slots.initSlot(second);
+	this.ads.slots.initSlot(third);
+
+	// change slot data to make it predictable
+	this.ads.slots.first.gpt.creativeId = '1234';
+	this.ads.slots.first.gpt.lineItemId = '5678';
+	delete this.ads.slots.second.gpt.creativeId;
+	delete this.ads.slots.second.gpt.lineItemId;
+	delete this.ads.slots.second.gpt.size;
+	this.ads.slots.second.gpt.isEmpty = true;
+	delete this.ads.slots.third.gpt.creativeId;
+	delete this.ads.slots.third.gpt.lineItemId;
+	delete this.ads.slots.third.gpt.size;
+
+	var slotTableData = [{
+		"name":"first",
+		"unit name":"/undefined",
+		"creative id":"1234",
+		"line item id":"5678",
+		"size":"300×250",
+		"sizes":"300×250",
+		"targeting":"monkey=see, monkeys=do"
+	},
+	{
+		"name":"second",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"empty",
+		"sizes":"300×600, 300×250",
+		"targeting":""
+	},
+	{
+		"name":"third",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"N/A",
+		"sizes":"responsive slot",
+		"targeting":""
+	}];
+	var start = this.spy(this.utils.log, 'start');
+ 	var table = this.spy(this.utils.log, 'table');
+	this.ads.slots.debug();
+	assert.ok(start.calledWith('Creatives'), '`log.start` was called for `Creatives`');
+	assert.ok(table.calledWith(slotTableData), '`log.table` was called with the expected data');
 });

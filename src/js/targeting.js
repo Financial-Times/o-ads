@@ -53,6 +53,7 @@ Targeting.prototype.get = function() {
 };
 
 Targeting.prototype.add = function(obj) {
+	/* istanbul ignore else  */
 	if (utils.isPlainObject(obj)) {
 		utils.extend(parameters, obj);
 	}
@@ -90,6 +91,7 @@ Targeting.prototype.encodedIp =  function() {
 			if (tmp) {
 				tmp = tmp[0];
 				ipTemp = tmp.match(/\w{1,3}/g);
+				/* istanbul ignore else  */
 				if (ipTemp) {
 					ip = ipTemp[0] + '.' + ipTemp[1] + '.' + ipTemp[2] + '.' + ipTemp[3];
 				}
@@ -106,6 +108,7 @@ Targeting.prototype.encodedIp =  function() {
 		if (ip) {
 			encodedIP = ip;
 			for (lookupKey in DFPPremiumIPReplaceLookup) {
+				/* istanbul ignore else  */
 				if (DFPPremiumIPReplaceLookup.hasOwnProperty(lookupKey)) {
 					encodedIP = encodedIP.replace(new RegExp(DFPPremiumIPReplaceLookup[lookupKey].replaceRegex), DFPPremiumIPReplaceLookup[lookupKey].replaceValue);
 				}
@@ -133,8 +136,9 @@ Targeting.prototype.encodedIp =  function() {
 Targeting.prototype.getFromConfig = function() {
 	var targeting = config('dfp_targeting') || {};
 	if (!utils.isPlainObject(targeting)) {
+		/* istanbul ignore else  */
 		if (utils.isString(targeting)) {
-			targeting = utils.hash(targeting, ';', '=') || {};
+			targeting = utils.hash(targeting, ';', '=');
 		}
 	}
 
@@ -156,7 +160,7 @@ Targeting.prototype.getPageReferrer = function() {
 
 		//remove hostname from results
 		match = hostRegex.exec(referrer)[1];
-
+		/* istanbul ignore else  */
 		if (match !== null) {
 			match.substring(1);
 		}
@@ -177,8 +181,10 @@ Targeting.prototype.getSocialReferrer = function() {
 		'drudgereport.com': 'dru'
 	};
 
+	/* istanbul ignore else  */
 	if (utils.isString(referrer)) {
 		for (refUrl in lookup) {
+			/* istanbul ignore else  */
 			if (lookup.hasOwnProperty(refUrl)) {
 				var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
 				if (refUrl !== undefined && refererRegex.test(referrer)) {
@@ -196,12 +202,6 @@ Targeting.prototype.cookieConsent = function() {
 	return {cc: utils.cookie('cookieconsent') === 'accepted' ? 'y' : 'n'};
 };
 
-//TODO is this still relevant maybe we should remove it
-Targeting.prototype.behaviouralFlag = function() {
-	var flag = (typeof this.rsiSegs() === 'undefined') ? 'false' : 'true';
-	return flag;
-};
-
 Targeting.prototype.searchTerm = function() {
 	var qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
 	var keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
@@ -211,8 +211,6 @@ Targeting.prototype.searchTerm = function() {
 		.replace(/[';\^\+]/g, ' ')
 		.replace(/\s+/g, ' ')
 		.trim();
-
-		//.replace(/\./g, '%2E');
 	}
 
 	return {kw: keywords};
@@ -229,7 +227,7 @@ Targeting.prototype.version = function() {
 Targeting.prototype.debug = function () {
 	var log = utils.log;
 	var parameters = this.get();
-	if (!parameters) {
+	if (Object.keys(parameters).length === 0) {
 		return;
 	}
 

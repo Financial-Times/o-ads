@@ -113,6 +113,14 @@ QUnit.test('write return value', function(assert) {
 	assert.equal(this.ads.utils.cookie('c', 'v'), 'c=v', 'should return written cookie string');
 });
 
+QUnit.test('write domain option', function(assert) {
+	assert.equal(this.ads.utils.cookie('test', 'val', { domain: 'localhost' }), 'test=val; domain=localhost', 'should write the cookie string with domain');
+});
+
+QUnit.test('write secure option', function(assert) {
+	assert.equal(this.ads.utils.cookie('secureCookie', 'v', { secure: true }), 'secureCookie=v; secure', 'should write the cookie string with secure');
+});
+
 QUnit.test('write defaults', function(assert) {
 	this.ads.utils.cookie.defaults.path = '/';
 	assert.ok(this.ads.utils.cookie('d', 'v').match(/path=\//), 'should use options from defaults');
@@ -174,6 +182,9 @@ QUnit.test('getCookieParam non-existent param', function(assert) {
 
 	this.ads.utils.cookie('FTQA', 'debug=true,env=live,breakout=banlb');
 	assert.equal($.type(this.ads.utils.getCookieParam("FTQA", "fish")), "undefined");
+
+	this.ads.utils.cookie('TEST', 'debug=true,env=live,breakout=banlb');
+	assert.equal(this.ads.utils.getCookieParam("TEST", "env"), "debug=true,env=live,breakout=banlb", 'return full value of cookie');
 });
 
 QUnit.test("getCookieParam existent param", function(assert) {

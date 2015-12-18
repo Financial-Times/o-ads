@@ -38,6 +38,7 @@ function log() {
  * @param {string} type
  */
 module.exports.isOn = function(type) {
+	/* istanbul ignore else  */
 	var debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
 };
@@ -100,24 +101,24 @@ module.exports.table = function(data, columns) {
 };
 
 module.exports.attributeTable = function(object, columns) {
-  var utils = require('../utils');
-  if (log.isOn('log') && window.console) {
-    if (console.table) {
-      var data = Object.keys(object).map(function(item) {
-        var val;
-        if (utils.isArray(object[item]) || utils.isObject(object[item])) {
-          val = JSON.stringify(object[item]);
-        } else {
-          val = object[item];
-        }
-        return {
-          key: item,
-          value: val
-        };
-      });
-      console.table(data, columns);
-    } else {
-      console.log(object);
-    }
-  }
+	var utils = require('../utils');
+	if (log.isOn('log') && window.console) {
+		if (console.table) {
+			var data = Object.keys(object).map(function(item) {
+				var val;
+				if (utils.isArray(object[item]) || utils.isObject(object[item])) {
+					val = JSON.stringify(object[item]);
+				} else {
+					val = object[item];
+				}
+				return {
+					key: item,
+					value: val
+				};
+			});
+			console.table(data, columns);
+		} else {
+			console.log(object);
+		}
+	}
 };

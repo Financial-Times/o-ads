@@ -51,7 +51,7 @@ var initAll = function() {
 	var stop = metas.filter(function(meta) {
 		return meta.name === 'o-ads-stop';
 	});
-
+	/* istanbul ignore else  */
 	if (!stop.length) {
 		ads.init();
 		var slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));

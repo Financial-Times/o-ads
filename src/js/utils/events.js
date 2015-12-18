@@ -14,6 +14,7 @@
 */
 module.exports.broadcast = broadcast;
 function broadcast(name, data, target) {
+	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
 	name = 'oAds.' + name;
 	var opts = {
@@ -21,7 +22,7 @@ function broadcast(name, data, target) {
 		cancelable: true,
 		detail: data
 	};
-	target.dispatchEvent(customEvent(name, opts));
+	target.dispatchEvent(new CustomEvent(name, opts));
 }
 
 /**
@@ -34,6 +35,7 @@ function broadcast(name, data, target) {
 module.exports.on = on;
 function on(name, callback, target) {
 	name = 'oAds.' + name;
+	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
 	target.addEventListener(name, callback);
 }
@@ -47,6 +49,7 @@ function on(name, callback, target) {
 module.exports.once = once;
 function once(name, callback, target) {
 	var handler = function(event) {
+		/* istanbul ignore next: ignore the final fallback as hard trigger */
 		var targ = event.target || event.srcElement;
 		targ.removeEventListener('oAds.' + name, callback);
 		if (callback) {
@@ -58,15 +61,4 @@ function once(name, callback, target) {
 	};
 
 	on(name, handler, target);
-}
-
-/*
-* custom event fix for safari
-*/
-function customEvent(name, opts) {
-	try {
-		return new CustomEvent(name, opts);
-	} catch (e) {
-		return CustomEvent.initCustomEvent(name, opts.bubbles, opts.cancelable, opts.detail);
-	}
 }

@@ -7,7 +7,7 @@ var handler;
 var slotRenderEnded;
 var slots = {};
 var stubs = sinon.sandbox.create();
-var oViewport =  require('o-viewport');
+var oViewport = require('o-viewport');
 
 function getResponsiveSizes(mapping) {
 	var winner;
@@ -29,7 +29,7 @@ googletag.defineSizeMapping = stubs.stub();
 googletag.companionAds = stubs.stub().returns({setRefreshUnfilledSlots: stubs.stub()});
 googletag.enableServices = stubs.stub();
 
-function Slot(name, sizes, id) {
+function GPTSlot(name, sizes, id) {
 	this.name = name;
 	if (typeof sizes === 'string') {
 		// out of page slot
@@ -73,7 +73,7 @@ function slotRender(slot, color) {
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
-		size = slot.sizes[0];
+		size = slot.sizes[0] || [];
 	}
 
 	if (!slot.iframe) {
@@ -82,8 +82,8 @@ function slotRender(slot, color) {
 		document.getElementById(slot.id).appendChild(slot.iframe);
 	}
 
-	slot.iframe.width = size[0];
-	slot.iframe.height = size[1];
+	slot.iframe.width = size[0] || 0;
+	slot.iframe.height = size[1] || 0;
 	slot.iframe.src = html;
 }
 
@@ -106,11 +106,11 @@ googletag.defineSlot = function() {};
 googletag.defineOutOfPageSlot = function() {};
 
 stubs.stub(googletag, 'defineSlot', function(name, sizes, id) {
-	return new Slot(name, sizes, id);
+	return new GPTSlot(name, sizes, id);
 });
 
 stubs.stub(googletag, 'defineOutOfPageSlot', function(name, id) {
-	return new Slot(name, id);
+	return new GPTSlot(name, id);
 });
 
 googletag.display = function() {};

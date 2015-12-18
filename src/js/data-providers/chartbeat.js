@@ -29,7 +29,7 @@ ChartBeat.prototype.init = function() {
 	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
 
-
+	/* istanbul ignore else  */
 	if (this.config) {
 		// config must be in a global var
 		window._sf_async_config = {
@@ -42,12 +42,14 @@ ChartBeat.prototype.init = function() {
 		};
 		window._cbq = window._cbq || [];
 
+		/* istanbul ignore else  */
 		if (this.config.loadsJS && !utils.isScriptAlreadyLoaded(src)) {
 			// LOAD LIBRARY
 			window._sf_endpt = (new Date()).getTime();
 			utils.attach(src, true);
 		}
 
+		/* istanbul ignore else  */
 		if (this.config.demographics) {
 			this.addDemographics(this.config.demographics);
 		}
@@ -67,6 +69,7 @@ ChartBeat.prototype.init = function() {
 	// Register GPT slots after they're defined with gpt
 	utils.on('complete', function(event) {
 		var slot = event.detail.slot;
+		/* istanbul ignore else  */
 		if (slot.gpt) {
 			window._cba.push(function() {
 				window.pSUPERFLY.registerGptSlot(slot.gpt.slot, slot.gpt.id);
@@ -101,7 +104,9 @@ ChartBeat.prototype.addDemographics = function(demographicsObject) {
 ChartBeat.prototype.debug = function () {
 	var log = utils.log;
 
-	if (this.config) {
+	if (!this.config) {
+		return;
+	}
 	log.start('ChartBeat');
 
 		var asyncConfig = utils.extend({}, window._sf_async_config);
@@ -109,7 +114,7 @@ ChartBeat.prototype.debug = function () {
 		var attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
 
 		attrs.forEach(function(attribute) {
-				log('%c' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+				log('%c ' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
 				delete asyncConfig[attribute];
 		});
 
@@ -117,10 +122,11 @@ ChartBeat.prototype.debug = function () {
 			log.attributeTable(asyncConfig);
 		log.end();
 
-		log.start('Demographic Codes');
-			log.attributeTable(this.demographicCodes);
-		log.end();
+		if (this.demographicCodes) {
+			log.start('Demographic Codes');
+				log.attributeTable(this.demographicCodes);
+			log.end();
+		}
 	log.end();
-	}
 };
 module.exports = new ChartBeat();

@@ -59,6 +59,12 @@ QUnit.test('slot configuration', function(assert) {
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
 });
 
+QUnit.test('loads chartbeat js file if configured', function(assert) {
+	this.stub(this.utils, 'isScriptAlreadyLoaded').returns(false);
+	this.ads.init({chartbeat: {loadsJS: true}});
+	assert.ok(this.attach.calledWith('//static.chartbeat.com/js/chartbeat_pub.js', true), 'loads chartbeat script if one is not loaded yet');
+});
+
 QUnit.test('override name', function(assert) {
 	var config = this.basic;
 	config.chartbeat = true;
@@ -120,4 +126,52 @@ QUnit.test('demographics configuration not set', function(assert) {
 	window._cbq.push = this.spy();
 	this.ads.init(config);
 	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
+});
+
+QUnit.test('sets global cbq if one is not available yet', function(assert) {
+	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
+	delete window._cbq;
+	this.ads.init(config);
+	assert.ok((window._cbq), 'cbq is set in the init');
+});
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.cb.debug();
+	assert.notOk(start.called, "`utils.start` wasn't called");
+});
+
+QUnit.test('debug starts logging Chartbeat data', function(assert) {
+	this.ads.init({chartbeat: {uid: '123'}});
+	var start = this.spy(this.utils.log, 'start');
+	var log = this.spy(this.utils, 'log');
+
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.ok(start.calledWith('Superfly Async Config'), "`utils.start` was called for 'Superfly Async Config'");
+	assert.ok(log.calledWith('%c uid:'), "`utils.log` was called for 'uid'");
+});
+
+QUnit.test("debug doesn't log demographic data if not set", function(assert) {
+	this.ads.init({chartbeat: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.notOk(start.calledWith('Demographic Codes'), "`utils.start` wasn't called for 'Demographic Codes'");
+});
+
+QUnit.test('debug logs demographic data if set', function(assert) {
+	this.ads.init({chartbeat: {}});
+	var start = this.spy(this.utils.log, 'start');
+
+	this.ads.cb.demographicCodes = {};
+	this.ads.cb.debug();
+
+	assert.ok(start.calledWith('ChartBeat'), "`utils.start` was called for 'Chartbeat'");
+	assert.ok(start.calledWith('Demographic Codes'), "`utils.start` was called for 'Demographic Codes'");
 });

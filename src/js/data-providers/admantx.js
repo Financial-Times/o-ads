@@ -72,18 +72,22 @@ Admantx.prototype.resolve = function(response){
 	var collections = this.collections;
 	var shortName;
 	var targetingObj = {};
+	/* istanbul ignore else  */
 	if (utils.isString(response)) {
 		try {
 			response = JSON.parse(response);
 		} catch (e) {
+			/* istanbul ignore next  */
 			// if the response is not valid JSON;
 			response = false;
 		}
 	}
 
 	//parse required targetting data from the response
+	/* istanbul ignore else  */
 	if (response) {
 		for (collection in collections) {
+			/* istanbul ignore else  */
 			if (collections.hasOwnProperty(collection) && collections[collection] && response[collection]) {
 				shortName = collection.substr(0, 2);
 				targetingObj[shortName] = this.processCollection(response[collection], collections[collection]);
@@ -95,32 +99,34 @@ Admantx.prototype.resolve = function(response){
 };
 
 Admantx.prototype.debug = function() {
-  var log = utils.log;
+	var log = utils.log;
 
-  if (!this.config && !this.config.id) {
-      return;
-  }
+	if (!this.config) {
+			return;
+	}
 
-  log.start('Admantx');
-    log('%c id:', 'font-weight: bold', this.config.id);
-    log('%c api:', 'font-weight: bold', this.api);
+	log.start('Admantx');
+		log('%c id:', 'font-weight: bold', this.config.id);
+		log('%c api:', 'font-weight: bold', this.api);
 
-    log.start('Collections');
-      log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
-      log('%c categories:', 'font-weight: bold', this.config.collections.categories);
-    log.end();
+		if (this.config.collections) {
+			log.start('Collections');
+				log('%c admants:', 'font-weight: bold' ,this.config.collections.admants);
+				log('%c categories:', 'font-weight: bold', this.config.collections.categories);
+			log.end();
+		}
 
-    if (this.xhr && this.xhr.response) {
-      log.start('Response');
-        log.start('Admants');
-          log.attributeTable(this.xhr.response.admants, ['value']);
-        log.end();
-        log.start('Categories');
-          log.attributeTable(this.xhr.response.categories, ['value']);
-        log.end();
-      log.end();
-    }
-  log.end();
+		if (this.xhr && this.xhr.response) {
+			log.start('Response');
+				log.start('Admants');
+					log.attributeTable(this.xhr.response.admants, ['value']);
+				log.end();
+				log.start('Categories');
+					log.attributeTable(this.xhr.response.categories, ['value']);
+				log.end();
+			log.end();
+		}
+	log.end();
 };
 
 module.exports = new Admantx();

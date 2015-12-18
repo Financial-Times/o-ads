@@ -272,6 +272,10 @@ QUnit.test('extend method', function(assert) {
 	assert.deepEqual(defaults, defaultsCopy, 'Check if not modified: options1 must not be modified');
 	assert.deepEqual(options1, options1Copy, 'Check if not modified: options1 must not be modified');
 	assert.deepEqual(options2, options2Copy, 'Check if not modified: options2 must not be modified');
+
+	assert.deepEqual(this.ads.utils.extend(), {}, 'passing nothing returns empty object');
+	assert.deepEqual(this.ads.utils.extend(true), {}, 'passing a single boolen returns empty object');
+	assert.deepEqual(this.ads.utils.extend('test'), {}, 'passing a string returns empty object');
 });
 
 QUnit.module('utils miscellanious methods');
@@ -281,11 +285,14 @@ QUnit.test('css class methods for working with .o-ads__ classes', function(asser
 
 	//just hint complains about all the crazy string escaping in here, but that's what we're testing
 	var node = this.fixturesContainer.add('<div class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$">');
+	var textNode = this.fixturesContainer.add('ranom class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$"');
 
 	assert.ok(this.ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), 'the node has the class o-ads__cr@zy-c|-|@r/\cter$');
 	assert.ok(this.ads.utils.hasClass(node, 'test'), 'the node has the class o-ads__test');
 	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__tes'), 'the node doesn\'t the class tes');
 	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__r/\cter$'), 'the node doesn\'t the class r/\cter$');
+
+	assert.ok(!this.ads.utils.hasClass(textNode, 'o-ads__test1'), 'returns false and does not attemt to find a class on a string');
 
 	this.ads.utils.addClass(node, 'hello');
 	assert.ok($(node).hasClass('o-ads__hello'), 'the node hello was added');
@@ -313,16 +320,49 @@ QUnit.test('hash method', function(assert) {
 	}
 });
 
-QUnit.test('attach method', function(assert) {
+QUnit.test('attach method success', function(assert) {
+	var done = assert.async();
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
 	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
 
-	this.ads.utils.attach(this.nullUrl);
-	assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
-	assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+	var tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+		assert.ok(successCallback.calledOnce, 'a success callback has been triggered');
+		assert.notOk(errorCallback.called, 'an error callback has not been triggered');
+		done();
+	}, 200);
 });
+
+QUnit.test('attach method failed', function(assert) {
+	var done = assert.async();
+	this.ads.utils.attach.restore();
+
+	// initial number of scripts
+	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
+
+	var tag = this.ads.utils.attach('test.js', true, successCallback, errorCallback);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+
+		assert.ok(errorCallback.calledOnce, 'an error callback has been triggered');
+		assert.notOk(successCallback.called, 'a success callback has not been triggered');
+		done();
+	}, 200);
+});
+
 
 QUnit.test('isScriptAlreadyLoaded method when script is not present', function(assert) {
 	var url = 'http://local.ft.com/null.js';
@@ -337,4 +377,25 @@ QUnit.test('isScriptAlreadyLoaded method when script is present', function(asser
 	node.parentNode.insertBefore(tag, node);
 	assert.ok(this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns true when a script with the given url is present in the page dom');
 	node.parentNode.removeChild(tag);
+});
+
+QUnit.test('string is capitalised', function(assert) {
+	assert.equal(this.ads.utils.capitalise('abcdefghijklmnopqrstuvwxyz1234567890!'), 'Abcdefghijklmnopqrstuvwxyz1234567890!', 'returns all letters in upper case');
+});
+
+QUnit.test('hyphenises upper case characeters', function(assert) {
+	assert.equal(this.ads.utils.hyphenise('abcDEFghIjklmNOPQrestuvWxYz1234567890!'), 'abc-d-e-fgh-ijklm-n-o-p-qrestuv-wx-yz1234567890!', 'hyphenises and lower cases all upper case characters');
+});
+
+QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
+		var frameContentWindow = this.createDummyFrame('test').window;
+		var result = this.utils.iframeToSlotName(frameContentWindow);
+		assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
+});
+
+QUnit.test('find a name of the ad from an iframe', function(assert) {
+		var node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
+		var frameContentWindow = this.createDummyFrame('test', node).window;
+		var result = this.utils.iframeToSlotName(frameContentWindow);
+		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
 });

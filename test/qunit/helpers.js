@@ -2,6 +2,8 @@
 /* global sinon: false, $: false, module: true, QUnit: false, require: true */
 "use strict";
 
+var oViewport = require('o-viewport');
+
 /* a URL that can be used in tests without causing 404 errors */
 module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
 
@@ -10,6 +12,22 @@ module.exports.fixturesContainer = document.getElementById('qunit-fixtures');
 module.exports.fixturesContainer.add = function(html) {
 	this.insertAdjacentHTML('beforeend', html);
 	return this.lastChild;
+};
+
+/* create an iframe and return it's context for testing post message */
+module.exports.createDummyFrame = function (content, target) {
+	target = target || document.getElementById('qunit-fixtures');
+	var iframe = document.createElement('iframe');
+	iframe.id = 'postMessage';
+	target.appendChild(iframe);
+	if (content) {
+		iframe.contentDocument.body.insertAdjacentHTML('beforeEnd', content);
+	}
+
+	return {
+		node: iframe,
+		window: iframe.contentWindow
+	};
 };
 
 module.exports.fixtures = {
@@ -37,21 +55,27 @@ module.exports.warn = function(message) {
 };
 
 /* trigger a dom event */
-module.exports.trigger = function(element, eventType, bubble, cancelable) {
+module.exports.trigger = function(element, eventType, bubble, cancelable, data) {
 	var event;
+	var utils = require('../../src/js/utils');
 	element = element || document.body;
 	element = $.type(element) === 'string' ? document.querySelector(element) : element;
 	if (document.createEvent) {
 		event = document.createEvent('HTMLEvents');
 		event.initEvent(eventType, bubble || true, cancelable || true);
+		if(data) {
+			utils.extend(event, data);
+		}
 		element.dispatchEvent(event);
 	} else {
 		event = document.createEventObject();
 		event.eventType = eventType;
 		event.cancelBubble = bubble ? false : true ;
+		if(data) {
+			utils.extend(event, {}, data);
+		}
 		element.fireEvent('on' + event.eventType, event);
 	}
-
 	return event;
 };
 
@@ -76,7 +100,7 @@ var _removeEventListener = document.body.removeEventListener;
 sandbox._eventListeners = [];
 document.body.addEventListener = function(type, listener) {
 	sandbox._eventListeners.push({type: type, listener: listener});
-	_addEventListener.apply(document.body, [].slice.call(arguments));
+	_addEventListener(type, listener);
 };
 
 document.body.removeEventListener = function(type, listener) {
@@ -91,7 +115,30 @@ document.body.removeEventListener = function(type, listener) {
 		sandbox._eventListeners.splice(remove, 1);
 	}
 
-	_removeEventListener.apply(document.body, [].slice.call(arguments));
+	_removeEventListener(type, listener);
+};
+
+var _addWindowEventListener = window.addEventListener;
+var _removeWindowEventListener = window.removeEventListener;
+sandbox._windowEventListeners = [];
+window.addEventListener = function(type, listener) {
+	sandbox._windowEventListeners.push({type: type, listener: listener});
+	_addWindowEventListener(type, listener);
+};
+
+window.removeEventListener = function(type, listener) {
+	var remove;
+	sandbox._windowEventListeners.forEach(function(item, index) {
+		if (item.type === type && listener === listener) {
+			remove = index;
+		}
+	});
+
+	if (remove) {
+		sandbox._windowEventListeners.splice(remove, 1);
+	}
+
+	_removeWindowEventListener(type, listener);
 };
 
 /* mock dates */
@@ -268,10 +315,17 @@ module.exports.clear = function() {
 
 	// remove attached events
 	sandbox._eventListeners.forEach(function(item) {
-		_removeEventListener.call(document.body, item.type, item.listener);
+		_removeEventListener(item.type, item.listener);
 	});
 	sandbox._eventListeners = [];
 
+	oViewport.stopListeningTo('all');
+
+	// remove attached events
+	sandbox._windowEventListeners.forEach(function(item) {
+		_removeWindowEventListener(item.type, item.listener);
+	});
+	sandbox._windowEventListeners = [];
 	// restore stubs & mocks
 	gpt.restore();
 	rubicon.restore();

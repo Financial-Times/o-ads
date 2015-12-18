@@ -92,3 +92,46 @@ QUnit.test('Timers', function(assert) {
 	assert.ok(method2.calledOnce, "Stop all: method 2 didn't run again");
 	assert.ok(method3.calledOnce, "Stop all: method 3 didn't run again");
 });
+
+QUnit.test('Timer default interval', function(assert) {
+	var timer = this.ads.utils.timers.create(undefined, function(){}, 3);
+	assert.equal(timer.interval, 1000, 'Default timer interval is 1 second');
+});
+
+QUnit.test('Timer can be reset', function(assert) {
+	var clock = this.date('now');
+	var method = this.spy();
+
+	var timer = this.ads.utils.timers.create(1, method, 3);
+	assert.notOk(timer.reset(), 'The timer cannot be cancelled if it did not start running yet');
+	clock.tick(1025);
+	timer.start();
+	assert.ok(timer.reset(), 'The timer has been reset');
+});
+
+QUnit.test('Timer auto reset when paused if been paused for longer than interval', function(assert) {
+	var clock = this.date('now');
+
+	var method1 = this.spy();
+	var timer1 = this.ads.utils.timers.create(1, method1, 3, {reset: true});
+	var resetStub = this.spy(timer1, 'reset');
+	clock.tick(25);
+	this.ads.utils.timers.pauseall();
+	assert.equal(timer1.id, undefined, 'Pause all: timer 1 canceled');
+	assert.equal(timer1.timeLeft, 975, 'Pause all: timer 1 time left calculated correctly');
+
+
+	clock.tick(4000);
+	assert.ok(!method1.called, "Pause all: method 1 didn't run");
+
+	this.ads.utils.timers.resumeall();
+	assert.ok(!!timer1.id, 'Resume all: timer 1 resumed');
+	clock.tick(1200);
+	assert.ok(method1.calledOnce, "Resume all: method 1 ran");
+
+	this.ads.utils.timers.stopall();
+	assert.equal(timer1.id, undefined, 'Stop all: timer 1 canceled');
+	clock.tick(4000);
+	assert.ok(method1.calledOnce, "Stop all: method 1 didn't run again");
+	assert.ok(resetStub.calledOnce, 'The timer has been reset');
+});

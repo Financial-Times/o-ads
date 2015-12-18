@@ -37,6 +37,7 @@ function run(slots, action, name) {
 */
 Slots.prototype.collapse = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'collapse', names);
 	} else if (utils.isArray(names)) {
@@ -51,6 +52,7 @@ Slots.prototype.collapse = function(names) {
 */
 Slots.prototype.uncollapse = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'uncollapse', names);
 	} else if (utils.isArray(names)) {
@@ -65,6 +67,7 @@ Slots.prototype.uncollapse = function(names) {
 */
 Slots.prototype.refresh = function(names) {
 	names = names || Object.keys(this);
+	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
 		run.call(null, this, 'refresh', names);
 	} else if (utils.isArray(names)) {
@@ -95,6 +98,7 @@ Slots.prototype.initSlot = function(container) {
 	}
 
 	var slot = new Slot(container, screensize);
+	/* istanbul ignore else  */
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
 		slot.elementvis = elementvis.track(slot.container);
@@ -109,6 +113,7 @@ Slots.prototype.initSlot = function(container) {
 Slots.prototype.initRefresh = function() {
 	if (config('flags').refresh && config('refresh')) {
 		var data = config('refresh');
+		/* istanbul ignore else  */
 		if (data.time && !data.inview) {
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
 		}
@@ -118,6 +123,7 @@ Slots.prototype.initRefresh = function() {
 };
 
 Slots.prototype.initInview = function() {
+	/* istanbul ignore else  */
 	if (config('flags').inview) {
 		window.addEventListener('load', onLoad.bind(null, this));
 	}
@@ -136,8 +142,9 @@ Slots.prototype.initInview = function() {
 		if (slots[name]) {
 			var slot = slots[name];
 
-			slot.inviewport = event.detail.inviewport || event.detail.visible;
+			slot.inviewport = event.detail.inviewport;
 			slot.percentage = event.detail.percentage;
+			/* istanbul ignore else  */
 			if (slot.inviewport) {
 				slot.fire('inview', event.detail);
 			}
@@ -154,8 +161,11 @@ Slots.prototype.initInview = function() {
 Slots.prototype.initRendered = function() {
 	utils.on('rendered', function(slots, event) {
 		var slot = slots[event.detail.name];
+		/* istanbul ignore else  */
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
+			var size = event.detail.gpt.size;
+			slot.maximise(size);
 			slot.fire('complete', event.detail);
 		}
 	}.bind(null, this));
@@ -167,6 +177,7 @@ Slots.prototype.initRendered = function() {
 */
 Slots.prototype.initResponsive = function() {
 	var breakpoints = config('responsive');
+	/* istanbul ignore else  */
 	if (utils.isObject(breakpoints)) {
 		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
 	}
@@ -179,6 +190,7 @@ Slots.prototype.initResponsive = function() {
 */
 function onBreakpointChange(slots, screensize) {
 	slots.forEach(function(slot) {
+		/* istanbul ignore else  */
 		if (slot) {
 			slot.screensize = screensize;
 			slot.fire('breakpoint', { screensize: screensize });
@@ -192,29 +204,42 @@ function onBreakpointChange(slots, screensize) {
 Slots.prototype.initPostMessage = function() {
 	// Listen for messages coming from ads
 	window.addEventListener('message', pmHandler.bind(null, this), false);
+
 	function pmHandler(slots, event) {
-		if (/^oAds\./.test(event.data.type)) {
-			var type = event.data.type.replace('oAds\.', '');
-			var slot = event.data.name ? slots[event.data.name] : false;
+		var data = utils.messenger.parse(event.data);
+		/* istanbul ignore else  don't process messages with a non oAds type*/
+		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
+			var type = data.type.replace('oAds\.', '');
+			var slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami' && event.source) {
+				var messageToSend = { type: 'oAds.youare' };
 				var slotName = utils.iframeToSlotName(event.source.window);
-				if (slotName && slots[slotName]) {
-					slots[slotName].impressionURL = event.data.impressionURL;
+				slot = slots[slotName] || false;
+
+				if(slot) {
+					if (data.collapse) {
+						slot.collapse();
+					}
+
+					messageToSend.name = slotName;
+					messageToSend.sizes = slot.sizes;
+
+					utils.messenger.post(messageToSend, event.source);
+				} else {
+					utils.log.error('Message received from unidentified slot');
+					utils.messenger.post(messageToSend, event.source);
 				}
-				event.source.postMessage({
-					type: 'oAds.youare',
-					name: slotName
-				}, '*');
+			} else if(type === 'responsive') {
+				slot.setResponsiveCreative(true);
 			} else if (utils.isFunction(slot[type])) {
 				slot[type]();
+			} else if (/^touch/.test(data.type)) {
+				slots[data.name].fire('touch', data);
 			} else {
-				var data = event.data;
 				delete data.type;
 				delete data.name;
 				slot.fire(type, data);
 			}
-		} else if (/^touch/.test(event.data.type)) {
-			slots[event.data.name].fire('touch', event.data);
 		}
 	}
 };
@@ -222,6 +247,7 @@ Slots.prototype.initPostMessage = function() {
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(function(name) {
 		var slot = this[name];
+		/* istanbul ignore else  */
 		if (slot instanceof Slot) {
 			fn.call(this, slot);
 		}

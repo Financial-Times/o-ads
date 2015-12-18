@@ -97,6 +97,7 @@ module.exports.isPlainObject = function(obj) {
 			return false;
 		}
 	} catch (e) {
+		/* istanbul ignore next  */
 		// IE8,9 Will throw exceptions on certain host objects
 		return false;
 	}
@@ -161,11 +162,13 @@ function extend() {
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
+	/* istanbul ignore else  */
 	if (typeof target !== "object" && !utils.isFunction(target)) {
 		target = {};
 	}
 
 	// do nothing if only one argument is passed (or 2 for a deep copy)
+	/* istanbul ignore else  */
 	if (length === i) {
 		return target;
 	}
@@ -209,6 +212,7 @@ function extend() {
 }
 
 module.exports.hasClass = function(node, className) {
+	/* istanbul ignore else  */
 	if (node.nodeType === 1) {
 		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
 	}
@@ -274,17 +278,18 @@ module.exports.hash = function(str, delimiter, pairing) {
 * @returns {HTMLElement} the created script tag
 */
 module.exports.attach = function(scriptUrl, async, callback, errorcb) {
-	var tag = document.createElement('script'),
-	node = document.getElementsByTagName('script')[0] || document.head.childNodes[0],
-	hasRun = false;
+	var tag = document.createElement('script');
+	var node = document.getElementsByTagName('script')[0];
+	var hasRun = false;
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
+	/* istanbul ignore else */
 	if (async) {
 		tag.async = 'true';
 	}
-
+	/* istanbul ignore else  */
 	if (utils.isFunction(callback)) {
-
+		/* istanbul ignore if - legacy IE code, won't test */
 		if (hop.call(tag, 'onreadystatechange')) {
 			tag.onreadystatechange = function() {
 				if (tag.readyState === "loaded") {
@@ -296,14 +301,16 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 			};
 		} else {
 			tag.onload =  function() {
+				/* istanbul ignore else  */
 				if (!hasRun) {
 					callback();
 					hasRun = true;
 				}
 			};
-
+			/* istanbul ignore else  */
 			if (utils.isFunction(errorcb)) {
 				tag.onerror = function() {
+					/* istanbul ignore else  */
 					if (!hasRun) {
 						errorcb();
 						hasRun = true;
@@ -342,6 +349,7 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 */
 module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 	var xhr = new XMLHttpRequest();
+	/* istanbul ignore else - legacy IE code, won't test */
 	if ('withCredentials' in xhr) {
 		xhr.open(method, url, true);
 		xhr.responseType = 'json';
@@ -371,6 +379,7 @@ module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
 * @returns {string} document.referrer
 */
+/* istanbul ignore next - cannot reliably test value of referer */
 module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
@@ -423,6 +432,7 @@ module.exports.parseAttributeName = function(attribute) {
 * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
 * @returns {string}
 */
+/* istanbul ignore next - cannot reliably test value of location */
 module.exports.getLocation = function() {
 	return document.location.href || '';
 };
@@ -463,6 +473,7 @@ module.exports.arrayLikeToArray = function(obj) {
 	try {
 		array = Array.prototype.slice.call(obj);
 	} catch (error) {
+		/* istanbul ignore next  */
 		for (var i = 0; i < obj.length; i++) {
 			array[i] = obj[i];
 		}
@@ -487,16 +498,18 @@ module.exports.iframeToSlotName = function(iframeWindow) {
 
 	// Figure out which iframe DOM node we have the window for
 	while (i--) {
+		/* istanbul ignore else  */
 		if (iframes[i].contentWindow === iframeWindow) {
 			node = iframes[i];
 			break;
 		}
 	}
-
+	/* istanbul ignore else  */
 	if (node) {
 		// find the closest parent with a data-o-ads-name attribute, that's our slot name
 		while (node.parentNode) {
 			slotName = node.getAttribute('data-o-ads-name');
+			/* istanbul ignore else  */
 			if (slotName) {
 				return slotName;
 			}
@@ -510,6 +523,7 @@ module.exports.iframeToSlotName = function(iframeWindow) {
 
 extend(module.exports, require('./cookie.js'));
 extend(module.exports, require('./events.js'));
+extend(module.exports, require('./messenger.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();
 module.exports.queue = require('./queue.js');

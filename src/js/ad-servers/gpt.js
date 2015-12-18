@@ -150,6 +150,7 @@ function enableCompanions(gptConfig) {
 function enableVideo(gptConfig) {
 	if (gptConfig.video) {
 		var url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
+		/* istanbul ignore else  */
 		if (!utils.isScriptAlreadyLoaded(url)) {
 			utils.attach(url, true);
 		}
@@ -169,6 +170,7 @@ function enableVideo(gptConfig) {
 */
 function onReady(slotMethods, event) {
 	var slot = event.detail.slot;
+	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
 
@@ -220,9 +222,10 @@ function onRefresh(event) {
 }
 
 function onResize(event) {
-	var slot = event.detail.slot;
-	slot.gpt.iframe.width = event.size[0];
-	slot.gpt.iframe.height = event.size[1];
+	var iframe = event.detail.slot.gpt.iframe;
+	var size = event.detail.size;
+	iframe.width = size[0];
+	iframe.height = size[1];
 }
 
 /*
@@ -253,10 +256,6 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
-	if (event.size && +event.size[0] === 100 && +event.size[1] === 100) {
-		detail.iframe.width = '100%';
-		detail.iframe.height = '100%';
-	}
 
 	utils.broadcast('rendered', data);
 }
@@ -310,7 +309,8 @@ var slotMethods = {
 			var slot = event.detail.slot;
 			var screensize = event.detail.screensize;
 
-			if (slot.hasValidSize(screensize)) {
+			if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
+				/* istanbul ignore else  */
 				if (slot.gpt.iframe) {
 					slot.fire('refresh');
 				} else if (!this.defer) {
@@ -404,10 +404,7 @@ var slotMethods = {
 	setURL: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
 		var canonical = config('canonical');
-		if (canonical) {
-			gptSlot.set('page_url', canonical || utils.getLocation());
-		}
-
+		gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
 		return this;
 	},
 
@@ -416,6 +413,7 @@ var slotMethods = {
 	*/
 	setTargeting: function(gptSlot) {
 		gptSlot = gptSlot || this.gpt.slot;
+		/* istanbul ignore else  */
 		if (utils.isPlainObject(this.targeting)) {
 			Object.keys(this.targeting).forEach(function(param) {
 				gptSlot.setTargeting(param, this.targeting[param]);
@@ -450,17 +448,19 @@ module.exports.updatePageTargeting = function(override) {
 		var params = utils.isPlainObject(override) ? override : targeting.get();
 		setPageTargeting(params);
 	}
-	else {utils.log.warn('Attempting to set page targeting before the GPT library has initialized');}
+	else {
+		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
+	}
 };
 
 module.exports.debug = function(){
-  var log = utils.log;
+	var log = utils.log;
 	var conf = config('gpt');
 	if(!conf){
 		return;
 	}
 
-  log.start('gpt');
-    log.attributeTable(conf);
-  log.end();
+	log.start('gpt');
+		log.attributeTable(conf);
+	log.end();
 };

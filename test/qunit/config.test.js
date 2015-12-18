@@ -9,6 +9,7 @@ QUnit.test('Config get/set', function(assert) {
 	this.ads.config.clear();
 	var result, obj,
 		key = 'key',
+		key2 = 'key2',
 		invalid = 'invalid',
 		value = 'value',
 		value2 = 'value2';
@@ -34,6 +35,16 @@ QUnit.test('Config get/set', function(assert) {
 
 	result = this.ads.config(key);
 	assert.deepEqual(result, value2, 'get returns the new value.');
+
+	this.ads.config(key, value2);
+	this.ads.config(key2, value2);
+	result = this.ads.config();
+	assert.ok(result[key], 'configuration has got first key set');
+	assert.ok(result[key2], 'configuration has got second key set');
+	this.ads.config.clear(key);
+	result = this.ads.config();
+	assert.notOk(result[key], 'first key has been removed');
+	assert.ok(result[key2], 'second key is still set');
 });
 
 QUnit.test('Config get/set - mulitple', function(assert) {
@@ -63,8 +74,10 @@ QUnit.test('Config fetchMetaConfig', function(assert) {
 	assert.equal(this.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
 });
 
+
 QUnit.test('Config fetchMetaConfigJSON', function(assert) {
 	if (window.JSON) {
+		var save = window.JSON;
 		this.meta({
 			metaconfjson1: {
 				content: '{"testing":"blah"}',
@@ -77,6 +90,17 @@ QUnit.test('Config fetchMetaConfigJSON', function(assert) {
 
 		assert.ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
 		assert.equal(this.ads.config('metaconfjson1').testing, 'blah', 'Config returns the correct value');
+
+		window['JSON'] = undefined;
+
+		this.ads.init();
+		result = this.ads.config();
+
+		assert.ok(result.hasOwnProperty('metaconfjson1'), 'When JSON is not available - meta value has been added to config');
+		assert.equal(this.ads.config('metaconfjson1'), 'UNSUPPORTED', 'When JSON is not available - config returns the correct value');
+
+		window['JSON'] = save;
+
 	} else {
 		assert.ok(true, "JSON is not defined -- FAIL");
 	}
@@ -95,10 +119,19 @@ QUnit.test('Config defaults', function(assert) {
 });
 
 QUnit.test('Config fetchDeclaritive', function(assert) {
+	var save = window.JSON;
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"dfpsite" : "site.site","dfpzone" : "zone.zone"}</script>');
 	this.ads.init();
 	var result = this.ads.config();
 	assert.ok(result.dfpzone, 'Config has been fetched from the inline declarative script');
+
+
+	window['JSON'] = undefined;
+	this.ads.init();
+	result = this.ads.config();
+	assert.notOk(result.dfpsite, 'no DFP Site - when JSON not available the declarative config is not parsed');
+	assert.notOk(result.dfpzone, 'no DFP zone - when JSON not available the declarative config is not parsed');
+	window['JSON'] = save;
 });
 
 QUnit.test('Config fetchDeclaritive, multiple script tags', function(assert) {

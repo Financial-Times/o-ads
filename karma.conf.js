@@ -25,7 +25,7 @@ var options = {
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
-		'test/qunit/*.test.js'
+	 	'test/qunit/*.test.js',
 	],
 	customLaunchers: {
 		Chrome_with_flags: {
@@ -36,7 +36,13 @@ var options = {
 	browsers: ['Chrome_with_flags'],
 	browserify: { transform: ['debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
-	preprocessors: { 'test/qunit/setup.js': 'browserify'}
+	preprocessors: {
+		'main.js': ['browserify'],
+		'src/**/*.js': ['browserify'],
+		'test/qunit/setup.js': ['browserify'],
+		'test/qunit/video.mainplayer.test.js': ['browserify'],
+		'test/qunit/version.test.js': ['browserify']
+	}
 };
 
 
@@ -49,42 +55,59 @@ if(/^win/.test(process.platform)){
 
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
+	console.log('CI options activated');
 	// CI options go here
-	options.browsers = ['PhamtomJS2'];
 	options.singleRun = true;
 	options.autoWatch = false;
 } else {
 	//options for local go here
 	options.browserify.debug = true;
+	options.preprocessors['main.js'].unshift('jshint');
+	options.preprocessors['src/**/*.js'].unshift('jshint');
+	options.preprocessors['test/**/*.js'] = ['jshint'];
+	options.jshintPreprocessor = {
+		jshintrc: 'node_modules/origami-build-tools/config/jshint.json',
+		stopOnError: true
+	};
 }
 
+var coverageChecks = {
+	global: {
+		statements: 100,
+		branches: 100,
+		functions: 100,
+		lines: 100
+	},
+	each: {
+		statements: 100,
+		branches: 100,
+		functions: 100,
+		lines: 100
+	}
+};
+
 if (process.env.COVERAGE) {
-	console.log('running coverage report...');
+	console.log('running coverage report');
+	options.files.push({ pattern: 'reports/**', included: false, watched: false });
 	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
-
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
 		reporters: [
 			{
 				type: 'html',
+				check: coverageChecks,
 				subdir: function(browser) {
 					return browser.toLowerCase().split(/[ /-]/)[0];
-				},
-				watermarks: {
-					statements: [0, 85],
-					lines: [0, 85],
-					functions: [0, 85],
-					branches:[0, 85]
 				}
 			},
+			{ type: 'text' },
 			{ type: 'json', subdir: '.', file: 'summary.json' }
 		]
 	};
 }
 
-if (process.env.CI_NAME === 'codeship') {
-	// we can't use codeship from stash but if this goes public codeship options go here
+if (process.env.CIRCLECI) {
 }
 
 if (process.env.JENKINS_URL) {

@@ -67,9 +67,9 @@ module.exports = buildURLForVideo;
 
 module.exports.debug = function(){
 	var utils = require('./utils');
-  var log = utils.log;
+	var log = utils.log;
 
-  log.start('Video');
-    log.attributeTable(buildURLForVideo());
-  log.end();
+	log.start('Video');
+		log.attributeTable(buildURLForVideo());
+	log.end();
 };

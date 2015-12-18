@@ -28,6 +28,7 @@ Krux.prototype.init = function(impl) {
 	this.config = config('krux');
 	if (this.config && this.config.id) {
 
+		/* istanbul ignore else  */
 		if (!window.Krux) {
 			((window.Krux = function() {
 				window.Krux.q.push(arguments);
@@ -36,14 +37,19 @@ Krux.prototype.init = function(impl) {
 		}
 
 		this.api = window.Krux;
+		/* istanbul ignore else  */
 		if(this.config.attributes) {
 			this.setAttributes('page_attr_',  this.config.attributes.page || {});
 			this.setAttributes('user_attr_',  this.config.attributes.user || {});
 			this.setAttributes('',  this.config.attributes.custom || {});
 		}
-		var m,
-		src = (m = location.href.match(/\bkxsrc=([^&]+)/)) && decodeURIComponent(m[1]),
-		finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+
+		var src;
+		var m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
+		if (m) {
+			src = decodeURIComponent(m[1]);
+		}
+		var finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -61,7 +67,7 @@ Krux.prototype.init = function(impl) {
 Krux.prototype.retrieve = function(name) {
 	var value;
 	name = 'kx' + name;
-
+	/* istanbul ignore else  */
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
 	}  else if (utils.cookie(name)) {
@@ -90,8 +96,10 @@ Krux.prototype.segments = function() {
 */
 Krux.prototype.targeting = function() {
 	var segs = this.segments();
+	/* istanbul ignore else  */
 	if (segs) {
 		segs = segs.split(',');
+		/* istanbul ignore else  */
 		if (config('krux').limit) {
 			segs = segs.slice(0, config('krux').limit);
 		}
@@ -113,6 +121,7 @@ Krux.prototype.targeting = function() {
 */
 Krux.prototype.events = {
 	dwell_time: function(config) {
+		/* istanbul ignore else  */
 		if (config) {
 			var fire = this.fire,
 			interval = config.interval || 5,
@@ -126,7 +135,9 @@ Krux.prototype.events = {
 		}
 	},
 	delegated: function(config) {
+		/* istanbul ignore else  */
 		if (window.addEventListener) {
+			/* istanbul ignore else  */
 			if (config) {
 				var fire = this.fire;
 				var eventScope = function(kEvnt) {
@@ -138,6 +149,7 @@ Krux.prototype.events = {
 				window.addEventListener('load', function() {
 					var delEvnt = new delegate(document.body);
 					for (var kEvnt in config) {
+						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
 						}
@@ -149,6 +161,7 @@ Krux.prototype.events = {
 };
 
 Krux.prototype.events.fire = function(id, attrs) {
+	/* istanbul ignore else  */
 	if (id) {
 		attrs = utils.isPlainObject(attrs) ? attrs : {};
 		return window.Krux('admEvent', id, attrs);
@@ -159,8 +172,10 @@ Krux.prototype.events.fire = function(id, attrs) {
 
 Krux.prototype.events.init = function() {
 	var event, configured = config('krux') && config('krux').events;
+	/* istanbul ignore else  */
 	if (utils.isPlainObject(configured)) {
 		for (event in configured) {
+			/* istanbul ignore else  */
 			if (utils.isFunction(this[event])) {
 				this[event](configured[event]);
 			} else if (utils.isFunction(configured[event].fn)) {
@@ -171,6 +186,7 @@ Krux.prototype.events.init = function() {
 };
 
 Krux.prototype.setAttributes = function (prefix, attributes) {
+	/* istanbul ignore else  */
 	if(attributes){
 		Object.keys(attributes).forEach(function(item) {
 			this.api('set',  prefix + item, attributes[item]);
@@ -180,7 +196,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 
 Krux.prototype.debug = function() {
 	var log = utils.log;
-	if (!this.config && !this.config.id) {
+	if (!this.config) {
 		return;
 	}
 	log.start('Krux©');
@@ -221,17 +237,17 @@ Krux.prototype.debug = function() {
 				log.end();
 			log.end();
 		}
-		if (this.targeting) {
-			var targeting = this.targeting();
-			log.start('Targeting');
-				log.attributeTable(targeting);
-			log.end();
-		}
+
+		var targeting = this.targeting();
+		log.start('Targeting');
+			log.attributeTable(targeting);
+		log.end();
+
 		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
 			log.start(tags.length + " Supertag© scripts");
 				tags.forEach(function(tag) {
-				  log(tag.dataset.alias, tag.querySelector("script"));
+					log(tag.dataset.alias, tag.querySelector("script"));
 				});
 			log.end();
 		}

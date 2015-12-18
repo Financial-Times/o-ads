@@ -16,3 +16,43 @@ QUnit.test('init All', function(assert) {
 	this.trigger(document.body, 'o.DOMContentLoaded');
 
 });
+
+QUnit.test("debug calls modules' debug functions", function(assert) {
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+	var cbDebug = this.spy(this.ads.cb, 'debug');
+	var gptDebug = this.spy(this.ads.gpt, 'debug');
+	var kruxDebug = this.spy(this.ads.krux, 'debug');
+	var slotsDebug = this.spy(this.ads.slots, 'debug');
+	var targetingDebug = this.spy(this.ads.targeting, 'debug');
+	var videoDebug = this.spy(this.ads.buildURLForVideo, 'debug');
+
+	this.ads.debug();
+
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.ok(cbDebug.called, 'Chartbeat debug function is called');
+	assert.ok(gptDebug.called, 'gpt debug function is called');
+	assert.ok(kruxDebug.called, 'Krux debug function is called');
+	assert.ok(slotsDebug.called, 'Slots debug function is called');
+	assert.ok(targetingDebug.called, 'Targeting debug function is called');
+	assert.ok(videoDebug.called, 'Video debug function is called');
+
+});
+
+QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+
+	this.localStorage({'oAds': true});
+	this.ads.debug();
+
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.ok(localStorage.getItem('oAds'), "oAds value in local storage wasn't removed");
+});
+
+QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", function(assert) {
+	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+
+	this.ads.debug();
+
+	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+	assert.notOk(localStorage.getItem('oAds'), 'oAds value in local storage was removed');
+});

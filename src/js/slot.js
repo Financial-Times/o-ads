@@ -6,7 +6,9 @@ var attributeParsers = {
 	sizes: function(value, sizes) {
 		if (value === false || value === 'false') {
 			return false;
-		} else if (utils.isArray(sizes)) {
+		}
+		/* istanbul ignore else  */
+		else if (utils.isArray(sizes)) {
 			value.replace(/(\d+)x(\d+)/g, function(match, width, height) {
 				sizes.push([parseInt(width, 10), parseInt(height, 10)]);
 			});
@@ -22,9 +24,9 @@ var attributeParsers = {
 			var mapping = config().formats;
 			var formats = utils.isArray(value) ? value : value.split(',');
 			formats.forEach(function(format) {
-				format = mapping[format];
-				if (format) {
-					if (format && utils.isArray(format.sizes[0])) {
+				if (mapping && mapping[format]) {
+					format = mapping[format];
+					if (utils.isArray(format.sizes[0])) {
 						for (var j = 0; j < format.sizes.length; j++) {
 							sizes.push(format.sizes[j]);
 						}
@@ -100,6 +102,7 @@ function Slot(container, screensize) {
 
 	// make sure the slot has a name
 	this.setName();
+	this.setResponsiveCreative(false);
 	slotConfig = slotConfig[this.name] || {};
 
 	// default configuration properties
@@ -163,10 +166,11 @@ Slot.prototype.parseAttributeConfig = function() {
 };
 
 Slot.prototype.getAttributes = function() {
-	this.attributes = {};
+	var attributes = {};
 	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
-		this.attributes[utils.parseAttributeName(attribute)] = attribute.value;
+		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
+	this.attributes = attributes;
 	return this;
 };
 
@@ -174,6 +178,7 @@ Slot.prototype.getAttributes = function() {
 *	Load a slot when it appears in the viewport
 */
 Slot.prototype.initLazyLoad = function() {
+	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
 		utils.once('inview', function(slot) {
@@ -188,6 +193,7 @@ Slot.prototype.initLazyLoad = function() {
 * where the configured size is set to false
 */
 Slot.prototype.initResponsive = function() {
+	/* istanbul ignore else  */
 	if (utils.isPlainObject(this.sizes)) {
 
 		if (!this.hasValidSize()) {
@@ -209,7 +215,16 @@ Slot.prototype.initResponsive = function() {
 	return this;
 };
 
-
+/**
+* Maximise the slot when size is 100x100
+*/
+Slot.prototype.maximise = function (size) {
+	if (size && +size[0] === 100 && +size[1] === 100) {
+		this.fire('resize', {
+			size: ['100%', '100%']
+		});
+	}
+};
 
 /**
 *	If the slot doesn't have a name give it one
@@ -222,6 +237,15 @@ Slot.prototype.setName = function() {
 	}
 	return this;
 };
+
+/**
+*	If the slot doesn't have a name give it one
+*/
+Slot.prototype.setResponsiveCreative = function (value) {
+	this.responsiveCreative = value;
+	return this;
+};
+
 
 /**
 * add the empty class to the slot
@@ -263,11 +287,13 @@ Slot.prototype.fire = function(name, data) {
 **/
 Slot.prototype.addContainer = function(node, attrs) {
 	var container = '<div ';
-	Object.keys(attrs || {}).forEach(function(attr) {
-		var value = attrs[attr];
-		container += attr + '=' + value + ' ';
-	});
-
+	/* istanbul ignore else  */
+	if(attrs) {
+		Object.keys(attrs).forEach(function(attr) {
+			var value = attrs[attr];
+			container += attr + '=' + value + ' ';
+		});
+	}
 	container += '></div>';
 	node.insertAdjacentHTML('beforeend', container);
 	return node.lastChild;

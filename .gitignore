@@ -19,7 +19,6 @@ bower_components/
 # Log Files #
 #############
 *.log
-*.log*
 timestamp.dat
 
 # OS generated files #

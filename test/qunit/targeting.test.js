@@ -256,3 +256,19 @@ QUnit.test("Library Version", function(assert) {
 	var result = this.ads.targeting.get();
 	assert.equal(result.ver, '${project.version}', "library version returned correctly");
 });
+
+QUnit.test('debug returns early if no config is set', function(assert) {
+	this.ads.init();
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.targeting.debug();
+	assert.notOk(start.called, "`utils.start` wasn't called for 'targeting'");
+});
+
+QUnit.test('debug starts logging data', function(assert) {
+	this.ads.init({dfp_targeting: {data: {allOfThe: 'targeting data'}}});
+	var start = this.spy(this.utils.log, "start");
+
+	this.ads.targeting.debug();
+	assert.ok(start.called, "`utils.start` was called for 'targeting'");
+});
