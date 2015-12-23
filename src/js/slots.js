@@ -90,6 +90,8 @@ Slots.prototype.initSlot = function(container) {
 			container.removeAttribute('id');
 		}
 	}
+	
+	container.setAttribute('aria-hidden', 'true');
 
 	// if not an element or we can't find it in the DOM exit
 	if (!utils.isElement(container)) {
