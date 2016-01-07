@@ -34,6 +34,15 @@ QUnit.test('generates new name for a slot', function(assert) {
 	assert.ok(result, 'ad slot inited correctly');
 });
 
+QUnit.test('adds an aria-hidden attribute on a slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	var result = slot.container.getAttribute('aria-hidden');
+	assert.ok(result, 'ad slot has the aria attribute');
+	assert.equal(result, 'true', 'ad slot aria attribue value is correct');
+});
+
 QUnit.test('sets all attributes on slot object', function(assert) {
 	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
