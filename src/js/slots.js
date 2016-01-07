@@ -90,14 +90,15 @@ Slots.prototype.initSlot = function(container) {
 			container.removeAttribute('id');
 		}
 	}
-	
-	container.setAttribute('aria-hidden', 'true');
 
 	// if not an element or we can't find it in the DOM exit
 	if (!utils.isElement(container)) {
 		utils.log.error('slot container must be an element!', container);
 		return false;
 	}
+
+	// add the aria hidden attribute
+	container.setAttribute('aria-hidden', 'true');
 
 	var slot = new Slot(container, screensize);
 	/* istanbul ignore else  */
