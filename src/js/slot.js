@@ -266,6 +266,18 @@ Slot.prototype.uncollapse = function() {
 };
 
 /**
+* remove the empty class from the slot
+*/
+Slot.prototype.destroy = function() {
+	/* istanbul ignore else  */
+	if (utils.isFunction(this['clearSlot'])) {
+			this.clearSlot.call(null, this);
+	}
+	return this;
+};
+
+
+/**
 *	fire an event on the slot
 */
 Slot.prototype.fire = function(name, data) {

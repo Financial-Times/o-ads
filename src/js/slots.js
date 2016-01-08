@@ -77,6 +77,27 @@ Slots.prototype.refresh = function(names) {
 	return this;
 };
 
+
+/**
+* Given a slot name or an array of slot names will destroy the slots using the destroy method on the slot
+*/
+Slots.prototype.destroy = function(names) {
+	names = names || Object.keys(this);
+	/* istanbul ignore else  */
+	if (utils.isNonEmptyString(names)) {
+		run.call(null, this, 'destroy', names);
+		this[names] = null;
+		delete this[names];
+	} else if (utils.isArray(names)) {
+		names.forEach(function(name){
+			run.call(null, this, 'destroy', name);
+			this[name] = null;
+			delete this[name];
+		}.bind(this));
+	}
+	return this;
+};
+
 /**
 * Confirms a container in the page exists and creates a Slot object
 */

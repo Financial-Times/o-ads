@@ -18,7 +18,7 @@ QUnit.test('init', function(assert) {
 	this.ads.init();
 	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
 	assert.ok(window.googletag, 'placeholder googletag object is created');
-	assert.ok(window.googletag.cmd.length, 'library setup is added tothe command queue');
+	assert.ok(window.googletag.cmd.length, 'library setup is added to the command queue');
 
 	// reinstate mock
 	window.googletag = this.gpt;
@@ -174,7 +174,7 @@ QUnit.test('provides api to clear the slot', function(assert) {
 	var slot = this.ads.slots.initSlot('test1');
 	slot.clearSlot();
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
-	assert.ok(googletag.pubads().clear.calledWith(slot.gpt.slot), 'defaults to slot that the method has been invoked on');
+	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
 });
 
 QUnit.test('provides api to clear another slot', function(assert) {
@@ -185,7 +185,7 @@ QUnit.test('provides api to clear another slot', function(assert) {
 	var slot2 = this.ads.slots.initSlot('test2');
 	slot.clearSlot(slot2.gpt.slot);
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
-	assert.ok(googletag.pubads().clear.calledWith(slot2.gpt.slot), 'one slot can clear ');
+	assert.ok(googletag.pubads().clear.calledWith([slot2.gpt.slot]), 'one slot can clear ');
 });
 
 QUnit.test('companion service is enabled globally on slots', function(assert) {
@@ -519,4 +519,13 @@ QUnit.test('companion service can be switched off per slot', function(assert) {
 	this.ads.init({gpt: {companions: true}});
 	var slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
+});
+
+QUnit.test('clear slot method calls to the ad server providers clear function', function(assert) {
+	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	slot.clearSlot();
+	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'googletag clear method called with the correct slot');
 });

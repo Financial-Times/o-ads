@@ -302,7 +302,7 @@ var slotMethods = {
 	},
 	clearSlot: function(gptSlot){
 		gptSlot = gptSlot || this.gpt.slot;
-		googletag.pubads().clear(gptSlot);
+		googletag.pubads().clear([gptSlot]);
 	},
 	initResponsive: function() {
 		utils.on('breakpoint', function(event) {
@@ -355,8 +355,6 @@ var slotMethods = {
 			unitName = '/' + network;
 			unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 			unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
-
-			// unitName += '/' + this.name;
 		}
 
 		this.gpt.unitName = unitName;
