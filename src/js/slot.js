@@ -268,7 +268,7 @@ Slot.prototype.uncollapse = function() {
 /**
 * remove the empty class from the slot
 */
-Slot.prototype.destroy = function() {
+Slot.prototype.clear = function() {
 	/* istanbul ignore else  */
 	if (utils.isFunction(this['clearSlot'])) {
 			this.clearSlot.call(null, this);

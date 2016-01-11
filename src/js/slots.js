@@ -17,18 +17,20 @@ function Slots() {
 function invokeMethodOnSlots(names, method, callback) {
   var slots = [];
 	names = names || Object.keys(this);
+
 	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
-		run.call(null, this, method, names);
 		slots.push(names)
 	} else if (utils.isArray(names)) {
-		names.forEach(run.bind(null, this, method));
 		slots = names;
 	}
 
+  slots.forEach(run.bind(null, this, method));
+
 	if(utils.isFunction(callback)){
-			callback.call(this, slots)
+			callback.call(this, slots);
 	}
+
 	return this;
 }
 
@@ -73,10 +75,17 @@ Slots.prototype.refresh = function(names) {
 
 
 /**
-* Given a slot name or an array of slot names will destroy the slots using the destroy method on the slot
+* Given a slot name or an array of slot names will clear the slots using the clear method on the slot
+*/
+Slots.prototype.clear = function(names) {
+	return invokeMethodOnSlots.call(this, names, 'clear');
+};
+
+/**
+* Given a slot name or an array of slot names will clear the slots using the clear method on the slot and remove the reference to the slot
 */
 Slots.prototype.destroy = function(names) {
-	return invokeMethodOnSlots.call(this, names, 'destroy', function(names){
+	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
 			names.forEach(function(name){
 				this[name] = null;
 				delete this[name];
