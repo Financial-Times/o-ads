@@ -266,7 +266,7 @@ Slot.prototype.uncollapse = function() {
 };
 
 /**
-* remove the empty class from the slot
+* call the ad server clear method on the slot if one exists
 */
 Slot.prototype.clear = function() {
 	/* istanbul ignore else  */
