@@ -6,7 +6,7 @@ var targeting = require('../../src/js/targeting');
 
 QUnit.module('Video Main-player tests');
 
-QUnit.test('buildURLForVideo returns correct URL base when vidoe-hub is set', function (assert) {
+QUnit.test('buildURLForVideo returns correct URL base when video-hub is set', function (assert) {
 	this.ads.init({
 		gpt:{
 			video: true,
@@ -21,7 +21,7 @@ QUnit.test('buildURLForVideo returns correct URL base when vidoe-hub is set', fu
 	assert.strictEqual(result.urlStem,expected, 'the url is what we expected');
 });
 
-QUnit.test('buildURLForVideo returns correct URL base when vidoe-hub is set but no parameters passed', function (assert) {
+QUnit.test('buildURLForVideo returns correct URL base when video-hub is set but no parameters passed', function (assert) {
 	this.ads.init({});
 	var result = this.ads.buildURLForVideo();
 	var expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/undefined/undefined&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
