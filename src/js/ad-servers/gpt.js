@@ -63,13 +63,18 @@ function initGoogleTag() {
 * when the library is available
 */
 function setup(gptConfig) {
-	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
-	enableVideo(gptConfig);
-	enableCompanions(gptConfig);
-	setRenderingMode(gptConfig);
-	setPageTargeting(targeting.get());
-	setPageCollapseEmpty(gptConfig);
-	googletag.enableServices();
+	if (window.googletag.pubads) {
+		googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
+		enableVideo(gptConfig);
+		enableCompanions(gptConfig);
+		setRenderingMode(gptConfig);
+		setPageTargeting(targeting.get());
+		setPageCollapseEmpty(gptConfig);
+		googletag.enableServices();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /*

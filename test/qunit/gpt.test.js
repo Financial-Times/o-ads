@@ -520,3 +520,33 @@ QUnit.test('companion service can be switched off per slot', function(assert) {
 	var slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
 });
+
+QUnit.test('setup added to command queue when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+
+	assert.ok(window.googletag.cmd.length > 0, 'setup added to command queue when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('command queue empty when googletag is available', function (assert) {
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+
+	assert.equal(window.googletag.cmd.length, 0, 'command queue empty when googletag is available');
+});
+
+QUnit.test('pubads not called when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+
+
+	assert.equal(window.googletag.cmd[0].call(), false, 'pubads not called when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
