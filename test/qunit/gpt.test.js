@@ -542,11 +542,12 @@ QUnit.test('command queue empty when googletag is available', function (assert) 
 QUnit.test('pubads not called when googletag not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 
-
-	assert.equal(window.googletag.cmd[0].call(), false, 'pubads not called when googletag not available');
+	window.googletag.cmd[0].call();
+	assert.ok(errorSpy.calledWith('Attempting to setup before the GPT library has initialized'), 'pubads not called when googletag not available');
 	// reinstate mock
 	window.googletag = this.gpt;
 });

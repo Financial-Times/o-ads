@@ -73,7 +73,7 @@ function setup(gptConfig) {
 		googletag.enableServices();
 		return true;
 	} else {
-		return false;
+		utils.log.warn('Attempting to setup before the GPT library has initialized');
 	}
 }
 
