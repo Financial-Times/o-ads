@@ -282,8 +282,8 @@ function onRenderEnded(event) {
 */
 var slotMethods = {
 	/**
-	  * define a GPT slot
-*/
+	* define a GPT slot
+	*/
 	defineSlot: function() {
 		if (libraryAvailable) {
 			this.gpt.id = this.name + '-gpt';
@@ -302,8 +302,8 @@ var slotMethods = {
 		return this;
 	},
 	/**
-	  * creates a container for an out of page ad and then makes the ad request
-*/
+	* creates a container for an out of page ad and then makes the ad request
+	*/
 	defineOutOfPage: function() {
 		if (libraryAvailable) {
 			var oop = this.gpt.oop = {};
@@ -359,8 +359,8 @@ var slotMethods = {
 		return this;
 	},
 	/*
-	  *	Tell gpt to request an ad
-*/
+	*	Tell gpt to request an ad
+	*/
 	display: function() {
 		if (libraryAvailable) {
 			googletag.display(this.gpt.id);
@@ -370,8 +370,8 @@ var slotMethods = {
 		return this;
 	},
 	/**
-	  * Set the DFP unit name for the slot.
-*/
+	* Set the DFP unit name for the slot.
+	*/
 	setUnitName: function() {
 		var unitName;
 		var gpt = config('gpt') || {};
@@ -396,8 +396,8 @@ var slotMethods = {
 		return this;
 	},
 	/**
-	  * Add the slot to the pub ads service and add a companion service if configured
-*/
+	* Add the slot to the pub ads service and add a companion service if configured
+	*/
 	addServices: function(gptSlot) {
 		if (libraryAvailable) {
 			var gpt = config('gpt') || {};
@@ -413,12 +413,12 @@ var slotMethods = {
 	},
 
 	/**
-	  * Sets the GPT collapse empty mode for a given slot
-	  * values can be 'after', 'before', 'never'
-	  * after as in after ads have rendered is the default
-	  * true is synonymous with before
-	  * false is synonymous with never
-*/
+	* Sets the GPT collapse empty mode for a given slot
+	* values can be 'after', 'before', 'never'
+	* after as in after ads have rendered is the default
+	* true is synonymous with before
+	* false is synonymous with never
+	*/
 	setCollapseEmpty: function() {
 		if (libraryAvailable) {
 			var mode = this.collapseEmpty || config('collapseEmpty');
@@ -437,9 +437,9 @@ var slotMethods = {
 	},
 
 	/**
-	  * Sets page url to be sent to google
-	  * prevents later url changes via javascript from breaking the ads
-*/
+	* Sets page url to be sent to google
+	* prevents later url changes via javascript from breaking the ads
+	*/
 	setURL: function(gptSlot) {
 		if(libraryAvailable){
 			gptSlot = gptSlot || this.gpt.slot;
