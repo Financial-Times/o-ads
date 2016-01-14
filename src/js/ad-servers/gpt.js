@@ -12,7 +12,7 @@ var config = require('../config');
 var utils = require('../utils');
 var targeting = require('../targeting');
 var breakpoints = false;
-
+var libraryAvailable = false;
 /*
 //###########################
 // Initialisation handlers ##
@@ -48,7 +48,16 @@ function initGoogleTag() {
 		window.googletag.cmd = [];
 	}
 
-	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true);
+	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true,
+		function() {
+			if (googletag.pubads) {
+				libraryAvailable = true;
+			}
+		},
+		function () {
+				libraryAvailable = false;
+		}
+	);
 }
 
 /*
@@ -63,7 +72,7 @@ function initGoogleTag() {
 * when the library is available
 */
 function setup(gptConfig) {
-	if (window.googletag.pubads) {
+	if (libraryAvailable) {
 		googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
 		enableVideo(gptConfig);
 		enableCompanions(gptConfig);
@@ -73,7 +82,7 @@ function setup(gptConfig) {
 		googletag.enableServices();
 		return true;
 	} else {
-		utils.log.warn('Attempting to setup before the GPT library has initialized');
+		return utils.log.warn('Attempting to setup before the GPT library has initialized');
 	}
 }
 
@@ -276,69 +285,88 @@ var slotMethods = {
 	  * define a GPT slot
 */
 	defineSlot: function() {
-		this.gpt.id = this.name + '-gpt';
-		this.inner.setAttribute('id', this.gpt.id);
-		this.setUnitName();
+		if (libraryAvailable) {
+			this.gpt.id = this.name + '-gpt';
+			this.inner.setAttribute('id', this.gpt.id);
+			this.setUnitName();
 
-		if (breakpoints && utils.isObject(this.sizes)) {
-			this.initResponsive();
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+			if (breakpoints && utils.isObject(this.sizes)) {
+				this.initResponsive();
+				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+			} else {
+				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+			}
 		} else {
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+			utils.log.warn('Attempting to call defineSlot before the GPT library has initialized');
 		}
-
 		return this;
 	},
 	/**
 	  * creates a container for an out of page ad and then makes the ad request
 */
 	defineOutOfPage: function() {
-		var oop = this.gpt.oop = {};
-		oop.id = this.name + '-oop';
-		this.addContainer(this.container, {id: oop.id});
+		if (libraryAvailable) {
+			var oop = this.gpt.oop = {};
+			oop.id = this.name + '-oop';
+			this.addContainer(this.container, {id: oop.id});
 
-		oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
-		.addService(googletag.pubads());
+			oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
+			.addService(googletag.pubads());
 
-		this.setTargeting(oop.slot);
-		this.setURL(oop.slot);
-		googletag.display(oop.id);
+			this.setTargeting(oop.slot);
+			this.setURL(oop.slot);
+			googletag.display(oop.id);
+		} else {
+			utils.log.warn('Attempting to call defineOutOfPage before the GPT library has initialized');
+		}
 		return this;
 	},
 	clearSlot: function(gptSlot){
-		gptSlot = gptSlot || this.gpt.slot;
-		googletag.pubads().clear(gptSlot);
+		if (libraryAvailable) {
+			gptSlot = gptSlot || this.gpt.slot;
+			googletag.pubads().clear(gptSlot);
+		} else {
+				return utils.log.warn('Attempting to call clearSlot before the GPT library has initialized');
+		}
 	},
 	initResponsive: function() {
-		utils.on('breakpoint', function(event) {
-			var slot = event.detail.slot;
-			var screensize = event.detail.screensize;
+		if (libraryAvailable) {
+			utils.on('breakpoint', function(event) {
+				var slot = event.detail.slot;
+				var screensize = event.detail.screensize;
 
-			if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
-				/* istanbul ignore else  */
-				if (slot.gpt.iframe) {
-					slot.fire('refresh');
-				} else if (!this.defer) {
-					slot.display();
+				if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
+					/* istanbul ignore else  */
+					if (slot.gpt.iframe) {
+						slot.fire('refresh');
+					} else if (!this.defer) {
+						slot.display();
+					}
 				}
-			}
-		}, this.container);
+			}, this.container);
 
-		var mapping = googletag.sizeMapping();
-		Object.keys(breakpoints).forEach(function(breakpoint) {
-			if (this.sizes[breakpoint]) {
-				mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
-			}
-		}.bind(this));
+			var mapping = googletag.sizeMapping();
+			Object.keys(breakpoints).forEach(function(breakpoint) {
+				if (this.sizes[breakpoint]) {
+					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
+				}
+			}.bind(this));
 
-		this.gpt.sizes = mapping.build();
+			this.gpt.sizes = mapping.build();
+		} else {
+			utils.log.warn('Attempting to call initResponsive before the GPT library has initialized');
+		}
 		return this;
 	},
 	/*
 	  *	Tell gpt to request an ad
 */
 	display: function() {
-		googletag.display(this.gpt.id);
+		if (libraryAvailable) {
+			googletag.display(this.gpt.id);
+		} else {
+			utils.log.warn('Attempting to call display before the GPT library has initialized');
+		}
 		return this;
 	},
 	/**
@@ -371,13 +399,16 @@ var slotMethods = {
 	  * Add the slot to the pub ads service and add a companion service if configured
 */
 	addServices: function(gptSlot) {
-		var gpt = config('gpt') || {};
-		gptSlot = gptSlot || this.gpt.slot;
-		gptSlot.addService(googletag.pubads());
-		if (gpt.companions && this.companion !== false) {
-			gptSlot.addService(googletag.companionAds());
+		if (libraryAvailable) {
+			var gpt = config('gpt') || {};
+			gptSlot = gptSlot || this.gpt.slot;
+			gptSlot.addService(googletag.pubads());
+			if (gpt.companions && this.companion !== false) {
+				gptSlot.addService(googletag.companionAds());
+			}
+		} else {
+			utils.log.warn('Attempting to call addServices before the GPT library has initialized');
 		}
-
 		return this;
 	},
 
@@ -389,16 +420,19 @@ var slotMethods = {
 	  * false is synonymous with never
 */
 	setCollapseEmpty: function() {
-		var mode = this.collapseEmpty || config('collapseEmpty');
+		if (libraryAvailable) {
+			var mode = this.collapseEmpty || config('collapseEmpty');
 
-		if (mode === true || mode === 'after') {
-			this.gpt.slot.setCollapseEmptyDiv(true);
-		} else if (mode === 'before') {
-			this.gpt.slot.setCollapseEmptyDiv(true, true);
-		} else if (mode === false || mode === 'never') {
-			this.gpt.slot.setCollapseEmptyDiv(false);
+			if (mode === true || mode === 'after') {
+				this.gpt.slot.setCollapseEmptyDiv(true);
+			} else if (mode === 'before') {
+				this.gpt.slot.setCollapseEmptyDiv(true, true);
+			} else if (mode === false || mode === 'never') {
+				this.gpt.slot.setCollapseEmptyDiv(false);
+			}
+		} else {
+			utils.log.warn('Attempting to call setCollapseEmpty before the GPT library has initialized');
 		}
-
 		return this;
 	},
 
@@ -407,9 +441,13 @@ var slotMethods = {
 	  * prevents later url changes via javascript from breaking the ads
 */
 	setURL: function(gptSlot) {
-		gptSlot = gptSlot || this.gpt.slot;
-		var canonical = config('canonical');
-		gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
+		if(libraryAvailable){
+			gptSlot = gptSlot || this.gpt.slot;
+			var canonical = config('canonical');
+			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
+		} else {
+			utils.log.warn('Attempting to call setURL before the GPT library has initialized');
+		}
 		return this;
 	},
 
@@ -417,14 +455,17 @@ var slotMethods = {
 	* Adds key values from a given object to the slot targeting
 	*/
 	setTargeting: function(gptSlot) {
-		gptSlot = gptSlot || this.gpt.slot;
-		/* istanbul ignore else  */
-		if (utils.isPlainObject(this.targeting)) {
-			Object.keys(this.targeting).forEach(function(param) {
-				gptSlot.setTargeting(param, this.targeting[param]);
-			}.bind(this));
+		if (libraryAvailable) {
+			gptSlot = gptSlot || this.gpt.slot;
+			/* istanbul ignore else  */
+			if (utils.isPlainObject(this.targeting)) {
+				Object.keys(this.targeting).forEach(function(param) {
+					gptSlot.setTargeting(param, this.targeting[param]);
+				}.bind(this));
+			}
+		} else {
+			utils.log.warn('Attempting to call setTargeting before the GPT library has initialized');
 		}
-
 		return this;
 	}
 };
@@ -441,9 +482,13 @@ var slotMethods = {
 * Updating is used to tell the ad server to treat subsequent ad calls as being on a new page
 */
 function updateCorrelator() {
-	googletag.cmd.push(function() {
-		googletag.pubads().updateCorrelator();
-	});
+	if (libraryAvailable) {
+		googletag.cmd.push(function() {
+			googletag.pubads().updateCorrelator();
+		});
+	} else {
+		utils.log.warn('Attempting to call updateCorrelator before the GPT library has initialized');
+	}
 }
 
 module.exports.init = init;

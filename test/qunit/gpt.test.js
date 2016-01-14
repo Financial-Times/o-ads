@@ -18,7 +18,7 @@ QUnit.test('init', function(assert) {
 	this.ads.init();
 	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
 	assert.ok(window.googletag, 'placeholder googletag object is created');
-	assert.ok(window.googletag.cmd.length, 'library setup is added tothe command queue');
+	assert.ok(window.googletag.cmd.length, 'library setup is added to the command queue');
 
 	// reinstate mock
 	window.googletag = this.gpt;
@@ -521,13 +521,40 @@ QUnit.test('companion service can be switched off per slot', function(assert) {
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
 });
 
+
 QUnit.test('setup added to command queue when googletag not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
 	this.ads.init({gpt: {companions: true}});
 
 	assert.ok(window.googletag.cmd.length > 0, 'setup added to command queue when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+
+QUnit.test('setup warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+	this.ads.init({gpt: {companions: true}});
+
+	window.googletag.cmd[0].call();
+	assert.ok(errorSpy.calledWith('Attempting to setup before the GPT library has initialized'), 'setup warned when googletag not available');
 	// reinstate mock
 	window.googletag = this.gpt;
 });
@@ -539,15 +566,217 @@ QUnit.test('command queue empty when googletag is available', function (assert) 
 	assert.equal(window.googletag.cmd.length, 0, 'command queue empty when googletag is available');
 });
 
-QUnit.test('pubads not called when googletag not available', function (assert) {
+QUnit.test('defineSlot warns when googletag not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
 	var errorSpy = this.spy(this.utils.log, 'warn');
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
 	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
 
-	window.googletag.cmd[0].call();
-	assert.ok(errorSpy.calledWith('Attempting to setup before the GPT library has initialized'), 'pubads not called when googletag not available');
+	slot.defineSlot();
+	assert.ok(errorSpy.calledWith('Attempting to call defineSlot before the GPT library has initialized'), 'defineSlot warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('defineOutOfPage warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.defineOutOfPage();
+	assert.ok(errorSpy.calledWith('Attempting to call defineOutOfPage before the GPT library has initialized'), 'defineOutOfPage warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('clearSlot warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.clearSlot();
+	assert.ok(errorSpy.calledWith('Attempting to call clearSlot before the GPT library has initialized'), 'clearSlot warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('initResponsive warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.initResponsive();
+	assert.ok(errorSpy.calledWith('Attempting to call initResponsive before the GPT library has initialized'), 'initResponsive warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('display warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.display();
+	assert.ok(errorSpy.calledWith('Attempting to call display before the GPT library has initialized'), 'display warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('addServices warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.addServices();
+	assert.ok(errorSpy.calledWith('Attempting to call addServices before the GPT library has initialized'), 'addServices warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setCollapseEmpty warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.setCollapseEmpty();
+	assert.ok(errorSpy.calledWith('Attempting to call setCollapseEmpty before the GPT library has initialized'), 'setCollapseEmpty warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setURL warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.setURL();
+	assert.ok(errorSpy.calledWith('Attempting to call setURL before the GPT library has initialized'), 'setURL warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setTargeting warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.setTargeting();
+	assert.ok(errorSpy.calledWith('Attempting to call setTargeting before the GPT library has initialized'), 'setTargeting warned when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('updateCorrelator warns when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+	var errorSpy = this.spy(this.utils.log, 'warn');
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+
+	this.ads.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, callback, errorcb) {
+		if (typeof errorcb === 'function') {
+			errorcb();
+		}
+	});
+
+	this.ads.init({gpt: {companions: true}});
+	// var slot = this.ads.slots.initSlot('TestFormat');
+
+	this.ads.gpt.updateCorrelator();
+	assert.ok(errorSpy.calledWith('Attempting to call updateCorrelator before the GPT library has initialized'), 'updateCorrelator warned when googletag not available');
 	// reinstate mock
 	window.googletag = this.gpt;
 });
