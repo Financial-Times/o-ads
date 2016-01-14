@@ -172,7 +172,7 @@ QUnit.test('provides api to clear the slot', function(assert) {
 	this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	var slot = this.ads.slots.initSlot('test1');
-	slot.clearSlot();
+	assert.equal(slot.clearSlot(), true, 'a call to clear slot returns a boolean');
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
 	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
 });

@@ -89,7 +89,7 @@ Slots.prototype.destroy = function(names) {
 			names.forEach(function(name){
 				this[name] = null;
 				delete this[name];
-			}.bind(this))
+			}.bind(this));
 	});
 };
 

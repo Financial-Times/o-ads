@@ -302,7 +302,7 @@ var slotMethods = {
 	},
 	clearSlot: function(gptSlot){
 		gptSlot = gptSlot || this.gpt.slot;
-		googletag.pubads().clear([gptSlot]);
+		return googletag.pubads().clear([gptSlot]);
 	},
 	initResponsive: function() {
 		utils.on('breakpoint', function(event) {
