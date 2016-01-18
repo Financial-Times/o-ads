@@ -452,7 +452,6 @@ QUnit.test('Slots.destroy will call clear slot method from the ad server provide
 	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
 	assert.ok(clearSlotSpy.calledOnce, 'clear slot method has been called on a slot');
-	assert.ok(clearSlotSpy.calledWith(slot), 'clear slot get invoked with the correct slot');
 });
 
 QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
@@ -509,7 +508,6 @@ QUnit.test('Slots.clear will call clear slot method from the ad server provider 
 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
 	assert.ok(clearSlotSpy.calledOnce, 'clear slot method has been called on a slot');
-	assert.ok(clearSlotSpy.calledWith(slot), 'clear slot get invoked with the correct slot');
 });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
