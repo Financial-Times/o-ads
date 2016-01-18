@@ -271,7 +271,7 @@ Slot.prototype.uncollapse = function() {
 Slot.prototype.clear = function() {
 	/* istanbul ignore else  */
 	if (utils.isFunction(this['clearSlot'])) {
-			this.clearSlot.call(null, this);
+		this.clearSlot();
 	}
 	return this;
 };
