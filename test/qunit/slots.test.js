@@ -430,6 +430,118 @@ QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
 	this.ads.slots.refresh('refresh-test');
 });
 
+QUnit.test('Slots.destroy will destroy a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['destroy-test'], 'slot to be destoryed has been initialised');
+	var clearSpy = this.spy(slot, 'clear');
+	this.ads.slots.destroy('destroy-test');
+	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+});
+
+QUnit.test('Slots.destroy will call clear slot method from the ad server provider when one is present', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['destroy-test'], 'slot to be destoryed has been initialised');
+	// provide mock method on slot (usually responosbility of ad server provider)
+	slot.clearSlot = function(){};
+	var clearSpy = this.spy(slot, 'clear');
+	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	this.ads.slots.destroy('destroy-test');
+	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+	assert.ok(clearSlotSpy.calledOnce, 'clear slot method has been called on a slot');
+});
+
+QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['destroy-test-1'], 'first slot to be destoryed has been initialised');
+	assert.ok(this.ads.slots['destroy-test-2'], 'second slot to be destoryed has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.destroy(['destroy-test-1', 'destroy-test-2']);
+	assert.notOk(this.ads.slots['destroy-test-1'], 'first slot has been destoryed and reference to it has been removed');
+	assert.notOk(this.ads.slots['destroy-test-2'], 'second slot has been destoryed and reference to it has been removed');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['destroy-test-1'], 'first slot to be destoryed has been initialised');
+	assert.ok(this.ads.slots['destroy-test-2'], 'second slot to be destoryed has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.destroy();
+	assert.notOk(this.ads.slots['destroy-test-1'], 'first slot has been destoryed and reference to it has been removed');
+	assert.notOk(this.ads.slots['destroy-test-2'], 'second slot has been destoryed and reference to it has been removed');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.clear will clear a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
+	var clearSpy = this.spy(slot, 'clear');
+	this.ads.slots.clear('clear-test');
+	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+});
+
+QUnit.test('Slots.clear will call clear slot method from the ad server provider when one is present', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
+	// provide mock method on slot (usually responosbility of ad server provider)
+	slot.clearSlot = function(){};
+	var clearSpy = this.spy(slot, 'clear');
+	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	this.ads.slots.clear('clear-test');
+	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+	assert.ok(clearSlotSpy.calledOnce, 'clear slot method has been called on a slot');
+});
+
+QUnit.test('Slots.clear will clear multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.clear(['clear-test-1', 'clear-test-2']);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.clear will clear multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.clear();
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
 	var warnSpy = this.spy(this.utils.log, 'warn');
 	this.ads.slots.collapse('unknown-test');
