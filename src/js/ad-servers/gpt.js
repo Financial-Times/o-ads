@@ -304,10 +304,12 @@ var slotMethods = {
 		return this;
 	},
 	clearSlot: function(gptSlot){
-		window.googletag.cmd.push(function() {
+		if (window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
-			googletag.pubads().clear(gptSlot);
-		}.bind(this));
+			return googletag.pubads().clear([gptSlot]);
+		} else {
+			return false;
+		}
 	},
 	initResponsive: function() {
 		window.googletag.cmd.push(function() {
@@ -365,10 +367,7 @@ var slotMethods = {
 				unitName = '/' + network;
 				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
-
-				// unitName += '/' + this.name;
 			}
-
 			this.gpt.unitName = unitName;
 		}.bind(this));
 		return this;

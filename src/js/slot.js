@@ -266,6 +266,18 @@ Slot.prototype.uncollapse = function() {
 };
 
 /**
+* call the ad server clear method on the slot if one exists
+*/
+Slot.prototype.clear = function() {
+	/* istanbul ignore else  */
+	if (utils.isFunction(this['clearSlot'])) {
+		this.clearSlot();
+	}
+	return this;
+};
+
+
+/**
 *	fire an event on the slot
 */
 Slot.prototype.fire = function(name, data) {

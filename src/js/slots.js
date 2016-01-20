@@ -14,6 +14,26 @@ var screensize = null;
 function Slots() {
 }
 
+function invokeMethodOnSlots(names, method, callback) {
+  var slots = [];
+	names = names || Object.keys(this);
+
+	/* istanbul ignore else  */
+	if (utils.isNonEmptyString(names)) {
+		slots.push(names)
+	} else if (utils.isArray(names)) {
+		slots = names;
+	}
+
+  slots.forEach(run.bind(null, this, method));
+
+	if(utils.isFunction(callback)){
+			callback.call(this, slots);
+	}
+
+	return this;
+}
+
 /*
 * Either run a method or fire an event on the named slot.
 * @private
@@ -36,45 +56,41 @@ function run(slots, action, name) {
 * Given a slot name or an array of slot names will collapse the slots using the collapse method on the slot
 */
 Slots.prototype.collapse = function(names) {
-	names = names || Object.keys(this);
-	/* istanbul ignore else  */
-	if (utils.isNonEmptyString(names)) {
-		run.call(null, this, 'collapse', names);
-	} else if (utils.isArray(names)) {
-		names.forEach(run.bind(null, this, 'collapse'));
-	}
-
-	return this;
+	return invokeMethodOnSlots.call(this, names, 'collapse');
 };
 
 /**
 * Given a slot name or an array of slot names will uncollapse the slots using the uncollapse method on the slot
 */
 Slots.prototype.uncollapse = function(names) {
-	names = names || Object.keys(this);
-	/* istanbul ignore else  */
-	if (utils.isNonEmptyString(names)) {
-		run.call(null, this, 'uncollapse', names);
-	} else if (utils.isArray(names)) {
-		names.forEach(run.bind(null, this, 'uncollapse'));
-	}
-
-	return this;
+	return invokeMethodOnSlots.call(this, names, 'uncollapse');
 };
 
 /**
 * Given a slot name or an array of slot names of slotnames will refresh the slots using the refresh method on the slot
 */
 Slots.prototype.refresh = function(names) {
-	names = names || Object.keys(this);
-	/* istanbul ignore else  */
-	if (utils.isNonEmptyString(names)) {
-		run.call(null, this, 'refresh', names);
-	} else if (utils.isArray(names)) {
-		names.forEach(run.bind(null, this, 'refresh'));
-	}
+	return invokeMethodOnSlots.call(this, names, 'refresh');
+};
 
-	return this;
+
+/**
+* Given a slot name or an array of slot names will clear the slots using the clear method on the slot
+*/
+Slots.prototype.clear = function(names) {
+	return invokeMethodOnSlots.call(this, names, 'clear');
+};
+
+/**
+* Given a slot name or an array of slot names will clear the slots using the clear method on the slot and remove the reference to the slot
+*/
+Slots.prototype.destroy = function(names) {
+	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
+			names.forEach(function(name){
+				this[name] = null;
+				delete this[name];
+			}.bind(this));
+	});
 };
 
 /**

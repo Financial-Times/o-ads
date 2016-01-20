@@ -172,9 +172,9 @@ QUnit.test('provides api to clear the slot', function(assert) {
 	this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	var slot = this.ads.slots.initSlot('test1');
-	slot.clearSlot();
+	assert.equal(slot.clearSlot(), true, 'a call to clear slot returns a boolean');
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
-	assert.ok(googletag.pubads().clear.calledWith(slot.gpt.slot), 'defaults to slot that the method has been invoked on');
+	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
 });
 
 QUnit.test('provides api to clear another slot', function(assert) {
@@ -185,7 +185,7 @@ QUnit.test('provides api to clear another slot', function(assert) {
 	var slot2 = this.ads.slots.initSlot('test2');
 	slot.clearSlot(slot2.gpt.slot);
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
-	assert.ok(googletag.pubads().clear.calledWith(slot2.gpt.slot), 'one slot can clear ');
+	assert.ok(googletag.pubads().clear.calledWith([slot2.gpt.slot]), 'one slot can clear ');
 });
 
 QUnit.test('companion service is enabled globally on slots', function(assert) {
@@ -572,17 +572,16 @@ QUnit.test('defineOutOfPage is added to command queue when googletag is not avai
 	window.googletag = this.gpt;
 });
 
-QUnit.test('clearSlot is added to command queue when googletag is not available', function (assert) {
+QUnit.test('clearSlot returns false when googletag is not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.clearSlot();
-	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineOutOfPage function added to command queue');
+	assert.equal(slot.clearSlot(), false, 'clearSlot function added to command queue');
 	// reinstate mock
 	window.googletag = this.gpt;
 });
@@ -708,4 +707,13 @@ QUnit.test('updateCorrelator is added to command queue when googletag is not ava
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'updateCorrelator function added to command queue');
 	// reinstate mock
 	window.googletag = this.gpt;
+});
+
+QUnit.test('clear slot method calls to the ad server providers clear function', function(assert) {
+	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(node);
+	slot.clearSlot();
+	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'googletag clear method called with the correct slot');
 });

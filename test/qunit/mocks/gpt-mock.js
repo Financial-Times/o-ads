@@ -138,7 +138,7 @@ var pubads = {
 	enableAsyncRendering: stubs.stub(),
 	refresh: function() {},
 	collapseEmptyDivs: stubs.stub(),
-	clear: stubs.stub(),
+	clear: stubs.stub().returns(true),
 	clearSlotTargeting: stubs.stub(),
 	definePassback: stubs.stub(),
 	enableSyncRendering: stubs.stub(),
