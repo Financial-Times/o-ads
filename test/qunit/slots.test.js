@@ -548,6 +548,13 @@ QUnit.test('attempting to run an action on an unknown slot will log a warning', 
 	assert.ok(warnSpy.calledWith('Attempted to %s non-existant slot %s', 'collapse', 'unknown-test'), 'a warning is generated');
 });
 
+QUnit.test('attempting to run an action on a non-slot log a warning', function(assert) {
+	var warnSpy = this.spy(this.utils.log, 'warn');
+	this.ads.slots['test'] = {};
+	this.ads.slots.clear();
+	assert.ok(warnSpy.calledWith('Attempted to %s on a non-slot %s', 'clear', 'test'), 'a warning is generated when triggering a call on non-slot');
+});
+
 QUnit.test('configure refresh globally on a timer', function (assert) {
 	var done = assert.async();
 	var clock = this.date();
