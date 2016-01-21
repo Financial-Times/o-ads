@@ -163,6 +163,7 @@ stubs.stub(pubads, 'refresh', function(slots) {
 });
 
 googletag.pubads = stubs.stub().returns(pubads);
+googletag.pubadsReady = true;
 
 googletag.cmd =  googletag.cmd || [];
 googletag.cmd.push = function(fn) {

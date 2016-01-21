@@ -304,7 +304,7 @@ var slotMethods = {
 		return this;
 	},
 	clearSlot: function(gptSlot){
-		if (window.googletag.pubads) {
+		if (window.googletag.pubadsReady && window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
 			return googletag.pubads().clear([gptSlot]);
 		} else {
