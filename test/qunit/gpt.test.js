@@ -521,6 +521,194 @@ QUnit.test('companion service can be switched off per slot', function(assert) {
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
 });
 
+QUnit.test('command queue empty when googletag is available', function (assert) {
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+
+	assert.equal(window.googletag.cmd.length, 0, 'command queue empty when googletag is available');
+});
+
+QUnit.test('setup added to command queue when googletag not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.ads.init({gpt: {companions: true}});
+
+	assert.equal(window.googletag.cmd.length, 1, 'setup added to command queue when googletag not available');
+	assert.equal(window.googletag.cmd[0].name, 'bound setup', 'setup added to command queue when googletag not available');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('defineSlot is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.defineSlot();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineSlot function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('defineOutOfPage is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.defineOutOfPage();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineOutOfPage function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('clearSlot returns false when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+
+	slot.clearSlot();
+	assert.equal(slot.clearSlot(), false, 'clearSlot function added to command queue');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('initResponsive is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.initResponsive();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'initResponsive function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('display is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.display();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'display function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setUnitName is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.setUnitName();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setUnitName function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('addServices is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.addServices();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'addServices function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setCollapseEmpty is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.setCollapseEmpty();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setCollapseEmpty function added to command queue');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setURL is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.setURL();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setURL function added to command queue');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('setTargeting is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.setTargeting();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setTargeting function added to command queue');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
+QUnit.test('updateCorrelator is added to command queue when googletag is not available', function (assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	this.ads.gpt.updateCorrelator();
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'updateCorrelator function added to command queue');
+	// reinstate mock
+	window.googletag = this.gpt;
+});
+
 QUnit.test('clear slot method calls to the ad server providers clear function', function(assert) {
 	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);

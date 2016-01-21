@@ -12,7 +12,6 @@ var config = require('../config');
 var utils = require('../utils');
 var targeting = require('../targeting');
 var breakpoints = false;
-
 /*
 //###########################
 // Initialisation handlers ##
@@ -70,6 +69,7 @@ function setup(gptConfig) {
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty(gptConfig);
 	googletag.enableServices();
+	return true;
 }
 
 /*
@@ -268,141 +268,157 @@ function onRenderEnded(event) {
 */
 var slotMethods = {
 	/**
-	  * define a GPT slot
-*/
+	* define a GPT slot
+	*/
 	defineSlot: function() {
-		this.gpt.id = this.name + '-gpt';
-		this.inner.setAttribute('id', this.gpt.id);
-		this.setUnitName();
+		window.googletag.cmd.push(function() {
+			this.gpt.id = this.name + '-gpt';
+			this.inner.setAttribute('id', this.gpt.id);
+			this.setUnitName();
 
-		if (breakpoints && utils.isObject(this.sizes)) {
-			this.initResponsive();
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
-		} else {
-			this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
-		}
-
+			if (breakpoints && utils.isObject(this.sizes)) {
+				this.initResponsive();
+				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+			} else {
+				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+			}
+		}.bind(this));
 		return this;
 	},
 	/**
-	  * creates a container for an out of page ad and then makes the ad request
-*/
+	* creates a container for an out of page ad and then makes the ad request
+	*/
 	defineOutOfPage: function() {
-		var oop = this.gpt.oop = {};
-		oop.id = this.name + '-oop';
-		this.addContainer(this.container, {id: oop.id});
+		window.googletag.cmd.push(function() {
+			var oop = this.gpt.oop = {};
+			oop.id = this.name + '-oop';
+			this.addContainer(this.container, {id: oop.id});
 
-		oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
-		.addService(googletag.pubads());
+			oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
+			.addService(googletag.pubads());
 
-		this.setTargeting(oop.slot);
-		this.setURL(oop.slot);
-		googletag.display(oop.id);
+			this.setTargeting(oop.slot);
+			this.setURL(oop.slot);
+			googletag.display(oop.id);
+		}.bind(this));
 		return this;
 	},
 	clearSlot: function(gptSlot){
-		gptSlot = gptSlot || this.gpt.slot;
-		return googletag.pubads().clear([gptSlot]);
+		if (window.googletag.pubadsReady && window.googletag.pubads) {
+			gptSlot = gptSlot || this.gpt.slot;
+			return googletag.pubads().clear([gptSlot]);
+		} else {
+			return false;
+		}
 	},
 	initResponsive: function() {
-		utils.on('breakpoint', function(event) {
-			var slot = event.detail.slot;
-			var screensize = event.detail.screensize;
+		window.googletag.cmd.push(function() {
+			utils.on('breakpoint', function(event) {
+				var slot = event.detail.slot;
+				var screensize = event.detail.screensize;
 
-			if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
-				/* istanbul ignore else  */
-				if (slot.gpt.iframe) {
-					slot.fire('refresh');
-				} else if (!this.defer) {
-					slot.display();
+				if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
+					/* istanbul ignore else  */
+					if (slot.gpt.iframe) {
+						slot.fire('refresh');
+					} else if (!this.defer) {
+						slot.display();
+					}
 				}
-			}
-		}, this.container);
+			}, this.container);
 
-		var mapping = googletag.sizeMapping();
-		Object.keys(breakpoints).forEach(function(breakpoint) {
-			if (this.sizes[breakpoint]) {
-				mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
-			}
+			var mapping = googletag.sizeMapping();
+			Object.keys(breakpoints).forEach(function(breakpoint) {
+				if (this.sizes[breakpoint]) {
+					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
+				}
+			}.bind(this));
+
+			this.gpt.sizes = mapping.build();
 		}.bind(this));
-
-		this.gpt.sizes = mapping.build();
 		return this;
 	},
 	/*
-	  *	Tell gpt to request an ad
-*/
+	*	Tell gpt to request an ad
+	*/
 	display: function() {
-		googletag.display(this.gpt.id);
+		window.googletag.cmd.push(function() {
+			googletag.display(this.gpt.id);
+		}.bind(this));
 		return this;
 	},
 	/**
-	  * Set the DFP unit name for the slot.
-*/
+	* Set the DFP unit name for the slot.
+	*/
 	setUnitName: function() {
-		var unitName;
-		var gpt = config('gpt') || {};
-		var attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
+		window.googletag.cmd.push(function() {
+			var unitName;
+			var gpt = config('gpt') || {};
+			var attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
 
-		if (utils.isNonEmptyString(attr)) {
-			unitName = attr;
-		} else if (utils.isNonEmptyString(gpt.unitName)) {
-			unitName = gpt.unitName;
-		} else {
-			var network = gpt.network;
-			var site = gpt.site;
-			var zone = gpt.zone;
-			unitName = '/' + network;
-			unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
-			unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
-		}
-
-		this.gpt.unitName = unitName;
+			if (utils.isNonEmptyString(attr)) {
+				unitName = attr;
+			} else if (utils.isNonEmptyString(gpt.unitName)) {
+				unitName = gpt.unitName;
+			} else {
+				var network = gpt.network;
+				var site = gpt.site;
+				var zone = gpt.zone;
+				unitName = '/' + network;
+				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
+				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
+			}
+			this.gpt.unitName = unitName;
+		}.bind(this));
 		return this;
 	},
 	/**
-	  * Add the slot to the pub ads service and add a companion service if configured
-*/
+	* Add the slot to the pub ads service and add a companion service if configured
+	*/
 	addServices: function(gptSlot) {
-		var gpt = config('gpt') || {};
-		gptSlot = gptSlot || this.gpt.slot;
-		gptSlot.addService(googletag.pubads());
-		if (gpt.companions && this.companion !== false) {
-			gptSlot.addService(googletag.companionAds());
-		}
-
+		window.googletag.cmd.push(function(gptSlot) {
+			var gpt = config('gpt') || {};
+			gptSlot = gptSlot || this.gpt.slot;
+			gptSlot.addService(googletag.pubads());
+			if (gpt.companions && this.companion !== false) {
+				gptSlot.addService(googletag.companionAds());
+			}
+		}.bind(this, gptSlot));
 		return this;
 	},
 
 	/**
-	  * Sets the GPT collapse empty mode for a given slot
-	  * values can be 'after', 'before', 'never'
-	  * after as in after ads have rendered is the default
-	  * true is synonymous with before
-	  * false is synonymous with never
-*/
+	* Sets the GPT collapse empty mode for a given slot
+	* values can be 'after', 'before', 'never'
+	* after as in after ads have rendered is the default
+	* true is synonymous with before
+	* false is synonymous with never
+	*/
 	setCollapseEmpty: function() {
-		var mode = this.collapseEmpty || config('collapseEmpty');
+		window.googletag.cmd.push(function() {
+			var mode = this.collapseEmpty || config('collapseEmpty');
 
-		if (mode === true || mode === 'after') {
-			this.gpt.slot.setCollapseEmptyDiv(true);
-		} else if (mode === 'before') {
-			this.gpt.slot.setCollapseEmptyDiv(true, true);
-		} else if (mode === false || mode === 'never') {
-			this.gpt.slot.setCollapseEmptyDiv(false);
-		}
-
+			if (mode === true || mode === 'after') {
+				this.gpt.slot.setCollapseEmptyDiv(true);
+			} else if (mode === 'before') {
+				this.gpt.slot.setCollapseEmptyDiv(true, true);
+			} else if (mode === false || mode === 'never') {
+				this.gpt.slot.setCollapseEmptyDiv(false);
+			}
+		}.bind(this));
 		return this;
 	},
 
 	/**
-	  * Sets page url to be sent to google
-	  * prevents later url changes via javascript from breaking the ads
-*/
+	* Sets page url to be sent to google
+	* prevents later url changes via javascript from breaking the ads
+	*/
 	setURL: function(gptSlot) {
-		gptSlot = gptSlot || this.gpt.slot;
-		var canonical = config('canonical');
-		gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
+		window.googletag.cmd.push(function() {
+			gptSlot = gptSlot || this.gpt.slot;
+			var canonical = config('canonical');
+			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
+		}.bind(this));
 		return this;
 	},
 
@@ -410,14 +426,15 @@ var slotMethods = {
 	* Adds key values from a given object to the slot targeting
 	*/
 	setTargeting: function(gptSlot) {
-		gptSlot = gptSlot || this.gpt.slot;
-		/* istanbul ignore else  */
-		if (utils.isPlainObject(this.targeting)) {
-			Object.keys(this.targeting).forEach(function(param) {
-				gptSlot.setTargeting(param, this.targeting[param]);
-			}.bind(this));
-		}
-
+		window.googletag.cmd.push(function() {
+			gptSlot = gptSlot || this.gpt.slot;
+			/* istanbul ignore else  */
+			if (utils.isPlainObject(this.targeting)) {
+				Object.keys(this.targeting).forEach(function(param) {
+					gptSlot.setTargeting(param, this.targeting[param]);
+				}.bind(this));
+			}
+		}.bind(this));
 		return this;
 	}
 };
