@@ -211,14 +211,16 @@ function onRender(event) {
 * refresh is called a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	var targeting = event.detail.targeting;
-	if (utils.isPlainObject(targeting)) {
-		Object.keys(targeting).forEach(function(name) {
-			event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
-		});
-	}
-
-	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
+	window.googletag.cmd.push(function(event) {
+		var targeting = event.detail.targeting;
+		if (utils.isPlainObject(targeting)) {
+			Object.keys(targeting).forEach(function(name) {
+				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
+			});
+		}
+		googletag.pubads().refresh([event.detail.slot.gpt.slot]);
+	}.bind(this, event));
+	return this;
 }
 
 function onResize(event) {
