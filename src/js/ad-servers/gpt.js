@@ -208,7 +208,7 @@ function onRender(event) {
 }
 
 /*
-* refresh is called a slot requests the ad be flipped
+* refresh is called when a slot requests the ad be flipped
 */
 function onRefresh(event) {
 	window.googletag.cmd.push(function(event) {
