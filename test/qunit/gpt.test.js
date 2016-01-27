@@ -717,3 +717,19 @@ QUnit.test('clear slot method calls to the ad server providers clear function', 
 	slot.clearSlot();
 	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'googletag clear method called with the correct slot');
 });
+
+QUnit.test('onRefresh is added to command queue when googletag is not available', function(assert) {
+	// delete the mock for this test
+	delete window.googletag;
+
+	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({gpt: {companions: true}});
+	var slot = this.ads.slots.initSlot('TestFormat');
+	var gptCommandsQueued = window.googletag.cmd.length;
+
+	slot.fire('refresh');
+	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'onRefresh function added to command queue');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
