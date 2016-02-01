@@ -689,7 +689,7 @@ QUnit.test('debug logs creatives', function(assert) {
 		"targeting":""
 	}];
 	var start = this.spy(this.utils.log, 'start');
- 	var table = this.spy(this.utils.log, 'table');
+	var table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();
 	assert.ok(start.calledWith('Creatives'), '`log.start` was called for `Creatives`');
 	assert.ok(table.calledWith(slotTableData), '`log.table` was called with the expected data');
