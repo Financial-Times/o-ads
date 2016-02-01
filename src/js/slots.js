@@ -45,7 +45,11 @@ function run(slots, action, name) {
 		if (utils.isFunction(slot[action])) {
 			slot[action]();
 		} else {
-			slot.fire(action);
+      if(utils.isFunction(slot.fire)){
+        slot.fire(action);
+      } else {
+        utils.log.warn('Attempted to %s on a non-slot %s', action, name);
+      }
 		}
 	} else {
 		utils.log.warn('Attempted to %s non-existant slot %s', action, name);
