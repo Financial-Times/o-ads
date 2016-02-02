@@ -243,6 +243,7 @@ module.exports.localStorage = function(data) {
 	var canMock = !!window.localStorage;
 	var fake;
 	if (canMock) {
+		// remember original local storage
 		sandbox._localStorage = window.localStorage;
 		if ($.isPlainObject(data)) {
 			var fakes = {
@@ -264,6 +265,9 @@ module.exports.localStorage = function(data) {
 			};
 
 			try {
+				// remove the original
+				delete window.localStorage;
+				// set up mock
 				Object.defineProperty(window, 'localStorage', { value: fakes, configurable: true, writable: true });
 			} catch (err) {
 				// this will fail in some browsers where you can't override host properties (Safari)
