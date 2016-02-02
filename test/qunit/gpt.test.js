@@ -365,6 +365,19 @@ QUnit.test('collapse empty', function(assert) {
 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(false), 'never mode is set in gpt');
 });
 
+
+QUnit.test('submit impression', function(assert) {
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	this.ads.slots.initSlot('delayedimpression');
+	this.ads.slots.initSlot('delayedimpression-oop');
+	var slot = this.ads.slots['delayedimpression-oop'];
+	slot.submitImpression();
+	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
+});
+
 QUnit.test('define a basic slot', function(assert) {
 	var html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);

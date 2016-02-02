@@ -207,6 +207,7 @@ function onRender(event) {
 	}
 }
 
+
 /*
 * refresh is called a slot requests the ad be flipped
 */
@@ -408,7 +409,19 @@ var slotMethods = {
 		}.bind(this));
 		return this;
 	},
-
+	submitImpression : function() {
+			function getImpressionURL(iframe) {
+				var impressionURL = "";
+				var trackingDiv = iframe.contentWindow.document.getElementById('tracking');
+				if (trackingDiv) {
+					impressionURL = trackingDiv.dataset.oAdsImpressionUrl;
+					return impressionURL;
+				}
+				else utils.log.warn('Tracking div was not found - this is set via a creative template.');
+		};
+		var impressionURL = getImpressionURL(this.gpt.iframe);
+		utils.createCORSRequest(impressionURL, 'GET', function(){utils.log.info('Impression Url requested');}, function(){utils.log.info('CORS request failed');})
+	},
 	/**
 	* Sets page url to be sent to google
 	* prevents later url changes via javascript from breaking the ads
@@ -436,7 +449,9 @@ var slotMethods = {
 			}
 		}.bind(this));
 		return this;
-	}
+	},
+
+
 };
 
 /*

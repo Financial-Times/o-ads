@@ -67,7 +67,7 @@ function slotRender(slot, color) {
 	color = color || '#800037';
 	/* jshint -W107 */
 	/* needs this to mock iframes */
-	var html = 'javascript:\'<html><body style="background:' + color + ';"></body></html>\'';
+	var html = 'javascript:\'<html><body style="background:' + color + ';"><div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div></body></html>\'';
 	slot = slots[slot];
 
 	if (slot.responsive) {
