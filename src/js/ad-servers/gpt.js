@@ -207,7 +207,6 @@ function onRender(event) {
 	}
 }
 
-
 /*
 * refresh is called a slot requests the ad be flipped
 */
