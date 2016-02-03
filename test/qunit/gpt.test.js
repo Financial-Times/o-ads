@@ -8,6 +8,8 @@ var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
 QUnit.module('gpt', {
 	beforeEach: function() {
 		this.cookies({});
+		this.server = this.server();
+		this.server.autoRespond = true;
 	}
 });
 
@@ -367,6 +369,7 @@ QUnit.test('collapse empty', function(assert) {
 
 
 QUnit.test('submit impression', function(assert) {
+	this.server.respondWith("GET", 'https://www.ft.com', [200, { "Content-Type": "application/text" }, 'OK']);
 	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
 	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
