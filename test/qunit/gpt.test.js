@@ -369,6 +369,8 @@ QUnit.test('collapse empty', function(assert) {
 
 
 QUnit.test('submit impression', function(assert) {
+	var infoLog = this.spy(this.utils.log, 'info');
+	var warnLog = this.spy(this.utils.log, 'warn');
 	this.server.respondWith("GET", 'https://www.ft.com', [200, { "Content-Type": "application/text" }, 'OK']);
 	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
 	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
@@ -379,10 +381,13 @@ QUnit.test('submit impression', function(assert) {
 	var slot = this.ads.slots['delayedimpression-oop'];
 	slot.submitImpression();
 	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
+	assert.notOk(infoLog.calledOnce, 'no warning have been logged');
+	assert.notOk(warnLog.calledOnce, 'no info notifications have been logged');
 });
 
 
 QUnit.test('catches a failure to submit an impression', function(assert) {
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
 	var log = this.spy(this.utils.log, 'info');
 	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
@@ -391,17 +396,20 @@ QUnit.test('catches a failure to submit an impression', function(assert) {
 	this.ads.slots.initSlot('delayedimpression-oop');
 	var slot = this.ads.slots['delayedimpression-oop'];
 	slot.submitImpression();
+	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
 	assert.ok(log.calledWith('CORS request to submit an impression failed'), 'message about a failed impression request is logged');
 });
 
 
 QUnit.test('logs a warning when trying to submit an impression and the URL is not present within creastive', function(assert) {
 	var log = this.spy(this.utils.log, 'warn');
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
 	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
 	var slot = this.ads.slots.initSlot('delayedimpression');
 	slot.submitImpression();
+	assert.notOk(corsUtilSpy.calledOnce, 'impression url never requested via utils');
 	assert.ok(log.calledWith('Tracking div was not found - this is set via a creative template.'), 'missing impression URL warning is logged');
 });
 
