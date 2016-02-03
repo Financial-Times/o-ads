@@ -381,6 +381,30 @@ QUnit.test('submit impression', function(assert) {
 	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
 });
 
+
+QUnit.test('catches a failure to submit an impression', function(assert) {
+	var log = this.spy(this.utils.log, 'info');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	this.ads.slots.initSlot('delayedimpression');
+	this.ads.slots.initSlot('delayedimpression-oop');
+	var slot = this.ads.slots['delayedimpression-oop'];
+	slot.submitImpression();
+	assert.ok(log.calledWith('CORS request to submit an impression failed'), 'message about a failed impression request is logged');
+});
+
+
+QUnit.test('logs a warning when trying to submit an impression and the URL is not present within creastive', function(assert) {
+	var log = this.spy(this.utils.log, 'warn');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('delayedimpression');
+	slot.submitImpression();
+	assert.ok(log.calledWith('Tracking div was not found - this is set via a creative template.'), 'missing impression URL warning is logged');
+});
+
 QUnit.test('define a basic slot', function(assert) {
 	var html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
