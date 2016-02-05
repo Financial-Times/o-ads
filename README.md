@@ -3,11 +3,8 @@
 This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Chartbeat](https://chartbeat.com/).
 
 ## Installation
-Install as a bower dependency
 
-```sh
-$ bower install o-ads --save
-```
+Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [*Integration guidelines*](docs/INTEGRATION.md)
 
 ## Browser support
 
