@@ -49,7 +49,7 @@ function GPTSlot(name, sizes, id) {
 	this.defineSizeMapping = function() {};
 	// add a mock outOfPage flag if the id contains -oop
 	if(id.indexOf('-oop') !== -1){
-		this.outOfPage = true;
+		this._testAdTrackingDiv = true;
 	}
 
 	stubs.stub(this, 'defineSizeMapping', function(mapping) {
@@ -72,8 +72,11 @@ function slotRender(slot, color) {
 	color = color || '#800037';
 	/* jshint -W107 */
 	/* needs this to mock iframes */
-	var html = 'javascript:\'<html><body style="background:' + color + ';"><div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div></body></html>\'';
+
 	slot = slots[slot];
+
+	var trackingDiv = slot.hasOwnProperty('_testAdTrackingDiv') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	var html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
 
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
@@ -91,9 +94,7 @@ function slotRender(slot, color) {
 	slot.iframe.height = size[1] || 0;
 
 	// this gets here from this file, not from Slot.ks, slot is an instance of GPTSlot
-	if(slot.outOfPage) {
-		slot.iframe.src = html;
-	}
+	slot.iframe.src = html;
 }
 
 function slotRenderEnded(slot) {
