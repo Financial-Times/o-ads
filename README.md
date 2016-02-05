@@ -186,3 +186,27 @@ oAds.init({
   ...
 });
 ```
+
+### Using 3rd Party Providers
+To use these 3rd party providers with the o-ads library you will need to have accounts with them directly. An Ad Operations team should be able to do this.
+
+#### [Krux](http://www.krux.com/)
+##### Prerequisites
+Before Krux can be enabled, the Ad Operations team should ensure that a Production and QA environment have been been created in the Krux system specific to the site. In most cases each site will have its own Production and QA environment set up in the Krux platform.
+
+##### Configuration
+#### [Chartbeat](https://chartbeat.com/about/)
+#### [Admantx](http://www.admantx.com/)
+#### [Rubicon](https://rubiconproject.com/)
+
+## Slots Functions
+
+- `clear`
+- `collapse`
+- `destroy`
+- `initSlot`
+- `refresh`
+- `uncollapse`
+
+## Targeting Functions
+
