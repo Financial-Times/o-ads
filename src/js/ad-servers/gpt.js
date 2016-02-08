@@ -411,11 +411,11 @@ var slotMethods = {
 	submitGptImpression : function() {
 		if (this.gpt.oop && this.gpt.oop.iframe) {
 			function getImpressionURL(iframe) {
-				var trackingDiv = iframe.contentWindow.document.getElementById('tracking');
-				if (trackingDiv) {
-					return trackingDiv.dataset.oAdsImpressionUrl;
+				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+				if (trackingUrlElement) {
+					return trackingUrlElement.dataset.oAdsImpressionUrl;
 				} else {
-					utils.log.warn('Tracking div was not found - this is set via a creative template.');
+					utils.log.warn('Impression URL not found, this is set via a creative template.');
 					return false;
 				}
 			};

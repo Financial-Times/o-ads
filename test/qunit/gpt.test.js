@@ -403,7 +403,7 @@ QUnit.test('logs a warning when trying to submit an impression and the URL is no
 	var slot = this.ads.slots.initSlot('delayedimpression-missing-tracking-div');
 	slot.submitGptImpression();
 	assert.notOk(corsUtilSpy.calledOnce, 'impression url never requested via utils');
-	assert.ok(log.calledWith('Tracking div was not found - this is set via a creative template.'), 'missing impression URL warning is logged');
+	assert.ok(log.calledWith('Impression URL not found, this is set via a creative template.'), 'missing impression URL warning is logged');
 });
 
 QUnit.test('logs a warning when trying to submit an impression on a non-oop slot', function(assert) {
