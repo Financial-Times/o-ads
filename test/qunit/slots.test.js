@@ -5,6 +5,8 @@
 QUnit.module('Slots', {
 	beforeEach: function() {
 		window.scrollTo(0, 0);
+		this.server = this.server();
+		this.server.autoRespond = true;
 	},
 
 	afterEach: function() {
@@ -540,6 +542,104 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
 	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.clear will clear a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
+	var clearSpy = this.spy(slot, 'clear');
+	this.ads.slots.clear('clear-test');
+	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+});
+
+QUnit.test('Slots.clear will call clear slot method from the ad server provider when one is present', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
+	// provide mock method on slot (usually responosbility of ad server provider)
+	slot.clearSlot = function(){};
+	var clearSpy = this.spy(slot, 'clear');
+	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	this.ads.slots.clear('clear-test');
+	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+	assert.ok(clearSlotSpy.calledOnce, 'clear slot method has been called on a slot');
+});
+
+QUnit.test('Slots.clear will clear multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.clear(['clear-test-1', 'clear-test-2']);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.clear will clear multiple slots', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
+	var clearSpy1 = this.spy(slot1, 'clear');
+	var clearSpy2 = this.spy(slot2, 'clear');
+	this.ads.slots.clear();
+	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
+	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
+	assert.ok(clearSpy1.calledOnce, 'clear method has been called on the first slot');
+	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
+});
+
+QUnit.test('Slots.submitImpression will submit and impression for a single slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
+	var slot = this.ads.slots.initSlot(node);
+	var submitSpy = this.spy(slot, 'submitImpression');
+	slot.submitGptImpression = function(){};
+	var submitGptSpy = this.spy(slot, 'submitGptImpression');
+	this.ads.slots.submitImpression('delayedimpression');
+	assert.ok(submitSpy.calledOnce, 'the submitImpression method has been called on a slot');
+	assert.ok(submitGptSpy.calledOnce, 'the gpt submitGptImpression method has been called');
+});
+
+QUnit.test('Slots.submitImpression will submit and impression for a single slot', function(assert) {
+	var node1 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-1" data-o-ads-formats="MediumRectangle"></div>');
+	var node2 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-2" data-o-ads-formats="MediumRectangle"></div>');
+	var node3 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-3" data-o-ads-formats="MediumRectangle"></div>');
+	var slot1 = this.ads.slots.initSlot(node1);
+	var slot2 = this.ads.slots.initSlot(node2);
+	var slot3 = this.ads.slots.initSlot(node3);
+	var submitSpy1 = this.spy(slot1, 'submitImpression');
+	var submitSpy2 = this.spy(slot2, 'submitImpression');
+	var submitSpy3 = this.spy(slot3, 'submitImpression');
+	this.ads.slots.submitImpression();
+	this.ads.slots.submitImpression(['delayedimpression-1', 'delayedimpression-2']);
+	assert.ok(submitSpy1.calledTwice, 'the submitImpression method has been called twice on slot1');
+	assert.ok(submitSpy2.calledTwice, 'the submitImpression method has been called twice on slot2');
+  assert.ok(submitSpy3.calledOnce, 'the submitImpression method has been called once on slot3');
+});
+
+QUnit.test('Can init a private slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.slots.initSlot(node, false);
+	assert.notOk(this.ads.slots['delayedimpression'], 'the delayedimpression slot is not public');
+});
+
+QUnit.test('Can init a private slot', function(assert) {
+	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['delayedimpression'], 'the delayedimpression slot is public');
+	assert.notOk(this.ads.slots['delayedimpression-oop'], 'the delayedimpression out of page slot is not public');
 });
 
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {

@@ -48,7 +48,7 @@ function GPTSlot(name, sizes, id) {
 	this.set = stubs.stub().returns(this);
 	this.defineSizeMapping = function() {};
 	// add a mock outOfPage flag if the id contains -oop
-	if(id.indexOf('-oop') !== -1){
+	if(id.indexOf('-oop') !== -1 && id !== 'delayedimpression-missing-tracking-div-oop'){
 		this._testAdTrackingDiv = true;
 	}
 

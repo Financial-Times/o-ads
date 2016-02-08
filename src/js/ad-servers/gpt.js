@@ -408,28 +408,32 @@ var slotMethods = {
 		}.bind(this));
 		return this;
 	},
-	submitImpression : function() {
-		function getImpressionURL(iframe) {
-			var trackingDiv = iframe.contentWindow.document.getElementById('tracking');
-			if (trackingDiv) {
-				return trackingDiv.dataset.oAdsImpressionUrl;
-			} else {
-				utils.log.warn('Tracking div was not found - this is set via a creative template.');
-				return false;
-			}
-		};
-
-		var impressionURL = getImpressionURL(this.gpt.iframe);
-		/* istanbul ignore else  */
-		if(impressionURL){
-			utils.createCORSRequest(impressionURL, 'GET',
-				function(){
-					utils.log.info('Impression Url requested');
-				},
-				function(){
-					utils.log.info('CORS request to submit an impression failed');
+	submitGptImpression : function() {
+		if (this.gpt.oop && this.gpt.oop.iframe) {
+			function getImpressionURL(iframe) {
+				var trackingDiv = iframe.contentWindow.document.getElementById('tracking');
+				if (trackingDiv) {
+					return trackingDiv.dataset.oAdsImpressionUrl;
+				} else {
+					utils.log.warn('Tracking div was not found - this is set via a creative template.');
+					return false;
 				}
-			);
+			};
+			var impressionURL = getImpressionURL(this.gpt.oop.iframe);
+			/* istanbul ignore else  */
+			if(impressionURL){
+				utils.createCORSRequest(impressionURL, 'GET',
+					function(){
+						utils.log.info('Impression Url requested');
+					},
+					function(){
+						utils.log.info('CORS request to submit an impression failed');
+					}
+				);
+			}
+		}
+		else {
+			utils.log.warn('Attempting to call submitImpression on a non-oop slot');
 		}
 	},
 	/**
@@ -460,8 +464,6 @@ var slotMethods = {
 		}.bind(this));
 		return this;
 	},
-
-
 };
 
 /*
