@@ -8,6 +8,8 @@ var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
 QUnit.module('gpt', {
 	beforeEach: function() {
 		this.cookies({});
+		this.server = this.server();
+		this.server.autoRespond = true;
 	}
 });
 
@@ -363,6 +365,57 @@ QUnit.test('collapse empty', function(assert) {
 
 	this.ads.init({gpt: {collapseEmpty: 'never'}});
 	assert.ok(googletag.pubads().collapseEmptyDivs.calledWith(false), 'never mode is set in gpt');
+});
+
+QUnit.test('submit impression', function(assert) {
+	var infoLog = this.spy(this.utils.log, 'info');
+	var warnLog = this.spy(this.utils.log, 'warn');
+	this.server.respondWith("GET", 'https://www.ft.com', [200, { "Content-Type": "application/text" }, 'OK']);
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('delayedimpression');
+	slot.submitGptImpression();
+	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
+	assert.notOk(infoLog.calledOnce, 'no warning have been logged');
+	assert.notOk(warnLog.calledOnce, 'no info notifications have been logged');
+});
+
+QUnit.test('catches a failure to submit an impression', function(assert) {
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
+	var log = this.spy(this.utils.log, 'info');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('delayedimpression');
+	slot.submitGptImpression();
+	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
+	assert.ok(log.calledWith('CORS request to submit an impression failed'), 'message about a failed impression request is logged');
+});
+
+QUnit.test('logs a warning when trying to submit an impression and the URL is not present within creative', function(assert) {
+	var log = this.spy(this.utils.log, 'warn');
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
+	var html = '<div data-o-ads-name="delayedimpression-missing-tracking-div" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('delayedimpression-missing-tracking-div');
+	slot.submitGptImpression();
+	assert.notOk(corsUtilSpy.calledOnce, 'impression url never requested via utils');
+	assert.ok(log.calledWith('Impression URL not found, this is set via a creative template.'), 'missing impression URL warning is logged');
+});
+
+QUnit.test('logs a warning when trying to submit an impression on a non-oop slot', function(assert) {
+	var log = this.spy(this.utils.log, 'warn');
+	var corsUtilSpy = this.spy(this.utils, 'createCORSRequest');
+	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(html);
+	this.ads.init();
+	var slot = this.ads.slots.initSlot('delayedimpression');
+	slot.submitGptImpression();
+	assert.notOk(corsUtilSpy.calledOnce, 'impression url never requested via utils');
+	assert.ok(log.calledWith('Attempting to call submitImpression on a non-oop slot'), 'catches attempt to call submit impression on a non-oop slot');
 });
 
 QUnit.test('define a basic slot', function(assert) {

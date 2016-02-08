@@ -410,7 +410,34 @@ var slotMethods = {
 		}.bind(this));
 		return this;
 	},
-
+	submitGptImpression : function() {
+		if (this.gpt.oop && this.gpt.oop.iframe) {
+			function getImpressionURL(iframe) {
+				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+				if (trackingUrlElement) {
+					return trackingUrlElement.dataset.oAdsImpressionUrl;
+				} else {
+					utils.log.warn('Impression URL not found, this is set via a creative template.');
+					return false;
+				}
+			};
+			var impressionURL = getImpressionURL(this.gpt.oop.iframe);
+			/* istanbul ignore else  */
+			if(impressionURL){
+				utils.createCORSRequest(impressionURL, 'GET',
+					function(){
+						utils.log.info('Impression Url requested');
+					},
+					function(){
+						utils.log.info('CORS request to submit an impression failed');
+					}
+				);
+			}
+		}
+		else {
+			utils.log.warn('Attempting to call submitImpression on a non-oop slot');
+		}
+	},
 	/**
 	* Sets page url to be sent to google
 	* prevents later url changes via javascript from breaking the ads
@@ -438,7 +465,7 @@ var slotMethods = {
 			}
 		}.bind(this));
 		return this;
-	}
+	},
 };
 
 /*

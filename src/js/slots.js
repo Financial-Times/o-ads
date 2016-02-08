@@ -97,12 +97,21 @@ Slots.prototype.destroy = function(names) {
 	});
 };
 
+
+/**
+* Given a slot name will submit a delayed impression for the slot
+*/
+Slots.prototype.submitImpression = function(name) {
+	return invokeMethodOnSlots.call(this, name, 'submitImpression');
+};
+
 /**
 * Confirms a container in the page exists and creates a Slot object
 */
-Slots.prototype.initSlot = function(container) {
+Slots.prototype.initSlot = function(container, isPublic) {
 	// if container is a string this is a legacy implementation using ids
 	// find the element and remove the ID in favour of a data attribute
+  isPublic = (isPublic === false ? false : true);
 	if (utils.isString(container)) {
 		container = document.getElementById(container) || document.querySelector('[data-o-ads-name="' + container + '"]');
 		if (container && container.id) {
@@ -122,10 +131,15 @@ Slots.prototype.initSlot = function(container) {
 
 	var slot = new Slot(container, screensize);
 	/* istanbul ignore else  */
-	if (slot && !this[slot.name]) {
+	if (slot && !this[slot.name] && isPublic) {
 		this[slot.name] = slot;
 		slot.elementvis = elementvis.track(slot.container);
 		slot.fire('ready');
+
+    if (slot.outOfPage && slot.gpt && slot.gpt.hasOwnProperty('oop')) {
+      slot.childSlot = this.initSlot(slot.name+ '-oop', false);
+    }
+
 	} else if (this[slot.name]) {
 		utils.log.error('slot %s is already defined!', slot.name);
 	}

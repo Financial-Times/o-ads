@@ -30,6 +30,7 @@ googletag.companionAds = stubs.stub().returns({setRefreshUnfilledSlots: stubs.st
 googletag.enableServices = stubs.stub();
 
 function GPTSlot(name, sizes, id) {
+	// @todo: we need to make sure the config flags from Slot get propagated here, as we are mocking slots and whole slot itself withing this mock
 	this.name = name;
 	if (typeof sizes === 'string') {
 		// out of page slot
@@ -46,6 +47,10 @@ function GPTSlot(name, sizes, id) {
 	this.setTargeting = stubs.stub().returns(this);
 	this.set = stubs.stub().returns(this);
 	this.defineSizeMapping = function() {};
+	// add a mock outOfPage flag if the id contains -oop
+	if(id.indexOf('-oop') !== -1 && id !== 'delayedimpression-missing-tracking-div-oop'){
+		this._testAdTrackingDiv = true;
+	}
 
 	stubs.stub(this, 'defineSizeMapping', function(mapping) {
 		this.sizes = mapping;
@@ -67,8 +72,11 @@ function slotRender(slot, color) {
 	color = color || '#800037';
 	/* jshint -W107 */
 	/* needs this to mock iframes */
-	var html = 'javascript:\'<html><body style="background:' + color + ';"></body></html>\'';
+
 	slot = slots[slot];
+
+	var trackingDiv = slot.hasOwnProperty('_testAdTrackingDiv') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	var html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
 
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
@@ -84,6 +92,8 @@ function slotRender(slot, color) {
 
 	slot.iframe.width = size[0] || 0;
 	slot.iframe.height = size[1] || 0;
+
+	// this gets here from this file, not from Slot.ks, slot is an instance of GPTSlot
 	slot.iframe.src = html;
 }
 

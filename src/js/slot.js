@@ -273,9 +273,25 @@ Slot.prototype.clear = function() {
 	if (utils.isFunction(this['clearSlot'])) {
 		this.clearSlot();
 	}
+
+	/* istanbul ignore else  */
+	if(this.hasOwnProperty('childSlot')){
+		this.childSlot.clear();
+	}
+
 	return this;
 };
 
+/**
+* call the ad server impression URL for an out of page slot if it has been configured correctly for delayed impressions
+*/
+Slot.prototype.submitImpression = function() {
+	/* istanbul ignore else  */
+	if (utils.isFunction(this['submitGptImpression'])) {
+		this.submitGptImpression();
+	}
+	return this;
+};
 
 /**
 *	fire an event on the slot
