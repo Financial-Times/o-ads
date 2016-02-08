@@ -273,6 +273,12 @@ Slot.prototype.clear = function() {
 	if (utils.isFunction(this['clearSlot'])) {
 		this.clearSlot();
 	}
+
+	/* istanbul ignore else  */
+	if(this.hasOwnProperty('childSlot')){
+		this.childSlot.clear();
+	}
+
 	return this;
 };
 

@@ -137,7 +137,7 @@ Slots.prototype.initSlot = function(container, isPublic) {
 		slot.fire('ready');
 
     if (slot.outOfPage && slot.gpt && slot.gpt.hasOwnProperty('oop')) {
-      slot.childSlot =  this.initSlot(slot.name+ '-oop', false);
+      slot.childSlot = this.initSlot(slot.name+ '-oop', false);
     }
 
 	} else if (this[slot.name]) {
