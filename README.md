@@ -15,9 +15,7 @@ Safari   | 7+                 | 7+
 IE       | 8+                 | 8+
 
 ## Requirements
-For basic use a DFP account with google is required, each targeting/tracking supplier will require their own configuration and setup.
-
-Having a sales model is important! See this document for pre-requisite steps required for adding advertising to your product:    [https://docs.google.com/a/ft.com/document/d/1a9Dyi-4VzN_gzhYn6scVLgKICEP1AEPR7A7-shefklU/edit](https://docs.google.com/a/ft.com/document/d/1a9Dyi-4VzN_gzhYn6scVLgKICEP1AEPR7A7-shefklU/edit)
+For basic use, a DFP account with Google is required, each targeting/tracking supplier will require their own configuration and setup.
 
 ## Documentation
 ### Quick start
