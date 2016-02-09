@@ -1,7 +1,7 @@
-#### Responsive Slots
+# Responsive Slots
 Slots can be configured to react to the viewport size by either hiding the ad or requesting an ad of a different size. Responsive slots react to the window being resized as long as the HTML is well formed. In various browsers the resize event can fail to fire if a doctype is not included.
 
-##### Configuration
+## Configuration
 
 ```js
 oAds.init({

@@ -1,4 +1,4 @@
-#### Video
+## Video
 The o-ads library supports video pre-roll ads. See [Google DFP's documentation on video advertising](https://support.google.com/dfp_premium/answer/1711021?hl=en). It is enabled by adding to your configuration object.
 
 ```js
@@ -13,7 +13,7 @@ This setting allows the ability to use `buildURLForVideo()`
 
 --------------------------------------------------------------------------------
 
-##### `oAds#buildURLForVideo(zone, pos, kv)`
+### `oAds#buildURLForVideo(zone, pos, kv)`
 Request a url in a format suitable to pass to compatible video players for them to retrieve scheduled ad serving data in the [VAST (Video Ad Serving Template)](http://www.iab.com/guidelines/digital-video-ad-serving-template-vast-3-0/) format.
 
 Parameter      | Description
@@ -28,8 +28,9 @@ Returns an object with variables suitable for use in many different players
 
 Currently players with IMA3 (Google's Interactive Media Ads) plugins are supported. Many video players support this functionality including brightcove (out of the box) and VideoJS (with plugin)
 
-## Configuration guides for [brightcove](https://support.brightcove.com/en/video-cloud/docs/using-dfp-ima-3-ad-source) and [VideoJS](http://googleadsdeveloper.blogspot.co.uk/2014/08/introducing-ima-sdk-plugin-for-videojs.html)
-### Companions
+### Configuration guides for [brightcove](https://support.brightcove.com/en/video-cloud/docs/using-dfp-ima-3-ad-source) and [VideoJS](http://googleadsdeveloper.blogspot.co.uk/2014/08/introducing-ima-sdk-plugin-for-videojs.html)
+
+## Companions
 The o-ads library integrates with Google DFP's Companion Service for video ads. The Companion Ads service allows the video pre-roll ad to to be booked as a master ad which is able to pull in companion ads into the other ads slots on the page.
 
 The cCompanion Ads service is enabled via config settings by setting the `companions` config property to `true`.
