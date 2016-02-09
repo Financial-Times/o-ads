@@ -3,8 +3,7 @@
 This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Chartbeat](https://chartbeat.com/).
 
 ## Installation
-
-Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [*Integration guidelines*](docs/INTEGRATION.md)
+Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](docs/INTEGRATION.md)
 
 ## Browser support
 
@@ -49,8 +48,10 @@ oAds.init({
   }
 });
 ```
+
 ### Additional Configuration
 We currently support these additional features
+- Targeting
 - Responsive slots
 - Video advertising
 - Companion ads
@@ -62,6 +63,11 @@ As well as these 3rd party suppliers
 - Rubicon
 
 In order to use these features you will need to add to your configuration object.
+
+#### Targeting
+Additional targeting can be added at either the individual slot level or by adding  a `dfp_targeting` key to the config object.
+
+Targeting is passed, as a semicolon separated key/value string (e.g `'some=test;targeting=params'`), to either the config object using the key `dfp_targeting` or to an individual slot by adding it as a `data-o-ads-targeting` attribute.
 
 #### Responsive Slots
 Slots can be configured to react to the viewport size by either hiding the ad or requesting an ad of a different size. Responsive slots react to the window being resized as long as the HTML is well formed. In various browsers the resize event can fail to fire if a doctype is not included.
@@ -192,12 +198,30 @@ To use these 3rd party providers with the o-ads library you will need to have ac
 Before Krux can be enabled, the Ad Operations team should ensure that a Production and QA environment have been been created in the Krux system specific to the site. In most cases each site will have its own Production and QA environment set up in the Krux platform.
 
 ##### Configuration
+Enabling and configuring Krux is done by passing a `krux` object to the config with the krux id and attributes. For example
+
+```js
+oAds.init({
+  ...
+  krux: {
+    id: 'XXXXXXXX',
+    attributes: {
+      user: {},
+      page: {},
+      custom: {}
+    }
+    }
+  }
+  ...
+});
+```
+
+The attributes object can take user, page and custom data objects to send to Krux.
+
 #### [Chartbeat](https://chartbeat.com/about/)
 #### [Admantx](http://www.admantx.com/)
 #### [Rubicon](https://rubiconproject.com/)
-
 ## Slots Functions
-
 - `clear`
 - `collapse`
 - `destroy`
@@ -205,5 +229,44 @@ Before Krux can be enabled, the Ad Operations team should ensure that a Producti
 - `refresh`
 - `uncollapse`
 
-## Targeting Functions
+### `oAds.slots#clear(slot)`
+Takes an array of slot names or a slot name and clears those slots/slot.
 
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#collapse(slot)`
+Takes an array of slot names or a slot name and collapses those slots/slot.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#destroy(slot)`
+Takes an array of slot names or a slot name and destroys those slots/slot and remove any reference of them.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#initSlot(container)`
+Confirms an ad container exists in the page and creates a Slot object.
+
+Parameter | Description
+--------- | ----------------------------------------------------------------------------------------------------------------------
+container | html element where Ad Slot is to be created. Can be passed a string of the `data-o-ads-name` attribute on the element.
+
+### `oAds.slots#refresh(slot)`
+Takes an array of slot names or a slot name and refreshes those slots/slot.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#uncollapse(slot)`
+Takes an array of slot names or a slot name and uncollapses those slots/slot.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
