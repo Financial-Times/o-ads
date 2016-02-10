@@ -49,21 +49,57 @@ oAds.init({
 });
 ```
 
-### Additional Configuration
-We currently support these additional features
-- Targeting
-- Responsive slots
-- Video advertising with companion ads
+## API
+### `oAds.slots#clear(slot)`
+Takes an array of slot names or a slot name and clears those slots/slot. If no argument is passed it will invoke the function on all slots it has reference to.
 
-As well as these 3rd party suppliers
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#collapse(slot)`
+Takes an array of slot names or a slot name and collapses those slots/slot. If no argument is passed it will invoke the function on all slots it has reference to.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#destroy(slot)`
+Takes an array of slot names or a slot name and destroys those slots/slot and remove any reference of them. If no argument is passed it will invoke the function on all slots it has reference to.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#initSlot(container)`
+Confirms an ad container exists in the page and creates a Slot object.
+
+Parameter | Description
+--------- | ----------------------------------------------------------------------------------------------------------------------
+container | html element where Ad Slot is to be created. Can be passed a string of the `data-o-ads-name` attribute on the element.
+
+### `oAds.slots#refresh(slot)`
+Takes an array of slot names or a slot name and refreshes those slots/slot. If no argument is passed it will invoke the function on all slots it has reference to.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+### `oAds.slots#uncollapse(slot)`
+Takes an array of slot names or a slot name and uncollapses those slots/slot. If no argument is passed it will invoke the function on all slots it has reference to.
+
+Parameter | Description
+--------- | --------------------------------
+slot      | slot name or array of slot names
+
+## Additional Configuration
+We currently support these additional features
+- [Targeting](docs/TARGETING_CONFIG.md)
+- [Responsive Slots](docs/RESPONSIVE_SLOTS.md)
+- [Video and Companion Advertising](docs/VIDEO_CONFIG.md)
+
+As well as these [3rd party providers](docs/DATA_PROVIDERS.md)
 - Krux
 - Chartbeat
 - Admantx
 - Rubicon
-
-In order to use these features you will need to add to your configuration object. This is documented here;
-- [Targeting](docs/TARGETING_CONFIG.md)
-- [Responsive Slots](docs/RESPONSIVE_SLOTS.md)
-- [Video and Companion Advertising](docs/VIDEO_CONFIG.md)
-- [Using 3rd Party Providers](docs/DATA_PROVIDERS.md)
-- [Slots API](docs/SLOTS_API.md)
