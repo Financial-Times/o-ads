@@ -25,10 +25,12 @@ Include o-ads in the build and and add the following markup to the page:
 <div class="o-ads" data-o-ads-gpt-unit-name="/6355419/Travel" data-o-ads-formats="MediumRectangle"></div>
 ```
 
-o-ads will initialise on `o.DOMContentLoaded` and request a 300x250 (see Formats below) advert targeted from googles test network.
+On initialisation o-ads will request a 300x250 (see Formats below) advert targeted from Google's test network.
 
 ### Initialization
 The o-ads `init()` method takes a JSON object as it's only argument. The configuration object sets various properties on o-ads.
+
+**Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded`.
 
 This example demonstrates instantiating o-ads, setting the network code and ad formats (position name & sizes) via the configuration object.
 
@@ -60,7 +62,6 @@ As well as these 3rd party suppliers
 - Rubicon
 
 In order to use these features you will need to add to your configuration object. This is documented here;
-
 - [Targeting](docs/TARGETING_CONFIG.md)
 - [Responsive Slots](docs/RESPONSIVE_SLOTS.md)
 - [Video and Companion Advertising](docs/VIDEO_CONFIG.md)
