@@ -42,8 +42,3 @@ oAds.init({
 });
 
 ```
-
-## [Admantx](http://www.admantx.com/)
-:construction: Under construction :construction:
-## [Rubicon](https://rubiconproject.com/)
-:construction: Under construction :construction:
