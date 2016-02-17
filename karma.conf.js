@@ -34,7 +34,7 @@ var options = {
 		}
 	},
 	browsers: ['Chrome_with_flags'],
-	browserify: { transform: ['debowerify', 'browserify-swap'] },
+	browserify: { transform: ['babelify', 'debowerify', 'browserify-swap'] },
 	reporters: ['progress'],
 	preprocessors: {
 		'main.js': ['browserify'],
