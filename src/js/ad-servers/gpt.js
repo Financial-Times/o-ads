@@ -179,15 +179,11 @@ function onReady(slotMethods, event) {
 
 		// setup the gpt configuration the ad
 		googletag.cmd.push(function(slot) {
-			slot.defineSlot()
+			slot.defineSlot(slot.outOfPage)
 			.addServices()
 			.setCollapseEmpty()
 			.setTargeting()
 			.setURL();
-
-			if (slot.outOfPage) {
-				slot.defineOutOfPage();
-			}
 
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
@@ -208,19 +204,17 @@ function onRender(event) {
 }
 
 /*
-* refresh is called when a slot requests the ad be flipped
+* refresh is called a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	window.googletag.cmd.push(function(event) {
-		var targeting = event.detail.targeting;
-		if (utils.isPlainObject(targeting)) {
-			Object.keys(targeting).forEach(function(name) {
-				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
-			});
-		}
-		googletag.pubads().refresh([event.detail.slot.gpt.slot]);
-	}.bind(this, event));
-	return this;
+	var targeting = event.detail.targeting;
+	if (utils.isPlainObject(targeting)) {
+		Object.keys(targeting).forEach(function(name) {
+			event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
+		});
+	}
+
+	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
 }
 
 function onResize(event) {
@@ -272,36 +266,23 @@ var slotMethods = {
 	/**
 	* define a GPT slot
 	*/
-	defineSlot: function() {
+	defineSlot: function(isOutOfPage) {
+		isOutOfPage = (isOutOfPage === false ? false : true);
 		window.googletag.cmd.push(function() {
 			this.gpt.id = this.name + '-gpt';
 			this.inner.setAttribute('id', this.gpt.id);
 			this.setUnitName();
-
-			if (breakpoints && utils.isObject(this.sizes)) {
-				this.initResponsive();
-				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
-			} else {
-				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+			if (!isOutOfPage) {
+				if (breakpoints && utils.isObject(this.sizes)) {
+					this.initResponsive();
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+				} else {
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+				}
 			}
-		}.bind(this));
-		return this;
-	},
-	/**
-	* creates a container for an out of page ad and then makes the ad request
-	*/
-	defineOutOfPage: function() {
-		window.googletag.cmd.push(function() {
-			var oop = this.gpt.oop = {};
-			oop.id = this.name + '-oop';
-			this.addContainer(this.container, {id: oop.id});
-
-			oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
-			.addService(googletag.pubads());
-
-			this.setTargeting(oop.slot);
-			this.setURL(oop.slot);
-			googletag.display(oop.id);
+			else {
+				this.gpt.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, this.gpt.id);
+			}
 		}.bind(this));
 		return this;
 	},
@@ -417,7 +398,7 @@ var slotMethods = {
 				if (trackingUrlElement) {
 					return trackingUrlElement.dataset.oAdsImpressionUrl;
 				} else {
-					utils.log.warn('Impression URL not found, this is set via a creative template.');
+utils.log.warn('Impression URL not found, this is set via a creative template.');
 					return false;
 				}
 			};

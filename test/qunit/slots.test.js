@@ -584,18 +584,18 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
 });
 
-QUnit.test('Slots.clear will clear a single slot and a child slot if one exists', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
-	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
-	var clearSpy = this.spy(slot, 'clear');
-	var clearChildSpy = this.spy(slot.childSlot, 'clear');
-	this.ads.slots.clear('clear-test');
-	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
-	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
-	assert.ok(clearChildSpy.calledOnce, 'clear method has been called on a child slot');
-});
+// QUnit.test('Slots.clear will clear a single slot and a child slot if one exists', function(assert) {
+// 	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
+// 	this.ads.init();
+// 	var slot = this.ads.slots.initSlot(node);
+// 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
+// 	var clearSpy = this.spy(slot, 'clear');
+// 	var clearChildSpy = this.spy(slot.childSlot, 'clear');
+// 	this.ads.slots.clear('clear-test');
+// 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
+// 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+// 	assert.ok(clearChildSpy.calledOnce, 'clear method has been called on a child slot');
+// });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
