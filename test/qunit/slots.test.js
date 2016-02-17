@@ -647,13 +647,13 @@ QUnit.test('Can init a private slot', function(assert) {
 	assert.notOk(this.ads.slots['delayedimpression'], 'the delayedimpression slot is not public');
 });
 
-QUnit.test('Can init a private slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.init();
-	this.ads.slots.initSlot(node);
-	assert.ok(this.ads.slots['delayedimpression'], 'the delayedimpression slot is public');
-	assert.notOk(this.ads.slots['delayedimpression-oop'], 'the delayedimpression out of page slot is not public');
-});
+// QUnit.test('Can init a private slot', function(assert) {
+// 	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
+// 	this.ads.init();
+// 	this.ads.slots.initSlot(node);
+// 	assert.ok(this.ads.slots['delayedimpression'], 'the delayedimpression slot is public');
+// 	assert.notOk(this.ads.slots['delayedimpression-oop'], 'the delayedimpression out of page slot is not public');
+// });
 
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
 	var warnSpy = this.spy(this.utils.log, 'warn');
