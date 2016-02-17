@@ -26,6 +26,20 @@ QUnit.test('init', function(assert) {
 	window.googletag = this.gpt;
 });
 
+QUnit.test('broadcast an event when GPT fails to load', function(assert) {
+	this.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, fn, errorFn) {
+		errorFn('some error');
+	});
+
+	this.spy(this.utils, 'broadcast');
+
+	this.ads.init();
+
+	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadError', 'some error'));
+
+});
+
 QUnit.test('set page targeting', function(assert) {
 	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
