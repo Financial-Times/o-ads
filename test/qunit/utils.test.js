@@ -363,6 +363,28 @@ QUnit.test('attach method failed', function(assert) {
 	}, 200);
 });
 
+QUnit.test('attach method failedi with only an error callback specified', function(assert) {
+	var done = assert.async();
+	this.ads.utils.attach.restore();
+
+	// initial number of scripts
+	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
+
+	var tag = this.ads.utils.attach('test.js', true, null, errorCallback);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+
+		assert.ok(errorCallback.calledOnce, 'an error callback has been triggered');
+		assert.notOk(successCallback.called, 'a success callback has not been triggered');
+		done();
+	}, 200);
+});
+
 
 QUnit.test('isScriptAlreadyLoaded method when script is not present', function(assert) {
 	var url = 'http://local.ft.com/null.js';

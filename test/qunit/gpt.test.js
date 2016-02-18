@@ -1,5 +1,5 @@
 /* jshint globalstrict: true, browser: true */
-/* globals QUnit: false, googletag: false */
+/* globals QUnit: false, googletag: false, sinon: false */
 
 'use strict';
 var htmlstart = '<div data-o-ads-name="';
@@ -18,12 +18,26 @@ QUnit.test('init', function(assert) {
 	delete window.googletag;
 
 	this.ads.init();
-	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true), 'google publisher tag library is attached to the page');
+	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true, null, sinon.match.typeOf('function')), 'google publisher tag library is attached to the page');
 	assert.ok(window.googletag, 'placeholder googletag object is created');
 	assert.ok(window.googletag.cmd.length, 'library setup is added to the command queue');
 
 	// reinstate mock
 	window.googletag = this.gpt;
+});
+
+QUnit.test('broadcast an event when GPT fails to load', function(assert) {
+	this.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, fn, errorFn) {
+		errorFn('some error');
+	});
+
+	this.spy(this.utils, 'broadcast');
+
+	this.ads.init();
+
+	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadError', 'some error'));
+
 });
 
 QUnit.test('set page targeting', function(assert) {
