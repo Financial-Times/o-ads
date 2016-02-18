@@ -307,19 +307,18 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 					hasRun = true;
 				}
 			};
-			/* istanbul ignore else  */
-			if (utils.isFunction(errorcb)) {
-				tag.onerror = function() {
-					/* istanbul ignore else  */
-					if (!hasRun) {
-						errorcb();
-						hasRun = true;
-					}
-				};
-			}
 		}
 	}
 
+	if (utils.isFunction(errorcb)) {
+		tag.onerror = function() {
+			/* istanbul ignore else  */
+			if (!hasRun) {
+				errorcb();
+				hasRun = true;
+			}
+		};
+	}
 	// Use insert before, append child has issues with script tags in some browsers.
 	node.parentNode.insertBefore(tag, node);
 	return tag;
