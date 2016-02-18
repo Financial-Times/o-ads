@@ -310,6 +310,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 		}
 	}
 
+	/* istanbul ignore else  */
 	if (utils.isFunction(errorcb)) {
 		tag.onerror = function() {
 			/* istanbul ignore else  */
