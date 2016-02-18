@@ -389,8 +389,8 @@ QUnit.test('submit impression', function(assert) {
 	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
-//	var slot = this.ads.slots.initSlot('delayedimpression');
-//	slot.submitGptImpression();
+	var slot = this.ads.slots.initSlot('delayedimpression');
+	slot.submitGptImpression();
 	assert.ok(corsUtilSpy.calledOnce, 'impression url requested via utils');
 	assert.notOk(infoLog.calledOnce, 'no warning have been logged');
 	assert.notOk(warnLog.calledOnce, 'no info notifications have been logged');
@@ -440,7 +440,7 @@ QUnit.test('define a basic slot', function(assert) {
 	this.ads.slots.initSlot('no-responsive-mpu');
 	var gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
 	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
-	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is not called');
 });
 
 QUnit.test('define responsive slot', function(assert) {

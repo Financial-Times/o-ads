@@ -641,11 +641,11 @@ QUnit.test('Slots.submitImpression will submit and impression for a single slot'
   assert.ok(submitSpy3.calledOnce, 'the submitImpression method has been called once on slot3');
 });
 
-QUnit.test('Can init a private slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.slots.initSlot(node, false);
-	assert.notOk(this.ads.slots['delayedimpression'], 'the delayedimpression slot is not public');
-});
+// QUnit.test('Can init a private slot', function(assert) {
+// 	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
+// 	this.ads.slots.initSlot(node, false);
+// 	assert.notOk(this.ads.slots['delayedimpression'], 'the delayedimpression slot is not public');
+// });
 
 // QUnit.test('Can init a private slot', function(assert) {
 // 	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');

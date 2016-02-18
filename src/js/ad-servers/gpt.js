@@ -181,7 +181,7 @@ function onReady(slotMethods, event) {
 
 		// setup the gpt configuration the ad
 		googletag.cmd.push(function(slot) {
-			slot.defineSlot(slot.outOfPage)
+			slot.defineSlot()
 			.addServices()
 			.setCollapseEmpty()
 			.setTargeting()
@@ -206,17 +206,19 @@ function onRender(event) {
 }
 
 /*
-* refresh is called a slot requests the ad be flipped
+* refresh is called when a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	var targeting = event.detail.targeting;
-	if (utils.isPlainObject(targeting)) {
-		Object.keys(targeting).forEach(function(name) {
-			event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
-		});
-	}
-
-	googletag.pubads().refresh([event.detail.slot.gpt.slot]);
+	window.googletag.cmd.push(function(event) {
+		var targeting = event.detail.targeting;
+		if (utils.isPlainObject(targeting)) {
+			Object.keys(targeting).forEach(function(name) {
+				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
+			});
+		}
+		googletag.pubads().refresh([event.detail.slot.gpt.slot]);
+	}.bind(this, event));
+	return this;
 }
 
 function onResize(event) {
@@ -240,14 +242,7 @@ function onRenderEnded(event) {
 	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 	data.type = domId.pop();
 	data.name = domId.join('-');
-
-	if (data.type === 'gpt') {
-		detail = data.gpt;
-	} else {
-		data.gpt.oop = {};
-		detail = data.gpt.oop;
-	}
-
+	detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
 	detail.creativeId = event.creativeId;
@@ -268,13 +263,12 @@ var slotMethods = {
 	/**
 	* define a GPT slot
 	*/
-	defineSlot: function(isOutOfPage) {
-		isOutOfPage = (isOutOfPage === false ? false : true);
+	defineSlot: function() {
 		window.googletag.cmd.push(function() {
 			this.gpt.id = this.name + '-gpt';
 			this.inner.setAttribute('id', this.gpt.id);
 			this.setUnitName();
-			if (!isOutOfPage) {
+			if (!this.outOfPage) {
 				if (breakpoints && utils.isObject(this.sizes)) {
 					this.initResponsive();
 					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
@@ -394,7 +388,7 @@ var slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
-		if (this.gpt.oop && this.gpt.oop.iframe) {
+		if (this.outOfPage && this.gpt.iframe) {
 			function getImpressionURL(iframe) {
 				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
 				if (trackingUrlElement) {
@@ -404,7 +398,7 @@ utils.log.warn('Impression URL not found, this is set via a creative template.')
 					return false;
 				}
 			};
-			var impressionURL = getImpressionURL(this.gpt.oop.iframe);
+			var impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
 				utils.createCORSRequest(impressionURL, 'GET',
