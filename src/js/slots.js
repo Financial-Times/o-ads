@@ -162,7 +162,7 @@ Slots.prototype.initRefresh = function() {
 Slots.prototype.initInview = function() {
 	/* istanbul ignore else  */
 	if (config('flags').inview) {
-		window.addEventListener('load', onLoad.bind(null, this));
+		onLoad(this);
 	}
 
 	function onLoad(slots) {

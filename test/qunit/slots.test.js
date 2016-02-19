@@ -688,11 +688,10 @@ QUnit.test('elementvisibility is update on load', function(assert) {
 	var slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 
-	this.ads.init();
 	var slot = this.ads.slots.initSlot(node);
 	var updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
 	var updateSpy = this.spy(slot.elementvis, 'update');
-	this.trigger(window, 'load');
+	this.ads.init();
 	assert.ok(updatePositionSpy.called, 'position is updated on load');
 	assert.ok(updateSpy.called, 'visibility is updated on load');
 });
