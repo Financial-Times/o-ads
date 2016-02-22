@@ -47,10 +47,6 @@ function GPTSlot(name, sizes, id) {
 	this.setTargeting = stubs.stub().returns(this);
 	this.set = stubs.stub().returns(this);
 	this.defineSizeMapping = function() {};
-	// add a mock outOfPage flag if the id contains -oop
-	if(id.indexOf('-oop') !== -1 && id !== 'delayedimpression-missing-tracking-div-oop'){
-		this._testAdTrackingDiv = true;
-	}
 
 	stubs.stub(this, 'defineSizeMapping', function(mapping) {
 		this.sizes = mapping;
@@ -75,7 +71,7 @@ function slotRender(slot, color) {
 
 	slot = slots[slot];
 
-	var trackingDiv = slot.hasOwnProperty('_testAdTrackingDiv') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	var trackingDiv = (slot.hasOwnProperty('outOfPage')  && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
 	var html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
 
 	if (slot.responsive) {
@@ -120,7 +116,9 @@ stubs.stub(googletag, 'defineSlot', function(name, sizes, id) {
 });
 
 stubs.stub(googletag, 'defineOutOfPageSlot', function(name, id) {
-	return new GPTSlot(name, id);
+	var gptSlot = new GPTSlot(name, id);
+	gptSlot.outOfPage = true;
+	return gptSlot;
 });
 
 googletag.display = function() {};

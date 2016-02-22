@@ -440,7 +440,7 @@ QUnit.test('define a basic slot', function(assert) {
 	this.ads.slots.initSlot('no-responsive-mpu');
 	var gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
 	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
-	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is called');
+	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is not called');
 });
 
 QUnit.test('define responsive slot', function(assert) {
@@ -618,22 +618,6 @@ QUnit.test('defineSlot is added to command queue when googletag is not available
 
 	slot.defineSlot();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineSlot function added to command queue');
-
-	// reinstate mock
-	window.googletag = this.gpt;
-});
-
-QUnit.test('defineOutOfPage is added to command queue when googletag is not available', function (assert) {
-	// delete the mock for this test
-	delete window.googletag;
-
-	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
-
-	slot.defineOutOfPage();
-	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineOutOfPage function added to command queue');
 
 	// reinstate mock
 	window.googletag = this.gpt;
