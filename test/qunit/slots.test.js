@@ -584,19 +584,6 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 	assert.ok(clearSpy2.calledOnce, 'clear method has been called on the second slot');
 });
 
-// QUnit.test('Slots.clear will clear a single slot and a child slot if one exists', function(assert) {
-// 	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
-// 	this.ads.init();
-// 	var slot = this.ads.slots.initSlot(node);
-// 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
-// 	var clearSpy = this.spy(slot, 'clear');
-// 	var clearChildSpy = this.spy(slot.childSlot, 'clear');
-// 	this.ads.slots.clear('clear-test');
-// 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
-// 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
-// 	assert.ok(clearChildSpy.calledOnce, 'clear method has been called on a child slot');
-// });
-
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
 	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
@@ -641,19 +628,6 @@ QUnit.test('Slots.submitImpression will submit and impression for a single slot'
   assert.ok(submitSpy3.calledOnce, 'the submitImpression method has been called once on slot3');
 });
 
-// QUnit.test('Can init a private slot', function(assert) {
-// 	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
-// 	this.ads.slots.initSlot(node, false);
-// 	assert.notOk(this.ads.slots['delayedimpression'], 'the delayedimpression slot is not public');
-// });
-
-// QUnit.test('Can init a private slot', function(assert) {
-// 	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>');
-// 	this.ads.init();
-// 	this.ads.slots.initSlot(node);
-// 	assert.ok(this.ads.slots['delayedimpression'], 'the delayedimpression slot is public');
-// 	assert.notOk(this.ads.slots['delayedimpression-oop'], 'the delayedimpression out of page slot is not public');
-// });
 
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
 	var warnSpy = this.spy(this.utils.log, 'warn');

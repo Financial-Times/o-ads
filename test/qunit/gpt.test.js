@@ -623,22 +623,6 @@ QUnit.test('defineSlot is added to command queue when googletag is not available
 	window.googletag = this.gpt;
 });
 
-// QUnit.test('defineOutOfPage is added to command queue when googletag is not available', function (assert) {
-// 	// delete the mock for this test
-// 	delete window.googletag;
-//
-// 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
-// 	this.ads.init({gpt: {companions: true}});
-// 	var slot = this.ads.slots.initSlot('TestFormat');
-// 	var gptCommandsQueued = window.googletag.cmd.length;
-//
-// 	slot.defineOutOfPage();
-// 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineOutOfPage function added to command queue');
-//
-// 	// reinstate mock
-// 	window.googletag = this.gpt;
-// });
-
 QUnit.test('clearSlot returns false when googletag is not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
