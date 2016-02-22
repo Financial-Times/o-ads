@@ -126,18 +126,12 @@ Slots.prototype.initSlot = function(container) {
 
 	// add the aria hidden attribute
 	container.setAttribute('aria-hidden', 'true');
-
 	var slot = new Slot(container, screensize);
-	/* istanbul ignore else  */
+  /* istanbul ignore else  */
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
 		slot.elementvis = elementvis.track(slot.container);
 		slot.fire('ready');
-
-    if (slot.outOfPage) {
-//    slot.childSlot = this.initSlot(slot.name+ '-oop', false);
-    }
-
 	} else if (this[slot.name]) {
 		utils.log.error('slot %s is already defined!', slot.name);
 	}
