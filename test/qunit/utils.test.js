@@ -341,6 +341,25 @@ QUnit.test('attach method success', function(assert) {
 	}, 200);
 });
 
+QUnit.test('attach method supports auto removing script', function(assert) {
+	var done = assert.async();
+	this.ads.utils.attach.restore();
+
+	// initial number of scripts
+	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
+
+	var tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback, true);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size(), initialScripts, 'no new script tags have been added to tha page.');
+		assert.equal($('script[o-ads]').size(), 0, 'there are no script tags that have an o-ads attribute');
+		done();
+	}, 200);
+});
+
 QUnit.test('attach method failed', function(assert) {
 	var done = assert.async();
 	this.ads.utils.attach.restore();

@@ -277,7 +277,7 @@ module.exports.hash = function(str, delimiter, pairing) {
 * @param {function} errorcb A function to run if the script fails to load
 * @returns {HTMLElement} the created script tag
 */
-module.exports.attach = function(scriptUrl, async, callback, errorcb) {
+module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
 	var tag = document.createElement('script');
 	var node = document.getElementsByTagName('script')[0];
 	var hasRun = false;
@@ -295,6 +295,9 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 				if (tag.readyState === "loaded") {
 					if (!hasRun) {
 						callback();
+						if(autoRemove) {
+							tag.parentElement.removeChild(tag);
+						}
 						hasRun = true;
 					}
 				}
@@ -304,6 +307,9 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 				/* istanbul ignore else  */
 				if (!hasRun) {
 					callback();
+					if(autoRemove) {
+						tag.parentElement.removeChild(tag);
+					}
 					hasRun = true;
 				}
 			};
@@ -316,6 +322,9 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb) {
 			/* istanbul ignore else  */
 			if (!hasRun) {
 				errorcb();
+				if(autoRemove) {
+					tag.parentElement.removeChild(tag);
+				}
 				hasRun = true;
 			}
 		};

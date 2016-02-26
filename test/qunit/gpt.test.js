@@ -387,7 +387,7 @@ QUnit.test('submit impression', function(assert) {
 	this.ads.init();
 	var slot = this.ads.slots.initSlot('delayedimpression');
 	slot.submitGptImpression();
-	assert.ok(this.ads.utils.attach.calledWith('https://www.ft.com'), 'impression url requested via utils');
+	assert.ok(this.ads.utils.attach.calledWith('https://www.ft.com', true, sinon.match.any, sinon.match.any, true), 'impression url requested via utils with correct parameters');
 	assert.ok(infoLog.calledOnce, 'impression info logged');
 	assert.ok(infoLog.calledWith('Impression Url requested'), 'correct impression info logged');
 	assert.notOk(warnLog.calledOnce, 'no info notifications have been logged');

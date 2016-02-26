@@ -407,7 +407,8 @@ var slotMethods = {
 					},
 					function(){
 						utils.log.info('CORS request to submit an impression failed');
-					}
+					},
+					true
 				);
 			}
 		}
