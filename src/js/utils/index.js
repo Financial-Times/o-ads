@@ -281,6 +281,19 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 	var tag = document.createElement('script');
 	var node = document.getElementsByTagName('script')[0];
 	var hasRun = false;
+
+	function processCallback(callback) {
+		/* istanbul ignore else  */
+		if (!hasRun) {
+			callback.call();
+			hasRun = true;
+			/* istanbul ignore else  */
+			if(autoRemove) {
+				tag.parentElement.removeChild(tag);
+			}
+		}
+	}
+
 	tag.setAttribute('src', scriptUrl);
 	tag.setAttribute('o-ads', '');
 	/* istanbul ignore else */
@@ -293,25 +306,12 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 		if (hop.call(tag, 'onreadystatechange')) {
 			tag.onreadystatechange = function() {
 				if (tag.readyState === "loaded") {
-					if (!hasRun) {
-						callback();
-						if(autoRemove) {
-							tag.parentElement.removeChild(tag);
-						}
-						hasRun = true;
-					}
+					processCallback(callback);
 				}
 			};
 		} else {
 			tag.onload =  function() {
-				/* istanbul ignore else  */
-				if (!hasRun) {
-					callback();
-					if(autoRemove) {
-						tag.parentElement.removeChild(tag);
-					}
-					hasRun = true;
-				}
+				processCallback(callback);
 			};
 		}
 	}
@@ -319,14 +319,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 	/* istanbul ignore else  */
 	if (utils.isFunction(errorcb)) {
 		tag.onerror = function() {
-			/* istanbul ignore else  */
-			if (!hasRun) {
-				errorcb();
-				if(autoRemove) {
-					tag.parentElement.removeChild(tag);
-				}
-				hasRun = true;
-			}
+			processCallback(errorcb);
 		};
 	}
 	// Use insert before, append child has issues with script tags in some browsers.
