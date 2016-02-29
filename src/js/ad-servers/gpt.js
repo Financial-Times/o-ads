@@ -394,20 +394,21 @@ var slotMethods = {
 				if (trackingUrlElement) {
 					return trackingUrlElement.dataset.oAdsImpressionUrl;
 				} else {
-utils.log.warn('Impression URL not found, this is set via a creative template.');
+					utils.log.warn('Impression URL not found, this is set via a creative template.');
 					return false;
 				}
 			};
 			var impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
-				utils.createCORSRequest(impressionURL, 'GET',
+				utils.attach(impressionURL, true,
 					function(){
 						utils.log.info('Impression Url requested');
 					},
 					function(){
 						utils.log.info('CORS request to submit an impression failed');
-					}
+					},
+					true
 				);
 			}
 		}
