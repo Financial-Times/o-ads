@@ -30,7 +30,13 @@ On initialisation o-ads will request a 300x250 (see Formats below) advert target
 ### Initialization
 The o-ads `init()` method takes a JSON object as it's only argument. The configuration object sets various properties on o-ads.
 
-**Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded`.
+**Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded` on `document.documentElement`.
+
+```js
+document.addEventListener('o.DOMContentLoaded', function(e) {
+    document.documentElement.dispatchEvent(new CustomEvent(e.type));
+});
+```
 
 This example demonstrates instantiating o-ads, setting the network code and ad formats (position name & sizes) via the configuration object.
 
