@@ -143,3 +143,16 @@ QUnit.test('When passing values passed to attribute table are arrays or objects 
 		this.warn('Test skipped due to lack of console support!');
 	}
 });
+
+QUnit.test('Returns undefined if passed a falsy argument', function(assert) {
+	if (console) {
+		var log = this.utils.log;
+		log.attributeTable(undefined);
+		assert.notOk(console.table.called, 'table not drawn');
+		assert.ok(console.log.withArgs(undefined), 'table not drawn');
+
+	} else {
+		assert.ok(true, 'console unavailable in this browser');
+		this.warn('Test skipped due to lack of console support!');
+	}
+});
