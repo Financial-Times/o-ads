@@ -103,7 +103,7 @@ module.exports.table = function(data, columns) {
 module.exports.attributeTable = function(object, columns) {
 	var utils = require('../utils');
 	if (log.isOn('log') && window.console) {
-		if (console.table) {
+		if (object && console.table) {
 			var data = Object.keys(object).map(function(item) {
 				var val;
 				if (utils.isArray(object[item]) || utils.isObject(object[item])) {
