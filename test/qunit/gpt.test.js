@@ -593,14 +593,13 @@ QUnit.test('command queue empty when googletag is available', function (assert) 
 	assert.equal(window.googletag.cmd.length, 0, 'command queue empty when googletag is available');
 });
 
+
 QUnit.test('setup added to command queue when googletag not available', function (assert) {
 	// delete the mock for this test
 	delete window.googletag;
 
 	this.ads.init({gpt: {companions: true}});
-
 	assert.equal(window.googletag.cmd.length, 1, 'setup added to command queue when googletag not available');
-	assert.equal(window.googletag.cmd[0].name, 'bound setup', 'setup added to command queue when googletag not available');
 	// reinstate mock
 	window.googletag = this.gpt;
 });

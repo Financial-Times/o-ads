@@ -9,4 +9,3 @@ dependencies:
 test:
   override:
     - npm run ci
-    - npm verify
