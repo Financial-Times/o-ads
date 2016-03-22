@@ -1,14 +1,12 @@
-'use strict';
-
 module.exports = function (browser) {
-
-		'goToDemoPage': function () {
+	return {
+		goToDemoPage: function () {
 			return browser
 				.url(browser.launch_url + "/Individual-Ad.html")
 				.waitForElementVisible("body", 5000)
 				.assert.title("o-ads: Individual-Ad demo", 'Page title is correct')
 		},
-		'verifyIndividualAdIsVisible': function () {
+		verifyIndividualAdIsVisible: function () {
 			return browser
 				.assert.visible("#leaderboard-gpt", 'Advert has been initiated and visible')
 					// switch focus to first iframe
@@ -19,10 +17,6 @@ module.exports = function (browser) {
 					.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/1809750796305150566', 'Correct image is displayed for leaderboard')
 					// switch focus back to main page
           .frame(null)
-		},
-
-		after: function (browser) {
-			// end test
-			browser.end();
 		}
+	}
 };
