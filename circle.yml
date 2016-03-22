@@ -9,4 +9,5 @@ dependencies:
 test:
   override:
     - npm run ci
+    - obt test --browserTest
     - npm verify
