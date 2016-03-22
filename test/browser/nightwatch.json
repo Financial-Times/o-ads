@@ -1,0 +1,37 @@
+{
+  "src_folders" : ["test/browser/tests"],
+  "output_folder" : "./test/browser/reports",
+
+  "selenium" : {
+    "start_process" : false,
+    "server_path" : "",
+    "log_path" : ""
+  },
+
+  "test_settings" : {
+    "default" : {
+      "launch_url" : "${TEST_URL}",
+      "selenium_port"  : 80,
+      "selenium_host"  : "${SELENIUM_HOST}",
+      "silent": true,
+      "screenshots" : {
+        "enabled" : true,
+        "path" : "./test/browser/screenshots"
+      },
+      "username": "${SELENIUM_USER}",
+      "access_key": "${SELENIUM_KEY}",
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "version": "37",
+        "platform": "WINDOWS"
+      }
+    },
+    "chrome_latest" : {
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "version": "latest",
+        "platform": "WINDOWS"
+      }
+    }
+  }
+}
