@@ -9,5 +9,5 @@ dependencies:
 test:
   override:
     - npm run ci
-    - export CI=true ./node_modules/obt test --browserTest && unset CI
+    - ./node_modules/obt test --browserTest
     - npm verify
