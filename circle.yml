@@ -9,5 +9,5 @@ dependencies:
 test:
   override:
     - npm run ci
-    - ./node_modules/obt test --browserTest
+    - ./node_modules/.bin/obt test --browserTest
     - npm verify
