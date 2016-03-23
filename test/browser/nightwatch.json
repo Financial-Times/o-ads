@@ -1,6 +1,6 @@
 {
   "src_folders" : ["test/browser/tests"],
-  "output_folder" : "./reports/nightwatch",
+  "output_folder" : "${CIRCLE_TEST_REPORTS}/nightwatch",
 
   "selenium" : {
     "start_process" : false,
