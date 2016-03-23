@@ -1,6 +1,6 @@
 {
   "src_folders" : ["test/browser/tests"],
-  "output_folder" : "./test/browser/reports",
+  "output_folder" : "./reports/nightwatch",
 
   "selenium" : {
     "start_process" : false,
@@ -15,8 +15,7 @@
       "selenium_host"  : "${SELENIUM_HOST}",
       "silent": true,
       "screenshots" : {
-        "enabled" : true,
-        "path" : "./test/browser/screenshots"
+        "enabled" : false
       },
       "username": "${SELENIUM_USER}",
       "access_key": "${SELENIUM_KEY}",
