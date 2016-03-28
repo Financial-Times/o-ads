@@ -28,7 +28,20 @@ Include o-ads in the build and and add the following markup to the page:
 On initialisation o-ads will request a 300x250 (see Formats below) advert targeted from Google's test network.
 
 ### Initialization
-The o-ads `init()` method takes a JSON object as it's only argument. The configuration object sets various properties on o-ads.
+
+### Firing an event
+
+First you will need to have the markup for configuration:
+```html
+<script data-o-ads-config="" type="application/json">
+		{
+      "gpt": {
+        "network": 5887,
+        "site": "test.5887.origami"
+      }
+		}
+</script>
+```
 
 **Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded` on `document.documentElement`.
 
@@ -38,7 +51,10 @@ document.addEventListener('o.DOMContentLoaded', function(e) {
 });
 ```
 
-This example demonstrates instantiating o-ads, setting the network code and ad formats (position name & sizes) via the configuration object.
+
+### Calling public API
+
+This example demonstrates instantiating o-ads, setting the network code and ad formats (position name & sizes) via the configuration object being passed directly to the `init` method.
 
 ```js
 const oAds = require('o-ads');
@@ -54,6 +70,8 @@ oAds.init({
   }
 });
 ```
+
+
 
 ## API
 ### `oAds.slots#clear(slot)`
@@ -100,11 +118,13 @@ slot      | slot name or array of slot names
 
 ## Additional Configuration
 We currently support these additional features
-- [Targeting](docs/TARGETING_CONFIG.md)
-- [Responsive Slots](docs/RESPONSIVE_SLOTS.md)
-- [Video and Companion Advertising](docs/VIDEO_CONFIG.md)
+- [Targeting](https://github.com/Financial-Times/o-ads/blob/master/docs/TARGETING_CONFIG.md)
+- [Responsive Slots](https://github.com/Financial-Times/o-ads/blob/master/docs/RESPONSIVE_SLOTS.md)
+- [Video and Companion Advertising](https://github.com/Financial-Times/o-ads/blob/master/docs/VIDEO_CONFIG.md)
+- [Slot configuration full reference](https://github.com/Financial-Times/o-ads/blob/master/docs/SLOT_CONFIG_REFERENCE.md)
+- [Examples](https://github.com/Financial-Times/o-ads/blob/master/docs/EXAMPLES.md)
 
-As well as these [3rd party providers](docs/DATA_PROVIDERS.md)
+As well as these [3rd party providers](https://github.com/Financial-Times/o-ads/blob/master/docs/DATA_PROVIDERS.md)
 - Krux
 - Chartbeat
 - Admantx
