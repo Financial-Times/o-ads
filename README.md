@@ -3,7 +3,7 @@
 This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Chartbeat](https://chartbeat.com/).
 
 ## Installation
-Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](docs/INTEGRATION.md)
+Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](https://github.com/Financial-Times/o-ads/blob/master/docs/INTEGRATION.md)
 
 ## Browser support
 
@@ -122,7 +122,6 @@ We currently support these additional features
 - [Responsive Slots](https://github.com/Financial-Times/o-ads/blob/master/docs/RESPONSIVE_SLOTS.md)
 - [Video and Companion Advertising](https://github.com/Financial-Times/o-ads/blob/master/docs/VIDEO_CONFIG.md)
 - [Slot configuration full reference](https://github.com/Financial-Times/o-ads/blob/master/docs/SLOT_CONFIG_REFERENCE.md)
-- [Examples](https://github.com/Financial-Times/o-ads/blob/master/docs/EXAMPLES.md)
 
 As well as these [3rd party providers](https://github.com/Financial-Times/o-ads/blob/master/docs/DATA_PROVIDERS.md)
 - Krux
