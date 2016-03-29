@@ -27,7 +27,7 @@ Include o-ads in the build and and add the following markup to the page:
 
 On initialisation o-ads will request a 300x250 (see Formats below) advert targeted from Google's test network.
 
-### Initialization
+## Initialization
 
 ### Firing an event
 

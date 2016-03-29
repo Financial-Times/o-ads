@@ -116,6 +116,9 @@ Defines if an "Advertising" label should be shown above the slot container and t
 
 ### Out of page
 Define the parameter if the slot to be requested should be out of page one. Default is `false`.
+"Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.
+
+To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.", [Google](https://support.google.com/dfp_premium/answer/1154352?hl=en)
 
 #### JSON Configuration
 ```js
@@ -169,7 +172,7 @@ The library comes with the following default options:
 * MicroBar `88x31`
 * Button2 `120x60`
 
-***Note:*** Formats can only be configured via JSON configuration. Also once added, they can be used a number of slots alongside the default formats.
+***Note:*** Formats can only be configured via JSON configuration. Also once added, they can be used a number of slots alongside the default formats. Also the formats are a global configuration, and you cannot define a format per slot and re-use it on other slots.
 
 
 #### JSON Configuration
