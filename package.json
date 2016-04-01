@@ -42,7 +42,7 @@
     "karma-safari-launcher": "^0.1.1",
     "karma-webdriver-launcher": "^1.0.4",
     "nightwatch": "^0.8.18",
-    "origami-build-tools": "^3.3.5",
+    "origami-build-tools": "https://github.com/Financial-Times/origami-build-tools.git#browser-test-fail-to-break-build",
     "qunitjs": "^1.20.0",
     "run-sequence": "^1.1.5",
     "yargs": "^3.31.0"
