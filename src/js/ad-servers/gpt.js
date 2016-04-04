@@ -187,10 +187,6 @@ function onReady(slotMethods, event) {
 			.setTargeting()
 			.setURL();
 
-			if (slot.outOfPage) {
-				slot.defineOutOfPage();
-			}
-
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
 			}
@@ -246,14 +242,7 @@ function onRenderEnded(event) {
 	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 	data.type = domId.pop();
 	data.name = domId.join('-');
-
-	if (data.type === 'gpt') {
-		detail = data.gpt;
-	} else {
-		data.gpt.oop = {};
-		detail = data.gpt.oop;
-	}
-
+	detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
 	detail.creativeId = event.creativeId;
@@ -279,31 +268,17 @@ var slotMethods = {
 			this.gpt.id = this.name + '-gpt';
 			this.inner.setAttribute('id', this.gpt.id);
 			this.setUnitName();
-
-			if (breakpoints && utils.isObject(this.sizes)) {
-				this.initResponsive();
-				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
-			} else {
-				this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+			if (!this.outOfPage) {
+				if (breakpoints && utils.isObject(this.sizes)) {
+					this.initResponsive();
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+				} else {
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
+				}
 			}
-		}.bind(this));
-		return this;
-	},
-	/**
-	* creates a container for an out of page ad and then makes the ad request
-	*/
-	defineOutOfPage: function() {
-		window.googletag.cmd.push(function() {
-			var oop = this.gpt.oop = {};
-			oop.id = this.name + '-oop';
-			this.addContainer(this.container, {id: oop.id});
-
-			oop.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, oop.id)
-			.addService(googletag.pubads());
-
-			this.setTargeting(oop.slot);
-			this.setURL(oop.slot);
-			googletag.display(oop.id);
+			else {
+				this.gpt.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, this.gpt.id);
+			}
 		}.bind(this));
 		return this;
 	},
@@ -413,7 +388,7 @@ var slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
-		if (this.gpt.oop && this.gpt.oop.iframe) {
+		if (this.outOfPage && this.gpt.iframe) {
 			function getImpressionURL(iframe) {
 				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
 				if (trackingUrlElement) {
@@ -423,16 +398,17 @@ var slotMethods = {
 					return false;
 				}
 			};
-			var impressionURL = getImpressionURL(this.gpt.oop.iframe);
+			var impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
-				utils.createCORSRequest(impressionURL, 'GET',
+				utils.attach(impressionURL, true,
 					function(){
 						utils.log.info('Impression Url requested');
 					},
 					function(){
 						utils.log.info('CORS request to submit an impression failed');
-					}
+					},
+					true
 				);
 			}
 		}

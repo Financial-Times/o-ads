@@ -341,6 +341,25 @@ QUnit.test('attach method success', function(assert) {
 	}, 200);
 });
 
+QUnit.test('attach method supports auto removing script', function(assert) {
+	var done = assert.async();
+	this.ads.utils.attach.restore();
+
+	// initial number of scripts
+	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
+
+	var tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback, true);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size(), initialScripts, 'no new script tags have been added to tha page.');
+		assert.equal($('script[o-ads]').size(), 0, 'there are no script tags that have an o-ads attribute');
+		done();
+	}, 200);
+});
+
 QUnit.test('attach method failed', function(assert) {
 	var done = assert.async();
 	this.ads.utils.attach.restore();
@@ -351,6 +370,28 @@ QUnit.test('attach method failed', function(assert) {
 	var errorCallback = this.stub();
 
 	var tag = this.ads.utils.attach('test.js', true, successCallback, errorCallback);
+
+	this.trigger(tag, 'onload');
+	setTimeout(function() {
+		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+
+		assert.ok(errorCallback.calledOnce, 'an error callback has been triggered');
+		assert.notOk(successCallback.called, 'a success callback has not been triggered');
+		done();
+	}, 200);
+});
+
+QUnit.test('attach method failedi with only an error callback specified', function(assert) {
+	var done = assert.async();
+	this.ads.utils.attach.restore();
+
+	// initial number of scripts
+	var initialScripts = $('script').size();
+	var successCallback = this.stub();
+	var errorCallback = this.stub();
+
+	var tag = this.ads.utils.attach('test.js', true, null, errorCallback);
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
