@@ -73,7 +73,6 @@ function slotRender(slot, color) {
 
 	var trackingDiv = (slot.hasOwnProperty('outOfPage')  && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
 	var html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
-
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
@@ -166,6 +165,7 @@ stubs.stub(pubads, 'addEventListener', function(eventName, fn) {
 stubs.stub(pubads, 'refresh', function(slots) {
 	slots.forEach(function(slot) {
 		slotRender(slot.id, '#006D91');
+		slotRenderEnded(slot.id);
 	});
 	return slots;
 });

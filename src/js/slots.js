@@ -56,6 +56,19 @@ function run(slots, action, name) {
 	}
 }
 
+function findFormatBySize(size) {
+	if(!size) {
+		return false;
+	}
+	var formats = config('formats');
+	for(var prop in formats) {
+		/* istanbul ignore else  */
+		if(formats.hasOwnProperty(prop)) {
+			if( formats[prop].sizes[0] === parseInt(size[0]) && formats[prop].sizes[1] === parseInt(size[1]))
+				return prop;
+			}
+		}
+}
 /**
 * Given a slot name or an array of slot names will collapse the slots using the collapse method on the slot
 */
@@ -194,6 +207,8 @@ Slots.prototype.initRendered = function() {
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
 			var size = event.detail.gpt.size;
+			var format = findFormatBySize(size);
+			slot.setFormatLoaded(format);
 			slot.maximise(size);
 			slot.fire('complete', event.detail);
 		}

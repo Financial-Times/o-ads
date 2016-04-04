@@ -257,6 +257,14 @@ Slot.prototype.collapse = function() {
 };
 
 /**
+* sets a classname of the format
+*/
+Slot.prototype.setFormatLoaded = function(format) {
+	this.container.setAttribute('data-o-ads-loaded', format);
+	return this;
+};
+
+/**
 * remove the empty class from the slot
 */
 Slot.prototype.uncollapse = function() {

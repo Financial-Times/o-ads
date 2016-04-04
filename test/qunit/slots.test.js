@@ -196,6 +196,7 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	var clock = this.date();
 	this.viewport(700, 700);
 
+
 	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
@@ -211,12 +212,13 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	assert.ok(this.gpt.display.calledOnce, 'Initial ad call is made for large size.');
 	var iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
 	assert.deepEqual(iframeSize, ['728', '90'], 'The ad slot is displayed at the correct size.');
-
+	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'Leaderboard');
 	this.viewport(500, 500);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed, ad call is made.');
 	iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
+	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'MediumRectangle');
 	assert.deepEqual(iframeSize, ['300', '250'], 'The new size is displayed.');
 });
 
