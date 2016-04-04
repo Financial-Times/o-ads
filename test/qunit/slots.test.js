@@ -77,7 +77,7 @@ QUnit.test('creates add based on a format with multiple sizes defined', function
 	var sizes = [[970, 90], [970, 66], [180, 50]];
 	this.ads.init({
 		formats: {
-			TestFormat: {sizes: sizes}
+			TestFormat: {sizes: [[970, 90], [970, 66], [180, 50]]}
 		}
 	});
 	var slot = this.ads.slots.initSlot(node);
@@ -333,6 +333,14 @@ QUnit.test('configure out of page slot', function(assert) {
 	this.ads.init({});
 	result = this.ads.slots.initSlot(node);
 	assert.ok(!result.outOfPage, 'No attribute and no config returns false');
+});
+
+QUnit.test('configure out of page slot via DOM', function(assert) {
+	var slotHTML = '<div data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	var node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	var result = this.ads.slots.initSlot(node);
+	assert.ok(result.outOfPage, 'data-o-ads-out-of-page attribute is present returns true');
 });
 
 QUnit.test('configure slot level targeting', function(assert) {
