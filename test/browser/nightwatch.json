@@ -21,8 +21,8 @@
       "access_key": "${SELENIUM_KEY}",
       "desiredCapabilities": {
         "browserName": "chrome",
-        "version": "37",
-        "platform": "WINDOWS"
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
       }
     },
     "chrome_latest" : {
@@ -50,69 +50,6 @@
       "desiredCapabilities": {
         "browserName": "firefox",
         "version": "latest-1",
-        "platform": "WINDOWS"
-      }
-    },
-    "chrome38_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "version": "38",
-        "platform": "WINDOWS"
-      }
-    },
-    "chrome39_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "version": "39",
-        "platform": "WINDOWS"
-      }
-    },
-    "chrome40_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "version": "40",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox30_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "30",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox31_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "31",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox32_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "32",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox33_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "33",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox34_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "34",
-        "platform": "WINDOWS"
-      }
-    },
-    "firefox35_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "firefox",
-        "version": "35",
         "platform": "WINDOWS"
       }
     },
