@@ -5,6 +5,9 @@ reports/
 demos/local/
 .editorconfig
 test-results.xml
+.haikro-cache/
+node*linux*/
+*/*.xml
 
 # Local config files #
 ######################
