@@ -8,5 +8,4 @@ dependencies:
     - "node_modules"
 test:
   override:
-    - npm run ci
-    - ./node_modules/.bin/obt test --browserTest --browserTestFailBuild
+    - ./node_modules/.bin/obt test --browserTest --browserTestFailBuild --environments=chrome_latest,chrome_latest-1,firefox_latest,firefox_latest-1

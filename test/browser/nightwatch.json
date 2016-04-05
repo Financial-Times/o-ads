@@ -52,41 +52,6 @@
         "version": "latest-1",
         "platform": "WINDOWS"
       }
-    },
-    "ie8_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "internet explorer",
-        "version": "8",
-        "platform": "WINDOWS"
-      }
-    },
-    "ie9_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "internet explorer",
-        "version": "9",
-        "platform": "WINDOWS"
-      }
-    },
-    "ie10_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "internet explorer",
-        "version": "10",
-        "platform": "WINDOWS"
-      }
-    },
-    "ie11_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "internet explorer",
-        "version": "11",
-        "platform": "WINDOWS"
-      }
-    },
-    "safari8_Grid" : {
-      "desiredCapabilities": {
-        "browserName": "safari",
-        "version": "8",
-        "platform": "MAC"
-      }
     }
   }
 }
