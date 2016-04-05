@@ -1,6 +1,6 @@
 {
   "src_folders" : ["test/browser/tests"],
-  "output_folder" : "${CIRCLE_TEST_REPORTS}/nightwatch",
+  "output_folder" : "./reports",
 
   "selenium" : {
     "start_process" : false,
@@ -25,32 +25,67 @@
         "acceptSslCerts": true
       }
     },
-    "chrome_latest" : {
+    "chrome_latest_sauce" : {
       "desiredCapabilities": {
         "browserName": "chrome",
         "version": "latest",
-        "platform": "WINDOWS"
+        "platform": "Windows 7"
       }
     },
-    "chrome_latest-1" : {
+    "chrome_latest-1_sauce" : {
       "desiredCapabilities": {
         "browserName": "chrome",
         "version": "latest-1",
-        "platform": "WINDOWS"
+        "platform": "Windows 7"
       }
     },
-    "firefox_latest" : {
+    "firefox_latest_sauce" : {
       "desiredCapabilities": {
         "browserName": "firefox",
         "version": "latest",
-        "platform": "WINDOWS"
+        "platform": "Windows 7"
       }
     },
-    "firefox_latest-1" : {
+    "firefox_latest-1_sauce" : {
       "desiredCapabilities": {
         "browserName": "firefox",
         "version": "latest-1",
-        "platform": "WINDOWS"
+        "platform": "Windows 7"
+      }
+    },
+    "ie_11_sauce" : {
+      "desiredCapabilities": {
+        "browserName": "internet explorer",
+        "version": "11.0",
+        "platform": "Windows 7"
+      }
+    },
+    "ie_10_sauce" : {
+      "desiredCapabilities": {
+        "browserName": "internet explorer",
+        "version": "10.0",
+        "platform": "Windows 7"
+      }
+    },
+    "ie_9_sauce" : {
+      "desiredCapabilities": {
+        "browserName": "internet explorer",
+        "version": "9.0",
+        "platform": "Windows 7"
+      }
+    },
+    "safari_9_sauce" : {
+      "desiredCapabilities": {
+        "browserName": "safari",
+        "version": "9.0",
+        "platform": "OS X 10.11"
+      }
+    },
+    "safari_8_sauce" : {
+      "desiredCapabilities": {
+        "browserName": "safari",
+        "version": "8.0",
+        "platform": "OS X 10.10"
       }
     }
   }
