@@ -1,7 +1,7 @@
 'use strict';
 
-var timeout = 20000;
-var wait = 5000;
+var timeout = 30000;
+var wait = 8000;
 
 module.exports = {
 
