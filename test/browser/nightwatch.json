@@ -73,20 +73,6 @@
         "version": "9.0",
         "platform": "Windows 7"
       }
-    },
-    "safari_9_sauce" : {
-      "desiredCapabilities": {
-        "browserName": "safari",
-        "version": "9.0",
-        "platform": "OS X 10.11"
-      }
-    },
-    "safari_8_sauce" : {
-      "desiredCapabilities": {
-        "browserName": "safari",
-        "version": "8.0",
-        "platform": "OS X 10.10"
-      }
     }
   }
 }
