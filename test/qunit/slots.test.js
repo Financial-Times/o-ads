@@ -213,12 +213,14 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	var iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
 	assert.deepEqual(iframeSize, ['728', '90'], 'The ad slot is displayed at the correct size.');
 	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'Leaderboard');
+	assert.equal(this.ads.targeting.get().res, 'large');
 	this.viewport(500, 500);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed, ad call is made.');
 	iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
 	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'MediumRectangle');
+	assert.equal(this.ads.targeting.get().res, 'medium');
 	assert.deepEqual(iframeSize, ['300', '250'], 'The new size is displayed.');
 });
 

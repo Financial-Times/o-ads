@@ -251,6 +251,26 @@ QUnit.test("timestamp", function(assert) {
 	assert.equal(result.ts, '20131119003007', "fast forward one hour and timestamp value returns correctly");
 });
 
+QUnit.test("responsive", function(assert) {
+
+	var breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
+	breakpoint.returns("small");
+	this.ads.init({responsive: [] });
+	var result = this.ads.targeting.get();
+
+	assert.equal(result.res, 'small');
+});
+
+QUnit.test("Responsive targeting on non-responsive page", function(assert) {
+
+	var breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
+	breakpoint.returns("small");
+	this.ads.init();
+	var result = this.ads.targeting.get();
+
+	assert.equal(result.hasOwnProperty('res'), false);
+});
+
 QUnit.test("Library Version", function(assert) {
 	this.ads.init({ version: true });
 	var result = this.ads.targeting.get();
