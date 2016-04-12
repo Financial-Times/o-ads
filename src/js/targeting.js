@@ -38,7 +38,8 @@ Targeting.prototype.get = function() {
 		pageReferrer: this.getPageReferrer,
 		cookieConsent:  this.cookieConsent,
 		timestamp: this.timestamp,
-		version: this.version
+		version: this.version,
+		responsive: this.responsive
 	};
 
 	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.searchTerm());
@@ -222,6 +223,10 @@ Targeting.prototype.timestamp = function() {
 
 Targeting.prototype.version = function() {
 	return {ver: version.artifactVersion};
+};
+
+Targeting.prototype.responsive = function() {
+	return { res: utils.responsive.getCurrent() };
 };
 
 Targeting.prototype.debug = function () {

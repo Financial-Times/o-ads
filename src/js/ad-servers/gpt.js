@@ -97,6 +97,7 @@ function setRenderingMode(gptConfig) {
 * @lends GPT
 */
 function setPageTargeting(targeting) {
+
 	function setTargeting(key, value) {
 		googletag.pubads().setTargeting(key, value);
 	}
@@ -296,6 +297,8 @@ var slotMethods = {
 				var slot = event.detail.slot;
 				var screensize = event.detail.screensize;
 
+				updatePageTargeting({ res: screensize });
+
 				if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
 					/* istanbul ignore else  */
 					if (slot.gpt.iframe) {
@@ -463,9 +466,7 @@ function updateCorrelator() {
 	});
 }
 
-module.exports.init = init;
-module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = function(override) {
+function updatePageTargeting(override) {
 	if (window.googletag) {
 		var params = utils.isPlainObject(override) ? override : targeting.get();
 		setPageTargeting(params);
@@ -473,7 +474,11 @@ module.exports.updatePageTargeting = function(override) {
 	else {
 		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
 	}
-};
+}
+
+module.exports.init = init;
+module.exports.updateCorrelator = updateCorrelator;
+module.exports.updatePageTargeting = updatePageTargeting;
 
 module.exports.debug = function(){
 	var log = utils.log;

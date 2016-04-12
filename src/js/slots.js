@@ -57,9 +57,6 @@ function run(slots, action, name) {
 }
 
 function findFormatBySize(size) {
-	if(!size) {
-		return false;
-	}
 	var formats = config('formats');
 	for(var prop in formats) {
 		/* istanbul ignore else  */
