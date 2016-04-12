@@ -1,4 +1,4 @@
-/* globals sinon: false, $: false */
+/* globals sinon: false, $: false*/
 
 'use strict';
 
@@ -79,14 +79,21 @@ function slotRender(slot, color) {
 		size = slot.sizes[0] || [];
 	}
 
+	if(size[0] === 970 && size[1] === 250) {
+		//For testing, make billboard sizes empty
+		size = [0,0];
+	}
+
 	if (!slot.iframe) {
 		slot.iframe = document.createElement('iframe');
 		slot.iframe.id = 'google_ads_iframe_' + slot.getId();
 		document.getElementById(slot.id).appendChild(slot.iframe);
 	}
 
-	slot.iframe.width = size[0] || 0;
-	slot.iframe.height = size[1] || 0;
+	if(size) {
+		slot.iframe.width = size[0] || 0;
+		slot.iframe.height = size[1] || 0;
+	}
 
 	// this gets here from this file, not from Slot.ks, slot is an instance of GPTSlot
 	slot.iframe.src = html;
@@ -96,11 +103,11 @@ function slotRenderEnded(slot) {
 	slot = slots[slot];
 	var size = [slot.iframe.width, slot.iframe.height];
 	var event = {
-		isEmpty: false,
+		isEmpty: !!slot.iframe.width,
 		creativeId: Math.floor(Math.random() * 1e11),
 		lineItemId: Math.floor(Math.random() * 1e9),
 		serviceName: 'publisher_ads',
-		size: size,
+		size: slot.iframe.width > 0 ? size : null,
 		slot: slot
 	};
 	handler(event);
