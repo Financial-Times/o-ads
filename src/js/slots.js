@@ -64,10 +64,17 @@ function findFormatBySize(size) {
 	for(var prop in formats) {
 		/* istanbul ignore else  */
 		if(formats.hasOwnProperty(prop)) {
-			if( formats[prop].sizes[0] === parseInt(size[0]) && formats[prop].sizes[1] === parseInt(size[1]))
+
+			var sizes = formats[prop].sizes;
+			sizes = utils.isArray(sizes[0]) ? sizes : [sizes];
+			var match = sizes.filter(function(s) {
+				return (s[0] === parseInt(size[0]) && s[1] === parseInt(size[1]));
+			});
+			if(match.length) {
 				return prop;
 			}
 		}
+	}
 }
 /**
 * Given a slot name or an array of slot names will collapse the slots using the collapse method on the slot
