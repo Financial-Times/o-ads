@@ -62,13 +62,6 @@ if (process.env.CI === 'true') {
 } else {
 	//options for local go here
 	options.browserify.debug = true;
-	options.preprocessors['main.js'].unshift('jshint');
-	options.preprocessors['src/**/*.js'].unshift('jshint');
-	options.preprocessors['test/**/*.js'] = ['jshint'];
-	options.jshintPreprocessor = {
-		jshintrc: 'node_modules/origami-build-tools/config/jshint.json',
-		stopOnError: true
-	};
 }
 
 var coverageChecks = {
