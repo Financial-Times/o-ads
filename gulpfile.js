@@ -11,7 +11,7 @@ const filter = require('gulp-filter');
 const tagVersion = require('gulp-tag-version');
 const conventionalGithubReleaser = require('conventional-github-releaser');
 const packageJsonPath = path.join(__dirname, 'package.json');
-const packageJson = readPackageJSON(packageJsonPath) ;
+let packageJson = readPackageJSON(packageJsonPath) ;
 const runSequence = require('run-sequence');
 
 

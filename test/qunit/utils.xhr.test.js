@@ -1,6 +1,5 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
-'use strict';
 
 QUnit.module('utils.createCORSRequest');
 

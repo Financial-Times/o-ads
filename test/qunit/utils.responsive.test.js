@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
 
 QUnit.module('utils.responsive');
 
@@ -37,13 +36,13 @@ QUnit.test('resizing the browser window, simple config', function(assert) {
 
 QUnit.test('resizing the browser window, overlapping viewport sizes', function(assert) {
 	const clock = this.date('now');
-	const callback = this.spy(),
-		viewports = {
-			large: [300, 200],
-			medium: [200, 100],
-			other: [100, 200],
-			small: [0, 0]
-		};
+	const callback = this.spy();
+	const viewports = {
+		large: [300, 200],
+		medium: [200, 100],
+		other: [100, 200],
+		small: [0, 0]
+	};
 
 	this.viewport(1, 1);
 	this.ads.utils.responsive(viewports, callback);

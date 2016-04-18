@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
 
 const version = require('../../src/js/version');
 

@@ -7,7 +7,6 @@
 * @author Robin Marr, robin.marr@ft.com
 */
 
-'use strict';
 const config = require('../config');
 const utils = require('../utils');
 const targeting = require('../targeting');
@@ -349,7 +348,7 @@ const slotMethods = {
 				const site = gpt.site;
 				const zone = gpt.zone;
 				unitName = '/' + network;
-				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
+				unitName += utils.isNonEmptyString(site) ? '/' + site : '';
 				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
 			}
 			this.gpt.unitName = unitName;

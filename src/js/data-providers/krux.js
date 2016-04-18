@@ -10,10 +10,9 @@
  * @memberof FT.ads
 
 */
-'use strict';
 const utils = require('../utils');
 const config = require('../config');
-const delegate = require('ftdomdelegate');
+const Delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -24,7 +23,7 @@ function Krux() {
 
 }
 
-Krux.prototype.init = function(impl) {
+Krux.prototype.init = function() {
 	this.config = config('krux');
 	if (this.config && this.config.id) {
 
@@ -39,9 +38,9 @@ Krux.prototype.init = function(impl) {
 		this.api = window.Krux;
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
-			this.setAttributes('page_attr_',  this.config.attributes.page || {});
-			this.setAttributes('user_attr_',  this.config.attributes.user || {});
-			this.setAttributes('',  this.config.attributes.custom || {});
+			this.setAttributes('page_attr_', this.config.attributes.page || {});
+			this.setAttributes('user_attr_', this.config.attributes.user || {});
+			this.setAttributes('', this.config.attributes.custom || {});
 		}
 
 		let src;
@@ -49,7 +48,7 @@ Krux.prototype.init = function(impl) {
 		if (m) {
 			src = decodeURIComponent(m[1]);
 		}
-		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -70,7 +69,7 @@ Krux.prototype.retrieve = function(name) {
 	/* istanbul ignore else  */
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
-	}  else if (utils.cookie(name)) {
+	} else if (utils.cookie(name)) {
 		value = utils.cookie(name);
 	}
 
@@ -123,10 +122,10 @@ Krux.prototype.events = {
 	dwell_time: function(config) {
 		/* istanbul ignore else  */
 		if (config) {
-			const fire = this.fire,
-			interval = config.interval || 5,
-			max = (config.total / interval) || 120,
-			uid = config.id;
+			const fire = this.fire;
+			const interval = config.interval || 5;
+			const max = (config.total / interval) || 120;
+			const uid = config.id;
 			utils.timers.create(interval, (function() {
 				return function() {
 					fire(uid, {dwell_time: (this.interval * this.ticks) / 1000 });
@@ -141,13 +140,13 @@ Krux.prototype.events = {
 			if (config) {
 				const fire = this.fire;
 				const eventScope = function(kEvnt) {
-					return function(e, t) {
+					return function() {
 						fire(config[kEvnt].id);
 					};
 				};
 
 				window.addEventListener('load', function() {
-					const delEvnt = new delegate(document.body);
+					const delEvnt = new Delegate(document.body);
 					for (let kEvnt in config) {
 						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
@@ -164,7 +163,7 @@ Krux.prototype.events.fire = function(id, attrs) {
 	/* istanbul ignore else  */
 	if (id) {
 		attrs = utils.isPlainObject(attrs) ? attrs : {};
-		return window.Krux('admEvent', id, attrs);
+		return window.Krux('admEvent', id, attrs); // eslint-disable-line new-cap
 	}
 
 	return false;
@@ -190,7 +189,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
 		Object.keys(attributes).forEach(function(item) {
-			this.api('set',  prefix + item, attributes[item]);
+			this.api('set', prefix + item, attributes[item]);
 		}.bind(this));
 	}
 };

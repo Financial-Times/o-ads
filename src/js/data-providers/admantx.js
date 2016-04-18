@@ -11,7 +11,6 @@
  * @memberof ads
  */
 
-'use strict';
 
 const utils = require('../utils');
 const config = require('../config');

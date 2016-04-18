@@ -1,6 +1,5 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false, jQuery: false, $: false */
-'use strict';
 
 QUnit.module('utils.isType methods');
 
@@ -171,16 +170,16 @@ QUnit.test('isPlainObject method', function(assert) {
 QUnit.module('utils.extend');
 QUnit.test('extend method', function(assert) {
 
-	let settings = { 'xnumber1': 5, 'xnumber2': 7, 'xstring1': 'peter', 'xstring2': 'pan' },
-		options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' },
-		optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' },
-		merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' },
-		deep1 = { 'foo': { 'bar': true } },
-		deep2 = { 'foo': { 'baz': true }},
-		deep2copy = { 'foo': { 'baz': true }},
-		deepmerged = { 'foo': { 'bar': true, 'baz': true }},
-		arr = [1, 2, 3],
-		nestedarray = { 'arr': arr };
+	let settings = { 'xnumber1': 5, 'xnumber2': 7, 'xstring1': 'peter', 'xstring2': 'pan' };
+	let options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	let optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	let merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' };
+	let deep1 = { 'foo': { 'bar': true } };
+	let deep2 = { 'foo': { 'baz': true }};
+	let deep2copy = { 'foo': { 'baz': true }};
+	let deepmerged = { 'foo': { 'bar': true, 'baz': true }};
+	let arr = [1, 2, 3];
+	let nestedarray = { 'arr': arr };
 
 	this.ads.utils.extend(settings, options);
 	assert.deepEqual(settings, merged, 'Check if extended: settings must be extended');
@@ -303,7 +302,8 @@ QUnit.test('css class methods for working with .o-ads__ classes', function(asser
 });
 
 QUnit.test('hash method', function(assert) {
-	let result, test = 'a:1,b:2,c:3,a:12';
+	let result;
+	let test = 'a:1,b:2,c:3,a:12';
 	result = this.ads.utils.hash(test, ',', ':');
 
 	assert.ok(this.ads.utils.isObject(result), 'the result is an object');
@@ -411,7 +411,7 @@ QUnit.test('isScriptAlreadyLoaded method when script is not present', function(a
 });
 
 QUnit.test('isScriptAlreadyLoaded method when script is present', function(assert) {
-	const url = location.protocol + '//'  + location.host + '/base/test/qunit/mocks/null.js';
+	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/null.js';
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
 	tag.setAttribute('src', url);

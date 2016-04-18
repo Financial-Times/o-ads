@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, sinon: false, $: false, jQuery: false */
-"use strict";
 
 QUnit.module('Test setup');
 

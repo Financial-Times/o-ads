@@ -4,7 +4,6 @@
  * @module utils/events
  * @see utils
  */
-'use strict';
 
 /**
 * Broadscasts an o-ads event

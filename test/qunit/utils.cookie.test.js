@@ -1,6 +1,5 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false, $: false */
-"use strict";
 
 QUnit.module('utils.cookie', {
 	beforeEach: function() {

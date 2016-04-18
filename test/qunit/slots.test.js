@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, $: false */
-'use strict';
 
 QUnit.module('Slots', {
 	beforeEach: function() {

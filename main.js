@@ -1,15 +1,3 @@
-/**
- * O-ADS - the origami advertising library
- * @author Advertising Technology origami.advertising.technology@ft.com
- *
- */
-'use strict';
-
-/**
- * Represents an instance of the o-ads on the page.
- * All sub modules are available from the prototype
- * @constructor
- */
 function Ads() {
 }
 
@@ -22,7 +10,6 @@ Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
-Ads.prototype.metadata = require('./src/js/metadata');
 Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
 const utils = Ads.prototype.utils = require('./src/js/utils');

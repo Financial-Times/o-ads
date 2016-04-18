@@ -1,5 +1,4 @@
 /* globals sinon: false */
-"use strict";
 const stubs = sinon.sandbox.create();
 
 window.oz_insight = function() {

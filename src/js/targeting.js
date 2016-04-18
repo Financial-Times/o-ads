@@ -15,7 +15,6 @@
 * @memberof FT.ads
 */
 
-'use strict';
 const config = require('./config');
 const krux = require('./data-providers/krux');
 const version = require('./version');
@@ -31,7 +30,6 @@ function Targeting() {
 }
 
 Targeting.prototype.get = function() {
-	let item;
 	const methods = {
 		krux: this.fetchKrux,
 		socialReferrer: this.getSocialReferrer,
@@ -44,7 +42,7 @@ Targeting.prototype.get = function() {
 
 	utils.extend(parameters, this.getFromConfig(), this.encodedIp(), this.searchTerm());
 
-	for (item in methods)  {
+	for (let item in methods) {
 		if (methods.hasOwnProperty(item) && config(item)) {
 			utils.extend(parameters, methods[item]());
 		}
@@ -64,7 +62,7 @@ Targeting.prototype.clear = function() {
 	parameters = {};
 };
 
-Targeting.prototype.encodedIp =  function() {
+Targeting.prototype.encodedIp = function() {
 	const DFPPremiumIPReplaceLookup = {
 		0: {replaceRegex: /0/g, replaceValue: 'a'},
 		1: {replaceRegex: /1/g, replaceValue: 'b'},

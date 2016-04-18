@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
 
 QUnit.module('Krux', {
 	beforeEach: function() {
@@ -70,8 +69,8 @@ QUnit.test('number of Krux segments can be limited', function(assert) {
 
 QUnit.test('event pixels', function(assert) {
 	this.ads.init({ krux: {id: '112233'}});
-	const eventId = 'crunch',
-		attrs = {snap: 'crackle'};
+	const eventId = 'crunch';
+	const attrs = {snap: 'crackle'};
 
 	this.ads.krux.events.fire(eventId);
 	assert.ok(window.Krux.calledWith('admEvent', eventId), 'firing an event works!');

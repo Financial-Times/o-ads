@@ -5,11 +5,10 @@
  * @see utils
  */
 
-'use strict';
 
-const utils = require('./index.js'),
-	pluses = /\+/g,
-	today = new Date();
+const utils = require('./index.js');
+const pluses = /\+/g;
+const today = new Date();
 
 function raw(s) {
 	return s;
@@ -36,7 +35,8 @@ const config = module.exports.cookie = function(key, value, options) {
 		}
 
 		if (typeof options.expires === 'number') {
-			const days = options.expires, t = options.expires = new Date();
+			const days = options.expires;
+			const t = options.expires = new Date();
 			t.setDate(t.getDate() + days);
 		}
 
@@ -51,9 +51,9 @@ const config = module.exports.cookie = function(key, value, options) {
 		return (document.cookie = [
 		encodeURIComponent(key), '=', value,
 		options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-		options.path    ? '; path=' + options.path : '',
-		options.domain  ? '; domain=' + options.domain : '',
-		options.secure  ? '; secure' : ''
+		options.path ? '; path=' + options.path : '',
+		options.domain ? '; domain=' + options.domain : '',
+		options.secure ? '; secure' : ''
 		].join(''));
 	}
 

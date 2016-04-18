@@ -1,6 +1,3 @@
-'use strict';
-
-const timeout = 30000;
 const wait = 8000;
 
 module.exports = {
@@ -12,7 +9,7 @@ module.exports = {
 	'Step 1: go to leaderboard demo page': function (browser) {
 		browser
 			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Individual-Ad demo', 'Page title is correct')
+			.assert.title('o-ads: Individual-Ad demo', 'Page title is correct');
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
@@ -24,7 +21,7 @@ module.exports = {
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/1809750796305150566', 'Correct image is displayed for leaderboard')
 				// switch focus back to main page
-				.frame(null)
+				.frame(null);
 	},
 	after: function (browser) {
 		browser.end();

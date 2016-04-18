@@ -6,7 +6,6 @@
  */
 
 /* jshint devel: true */
-'use strict';
 
 module.exports = log;
 
@@ -17,7 +16,9 @@ module.exports = log;
  * @param {any} args the arguments to be passed to console[type]
  */
 function log() {
-	let type, args, argsIndex;
+	let type;
+	let args;
+	let argsIndex;
 	if ('log warn error info'.indexOf(arguments[0]) === -1) {
 		type = 'log';
 		argsIndex = 0;

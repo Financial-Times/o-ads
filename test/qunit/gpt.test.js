@@ -1,7 +1,6 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, googletag: false, sinon: false */
 
-'use strict';
 const htmlstart = '<div data-o-ads-name="';
 const htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
 
@@ -82,7 +81,7 @@ QUnit.test('override page targeting', function(assert) {
 });
 
 QUnit.test('catches and warns when targeting is not set', function(assert) {
-	this.stub(this.utils, 'isPlainObject', function(url, async, fn) {
+	this.stub(this.utils, 'isPlainObject', function() {
 		return false;
 	});
 	const warnSpy = this.spy(this.utils.log, 'warn');
@@ -180,7 +179,7 @@ QUnit.test('on slot refresh event sets the iframe width and height', function(as
 		assert.equal(iframe.style.height, '250px');
 		done();
 	});
-	const slot = this.ads.slots.initSlot(node);
+	this.ads.slots.initSlot(node);
 });
 
 QUnit.test('on slot refresh event updates targeting', function(assert) {

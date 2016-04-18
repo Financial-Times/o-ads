@@ -5,7 +5,6 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 
-'use strict';
 
 module.exports = {
 	artifactVersion: '${project.version}',

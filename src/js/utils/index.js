@@ -3,7 +3,6 @@
  * @author Origami Advertising, origami.advertising@ft.com
  * @module utils
  */
-'use strict';
 const hop = Object.prototype.hasOwnProperty;
 
 const utils = module.exports;
@@ -145,11 +144,15 @@ module.exports.extend = extend;
 function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
-	let options, name, src, copy, copyIsArray, clone,
-	target = arguments[0] || {},
-	i = 1,
-	length = arguments.length,
-	deep = false;
+	let options;
+	let src;
+	let copy;
+	let copyIsArray;
+	let clone;
+	let target = arguments[0] || {};
+	let length = arguments.length;
+	let deep = false;
+	let i = 1;
 
 	// Handle a deep copy situation
 	if (typeof target === 'boolean') {
@@ -176,7 +179,10 @@ function extend() {
 		// Only deal with non-null/undefined values
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
-			for (name in options) {
+			for (let name in options) {
+				if(!options.hasOwnProperty(name)) {
+					return;
+				}
 				src = target[name];
 				copy = options[name];
 
@@ -228,7 +234,8 @@ module.exports.addClass = function(node, className) {
 };
 
 module.exports.removeClass = function(node, className) {
-	let index, classes;
+	let index;
+	let classes;
 	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
 		classes = node.className.split(' ');
 		index = classes.indexOf('o-ads__' + className);
@@ -249,12 +256,13 @@ module.exports.removeClass = function(node, className) {
  *
  */
 module.exports.hash = function(str, delimiter, pairing) {
-	let pair, value, idx, len,
-	hash = {};
+	let pair;
+	let value;
+	const hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
-		for (idx = 0, len = str.length; idx < len; idx += 1) {
+		for (let idx = 0, l = str.length; idx < l; idx += 1) {
 			value = str[idx];
 			pair = value.split(pairing);
 			if (pair.length > 1) {
@@ -309,7 +317,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 				}
 			};
 		} else {
-			tag.onload =  function() {
+			tag.onload = function() {
 				processCallback(callback);
 			};
 		}
@@ -494,7 +502,8 @@ const iframes = document.getElementsByTagName('iframe');
 * @returns {String|Boolean}
 */
 module.exports.iframeToSlotName = function(iframeWindow) {
-	let slotName, node;
+	let slotName;
+	let node;
 	let i = iframes.length;
 
 	// Figure out which iframe DOM node we have the window for

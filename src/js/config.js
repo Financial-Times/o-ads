@@ -21,7 +21,6 @@
  * @memberof FT.ads
  * @function
 */
-'use strict';
 const utils = require('./utils');
 /**
 * Default configuration set in the constructor.

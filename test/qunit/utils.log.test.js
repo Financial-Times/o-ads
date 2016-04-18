@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, devel: true */
 /* globals QUnit: false */
-"use strict";
 
 QUnit.module('utils.log', { beforeEach: function() {
 	this.debugOn = this.utils.log.isOn('log');

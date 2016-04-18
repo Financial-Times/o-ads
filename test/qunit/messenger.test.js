@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* global QUnit: false */
-"use strict";
 
 QUnit.module('Messenger');
 

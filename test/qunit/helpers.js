@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* global sinon: false, $: false, module: true, QUnit: false, require: true */
-"use strict";
 
 const oViewport = require('o-viewport');
 
@@ -188,7 +187,9 @@ module.exports.viewport = function(width, height) {
 
 /* Add meta data to the page */
 module.exports.meta = function(data) {
-	let name, attr, content, metatag;
+	let name;
+	let attr;
+	let metatag;
 	let attrs = '';
 	if ($.isPlainObject(data)) {
 		for (name in data) {
@@ -196,7 +197,6 @@ module.exports.meta = function(data) {
 				if ($.type(data[name]) === 'string') {
 					attrs += 'content="' + data[name] + '"';
 				} else if ($.isPlainObject(data[name])) {
-					content = JSON.stringify(data[name].content);
 					for (attr in data[name]) {
 						if (data[name].hasOwnProperty(attr)) {
 							attrs += attr + '=\'' + data[name][attr] + '\' ';

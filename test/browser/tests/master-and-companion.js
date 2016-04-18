@@ -1,6 +1,3 @@
-'use strict';
-
-const timeout = 30000;
 const wait = 8000;
 
 module.exports = {
@@ -12,7 +9,7 @@ module.exports = {
 	'Step 1: go to master and companion demo page': function (browser) {
 		browser
 			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Master-and-Companion demo', 'Page title is correct')
+			.assert.title('o-ads: Master-and-Companion demo', 'Page title is correct');
 	},
 	'Step 2: verify the master advert is displayed': function (browser) {
 		browser
@@ -24,7 +21,7 @@ module.exports = {
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/9281177167350826970')
 				// switch focus back to main page
-				.frame(null)
+				.frame(null);
 	},
 	'Step 3: verify the companion advert is displayed': function (browser) {
 		browser
@@ -36,7 +33,7 @@ module.exports = {
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14580659904523692186')
 				// switch focus back to main page
-				.frame(null)
+				.frame(null);
 	},
 	after: function (browser) {
 		browser.end();

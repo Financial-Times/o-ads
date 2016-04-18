@@ -1,6 +1,5 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
-"use strict";
 
 QUnit.module('utils.events');
 
@@ -62,7 +61,7 @@ QUnit.test('We can listen to a one time event', function(assert) {
 	const done = assert.async();
 	let listened = 0;
 
-	utils.once('ahoy', function(ev) {
+	utils.once('ahoy', function() {
 		listened++;
 	});
 

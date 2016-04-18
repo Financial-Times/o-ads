@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
 
 QUnit.module('Rubicon', {
 	afterEach: function() {

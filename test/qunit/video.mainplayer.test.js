@@ -1,6 +1,5 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
 
 const targeting = require('../../src/js/targeting');
 
