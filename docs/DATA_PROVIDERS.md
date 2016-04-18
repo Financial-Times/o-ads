@@ -42,3 +42,14 @@ oAds.init({
 });
 
 ```
+
+## [Moat](https://moat.com/)
+### Configuration
+```js
+oAds.init({
+  ...
+  moat: true,
+  ...
+});
+
+```
