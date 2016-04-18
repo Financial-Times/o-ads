@@ -49,7 +49,7 @@ Krux.prototype.init = function(impl) {
 		if (m) {
 			src = decodeURIComponent(m[1]);
 		}
-		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  `//cdn.krxd.net/controltag?confid=${this.config.id}`;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -66,7 +66,7 @@ Krux.prototype.init = function(impl) {
 */
 Krux.prototype.retrieve = function(name) {
 	let value;
-	name = 'kx' + name;
+	name = `kx${name}`;
 	/* istanbul ignore else  */
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
@@ -246,7 +246,7 @@ Krux.prototype.debug = function() {
 
 		const tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
-			log.start(tags.length + " Supertag© scripts");
+			log.start(`${tags.length} Supertag© scripts`);
 				tags.forEach(function(tag) {
 					log(tag.dataset.alias, tag.querySelector("script"));
 				});

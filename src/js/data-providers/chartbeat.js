@@ -1,25 +1,7 @@
-/**
-* @fileOverview
-* Third party library for use with google publisher tags.
-*
-* @author Robin Marr, robin.marr@ft.com
-*/
-/**
-* FT.ads.chartbeat provides chartbest integration for the FT advertising library
-* @name targeting
-* @memberof FT.ads
-*/
 'use strict';
 const utils = require('../utils');
 const config = require('../config');
 
-/**
-* initialise chartbeat functionality
-* Decorates the gpt refresh method with chartbeat functionality
-* @name init
-* @memberof ChartBeat
-* @lends ChartBeat
-*/
 function ChartBeat() {
 
 }
@@ -36,7 +18,7 @@ ChartBeat.prototype.init = function() {
 			uid: this.config.uid,
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
-			zone: this.config.zone || gpt.unitName || gpt.site + '/' + gpt.zone,
+			zone: this.config.zone || gpt.unitName || `${gpt.site}/${gpt.zone}`,
 			sections: this.config.pageType,
 			enableAdRefresh: this.config.enableAdRefresh || false
 		};
@@ -95,7 +77,7 @@ ChartBeat.prototype.init = function() {
 ChartBeat.prototype.addDemographics = function(demographicsObject) {
 	// Pass User metadata to chartbeat
 	const demographicCodes = Object.keys(demographicsObject).map(function (key) {
-			return key + '=' + demographicsObject[key];
+			return `${key}=${demographicsObject[key]}`;
 		}).join(',');
 
 	window._cbq.push(['_demo', demographicCodes]);
@@ -113,8 +95,8 @@ ChartBeat.prototype.debug = function () {
 
 		const attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
 
-		attrs.forEach(function(attribute) {
-				log('%c ' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+		attrs.forEach(attribute => {
+				log(`%c ${attribute}:`, 'font-weight:bold', asyncConfig[attribute]);
 				delete asyncConfig[attribute];
 		});
 

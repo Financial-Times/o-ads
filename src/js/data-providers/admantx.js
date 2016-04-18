@@ -1,37 +1,13 @@
-/**
- * @fileOverview
- * Third party library for use with google publisher tags.
- *
- * @author Robin Marr, robin.marr@com
- */
-
-/**
- * ads.admantx provides admantx contextual data target information
- * @name targeting
- * @memberof ads
- */
-
 'use strict';
 
 const utils = require('../utils');
 const config = require('../config');
 const targeting = require('../targeting');
 
-/**
- * The Admantx class defines an ads.admantx instance
- * @class
- * @constructor
-*/
-function Admantx() {
-}
 
-/**
- * initialise Admantx functionality
- * calls Admantx api for targeting information
- * @name init
- * @memberof Admantx
- * @lends Admantx
-*/
+function Admantx() {
+
+}
 
 Admantx.prototype.init = function() {
 	this.config = config('admantx') || {};

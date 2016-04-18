@@ -1,12 +1,3 @@
-/*globals googletag: true */
-
-/**
-* @fileOverview
-* ad server modukes for o-ads implementing Google publisher tags ad requests.
-*
-* @author Robin Marr, robin.marr@ft.com
-*/
-
 'use strict';
 const config = require('../config');
 const utils = require('../utils');
@@ -210,10 +201,10 @@ function onRender(event) {
 * refresh is called when a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	window.googletag.cmd.push(function(event) {
+	window.googletag.cmd.push((event) => {
 		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
-			Object.keys(targeting).forEach(function(name) {
+			Object.keys(targeting).forEach((name) => {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
 			});
 		}
@@ -239,7 +230,7 @@ function onRenderEnded(event) {
 
 	const gptSlotId = event.slot.getSlotId();
 	const domId = gptSlotId.getDomId().split('-');
-	const iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
 	const detail = data.gpt;
@@ -250,8 +241,8 @@ function onRenderEnded(event) {
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
 	if(detail.size) {
-		detail.iframe.style.width = detail.size[0] + 'px';
-		detail.iframe.style.height = detail.size[1] + 'px';
+		detail.iframe.style.width = `${detail.size[0]}px`;
+		detail.iframe.style.height = `${detail.size[1]}px`;
 	}
 	utils.broadcast('rendered', data);
 }
@@ -267,8 +258,8 @@ const slotMethods = {
 	* define a GPT slot
 	*/
 	defineSlot: function() {
-		window.googletag.cmd.push(function() {
-			this.gpt.id = this.name + '-gpt';
+		window.googletag.cmd.push(() => {
+			this.gpt.id = `${this.name}-gpt`;
 			this.inner.setAttribute('id', this.gpt.id);
 			this.setUnitName();
 			if (!this.outOfPage) {
@@ -282,10 +273,10 @@ const slotMethods = {
 			else {
 				this.gpt.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, this.gpt.id);
 			}
-		}.bind(this));
+		});
 		return this;
 	},
-	clearSlot: function(gptSlot){
+	clearSlot: function(gptSlot) {
 		if (window.googletag.pubadsReady && window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
 			return googletag.pubads().clear([gptSlot]);
@@ -294,8 +285,8 @@ const slotMethods = {
 		}
 	},
 	initResponsive: function() {
-		window.googletag.cmd.push(function() {
-			utils.on('breakpoint', function(event) {
+		window.googletag.cmd.push(() => {
+			utils.on('breakpoint', (event) => {
 				const slot = event.detail.slot;
 				const screensize = event.detail.screensize;
 
@@ -312,7 +303,7 @@ const slotMethods = {
 			}, this.container);
 
 			const mapping = googletag.sizeMapping();
-			Object.keys(breakpoints).forEach(function(breakpoint) {
+			Object.keys(breakpoints).forEach((breakpoint) => {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
@@ -326,7 +317,7 @@ const slotMethods = {
 	*	Tell gpt to request an ad
 	*/
 	display: function() {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			googletag.display(this.gpt.id);
 		}.bind(this));
 		return this;
@@ -335,7 +326,7 @@ const slotMethods = {
 	* Set the DFP unit name for the slot.
 	*/
 	setUnitName: function() {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			let unitName;
 			const gpt = config('gpt') || {};
 			const attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
@@ -348,9 +339,9 @@ const slotMethods = {
 				const network = gpt.network;
 				const site = gpt.site;
 				const zone = gpt.zone;
-				unitName = '/' + network;
-				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
-				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
+				unitName = `/${network}`;
+				unitName += utils.isNonEmptyString(site) ? `/${site}` : '';
+				unitName += utils.isNonEmptyString(zone) ? `/${zone}` : '';
 			}
 			this.gpt.unitName = unitName;
 		}.bind(this));
@@ -360,7 +351,7 @@ const slotMethods = {
 	* Add the slot to the pub ads service and add a companion service if configured
 	*/
 	addServices: function(gptSlot) {
-		window.googletag.cmd.push(function(gptSlot) {
+		window.googletag.cmd.push((gptSlot) => {
 			const gpt = config('gpt') || {};
 			gptSlot = gptSlot || this.gpt.slot;
 			gptSlot.addService(googletag.pubads());
@@ -379,7 +370,7 @@ const slotMethods = {
 	* false is synonymous with never
 	*/
 	setCollapseEmpty: function() {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			const mode = this.collapseEmpty || config('collapseEmpty');
 
 			if (mode === true || mode === 'after') {
@@ -407,10 +398,10 @@ const slotMethods = {
 			/* istanbul ignore else  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
-					function(){
+					() => {
 						utils.log.info('Impression Url requested');
 					},
-					function(){
+					() => {
 						utils.log.info('CORS request to submit an impression failed');
 					},
 					true
@@ -426,7 +417,7 @@ const slotMethods = {
 	* prevents later url changes via javascript from breaking the ads
 	*/
 	setURL: function(gptSlot) {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			const canonical = config('canonical');
 			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
@@ -438,11 +429,11 @@ const slotMethods = {
 	* Adds key values from a given object to the slot targeting
 	*/
 	setTargeting: function(gptSlot) {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			/* istanbul ignore else  */
 			if (utils.isPlainObject(this.targeting)) {
-				Object.keys(this.targeting).forEach(function(param) {
+				Object.keys(this.targeting).forEach((param) => {
 					gptSlot.setTargeting(param, this.targeting[param]);
 				}.bind(this));
 			}
@@ -463,7 +454,7 @@ const slotMethods = {
 * Updating is used to tell the ad server to treat subsequent ad calls as being on a new page
 */
 function updateCorrelator() {
-	googletag.cmd.push(function() {
+	googletag.cmd.push(() => {
 		googletag.pubads().updateCorrelator();
 	});
 }
@@ -482,7 +473,7 @@ module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = updatePageTargeting;
 
-module.exports.debug = function(){
+module.exports.debug = () => {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){
