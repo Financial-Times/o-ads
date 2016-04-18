@@ -48,7 +48,9 @@ oAds.init({
 ```js
 oAds.init({
   ...
-  moat: true,
+  moat: {
+    id: "moatid1234"
+  },
   ...
 });
 
