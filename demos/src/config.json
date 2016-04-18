@@ -28,16 +28,6 @@
          "name": "Responsive-Positions",
          "template": "demos/src/responsive.mustache",
          "data": {"network": 5887, "site" : "test.5887.origami"}
-      },
-      {
-         "name": "Video-Advertising",
-         "template": "demos/src/video.mustache",
-         "data": {"network": 5887, "site" : "test.5887.origami"}
-      },
-      {
-         "name": "Video-Advertising-with-Companion",
-         "template": "demos/src/videocompanions.mustache",
-         "data": {"network": 5887, "site" : "test.5887.origami"}
       }
    ]
 }
