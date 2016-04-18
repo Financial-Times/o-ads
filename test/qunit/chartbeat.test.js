@@ -14,7 +14,7 @@ QUnit.module('Chartbeat', {
 		}
 
 		if (window._cba && window._cba.push) {
-			var _push = window._cba.push;
+			const _push = window._cba.push;
 
 			window._cba.forEach(process);
 			window._cba.push = function(item) {
@@ -39,23 +39,23 @@ QUnit.module('Chartbeat', {
 });
 
 QUnit.test('global configuration', function(assert) {
-	var config = this.basic;
+	const config = this.basic;
 	config.chartbeat = true;
 
 	this.ads.init(config);
 	this.ads.slots.initSlot(this.node);
-	var slot = this.ads.slots.advert;
+	const slot = this.ads.slots.advert;
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
 });
 
 QUnit.test('slot configuration', function(assert) {
-	var config = this.basic;
+	const config = this.basic;
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
 	this.ads.init(config);
 	this.ads.slots.initSlot(this.node);
-	var slot = this.ads.slots.advert;
+	const slot = this.ads.slots.advert;
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'advert', 'the chartbeat id attribute has been added to the slot');
 });
 
@@ -66,19 +66,19 @@ QUnit.test('loads chartbeat js file if configured', function(assert) {
 });
 
 QUnit.test('override name', function(assert) {
-	var config = this.basic;
+	const config = this.basic;
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = 'override';
 
 	this.ads.init(config);
 	this.ads.slots.initSlot(this.node);
-	var slot = this.ads.slots.advert;
+	const slot = this.ads.slots.advert;
 	assert.equal(slot.container.getAttribute('data-cb-ad-id'), 'override', 'the chartbeat id attribute has been added to the slot');
 });
 
 QUnit.test('register gpt slots with the enaged refresh service', function(assert) {
-	var done = assert.async();
-	var config = this.basic;
+	const done = assert.async();
+	const config = this.basic;
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
@@ -95,8 +95,8 @@ QUnit.test('register gpt slots with the enaged refresh service', function(assert
 });
 
 QUnit.test('the refreshAd method is called when refreshing the ad', function(assert) {
-	var done = assert.async();
-	var config = this.basic;
+	const done = assert.async();
+	const config = this.basic;
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
@@ -114,7 +114,7 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 });
 
 QUnit.test('demographics configuration set', function(assert) {
-	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
+	const config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
 	window._cbq.push = this.spy();
 	this.ads.init(config);
 
@@ -122,14 +122,14 @@ QUnit.test('demographics configuration set', function(assert) {
 });
 
 QUnit.test('demographics configuration not set', function(assert) {
-	var config = {};
+	const config = {};
 	window._cbq.push = this.spy();
 	this.ads.init(config);
 	assert.ok((window._cbq.push.callCount === 0), 'no call has been made to chartbeat api');
 });
 
 QUnit.test('sets global cbq if one is not available yet', function(assert) {
-	var config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
+	const config = {chartbeat : {'demographics' : {27 : 'PVT', 18 : 'TEST'} }};
 	delete window._cbq;
 	this.ads.init(config);
 	assert.ok((window._cbq), 'cbq is set in the init');
@@ -137,7 +137,7 @@ QUnit.test('sets global cbq if one is not available yet', function(assert) {
 
 QUnit.test('debug returns early if no config is set', function(assert) {
 	this.ads.init();
-	var start = this.spy(this.utils.log, "start");
+	const start = this.spy(this.utils.log, "start");
 
 	this.ads.cb.debug();
 	assert.notOk(start.called, "`utils.start` wasn't called");
@@ -145,8 +145,8 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 
 QUnit.test('debug starts logging Chartbeat data', function(assert) {
 	this.ads.init({chartbeat: {uid: '123'}});
-	var start = this.spy(this.utils.log, 'start');
-	var log = this.spy(this.utils, 'log');
+	const start = this.spy(this.utils.log, 'start');
+	const log = this.spy(this.utils, 'log');
 
 	this.ads.cb.debug();
 
@@ -157,7 +157,7 @@ QUnit.test('debug starts logging Chartbeat data', function(assert) {
 
 QUnit.test("debug doesn't log demographic data if not set", function(assert) {
 	this.ads.init({chartbeat: {}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.cb.debug();
 
@@ -167,7 +167,7 @@ QUnit.test("debug doesn't log demographic data if not set", function(assert) {
 
 QUnit.test('debug logs demographic data if set', function(assert) {
 	this.ads.init({chartbeat: {}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.cb.demographicCodes = {};
 	this.ads.cb.debug();

@@ -2,18 +2,17 @@
 
 'use strict';
 
-var googletag = {};
-var handler;
-var slotRenderEnded;
-var slots = {};
-var stubs = sinon.sandbox.create();
-var oViewport = require('o-viewport');
+const googletag = {};
+let handler;
+const slots = {};
+const stubs = sinon.sandbox.create();
+const oViewport = require('o-viewport');
 
 function getResponsiveSizes(mapping) {
-	var winner;
-	var dims = oViewport.getSize();
+	let winner;
+	const dims = oViewport.getSize();
 	function findCurrentBreakpoint(breakpoint) {
-		var breakpointDims = breakpoint[0];
+		const breakpointDims = breakpoint[0];
 		if (dims.width > breakpointDims[0] && dims.height > breakpointDims[1]) {
 			if (!winner || breakpointDims[0] > winner[0][0]) {
 				winner = breakpoint;
@@ -64,15 +63,15 @@ function GPTSlot(name, sizes, id) {
 }
 
 function slotRender(slot, color) {
-	var size;
+	let size;
 	color = color || '#800037';
 	/* jshint -W107 */
 	/* needs this to mock iframes */
 
 	slot = slots[slot];
 
-	var trackingDiv = (slot.hasOwnProperty('outOfPage')  && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
-	var html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
+	const trackingDiv = (slot.hasOwnProperty('outOfPage')  && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	const html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
@@ -101,8 +100,8 @@ function slotRender(slot, color) {
 
 function slotRenderEnded(slot) {
 	slot = slots[slot];
-	var size = [slot.iframe.width, slot.iframe.height];
-	var event = {
+	const size = [slot.iframe.width, slot.iframe.height];
+	const event = {
 		isEmpty: !!slot.iframe.width,
 		creativeId: Math.floor(Math.random() * 1e11),
 		lineItemId: Math.floor(Math.random() * 1e9),
@@ -122,7 +121,7 @@ stubs.stub(googletag, 'defineSlot', function(name, sizes, id) {
 });
 
 stubs.stub(googletag, 'defineOutOfPageSlot', function(name, id) {
-	var gptSlot = new GPTSlot(name, id);
+	const gptSlot = new GPTSlot(name, id);
 	gptSlot.outOfPage = true;
 	return gptSlot;
 });
@@ -135,7 +134,7 @@ stubs.stub(googletag, 'display', function(slot) {
 });
 
 googletag.sizeMapping = function() {
-	var mapping = [];
+	const mapping = [];
 	return {
 		addSize: function() {
 			mapping.push([].slice.call(arguments));
@@ -146,7 +145,7 @@ googletag.sizeMapping = function() {
 	};
 };
 
-var pubads = {
+const pubads = {
 	disableInitialLoad: stubs.stub(),
 	enableSingleRequest: stubs.stub(),
 	enableAsyncRendering: stubs.stub(),

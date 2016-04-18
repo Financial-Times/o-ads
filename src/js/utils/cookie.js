@@ -7,7 +7,7 @@
 
 'use strict';
 
-var utils = require('./index.js'),
+const utils = require('./index.js'),
 	pluses = /\+/g,
 	today = new Date();
 
@@ -26,7 +26,7 @@ function decoded(s) {
 * @param {string} value The value to set to the written cookie (if param is missing the cookie will be read)
 * @param {object} options Expires,
 */
-var config = module.exports.cookie = function(key, value, options) {
+const config = module.exports.cookie = function(key, value, options) {
 	// write
 	if (value !== undefined) {
 		options = utils.extend({}, config.defaults, options);
@@ -36,7 +36,7 @@ var config = module.exports.cookie = function(key, value, options) {
 		}
 
 		if (typeof options.expires === 'number') {
-			var days = options.expires, t = options.expires = new Date();
+			const days = options.expires, t = options.expires = new Date();
 			t.setDate(t.getDate() + days);
 		}
 
@@ -58,8 +58,8 @@ var config = module.exports.cookie = function(key, value, options) {
 	}
 
 	// read
-	var decode = config.raw ? raw : decoded;
-	var cookie = utils.cookies[encodeURIComponent(key)];
+	const decode = config.raw ? raw : decoded;
+	const cookie = utils.cookies[encodeURIComponent(key)];
 	if (!!cookie || cookie === '') {
 		return config.json ? JSON.parse(decode(cookie)) : decode(cookie);
 	}
@@ -92,8 +92,9 @@ module.exports.removeCookie = function(key, options) {
 * @return {string|undefined}
 */
 function getRegExp(name, param) {
-	var re,
-	formats = {
+	let re;
+
+	const formats = {
 		"AYSC": "underscore",
 		"FT_U": "underscoreEquals",
 		"FT_Remember": "colonEquals",
@@ -129,8 +130,9 @@ function getRegExp(name, param) {
 * @return {string|undefined}
 */
 module.exports.getCookieParam = function(name, param) {
-	var matches,
-	wholeValue = module.exports.cookie(name) || "";
+	let matches;
+
+	const wholeValue = module.exports.cookie(name) || "";
 	/* istanbul ignore else  */
 	if (param) {
 		matches = wholeValue.match(getRegExp(name, param));

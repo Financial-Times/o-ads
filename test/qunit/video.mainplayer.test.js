@@ -2,7 +2,7 @@
 /* globals QUnit: false */
 "use strict";
 
-var targeting = require('../../src/js/targeting');
+const targeting = require('../../src/js/targeting');
 
 QUnit.module('Video Main-player tests');
 
@@ -16,15 +16,15 @@ QUnit.test('buildURLForVideo returns correct URL base when video-hub is set', fu
 		}
 	});
 
-	var result = this.ads.buildURLForVideo("uk","video",{});
-	var expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/ftcom.5887.video/video-hub&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
+	const result = this.ads.buildURLForVideo("uk","video",{});
+	const expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/ftcom.5887.video/video-hub&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
 	assert.strictEqual(result.urlStem,expected, 'the url is what we expected');
 });
 
 QUnit.test('buildURLForVideo returns correct URL base when video-hub is set but no parameters passed', function (assert) {
 	this.ads.init({});
-	var result = this.ads.buildURLForVideo();
-	var expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/undefined/undefined&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
+	const result = this.ads.buildURLForVideo();
+	const expected = 'http://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&impl=s&output=xml_vast2&iu=/5887/undefined/undefined&sz=592x333|400x225&unviewed_position_start=1&scp=pos%3Dvideo';
 	assert.strictEqual(result.urlStem,expected, 'the url is what we expected when no parameters are passed');
 });
 
@@ -43,8 +43,8 @@ QUnit.test('buildURLForVideo returns correct targetting parameters from targetti
 		return {slv: 'test1', ksg: []};
 	});
 
-	var result = this.ads.buildURLForVideo("uk","video",{});
-	var expected = 'slv=test1&';
+	const result = this.ads.buildURLForVideo("uk","video",{});
+	const expected = 'slv=test1&';
 	assert.strictEqual(decodeURIComponent(result.additionalAdTargetingParams), expected, 'the targetting parameters are correct');
 });
 
@@ -59,7 +59,7 @@ QUnit.test('buildURLForVideo returns correct targetting parameters from options 
 	});
 
 
-	var result = this.ads.buildURLForVideo("uk","video",{slv: 'test3'});
-	var expected = 'slv=test3&';
+	const result = this.ads.buildURLForVideo("uk","video",{slv: 'test3'});
+	const expected = 'slv=test3&';
 	assert.strictEqual(decodeURIComponent(result.additionalAdTargetingParams), expected, 'the targetting parameters are correct');
 });

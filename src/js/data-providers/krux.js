@@ -11,9 +11,9 @@
 
 */
 'use strict';
-var utils = require('../utils');
-var config = require('../config');
-var delegate = require('ftdomdelegate');
+const utils = require('../utils');
+const config = require('../config');
+const delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -44,12 +44,12 @@ Krux.prototype.init = function(impl) {
 			this.setAttributes('',  this.config.attributes.custom || {});
 		}
 
-		var src;
-		var m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
+		let src;
+		const m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
 		if (m) {
 			src = decodeURIComponent(m[1]);
 		}
-		var finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
@@ -65,7 +65,7 @@ Krux.prototype.init = function(impl) {
 * @lends Krux
 */
 Krux.prototype.retrieve = function(name) {
-	var value;
+	let value;
 	name = 'kx' + name;
 	/* istanbul ignore else  */
 	if (window.localStorage && localStorage.getItem(name)) {
@@ -95,7 +95,7 @@ Krux.prototype.segments = function() {
 * @lends Krux
 */
 Krux.prototype.targeting = function() {
-	var segs = this.segments();
+	let segs = this.segments();
 	/* istanbul ignore else  */
 	if (segs) {
 		segs = segs.split(',');
@@ -123,7 +123,7 @@ Krux.prototype.events = {
 	dwell_time: function(config) {
 		/* istanbul ignore else  */
 		if (config) {
-			var fire = this.fire,
+			const fire = this.fire,
 			interval = config.interval || 5,
 			max = (config.total / interval) || 120,
 			uid = config.id;
@@ -139,16 +139,16 @@ Krux.prototype.events = {
 		if (window.addEventListener) {
 			/* istanbul ignore else  */
 			if (config) {
-				var fire = this.fire;
-				var eventScope = function(kEvnt) {
+				const fire = this.fire;
+				const eventScope = function(kEvnt) {
 					return function(e, t) {
 						fire(config[kEvnt].id);
 					};
 				};
 
 				window.addEventListener('load', function() {
-					var delEvnt = new delegate(document.body);
-					for (var kEvnt in config) {
+					const delEvnt = new delegate(document.body);
+					for (let kEvnt in config) {
 						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
@@ -171,7 +171,8 @@ Krux.prototype.events.fire = function(id, attrs) {
 };
 
 Krux.prototype.events.init = function() {
-	var event, configured = config('krux') && config('krux').events;
+	let event;
+    const configured = config('krux') && config('krux').events;
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(configured)) {
 		for (event in configured) {
@@ -195,7 +196,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 };
 
 Krux.prototype.debug = function() {
-	var log = utils.log;
+	const log = utils.log;
 	if (!this.config) {
 		return;
 	}
@@ -207,7 +208,7 @@ Krux.prototype.debug = function() {
 		}
 
 		if (this.config.attributes) {
-			var attributes = this.config.attributes;
+			const attributes = this.config.attributes;
 			log.start('Attributes');
 				log.start('Page');
 					log.attributeTable(attributes.page);
@@ -223,7 +224,7 @@ Krux.prototype.debug = function() {
 			log.end();
 		}
 		if (this.config.events) {
-			var events = this.config.events;
+			const events = this.config.events;
 			log.start('Events');
 				if (events.dwell_time) {
 					log.start('Dwell Time');
@@ -238,12 +239,12 @@ Krux.prototype.debug = function() {
 			log.end();
 		}
 
-		var targeting = this.targeting();
+		const targeting = this.targeting();
 		log.start('Targeting');
 			log.attributeTable(targeting);
 		log.end();
 
-		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
+		const tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
 			log.start(tags.length + " Supertag© scripts");
 				tags.forEach(function(tag) {

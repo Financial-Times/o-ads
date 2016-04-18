@@ -2,7 +2,7 @@
 /* global sinon: false, $: false, module: true, QUnit: false, require: true */
 "use strict";
 
-var oViewport = require('o-viewport');
+const oViewport = require('o-viewport');
 
 /* a URL that can be used in tests without causing 404 errors */
 module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
@@ -17,7 +17,7 @@ module.exports.fixturesContainer.add = function(html) {
 /* create an iframe and return it's context for testing post message */
 module.exports.createDummyFrame = function (content, target) {
 	target = target || document.getElementById('qunit-fixtures');
-	var iframe = document.createElement('iframe');
+	const iframe = document.createElement('iframe');
 	iframe.id = 'postMessage';
 	target.appendChild(iframe);
 	if (content) {
@@ -35,12 +35,12 @@ module.exports.fixtures = {
 };
 
 /* the google library mock*/
-var gpt = require('./mocks/gpt-mock');
+const gpt = require('./mocks/gpt-mock');
 
 module.exports.gpt = gpt.mock;
 
 /* the rubicon library mock*/
-var rubicon = require('./mocks/rubicon-mock');
+const rubicon = require('./mocks/rubicon-mock');
 
 module.exports.rubicon = rubicon.mock;
 
@@ -49,15 +49,15 @@ module.exports.rubicon = rubicon.mock;
 module.exports.warn = function(message) {
 	/* jshint devel: true */
 	if (console) {
-		var log = console.warn || console.log;
+		const log = console.warn || console.log;
 		log.call(console, message);
 	}
 };
 
 /* trigger a dom event */
 module.exports.trigger = function(element, eventType, bubble, cancelable, data) {
-	var event;
-	var utils = require('../../src/js/utils');
+	let event;
+	const utils = require('../../src/js/utils');
 	element = element || document.body;
 	element = $.type(element) === 'string' ? document.querySelector(element) : element;
 	if (document.createEvent) {
@@ -80,7 +80,7 @@ module.exports.trigger = function(element, eventType, bubble, cancelable, data) 
 };
 
 /* Setup a sinon sandbox to easily clear mocks */
-var sandbox = QUnit.sandbox = module.exports.sandbox = sinon.sandbox.create();
+const sandbox = QUnit.sandbox = module.exports.sandbox = sinon.sandbox.create();
 /* Shortcuts to Sinon sandbox methods */
 module.exports.spy = function() {
 	return sandbox.spy.apply(sandbox, [].slice.call(arguments));
@@ -95,8 +95,8 @@ module.exports.mock = function() {
 };
 
 /* decorate document.body add/remove EventListener so we can remove any attached events */
-var _addEventListener = document.body.addEventListener;
-var _removeEventListener = document.body.removeEventListener;
+const _addEventListener = document.body.addEventListener;
+const _removeEventListener = document.body.removeEventListener;
 sandbox._eventListeners = [];
 document.body.addEventListener = function(type, listener) {
 	sandbox._eventListeners.push({type: type, listener: listener});
@@ -104,7 +104,7 @@ document.body.addEventListener = function(type, listener) {
 };
 
 document.body.removeEventListener = function(type, listener) {
-	var remove;
+	let remove;
 	sandbox._eventListeners.forEach(function(item, index) {
 		if (item.type === type && listener === listener) {
 			remove = index;
@@ -118,8 +118,8 @@ document.body.removeEventListener = function(type, listener) {
 	_removeEventListener(type, listener);
 };
 
-var _addWindowEventListener = window.addEventListener;
-var _removeWindowEventListener = window.removeEventListener;
+const _addWindowEventListener = window.addEventListener;
+const _removeWindowEventListener = window.removeEventListener;
 sandbox._windowEventListeners = [];
 window.addEventListener = function(type, listener) {
 	sandbox._windowEventListeners.push({type: type, listener: listener});
@@ -127,7 +127,7 @@ window.addEventListener = function(type, listener) {
 };
 
 window.removeEventListener = function(type, listener) {
-	var remove;
+	let remove;
 	sandbox._windowEventListeners.forEach(function(item, index) {
 		if (item.type === type && listener === listener) {
 			remove = index;
@@ -143,7 +143,7 @@ window.removeEventListener = function(type, listener) {
 
 /* mock dates */
 module.exports.date = function(time) {
-	var clock;
+	let clock;
 	if (isNaN(time)) {
 		clock = sandbox.useFakeTimers();
 	} else {
@@ -172,7 +172,7 @@ module.exports.viewport = function(width, height) {
 		Math.max.restore();
 	}
 
-	var _max = Math.max;
+	const _max = Math.max;
 	this.stub(Math, 'max', function() {
 		if (document.documentElement.clientWidth === arguments[0] || window.innerWidth === arguments[0]) {
 			return width;
@@ -188,8 +188,8 @@ module.exports.viewport = function(width, height) {
 
 /* Add meta data to the page */
 module.exports.meta = function(data) {
-	var name, attr, content, metatag;
-	var attrs = '';
+	let name, attr, content, metatag;
+	let attrs = '';
 	if ($.isPlainObject(data)) {
 		for (name in data) {
 			if (data.hasOwnProperty(name)) {
@@ -217,7 +217,7 @@ module.exports.meta = function(data) {
 
 /* Mock cookies */
 module.exports.cookies = function(data) {
-	var utils = require('../../src/js/utils');
+	const utils = require('../../src/js/utils');
 	if ($.isPlainObject(data)) {
 		sandbox._cookies = utils.cookies;
 		utils.cookies = data;
@@ -240,13 +240,13 @@ module.exports.window = function(data) {
 
 /* Mock localStorage */
 module.exports.localStorage = function(data) {
-	var canMock = !!window.localStorage;
-	var fake;
+	let canMock = !!window.localStorage;
+	let fake;
 	if (canMock) {
 		// remember original local storage
 		sandbox._localStorage = window.localStorage;
 		if ($.isPlainObject(data)) {
-			var fakes = {
+			const fakes = {
 				getItem: function(key) {
 					return data[key] || null;
 				},
@@ -258,7 +258,7 @@ module.exports.localStorage = function(data) {
 					delete data[key];
 				},
 				key: function(index) {
-					var keys = Object.keys(data);
+					const keys = Object.keys(data);
 					index = index || 0;
 					return data[keys[index]] || null;
 				}

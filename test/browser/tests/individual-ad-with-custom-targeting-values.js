@@ -1,7 +1,7 @@
 'use strict';
 
-var timeout = 30000;
-var wait = 8000;
+const timeout = 30000;
+const wait = 8000;
 
 module.exports = {
 
@@ -29,4 +29,4 @@ module.exports = {
 	after: function (browser) {
 		browser.end();
 	}
-};
+}

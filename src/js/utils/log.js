@@ -17,7 +17,7 @@ module.exports = log;
  * @param {any} args the arguments to be passed to console[type]
  */
 function log() {
-	var type, args, argsIndex;
+	let type, args, argsIndex;
 	if ('log warn error info'.indexOf(arguments[0]) === -1) {
 		type = 'log';
 		argsIndex = 0;
@@ -39,7 +39,7 @@ function log() {
  */
 module.exports.isOn = function(type) {
 	/* istanbul ignore else  */
-	var debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
+	const debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
 };
 
@@ -47,7 +47,7 @@ module.exports.isOn = function(type) {
  * Log a warning message
  */
 module.exports.warn = function() {
-	var args = ['warn'].concat([].slice.call(arguments, 0));
+	const args = ['warn'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
@@ -55,7 +55,7 @@ module.exports.warn = function() {
  * Log an error message
  */
 module.exports.error = function() {
-	var args = ['error'].concat([].slice.call(arguments, 0));
+	const args = ['error'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
@@ -63,7 +63,7 @@ module.exports.error = function() {
  * Log an info message
  */
 module.exports.info = function() {
-	var args = ['info'].concat([].slice.call(arguments, 0));
+	const args = ['info'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
 
@@ -101,11 +101,11 @@ module.exports.table = function(data, columns) {
 };
 
 module.exports.attributeTable = function(object, columns) {
-	var utils = require('../utils');
+	const utils = require('../utils');
 	if (log.isOn('log') && window.console) {
 		if (object && console.table) {
-			var data = Object.keys(object).map(function(item) {
-				var val;
+			const data = Object.keys(object).map(function(item) {
+				let val;
 				if (utils.isArray(object[item]) || utils.isObject(object[item])) {
 					val = JSON.stringify(object[item]);
 				} else {

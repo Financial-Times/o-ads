@@ -5,9 +5,9 @@
 QUnit.module('Slots - post message', {
 	beforeEach: function() {
 		window.scrollTo(0, 0);
-		var eventListeners = this.eventListeners = [];
+		const eventListeners = this.eventListeners = [];
 		eventListeners;
-		var _addEventListener = window.addEventListener;
+		const _addEventListener = window.addEventListener;
 		window.addEventListener = function (type, handler) {
 			if(type === 'message'){
 		 		eventListeners.push({type: type, handler: handler});
@@ -25,9 +25,9 @@ QUnit.module('Slots - post message', {
 });
 
 QUnit.test('Post message whoami message reply is sent', function (assert) {
-	var done = assert.async();
-	var slotName = 'whoami-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'whoami-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
@@ -46,14 +46,14 @@ QUnit.test('Post message whoami message reply is sent', function (assert) {
  	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });
 
 QUnit.test('Post message whoami message with collapse will call slot collapse', function (assert) {
-	var done = assert.async();
-	var slotName = 'whoami-collapse-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'whoami-collapse-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
@@ -72,19 +72,19 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });
 
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
-	var done = assert.async();
-	var slotName = 'whoami-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'whoami-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return 'unknown-slot';
 	});
 
-	var errorStub = this.stub(this.utils.log, 'error');
+	const errorStub = this.stub(this.utils.log, 'error');
 
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.ok(errorStub.calledWith('Message received from unidentified slot'), 'the error is logged');
@@ -101,20 +101,20 @@ QUnit.test('Post message from unknown slot logs an error and sends a repsonse', 
  	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });
 
 QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
-	var done = assert.async();
-	var slotName = 'collapse-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'collapse-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	document.body.addEventListener('oAds.complete', function () {
 		window.postMessage('{ "type": "oAds.collapse", "name": "' + slotName + '"}', '*');
 	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.stub(slot, 'collapse', function () {
 		assert.ok(slot.collapse.called, 'the collapse method is called');
 		done();
@@ -122,16 +122,16 @@ QUnit.test('Post message collapse calls the collapse method on the slot', functi
 });
 
 QUnit.test('Post message responsive tells the slot a responsive creative is loaded', function (assert) {
-	var done = assert.async();
-	var slotName = 'responsive-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'responsive-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.responsive", "name": "' + slotName + '"}', '*');
 	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.stub(slot, 'setResponsiveCreative', function () {
 		assert.ok(slot.setResponsiveCreative.calledWith(true), 'the setResponsiveCreative method is called');
 		done();
@@ -140,9 +140,9 @@ QUnit.test('Post message responsive tells the slot a responsive creative is load
 
 
 QUnit.test('Post message resize message fire the resize event', function (assert) {
-	var done = assert.async();
-	var slotName = 'resize-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'resize-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.resize", "name": "' + slotName + '", "size": [300, 250]}', '*');
@@ -160,9 +160,9 @@ QUnit.test('Post message resize message fire the resize event', function (assert
 });
 
 QUnit.test('Passed touch fires an event', function (assert) {
-	var done = assert.async();
-	var slotName = 'touch-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'touch-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "touchstart", "name": "' + slotName + '"}', '*');

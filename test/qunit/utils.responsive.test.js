@@ -5,11 +5,11 @@
 QUnit.module('utils.responsive');
 
 QUnit.test('resizing the browser window, simple config', function(assert) {
-	var clock = this.date();
+	const clock = this.date();
 	this.viewport(1, 1);
 
-	var callback = this.stub();
-	var	viewports = {
+	const callback = this.stub();
+	const	viewports = {
 		large: [300, 200],
 		medium: [200, 100],
 		small: [0, 0]
@@ -36,8 +36,8 @@ QUnit.test('resizing the browser window, simple config', function(assert) {
 });
 
 QUnit.test('resizing the browser window, overlapping viewport sizes', function(assert) {
-	var clock = this.date('now');
-	var callback = this.spy(),
+	const clock = this.date('now');
+	const callback = this.spy(),
 		viewports = {
 			large: [300, 200],
 			medium: [200, 100],
@@ -69,12 +69,12 @@ QUnit.test('resizing the browser window, overlapping viewport sizes', function(a
 QUnit.test('resizing the browser window, simple config', function(assert) {
 	this.viewport(1, 1);
 
-	var	viewports = {
+	const	viewports = {
 		large: [300, 200],
 		medium: [200, 100],
 		small: [0, 0]
 	};
 
-	var result = this.ads.utils.responsive(viewports, 'string');
+	const result = this.ads.utils.responsive(viewports, 'string');
 	assert.notOk(result, 'responsive init returns early if the callback is not a function');
 });

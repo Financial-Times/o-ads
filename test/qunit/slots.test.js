@@ -17,56 +17,56 @@ QUnit.module('Slots', {
 QUnit.test('fails nicely if not slots found', function(assert) {
 	this.fixturesContainer.add('<div id="banlb2" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
-	var result = this.ads.slots.initSlot('banlb1');
+	const result = this.ads.slots.initSlot('banlb1');
 	assert.notOk(result, 'failed to find an ad slot');
 });
 
 QUnit.test('moves id attribute to data-o-ads-name attribute instead', function(assert) {
 	this.fixturesContainer.add('<div id="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
-	var result = this.ads.slots.initSlot('banlb2');
+	const result = this.ads.slots.initSlot('banlb2');
 	assert.ok(result, 'ad slot inited correctly');
 });
 
 QUnit.test('generates new name for a slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
-	var result = slot.container.getAttribute('data-o-ads-name');
+	const slot = this.ads.slots.initSlot(node);
+	const result = slot.container.getAttribute('data-o-ads-name');
 	assert.ok(result, 'ad slot inited correctly');
 });
 
 QUnit.test('adds an aria-hidden attribute on a slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
-	var result = slot.container.getAttribute('aria-hidden');
+	const slot = this.ads.slots.initSlot(node);
+	const result = slot.container.getAttribute('aria-hidden');
 	assert.ok(result, 'ad slot has the aria attribute');
 	assert.equal(result, 'true', 'ad slot aria attribue value is correct');
 });
 
 QUnit.test('sets all attributes on slot object', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	assert.notOk(slot.attributes, 'attributes are not set on slot object');
 	slot.getAttributes();
 	assert.ok(slot.attributes, 'attributes are set on slot object');
 });
 
 QUnit.test('catches when the ads format is not correct', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var errorSpy = this.spy(this.utils.log, 'error');
+	const errorSpy = this.spy(this.utils.log, 'error');
 	this.ads.slots.initSlot(node);
 	assert.ok(errorSpy.calledOnce, 'logs error when using wrong format');
 });
 
 
 QUnit.test('catches when the ads sizes are not correct', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="WrongFormat" data-o-ads-sizes></div>');
 	this.ads.init();
-	var errorSpy = this.spy(this.utils.log, 'error');
+	const errorSpy = this.spy(this.utils.log, 'error');
 	this.ads.slots.initSlot(node);
 	assert.ok(errorSpy.called, 'logs error when using wrong sizes');
 	assert.ok(errorSpy.calledWith('slot %s has no configured sizes!'), 'missing size config logs correct error message');
@@ -74,52 +74,52 @@ QUnit.test('catches when the ads sizes are not correct', function(assert) {
 
 
 QUnit.test('creates add based on a format with multiple sizes defined', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="TestFormat" data-o-ads-sizes></div>');
-	var sizes = [[970, 90], [970, 66], [180, 50]];
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="TestFormat" data-o-ads-sizes></div>');
+	const sizes = [[970, 90], [970, 66], [180, 50]];
 	this.ads.init({
 		formats: {
 			TestFormat: {sizes: [[970, 90], [970, 66], [180, 50]]}
 		}
 	});
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	assert.deepEqual(slot.sizes, sizes, 'slot contains all sizes defined in the format defined');
 });
 
 QUnit.test('converts false string value of a property to a boolean', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="false" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="false" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	assert.notOk(slot.center, 'the center value is a boolean');
 });
 
 QUnit.test('converts false string value of a property to a boolean', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="true" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(slot.center, 'the center value is a boolean');
 });
 
 QUnit.test('defaults empty string value of a property to a true boolean', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="" data-o-ads-sizes="600x300,300x600,720x30"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(slot.center, 'the center value is a boolean');
 });
 
 QUnit.test('create a basic slot with js configuration', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="banlb"></div>');
 
-	var expected = {
+	const expected = {
 		outOfPage: true,
 		sizes: [[2, 2]]
 	};
 
 	this.ads.init({slots: { banlb: expected }});
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.banlb;
-	var container = result.container;
-	var outer = container.querySelector('.o-ads__outer');
-	var inner = outer.querySelector('.o-ads__inner');
+	const result = this.ads.slots.banlb;
+	const container = result.container;
+	const outer = container.querySelector('.o-ads__outer');
+	const inner = outer.querySelector('.o-ads__inner');
 	assert.strictEqual(result.name, 'banlb', 'the slot name is available');
 	assert.ok(result, 'the slot object is available');
 	assert.deepEqual(result.sizes, expected.sizes, 'the correct sizes are configured');
@@ -129,27 +129,27 @@ QUnit.test('create a basic slot with js configuration', function(assert) {
 });
 
 QUnit.test('create a slot with sizes via sizes attribute', function(assert) {
-	var expected = [[600, 300], [300, 600], [720, 30]];
-	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
+	const expected = [[600, 300], [300, 600], [720, 30]];
+	const node = this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-sizes="600x300,300x600,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.banlb2;
+	const result = this.ads.slots.banlb2;
 	assert.deepEqual(result.sizes, expected, 'Multiple sizes are parsed and added correctly');
 });
 
 QUnit.test('create a slot with an invalid size among multiple sizes', function(assert) {
-	var expected = [[600, 300], [100, 200], [720, 30]];
-	var node = this.fixturesContainer.add('<div data-o-ads-name="banlb" data-o-ads-sizes="600x300,invalidxsize,100x200,720x30" class="o-ads o-ads-slot"></div>');
+	const expected = [[600, 300], [100, 200], [720, 30]];
+	const node = this.fixturesContainer.add('<div data-o-ads-name="banlb" data-o-ads-sizes="600x300,invalidxsize,100x200,720x30" class="o-ads o-ads-slot"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.banlb;
+	const result = this.ads.slots.banlb;
 	assert.deepEqual(result.sizes, expected, 'Invalid size is ignored');
 });
 
 QUnit.test('create a slot with responsive sizes via sizes attributes', function(assert) {
-	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
-	var expected = { small:false, medium:[[300, 400], [300, 600]], large:[[300, 600], [300, 1050]]};
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
+	const expected = { small:false, medium:[[300, 400], [300, 600]], large:[[300, 600], [300, 1050]]};
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
 			small: [0, 0],
@@ -158,13 +158,13 @@ QUnit.test('create a slot with responsive sizes via sizes attributes', function(
 		}
 	});
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.mpu;
+	const result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'sizes are parsed into slot config.');
 });
 
 QUnit.test('create a slot with sizes via format attribute', function(assert) {
-	var expected = [[300, 250]];
-	var node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	const expected = [[300, 250]];
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({
 		responsive: {
 			small: [0, 0],
@@ -173,14 +173,14 @@ QUnit.test('create a slot with sizes via format attribute', function(assert) {
 		}
 	});
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.mpu;
+	const result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
 QUnit.test('create a slot with responsive sizes via formats attributes', function(assert) {
-	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
-	var expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	const expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
 			small: [0, 0],
@@ -189,17 +189,17 @@ QUnit.test('create a slot with responsive sizes via formats attributes', functio
 		}
 	});
 	this.ads.slots.initSlot(node);
-	var result = this.ads.slots.mpu;
+	const result = this.ads.slots.mpu;
 	assert.deepEqual(result.sizes, expected, 'Formats names are parsed and the matching sizes are pulled from config.');
 });
 
 QUnit.test('responsive slot should refresh when a new size exists for a breakpoint', function(assert) {
-	var clock = this.date();
+	const clock = this.date();
 	this.viewport(700, 700);
 
 
-	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="SuperLeaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="Billboard"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="SuperLeaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="Billboard"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
 			small: [0, 0],
@@ -209,9 +209,9 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	});
 
 	this.ads.slots.initSlot(node);
-	var slot = this.ads.slots.mpu;
+	const slot = this.ads.slots.mpu;
 	assert.ok(this.gpt.display.calledOnce, 'Initial ad call is made for large size.');
-	var iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
+	let iframeSize = [slot.gpt.iframe.width, slot.gpt.iframe.height];
 	assert.deepEqual(iframeSize, ['970', '90'], 'The ad slot is displayed at the correct size.');
 	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'SuperLeaderboard');
 	assert.equal(this.ads.targeting.get().res, 'large');
@@ -231,11 +231,11 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 });
 
 QUnit.test('responsive slot should not make a call when size is false', function(assert) {
-	var clock = this.date();
+	const clock = this.date();
 	this.viewport(200, 200);
 
-	var slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
 			small: [0, 0],
@@ -244,7 +244,7 @@ QUnit.test('responsive slot should not make a call when size is false', function
 		}
 	});
 	this.ads.slots.initSlot(node);
-	var slot = this.ads.slots.mpu;
+	const slot = this.ads.slots.mpu;
 	assert.ok(!this.gpt.display.called, 'When size is false no ad call is made.');
 	assert.ok($(slot.container).hasClass('o-ads__empty'), 'The ad slot is not displayed.');
 
@@ -268,67 +268,67 @@ QUnit.test('responsive slot should not make a call when size is false', function
 });
 
 QUnit.test('Center container', function(assert) {
-	var slotHTML = '<div data-o-ads-name="center-test" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="center-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({slots: {
 		'center-test': {
 			center: true
 		}
 	}});
-	var result = this.ads.slots.initSlot(node);
+	const result = this.ads.slots.initSlot(node);
 
 	assert.ok($(result.container).hasClass('o-ads__center'), 'the centering class has been added');
 });
 
 QUnit.test('Label container', function(assert) {
-	var slotHTML = '<div data-o-ads-name="label-test" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="label-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({slots: {
 		'label-test': {
 			label: true
 		}
 	}});
-	var result = this.ads.slots.initSlot(node);
+	const result = this.ads.slots.initSlot(node);
 
 	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
 });
 
 QUnit.test('Label right container', function(assert) {
-	var slotHTML = '<div data-o-ads-name="label-right-test" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="label-right-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({slots: {
 		'label-right-test': {
 			label: 'right'
 		}
 	}});
-	var result = this.ads.slots.initSlot(node);
+	const result = this.ads.slots.initSlot(node);
 
 	assert.ok($(result.container).hasClass('o-ads__label-right'), 'the labeling class has been added');
 });
 
 QUnit.test('Label container via attribute', function(assert) {
-	var slotHTML = '<div data-o-ads-name="label-attr-test" data-o-ads-label="left" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="label-attr-test" data-o-ads-label="left" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({slots: {
 		'label-attr-test': {
 			label: 'right'
 		}
 	}});
-	var result = this.ads.slots.initSlot(node);
+	const result = this.ads.slots.initSlot(node);
 
 	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
 });
 
 QUnit.test('configure out of page slot', function(assert) {
-	var slotHTML = '<div data-o-ads-name="out-of-page-test" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="out-of-page-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		slots: {
 		'out-of-page-test': {
 			outOfPage: true
 		}
 	}});
-	var result = this.ads.slots.initSlot(node);
+	let result = this.ads.slots.initSlot(node);
 	assert.ok(result.outOfPage, 'data-o-ads-out-of-page attribute is present returns true');
 
 	this.ads.init({
@@ -346,19 +346,19 @@ QUnit.test('configure out of page slot', function(assert) {
 });
 
 QUnit.test('configure out of page slot via DOM', function(assert) {
-	var slotHTML = '<div data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var result = this.ads.slots.initSlot(node);
+	const result = this.ads.slots.initSlot(node);
 	assert.ok(result.outOfPage, 'data-o-ads-out-of-page attribute is present returns true');
 });
 
 QUnit.test('configure slot level targeting', function(assert) {
-	var targeting = 'some=test;targeting=params;';
-	var node = this.fixturesContainer.add('<div data-o-ads-targeting="' + targeting + '" data-o-ads-name="targeting-test" data-o-ads-formats="MediumRectangle"></div>');
+	let targeting = 'some=test;targeting=params;';
+	let node = this.fixturesContainer.add('<div data-o-ads-targeting="' + targeting + '" data-o-ads-name="targeting-test" data-o-ads-formats="MediumRectangle"></div>');
 
-	var result = this.ads.slots.initSlot(node);
-	var expected = { some: 'test', targeting: 'params'};
+	let result = this.ads.slots.initSlot(node);
+	let expected = { some: 'test', targeting: 'params'};
 
 	assert.deepEqual(result.targeting, expected, 'data-o-ads-targeting attribute is parsed');
 
@@ -371,7 +371,7 @@ QUnit.test('configure slot level targeting', function(assert) {
 });
 
 QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
@@ -379,8 +379,8 @@ QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
 });
 
 QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
@@ -390,8 +390,8 @@ QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
 });
 
 QUnit.test('Slots.collapse with no args will collapse all slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
@@ -401,7 +401,7 @@ QUnit.test('Slots.collapse with no args will collapse all slots', function(asser
 });
 
 QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
@@ -411,8 +411,8 @@ QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
 });
 
 QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
@@ -425,8 +425,8 @@ QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
 });
 
 QUnit.test('Slots.uncollapse with no args will collapse all slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="collapse1-test" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="collapse2-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
@@ -439,8 +439,8 @@ QUnit.test('Slots.uncollapse with no args will collapse all slots', function(ass
 });
 
 QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
-	var done = assert.async();
-	var node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
 
 	node.addEventListener('oAds.refresh', function(event) {
 		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
@@ -451,23 +451,23 @@ QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
 });
 
 QUnit.test('Slots.destroy will destroy a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['destroy-test'], 'slot to be destoryed has been initialised');
-	var clearSpy = this.spy(slot, 'clear');
+	const clearSpy = this.spy(slot, 'clear');
 	this.ads.slots.destroy('destroy-test');
 	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
 });
 
 QUnit.test('Slots.destroy will call clear slot method from the ad server provider when one is present', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['destroy-test'], 'slot to be destoryed has been initialised');
 	// provide mock method on slot (usually responosbility of ad server provider)
 	slot.clearSlot = function(){};
-	var clearSpy = this.spy(slot, 'clear');
-	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	const clearSpy = this.spy(slot, 'clear');
+	const clearSlotSpy = this.spy(slot, 'clearSlot');
 	this.ads.slots.destroy('destroy-test');
 	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
@@ -475,14 +475,14 @@ QUnit.test('Slots.destroy will call clear slot method from the ad server provide
 });
 
 QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['destroy-test-1'], 'first slot to be destoryed has been initialised');
 	assert.ok(this.ads.slots['destroy-test-2'], 'second slot to be destoryed has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.destroy(['destroy-test-1', 'destroy-test-2']);
 	assert.notOk(this.ads.slots['destroy-test-1'], 'first slot has been destoryed and reference to it has been removed');
 	assert.notOk(this.ads.slots['destroy-test-2'], 'second slot has been destoryed and reference to it has been removed');
@@ -491,14 +491,14 @@ QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="destroy-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['destroy-test-1'], 'first slot to be destoryed has been initialised');
 	assert.ok(this.ads.slots['destroy-test-2'], 'second slot to be destoryed has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.destroy();
 	assert.notOk(this.ads.slots['destroy-test-1'], 'first slot has been destoryed and reference to it has been removed');
 	assert.notOk(this.ads.slots['destroy-test-2'], 'second slot has been destoryed and reference to it has been removed');
@@ -507,23 +507,23 @@ QUnit.test('Slots.destroy will destroy multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.clear will clear a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
-	var clearSpy = this.spy(slot, 'clear');
+	const clearSpy = this.spy(slot, 'clear');
 	this.ads.slots.clear('clear-test');
 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
 });
 
 QUnit.test('Slots.clear will call clear slot method from the ad server provider when one is present', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
 	// provide mock method on slot (usually responosbility of ad server provider)
 	slot.clearSlot = function(){};
-	var clearSpy = this.spy(slot, 'clear');
-	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	const clearSpy = this.spy(slot, 'clear');
+	const clearSlotSpy = this.spy(slot, 'clearSlot');
 	this.ads.slots.clear('clear-test');
 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
@@ -531,14 +531,14 @@ QUnit.test('Slots.clear will call clear slot method from the ad server provider 
 });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.clear(['clear-test-1', 'clear-test-2']);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
@@ -547,14 +547,14 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.clear();
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
@@ -563,23 +563,23 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.clear will clear a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
-	var clearSpy = this.spy(slot, 'clear');
+	const clearSpy = this.spy(slot, 'clear');
 	this.ads.slots.clear('clear-test');
 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
 });
 
 QUnit.test('Slots.clear will call clear slot method from the ad server provider when one is present', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
+	const node = this.fixturesContainer.add('<div data-o-ads-name="clear-test" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['clear-test'], 'slot to be cleared has been initialised');
 	// provide mock method on slot (usually responosbility of ad server provider)
 	slot.clearSlot = function(){};
-	var clearSpy = this.spy(slot, 'clear');
-	var clearSlotSpy = this.spy(slot, 'clearSlot');
+	const clearSpy = this.spy(slot, 'clear');
+	const clearSlotSpy = this.spy(slot, 'clearSlot');
 	this.ads.slots.clear('clear-test');
 	assert.ok(this.ads.slots['clear-test'], 'slot has been cleared and reference to it still exists');
 	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
@@ -587,14 +587,14 @@ QUnit.test('Slots.clear will call clear slot method from the ad server provider 
 });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.clear(['clear-test-1', 'clear-test-2']);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
@@ -603,14 +603,14 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.clear will clear multiple slots', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="clear-test-2" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot to be cleared has been initialised');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot to be cleared has been initialised');
-	var clearSpy1 = this.spy(slot1, 'clear');
-	var clearSpy2 = this.spy(slot2, 'clear');
+	const clearSpy1 = this.spy(slot1, 'clear');
+	const clearSpy2 = this.spy(slot2, 'clear');
 	this.ads.slots.clear();
 	assert.ok(this.ads.slots['clear-test-1'], 'first slot has been cleared and reference to it still exists');
 	assert.ok(this.ads.slots['clear-test-2'], 'second slot has been cleared and reference to it still exists');
@@ -619,26 +619,26 @@ QUnit.test('Slots.clear will clear multiple slots', function(assert) {
 });
 
 QUnit.test('Slots.submitImpression will submit and impression for a single slot', function(assert) {
-	var node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
-	var slot = this.ads.slots.initSlot(node);
-	var submitSpy = this.spy(slot, 'submitImpression');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>');
+	const slot = this.ads.slots.initSlot(node);
+	const submitSpy = this.spy(slot, 'submitImpression');
 	slot.submitGptImpression = function(){};
-	var submitGptSpy = this.spy(slot, 'submitGptImpression');
+	const submitGptSpy = this.spy(slot, 'submitGptImpression');
 	this.ads.slots.submitImpression('delayedimpression');
 	assert.ok(submitSpy.calledOnce, 'the submitImpression method has been called on a slot');
 	assert.ok(submitGptSpy.calledOnce, 'the gpt submitGptImpression method has been called');
 });
 
 QUnit.test('Slots.submitImpression will submit and impression for a single slot', function(assert) {
-	var node1 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-1" data-o-ads-formats="MediumRectangle"></div>');
-	var node2 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-2" data-o-ads-formats="MediumRectangle"></div>');
-	var node3 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-3" data-o-ads-formats="MediumRectangle"></div>');
-	var slot1 = this.ads.slots.initSlot(node1);
-	var slot2 = this.ads.slots.initSlot(node2);
-	var slot3 = this.ads.slots.initSlot(node3);
-	var submitSpy1 = this.spy(slot1, 'submitImpression');
-	var submitSpy2 = this.spy(slot2, 'submitImpression');
-	var submitSpy3 = this.spy(slot3, 'submitImpression');
+	const node1 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-1" data-o-ads-formats="MediumRectangle"></div>');
+	const node2 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-2" data-o-ads-formats="MediumRectangle"></div>');
+	const node3 = this.fixturesContainer.add('<div data-o-ads-name="delayedimpression-3" data-o-ads-formats="MediumRectangle"></div>');
+	const slot1 = this.ads.slots.initSlot(node1);
+	const slot2 = this.ads.slots.initSlot(node2);
+	const slot3 = this.ads.slots.initSlot(node3);
+	const submitSpy1 = this.spy(slot1, 'submitImpression');
+	const submitSpy2 = this.spy(slot2, 'submitImpression');
+	const submitSpy3 = this.spy(slot3, 'submitImpression');
 	this.ads.slots.submitImpression();
 	this.ads.slots.submitImpression(['delayedimpression-1', 'delayedimpression-2']);
 	assert.ok(submitSpy1.calledTwice, 'the submitImpression method has been called twice on slot1');
@@ -648,23 +648,23 @@ QUnit.test('Slots.submitImpression will submit and impression for a single slot'
 
 
 QUnit.test('attempting to run an action on an unknown slot will log a warning', function(assert) {
-	var warnSpy = this.spy(this.utils.log, 'warn');
+	const warnSpy = this.spy(this.utils.log, 'warn');
 	this.ads.slots.collapse('unknown-test');
 	assert.ok(warnSpy.calledWith('Attempted to %s non-existant slot %s', 'collapse', 'unknown-test'), 'a warning is generated');
 });
 
 QUnit.test('attempting to run an action on a non-slot log a warning', function(assert) {
-	var warnSpy = this.spy(this.utils.log, 'warn');
+	const warnSpy = this.spy(this.utils.log, 'warn');
 	this.ads.slots['test'] = {};
 	this.ads.slots.clear();
 	assert.ok(warnSpy.calledWith('Attempted to %s on a non-slot %s', 'clear', 'test'), 'a warning is generated when triggering a call on non-slot');
 });
 
 QUnit.test('configure refresh globally on a timer', function (assert) {
-	var done = assert.async();
-	var clock = this.date();
-	var slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const done = assert.async();
+	const clock = this.date();
+	const slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 
 	document.body.addEventListener('oAds.refresh', function(event) {
 		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
@@ -677,22 +677,22 @@ QUnit.test('configure refresh globally on a timer', function (assert) {
 });
 
 QUnit.test('elementvisibility is update on load', function(assert) {
-	var slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 
-	var slot = this.ads.slots.initSlot(node);
-	var updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
-	var updateSpy = this.spy(slot.elementvis, 'update');
+	const slot = this.ads.slots.initSlot(node);
+	const updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
+	const updateSpy = this.spy(slot.elementvis, 'update');
 	this.ads.init();
 	assert.ok(updatePositionSpy.called, 'position is updated on load');
 	assert.ok(updateSpy.called, 'visibility is updated on load');
 });
 
 QUnit.test('lazy loading', function(assert) {
-	var done = assert.async();
-	var done2 = assert.async();
-	var slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const done = assert.async();
+	const done2 = assert.async();
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	document.body.addEventListener('oAds.inview', function(event) {
 		if (event.detail.name === 'lazy-test') {
 			assert.ok('our test slot is inview');
@@ -713,14 +713,14 @@ QUnit.test('lazy loading', function(assert) {
 
 
 QUnit.test('complete events fire', function(assert) {
-	var done = assert.async();
-	var done2 = assert.async();
+	const done = assert.async();
+	const done2 = assert.async();
 
-	var clock = this.date();
-	var slotHTML = '<div data-o-ads-name="first" data-o-ads-formats="MediumRectangle"></div>';
-	var first = this.fixturesContainer.add(slotHTML);
+	const clock = this.date();
+	let slotHTML = '<div data-o-ads-name="first" data-o-ads-formats="MediumRectangle"></div>';
+	const first = this.fixturesContainer.add(slotHTML);
 	slotHTML = '<div data-o-ads-name="second" data-o-ads-formats="MediumRectangle"></div>';
-	var second = this.fixturesContainer.add(slotHTML);
+	const second = this.fixturesContainer.add(slotHTML);
 
 	document.body.addEventListener('oAds.complete', function(event) {
 		assert.ok(event.detail.name, event.detail.name + ' completed.');
@@ -740,9 +740,9 @@ QUnit.test('complete events fire', function(assert) {
 
 
 QUnit.test('debug logs creatives', function(assert) {
-	var first = this.fixturesContainer.add('<div data-o-ads-name="first" data-o-ads-targeting="monkey=see;monkeys=do" data-o-ads-formats="MediumRectangle"></div>');
-	var second = this.fixturesContainer.add('<div data-o-ads-name="second" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
-	var third = this.fixturesContainer.add('<div data-o-ads-name="third" data-o-ads-formats-small="MediumRectangle" data-o-ads-formats-large="HalfPage,MediumRectangle"></div>');
+	const first = this.fixturesContainer.add('<div data-o-ads-name="first" data-o-ads-targeting="monkey=see;monkeys=do" data-o-ads-formats="MediumRectangle"></div>');
+	const second = this.fixturesContainer.add('<div data-o-ads-name="second" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	const third = this.fixturesContainer.add('<div data-o-ads-name="third" data-o-ads-formats-small="MediumRectangle" data-o-ads-formats-large="HalfPage,MediumRectangle"></div>');
 
 	this.ads.init({
 		responsive: {
@@ -766,7 +766,7 @@ QUnit.test('debug logs creatives', function(assert) {
 	delete this.ads.slots.third.gpt.size;
 	this.ads.slots.third.gpt.isEmpty = false;
 
-	var slotTableData = [{
+	const slotTableData = [{
 		"name":"first",
 		"unit name":"/undefined",
 		"creative id":"1234",
@@ -793,8 +793,8 @@ QUnit.test('debug logs creatives', function(assert) {
 		"sizes":"responsive slot",
 		"targeting":""
 	}];
-	var start = this.spy(this.utils.log, 'start');
-	var table = this.spy(this.utils.log, 'table');
+	const start = this.spy(this.utils.log, 'start');
+	const table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();
 	assert.ok(start.calledWith('Creatives'), '`log.start` was called for `Creatives`');
 	assert.ok(table.calledWith(slotTableData), '`log.table` was called with the expected data');

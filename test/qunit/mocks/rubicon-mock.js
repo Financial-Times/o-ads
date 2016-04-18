@@ -1,6 +1,6 @@
 /* globals sinon: false */
 "use strict";
-var stubs = sinon.sandbox.create();
+const stubs = sinon.sandbox.create();
 
 window.oz_insight = function() {
 	window.oz_callback({ estimate: {tier: 400}});

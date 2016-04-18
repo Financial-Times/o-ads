@@ -15,7 +15,7 @@ function Timer(interval, fn, maxTicks, opts) {
 }
 
 Timer.prototype.tick = function() {
-	var Timer = this;
+	const Timer = this;
 	return function() {
 		Timer.ticks++;
 		Timer.fn.apply(Timer);
@@ -89,14 +89,14 @@ function Timers() {
 		return new Timers();
 	}
 
-	var scope =  this;
+	const scope =  this;
 	this.timers = [];
 
 	function all(method) {
 		return function() {
-			var j = scope.timers.length;
+			const j = scope.timers.length;
 
-			for (var i = 0; i < j; i++) {
+			for (let i = 0; i < j; i++) {
 				scope.timers[i][method]();
 			}
 		};
@@ -104,7 +104,7 @@ function Timers() {
 
 	function hasExecutionPaused(fn) {
 		return function() {
-			var Timer = this,
+			const Timer = this,
 			time = now() - Timer.lastTick - Timer.interval,
 			threshhold = Timer.interval * 1.5;
 
@@ -121,7 +121,7 @@ function Timers() {
 			fn = hasExecutionPaused(fn);
 		}
 
-		var timer  = new Timer(interval, fn, maxTicks, opts);
+		const timer  = new Timer(interval, fn, maxTicks, opts);
 		scope.timers.push(timer);
 		return timer;
 	}

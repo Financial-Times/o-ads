@@ -2,8 +2,8 @@
 /* globals QUnit: false, googletag: false, sinon: false */
 
 'use strict';
-var htmlstart = '<div data-o-ads-name="';
-var htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
+const htmlstart = '<div data-o-ads-name="';
+const htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
 
 QUnit.module('gpt', {
 	beforeEach: function() {
@@ -58,7 +58,7 @@ QUnit.test('override page targeting', function(assert) {
 });
 
 QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
-	var errorSpy = this.spy(this.utils.log, 'warn');
+	const errorSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
 	// delete mock
 	delete window.googletag;
@@ -85,7 +85,7 @@ QUnit.test('catches and warns when targeting is not set', function(assert) {
 	this.stub(this.utils, 'isPlainObject', function(url, async, fn) {
 		return false;
 	});
-	var warnSpy = this.spy(this.utils.log, 'warn');
+	const warnSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
 	assert.ok(warnSpy.calledOnce, 'logs a warning for invalid targeting');
 });
@@ -119,7 +119,7 @@ QUnit.test('enables companion ads', function(assert) {
 QUnit.test('set correct collapse mode when collapseEmpty is true', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: true});
-	var slot = this.ads.slots.initSlot('mpu');
+	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true), 'call collapse empty slot gpt api with correct parameters');
 });
@@ -128,7 +128,7 @@ QUnit.test('set correct collapse mode when collapseEmpty is true', function(asse
 QUnit.test('set correct collapse mode when collapseEmpty is after', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: true});
-	var slot = this.ads.slots.initSlot('mpu');
+	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true), 'call collapse empty slot gpt api with correct parameters');
 });
@@ -136,7 +136,7 @@ QUnit.test('set correct collapse mode when collapseEmpty is after', function(ass
 QUnit.test('set correct collapse mode when collapseEmpty is before', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: 'before'});
-	var slot = this.ads.slots.initSlot('mpu');
+	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true, true), 'call collapse empty slot gpt api with correct parameters');
 });
@@ -145,7 +145,7 @@ QUnit.test('set correct collapse mode when collapseEmpty is before', function(as
 QUnit.test('set correct collapse mode when collapseEmpty is false', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: false});
-	var slot = this.ads.slots.initSlot('mpu');
+	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
 });
@@ -153,41 +153,41 @@ QUnit.test('set correct collapse mode when collapseEmpty is false', function(ass
 QUnit.test('set correct collapse mode when collapseEmpty is never', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: 'never'});
-	var slot = this.ads.slots.initSlot('mpu');
+	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
 });
 
 
 QUnit.test('catches slot in view render event and display it if method is ready', function(assert) {
-	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
-	var displaySpy = this.spy(slot, 'display');
+	const slot = this.ads.slots.initSlot(node);
+	const displaySpy = this.spy(slot, 'display');
 	slot.fire('render');
 	assert.ok(displaySpy.calledOnce, 'slot dislpay method has been triggered');
 });
 
 QUnit.test('on slot refresh event sets the iframe width and height', function(assert) {
-	var done = assert.async();
-	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const done = assert.async();
+	const slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	document.body.addEventListener('oAds.rendered', function(event) {
-		var iframe = event.detail.gpt.iframe;
+		const iframe = event.detail.gpt.iframe;
 		assert.equal(iframe.style.width, '300px');
 		assert.equal(iframe.style.height, '250px');
 		done();
 	});
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 });
 
 QUnit.test('on slot refresh event updates targeting', function(assert) {
-	var slotHTML = '<div data-o-ads-formats="MediumRectangle" data-o-ads-targeting="random=1"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-formats="MediumRectangle" data-o-ads-targeting="random=1"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	slot.fire('refresh', {targeting: {test: true}});
 	assert.ok(googletag.pubads().refresh.calledOnce, 'googletag refresh method has been called');
 	assert.ok(slot.gpt.slot.setTargeting.calledTwice, 'setTargeting has been called on the slot');
@@ -196,21 +196,21 @@ QUnit.test('on slot refresh event updates targeting', function(assert) {
 });
 
 QUnit.test('provides api to clear the slot', function(assert) {
-	var slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
+	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('test1');
+	const slot = this.ads.slots.initSlot('test1');
 	assert.equal(slot.clearSlot(), true, 'a call to clear slot returns a boolean');
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
 	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
 });
 
 QUnit.test('provides api to clear another slot', function(assert) {
-	var slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div><div data-o-ads-name="test2" data-o-ads-formats="MediumRectangle"></div>';
+	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div><div data-o-ads-name="test2" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('test1');
-	var slot2 = this.ads.slots.initSlot('test2');
+	const slot = this.ads.slots.initSlot('test1');
+	const slot2 = this.ads.slots.initSlot('test2');
 	slot.clearSlot(slot2.gpt.slot);
 	assert.ok(googletag.pubads().clear.calledOnce, 'clear api has been called');
 	assert.ok(googletag.pubads().clear.calledWith([slot2.gpt.slot]), 'one slot can clear ');
@@ -219,7 +219,7 @@ QUnit.test('provides api to clear another slot', function(assert) {
 QUnit.test('companion service is enabled globally on slots', function(assert) {
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="test" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('test');
+	const slot = this.ads.slots.initSlot('test');
 	assert.ok(slot.gpt.slot.addService.calledWith(googletag.companionAds()), 'add companionAds service has been called on slot');
 });
 
@@ -236,24 +236,24 @@ QUnit.test('companion service can be switched off per format', function(assert) 
 			companions: true
 		}
 	});
-	var slot = this.ads.slots.initSlot('TestFormat');
+	const slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on format');
 });
 
 QUnit.test('companion service can be switched off per slot', function(assert) {
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
+	const slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
 });
 
 QUnit.test('set unit name', function(assert) {
-	var done = assert.async();
-	var expected = '/5887/some-dfp-site/some-dfp-zone';
+	const done = assert.async();
+	const expected = '/5887/some-dfp-site/some-dfp-zone';
 	this.fixturesContainer.add(htmlstart + 'unit-name-full' + htmlend);
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-full') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with site and zone works');
 			done();
@@ -271,13 +271,13 @@ QUnit.test('set unit name', function(assert) {
 });
 
 QUnit.test('set unit name site only', function(assert) {
-	var done = assert.async();
-	var expected = '/5887/some-dfp-site';
+	const done = assert.async();
+	const expected = '/5887/some-dfp-site';
 	this.fixturesContainer.add(htmlstart + 'unit-name-site-only' + htmlend);
 
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-site-only') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with site and no zone works');
 			done();
@@ -293,13 +293,13 @@ QUnit.test('set unit name site only', function(assert) {
 });
 
 QUnit.test('set unit names network only', function(assert) {
-	var done = assert.async();
-	var expected = '/5887';
+	const done = assert.async();
+	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-network-only' + htmlend);
 
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-network-only') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty site and empty zone  just returns network');
 			done();
@@ -316,13 +316,13 @@ QUnit.test('set unit names network only', function(assert) {
 
 QUnit.test('unit names with empty strings', function(assert) {
 
-	var done = assert.async();
-	var expected = '/5887';
+	const done = assert.async();
+	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-empty-string' + htmlend);
 
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-empty-string') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty string site and zone just returns network');
 			done();
@@ -340,13 +340,13 @@ QUnit.test('unit names with empty strings', function(assert) {
 });
 
 QUnit.test('set unit name with override', function(assert) {
-	var done = assert.async();
-	var expected = '/hello-there/stranger';
+	const done = assert.async();
+	const expected = '/hello-there/stranger';
 	this.fixturesContainer.add(htmlstart + 'unit-name-custom' + htmlend);
 
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-custom') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'global override works');
 			done();
@@ -362,13 +362,13 @@ QUnit.test('set unit name with override', function(assert) {
 });
 
 QUnit.test('set unit name with attribute', function(assert) {
-	var done = assert.async();
-	var expected = '/this-works';
-	var container = this.fixturesContainer.add(htmlstart + 'unit-name-attr" data-o-ads-gpt-unit-name="' + expected + htmlend);
+	const done = assert.async();
+	const expected = '/this-works';
+	const container = this.fixturesContainer.add(htmlstart + 'unit-name-attr" data-o-ads-gpt-unit-name="' + expected + htmlend);
 
 	document.addEventListener('oAds.complete', function(event) {
-		var name = event.detail.name;
-		var slot = event.detail.slot;
+		const name = event.detail.name;
+		const slot = event.detail.slot;
 		if (name === 'unit-name-attr') {
 			assert.strictEqual(slot.gpt.unitName, expected, 'attribute override works');
 			done();
@@ -394,12 +394,12 @@ QUnit.test('collapse empty', function(assert) {
 });
 
 QUnit.test('submit impression', function(assert) {
-	var infoLog = this.spy(this.utils.log, 'info');
-	var warnLog = this.spy(this.utils.log, 'warn');
-	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	const infoLog = this.spy(this.utils.log, 'info');
+	const warnLog = this.spy(this.utils.log, 'warn');
+	const html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('delayedimpression');
+	const slot = this.ads.slots.initSlot('delayedimpression');
 	slot.submitGptImpression();
 	assert.ok(this.ads.utils.attach.calledWith('https://www.ft.com', true, sinon.match.any, sinon.match.any, true), 'impression url requested via utils with correct parameters');
 	assert.ok(infoLog.calledOnce, 'impression info logged');
@@ -409,48 +409,48 @@ QUnit.test('submit impression', function(assert) {
 
 QUnit.test('catches a failure to submit an impression', function(assert) {
 	this.ads.utils.attach.restore();
-	var attachSpy = this.stub(this.ads.utils, 'attach', function(url, async, successCallback, failureCallback) {
+	const attachSpy = this.stub(this.ads.utils, 'attach', function(url, async, successCallback, failureCallback) {
 		failureCallback.call();
 	});
-	var log = this.spy(this.utils.log, 'info');
-	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	const log = this.spy(this.utils.log, 'info');
+	const html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('delayedimpression');
+	const slot = this.ads.slots.initSlot('delayedimpression');
 	slot.submitGptImpression();
 	assert.ok(attachSpy.calledWith('https://www.ft.com'), 'impression url requested via utils');
 	assert.ok(log.calledWith('CORS request to submit an impression failed'), 'message about a failed impression request is logged');
 });
 
 QUnit.test('logs a warning when trying to submit an impression and the URL is not present within creative', function(assert) {
-	var log = this.spy(this.utils.log, 'warn');
-	var html = '<div data-o-ads-name="delayedimpression-missing-tracking-div" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
+	const log = this.spy(this.utils.log, 'warn');
+	const html = '<div data-o-ads-name="delayedimpression-missing-tracking-div" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('delayedimpression-missing-tracking-div');
+	const slot = this.ads.slots.initSlot('delayedimpression-missing-tracking-div');
 	slot.submitGptImpression();
 	assert.notOk(this.ads.utils.attach.calledWith('https://www.ft.com'), 'impression url never requested via utils');
 	assert.ok(log.calledWith('Impression URL not found, this is set via a creative template.'), 'missing impression URL warning is logged');
 });
 
 QUnit.test('logs a warning when trying to submit an impression on a non-oop slot', function(assert) {
-	var log = this.spy(this.utils.log, 'warn');
-	var html = '<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>';
+	const log = this.spy(this.utils.log, 'warn');
+	const html = '<div data-o-ads-name="delayedimpression" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot('delayedimpression');
+	const slot = this.ads.slots.initSlot('delayedimpression');
 	slot.submitGptImpression();
 	assert.notOk(this.ads.utils.attach.calledWith('https://www.ft.com'), 'impression url never requested via utils');
 	assert.ok(log.calledWith('Attempting to call submitImpression on a non-oop slot'), 'catches attempt to call submit impression on a non-oop slot');
 });
 
 QUnit.test('define a basic slot', function(assert) {
-	var html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
+	const html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
 
 	this.ads.slots.initSlot('no-responsive-mpu');
-	var gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
+	const gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
 	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define slot is called');
 	assert.equal(gptSlot.defineSizeMapping.callCount, 0, 'the GPT defineSizeMapping slot is not called');
 });
@@ -475,14 +475,14 @@ QUnit.test('define responsive slot', function(assert) {
 	});
 
 	this.ads.slots.initSlot('responsive-mpu');
-	var gptSlot = this.ads.slots['responsive-mpu'].gpt.slot;
+	const gptSlot = this.ads.slots['responsive-mpu'].gpt.slot;
 	assert.ok(googletag.defineSlot.calledOnce, 'the GPT define unit is called');
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
 QUnit.test('rendered event fires on slot', function(assert) {
-	var done = assert.async();
-	var html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
+	const done = assert.async();
+	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
 
@@ -507,7 +507,7 @@ QUnit.test('fixed url for ad requests', function(assert) {
 	});
 	this.ads.slots.initSlot('url-slot');
 
-	var gptSlot = this.ads.slots['url-slot'].gpt.slot;
+	let gptSlot = this.ads.slots['url-slot'].gpt.slot;
 	assert.ok(gptSlot.set.calledWith('page_url', 'http://www.ft.com'), 'page url set via config');
 
 	document.head.insertAdjacentHTML('beforeend', '<link href="http://www.random-inc.com/" rel="canonical" remove />');
@@ -522,7 +522,7 @@ QUnit.test('fixed url for ad requests', function(assert) {
 
 
 QUnit.test('pick up the slot URL from page address if config or canonical not available', function(assert) {
-	var urlUtilSpy = this.spy(this.utils, 'getLocation');
+	const urlUtilSpy = this.spy(this.utils, 'getLocation');
 	this.fixturesContainer.add('<div data-o-ads-name="url-slot" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init();
 	this.ads.slots.initSlot('url-slot');
@@ -531,16 +531,16 @@ QUnit.test('pick up the slot URL from page address if config or canonical not av
 
 
 QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	document.body.addEventListener('oAds.complete', function(event) {
-		var iframe = event.detail.slot.gpt.iframe;
-		var iframeSize = [iframe.width, iframe.height];
+		const iframe = event.detail.slot.gpt.iframe;
+		const iframeSize = [iframe.width, iframe.height];
 			assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
 			done();
 	});
 
-	var slotHTML = '<div data-o-ads-name="fullpage" data-o-ads-sizes="100x100"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-name="fullpage" data-o-ads-sizes="100x100"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
 	this.ads.slots.fullpage;
@@ -548,7 +548,7 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 
 QUnit.test('debug returns early if no config is set', function(assert) {
 	this.ads.init();
-	var start = this.spy(this.utils.log, "start");
+	const start = this.spy(this.utils.log, "start");
 
 	this.ads.gpt.debug();
 	assert.notOk(start.called, "`utils.start` wasn't called for 'gpt'");
@@ -556,7 +556,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 
 QUnit.test('debug logs info when config is set', function(assert) {
 	this.ads.init({gpt: true});
-	var start = this.spy(this.utils.log, "start");
+	const start = this.spy(this.utils.log, "start");
 
 	this.ads.gpt.debug();
 	assert.ok(start.calledWith('gpt'), "`utils.start` was called for 'gpt'");
@@ -572,7 +572,7 @@ QUnit.test('enables companion ads', function(assert) {
 QUnit.test('companion service is enabled globally on slots', function(assert) {
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-name="test" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('test');
+	const slot = this.ads.slots.initSlot('test');
 	assert.ok(slot.gpt.slot.addService.calledWith(googletag.companionAds()), 'add companionAds service has been called on slot');
 });
 
@@ -589,14 +589,14 @@ QUnit.test('companion service can be switched off per format', function(assert) 
 			companions: true
 		}
 	});
-	var slot = this.ads.slots.initSlot('TestFormat');
+	const slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on format');
 });
 
 QUnit.test('companion service can be switched off per slot', function(assert) {
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
+	const slot = this.ads.slots.initSlot('TestFormat');
 	assert.ok(slot.gpt.slot.addService.neverCalledWith(googletag.companionAds()), 'add service has not been called on slot');
 });
 
@@ -624,8 +624,8 @@ QUnit.test('defineSlot is added to command queue when googletag is not available
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.defineSlot();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'defineSlot function added to command queue');
@@ -640,7 +640,7 @@ QUnit.test('clearSlot returns false when googletag is not available', function (
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
+	const slot = this.ads.slots.initSlot('TestFormat');
 
 	slot.clearSlot();
 	assert.equal(slot.clearSlot(), false, 'clearSlot function added to command queue');
@@ -654,8 +654,8 @@ QUnit.test('initResponsive is added to command queue when googletag is not avail
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.initResponsive();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'initResponsive function added to command queue');
@@ -670,8 +670,8 @@ QUnit.test('display is added to command queue when googletag is not available', 
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.display();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'display function added to command queue');
@@ -686,8 +686,8 @@ QUnit.test('setUnitName is added to command queue when googletag is not availabl
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setUnitName();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setUnitName function added to command queue');
@@ -702,8 +702,8 @@ QUnit.test('addServices is added to command queue when googletag is not availabl
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.addServices();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'addServices function added to command queue');
@@ -718,8 +718,8 @@ QUnit.test('setCollapseEmpty is added to command queue when googletag is not ava
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setCollapseEmpty();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setCollapseEmpty function added to command queue');
@@ -733,8 +733,8 @@ QUnit.test('setURL is added to command queue when googletag is not available', f
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setURL();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setURL function added to command queue');
@@ -748,8 +748,8 @@ QUnit.test('setTargeting is added to command queue when googletag is not availab
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setTargeting();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setTargeting function added to command queue');
@@ -763,7 +763,7 @@ QUnit.test('updateCorrelator is added to command queue when googletag is not ava
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var gptCommandsQueued = window.googletag.cmd.length;
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	this.ads.gpt.updateCorrelator();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'updateCorrelator function added to command queue');
@@ -772,10 +772,10 @@ QUnit.test('updateCorrelator is added to command queue when googletag is not ava
 });
 
 QUnit.test('clear slot method calls to the ad server providers clear function', function(assert) {
-	var slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
-	var node = this.fixturesContainer.add(slotHTML);
+	const slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(node);
+	const slot = this.ads.slots.initSlot(node);
 	slot.clearSlot();
 	assert.ok(googletag.pubads().clear.calledWith([slot.gpt.slot]), 'googletag clear method called with the correct slot');
 });
@@ -786,8 +786,8 @@ QUnit.test('onRefresh is added to command queue when googletag is not available'
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	var slot = this.ads.slots.initSlot('TestFormat');
-	var gptCommandsQueued = window.googletag.cmd.length;
+	const slot = this.ads.slots.initSlot('TestFormat');
+	let gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.fire('refresh');
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'onRefresh function added to command queue');

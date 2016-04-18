@@ -10,8 +10,8 @@
  * @memberof ads
 */
 'use strict';
-var utils = require('../utils');
-var config = require('../config');
+const utils = require('../utils');
+const config = require('../config');
 
 /**
  * The Rubicon class defines an ads.rubicon instance
@@ -33,7 +33,7 @@ Rubicon.prototype.init = function() {
 	this.queue = utils.queue(this.initValuation.bind(this));
 	this.config = config('rubicon') || {};
 	if (this.config.id && this.config.site) {
-		var api = this.config.api || '//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=';
+		let api = this.config.api || '//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=';
 		api += this.config.id + '/' + this.config.site;
 		utils.attach(api, true, function() {
 			this.queue.process();
@@ -56,9 +56,9 @@ Rubicon.prototype.init = function() {
  * @lends Rubicon
 */
 Rubicon.prototype.initValuation = function(slot) {
-	var config = this.config;
-	var zone = (config.zones) ? config.zones[slot.name] : false;
-	var size = (config.formats) ? config.formats[slot.name] : false;
+	const config = this.config;
+	const zone = (config.zones) ? config.zones[slot.name] : false;
+	const size = (config.formats) ? config.formats[slot.name] : false;
 
 	if (zone && size) {
 		// rubicon loves globals

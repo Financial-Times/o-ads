@@ -16,7 +16,7 @@ QUnit.module('utils.log', { beforeEach: function() {
 
 QUnit.test('We can log messages', function(assert) {
 	if (console) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 		log('hello');
 		assert.ok(console.log.called, 'the message is logged to the console');
 	} else {
@@ -27,7 +27,7 @@ QUnit.test('We can log messages', function(assert) {
 
 QUnit.test('We can log warning messages', function(assert) {
 	if (console && console.warn) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 		log.warn('uh oh!');
 		assert.ok(console.warn.called, 'the warning message is logged to the console');
 	} else {
@@ -38,7 +38,7 @@ QUnit.test('We can log warning messages', function(assert) {
 
 QUnit.test('We can log error messages', function(assert) {
 	if (console && console.error) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 		log.error('oh nein, mein knee ist kaput!');
 		assert.ok(console.error.called, 'the error message is logged to the console');
 	} else {
@@ -49,7 +49,7 @@ QUnit.test('We can log error messages', function(assert) {
 
 QUnit.test('We can log info messages', function(assert) {
 	if (console && console.info) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 		log.info('Goodbye');
 		assert.ok(console.info.called, 'the info message is logged to the console');
 	} else {
@@ -60,7 +60,7 @@ QUnit.test('We can log info messages', function(assert) {
 
 QUnit.test('We can start and end groups', function(assert) {
 	if (console && console.groupCollapsed) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 
 		this.utils.log.isOn.returns(false);
 		assert.notOk(console.groupCollapsed.called, 'if logging is off never make a call to console');
@@ -87,7 +87,7 @@ QUnit.test('We can start and end groups', function(assert) {
 QUnit.test('We can turn logging on and off', function(assert) {
 	if (console) {
 
-		var log = this.utils.log;
+		const log = this.utils.log;
 		this.utils.log.isOn.returns(false);
 		log('hello');
 		assert.ok(!console.log.called, 'when loggin is off the message is not logged');
@@ -109,8 +109,8 @@ QUnit.test('We can turn logging on and off', function(assert) {
 
 QUnit.test('Fall back to log when table method is not available', function(assert) {
 	if (console) {
-		var log = this.utils.log;
-		var save = window.console.table;
+		const log = this.utils.log;
+		const save = window.console.table;
 
 		log.table('hello');
 		assert.ok(console.table.called, 'call table method when one is available');
@@ -133,8 +133,8 @@ QUnit.test('Fall back to log when table method is not available', function(asser
 
 QUnit.test('When passing values passed to attribute table are arrays or objects it stringifies them', function(assert) {
 	if (console) {
-		var log = this.utils.log;
-		var jsonSpy = this.spy(JSON, 'stringify');
+		const log = this.utils.log;
+		const jsonSpy = this.spy(JSON, 'stringify');
 		log.attributeTable({test: [1,2,3], test2: {key: 'value'}});
 		assert.ok(jsonSpy.calledTwice, 'falls back to calling log method');
 
@@ -146,7 +146,7 @@ QUnit.test('When passing values passed to attribute table are arrays or objects 
 
 QUnit.test('Returns undefined if passed a falsy argument', function(assert) {
 	if (console) {
-		var log = this.utils.log;
+		const log = this.utils.log;
 		log.attributeTable(undefined);
 		assert.notOk(console.table.called, 'table not drawn');
 		assert.ok(console.log.withArgs(undefined), 'table not drawn');

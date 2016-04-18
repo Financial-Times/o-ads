@@ -17,7 +17,7 @@ function broadcast(name, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
 	name = 'oAds.' + name;
-	var opts = {
+	const opts = {
 		bubbles: true,
 		cancelable: true,
 		detail: data
@@ -48,9 +48,9 @@ function on(name, callback, target) {
 */
 module.exports.once = once;
 function once(name, callback, target) {
-	var handler = function(event) {
+	const handler = function(event) {
 		/* istanbul ignore next: ignore the final fallback as hard trigger */
-		var targ = event.target || event.srcElement;
+		const targ = event.target || event.srcElement;
 		targ.removeEventListener('oAds.' + name, callback);
 		if (callback) {
 			callback(event);

@@ -4,7 +4,7 @@
 // I'm not sure what affect moving the myState var will have (it's used above too) so this need to be refactored at some point
 
 'use strict';
-var utils = require('./utils');
+const utils = require('./utils');
 
 // TODO: remove this in o-ads version 3
 function getLoginInfo() {

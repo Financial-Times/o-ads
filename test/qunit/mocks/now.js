@@ -4,8 +4,4 @@
 */
 'use strict';
 
-var now = function() {
-	return (new Date()).getTime();
-};
-
-module.exports = now;
+module.exports = () => new Date().getTime();

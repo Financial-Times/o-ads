@@ -34,13 +34,13 @@ QUnit.test('Basic Sinon methods are available via this', function(assert) {
 });
 
 QUnit.test('Sinon fake timers are available', function(assert) {
-	var clock = this.date(1);
+	const clock = this.date(1);
 	assert.equal((new Date()).valueOf(), 1, 'the date object is now mocked');
 	clock.tick(1);
 	assert.equal((new Date()).valueOf(), 2, 'a tick of the clock now pushes the date forward');
 });
 
-var _XMLHttpRequest = window.XMLHttpRequest;
+const _XMLHttpRequest = window.XMLHttpRequest;
 QUnit.test('Sinon fake server is available', function(assert) {
 	this.server();
 	assert.notEqual(window.XMLHttpRequest, _XMLHttpRequest, 'XMLHttpRequest is mocked');
@@ -68,9 +68,9 @@ QUnit.test('Meta data mocks are removed after the test', function(assert) {
 	assert.equal($('meta[name="complex"][content="tag"][with="attribute"]').size(), 0, 'complex tag gone');
 });
 
-var _localStorage = window.localStorage;
+const _localStorage = window.localStorage;
 QUnit.test('localStorage mocking', function(assert) {
-	var localMocked = this.localStorage({
+	const localMocked = this.localStorage({
 		Brandon: 'Bernier'
 	});
 

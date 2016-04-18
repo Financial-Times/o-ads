@@ -5,7 +5,7 @@
 QUnit.module('Main');
 
 QUnit.test('init All', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');
 
 	document.body.addEventListener('oAds.ready', function(event) {
@@ -18,13 +18,13 @@ QUnit.test('init All', function(assert) {
 });
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
-	var admantxDebug = this.spy(this.ads.admantx, 'debug');
-	var cbDebug = this.spy(this.ads.cb, 'debug');
-	var gptDebug = this.spy(this.ads.gpt, 'debug');
-	var kruxDebug = this.spy(this.ads.krux, 'debug');
-	var slotsDebug = this.spy(this.ads.slots, 'debug');
-	var targetingDebug = this.spy(this.ads.targeting, 'debug');
-	var videoDebug = this.spy(this.ads.buildURLForVideo, 'debug');
+	const admantxDebug = this.spy(this.ads.admantx, 'debug');
+	const cbDebug = this.spy(this.ads.cb, 'debug');
+	const gptDebug = this.spy(this.ads.gpt, 'debug');
+	const kruxDebug = this.spy(this.ads.krux, 'debug');
+	const slotsDebug = this.spy(this.ads.slots, 'debug');
+	const targetingDebug = this.spy(this.ads.targeting, 'debug');
+	const videoDebug = this.spy(this.ads.buildURLForVideo, 'debug');
 
 	this.ads.debug();
 
@@ -39,7 +39,7 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 });
 
 QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
-	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+	const admantxDebug = this.spy(this.ads.admantx, 'debug');
 
 	this.localStorage({'oAds': true});
 	this.ads.debug();
@@ -49,7 +49,7 @@ QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 });
 
 QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", function(assert) {
-	var admantxDebug = this.spy(this.ads.admantx, 'debug');
+	const admantxDebug = this.spy(this.ads.admantx, 'debug');
 
 	this.ads.debug();
 

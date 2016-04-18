@@ -5,7 +5,7 @@
 QUnit.module('Messenger');
 
 QUnit.test('post base context', function(assert) {
-	var top = window.top || window;
+	const top = window.top || window;
 	this.spy(top, 'postMessage');
 
 	// make a default call
@@ -15,8 +15,8 @@ QUnit.test('post base context', function(assert) {
 });
 
 QUnit.test('post from different context', function(assert) {
-	var frame = this.createDummyFrame();
-	var top = window.top || window;
+	const frame = this.createDummyFrame();
+	const top = window.top || window;
 	this.spy(top, 'postMessage');
 	this.spy(frame.window, 'postMessage');
 
@@ -29,32 +29,32 @@ QUnit.test('post from different context', function(assert) {
 });
 
 QUnit.test('parse plain string', function(assert) {
-	var input = 'random string';
-	var output = this.utils.messenger.parse(input);
+	const input = 'random string';
+	const output = this.utils.messenger.parse(input);
 
 	assert.strictEqual(typeof(output), 'string', 'Make sure that output is a string');
 	assert.equal(input, output, 'Make sure output is same as input');
 });
 
 QUnit.test('parse JSON string returns the equivakent JS Object', function(assert) {
-	var input = '{"test": "value", "anotherKey": 2}';
-	var output = this.utils.messenger.parse(input);
+	const input = '{"test": "value", "anotherKey": 2}';
+	const output = this.utils.messenger.parse(input);
 
 	assert.strictEqual(typeof(output), 'object', 'Make sure that output is an object');
 	assert.deepEqual(output, {test: 'value', anotherKey: 2}, 'Make sure the returned object was parsed correctly');
 });
 
 QUnit.test('parsing an Object returns an object', function(assert) {
-	var input = {"test": "value", "anotherKey": 2};
-	var output = this.utils.messenger.parse(input);
+	const input = {"test": "value", "anotherKey": 2};
+	const output = this.utils.messenger.parse(input);
 
 	assert.strictEqual(typeof(output), 'object', 'Make sure that output is a string');
 	assert.deepEqual(output, input, 'Make sure the returned object is the same as the original');
 });
 
 QUnit.test('parse Malformed JSON returns string', function(assert) {
-	var input = '{"test: "value}';
-	var output = this.utils.messenger.parse(input);
+	const input = '{"test: "value}';
+	const output = this.utils.messenger.parse(input);
 
 	assert.strictEqual(typeof(output), 'string', 'Make sure that output is a string');
 	assert.equal(input, output, 'Make sure output is same as input');

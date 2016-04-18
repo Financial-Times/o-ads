@@ -25,7 +25,7 @@ Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.metadata = require('./src/js/metadata');
 Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
-var utils = Ads.prototype.utils = require('./src/js/utils');
+const utils = Ads.prototype.utils = require('./src/js/utils');
 
 /**
 * Initialises the ads library and all sub modules
@@ -45,16 +45,16 @@ Ads.prototype.init = function(config) {
 	return this;
 };
 
-var ads = new Ads();
-var initAll = function() {
-	var metas = utils.arrayLikeToArray(document.getElementsByTagName('meta'));
-	var stop = metas.filter(function(meta) {
+const ads = new Ads();
+const initAll = function() {
+	const metas = utils.arrayLikeToArray(document.getElementsByTagName('meta'));
+	const stop = metas.filter(function(meta) {
 		return meta.name === 'o-ads-stop';
 	});
 	/* istanbul ignore else  */
 	if (!stop.length) {
 		ads.init();
-		var slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		const slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	}
 
@@ -62,7 +62,7 @@ var initAll = function() {
 };
 
 Ads.prototype.debug = function (){
-	var remove = true;
+	let remove = true;
 	if (localStorage.getItem('oAds')) {
 		remove = false;
 	} else {

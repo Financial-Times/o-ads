@@ -16,11 +16,11 @@
 */
 
 'use strict';
-var config = require('./config');
-var krux = require('./data-providers/krux');
-var version = require('./version');
-var utils = require('./utils');
-var parameters = {};
+const config = require('./config');
+const krux = require('./data-providers/krux');
+const version = require('./version');
+const utils = require('./utils');
+let parameters = {};
 
 /**
 * The Targeting class defines an ads.targeting instance
@@ -31,8 +31,8 @@ function Targeting() {
 }
 
 Targeting.prototype.get = function() {
-	var item;
-	var methods = {
+	let item;
+	const methods = {
 		krux: this.fetchKrux,
 		socialReferrer: this.getSocialReferrer,
 		pageReferrer: this.getPageReferrer,
@@ -65,7 +65,7 @@ Targeting.prototype.clear = function() {
 };
 
 Targeting.prototype.encodedIp =  function() {
-	var DFPPremiumIPReplaceLookup = {
+	const DFPPremiumIPReplaceLookup = {
 		0: {replaceRegex: /0/g, replaceValue: 'a'},
 		1: {replaceRegex: /1/g, replaceValue: 'b'},
 		2: {replaceRegex: /2/g, replaceValue: 'c'},
@@ -80,10 +80,10 @@ Targeting.prototype.encodedIp =  function() {
 	};
 
 	function getIP() {
-		var ip;
-		var tmp;
-		var ipTemp;
-		var ftUserTrackVal = utils.cookie('FTUserTrack');
+		let ip;
+		let tmp;
+		let ipTemp;
+		const ftUserTrackVal = utils.cookie('FTUserTrack');
 
 		// sample FTUserTrackValue = 203.190.72.182.1344916650137365
 		if (ftUserTrackVal) {
@@ -103,8 +103,8 @@ Targeting.prototype.encodedIp =  function() {
 	}
 
 	function encodeIP(ip) {
-		var encodedIP;
-		var lookupKey;
+		let encodedIP;
+		let lookupKey;
 
 		if (ip) {
 			encodedIP = ip;
@@ -135,7 +135,7 @@ Targeting.prototype.encodedIp =  function() {
 * @lends Targeting
 */
 Targeting.prototype.getFromConfig = function() {
-	var targeting = config('dfp_targeting') || {};
+	let targeting = config('dfp_targeting') || {};
 	if (!utils.isPlainObject(targeting)) {
 		/* istanbul ignore else  */
 		if (utils.isString(targeting)) {
@@ -151,9 +151,9 @@ Targeting.prototype.fetchKrux = function() {
 };
 
 Targeting.prototype.getPageReferrer = function() {
-	var hostRegex;
-	var match = null;
-	var referrer = utils.getReferrer();
+	let hostRegex;
+	let match = null;
+	const referrer = utils.getReferrer();
 
 	//referrer is not article
 	if (referrer !== '') {
@@ -171,11 +171,11 @@ Targeting.prototype.getPageReferrer = function() {
 };
 
 Targeting.prototype.getSocialReferrer = function() {
-	var codedValue;
-	var refUrl;
-	var referrer = utils.getReferrer();
-	var refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
-	var lookup = {
+	let codedValue;
+	let refUrl;
+	const referrer = utils.getReferrer();
+	const refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
+	const lookup = {
 		't.co': 'twi',
 		'facebook.com': 'fac',
 		'linkedin.com': 'lin',
@@ -187,7 +187,7 @@ Targeting.prototype.getSocialReferrer = function() {
 		for (refUrl in lookup) {
 			/* istanbul ignore else  */
 			if (lookup.hasOwnProperty(refUrl)) {
-				var refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
+				const refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
 				if (refUrl !== undefined && refererRegex.test(referrer)) {
 					codedValue = lookup[refUrl];
 					break;
@@ -204,8 +204,8 @@ Targeting.prototype.cookieConsent = function() {
 };
 
 Targeting.prototype.searchTerm = function() {
-	var qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
-	var keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
+	const qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
+	let keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
 	if (keywords && keywords !== '') {
 		keywords = unescape(keywords).toLowerCase()
@@ -230,8 +230,8 @@ Targeting.prototype.responsive = function() {
 };
 
 Targeting.prototype.debug = function () {
-	var log = utils.log;
-	var parameters = this.get();
+	const log = utils.log;
+	const parameters = this.get();
 	if (Object.keys(parameters).length === 0) {
 		return;
 	}

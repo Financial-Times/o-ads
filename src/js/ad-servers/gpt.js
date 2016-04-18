@@ -8,10 +8,10 @@
 */
 
 'use strict';
-var config = require('../config');
-var utils = require('../utils');
-var targeting = require('../targeting');
-var breakpoints = false;
+const config = require('../config');
+const utils = require('../utils');
+const targeting = require('../targeting');
+let breakpoints = false;
 /*
 //###########################
 // Initialisation handlers ##
@@ -22,7 +22,7 @@ var breakpoints = false;
 * Initialise Google publisher tags functionality
 */
 function init() {
-	var gptConfig = config('gpt') || {};
+	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	initGoogleTag();
 
@@ -80,7 +80,7 @@ function setup(gptConfig) {
 */
 
 function setRenderingMode(gptConfig) {
-	var rendering = gptConfig.rendering;
+	const rendering = gptConfig.rendering;
 	if (rendering === 'sync') {
 		googletag.pubads().enableSyncRendering();
 	} else if (rendering === 'sra') {
@@ -121,7 +121,7 @@ function setPageTargeting(targeting) {
 * false is synonymous with never
 */
 function setPageCollapseEmpty(gptConfig) {
-	var mode = gptConfig.collapseEmpty;
+	const mode = gptConfig.collapseEmpty;
 
 	if (mode === 'before' || mode === true) {
 		googletag.pubads().collapseEmptyDivs(true, true);
@@ -152,7 +152,7 @@ function enableCompanions(gptConfig) {
 */
 function enableVideo(gptConfig) {
 	if (gptConfig.video) {
-		var url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
+		const url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
 		/* istanbul ignore else  */
 		if (!utils.isScriptAlreadyLoaded(url)) {
 			utils.attach(url, true);
@@ -172,7 +172,7 @@ function enableVideo(gptConfig) {
 * Event handler for when a slot is ready for an ad to rendered
 */
 function onReady(slotMethods, event) {
-	var slot = event.detail.slot;
+	const slot = event.detail.slot;
 	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
@@ -198,7 +198,7 @@ function onReady(slotMethods, event) {
 * Render is called when a slot is not rendered when the ready event fires
 */
 function onRender(event) {
-	var slot = event.detail.slot;
+	const slot = event.detail.slot;
 	if (utils.isFunction(slot.display)) {
 		slot.display();
 	} else {
@@ -211,7 +211,7 @@ function onRender(event) {
 */
 function onRefresh(event) {
 	window.googletag.cmd.push(function(event) {
-		var targeting = event.detail.targeting;
+		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
 			Object.keys(targeting).forEach(function(name) {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
@@ -223,8 +223,8 @@ function onRefresh(event) {
 }
 
 function onResize(event) {
-	var iframe = event.detail.slot.gpt.iframe;
-	var size = event.detail.size;
+	const iframe = event.detail.slot.gpt.iframe;
+	const size = event.detail.size;
 	iframe.width = size[0];
 	iframe.height = size[1];
 }
@@ -233,17 +233,16 @@ function onResize(event) {
 * function passed to the gpt library that is run when an ad completes rendering
 */
 function onRenderEnded(event) {
-	var detail;
-	var data = {
+	const data = {
 		gpt: {}
 	};
 
-	var gptSlotId = event.slot.getSlotId();
-	var domId = gptSlotId.getDomId().split('-');
-	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+	const gptSlotId = event.slot.getSlotId();
+	const domId = gptSlotId.getDomId().split('-');
+	const iframeId = 'google_ads_iframe_' + gptSlotId.getId();
 	data.type = domId.pop();
 	data.name = domId.join('-');
-	detail = data.gpt;
+	const detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
 	detail.creativeId = event.creativeId;
@@ -263,7 +262,7 @@ function onRenderEnded(event) {
 //################
 * Set of methods extended on to the slot constructor for GPT served slots
 */
-var slotMethods = {
+const slotMethods = {
 	/**
 	* define a GPT slot
 	*/
@@ -297,8 +296,8 @@ var slotMethods = {
 	initResponsive: function() {
 		window.googletag.cmd.push(function() {
 			utils.on('breakpoint', function(event) {
-				var slot = event.detail.slot;
-				var screensize = event.detail.screensize;
+				const slot = event.detail.slot;
+				const screensize = event.detail.screensize;
 
 				updatePageTargeting({ res: screensize });
 
@@ -312,7 +311,7 @@ var slotMethods = {
 				}
 			}, this.container);
 
-			var mapping = googletag.sizeMapping();
+			const mapping = googletag.sizeMapping();
 			Object.keys(breakpoints).forEach(function(breakpoint) {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
@@ -337,18 +336,18 @@ var slotMethods = {
 	*/
 	setUnitName: function() {
 		window.googletag.cmd.push(function() {
-			var unitName;
-			var gpt = config('gpt') || {};
-			var attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
+			let unitName;
+			const gpt = config('gpt') || {};
+			const attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
 
 			if (utils.isNonEmptyString(attr)) {
 				unitName = attr;
 			} else if (utils.isNonEmptyString(gpt.unitName)) {
 				unitName = gpt.unitName;
 			} else {
-				var network = gpt.network;
-				var site = gpt.site;
-				var zone = gpt.zone;
+				const network = gpt.network;
+				const site = gpt.site;
+				const zone = gpt.zone;
 				unitName = '/' + network;
 				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
 				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
@@ -362,7 +361,7 @@ var slotMethods = {
 	*/
 	addServices: function(gptSlot) {
 		window.googletag.cmd.push(function(gptSlot) {
-			var gpt = config('gpt') || {};
+			const gpt = config('gpt') || {};
 			gptSlot = gptSlot || this.gpt.slot;
 			gptSlot.addService(googletag.pubads());
 			if (gpt.companions && this.companion !== false) {
@@ -381,7 +380,7 @@ var slotMethods = {
 	*/
 	setCollapseEmpty: function() {
 		window.googletag.cmd.push(function() {
-			var mode = this.collapseEmpty || config('collapseEmpty');
+			const mode = this.collapseEmpty || config('collapseEmpty');
 
 			if (mode === true || mode === 'after') {
 				this.gpt.slot.setCollapseEmptyDiv(true);
@@ -396,7 +395,7 @@ var slotMethods = {
 	submitGptImpression : function() {
 		if (this.outOfPage && this.gpt.iframe) {
 			function getImpressionURL(iframe) {
-				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
 				if (trackingUrlElement) {
 					return trackingUrlElement.dataset.oAdsImpressionUrl;
 				} else {
@@ -404,7 +403,7 @@ var slotMethods = {
 					return false;
 				}
 			};
-			var impressionURL = getImpressionURL(this.gpt.iframe);
+			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
@@ -429,7 +428,7 @@ var slotMethods = {
 	setURL: function(gptSlot) {
 		window.googletag.cmd.push(function() {
 			gptSlot = gptSlot || this.gpt.slot;
-			var canonical = config('canonical');
+			const canonical = config('canonical');
 			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
 		}.bind(this));
 		return this;
@@ -471,7 +470,7 @@ function updateCorrelator() {
 
 function updatePageTargeting(override) {
 	if (window.googletag) {
-		var params = utils.isPlainObject(override) ? override : targeting.get();
+		const params = utils.isPlainObject(override) ? override : targeting.get();
 		setPageTargeting(params);
 	}
 	else {
@@ -484,8 +483,8 @@ module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = updatePageTargeting;
 
 module.exports.debug = function(){
-	var log = utils.log;
-	var conf = config('gpt');
+	const log = utils.log;
+	const conf = config('gpt');
 	if(!conf){
 		return;
 	}

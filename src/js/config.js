@@ -22,11 +22,11 @@
  * @function
 */
 'use strict';
-var utils = require('./utils');
+const utils = require('./utils');
 /**
 * Default configuration set in the constructor.
 */
-var defaults = {
+const defaults = {
 	formats: {
 		MediumRectangle:  {sizes: [300, 250]},
 		Rectangle:  {sizes: [180, 50]},
@@ -53,10 +53,10 @@ var defaults = {
 * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
 */
 function fetchMetaConfig() {
-	var meta;
-	var results = {};
-	var metas = document.getElementsByTagName('meta');
-	for (var i = 0; i < metas.length; i++) {
+	let meta;
+	let results = {};
+	const metas = document.getElementsByTagName('meta');
+	for (let i = 0; i < metas.length; i++) {
 		meta = metas[i];
 		if (meta.name) {
 			if (meta.getAttribute('data-contenttype') === 'json') {
@@ -71,10 +71,10 @@ function fetchMetaConfig() {
 }
 
 function fetchDeclaritiveConfig() {
-	var script;
-	var scripts = document.querySelectorAll('script[data-o-ads-config]');
-	var results = {};
-	for (var i = 0; i < scripts.length; i++) {
+	let script;
+	const scripts = document.querySelectorAll('script[data-o-ads-config]');
+	let results = {};
+	for (let i = 0; i < scripts.length; i++) {
 		script = scripts[i];
 		results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
 	}
@@ -88,8 +88,8 @@ function fetchDeclaritiveConfig() {
 * fetchCanonicalURL Grabs the canonical URL from the page meta if it exists.
 */
 function fetchCanonicalURL() {
-	var canonical;
-	var canonicalTag = document.querySelector('link[rel="canonical"]');
+	let canonical;
+	const canonicalTag = document.querySelector('link[rel="canonical"]');
 	if (canonicalTag) {
 		canonical = canonicalTag.href;
 	}
@@ -107,7 +107,7 @@ function Config() {
 }
 
 Config.prototype.access = function(k, v) {
-	var result;
+	let result;
 	if (utils.isPlainObject(k)) {
 		utils.extend(true, this.store, k);
 		result = this.store;
@@ -139,7 +139,7 @@ Config.prototype.init = function() {
 	return this.store;
 };
 
-var config = new Config();
+const config = new Config();
 module.exports = config.access.bind(config);
 module.exports.init = config.init.bind(config);
 module.exports.clear = config.clear.bind(config);

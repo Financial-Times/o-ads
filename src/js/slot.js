@@ -1,8 +1,8 @@
 'use strict';
-var utils = require('./utils');
-var config = require('./config');
+const utils = require('./utils');
+const config = require('./config');
 
-var attributeParsers = {
+const attributeParsers = {
 	sizes: function(value, sizes) {
 		if (value === false || value === 'false') {
 			return false;
@@ -21,13 +21,13 @@ var attributeParsers = {
 		if (value === false || value === 'false') {
 			sizes = false;
 		} else {
-			var mapping = config().formats;
-			var formats = utils.isArray(value) ? value : value.split(',');
+			const mapping = config().formats;
+			const formats = utils.isArray(value) ? value : value.split(',');
 			formats.forEach(function(format) {
 				if (mapping && mapping[format]) {
 					format = mapping[format];
 					if (utils.isArray(format.sizes[0])) {
-						for (var j = 0; j < format.sizes.length; j++) {
+						for (let j = 0; j < format.sizes.length; j++) {
 							sizes.push(format.sizes[j]);
 						}
 					}
@@ -44,7 +44,7 @@ var attributeParsers = {
 	},
 
 	responsiveSizes: function(name, value, sizes) {
-		var screenName = name.replace(/^sizes/, '').toLowerCase();
+		const screenName = name.replace(/^sizes/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -54,7 +54,7 @@ var attributeParsers = {
 	},
 
 	responsiveFormats: function(name, value, sizes) {
-		var screenName = name.replace(/^formats/, '').toLowerCase();
+		const screenName = name.replace(/^formats/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -86,7 +86,7 @@ var attributeParsers = {
 * @constructor
 */
 function Slot(container, screensize) {
-	var slotConfig = config('slots') || {};
+	let slotConfig = config('slots') || {};
 
 	// store the container
 	this.container = container;
@@ -149,8 +149,8 @@ function Slot(container, screensize) {
 */
 Slot.prototype.parseAttributeConfig = function() {
 	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
-		var name = utils.parseAttributeName(attribute.name);
-		var value = attribute.value;
+		const name = utils.parseAttributeName(attribute.name);
+		const value = attribute.value;
 		if (name === 'formats') {
 			this[name] = attributeParsers[name](value, this.sizes);
 		} else if (attributeParsers[name]) {
@@ -166,7 +166,7 @@ Slot.prototype.parseAttributeConfig = function() {
 };
 
 Slot.prototype.getAttributes = function() {
-	var attributes = {};
+	const attributes = {};
 	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
 		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
@@ -201,7 +201,7 @@ Slot.prototype.initResponsive = function() {
 		}
 
 		utils.on('breakpoint', function(event) {
-			var slot = event.detail.slot;
+			const slot = event.detail.slot;
 			slot.screensize = event.detail.screensize;
 
 			if (slot.hasValidSize()) {
@@ -299,7 +299,7 @@ Slot.prototype.submitImpression = function() {
 *	fire an event on the slot
 */
 Slot.prototype.fire = function(name, data) {
-	var details = {
+	const details = {
 		name: this.name,
 		slot: this
 	};
@@ -316,11 +316,11 @@ Slot.prototype.fire = function(name, data) {
 *	add a div tag into the current slot container
 **/
 Slot.prototype.addContainer = function(node, attrs) {
-	var container = '<div ';
+	let container = '<div ';
 	/* istanbul ignore else  */
 	if(attrs) {
 		Object.keys(attrs).forEach(function(attr) {
-			var value = attrs[attr];
+			const value = attrs[attr];
 			container += attr + '=' + value + ' ';
 		});
 	}
@@ -355,7 +355,7 @@ Slot.prototype.centerContainer = function() {
 * Add a label class to the main container
 */
 Slot.prototype.labelContainer = function() {
-	var className;
+	let className;
 	if (this.label === true || this.label === 'left') {
 		className = 'label-left';
 	} else if (this.label === 'right') {

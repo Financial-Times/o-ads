@@ -35,11 +35,11 @@ QUnit.test('does not add a script from url when location contains krux src that 
 });
 
 QUnit.test('targeting data is generated correctly from localStorage', function(assert) {
-	var kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
-	var localstorageMock = this.localStorage(kruxData);
+	const kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
+	const localstorageMock = this.localStorage(kruxData);
 	if (localstorageMock) {
 		this.ads.init({ krux: { krux: {id: '112233'}}});
-		var result = this.ads.krux.targeting();
+		const result = this.ads.krux.targeting();
 		assert.deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "segments in localStorage returned correctly");
 		assert.equal(result.kuid, kruxData.kxuser, "user id returned correctly from localStorage");
 		assert.equal(result.khost, encodeURIComponent(location.hostname), "host returned correctly");
@@ -54,7 +54,7 @@ QUnit.test('targeting data is generated correctly from cookies', function(assert
 	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
 	this.ads.init({ krux: {id: '112233'}});
 
-	var result = this.ads.krux.targeting();
+	const result = this.ads.krux.targeting();
 	assert.deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "returns segments from cookies");
 	assert.equal(result.khost, encodeURIComponent(location.hostname), "host returned correctly");
 	assert.equal(result.bht, "true", "Behavioural flag is set, when cookies are used");
@@ -64,13 +64,13 @@ QUnit.test('number of Krux segments can be limited', function(assert) {
 	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
 	this.ads.init({ krux: {id: '112233', limit: 2}});
 
-	var result = this.ads.krux.targeting();
+	const result = this.ads.krux.targeting();
 	assert.deepEqual(result.ksg, ["seg1", "seg2"], "returns 2 segments");
 });
 
 QUnit.test('event pixels', function(assert) {
 	this.ads.init({ krux: {id: '112233'}});
-	var eventId = 'crunch',
+	const eventId = 'crunch',
 		attrs = {snap: 'crackle'};
 
 	this.ads.krux.events.fire(eventId);
@@ -112,10 +112,10 @@ QUnit.test('events on DOM elements ', function(assert) {
 });
 
 QUnit.test('event pixel - dwell time', function(assert) {
-	var dwellTimeId = 'dwell-time';
-	var dwellTimeInterval = 10;
-	var dwellTimeTotal = 30;
-	var clock = this.date();
+	const dwellTimeId = 'dwell-time';
+	const dwellTimeInterval = 10;
+	const dwellTimeTotal = 30;
+	const clock = this.date();
 
 	this.ads.init({
 		krux: {
@@ -153,8 +153,8 @@ QUnit.test('event pixel - dwell time', function(assert) {
 });
 
 QUnit.test('event pixel - dwell time defaults', function(assert) {
-	var dwellTimeId = 'dwell-time-default';
-	var clock = this.date();
+	const dwellTimeId = 'dwell-time-default';
+	const clock = this.date();
 
 	this.ads.init({
 		krux: {
@@ -204,7 +204,7 @@ QUnit.test('page & user attributes are set correctly and sent to Krux', function
 
 QUnit.test('debug returns early if no config is set', function(assert) {
 	this.ads.init();
-	var start = this.spy(this.utils.log, "start");
+	const start = this.spy(this.utils.log, "start");
 
 	this.ads.krux.debug();
 	assert.notOk(start.called, "`utils.start` wasn't called for 'Krux'");
@@ -212,7 +212,7 @@ QUnit.test('debug returns early if no config is set', function(assert) {
 
 QUnit.test('debug starts logging Krux data', function(assert) {
 	this.ads.init({krux: {}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('Krux©'), "`utils.start` was called for 'Krux'");
@@ -221,7 +221,7 @@ QUnit.test('debug starts logging Krux data', function(assert) {
 
 QUnit.test("debug doesn't log attributes data if none is set", function(assert) {
 	this.ads.init({krux: {}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.notOk(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
@@ -229,7 +229,7 @@ QUnit.test("debug doesn't log attributes data if none is set", function(assert) 
 
 QUnit.test("debug logs attributes data if set", function(assert) {
 	this.ads.init({krux: {attributes: {page: {}, user: {}, custom: {}}}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
@@ -240,7 +240,7 @@ QUnit.test("debug logs attributes data if set", function(assert) {
 
 QUnit.test("debug doesn't log events data if none is set", function(assert) {
 	this.ads.init({krux: {}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.notOk(start.calledWith('Events'), "`utils.start` wasn't called for 'Events'");
@@ -248,7 +248,7 @@ QUnit.test("debug doesn't log events data if none is set", function(assert) {
 
 QUnit.test("debug logs events data if set", function(assert) {
 	this.ads.init({krux: {events: {}}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('Events'), "`utils.start` was called for 'Events'");
@@ -257,7 +257,7 @@ QUnit.test("debug logs events data if set", function(assert) {
 
 QUnit.test("debug doesn't log dwell time data if none is set", function(assert) {
 	this.ads.init({krux: {events: {}}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.notOk(start.calledWith('Dwell Time'), "`utils.start` wasn't called for 'Dwell Time'");
@@ -265,7 +265,7 @@ QUnit.test("debug doesn't log dwell time data if none is set", function(assert) 
 
 QUnit.test("debug logs dwell time data if set", function(assert) {
 	this.ads.init({krux: {events: {dwell_time: {}}}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('Dwell Time'), "`utils.start` was called for 'Dwell Time'");
@@ -275,7 +275,7 @@ QUnit.test('debug logs number of supertag scripts', function(assert) {
 	this.fixturesContainer.add('<div class="kxinvisible"></div>');
 	this.fixturesContainer.add('<div class="kxinvisible"></div>');
 	this.ads.init({krux: {events: {dwell_time: {}}}});
-	var start = this.spy(this.utils.log, 'start');
+	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('2 Supertag© scripts'), 'logs correct number of scripts');
@@ -283,7 +283,7 @@ QUnit.test('debug logs number of supertag scripts', function(assert) {
 
 QUnit.test("debug logs segment limit data if set", function(assert) {
 	this.ads.init({krux: {limit: 10}});
-	var log = this.spy(this.utils, 'log');
+	const log = this.spy(this.utils, 'log');
 
 	this.ads.krux.debug();
 	assert.ok(log.calledWith('%c segment limit:'), "segment limit was logged'");

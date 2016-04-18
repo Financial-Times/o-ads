@@ -9,26 +9,25 @@
  * @memberof FT.ads
 */
 'use strict';
-var config = require('./config');
-var targeting = require('./targeting');
+const config = require('./config');
+const targeting = require('./targeting');
 
 function buildURLForVideo(zone, pos, vidKV) {
-	var krux = config('krux') || {};
-	var gpt = config('gpt') || {};
+	const krux = config('krux') || {};
+	const gpt = config('gpt') || {};
 	pos = pos || 'video';
 	vidKV = vidKV || {};
-	var gptVideoURL = function() {
-		var URL, additionalAdTargetingParams, fullURL;
-		var buildCustomParams = function(vkv) {
-			var i;
-			var allTargeting = targeting.get();
-			var results = '';
-			var kruxSegs = allTargeting.ksg;
-			var includeParams = ['playlistid', 'playerid', '07', 'ksg', 'kuid', 'khost', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
+	const gptVideoURL = function() {
+		let URL, additionalAdTargetingParams, fullURL;
+		const buildCustomParams = function(vkv) {
+			const allTargeting = targeting.get();
+			let results = '';
+			const kruxSegs = allTargeting.ksg;
+			const includeParams = ['playlistid', 'playerid', '07', 'ksg', 'kuid', 'khost', '06', 'slv', 'eid', '05', '19', '21', '27', '20', '02', '14', 'cn', '01', 'rfrsh', 'dcopt', 'brand', 'section', 'lnID', 'specialBadging'];
 
-			for (i = 0; i < includeParams.length; i++) {
-				var key = includeParams[i];
-				var value = false;
+			for (let i = 0; i < includeParams.length; i++) {
+				const key = includeParams[i];
+				let value = false;
 				if (typeof allTargeting[key] !== 'undefined') {
 					value = allTargeting[key];
 				} else if (typeof vkv !== 'undefined' && (typeof vkv[key] !== 'undefined')) {
@@ -36,7 +35,7 @@ function buildURLForVideo(zone, pos, vidKV) {
 				}
 
 				if (key === 'ksg' && kruxSegs) {
-					var max = krux.limit || 1e4;
+					const max = krux.limit || 1e4;
 					value = kruxSegs.slice(0, max).join(',');
 				}
 
@@ -46,7 +45,7 @@ function buildURLForVideo(zone, pos, vidKV) {
 			return results;
 		};
 
-		var encodeCustParams = function(vkv) {
+		const encodeCustParams = function(vkv) {
 			return encodeURIComponent(buildCustomParams(vkv));
 		};
 
@@ -66,8 +65,8 @@ function buildURLForVideo(zone, pos, vidKV) {
 module.exports = buildURLForVideo;
 
 module.exports.debug = function(){
-	var utils = require('./utils');
-	var log = utils.log;
+	const utils = require('./utils');
+	const log = utils.log;
 
 	log.start('Video');
 		log.attributeTable(buildURLForVideo());

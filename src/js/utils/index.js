@@ -4,9 +4,9 @@
  * @module utils
  */
 'use strict';
-var hop = Object.prototype.hasOwnProperty;
+const hop = Object.prototype.hasOwnProperty;
 
-var utils = module.exports;
+const utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
  * IE returns [object Object] for null and undefined so we need to filter those
@@ -16,7 +16,7 @@ var utils = module.exports;
  * @returns The type of the object e.g Array, String, Object
  */
 function is(object) {
-	var type = Object.prototype.toString.call(object)
+	const type = Object.prototype.toString.call(object)
 	.match(/^\[object\s(.*)\]$/)[1];
 
 	if (object === null) {
@@ -58,7 +58,7 @@ function curryIsMethods(obj, classNames) {
 	];
 
 	while (!!classNames.length) {
-		var className = classNames.pop();
+		const className = classNames.pop();
 		obj['is' + className] = createIsTest(className);
 	}
 
@@ -82,7 +82,7 @@ module.exports.isWindow = function(obj) {
  * @returns {boolean} true if the object is plain false otherwise
  */
 module.exports.isPlainObject = function(obj) {
-	var hop = Object.prototype.hasOwnProperty;
+	const hop = Object.prototype.hasOwnProperty;
 
 	// Must be an Object.
 	// Because of IE, we also have to check the presence of the constructor property.
@@ -104,8 +104,7 @@ module.exports.isPlainObject = function(obj) {
 
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
-
-	var key;
+	let key;
 	for (key in obj) {}
 
 	return key === undefined || hop.call(obj, key);
@@ -146,7 +145,7 @@ module.exports.extend = extend;
 function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
-	var options, name, src, copy, copyIsArray, clone,
+	let options, name, src, copy, copyIsArray, clone,
 	target = arguments[0] || {},
 	i = 1,
 	length = arguments.length,
@@ -229,7 +228,7 @@ module.exports.addClass = function(node, className) {
 };
 
 module.exports.removeClass = function(node, className) {
-	var index, classes;
+	let index, classes;
 	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
 		classes = node.className.split(' ');
 		index = classes.indexOf('o-ads__' + className);
@@ -250,7 +249,7 @@ module.exports.removeClass = function(node, className) {
  *
  */
 module.exports.hash = function(str, delimiter, pairing) {
-	var pair, value, idx, len,
+	let pair, value, idx, len,
 	hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
@@ -278,9 +277,9 @@ module.exports.hash = function(str, delimiter, pairing) {
 * @returns {HTMLElement} the created script tag
 */
 module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
-	var tag = document.createElement('script');
-	var node = document.getElementsByTagName('script')[0];
-	var hasRun = false;
+	const tag = document.createElement('script');
+	const node = document.getElementsByTagName('script')[0];
+	let hasRun = false;
 
 	function processCallback(callback) {
 		/* istanbul ignore else  */
@@ -333,8 +332,8 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 * @return {boolean} true if the file is already referenced else false
 */
 module.exports.isScriptAlreadyLoaded = function(url) {
-	var scripts = document.getElementsByTagName('script');
-	for (var i = scripts.length; i--;) {
+	const scripts = document.getElementsByTagName('script');
+	for (let i = scripts.length; i--;) {
 		if (scripts[i].src === url) return true;
 	}
 
@@ -350,7 +349,7 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 * @returns {HTMLElement} the created XHR object
 */
 module.exports.createCORSRequest = function(url, method, callback, errorcb) {
-	var xhr = new XMLHttpRequest();
+	let xhr = new XMLHttpRequest();
 	/* istanbul ignore else - legacy IE code, won't test */
 	if ('withCredentials' in xhr) {
 		xhr.open(method, url, true);
@@ -425,7 +424,7 @@ module.exports.hyphenise = function(string) {
 * @returns {string}
 */
 module.exports.parseAttributeName = function(attribute) {
-	var name = utils.isString(attribute) ? attribute : attribute.name;
+	const name = utils.isString(attribute) ? attribute : attribute.name;
 	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
 
@@ -454,7 +453,7 @@ module.exports.getQueryString = function() {
 * @returns {string}
 */
 module.exports.getTimestamp = function() {
-	var now = new Date();
+	const now = new Date();
 	return [
 	now.getFullYear(),
 	('0' + (now.getMonth() + 1)).slice(-2),
@@ -471,12 +470,12 @@ module.exports.getTimestamp = function() {
 * @returns {array}
 */
 module.exports.arrayLikeToArray = function(obj) {
-	var array = [];
+	let array = [];
 	try {
 		array = Array.prototype.slice.call(obj);
 	} catch (error) {
 		/* istanbul ignore next  */
-		for (var i = 0; i < obj.length; i++) {
+		for (let i = 0; i < obj.length; i++) {
 			array[i] = obj[i];
 		}
 	}
@@ -485,7 +484,7 @@ module.exports.arrayLikeToArray = function(obj) {
 };
 
 // capture all iframes in the page in a live node list
-var iframes = document.getElementsByTagName('iframe');
+const iframes = document.getElementsByTagName('iframe');
 
 /**
 * Given the window object of an iframe this method returns the o-ads slot name
@@ -495,8 +494,8 @@ var iframes = document.getElementsByTagName('iframe');
 * @returns {String|Boolean}
 */
 module.exports.iframeToSlotName = function(iframeWindow) {
-	var slotName, node;
-	var i = iframes.length;
+	let slotName, node;
+	let i = iframes.length;
 
 	// Figure out which iframe DOM node we have the window for
 	while (i--) {

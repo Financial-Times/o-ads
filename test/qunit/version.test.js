@@ -2,7 +2,7 @@
 /* globals QUnit: false */
 "use strict";
 
-var version = require('../../src/js/version');
+const version = require('../../src/js/version');
 
 QUnit.module('Version tests');
 
