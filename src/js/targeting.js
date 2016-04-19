@@ -1,5 +1,3 @@
-/* jshint forin: false */
-
 //TODO: refactor the asyc code, it's nasty
 
 /**

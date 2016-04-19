@@ -1,7 +1,7 @@
 
 /* globals process: true */
 
-'use strict'; //eslinst-disable-line
+'use strict'; //eslint-disable-line
 
 // if you want a different local configuration create a file called karma.local.js
 // the file should export a function that takes the current options object and

@@ -1,7 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, sinon: false, $: false, jQuery: false */
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 QUnit.module('Test setup');
 

@@ -1,7 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 const version = require('../../src/js/version');
 

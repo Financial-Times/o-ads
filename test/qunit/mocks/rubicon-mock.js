@@ -1,6 +1,6 @@
 /* globals sinon: false */
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 const stubs = sinon.sandbox.create();
 

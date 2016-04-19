@@ -1,7 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* global sinon: false, $: false, module: true, QUnit: false, require: true */
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 const oViewport = require('o-viewport');
 

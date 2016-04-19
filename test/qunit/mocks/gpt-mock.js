@@ -1,6 +1,6 @@
 /* globals sinon: false, $: false*/
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 const googletag = {};
 let handler;

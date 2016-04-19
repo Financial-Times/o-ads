@@ -1,6 +1,6 @@
 /* global QUnit: false, require: false */
 
-'use strict'; //eslint-ignore-line
+'use strict'; //eslint-disable-line
 
 QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
