@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false, jQuery: false, $: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.isType methods');
 
 QUnit.test('Utils object exists', function(assert) {

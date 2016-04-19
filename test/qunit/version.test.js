@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 const version = require('../../src/js/version');
 
 QUnit.module('Version tests');

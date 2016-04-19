@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Rubicon', {
 	afterEach: function() {
 		delete window['oz_api'];

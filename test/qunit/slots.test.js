@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, $: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Slots', {
 	beforeEach: function() {
 		window.scrollTo(0, 0);

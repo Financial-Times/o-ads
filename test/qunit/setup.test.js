@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, sinon: false, $: false, jQuery: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Test setup');
 
 QUnit.test('Global Dependencies', function(assert) {

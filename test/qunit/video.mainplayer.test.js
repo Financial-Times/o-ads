@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 const targeting = require('../../src/js/targeting');
 
 QUnit.module('Video Main-player tests');

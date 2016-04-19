@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.createCORSRequest');
 
 QUnit.test('We can make a CORS request', function(assert) {

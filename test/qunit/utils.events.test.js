@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.events');
 
 QUnit.test('We can broadcast an event to the body', function(assert) {

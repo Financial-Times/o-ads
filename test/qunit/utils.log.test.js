@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, devel: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.log', { beforeEach: function() {
 	this.debugOn = this.utils.log.isOn('log');
 	this.stub(this.utils.log, 'isOn').returns(true);

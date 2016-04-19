@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.timers');
 
 QUnit.test('Timer', function(assert) {

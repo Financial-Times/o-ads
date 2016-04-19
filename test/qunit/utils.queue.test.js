@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.queue');
 
 QUnit.test('We can create a queue', function(assert) {

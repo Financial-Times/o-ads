@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false, $: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('utils.cookie', {
 	beforeEach: function() {
 		this.ads.utils.cookies = {};
