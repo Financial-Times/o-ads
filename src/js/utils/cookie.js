@@ -34,7 +34,8 @@ const config = module.exports.cookie = function(key, value, options) {
 		}
 
 		if (typeof options.expires === 'number') {
-			const days = options.expires, t = options.expires = new Date();
+			const days = options.expires;
+			const t = options.expires = new Date();
 			t.setDate(t.getDate() + days);
 		}
 

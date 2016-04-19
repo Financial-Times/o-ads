@@ -28,7 +28,7 @@ const attributeParsers = {
 					if (utils.isArray(format.sizes[0])) {
 						format.sizes.forEach(size => {
 							sizes.push(size);
-						})
+						});
 					}
 					else {
 						sizes.push(format.sizes);

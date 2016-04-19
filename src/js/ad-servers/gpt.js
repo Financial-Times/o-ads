@@ -209,7 +209,7 @@ function onRender(event) {
 * refresh is called when a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	window.googletag.cmd.push((event) => {
+	window.googletag.cmd.push(() => {
 		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
 			Object.keys(targeting).forEach((name) => {
@@ -217,7 +217,7 @@ function onRefresh(event) {
 			});
 		}
 		googletag.pubads().refresh([event.detail.slot.gpt.slot]);
-	}.bind(this, event));
+	});
 	return this;
 }
 
@@ -315,10 +315,10 @@ const slotMethods = {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
-			}.bind(this));
+			});
 
 			this.gpt.sizes = mapping.build();
-		}.bind(this));
+		});
 		return this;
 	},
 	/*
@@ -327,7 +327,7 @@ const slotMethods = {
 	display: function() {
 		window.googletag.cmd.push(() => {
 			googletag.display(this.gpt.id);
-		}.bind(this));
+		});
 		return this;
 	},
 	/**
@@ -352,21 +352,21 @@ const slotMethods = {
 				unitName += utils.isNonEmptyString(zone) ? `/${zone}` : '';
 			}
 			this.gpt.unitName = unitName;
-		}.bind(this));
+		});
 		return this;
 	},
 	/**
 	* Add the slot to the pub ads service and add a companion service if configured
 	*/
 	addServices: function(gptSlot) {
-		window.googletag.cmd.push((gptSlot) => {
+		window.googletag.cmd.push(() => {
 			const gpt = config('gpt') || {};
 			gptSlot = gptSlot || this.gpt.slot;
 			gptSlot.addService(googletag.pubads());
 			if (gpt.companions && this.companion !== false) {
 				gptSlot.addService(googletag.companionAds());
 			}
-		}.bind(this, gptSlot));
+		});
 		return this;
 	},
 
@@ -388,7 +388,7 @@ const slotMethods = {
 			} else if (mode === false || mode === 'never') {
 				this.gpt.slot.setCollapseEmptyDiv(false);
 			}
-		}.bind(this));
+		});
 		return this;
 	},
 	submitGptImpression : function() {
@@ -429,7 +429,7 @@ const slotMethods = {
 			gptSlot = gptSlot || this.gpt.slot;
 			const canonical = config('canonical');
 			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
-		}.bind(this));
+		});
 		return this;
 	},
 
@@ -443,9 +443,9 @@ const slotMethods = {
 			if (utils.isPlainObject(this.targeting)) {
 				Object.keys(this.targeting).forEach((param) => {
 					gptSlot.setTargeting(param, this.targeting[param]);
-				}.bind(this));
+				});
 			}
-		}.bind(this));
+		});
 		return this;
 	},
 };

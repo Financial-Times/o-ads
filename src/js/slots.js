@@ -1,4 +1,3 @@
-'use strict';
 const utils = require('./utils');
 const config = require('./config');
 const Slot = require('./slot');
@@ -20,7 +19,7 @@ function invokeMethodOnSlots(names, method, callback) {
 
 	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
-		slots.push(names)
+		slots.push(names);
 	} else if (utils.isArray(names)) {
 		slots = names;
 	}
@@ -331,7 +330,7 @@ Slots.prototype.debug = function (){
 			'line item id': slot.gpt.lineItemId || 'N/A',
 			size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
 			sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
-			targeting: Object.keys(slot.targeting).map(function (param) { return `${param}=${slot.targeting[param]}` }).join(', ')
+			targeting: Object.keys(slot.targeting).map(function (param) { return `${param}=${slot.targeting[param]}`;} ).join(', ')
 		};
 		data.push(row);
 	});

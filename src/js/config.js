@@ -62,7 +62,7 @@ function fetchMetaConfig() {
 				results[meta.name] = meta.content;
 			}
 		}
-	})
+	});
 
 	return results;
 }
@@ -72,7 +72,7 @@ function fetchDeclaritiveConfig() {
 	const scripts = Array.from(document.querySelectorAll('script[data-o-ads-config]'));
 	scripts.forEach(script => {
 		results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
-	})
+	});
 
 	return results;
 }
