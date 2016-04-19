@@ -5,11 +5,9 @@
  * @see utils
  */
 
-'use strict';
-
-const utils = require('./index.js'),
-	pluses = /\+/g,
-	today = new Date();
+const utils = require('./index.js');
+const pluses = /\+/g;
+const today = new Date();
 
 function raw(s) {
 	return s;
@@ -50,10 +48,10 @@ const config = module.exports.cookie = function(key, value, options) {
 
 		return (document.cookie = [
 		encodeURIComponent(key), '=', value,
-		options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-		options.path    ? '; path=' + options.path : '',
-		options.domain  ? '; domain=' + options.domain : '',
-		options.secure  ? '; secure' : ''
+		options.expires ? `; expires=${options.expires.toUTCString()}` : '', // use expires attribute, max-age is not supported by IE
+		options.path ? `; path=${options.path}` : '',
+		options.domain ? `; domain=${options.domain}` : '',
+		options.secure ? `; secure` : ''
 		].join(''));
 	}
 
@@ -104,16 +102,16 @@ function getRegExp(name, param) {
 
 	switch (formats[name]) {
 	case "underscore":
-		re = '_' + param + '([^_]*)_';
+		re = `_${param}([^_]*)_`;
 		break;
 	case "underscoreEquals":
-		re = '_' + param + '=([^_]*)_';
+		re = `_${param}=([^_]*)_`;
 		break;
 	case "colonEquals":
-		re = ':' + param + '=([^:]*)';
+		re = `:${param}=([^:]*)`;
 		break;
 	case "commaEquals":
-		re = param + '=([^,]*)';
+		re = `${param}=([^,]*)`;
 		break;
 	default:
 		re = /((.|\n)*)/; // match everything

@@ -1,4 +1,3 @@
-'use strict';
 const utils = require('./utils');
 const config = require('./config');
 
@@ -23,19 +22,19 @@ const attributeParsers = {
 		} else {
 			const mapping = config().formats;
 			const formats = utils.isArray(value) ? value : value.split(',');
-			formats.forEach(function(format) {
+			formats.forEach(format => {
 				if (mapping && mapping[format]) {
 					format = mapping[format];
 					if (utils.isArray(format.sizes[0])) {
-						for (let j = 0; j < format.sizes.length; j++) {
-							sizes.push(format.sizes[j]);
-						}
+						format.sizes.forEach(size => {
+							sizes.push(size);
+						})
 					}
 					else {
 						sizes.push(format.sizes);
 					}
 				} else {
-					utils.log.error('Slot configured with unknown format ' + format);
+					utils.log.error(`Slot configured with unknown format ${format}`);
 				}
 			});
 		}
@@ -232,7 +231,7 @@ Slot.prototype.maximise = function (size) {
 Slot.prototype.setName = function() {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
 	if (!this.name) {
-		this.name = 'o-ads-slot-' + (Math.floor(Math.random() * 10000));
+		this.name = `o-ads-slot-${(Math.floor(Math.random() * 10000))}`;
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
 	return this;
@@ -252,7 +251,7 @@ Slot.prototype.setResponsiveCreative = function (value) {
 */
 Slot.prototype.collapse = function() {
 	utils.addClass(this.container, 'empty');
-	utils.addClass(document.body, 'no-' + this.name);
+	utils.addClass(document.body, `no-${this.name}`);
 	return this;
 };
 
@@ -269,7 +268,7 @@ Slot.prototype.setFormatLoaded = function(format) {
 */
 Slot.prototype.uncollapse = function() {
 	utils.removeClass(this.container, 'empty');
-	utils.removeClass(document.body, 'no-' + this.name);
+	utils.removeClass(document.body, `no-${this.name}`);
 	return this;
 };
 
@@ -321,7 +320,7 @@ Slot.prototype.addContainer = function(node, attrs) {
 	if(attrs) {
 		Object.keys(attrs).forEach(function(attr) {
 			const value = attrs[attr];
-			container += attr + '=' + value + ' ';
+			container += `${attr}=${value} `;
 		});
 	}
 	container += '></div>';

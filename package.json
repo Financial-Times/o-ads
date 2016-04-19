@@ -34,8 +34,6 @@
     "karma-cli": "^0.1.1",
     "karma-coverage": "^0.5.3",
     "karma-ie-launcher": "^0.2.0",
-    "karma-jshint-preprocessor": "0.0.6",
-    "karma-junit-reporter": "^0.3.8",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-phantomjs2-launcher": "^0.3.2",
     "karma-qunit": "^0.1.8",
@@ -55,5 +53,8 @@
       ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
     }
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  }
 }

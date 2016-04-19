@@ -1,4 +1,16 @@
-'use strict';
+/**
+ * @fileOverview
+ * Third party library for use with google publisher tags.
+ *
+ * @author Robin Marr, robin.marr@com
+ */
+
+/**
+ * ads.admantx provides admantx contextual data target information
+ * @name targeting
+ * @memberof ads
+ */
+
 
 const utils = require('../utils');
 const config = require('../config');

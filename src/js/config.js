@@ -21,7 +21,6 @@
  * @memberof FT.ads
  * @function
 */
-'use strict';
 const utils = require('./utils');
 /**
 * Default configuration set in the constructor.
@@ -53,11 +52,9 @@ const defaults = {
 * fetchMetaConfig pulls out metatag key value pairs into an object returns the object
 */
 function fetchMetaConfig() {
-	let meta;
 	let results = {};
-	const metas = document.getElementsByTagName('meta');
-	for (let i = 0; i < metas.length; i++) {
-		meta = metas[i];
+	const metas = Array.from(document.getElementsByTagName('meta'));
+	metas.forEach(meta => {
 		if (meta.name) {
 			if (meta.getAttribute('data-contenttype') === 'json') {
 				results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : 'UNSUPPORTED';
@@ -65,19 +62,17 @@ function fetchMetaConfig() {
 				results[meta.name] = meta.content;
 			}
 		}
-	}
+	})
 
 	return results;
 }
 
 function fetchDeclaritiveConfig() {
-	let script;
-	const scripts = document.querySelectorAll('script[data-o-ads-config]');
 	let results = {};
-	for (let i = 0; i < scripts.length; i++) {
-		script = scripts[i];
+	const scripts = Array.from(document.querySelectorAll('script[data-o-ads-config]'));
+	scripts.forEach(script => {
 		results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
-	}
+	})
 
 	return results;
 }

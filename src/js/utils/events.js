@@ -4,7 +4,6 @@
  * @module utils/events
  * @see utils
  */
-'use strict';
 
 /**
 * Broadscasts an o-ads event
@@ -16,7 +15,7 @@ module.exports.broadcast = broadcast;
 function broadcast(name, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
-	name = 'oAds.' + name;
+	name = `oAds.${name}`;
 	const opts = {
 		bubbles: true,
 		cancelable: true,
@@ -34,7 +33,7 @@ function broadcast(name, data, target) {
 
 module.exports.on = on;
 function on(name, callback, target) {
-	name = 'oAds.' + name;
+	name = `oAds.${name}`;
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
 	target.addEventListener(name, callback);
@@ -51,7 +50,7 @@ function once(name, callback, target) {
 	const handler = function(event) {
 		/* istanbul ignore next: ignore the final fallback as hard trigger */
 		const targ = event.target || event.srcElement;
-		targ.removeEventListener('oAds.' + name, callback);
+		targ.removeEventListener(name = `oAds.${name}`, callback);
 		if (callback) {
 			callback(event);
 

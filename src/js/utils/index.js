@@ -3,7 +3,6 @@
  * @author Origami Advertising, origami.advertising@ft.com
  * @module utils
  */
-'use strict';
 const hop = Object.prototype.hasOwnProperty;
 
 const utils = module.exports;
@@ -59,7 +58,7 @@ function curryIsMethods(obj, classNames) {
 
 	while (!!classNames.length) {
 		const className = classNames.pop();
-		obj['is' + className] = createIsTest(className);
+		obj[`is${className}`] = createIsTest(className);
 	}
 
 	return obj;
@@ -145,11 +144,15 @@ module.exports.extend = extend;
 function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
-	let options, name, src, copy, copyIsArray, clone,
-	target = arguments[0] || {},
-	i = 1,
-	length = arguments.length,
-	deep = false;
+	let options;
+	let src;
+	let copy;
+	let copyIsArray;
+	let clone;
+	let target = arguments[0] || {};
+	let length = arguments.length;
+	let deep = false;
+	let i = 1;
 
 	// Handle a deep copy situation
 	if (typeof target === 'boolean') {
@@ -176,7 +179,11 @@ function extend() {
 		// Only deal with non-null/undefined values
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
-			for (name in options) {
+			for (let name in options) {
+				/* istanbul ignore next */
+				if(!options.hasOwnProperty(name)) {
+					return;
+				}
 				src = target[name];
 				copy = options[name];
 
@@ -213,7 +220,7 @@ function extend() {
 module.exports.hasClass = function(node, className) {
 	/* istanbul ignore else  */
 	if (node.nodeType === 1) {
-		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
+		return node.className.split(' ').indexOf(`o-ads__${className}`) > -1 ? true : false;
 	}
 
 	return false;
@@ -221,17 +228,18 @@ module.exports.hasClass = function(node, className) {
 
 module.exports.addClass = function(node, className) {
 	if (node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)) {
-		node.className += ' o-ads__' + className.trim();
+		node.className += ` o-ads__${className.trim()}`;
 	}
 
 	return true;
 };
 
 module.exports.removeClass = function(node, className) {
-	let index, classes;
+	let index;
+	let classes;
 	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
 		classes = node.className.split(' ');
-		index = classes.indexOf('o-ads__' + className);
+		index = classes.indexOf(`o-ads__${className}`);
 		classes.splice(index, 1);
 		node.className = classes.join(' ');
 	}
@@ -249,12 +257,13 @@ module.exports.removeClass = function(node, className) {
  *
  */
 module.exports.hash = function(str, delimiter, pairing) {
-	let pair, value, idx, len,
-	hash = {};
+	let pair;
+	let value;
+	const hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
-		for (idx = 0, len = str.length; idx < len; idx += 1) {
+		for (let idx = 0, l = str.length; idx < l; idx += 1) {
 			value = str[idx];
 			pair = value.split(pairing);
 			if (pair.length > 1) {
@@ -309,7 +318,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 				}
 			};
 		} else {
-			tag.onload =  function() {
+			tag.onload = function() {
 				processCallback(callback);
 			};
 		}
@@ -414,7 +423,7 @@ module.exports.dehyphenise = function(string) {
 */
 module.exports.hyphenise = function(string) {
 	return string.replace(/([A-Z])/g, function(match, letter) {
-		return '-' + letter.toLowerCase();
+		return `-${letter.toLowerCase()}`;
 	});
 };
 
@@ -456,11 +465,11 @@ module.exports.getTimestamp = function() {
 	const now = new Date();
 	return [
 	now.getFullYear(),
-	('0' + (now.getMonth() + 1)).slice(-2),
-	('0' + now.getDate()).slice(-2),
-	('0' + now.getHours()).slice(-2),
-	('0' + now.getMinutes()).slice(-2),
-	('0' + now.getSeconds()).slice(-2)
+	(`0${(now.getMonth() + 1)}`).slice(-2),
+	(`0${now.getDate()}`).slice(-2),
+	(`0${now.getHours()}`).slice(-2),
+	(`0${now.getMinutes()}`).slice(-2),
+	(`0${now.getSeconds()}`).slice(-2)
 	].join("");
 };
 
@@ -494,7 +503,8 @@ const iframes = document.getElementsByTagName('iframe');
 * @returns {String|Boolean}
 */
 module.exports.iframeToSlotName = function(iframeWindow) {
-	let slotName, node;
+	let slotName;
+	let node;
 	let i = iframes.length;
 
 	// Figure out which iframe DOM node we have the window for

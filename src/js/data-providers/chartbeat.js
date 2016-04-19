@@ -1,4 +1,14 @@
-'use strict';
+/**
+* @fileOverview
+* Third party library for use with google publisher tags.
+*
+* @author Robin Marr, robin.marr@ft.com
+*/
+/**
+* FT.ads.chartbeat provides chartbest integration for the FT advertising library
+* @name targeting
+* @memberof FT.ads
+*/
 const utils = require('../utils');
 const config = require('../config');
 

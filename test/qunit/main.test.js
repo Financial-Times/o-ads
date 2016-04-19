@@ -1,6 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false: false */
-'use strict';
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('Main');
 
@@ -44,7 +44,7 @@ QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 	this.localStorage({'oAds': true});
 	this.ads.debug();
 
-	assert.ok(admantxDebug.called, 'Admantx debug function is called');
+assert.ok(admantxDebug.called, 'Admantx debug function is called');
 	assert.ok(localStorage.getItem('oAds'), "oAds value in local storage wasn't removed");
 });
 

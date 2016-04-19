@@ -1,4 +1,8 @@
-/* jshint node: true */
+
+/* globals process: true */
+
+'use strict'; //eslint-disable-line
+
 // if you want a different local configuration create a file called karma.local.js
 // the file should export a function that takes the current options object and
 // returns an amended one e.g.
@@ -6,11 +10,10 @@
 // 	var options.test = "it works!";
 // 	return options;
 // }
-'use strict';
 
 process.env['BROWSERIFYSWAP_ENV'] = 'karma';
 
-var options = {
+let options = {
 	basePath: '',
 	autoWatch: true,
 	singleRun: false,
@@ -64,7 +67,7 @@ if (process.env.CI === 'true') {
 	options.browserify.debug = true;
 }
 
-var coverageChecks = {
+const coverageChecks = {
 	global: {
 		statements: 100,
 		branches: 100,

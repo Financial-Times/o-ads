@@ -1,8 +1,8 @@
-'use strict';
-
-let callback, breakpoints, current;
+let callback;
+let breakpoints;
+let current;
 const utils = require('./index.js');
-const oViewport =  require('o-viewport');
+const oViewport = require('o-viewport');
 
 function getNearestBreakpoint() {
 	let winner;

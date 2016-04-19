@@ -1,4 +1,12 @@
-'use strict';
+/*globals googletag: true */
+
+/**
+* @fileOverview
+* ad server modukes for o-ads implementing Google publisher tags ad requests.
+*
+* @author Robin Marr, robin.marr@ft.com
+*/
+
 const config = require('../config');
 const utils = require('../utils');
 const targeting = require('../targeting');

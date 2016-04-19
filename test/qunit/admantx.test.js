@@ -1,6 +1,6 @@
-/* jshint globalstrict: true */
 /* globals QUnit: false */
-"use strict";
+
+'use strict'; // eslint-disable-line
 
 QUnit.module('Admantx', {
 	beforeEach: function() {
@@ -15,7 +15,7 @@ QUnit.test('process categories objects', function(assert) {
 		{ "name": "Boris Johnson", "origin": "NORMAL", "score": 10, "type": "PEOPLE" },
 		{ "name": "London", "origin": "NORMAL", "score": 8, "type": "PLACES" },
 		{ "name": "United States of America", "origin": "NORMAL", "score": 7, "type": "PLACES" },
-		{ "name": "tax bill", "origin": "NORMAL", "score": 6,  "type": "MAINLEMMAS"}
+		{ "name": "tax bill", "origin": "NORMAL", "score": 6, "type": "MAINLEMMAS"}
 	];
 	let returns = ["US", "Boris Johnson", "London", "United States of America", "tax bill"];
 	assert.deepEqual(this.ads.admantx.processCollection(given), returns, 'Given a set from Admantx and no max argument returns all name nodes');

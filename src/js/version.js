@@ -5,7 +5,6 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 
-'use strict';
 
 module.exports = {
 	artifactVersion: '${project.version}',
@@ -13,6 +12,6 @@ module.exports = {
 	buildLifeDate: '${buildLifeDate}',
 	gitRev: '${buildNumber}',
 	toString: function() {
-		return ' version: ' + this.artifactVersion + ' Build life id: ' + this.buildLifeId + ' Build date: ' + this.buildLifeDate + ' git revision: ' + this.gitRev;
+		return ` version: ${this.artifactVersion} Build life id: ${this.buildLifeId} Build date: ${this.buildLifeDate} git revision: ${this.gitRev}`;
 	}
 };

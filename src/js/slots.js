@@ -131,7 +131,7 @@ Slots.prototype.initSlot = function(container) {
 	// if container is a string this is a legacy implementation using ids
 	// find the element and remove the ID in favour of a data attribute
 	if (utils.isString(container)) {
-		container = document.getElementById(container) || document.querySelector('[data-o-ads-name="' + container + '"]');
+		container = document.getElementById(container) || document.querySelector(`[data-o-ads-name="${container}"]`);
 		if (container && container.id) {
 			container.setAttribute('data-o-ads-name', container.id);
 			container.removeAttribute('id');
@@ -331,7 +331,7 @@ Slots.prototype.debug = function (){
 			'line item id': slot.gpt.lineItemId || 'N/A',
 			size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
 			sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
-			targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
+			targeting: Object.keys(slot.targeting).map(function (param) { return `${param}=${slot.targeting[param]}` }).join(', ')
 		};
 		data.push(row);
 	});

@@ -1,6 +1,6 @@
 /* globals sinon: false, $: false*/
 
-'use strict';
+'use strict'; //eslint-disable-line
 
 const googletag = {};
 let handler;
@@ -70,7 +70,7 @@ function slotRender(slot, color) {
 
 	slot = slots[slot];
 
-	const trackingDiv = (slot.hasOwnProperty('outOfPage')  && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	const trackingDiv = (slot.hasOwnProperty('outOfPage') && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
 	const html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
@@ -179,7 +179,7 @@ stubs.stub(pubads, 'refresh', function(slots) {
 googletag.pubads = stubs.stub().returns(pubads);
 googletag.pubadsReady = true;
 
-googletag.cmd =  googletag.cmd || [];
+googletag.cmd = googletag.cmd || [];
 googletag.cmd.push = function(fn) {
 	if ($.isFunction(fn)) {
 		fn.call(googletag);

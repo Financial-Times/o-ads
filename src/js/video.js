@@ -8,7 +8,6 @@
  * @name video-miniplayer
  * @memberof FT.ads
 */
-'use strict';
 const config = require('./config');
 const targeting = require('./targeting');
 
@@ -18,7 +17,9 @@ function buildURLForVideo(zone, pos, vidKV) {
 	pos = pos || 'video';
 	vidKV = vidKV || {};
 	const gptVideoURL = function() {
-		let URL, additionalAdTargetingParams, fullURL;
+		let URL;
+		let additionalAdTargetingParams;
+		let fullURL;
 		const buildCustomParams = function(vkv) {
 			const allTargeting = targeting.get();
 			let results = '';

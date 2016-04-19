@@ -1,5 +1,7 @@
 /* globals sinon: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
+
 const stubs = sinon.sandbox.create();
 
 window.oz_insight = function() {

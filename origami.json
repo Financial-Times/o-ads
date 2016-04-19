@@ -1,44 +1,44 @@
 {
-    "description": "Advertising",
-    "origamiType": "module",
-    "origamiVersion": 1,
-    "support": "origami.advertising.technology@ft.com",
-    "supportStatus": "active",
-    "demos": [
-        {
-            "path": "/demos/Individual-Ad.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Individual-Ad-With-Out-Of-Page.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Master-and-Companion.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Responsive-Positions.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Video-Advertising.html",
-            "expanded": true,
-            "description": ""
-        },
-        {
-            "path": "/demos/Video-Advertising-with-Companion.html",
-            "expanded": true,
-            "description": ""
-        }
-    ]
+	"description": "Advertising",
+	"origamiType": "module",
+	"origamiVersion": 1,
+	"support": "origami.advertising.technology@ft.com",
+	"supportStatus": "active",
+	"demosDefaults": {
+	 "template": "demos/src/individual.mustache",
+	 "sass": "demos/src/demo.scss",
+	 "js": "demos/src/demo.js"
+	 },
+	 "demos": [
+	 {
+		"name": "Individual-Ad",
+		"template": "/demos/Individual-Ad.html",
+		"expanded": true,
+		"description": ""
+	  },
+	  {
+		"name": "Individual-Ad-With-Out-Of-Page",
+		"template": "/demos/Individual-Ad-With-Out-Of-Page.html",
+		"expanded": false,
+		"description": ""
+	  },
+	  {
+		"name": "Individual-Ad-with-Custom-Targeting-Values",
+		"template": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
+		"expanded": false,
+		"description": ""
+	  },
+	  {
+		"name": "Master-and-Companion",
+		"template": "/demos/Master-and-Companion.html",
+		"expanded": false,
+		"description": ""
+	  },
+	  {
+	  	"name": "Responsive-Positions",
+	  	"template": "/demos/Responsive-Positions.html",
+	  	"expanded": false,
+	  	"description": ""
+	  }
+  	]
 }

@@ -1,4 +1,3 @@
-'use strict';
 
 function Queue(processor) {
 	if (!(this instanceof Queue)) {

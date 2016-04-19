@@ -1,6 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-'use strict';
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('Chartbeat', {
 	beforeEach: function() {
@@ -82,7 +82,7 @@ QUnit.test('register gpt slots with the enaged refresh service', function(assert
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
-	document.body.addEventListener('oAds.complete', function(event) {
+	document.body.addEventListener('oAds.complete', function() {
 		// assertions on next tick to make sure the refresh event has run
 		setTimeout(function() {
 			assert.equal(window._cba.length, 1, 'the gpt slot is queued with chartbeat.');
@@ -100,7 +100,7 @@ QUnit.test('the refreshAd method is called when refreshing the ad', function(ass
 	config.chartbeat = true;
 	config.slots.advert.chartbeat = true;
 
-	document.body.addEventListener('oAds.refresh', function(event) {
+	document.body.addEventListener('oAds.refresh', function() {
 		// assertions on next tick to make sure the refresh event has run
 		setTimeout(function() {
 			assert.ok(window.pSUPERFLY.refreshAd.called, 'the refreshAd method is called on refresh.');

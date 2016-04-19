@@ -1,14 +1,12 @@
-/* jshint globalstrict: true */
 /* globals QUnit: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('utils.queue');
 
 QUnit.test('We can create a queue', function(assert) {
 	let queue = this.ads.utils.queue();
 	assert.ok(queue instanceof this.ads.utils.queue, 'it is a queue without new');
-	queue = new this.ads.utils.queue();
-	assert.ok(queue instanceof this.ads.utils.queue, 'it is a queue with new');
 });
 
 QUnit.test('We can add things to the queue', function(assert) {

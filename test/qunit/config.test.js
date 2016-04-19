@@ -1,18 +1,19 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, $: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('config');
 
 QUnit.test('Config get/set', function(assert) {
 	this.ads.config.init();
 	this.ads.config.clear();
-	let result, obj,
-		key = 'key',
-		key2 = 'key2',
-		invalid = 'invalid',
-		value = 'value',
-		value2 = 'value2';
+	let result;
+	let obj;
+	let key = 'key';
+	let key2 = 'key2';
+	let invalid = 'invalid';
+	let value = 'value';
+	let value2 = 'value2';
 
 	assert.ok($.isFunction(this.ads.config), 'The set method exists');
 
@@ -113,7 +114,7 @@ QUnit.test('Config defaults', function(assert) {
 		sticky: true,
 		inview: true
 	};
-	const result =  this.ads.config();
+	const result = this.ads.config();
 	assert.ok(result.hasOwnProperty('flags'), 'default properties have been added to config');
 	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');
 });

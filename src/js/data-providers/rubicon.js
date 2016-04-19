@@ -1,4 +1,14 @@
-'use strict';
+/**
+ * @fileOverview
+ * Third party library for use with google publisher tags.
+ *
+ * @author Robin Marr, robin.marr@com
+ */
+/**
+ * ads.rubicon provides rubicon real time pricing integration for the FT advertising library
+ * @name targeting
+ * @memberof ads
+*/
 const utils = require('../utils');
 const config = require('../config');
 

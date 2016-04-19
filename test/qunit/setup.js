@@ -1,6 +1,7 @@
-/* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
-'use strict';
+
+'use strict'; //eslint-disable-line
+
 QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
@@ -79,7 +80,7 @@ function decorateModule() {
 				if (hooks.afterEach && hooks.afterEach.apply) {
 					hooks.afterEach.apply(this, [].slice.call(arguments));
 				}
-
+				this.attach.restore();
 				// reset sinon sandbox and remove elements added to dom
 				this.clear();
 				this.ads.targeting.clear();

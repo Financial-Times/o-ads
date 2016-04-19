@@ -1,11 +1,10 @@
-'use strict';
 
 function now() {
 	return (new Date()).valueOf();
 }
 
 function Timer(interval, fn, maxTicks, opts) {
-	this.interval = (parseFloat(interval) || 1)  * 1000;
+	this.interval = (parseFloat(interval) || 1) * 1000;
 	this.maxTicks = parseInt(maxTicks, 10) || 0;
 	this.fn = fn;
 	this.ticks = 0;
@@ -89,7 +88,7 @@ function Timers() {
 		return new Timers();
 	}
 
-	const scope =  this;
+	const scope = this;
 	this.timers = [];
 
 	function all(method) {
@@ -104,11 +103,11 @@ function Timers() {
 
 	function hasExecutionPaused(fn) {
 		return function() {
-			const Timer = this,
-			time = now() - Timer.lastTick - Timer.interval,
-			threshhold = Timer.interval * 1.5;
+			const Timer = this;
+			const time = now() - Timer.lastTick - Timer.interval;
+			const threshold = Timer.interval * 1.5;
 
-			if (threshhold < time) {
+			if (threshold < time) {
 					Timer.reset();
 			}
 
@@ -121,7 +120,7 @@ function Timers() {
 			fn = hasExecutionPaused(fn);
 		}
 
-		const timer  = new Timer(interval, fn, maxTicks, opts);
+		const timer = new Timer(interval, fn, maxTicks, opts);
 		scope.timers.push(timer);
 		return timer;
 	}

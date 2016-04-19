@@ -6,7 +6,6 @@
  */
 
 /* jshint devel: true */
-'use strict';
 
 module.exports = log;
 
@@ -17,7 +16,9 @@ module.exports = log;
  * @param {any} args the arguments to be passed to console[type]
  */
 function log() {
-	let type, args, argsIndex;
+	let type;
+	let args;
+	let argsIndex;
 	if ('log warn error info'.indexOf(arguments[0]) === -1) {
 		type = 'log';
 		argsIndex = 0;
@@ -104,7 +105,7 @@ module.exports.attributeTable = function(object, columns) {
 	const utils = require('../utils');
 	if (log.isOn('log') && window.console) {
 		if (object && console.table) {
-			const data = Object.keys(object).map(function(item) {
+			const data = Object.keys(object).map((item) => {
 				let val;
 				if (utils.isArray(object[item]) || utils.isObject(object[item])) {
 					val = JSON.stringify(object[item]);
