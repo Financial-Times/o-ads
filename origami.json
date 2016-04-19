@@ -11,31 +11,31 @@
 	 },
 	 "demos": [
 	 {
-		"name": "Individual Ad",
+		"name": "Individual-Ad",
 		"template": "/demos/Individual-Ad.html",
 		"expanded": true,
 		"description": ""
 	  },
 	  {
-		"name": "Individual Ad with Out-of-Page",
+		"name": "Individual-Ad-With-Out-Of-Page",
 		"template": "/demos/Individual-Ad-With-Out-Of-Page.html",
 		"expanded": false,
 		"description": ""
 	  },
 	  {
-		"name": "Individual Ad with Custom Targeting Values",
+		"name": "Individual-Ad-with-Custom-Targeting-Values",
 		"template": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
 		"expanded": false,
 		"description": ""
 	  },
 	  {
-		"name": "Master and Companion",
+		"name": "Master-and-Companion",
 		"template": "/demos/Master-and-Companion.html",
 		"expanded": false,
 		"description": ""
 	  },
 	  {
-	  	"name": "Responsive Positions",
+	  	"name": "Responsive-Positions",
 	  	"template": "/demos/Responsive-Positions.html",
 	  	"expanded": false,
 	  	"description": ""
