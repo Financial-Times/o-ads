@@ -147,7 +147,7 @@ function Slot(container, screensize) {
 * parse slot attribute config
 */
 Slot.prototype.parseAttributeConfig = function() {
-	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
+	Array.from(this.container.attributes).forEach((attribute) => {
 		const name = utils.parseAttributeName(attribute.name);
 		const value = attribute.value;
 		if (name === 'formats') {
@@ -161,12 +161,12 @@ Slot.prototype.parseAttributeConfig = function() {
 		} else if (this.hasOwnProperty(name)) {
 			this[name] = attributeParsers.base(value);
 		}
-	}.bind(this));
+	});
 };
 
 Slot.prototype.getAttributes = function() {
 	const attributes = {};
-	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
+	Array.from(this.container.attributes).forEach((attribute) => {
 		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
 	this.attributes = attributes;
@@ -250,8 +250,8 @@ Slot.prototype.setResponsiveCreative = function (value) {
 * add the empty class to the slot
 */
 Slot.prototype.collapse = function() {
-	utils.addClass(this.container, 'empty');
-	utils.addClass(document.body, `no-${this.name}`);
+	this.container.classList.add('o-ads--empty');
+	document.body.classList.add(`o-ads-no-${this.name}`);
 	return this;
 };
 
@@ -267,8 +267,8 @@ Slot.prototype.setFormatLoaded = function(format) {
 * remove the empty class from the slot
 */
 Slot.prototype.uncollapse = function() {
-	utils.removeClass(this.container, 'empty');
-	utils.removeClass(document.body, `no-${this.name}`);
+	this.container.classList.remove('o-ads--empty');
+	document.body.classList.remove(`o-ads-no-${this.name}`);
 	return this;
 };
 
@@ -343,7 +343,7 @@ Slot.prototype.hasValidSize = function(screensize) {
 */
 Slot.prototype.centerContainer = function() {
 	if (this.center) {
-		utils.addClass(this.container, 'center');
+		this.container.classList.add('o-ads--center');
 	}
 
 	return this;
@@ -361,7 +361,9 @@ Slot.prototype.labelContainer = function() {
 		className = 'label-right';
 	}
 
-	utils.addClass(this.container, className);
+	if (className) {
+		this.container.classList.add(`o-ads--${className}`);
+	}
 	return this;
 };
 

@@ -243,7 +243,7 @@ Krux.prototype.debug = function() {
 			log.attributeTable(targeting);
 		log.end();
 
-		const tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
+		const tags = Array.from(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
 			log.start(`${tags.length} Supertag© scripts`);
 				tags.forEach(function(tag) {

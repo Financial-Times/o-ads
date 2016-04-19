@@ -217,36 +217,6 @@ function extend() {
 	return target;
 }
 
-module.exports.hasClass = function(node, className) {
-	/* istanbul ignore else  */
-	if (node.nodeType === 1) {
-		return node.className.split(' ').indexOf(`o-ads__${className}`) > -1 ? true : false;
-	}
-
-	return false;
-};
-
-module.exports.addClass = function(node, className) {
-	if (node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)) {
-		node.className += ` o-ads__${className.trim()}`;
-	}
-
-	return true;
-};
-
-module.exports.removeClass = function(node, className) {
-	let index;
-	let classes;
-	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
-		classes = node.className.split(' ');
-		index = classes.indexOf(`o-ads__${className}`);
-		classes.splice(index, 1);
-		node.className = classes.join(' ');
-	}
-
-	return true;
-};
-
 /**
  * Create an object hash from a delimited string
  * Beware all properties on the resulting object will have string values.
@@ -471,25 +441,6 @@ module.exports.getTimestamp = function() {
 	(`0${now.getMinutes()}`).slice(-2),
 	(`0${now.getSeconds()}`).slice(-2)
 	].join("");
-};
-
-/**
-* Converts an array like object e.g arguments into a full array
-* @param {object}  obj an Array like object to convert
-* @returns {array}
-*/
-module.exports.arrayLikeToArray = function(obj) {
-	let array = [];
-	try {
-		array = Array.prototype.slice.call(obj);
-	} catch (error) {
-		/* istanbul ignore next  */
-		for (let i = 0; i < obj.length; i++) {
-			array[i] = obj[i];
-		}
-	}
-
-	return array;
 };
 
 // capture all iframes in the page in a live node list

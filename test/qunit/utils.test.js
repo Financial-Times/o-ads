@@ -280,28 +280,6 @@ QUnit.test('extend method', function(assert) {
 
 QUnit.module('utils miscellanious methods');
 
-QUnit.test('css class methods for working with .o-ads__ classes', function(assert) {
-	/* jshint -W044 */
-
-	//just hint complains about all the crazy string escaping in here, but that's what we're testing
-	const node = this.fixturesContainer.add('<div class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$">');
-	const textNode = this.fixturesContainer.add('ranom class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$"');
-
-	assert.ok(this.ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), 'the node has the class o-ads__cr@zy-c|-|@r/\cter$');
-	assert.ok(this.ads.utils.hasClass(node, 'test'), 'the node has the class o-ads__test');
-	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__tes'), 'the node doesn\'t the class tes');
-	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__r/\cter$'), 'the node doesn\'t the class r/\cter$');
-
-	assert.ok(!this.ads.utils.hasClass(textNode, 'o-ads__test1'), 'returns false and does not attemt to find a class on a string');
-
-	this.ads.utils.addClass(node, 'hello');
-	assert.ok($(node).hasClass('o-ads__hello'), 'the node hello was added');
-
-	this.ads.utils.removeClass(node, 'hello');
-	assert.ok(!$(node).hasClass('o-ads__hello'), 'the node hello was removed');
-	/* jshint +W044 */
-});
-
 QUnit.test('hash method', function(assert) {
 	let result;
 	let test = 'a:1,b:2,c:3,a:12';

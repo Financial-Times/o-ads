@@ -246,25 +246,26 @@ QUnit.test('responsive slot should not make a call when size is false', function
 	this.ads.slots.initSlot(node);
 	const slot = this.ads.slots.mpu;
 	assert.ok(!this.gpt.display.called, 'When size is false no ad call is made.');
-	assert.ok($(slot.container).hasClass('o-ads__empty'), 'The ad slot is not displayed.');
+	assert.ok($(slot.container).hasClass('o-ads--empty'), 'The ad slot is not displayed.');
 
 	this.viewport(500, 500);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.display.calledOnce, 'When screen size is changed, ad call is made.');
-	assert.ok(!$(slot.container).hasClass('o-ads__empty'), 'The ad slot is displayed.');
+	console.log(slot.container.className);
+	assert.ok(!$(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
 
 	this.viewport(700, 700);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed to large, ad call is made.');
-	assert.ok(!$(slot.container).hasClass('o-ads__empty'), 'The ad slot is displayed.');
+	assert.ok(!$(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
 
 	this.viewport(200, 200);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.display.calledOnce, 'When screen size is change to, no ad call is made.');
-	assert.ok($(slot.container).hasClass('o-ads__empty'), 'The ad slot is not displayed.');
+	assert.ok($(slot.container).hasClass('o-ads--empty'), 'The ad slot is not displayed.');
 });
 
 QUnit.test('Center container', function(assert) {
@@ -277,7 +278,7 @@ QUnit.test('Center container', function(assert) {
 	}});
 	const result = this.ads.slots.initSlot(node);
 
-	assert.ok($(result.container).hasClass('o-ads__center'), 'the centering class has been added');
+	assert.ok($(result.container).hasClass('o-ads--center'), 'the centering class has been added');
 });
 
 QUnit.test('Label container', function(assert) {
@@ -290,7 +291,7 @@ QUnit.test('Label container', function(assert) {
 	}});
 	const result = this.ads.slots.initSlot(node);
 
-	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
+	assert.ok($(result.container).hasClass('o-ads--label-left'), 'the labeling class has been added');
 });
 
 QUnit.test('Label right container', function(assert) {
@@ -303,7 +304,7 @@ QUnit.test('Label right container', function(assert) {
 	}});
 	const result = this.ads.slots.initSlot(node);
 
-	assert.ok($(result.container).hasClass('o-ads__label-right'), 'the labeling class has been added');
+	assert.ok($(result.container).hasClass('o-ads--label-right'), 'the labeling class has been added');
 });
 
 QUnit.test('Label container via attribute', function(assert) {
@@ -316,7 +317,7 @@ QUnit.test('Label container via attribute', function(assert) {
 	}});
 	const result = this.ads.slots.initSlot(node);
 
-	assert.ok($(result.container).hasClass('o-ads__label-left'), 'the labeling class has been added');
+	assert.ok($(result.container).hasClass('o-ads--label-left'), 'the labeling class has been added');
 });
 
 QUnit.test('configure out of page slot', function(assert) {
@@ -375,7 +376,7 @@ QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
 
 	this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
-	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+	assert.ok($(node).hasClass('o-ads--empty'), 'slot is collapsed');
 });
 
 QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
@@ -385,8 +386,8 @@ QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
 	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
-	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
-	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	assert.ok($(node1).hasClass('o-ads--empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads--empty'), 'slot 2 is collapsed');
 });
 
 QUnit.test('Slots.collapse with no args will collapse all slots', function(assert) {
@@ -396,8 +397,8 @@ QUnit.test('Slots.collapse with no args will collapse all slots', function(asser
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
 	this.ads.slots.collapse();
-	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
-	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	assert.ok($(node1).hasClass('o-ads--empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads--empty'), 'slot 2 is collapsed');
 });
 
 QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
@@ -405,9 +406,9 @@ QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
 
 	this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
-	assert.ok($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+	assert.ok($(node).hasClass('o-ads--empty'), 'slot is collapsed');
 	this.ads.slots.uncollapse('collapse-test');
-	assert.notOk($(node).hasClass('o-ads__empty'), 'slot is collapsed');
+	assert.notOk($(node).hasClass('o-ads--empty'), 'slot is collapsed');
 });
 
 QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
@@ -417,11 +418,11 @@ QUnit.test('Slots.uncollapse will uncollapse mulitple slots', function(assert) {
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
 	this.ads.slots.collapse(['collapse1-test', 'collapse2-test']);
-	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
-	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	assert.ok($(node1).hasClass('o-ads--empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads--empty'), 'slot 2 is collapsed');
 	this.ads.slots.uncollapse(['collapse1-test', 'collapse2-test']);
-	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
-	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+	assert.notOk($(node1).hasClass('o-ads--empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads--empty'), 'slot 2 is uncollapsed');
 });
 
 QUnit.test('Slots.uncollapse with no args will collapse all slots', function(assert) {
@@ -431,11 +432,11 @@ QUnit.test('Slots.uncollapse with no args will collapse all slots', function(ass
 	this.ads.slots.initSlot(node1);
 	this.ads.slots.initSlot(node2);
 	this.ads.slots.collapse();
-	assert.ok($(node1).hasClass('o-ads__empty'), 'slot 1 is collapsed');
-	assert.ok($(node2).hasClass('o-ads__empty'), 'slot 2 is collapsed');
+	assert.ok($(node1).hasClass('o-ads--empty'), 'slot 1 is collapsed');
+	assert.ok($(node2).hasClass('o-ads--empty'), 'slot 2 is collapsed');
 	this.ads.slots.uncollapse();
-	assert.notOk($(node1).hasClass('o-ads__empty'), 'slot 1 is uncollapsed');
-	assert.notOk($(node2).hasClass('o-ads__empty'), 'slot 2 is uncollapsed');
+	assert.notOk($(node1).hasClass('o-ads--empty'), 'slot 1 is uncollapsed');
+	assert.notOk($(node2).hasClass('o-ads--empty'), 'slot 2 is uncollapsed');
 });
 
 QUnit.test('Slots.refresh will refresh a single slot', function(assert) {

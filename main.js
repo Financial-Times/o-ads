@@ -34,14 +34,14 @@ Ads.prototype.init = function(config) {
 
 const ads = new Ads();
 const initAll = function() {
-	const metas = utils.arrayLikeToArray(document.getElementsByTagName('meta'));
+	const metas = Array.from(document.getElementsByTagName('meta'));
 	const stop = metas.filter(function(meta) {
 		return meta.name === 'o-ads-stop';
 	});
 	/* istanbul ignore else  */
 	if (!stop.length) {
 		ads.init();
-		const slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	}
 
