@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* global sinon: false, $: false, module: true, QUnit: false, require: true */
 
+'use strict'; //eslint-ignore-line
+
 const oViewport = require('o-viewport');
 
 /* a URL that can be used in tests without causing 404 errors */

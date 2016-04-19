@@ -1,5 +1,7 @@
 /* globals sinon: false, $: false*/
 
+'use strict'; //eslint-ignore-line
+
 const googletag = {};
 let handler;
 const slots = {};

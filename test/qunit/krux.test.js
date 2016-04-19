@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Krux', {
 	beforeEach: function() {
 		window.Krux = this.stub();

@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Chartbeat', {
 	beforeEach: function() {
 		window.pSUPERFLY = {

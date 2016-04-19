@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, googletag: false, sinon: false */
 
+'use strict'; //eslint-ignore-line
+
 const htmlstart = '<div data-o-ads-name="';
 const htmlend = '" data-o-ads-formats="MediumRectangle"></div>';
 

@@ -1,5 +1,7 @@
-/* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
+
+'use strict'; //eslint-ignore-line
+
 QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',

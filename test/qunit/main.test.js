@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Main');
 
 QUnit.test('init All', function(assert) {

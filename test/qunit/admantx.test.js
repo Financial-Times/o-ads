@@ -1,6 +1,8 @@
 /* jshint globalstrict: true */
 /* globals QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Admantx', {
 	beforeEach: function() {
 		this.server = this.server();

@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* global QUnit: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('Messenger');
 
 QUnit.test('post base context', function(assert) {

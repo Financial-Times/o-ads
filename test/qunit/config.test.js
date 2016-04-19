@@ -1,6 +1,8 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false, $: false */
 
+'use strict'; //eslint-ignore-line
+
 QUnit.module('config');
 
 QUnit.test('Config get/set', function(assert) {
