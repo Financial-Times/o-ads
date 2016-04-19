@@ -180,6 +180,7 @@ function extend() {
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
 			for (let name in options) {
+				/* istanbul ignore next */
 				if(!options.hasOwnProperty(name)) {
 					return;
 				}
