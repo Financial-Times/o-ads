@@ -252,14 +252,13 @@ QUnit.test('responsive slot should not make a call when size is false', function
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.display.calledOnce, 'When screen size is changed, ad call is made.');
-	console.log(slot.container.className);
-	assert.ok(!$(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
+	assert.notOk($(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
 
 	this.viewport(700, 700);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
 	assert.ok(this.gpt.pubads().refresh.calledOnce, 'When screen size is changed to large, ad call is made.');
-	assert.ok(!$(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
+	assert.notOk($(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
 
 	this.viewport(200, 200);
 	window.dispatchEvent(new Event('resize'));
