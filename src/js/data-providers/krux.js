@@ -188,9 +188,9 @@ Krux.prototype.events.init = function() {
 Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
-		Object.keys(attributes).forEach(function(item) {
+		Object.keys(attributes).forEach(item => {
 			this.api('set', prefix + item, attributes[item]);
-		}.bind(this));
+		});
 	}
 };
 

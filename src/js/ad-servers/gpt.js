@@ -180,7 +180,7 @@ function onReady(slotMethods, event) {
 		utils.extend(slot, slotMethods);
 
 		// setup the gpt configuration the ad
-		googletag.cmd.push(function(slot) {
+		googletag.cmd.push(() => {
 			slot.defineSlot()
 			.addServices()
 			.setCollapseEmpty()
@@ -190,7 +190,7 @@ function onReady(slotMethods, event) {
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
 			}
-		}.bind(null, slot));
+		});
 	}
 }
 /*
@@ -212,7 +212,7 @@ function onRefresh(event) {
 	window.googletag.cmd.push(() => {
 		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
-			Object.keys(targeting).forEach((name) => {
+			Object.keys(targeting).forEach(name => {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
 			});
 		}
@@ -311,7 +311,7 @@ const slotMethods = {
 			}, this.container);
 
 			const mapping = googletag.sizeMapping();
-			Object.keys(breakpoints).forEach((breakpoint) => {
+			Object.keys(breakpoints).forEach(breakpoint => {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
@@ -441,7 +441,7 @@ const slotMethods = {
 			gptSlot = gptSlot || this.gpt.slot;
 			/* istanbul ignore else  */
 			if (utils.isPlainObject(this.targeting)) {
-				Object.keys(this.targeting).forEach((param) => {
+				Object.keys(this.targeting).forEach(param => {
 					gptSlot.setTargeting(param, this.targeting[param]);
 				});
 			}

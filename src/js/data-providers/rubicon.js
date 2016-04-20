@@ -22,17 +22,17 @@ Rubicon.prototype.init = function() {
 	if (this.config.id && this.config.site) {
 		let api = this.config.api || '//tap-cdn.rubiconproject.com/partner/scripts/rubicon/dorothy.js?pc=';
 		api += `${this.config.id}/${this.config.site}`;
-		utils.attach(api, true, function() {
+		utils.attach(api, true, () => {
 			this.queue.process();
-		}.bind(this), function() {
+		}, () => {
 			this.queue.setProcessor(function(slot) {
 				utils.log.error('%s rtp valuation call failed', slot.name);
 			}).process();
-		}.bind(this));
+		});
 
-		utils.on('ready', function(event) {
+		utils.on('ready', event => {
 			this.queue.add(event.detail.slot);
-		}.bind(this));
+		});
 	}
 };
 

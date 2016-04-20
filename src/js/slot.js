@@ -123,9 +123,9 @@ function Slot(container, screensize) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
 	}	else if (utils.isPlainObject(slotConfig.formats)) {
 		this.sizes = {};
-		Object.keys(slotConfig.formats).forEach(function(screenName) {
+		Object.keys(slotConfig.formats).forEach(screenName => {
 			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
-		}.bind(this));
+		});
 	}
 
 	// extend with imperative configuration options
@@ -147,7 +147,7 @@ function Slot(container, screensize) {
 * parse slot attribute config
 */
 Slot.prototype.parseAttributeConfig = function() {
-	Array.from(this.container.attributes).forEach((attribute) => {
+	Array.from(this.container.attributes).forEach(attribute => {
 		const name = utils.parseAttributeName(attribute.name);
 		const value = attribute.value;
 		if (name === 'formats') {
@@ -166,7 +166,7 @@ Slot.prototype.parseAttributeConfig = function() {
 
 Slot.prototype.getAttributes = function() {
 	const attributes = {};
-	Array.from(this.container.attributes).forEach((attribute) => {
+	Array.from(this.container.attributes).forEach(attribute => {
 		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
 	this.attributes = attributes;
