@@ -8,41 +8,45 @@ QUnit.module('Targeting', {
 	}
 });
 
+//clear the params we know dont need to test
+function deleteKnownParams(res) {
+	delete res.ts;
+	delete res.rf;
+	delete res.res;
+}
+
 QUnit.test('getFromConfig', function(assert) {
 	this.ads.init({});
 	let result = this.ads.targeting.get();
-	delete result.ts;
-	delete result.rf;
-	assert.deepEqual(result, {}, 'No dfp_targeting returns no targetting params');
-
+	delete result.rf; //Qunit sometimes has referrer
+	assert.ok(result.ts, 'timestamp exists');
+	assert.ok(result.res, 'responsive breakpoint exists');
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
-	delete result.ts;
-	delete result.rf;
-	assert.deepEqual(result, {}, 'Empty string dfp_targeting returns no params');
+	delete result.rf; //Qunit sometimes has referrer
+	assert.deepEqual(Object.keys(result).length, 2, 'Empty string dfp_targeting returns only default params');
+
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;targeting=params');
 	result = this.ads.targeting.get();
-	delete result.ts;
-	delete result.rf;
-	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Simple params are parsed correctly');
+	assert.deepEqual(result.some, 'test', 'Simple params are parsed correctly');
+	assert.deepEqual(result.targeting, 'params', 'Simple params are parsed correctly');
+
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;;targeting=params');
 	result = this.ads.targeting.get();
-	delete result.ts;
-	delete result.rf;
-	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Double semi-colons still parse correctly');
+	assert.deepEqual(result.some, 'test', 'Double ; are handled');
+	assert.deepEqual(result.targeting, 'params', 'Double ; are handled');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 's@me=test;targeting=par@ms$\'');
 	result = this.ads.targeting.get();
-	delete result.ts;
-	delete result.rf;
 
-	assert.deepEqual(result, {'s@me': 'test', targeting: 'par@ms$\''}, 'Special characters parse correctly');
+	assert.deepEqual(result['s@me'], 'test', 'Special characters in targeting key handled');
+	assert.deepEqual(result.targeting, 'par@ms$\'', 'Special characters in targeting value handled');
 });
 
 QUnit.test("social referrer", function(assert) {
@@ -238,7 +242,7 @@ QUnit.test("Responsive targeting on non-responsive page", function(assert) {
 
 	const breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
 	breakpoint.returns("small");
-	this.ads.init();
+	this.ads.init({responsive: false});
 	const result = this.ads.targeting.get();
 
 	assert.equal(result.hasOwnProperty('res'), false);
