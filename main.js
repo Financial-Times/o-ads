@@ -11,8 +11,7 @@ Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.version = require('./src/js/version');
-Ads.prototype.buildURLForVideo = require('./src/js/video');
-const utils = Ads.prototype.utils = require('./src/js/utils');
+Ads.prototype.utils = require('./src/js/utils');
 
 /**
 * Initialises the ads library and all sub modules
@@ -61,7 +60,6 @@ Ads.prototype.debug = function (){
 	this.krux.debug();
 	this.slots.debug();
 	this.targeting.debug();
-	this.buildURLForVideo.debug();
 
 	if (remove) {
 		localStorage.removeItem('oAds');

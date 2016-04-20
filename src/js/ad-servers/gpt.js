@@ -64,7 +64,6 @@ function initGoogleTag() {
 */
 function setup(gptConfig) {
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
-	enableVideo(gptConfig);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
@@ -140,24 +139,6 @@ function enableCompanions(gptConfig) {
 	if (gptConfig.companions) {
 		googletag.pubads().disableInitialLoad();
 		googletag.companionAds().setRefreshUnfilledSlots(true);
-	}
-}
-
-/**
-* Enables video ads and attaches the required additional script
-* @name enableVideo
-* @memberof GPT
-* @lends GPT
-*/
-function enableVideo(gptConfig) {
-	if (gptConfig.video) {
-		const url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
-		/* istanbul ignore else  */
-		if (!utils.isScriptAlreadyLoaded(url)) {
-			utils.attach(url, true);
-		}
-
-		googletag.pubads().enableVideoAds();
 	}
 }
 

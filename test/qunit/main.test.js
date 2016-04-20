@@ -24,7 +24,6 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 	const kruxDebug = this.spy(this.ads.krux, 'debug');
 	const slotsDebug = this.spy(this.ads.slots, 'debug');
 	const targetingDebug = this.spy(this.ads.targeting, 'debug');
-	const videoDebug = this.spy(this.ads.buildURLForVideo, 'debug');
 
 	this.ads.debug();
 
@@ -34,7 +33,6 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 	assert.ok(kruxDebug.called, 'Krux debug function is called');
 	assert.ok(slotsDebug.called, 'Slots debug function is called');
 	assert.ok(targetingDebug.called, 'Targeting debug function is called');
-	assert.ok(videoDebug.called, 'Video debug function is called');
 
 });
 
