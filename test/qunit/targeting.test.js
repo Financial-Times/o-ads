@@ -11,63 +11,38 @@ QUnit.module('Targeting', {
 QUnit.test('getFromConfig', function(assert) {
 	this.ads.init({});
 	let result = this.ads.targeting.get();
+	delete result.ts;
+	delete result.rf;
 	assert.deepEqual(result, {}, 'No dfp_targeting returns no targetting params');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
-
+	delete result.ts;
+	delete result.rf;
 	assert.deepEqual(result, {}, 'Empty string dfp_targeting returns no params');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;targeting=params');
 	result = this.ads.targeting.get();
+	delete result.ts;
+	delete result.rf;
 	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Simple params are parsed correctly');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;;targeting=params');
 	result = this.ads.targeting.get();
+	delete result.ts;
+	delete result.rf;
 	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Double semi-colons still parse correctly');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 's@me=test;targeting=par@ms$\'');
 	result = this.ads.targeting.get();
+	delete result.ts;
+	delete result.rf;
 
 	assert.deepEqual(result, {'s@me': 'test', targeting: 'par@ms$\''}, 'Special characters parse correctly');
-});
-
-QUnit.test('cookieConsent', function(assert) {
-	this.cookies({ cookieconsent: 'accepted'});
-	this.ads.init({ cookieConsent: true });
-	let result = this.ads.targeting.get();
-	assert.equal(result.cc, 'y', 'Cookie consent accepted is reported');
-
-	this.cookies({});
-	this.ads.init({cookieConsent: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.cc, 'n', 'Cookie consent not accepted is reported');
-});
-
-QUnit.test('encodedIP', function(assert) {
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182.1344916650137365" };
-	this.ads.init();
-	let result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "complete FTUserTrack information");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182" };
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "203.190.72.182 - incomplete FTUserTrack information");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72."};
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhcz', "203.190.72. - incomplete IP in FTUserTrack");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182.aaaaa"};
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "203.190.72.182.aaaaa - malformed FTUserTrack");
 });
 
 QUnit.test("social referrer", function(assert) {
@@ -77,7 +52,6 @@ QUnit.test("social referrer", function(assert) {
 	referrer.returns('');
 	this.ads.init({ socialReferrer: true });
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {}, "No document referrer, returns no targeting params");
 	assert.equal(result.socref, undefined, "No document referrer, socref key returns undefined");
 
 	referrer.returns('http://t.co/cjPOFshzk2');
@@ -128,7 +102,6 @@ QUnit.test('Page referrer', function(assert) {
 	referrer.returns('');
 	this.ads.init({ pageReferrer: true });
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {}, "with no referrer no targetting param is added");
 	assert.equal(result.rf, undefined, "calling rf returns undefined");
 
 	referrer.returns('http://www.example.com/some/page?some=param');
@@ -271,19 +244,6 @@ QUnit.test("Responsive targeting on non-responsive page", function(assert) {
 	assert.equal(result.hasOwnProperty('res'), false);
 });
 
-QUnit.test("Library Version", function(assert) {
-	this.ads.init({ version: true });
-	const result = this.ads.targeting.get();
-	assert.equal(result.ver, '${project.version}', "library version returned correctly");
-});
-
-QUnit.test('debug returns early if no config is set', function(assert) {
-	this.ads.init();
-	const start = this.spy(this.utils.log, "start");
-
-	this.ads.targeting.debug();
-	assert.notOk(start.called, "`utils.start` wasn't called for 'targeting'");
-});
 
 QUnit.test('debug starts logging data', function(assert) {
 	this.ads.init({dfp_targeting: {data: {allOfThe: 'targeting data'}}});

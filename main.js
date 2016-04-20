@@ -10,7 +10,6 @@ Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
-Ads.prototype.version = require('./src/js/version');
 Ads.prototype.utils = require('./src/js/utils');
 
 /**
