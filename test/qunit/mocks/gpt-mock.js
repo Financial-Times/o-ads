@@ -155,7 +155,6 @@ const pubads = {
 	clearSlotTargeting: stubs.stub(),
 	definePassback: stubs.stub(),
 	enableSyncRendering: stubs.stub(),
-	enableVideoAds: stubs.stub(),
 	setTargeting: stubs.stub(),
 	clearTargeting: stubs.stub(),
 	addEventListener: function() {},
