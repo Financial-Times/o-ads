@@ -109,10 +109,10 @@ Slots.prototype.clear = function(names) {
 */
 Slots.prototype.destroy = function(names) {
 	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
-			names.forEach(function(name){
+			names.forEach(name => {
 				this[name] = null;
 				delete this[name];
-			}.bind(this));
+			});
 	});
 };
 
@@ -295,13 +295,13 @@ Slots.prototype.initPostMessage = function() {
 };
 
 Slots.prototype.forEach = function(fn) {
-	Object.keys(this).forEach(function(name) {
+	Object.keys(this).forEach(name => {
 		const slot = this[name];
 		/* istanbul ignore else  */
 		if (slot instanceof Slot) {
 			fn.call(this, slot);
 		}
-	}.bind(this));
+	});
 	return this;
 };
 
