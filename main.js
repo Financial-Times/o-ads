@@ -78,9 +78,6 @@ Ads.prototype.destroy = function () {
 	adSlots.forEach(slot => {
 		slot.remove();
 	});
-
-
-
 };
 
 document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
