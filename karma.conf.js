@@ -21,6 +21,7 @@ let options = {
 	files: [
 		'test/qunit/styles.css',
 		'build/main.css',
+		'http://polyfill.webservices.ft.com/v2/polyfill.js?ua=safari/4',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/jquery.cookie/index.js',
@@ -42,9 +43,7 @@ let options = {
 	preprocessors: {
 		'main.js': ['browserify'],
 		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify'],
-		'test/qunit/video.mainplayer.test.js': ['browserify'],
-		'test/qunit/version.test.js': ['browserify']
+		'test/qunit/setup.js': ['browserify']
 	}
 };
 

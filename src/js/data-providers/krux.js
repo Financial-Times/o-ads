@@ -1,18 +1,7 @@
-/**
- * @fileOverview
- * Third party library for use with google publisher tags.
- *
- * @author Robin Marr, robin.marr@ft.com
- */
-/**
- * FT.ads.targeting is an object providing properties and methods for accessing targeting parameters from various sources including FT Track and Audience Science and passing them into DFP
- * @name targeting
- * @memberof FT.ads
-
-*/
 const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
+const targeting = require('../targeting');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -52,6 +41,7 @@ Krux.prototype.init = function() {
 
 		utils.attach(finalSrc, true);
 		this.events.init();
+		targeting.add(this.targeting());
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
 	}

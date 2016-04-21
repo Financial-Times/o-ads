@@ -447,7 +447,7 @@ QUnit.test('logs a warning when trying to submit an impression on a non-oop slot
 QUnit.test('define a basic slot', function(assert) {
 	const html = '<div data-o-ads-name="no-responsive-mpu" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
-	this.ads.init();
+	this.ads.init({responsive: false});
 
 	this.ads.slots.initSlot('no-responsive-mpu');
 	const gptSlot = this.ads.slots['no-responsive-mpu'].gpt.slot;
@@ -458,11 +458,6 @@ QUnit.test('define a basic slot', function(assert) {
 QUnit.test('define responsive slot', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="responsive-mpu"></div>');
 	this.ads.init({
-		responsive:{
-			large: [1280, 800],
-			medium: [970, 690],
-			small: [0, 0]
-		},
 		slots: {
 			'responsive-mpu': {
 				formats: {

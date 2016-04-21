@@ -37,11 +37,17 @@ const defaults = {
 		Portrait: {sizes: [300, 1050]},
 		AdhesionBanner: {sizes: [320, 50]},
 		MicroBar: {sizes: [88, 31]},
-		Button2: {sizes: [120, 60]}
+		Button2: {sizes: [120, 60]},
+		Responsive: { sizes: [2,2] }
+	},
+	responsive: {
+		extra: [1025, 0], //Reasonable width to show a Billboard (desktop)
+		large: [1000, 0], //reasonable width to show SuperLeaderboard (tablet landscape)
+		medium: [760, 0], //reasonable width to show a leaderboard (tablet portrait)
+		small: [0, 0] //Mobile
 	},
 	flags: {
 		refresh: true,
-		sticky: true,
 		inview: true
 	}
 };

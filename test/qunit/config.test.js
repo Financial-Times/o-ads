@@ -111,7 +111,6 @@ QUnit.test('Config defaults', function(assert) {
 	this.ads.init();
 	const flags = {
 		refresh: true,
-		sticky: true,
 		inview: true
 	};
 	const result = this.ads.config();
