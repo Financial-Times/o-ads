@@ -301,7 +301,7 @@ QUnit.test('set unit names network only', function(assert) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-network-only') {
-			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty site and empty zone  just returns network');
+			assert.strictEqual(slot.gpt.unitName, expected, 'setting unit name with empty site and empty zone just returns network');
 			done();
 		}
 	});

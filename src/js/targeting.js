@@ -32,7 +32,7 @@ Targeting.prototype.get = function() {
 		krux: this.fetchKrux,
 		socialReferrer: this.getSocialReferrer,
 		pageReferrer: this.getPageReferrer,
-		cookieConsent:  this.cookieConsent,
+		cookieConsent: this.cookieConsent,
 		timestamp: this.timestamp,
 		version: this.version,
 		responsive: this.responsive
@@ -116,9 +116,9 @@ Targeting.prototype.encodedIp = function() {
 	}
 
 	/**
-	  * returns an object with key loc and a value of the encoded ip
-	  * @memberof Targeting
-	  * @lends Targeting
+		* returns an object with key loc and a value of the encoded ip
+		* @memberof Targeting
+		* @lends Targeting
 */
 	return { loc: encodeIP(getIP())};
 };
