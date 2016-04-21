@@ -73,6 +73,7 @@ Ads.prototype.destroy = function () {
 	});
 
 	this.slots.destroy();
+	this.utils.timers.stopall();
 
 	const adSlots = Array.from(document.querySelectorAll('.o-ads__outer'));
 	adSlots.forEach(slot => {
