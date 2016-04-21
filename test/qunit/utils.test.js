@@ -304,7 +304,7 @@ QUnit.test('attach method success', function(assert) {
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	const initialScripts = $('script').size();
+	const initialScripts = document.querySelectorAll('script').length;
 	const successCallback = this.stub();
 	const errorCallback = this.stub();
 
@@ -312,8 +312,8 @@ QUnit.test('attach method success', function(assert) {
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
-		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
-		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+		assert.equal(document.querySelectorAll('script').length - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal(document.querySelectorAll('script[o-ads]').length, 1, 'the script tag has an o-ads attribute');
 		assert.ok(successCallback.calledOnce, 'a success callback has been triggered');
 		assert.notOk(errorCallback.called, 'an error callback has not been triggered');
 		done();
@@ -325,7 +325,7 @@ QUnit.test('attach method supports auto removing script', function(assert) {
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	const initialScripts = $('script').size();
+	const initialScripts = document.querySelectorAll('script').length;
 	const successCallback = this.stub();
 	const errorCallback = this.stub();
 
@@ -333,8 +333,8 @@ QUnit.test('attach method supports auto removing script', function(assert) {
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
-		assert.equal($('script').size(), initialScripts, 'no new script tags have been added to tha page.');
-		assert.equal($('script[o-ads]').size(), 0, 'there are no script tags that have an o-ads attribute');
+		assert.equal(document.querySelectorAll('script').length, initialScripts, 'no new script tags have been added to tha page.');
+		assert.equal(document.querySelectorAll('script[o-ads]').length, 0, 'there are no script tags that have an o-ads attribute');
 		done();
 	}, 200);
 });
@@ -344,7 +344,7 @@ QUnit.test('attach method failed', function(assert) {
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	const initialScripts = $('script').size();
+	const initialScripts = document.querySelectorAll('script').length;
 	const successCallback = this.stub();
 	const errorCallback = this.stub();
 
@@ -352,8 +352,8 @@ QUnit.test('attach method failed', function(assert) {
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
-		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
-		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+		assert.equal(document.querySelectorAll('script').length - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal(document.querySelectorAll('script[o-ads]').length, 1, 'the script tag has an o-ads attribute');
 
 		assert.ok(errorCallback.calledOnce, 'an error callback has been triggered');
 		assert.notOk(successCallback.called, 'a success callback has not been triggered');
@@ -366,7 +366,7 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	const initialScripts = $('script').size();
+	const initialScripts = document.querySelectorAll('script').length;
 	const successCallback = this.stub();
 	const errorCallback = this.stub();
 
@@ -374,8 +374,8 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
-		assert.equal($('script').size() - initialScripts, 1, 'a new script tag has been added to the page.');
-		assert.equal($('script[o-ads]').size(), 1, 'the script tag has an o-ads attribute');
+		assert.equal(document.querySelectorAll('script').length - initialScripts, 1, 'a new script tag has been added to the page.');
+		assert.equal(document.querySelectorAll('script[o-ads]').length, 1, 'the script tag has an o-ads attribute');
 
 		assert.ok(errorCallback.calledOnce, 'an error callback has been triggered');
 		assert.notOk(successCallback.called, 'a success callback has not been triggered');
