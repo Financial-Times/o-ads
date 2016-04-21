@@ -334,10 +334,11 @@ Slots.prototype.debug = function (){
 		};
 		data.push(row);
 	});
-
-	log.start('Creatives');
-	log.table(data);
-	log.end();
+	if (data.length > 0) {
+		log.start('Creatives');
+		log.table(data);
+		log.end();
+	}
 };
 
 module.exports = new Slots();
