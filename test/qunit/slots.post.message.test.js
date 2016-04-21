@@ -32,14 +32,14 @@ QUnit.test('Post message whoami message reply is sent', function (assert) {
 		return slotName;
 	});
 
-	this.stub(this.utils.messenger, 'post', (message, source) => {
+	this.stub(this.utils.messenger, 'post', function(message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
 		assert.deepEqual(message.sizes, [[300, 250]], 'the correct sizes are supplied');
 		assert.notOk(slot.collapse.called, 'the collapse method is not called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	});
+	}.bind(this));
 
 	document.body.addEventListener('oAds.ready', 	function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
@@ -58,14 +58,14 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 		return slotName;
 	});
 
-	this.stub(this.utils.messenger, 'post', (message, source) => {
+	this.stub(this.utils.messenger, 'post', function(message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
 		assert.deepEqual(message.sizes, [[300, 250]], 'the sizes are returned');
 		assert.ok(slot.collapse.called, 'the collapse method is called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	});
+	}.bind(this));
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.whoami", "collapse": true}', '*');
