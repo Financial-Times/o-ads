@@ -272,6 +272,14 @@ Slots.prototype.initPostMessage = function() {
 						slot.collapse();
 					}
 
+					if (data.isMaster) {
+						slots.forEach(function(s) {
+							if(s.companion && s.name !== slot.name) {
+								s.fire('masterLoaded', slot);
+							}
+						});
+					}
+
 					messageToSend.name = slotName;
 					messageToSend.sizes = slot.sizes;
 

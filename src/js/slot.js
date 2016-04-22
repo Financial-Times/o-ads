@@ -182,8 +182,21 @@ Slot.prototype.initLazyLoad = function() {
 	if (this.lazyLoad) {
 		this.defer = true;
 		utils.once('inview', function(slot) {
-			slot.fire('render');
+			if(!slot.rendered) {
+				slot.fire('render');
+				slot.rendered = true;
+			}
 		}.bind(null, this), this.container);
+		//Master/Companion ads don't work with lazy loading, so if a master ad loads trigger
+		//the companions to render immediately
+		if(this.companion) {
+			utils.once('masterLoaded', function(slot) {
+				if(!slot.rendered) {
+					slot.fire('render');
+					slot.rendered =true;
+				}
+			}.bind(null, this), this.container);
+		}
 	}
 	return this;
 };
