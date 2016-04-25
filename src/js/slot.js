@@ -141,7 +141,12 @@ function Slot(container, screensize) {
 	this.labelContainer();
 
 	this.initResponsive();
-	this.initLazyLoad();
+	
+	if('IntersectionObserver' in window && this.lazyLoad) {
+		this.initLazyLoad();
+	} else {
+		this.lazyLoad = false;
+	}
 }
 
 /**
@@ -181,10 +186,19 @@ Slot.prototype.initLazyLoad = function() {
 	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
-		utils.once('inview', function(slot) {
-			slot.fire('render');
-		}.bind(null, this), this.container);
+ // create an observer
+    var observer = new IntersectionObserver(onChange.bind(this), {
+      // rootMargin: '50% 0%'
+      // threshold: [0.5]
+    });
+		observer.observe(this.container);
+
+    function onChange() {
+			this.fire('render');
+			observer.unobserve(this.container);
+    }
 	}
+
 	return this;
 };
 
