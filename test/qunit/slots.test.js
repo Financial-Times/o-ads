@@ -714,7 +714,7 @@ QUnit.test('lazy loading', function(assert) {
 
 QUnit.test('lazy loading a companion slot', function(assert) {
 	var done = assert.async();
-	var slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
+	var slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
 	var node = this.fixturesContainer.add(slotHTML);
 
 	document.body.addEventListener('oAds.render', function(event) {
@@ -725,9 +725,8 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	});
 
 	this.ads.init();
-	this.trigger(window, 'load');
-	this.trigger(node, 'masterLoaded');
 	this.ads.slots.initSlot(node);
+	this.utils.broadcast('masterLoaded', {}, node);
 });
 
 
