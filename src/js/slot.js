@@ -193,7 +193,7 @@ Slot.prototype.initLazyLoad = function() {
 			utils.once('masterLoaded', function(slot) {
 				if(!slot.rendered) {
 					slot.fire('render');
-					slot.rendered =true;
+					slot.rendered = true;
 				}
 			}.bind(null, this), this.container);
 		}

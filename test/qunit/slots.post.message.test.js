@@ -79,7 +79,7 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 QUnit.test('Post message whoami message with isMaster will fire event on companion slots', function (assert) {
 	var done = assert.async();
 	var callCount = 0;
-	var master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="MediumRectangle"></div>');
+	var master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="Leaderboard"></div>');
 	var companion = this.fixturesContainer.add('<div data-o-ads-name="companion" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
 	var notCompanion = this.fixturesContainer.add('<div data-o-ads-name="not-companion" data-o-ads-formats="MediumRectangle" data-o-ads-companion="false"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
@@ -88,6 +88,7 @@ QUnit.test('Post message whoami message with isMaster will fire event on compani
 
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.ok(companionSlot.fire.called, 'the event is is called on the companion');
+		assert.equal(companionSlot.container.getAttribute('data-o-ads-master-loaded'), 'Leaderboard');
 		assert.notOk(masterSlot.fire.called, 'the event method is not called on the master');
 		assert.notOk(notCompanionSlot.fire.called, 'the collapse method is not called on a non companion');
 		done();
@@ -95,7 +96,7 @@ QUnit.test('Post message whoami message with isMaster will fire event on compani
 
 	document.body.addEventListener('oAds.ready', function (slot) {
 		if(slot.detail.name === 'master') {
-			window.postMessage('{ "type": "oAds.whoami", "isMaster": true}', '*');
+			window.postMessage('{ "type": "oAds.whoami", "mastercompanion": true}', '*');
 		}
 	});
 
