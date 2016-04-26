@@ -284,7 +284,7 @@ Slots.prototype.initPostMessage = function() {
 					}
 
           if(slot.disableSwipeDefault) {
-            messageToSend.disableDefault = true;
+            messageToSend.disableDefaultSwipeHandler = true;
           }
 
 					messageToSend.name = slotName;

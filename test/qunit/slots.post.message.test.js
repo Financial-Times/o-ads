@@ -223,7 +223,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefault, true, 'the default handler disable flag is present');
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
 	}.bind(this));
@@ -247,7 +247,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefault, true, 'the default handler disable flag is present');
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
 	}.bind(this));
@@ -271,7 +271,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefault, true, 'the default handler disable flag is present');
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
 	}.bind(this));
