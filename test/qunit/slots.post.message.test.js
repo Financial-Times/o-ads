@@ -76,6 +76,38 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 	this.spy(slot, 'collapse');
 });
 
+QUnit.test('Post message whoami message with isMaster will fire event on companion slots', function (assert) {
+	var done = assert.async();
+	var callCount = 0;
+	var master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="Leaderboard"></div>');
+	var companion = this.fixturesContainer.add('<div data-o-ads-name="companion" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
+	var notCompanion = this.fixturesContainer.add('<div data-o-ads-name="not-companion" data-o-ads-formats="MediumRectangle" data-o-ads-companion="false"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return 'master';
+	});
+
+	this.stub(this.utils.messenger, 'post', function (message, source) {
+		assert.ok(companionSlot.fire.called, 'the event is is called on the companion');
+		assert.equal(companionSlot.container.getAttribute('data-o-ads-master-loaded'), 'Leaderboard');
+		assert.notOk(masterSlot.fire.called, 'the event method is not called on the master');
+		assert.notOk(notCompanionSlot.fire.called, 'the collapse method is not called on a non companion');
+		done();
+	}.bind(this));
+
+	document.body.addEventListener('oAds.ready', function (slot) {
+		if(slot.detail.name === 'master') {
+			window.postMessage('{ "type": "oAds.whoami", "mastercompanion": true}', '*');
+		}
+	});
+
+	this.ads.init();
+	var masterSlot = this.ads.slots.initSlot(master);
+	var companionSlot = this.ads.slots.initSlot(companion);
+	var notCompanionSlot = this.ads.slots.initSlot(notCompanion);
+	this.spy(masterSlot, 'fire');
+	this.spy(companionSlot, 'fire');
+	this.spy(notCompanionSlot, 'fire');
+});
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
 	var done = assert.async();
 	var slotName = 'whoami-ad';

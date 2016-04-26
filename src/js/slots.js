@@ -272,6 +272,17 @@ Slots.prototype.initPostMessage = function() {
 						slot.collapse();
 					}
 
+					if (data.mastercompanion) {
+						var size = slot.gpt.size;
+						var format = findFormatBySize(size);
+						slots.forEach(function(s) {
+							if(s.companion && s.name !== slot.name) {
+								s.fire('masterLoaded', slot);
+								s.container.setAttribute('data-o-ads-master-loaded', format);
+							}
+						});
+					}
+
 					messageToSend.name = slotName;
 					messageToSend.sizes = slot.sizes;
 
