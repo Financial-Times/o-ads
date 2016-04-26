@@ -283,6 +283,10 @@ Slots.prototype.initPostMessage = function() {
 						});
 					}
 
+          if(slot.disableSwipeDefault) {
+            messageToSend.disableDefault = true;
+          }
+
 					messageToSend.name = slotName;
 					messageToSend.sizes = slot.sizes;
 
