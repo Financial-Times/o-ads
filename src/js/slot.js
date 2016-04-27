@@ -87,6 +87,7 @@ var attributeParsers = {
 */
 function Slot(container, screensize) {
 	var slotConfig = config('slots') || {};
+	var disableSwipeDefault = config('disableSwipeDefault') || false;
 
 	// store the container
 	this.container = container;
@@ -116,6 +117,7 @@ function Slot(container, screensize) {
 	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
+	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	this.chartbeat = slotConfig.chartbeat || config('chartbeat');

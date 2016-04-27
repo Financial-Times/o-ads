@@ -210,3 +210,76 @@ QUnit.test('Passed touch fires an event', function (assert) {
 	this.ads.init();
 	this.ads.slots.initSlot(container);
 });
+
+
+QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present on attribute', function (assert) {
+	var done = assert.async();
+	var slotName = 'whoami-collapse-ad';
+	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle" data-o-ads-disable-swipe-default="true"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+
+	this.stub(this.utils.messenger, 'post', function (message, source) {
+		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
+		assert.equal(message.name, slotName, 'the name is ' + slotName);
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
+		assert.strictEqual(window, source, ' the source is the as expected');
+		done();
+	}.bind(this));
+
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.whoami"}', '*');
+	});
+
+	this.ads.init();
+	var slot = this.ads.slots.initSlot(container);
+	this.spy(slot, 'collapse');
+});
+
+QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in slot config', function (assert) {
+	var done = assert.async();
+	var slotName = 'test';
+	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+	this.stub(this.utils.messenger, 'post', function (message, source) {
+		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
+		assert.equal(message.name, slotName, 'the name is ' + slotName);
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
+		assert.strictEqual(window, source, ' the source is the as expected');
+		done();
+	}.bind(this));
+
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.whoami"}', '*');
+	});
+	this.ads.init({slots: {test: {disableSwipeDefault: true}}});
+	var slot = this.ads.slots.initSlot(container);
+	this.spy(slot, 'collapse');
+});
+
+
+QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in global config', function (assert) {
+	var done = assert.async();
+	var slotName = 'test';
+	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+	this.stub(this.utils.messenger, 'post', function (message, source) {
+		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
+		assert.equal(message.name, slotName, 'the name is ' + slotName);
+		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
+		assert.strictEqual(window, source, ' the source is the as expected');
+		done();
+	}.bind(this));
+
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.whoami"}', '*');
+	});
+	this.ads.init({disableSwipeDefault: true});
+	var slot = this.ads.slots.initSlot(container);
+	this.spy(slot, 'collapse');
+});

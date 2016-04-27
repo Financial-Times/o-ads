@@ -314,3 +314,35 @@ And the markup for both of the slots:
 <div data-o-ads-name="leaderboard" data-o-ads-formats="Leaderboard"></div>
 <div data-o-ads-name="halfpage" data-o-ads-formats="HalfPage"></div>
 ```
+
+
+### Disable swipe configuration
+This will only work if you are using [o-ads-embed](https://github.com/Financial-Times/o-ads-embed) in your creative wrapper in DFP.
+
+In certain cases when the site or application are taking over natural scrolling, we might want to disable the default touch move events and handle it *ourself* via o-ads-embed module.
+
+#### JSON Configuration
+```js
+{
+  ...
+  disableSwipeDefault: true
+  ...
+}
+```
+
+```js
+{
+  ...
+  slots: {
+    slotName: {
+        disableSwipeDefault: true
+    }
+  }
+  ...
+}
+```
+
+#### DOM Configuration
+```html
+<div data-o-ads-disable-swipe-default="true"></div>
+```
