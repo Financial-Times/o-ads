@@ -20,7 +20,7 @@ let options = {
 	frameworks: ['browserify', 'qunit'],
 	files: [
 		'test/qunit/styles.css',
-		'build/main.css',
+		'build/main.scss',
 		'http://polyfill.webservices.ft.com/v2/polyfill.js?ua=safari/4',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',

@@ -10,15 +10,8 @@ Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
-<<<<<<< HEAD
-Ads.prototype.metadata = require('./src/js/metadata');
-Ads.prototype.version = require('./src/js/version');
-Ads.prototype.buildURLForVideo = require('./src/js/video');
 Ads.prototype.moat = require('./src/js/data-providers/moat');
-var utils = Ads.prototype.utils = require('./src/js/utils');
-=======
 Ads.prototype.utils = require('./src/js/utils');
->>>>>>> origin/es6
 
 /**
 * Initialises the ads library and all sub modules
