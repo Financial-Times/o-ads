@@ -58,6 +58,5 @@ function once(name, callback, target) {
 			callback = null;
 		}
 	};
-
 	on(name, handler, target);
 }

@@ -86,6 +86,7 @@ const attributeParsers = {
 */
 function Slot(container, screensize) {
 	let slotConfig = config('slots') || {};
+	let disableSwipeDefault = config('disableSwipeDefault') || false;
 
 	// store the container
 	this.container = container;
@@ -115,6 +116,7 @@ function Slot(container, screensize) {
 	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 	this.lazyLoad = slotConfig.lazyLoad || false;
+	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
@@ -180,9 +182,21 @@ Slot.prototype.initLazyLoad = function() {
 	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
-		utils.once('inview', function(slot) {
-			slot.fire('render');
-		}.bind(null, this), this.container);
+		let renderSlot = function(slot) {
+			/* istanbul ignore else */
+			if(!slot.rendered) {
+				slot.fire('render');
+				slot.rendered = true;
+			}
+		}.bind(null, this);
+		utils.once('inview', renderSlot, this.container);
+		//Master/Companion ads don't work with lazy loading, so if a master ad loads trigger
+		//the companions to render immediately
+
+		/* istanbul ignore else */
+		if(this.companion) {
+			utils.once('masterLoaded', renderSlot, this.container);
+		}
 	}
 	return this;
 };

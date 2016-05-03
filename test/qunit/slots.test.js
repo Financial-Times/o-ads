@@ -701,14 +701,34 @@ QUnit.test('lazy loading', function(assert) {
 	});
 
 	document.body.addEventListener('oAds.render', function(event) {
-		assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
-		done2();
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done2();
+		}
 	});
 
 	this.ads.init();
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
 });
+
+QUnit.test('lazy loading a companion slot', function(assert) {
+	const done = assert.async();
+	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-companion-test') {
+			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	this.utils.broadcast('masterLoaded', {}, node);
+});
+
 
 
 

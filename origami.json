@@ -14,31 +14,39 @@
 		"name": "Individual-Ad",
 		"template": "/demos/Individual-Ad.html",
 		"expanded": true,
-		"description": ""
+		"description": "",
+		"data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami", "moatid" : "financialtimes506DCcQ32"}
+
 	  },
 	  {
 		"name": "Individual-Ad-With-Out-Of-Page",
 		"template": "/demos/Individual-Ad-With-Out-Of-Page.html",
 		"expanded": false,
-		"description": ""
+		"description": "",
+		"data": {"name":"halfpage", "formats": "HalfPage",  "network": 5887, "site" : "test.5887.origami"}
+
 	  },
 	  {
 		"name": "Individual-Ad-with-Custom-Targeting-Values",
 		"template": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
 		"expanded": false,
-		"description": ""
+		"description": "",
+		"data": {"name":"leaderboard", "network": 5887, "site" : "test.5887.origami"}
+
 	  },
 	  {
 		"name": "Master-and-Companion",
 		"template": "/demos/Master-and-Companion.html",
 		"expanded": false,
-		"description": ""
+		"description": "",
+		"data": {"network": 5887, "site" : "test.5887.origami", "zone": "master-companion-test"}
 	  },
 	  {
 	  	"name": "Responsive-Positions",
 	  	"template": "/demos/Responsive-Positions.html",
 	  	"expanded": false,
-	  	"description": ""
+	  	"description": "",
+			"data": {"network": 5887, "site" : "test.5887.origami"}
 	  }
   	]
 }

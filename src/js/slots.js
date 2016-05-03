@@ -271,6 +271,21 @@ Slots.prototype.initPostMessage = function() {
 						slot.collapse();
 					}
 
+					if (data.mastercompanion) {
+						const size = slot.gpt.size;
+						const format = findFormatBySize(size);
+						slots.forEach(function(s) {
+							if(s.companion && s.name !== slot.name) {
+								s.fire('masterLoaded', slot);
+								s.container.setAttribute('data-o-ads-master-loaded', format);
+							}
+						});
+					}
+
+          if(slot.disableSwipeDefault) {
+            messageToSend.disableDefaultSwipeHandler = true;
+          }
+
 					messageToSend.name = slotName;
 					messageToSend.sizes = slot.sizes;
 

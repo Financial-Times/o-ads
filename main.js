@@ -10,6 +10,7 @@ Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
+Ads.prototype.moat = require('./src/js/data-providers/moat');
 Ads.prototype.utils = require('./src/js/utils');
 
 /**
@@ -24,6 +25,7 @@ Ads.prototype.init = function(config) {
 	this.gpt.init();
 	this.krux.init();
 	this.cb.init();
+	this.moat.init();
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));

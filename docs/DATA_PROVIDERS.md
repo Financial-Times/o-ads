@@ -42,3 +42,16 @@ oAds.init({
 });
 
 ```
+
+## [Moat](https://moat.com/)
+### Configuration
+```js
+oAds.init({
+  ...
+  moat: {
+    id: "moatid1234"
+  },
+  ...
+});
+
+```

@@ -8,4 +8,4 @@ dependencies:
     - "node_modules"
 test:
   override:
-    - ./node_modules/.bin/obt test --browserTest --browserTestFailBuild --environments=chrome_latest_sauce,firefox_latest_sauce
+    - ./node_modules/.bin/obt test --browserTest --browserTestFailBuild --environments=chrome_latest_sauce,chrome_latest-1_sauce,firefox_latest_sauce,firefox_latest-1_sauce

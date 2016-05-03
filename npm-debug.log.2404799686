@@ -1,0 +1,29 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/Cellar/node/5.10.1/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'test' ]
+2 info using npm@3.8.3
+3 info using node@v5.10.1
+4 verbose run-script [ 'pretest', 'test', 'posttest' ]
+5 info lifecycle o-ads@3.0.1~pretest: o-ads@3.0.1
+6 silly lifecycle o-ads@3.0.1~pretest: no script for pretest, continuing
+7 info lifecycle o-ads@3.0.1~test: o-ads@3.0.1
+8 verbose lifecycle o-ads@3.0.1~test: unsafe-perm in lifecycle true
+9 verbose lifecycle o-ads@3.0.1~test: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/andrew.georgiou/projects/2016/o-ads/node_modules/.bin:/usr/local/Cellar/node/5.10.1/bin:/usr/local/bin:/user/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/Cellar/php55/5.5.20/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+10 verbose lifecycle o-ads@3.0.1~test: CWD: /Users/andrew.georgiou/projects/2016/o-ads
+11 silly lifecycle o-ads@3.0.1~test: Args: [ '-c', 'karma start karma.conf.js' ]
+12 verbose stack Error: write EPIPE
+12 verbose stack     at exports._errnoException (util.js:890:11)
+12 verbose stack     at WriteWrap.afterWrite (net.js:767:14)
+13 verbose cwd /Users/andrew.georgiou/projects/2016/o-ads
+14 error Darwin 14.5.0
+15 error argv "/usr/local/Cellar/node/5.10.1/bin/node" "/usr/local/bin/npm" "test"
+16 error node v5.10.1
+17 error npm  v3.8.3
+18 error code EPIPE
+19 error errno EPIPE
+20 error syscall write
+21 error write EPIPE
+22 error If you need help, you may report this error at:
+22 error     <https://github.com/npm/npm/issues>
+23 verbose exit [ 1, true ]

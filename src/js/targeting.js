@@ -17,6 +17,7 @@ Targeting.prototype.get = function() {
 	utils.extend(parameters, this.getFromConfig(), this.searchTerm());
 
 	for (let item in methods) {
+	/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
 			utils.extend(parameters, methods[item]());
 		}
@@ -127,13 +128,12 @@ Targeting.prototype.responsive = function() {
 Targeting.prototype.debug = function () {
 	const log = utils.log;
 	const parameters = this.get();
-	if (Object.keys(parameters).length === 0) {
-		return;
-	}
-
-	log.start('Targeting');
+	if (Object.keys(parameters).length !== 0) {
+		/* istanbul ignore else  */
+		log.start('Targeting');
 		log.attributeTable(this.get());
-	log.end();
+		log.end();
+	}
 };
 
 module.exports = new Targeting();
