@@ -1,6 +1,6 @@
-/* jshint globalstrict: true */
 /* globals QUnit: false, $: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('utils.cookie', {
 	beforeEach: function() {
@@ -89,21 +89,21 @@ QUnit.test('write number', function(assert) {
 });
 
 QUnit.test('write expires option as days from now', function(assert) {
-	var sevenDaysFromNow = new Date();
+	const sevenDaysFromNow = new Date();
 	sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
 	assert.equal(this.ads.utils.cookie('c', 'v', { expires: 7 }), 'c=v; expires=' + sevenDaysFromNow.toUTCString(),
 		'should write the cookie string with expires');
 });
 
 QUnit.test('write expires option as Date instance', function(assert) {
-	var sevenDaysFromNow = new Date();
+	const sevenDaysFromNow = new Date();
 	sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
 	assert.equal(this.ads.utils.cookie('c', 'v', { expires: sevenDaysFromNow }), 'c=v; expires=' + sevenDaysFromNow.toUTCString(),
 		'should write the cookie string with expires');
 });
 
 QUnit.test('write invalid expires option (in the past)', function(assert) {
-	var yesterday = new Date();
+	const yesterday = new Date();
 	yesterday.setDate(yesterday.getDate() - 1);
 	this.ads.utils.cookie('e', 'v', { expires: yesterday });
 	assert.equal(this.ads.utils.cookie('e'), null, 'should not save already expired cookie');
@@ -135,7 +135,7 @@ QUnit.test('write raw: true', function(assert) {
 QUnit.test('write json: true', function(assert) {
 	this.ads.utils.cookie.json = true;
 	if (!!window.JSON) {
-		var cookieValue = 'c=' + encodeURIComponent(JSON.stringify({ foo: 'bar' }));
+		const cookieValue = 'c=' + encodeURIComponent(JSON.stringify({ foo: 'bar' }));
 		this.ads.utils.cookie('c', { foo: 'bar' });
 		assert.ok(document.cookie.indexOf(cookieValue) > -1, 'should stringify JSON');
 	} else {

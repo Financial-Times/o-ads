@@ -9,24 +9,16 @@
 * @name targeting
 * @memberof FT.ads
 */
-'use strict';
-var utils = require('../utils');
-var config = require('../config');
+const utils = require('../utils');
+const config = require('../config');
 
-/**
-* initialise chartbeat functionality
-* Decorates the gpt refresh method with chartbeat functionality
-* @name init
-* @memberof ChartBeat
-* @lends ChartBeat
-*/
 function ChartBeat() {
 
 }
 
 ChartBeat.prototype.init = function() {
-	var gpt = config('gpt') || {};
-	var src = '//static.chartbeat.com/js/chartbeat_pub.js';
+	const gpt = config('gpt') || {};
+	const src = '//static.chartbeat.com/js/chartbeat_pub.js';
 	this.config = config('chartbeat');
 
 	/* istanbul ignore else  */
@@ -36,7 +28,7 @@ ChartBeat.prototype.init = function() {
 			uid: this.config.uid,
 			domain: this.config.domain || location.host,
 			useCanonical: this.config.canonical || true,
-			zone: this.config.zone || gpt.unitName || gpt.site + '/' + gpt.zone,
+			zone: this.config.zone || gpt.unitName || `${gpt.site}/${gpt.zone}`,
 			sections: this.config.pageType,
 			enableAdRefresh: this.config.enableAdRefresh || false
 		};
@@ -61,14 +53,14 @@ ChartBeat.prototype.init = function() {
 	// add an id attribute to each slot
 	// id will be the slots name unless overidden
 	utils.on('ready', function(event) {
-		var slot = event.detail.slot;
-		var name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
+		const slot = event.detail.slot;
+		const name = utils.isNonEmptyString(slot.chartbeat) ? slot.chartbeat : slot.name;
 		slot.container.setAttribute('data-cb-ad-id', name);
 	});
 
 	// Register GPT slots after they're defined with gpt
 	utils.on('complete', function(event) {
-		var slot = event.detail.slot;
+		const slot = event.detail.slot;
 		/* istanbul ignore else  */
 		if (slot.gpt) {
 			window._cba.push(function() {
@@ -94,27 +86,27 @@ ChartBeat.prototype.init = function() {
 
 ChartBeat.prototype.addDemographics = function(demographicsObject) {
 	// Pass User metadata to chartbeat
-	var demographicCodes = Object.keys(demographicsObject).map(function (key) {
-			return key + '=' + demographicsObject[key];
+	const demographicCodes = Object.keys(demographicsObject).map(function (key) {
+			return `${key}=${demographicsObject[key]}`;
 		}).join(',');
 
 	window._cbq.push(['_demo', demographicCodes]);
 };
 
 ChartBeat.prototype.debug = function () {
-	var log = utils.log;
+	const log = utils.log;
 
 	if (!this.config) {
 		return;
 	}
 	log.start('ChartBeat');
 
-		var asyncConfig = utils.extend({}, window._sf_async_config);
+		const asyncConfig = utils.extend({}, window._sf_async_config);
 
-		var attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
+		const attrs = ['uid', 'domain', 'useCanonical', 'zone', 'sections', 'enableAdRefresh'];
 
-		attrs.forEach(function(attribute) {
-				log('%c ' + attribute + ':', 'font-weight:bold', asyncConfig[attribute]);
+		attrs.forEach(attribute => {
+				log(`%c ${attribute}:`, 'font-weight:bold', asyncConfig[attribute]);
 				delete asyncConfig[attribute];
 		});
 

@@ -1,6 +1,8 @@
 /* globals sinon: false */
-"use strict";
-var stubs = sinon.sandbox.create();
+
+'use strict'; //eslint-disable-line
+
+const stubs = sinon.sandbox.create();
 
 window.oz_insight = function() {
 	window.oz_callback({ estimate: {tier: 400}});

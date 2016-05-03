@@ -1,6 +1,7 @@
-/* jshint globalstrict: true, browser: true */
 /* global QUnit: false, require: false */
-'use strict';
+
+'use strict'; //eslint-disable-line
+
 QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
@@ -27,13 +28,13 @@ decorateModule();
 // test will always return the same instance of the object, using the
 // constructor gives each test access to a unique instance
 // this is added to the test context via the module decorator
-var Ads = require('../../main.js').constructor;
-var utils = require('../../src/js/utils');
-var helpers = require('./helpers.js');
+const Ads = require('../../main.js').constructor;
+const utils = require('../../src/js/utils');
+const helpers = require('./helpers.js');
 
 // Curry helper methods
 function addHelpers(obj) {
-	for (var key in helpers) {
+	for (let key in helpers) {
 		if (helpers.hasOwnProperty(key)) {
 			obj[key] = helpers[key];
 		}
@@ -42,11 +43,11 @@ function addHelpers(obj) {
 
 // QUnit decided to remove the ability to define global test hooks
 function decorateModule() {
-	var _module = QUnit.module;
+	const _module = QUnit.module;
 	function decorateHooks(hooks) {
 		return {
 			beforeEach: function() {
-				var mod;
+				let mod;
 				this.ads = new Ads();
 				this.utils = utils;
 				window.scroll(0, 0);
@@ -79,7 +80,7 @@ function decorateModule() {
 				if (hooks.afterEach && hooks.afterEach.apply) {
 					hooks.afterEach.apply(this, [].slice.call(arguments));
 				}
-
+				this.attach.restore();
 				// reset sinon sandbox and remove elements added to dom
 				this.clear();
 				this.ads.targeting.clear();

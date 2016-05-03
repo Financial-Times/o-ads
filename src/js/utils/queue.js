@@ -1,4 +1,3 @@
-'use strict';
 
 function Queue(processor) {
 	if (!(this instanceof Queue)) {
@@ -17,9 +16,9 @@ Queue.prototype.setProcessor = function(processor) {
 
 Queue.prototype.process = function() {
 	this.processed = true;
-	for (var i = 0, j = this.items.length; i < j; i++) {
-		this.processor(this.items[i]);
-	}
+	this.items.forEach(item => {
+		this.processor(item);
+	});
 
 	return this;
 };

@@ -1,6 +1,6 @@
-/* jshint globalstrict: true */
 /* globals QUnit: false, jQuery: false, $: false */
-'use strict';
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('utils.isType methods');
 
@@ -137,13 +137,13 @@ QUnit.test('isPlainObject method', function(assert) {
 	// Instantiated objects shouldn't be matched
 	assert.ok(!this.ads.utils.isPlainObject(new Date()), 'new Date');
 
-	var fnplain = function() {};
+	const fnplain = function() {};
 
 	// Functions shouldn't be matched
 	assert.ok(!this.ads.utils.isPlainObject(fnplain), 'fn');
 
 	/** @constructor */
-	var Fn = function() {};
+	const Fn = function() {};
 
 	// Again, instantiated objects shouldn't be matched
 	assert.ok(!this.ads.utils.isPlainObject(new Fn()), 'new fn (no methods)');
@@ -171,16 +171,16 @@ QUnit.test('isPlainObject method', function(assert) {
 QUnit.module('utils.extend');
 QUnit.test('extend method', function(assert) {
 
-	var settings = { 'xnumber1': 5, 'xnumber2': 7, 'xstring1': 'peter', 'xstring2': 'pan' },
-		options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' },
-		optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' },
-		merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' },
-		deep1 = { 'foo': { 'bar': true } },
-		deep2 = { 'foo': { 'baz': true }},
-		deep2copy = { 'foo': { 'baz': true }},
-		deepmerged = { 'foo': { 'bar': true, 'baz': true }},
-		arr = [1, 2, 3],
-		nestedarray = { 'arr': arr };
+	let settings = { 'xnumber1': 5, 'xnumber2': 7, 'xstring1': 'peter', 'xstring2': 'pan' };
+	let options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	let optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	let merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' };
+	let deep1 = { 'foo': { 'bar': true } };
+	let deep2 = { 'foo': { 'baz': true }};
+	let deep2copy = { 'foo': { 'baz': true }};
+	let deepmerged = { 'foo': { 'bar': true, 'baz': true }};
+	let arr = [1, 2, 3];
+	let nestedarray = { 'arr': arr };
 
 	this.ads.utils.extend(settings, options);
 	assert.deepEqual(settings, merged, 'Check if extended: settings must be extended');
@@ -198,20 +198,20 @@ QUnit.test('extend method', function(assert) {
 	assert.ok(jQuery.isArray(this.ads.utils.extend(true, { 'arr': {} }, nestedarray).arr), 'Cloned array have to be an Array');
 	assert.ok(jQuery.isPlainObject(this.ads.utils.extend(true, { 'arr': arr }, { 'arr': {} }).arr), 'Cloned object have to be an plain object');
 
-	var empty = {};
-	var optionsWithLength = { 'foo': { 'length': -1 } };
+	let empty = {};
+	const optionsWithLength = { 'foo': { 'length': -1 } };
 	this.ads.utils.extend(true, empty, optionsWithLength);
 	assert.deepEqual(empty.foo, optionsWithLength.foo, 'The length property must copy correctly');
 
 	empty = {};
-	var optionsWithDate = { 'foo': { 'date': new Date() } };
+	const optionsWithDate = { 'foo': { 'date': new Date() } };
 	this.ads.utils.extend(true, empty, optionsWithDate);
 	assert.deepEqual(empty.foo, optionsWithDate.foo, 'Dates copy correctly');
 
 	/** @constructor */
-	var MyKlass = function() {};
-	var customObject = new MyKlass();
-	var optionsWithCustomObject = { foo: { date: customObject } };
+	const MyKlass = function() {};
+	const customObject = new MyKlass();
+	const optionsWithCustomObject = { foo: { date: customObject } };
 	empty = {};
 	this.ads.utils.extend(true, empty, optionsWithCustomObject);
 	assert.ok(empty.foo && empty.foo.date === customObject, 'Custom objects copy correctly (no methods)');
@@ -222,11 +222,11 @@ QUnit.test('extend method', function(assert) {
 	this.ads.utils.extend(true, empty, optionsWithCustomObject);
 	assert.ok(empty.foo && empty.foo.date === customObject, 'Custom objects copy correctly');
 
-	var MyNumber = Number;
-	var ret = this.ads.utils.extend(true, { 'foo': 4 }, { 'foo': new MyNumber(5) });
+	const MyNumber = Number;
+	let ret = this.ads.utils.extend(true, { 'foo': 4 }, { 'foo': new MyNumber(5) });
 	assert.ok(parseInt(ret.foo, 10) === 5, 'Wrapped numbers copy correctly');
 
-	var nullUndef;
+	let nullUndef;
 	nullUndef = this.ads.utils.extend({}, options, { 'xnumber2': null });
 	assert.ok(nullUndef.xnumber2 === null, 'Check to make sure null values are copied');
 
@@ -236,8 +236,8 @@ QUnit.test('extend method', function(assert) {
 	nullUndef = this.ads.utils.extend({}, options, { 'xnumber0': null });
 	assert.ok(nullUndef.xnumber0 === null, 'Check to make sure null values are inserted');
 
-	var target = {};
-	var recursive = { foo:target, bar:5 };
+	const target = {};
+	const recursive = { foo:target, bar:5 };
 	this.ads.utils.extend(true, target, recursive);
 	assert.deepEqual(target, { bar:5 }, 'Check to make sure a recursive obj doesn\'t go never-ending loop by not copying it over');
 
@@ -250,7 +250,7 @@ QUnit.test('extend method', function(assert) {
 	ret = this.ads.utils.extend(true, { foo:'bar' }, { foo:null });
 	assert.ok(typeof ret.foo !== 'undefined', 'Make sure a null value doesn\'t crash with deep extend, for #1908');
 
-	var obj = { foo:null };
+	const obj = { foo:null };
 	this.ads.utils.extend(true, obj, { foo:'notnull' });
 	assert.equal(obj.foo, 'notnull', 'Make sure a null value can be overwritten');
 
@@ -259,13 +259,13 @@ QUnit.test('extend method', function(assert) {
 	this.ads.utils.extend(func, { key: 'value' });
 	assert.equal(func.key, 'value', 'Verify a function can be extended');
 
-	var defaults = { xnumber1: 5, xnumber2: 7, xstring1: 'peter', xstring2: 'pan' };
-	var defaultsCopy = { xnumber1: 5, xnumber2: 7, xstring1: 'peter', xstring2: 'pan' };
-	var options1 = { xnumber2: 1, xstring2: 'x' };
-	var options1Copy = { xnumber2: 1, xstring2: 'x' };
-	var options2 = { xstring2: 'xx', xxx: 'newstringx' };
-	var options2Copy = { xstring2: 'xx', xxx: 'newstringx' };
-	var merged2 = { xnumber1: 5, xnumber2: 1, xstring1: 'peter', xstring2: 'xx', xxx: 'newstringx' };
+	const defaults = { xnumber1: 5, xnumber2: 7, xstring1: 'peter', xstring2: 'pan' };
+	const defaultsCopy = { xnumber1: 5, xnumber2: 7, xstring1: 'peter', xstring2: 'pan' };
+	const options1 = { xnumber2: 1, xstring2: 'x' };
+	const options1Copy = { xnumber2: 1, xstring2: 'x' };
+	const options2 = { xstring2: 'xx', xxx: 'newstringx' };
+	const options2Copy = { xstring2: 'xx', xxx: 'newstringx' };
+	const merged2 = { xnumber1: 5, xnumber2: 1, xstring1: 'peter', xstring2: 'xx', xxx: 'newstringx' };
 
 	settings = this.ads.utils.extend({}, defaults, options1, options2);
 	assert.deepEqual(settings, merged2, 'Check if extended: settings must be extended');
@@ -280,30 +280,9 @@ QUnit.test('extend method', function(assert) {
 
 QUnit.module('utils miscellanious methods');
 
-QUnit.test('css class methods for working with .o-ads__ classes', function(assert) {
-	/* jshint -W044 */
-
-	//just hint complains about all the crazy string escaping in here, but that's what we're testing
-	var node = this.fixturesContainer.add('<div class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$">');
-	var textNode = this.fixturesContainer.add('ranom class="o-ads__test o-ads__cr@zy-c|-|@r/\cter$"');
-
-	assert.ok(this.ads.utils.hasClass(node, 'cr@zy-c|-|@r/\cter$'), 'the node has the class o-ads__cr@zy-c|-|@r/\cter$');
-	assert.ok(this.ads.utils.hasClass(node, 'test'), 'the node has the class o-ads__test');
-	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__tes'), 'the node doesn\'t the class tes');
-	assert.ok(!this.ads.utils.hasClass(node, 'o-ads__r/\cter$'), 'the node doesn\'t the class r/\cter$');
-
-	assert.ok(!this.ads.utils.hasClass(textNode, 'o-ads__test1'), 'returns false and does not attemt to find a class on a string');
-
-	this.ads.utils.addClass(node, 'hello');
-	assert.ok($(node).hasClass('o-ads__hello'), 'the node hello was added');
-
-	this.ads.utils.removeClass(node, 'hello');
-	assert.ok(!$(node).hasClass('o-ads__hello'), 'the node hello was removed');
-	/* jshint +W044 */
-});
-
 QUnit.test('hash method', function(assert) {
-	var result, test = 'a:1,b:2,c:3,a:12';
+	let result;
+	let test = 'a:1,b:2,c:3,a:12';
 	result = this.ads.utils.hash(test, ',', ':');
 
 	assert.ok(this.ads.utils.isObject(result), 'the result is an object');
@@ -321,15 +300,15 @@ QUnit.test('hash method', function(assert) {
 });
 
 QUnit.test('attach method success', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	var initialScripts = $('script').size();
-	var successCallback = this.stub();
-	var errorCallback = this.stub();
+	const initialScripts = $('script').size();
+	const successCallback = this.stub();
+	const errorCallback = this.stub();
 
-	var tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback);
+	const tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback);
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
@@ -342,15 +321,15 @@ QUnit.test('attach method success', function(assert) {
 });
 
 QUnit.test('attach method supports auto removing script', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	var initialScripts = $('script').size();
-	var successCallback = this.stub();
-	var errorCallback = this.stub();
+	const initialScripts = $('script').size();
+	const successCallback = this.stub();
+	const errorCallback = this.stub();
 
-	var tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback, true);
+	const tag = this.ads.utils.attach(this.nullUrl, true, successCallback, errorCallback, true);
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
@@ -361,15 +340,15 @@ QUnit.test('attach method supports auto removing script', function(assert) {
 });
 
 QUnit.test('attach method failed', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	var initialScripts = $('script').size();
-	var successCallback = this.stub();
-	var errorCallback = this.stub();
+	const initialScripts = $('script').size();
+	const successCallback = this.stub();
+	const errorCallback = this.stub();
 
-	var tag = this.ads.utils.attach('test.js', true, successCallback, errorCallback);
+	const tag = this.ads.utils.attach('test.js', true, successCallback, errorCallback);
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
@@ -383,15 +362,15 @@ QUnit.test('attach method failed', function(assert) {
 });
 
 QUnit.test('attach method failedi with only an error callback specified', function(assert) {
-	var done = assert.async();
+	const done = assert.async();
 	this.ads.utils.attach.restore();
 
 	// initial number of scripts
-	var initialScripts = $('script').size();
-	var successCallback = this.stub();
-	var errorCallback = this.stub();
+	const initialScripts = $('script').size();
+	const successCallback = this.stub();
+	const errorCallback = this.stub();
 
-	var tag = this.ads.utils.attach('test.js', true, null, errorCallback);
+	const tag = this.ads.utils.attach('test.js', true, null, errorCallback);
 
 	this.trigger(tag, 'onload');
 	setTimeout(function() {
@@ -406,14 +385,14 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 
 
 QUnit.test('isScriptAlreadyLoaded method when script is not present', function(assert) {
-	var url = 'http://local.ft.com/null.js';
+	const url = 'http://local.ft.com/null.js';
 	assert.ok(!this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
 });
 
 QUnit.test('isScriptAlreadyLoaded method when script is present', function(assert) {
-	var url = location.protocol + '//'  + location.host + '/base/test/qunit/mocks/null.js';
-	var tag = document.createElement('script');
-	var node = document.getElementsByTagName('script')[0];
+	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/null.js';
+	const tag = document.createElement('script');
+	const node = document.getElementsByTagName('script')[0];
 	tag.setAttribute('src', url);
 	node.parentNode.insertBefore(tag, node);
 	assert.ok(this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns true when a script with the given url is present in the page dom');
@@ -429,14 +408,14 @@ QUnit.test('hyphenises upper case characeters', function(assert) {
 });
 
 QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
-		var frameContentWindow = this.createDummyFrame('test').window;
-		var result = this.utils.iframeToSlotName(frameContentWindow);
+		const frameContentWindow = this.createDummyFrame('test').window;
+		const result = this.utils.iframeToSlotName(frameContentWindow);
 		assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
 });
 
 QUnit.test('find a name of the ad from an iframe', function(assert) {
-		var node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
-		var frameContentWindow = this.createDummyFrame('test', node).window;
-		var result = this.utils.iframeToSlotName(frameContentWindow);
+		const node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
+		const frameContentWindow = this.createDummyFrame('test', node).window;
+		const result = this.utils.iframeToSlotName(frameContentWindow);
 		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
 });

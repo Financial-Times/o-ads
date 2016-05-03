@@ -7,11 +7,10 @@
 * @author Robin Marr, robin.marr@ft.com
 */
 
-'use strict';
-var config = require('../config');
-var utils = require('../utils');
-var targeting = require('../targeting');
-var breakpoints = false;
+const config = require('../config');
+const utils = require('../utils');
+const targeting = require('../targeting');
+let breakpoints = false;
 /*
 //###########################
 // Initialisation handlers ##
@@ -22,7 +21,7 @@ var breakpoints = false;
 * Initialise Google publisher tags functionality
 */
 function init() {
-	var gptConfig = config('gpt') || {};
+	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	initGoogleTag();
 
@@ -65,7 +64,6 @@ function initGoogleTag() {
 */
 function setup(gptConfig) {
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
-	enableVideo(gptConfig);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
@@ -80,7 +78,7 @@ function setup(gptConfig) {
 */
 
 function setRenderingMode(gptConfig) {
-	var rendering = gptConfig.rendering;
+	const rendering = gptConfig.rendering;
 	if (rendering === 'sync') {
 		googletag.pubads().enableSyncRendering();
 	} else if (rendering === 'sra') {
@@ -121,7 +119,7 @@ function setPageTargeting(targeting) {
 * false is synonymous with never
 */
 function setPageCollapseEmpty(gptConfig) {
-	var mode = gptConfig.collapseEmpty;
+	const mode = gptConfig.collapseEmpty;
 
 	if (mode === 'before' || mode === true) {
 		googletag.pubads().collapseEmptyDivs(true, true);
@@ -144,24 +142,6 @@ function enableCompanions(gptConfig) {
 	}
 }
 
-/**
-* Enables video ads and attaches the required additional script
-* @name enableVideo
-* @memberof GPT
-* @lends GPT
-*/
-function enableVideo(gptConfig) {
-	if (gptConfig.video) {
-		var url = '//s0.2mdn.net/instream/html5/gpt_proxy.js';
-		/* istanbul ignore else  */
-		if (!utils.isScriptAlreadyLoaded(url)) {
-			utils.attach(url, true);
-		}
-
-		googletag.pubads().enableVideoAds();
-	}
-}
-
 /*
 //##################
 // Event handlers ##
@@ -172,7 +152,7 @@ function enableVideo(gptConfig) {
 * Event handler for when a slot is ready for an ad to rendered
 */
 function onReady(slotMethods, event) {
-	var slot = event.detail.slot;
+	const slot = event.detail.slot;
 	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
@@ -181,7 +161,7 @@ function onReady(slotMethods, event) {
 		utils.extend(slot, slotMethods);
 
 		// setup the gpt configuration the ad
-		googletag.cmd.push(function(slot) {
+		googletag.cmd.push(() => {
 			slot.defineSlot()
 			.addServices()
 			.setCollapseEmpty()
@@ -191,14 +171,14 @@ function onReady(slotMethods, event) {
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
 			}
-		}.bind(null, slot));
+		});
 	}
 }
 /*
 * Render is called when a slot is not rendered when the ready event fires
 */
 function onRender(event) {
-	var slot = event.detail.slot;
+	const slot = event.detail.slot;
 	if (utils.isFunction(slot.display)) {
 		slot.display();
 	} else {
@@ -210,21 +190,21 @@ function onRender(event) {
 * refresh is called when a slot requests the ad be flipped
 */
 function onRefresh(event) {
-	window.googletag.cmd.push(function(event) {
-		var targeting = event.detail.targeting;
+	window.googletag.cmd.push(() => {
+		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
-			Object.keys(targeting).forEach(function(name) {
+			Object.keys(targeting).forEach(name => {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
 			});
 		}
 		googletag.pubads().refresh([event.detail.slot.gpt.slot]);
-	}.bind(this, event));
+	});
 	return this;
 }
 
 function onResize(event) {
-	var iframe = event.detail.slot.gpt.iframe;
-	var size = event.detail.size;
+	const iframe = event.detail.slot.gpt.iframe;
+	const size = event.detail.size;
 	iframe.width = size[0];
 	iframe.height = size[1];
 }
@@ -233,17 +213,16 @@ function onResize(event) {
 * function passed to the gpt library that is run when an ad completes rendering
 */
 function onRenderEnded(event) {
-	var detail;
-	var data = {
+	const data = {
 		gpt: {}
 	};
 
-	var gptSlotId = event.slot.getSlotId();
-	var domId = gptSlotId.getDomId().split('-');
-	var iframeId = 'google_ads_iframe_' + gptSlotId.getId();
+	const gptSlotId = event.slot.getSlotId();
+	const domId = gptSlotId.getDomId().split('-');
+	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
-	detail = data.gpt;
+	const detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
 	detail.creativeId = event.creativeId;
@@ -251,8 +230,8 @@ function onRenderEnded(event) {
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
 	if(detail.size) {
-		detail.iframe.style.width = detail.size[0] + 'px';
-		detail.iframe.style.height = detail.size[1] + 'px';
+		detail.iframe.style.width = `${detail.size[0]}px`;
+		detail.iframe.style.height = `${detail.size[1]}px`;
 	}
 	utils.broadcast('rendered', data);
 }
@@ -263,13 +242,13 @@ function onRenderEnded(event) {
 //################
 * Set of methods extended on to the slot constructor for GPT served slots
 */
-var slotMethods = {
+const slotMethods = {
 	/**
 	* define a GPT slot
 	*/
 	defineSlot: function() {
-		window.googletag.cmd.push(function() {
-			this.gpt.id = this.name + '-gpt';
+		window.googletag.cmd.push(() => {
+			this.gpt.id = `${this.name}-gpt`;
 			this.inner.setAttribute('id', this.gpt.id);
 			this.setUnitName();
 			if (!this.outOfPage) {
@@ -283,10 +262,10 @@ var slotMethods = {
 			else {
 				this.gpt.slot = googletag.defineOutOfPageSlot(this.gpt.unitName, this.gpt.id);
 			}
-		}.bind(this));
+		});
 		return this;
 	},
-	clearSlot: function(gptSlot){
+	clearSlot: function(gptSlot) {
 		if (window.googletag.pubadsReady && window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
 			return googletag.pubads().clear([gptSlot]);
@@ -295,10 +274,10 @@ var slotMethods = {
 		}
 	},
 	initResponsive: function() {
-		window.googletag.cmd.push(function() {
-			utils.on('breakpoint', function(event) {
-				var slot = event.detail.slot;
-				var screensize = event.detail.screensize;
+		window.googletag.cmd.push(() => {
+			utils.on('breakpoint', (event) => {
+				const slot = event.detail.slot;
+				const screensize = event.detail.screensize;
 
 				updatePageTargeting({ res: screensize });
 
@@ -312,63 +291,63 @@ var slotMethods = {
 				}
 			}, this.container);
 
-			var mapping = googletag.sizeMapping();
-			Object.keys(breakpoints).forEach(function(breakpoint) {
+			const mapping = googletag.sizeMapping();
+			Object.keys(breakpoints).forEach(breakpoint => {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
-			}.bind(this));
+			});
 
 			this.gpt.sizes = mapping.build();
-		}.bind(this));
+		});
 		return this;
 	},
 	/*
 	*	Tell gpt to request an ad
 	*/
 	display: function() {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			googletag.display(this.gpt.id);
-		}.bind(this));
+		});
 		return this;
 	},
 	/**
 	* Set the DFP unit name for the slot.
 	*/
 	setUnitName: function() {
-		window.googletag.cmd.push(function() {
-			var unitName;
-			var gpt = config('gpt') || {};
-			var attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
+		window.googletag.cmd.push(() => {
+			let unitName;
+			const gpt = config('gpt') || {};
+			const attr = this.container.getAttribute('data-o-ads-gpt-unit-name');
 
 			if (utils.isNonEmptyString(attr)) {
 				unitName = attr;
 			} else if (utils.isNonEmptyString(gpt.unitName)) {
 				unitName = gpt.unitName;
 			} else {
-				var network = gpt.network;
-				var site = gpt.site;
-				var zone = gpt.zone;
-				unitName = '/' + network;
-				unitName += utils.isNonEmptyString(site)  ? '/' + site : '';
-				unitName += utils.isNonEmptyString(zone) ? '/' + zone : '';
+				const network = gpt.network;
+				const site = gpt.site;
+				const zone = gpt.zone;
+				unitName = `/${network}`;
+				unitName += utils.isNonEmptyString(site) ? `/${site}` : '';
+				unitName += utils.isNonEmptyString(zone) ? `/${zone}` : '';
 			}
 			this.gpt.unitName = unitName;
-		}.bind(this));
+		});
 		return this;
 	},
 	/**
 	* Add the slot to the pub ads service and add a companion service if configured
 	*/
 	addServices: function(gptSlot) {
-		window.googletag.cmd.push(function(gptSlot) {
-			var gpt = config('gpt') || {};
+		window.googletag.cmd.push(() => {
+			const gpt = config('gpt') || {};
 			gptSlot = gptSlot || this.gpt.slot;
 			gptSlot.addService(googletag.pubads());
 			if (gpt.companions && this.companion !== false) {
 				gptSlot.addService(googletag.companionAds());
 			}
-		}.bind(this, gptSlot));
+		});
 		return this;
 	},
 
@@ -380,8 +359,8 @@ var slotMethods = {
 	* false is synonymous with never
 	*/
 	setCollapseEmpty: function() {
-		window.googletag.cmd.push(function() {
-			var mode = this.collapseEmpty || config('collapseEmpty');
+		window.googletag.cmd.push(() => {
+			const mode = this.collapseEmpty || config('collapseEmpty');
 
 			if (mode === true || mode === 'after') {
 				this.gpt.slot.setCollapseEmptyDiv(true);
@@ -390,13 +369,13 @@ var slotMethods = {
 			} else if (mode === false || mode === 'never') {
 				this.gpt.slot.setCollapseEmptyDiv(false);
 			}
-		}.bind(this));
+		});
 		return this;
 	},
 	submitGptImpression : function() {
 		if (this.outOfPage && this.gpt.iframe) {
 			function getImpressionURL(iframe) {
-				var trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
 				if (trackingUrlElement) {
 					return trackingUrlElement.dataset.oAdsImpressionUrl;
 				} else {
@@ -404,14 +383,14 @@ var slotMethods = {
 					return false;
 				}
 			};
-			var impressionURL = getImpressionURL(this.gpt.iframe);
+			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
-					function(){
+					() => {
 						utils.log.info('Impression Url requested');
 					},
-					function(){
+					() => {
 						utils.log.info('CORS request to submit an impression failed');
 					},
 					true
@@ -427,11 +406,11 @@ var slotMethods = {
 	* prevents later url changes via javascript from breaking the ads
 	*/
 	setURL: function(gptSlot) {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
-			var canonical = config('canonical');
+			const canonical = config('canonical');
 			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
-		}.bind(this));
+		});
 		return this;
 	},
 
@@ -439,15 +418,15 @@ var slotMethods = {
 	* Adds key values from a given object to the slot targeting
 	*/
 	setTargeting: function(gptSlot) {
-		window.googletag.cmd.push(function() {
+		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			/* istanbul ignore else  */
 			if (utils.isPlainObject(this.targeting)) {
-				Object.keys(this.targeting).forEach(function(param) {
+				Object.keys(this.targeting).forEach(param => {
 					gptSlot.setTargeting(param, this.targeting[param]);
-				}.bind(this));
+				});
 			}
-		}.bind(this));
+		});
 		return this;
 	},
 };
@@ -464,14 +443,14 @@ var slotMethods = {
 * Updating is used to tell the ad server to treat subsequent ad calls as being on a new page
 */
 function updateCorrelator() {
-	googletag.cmd.push(function() {
+	googletag.cmd.push(() => {
 		googletag.pubads().updateCorrelator();
 	});
 }
 
 function updatePageTargeting(override) {
 	if (window.googletag) {
-		var params = utils.isPlainObject(override) ? override : targeting.get();
+		const params = utils.isPlainObject(override) ? override : targeting.get();
 		setPageTargeting(params);
 	}
 	else {
@@ -483,9 +462,9 @@ module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = updatePageTargeting;
 
-module.exports.debug = function(){
-	var log = utils.log;
-	var conf = config('gpt');
+module.exports.debug = () => {
+	const log = utils.log;
+	const conf = config('gpt');
 	if(!conf){
 		return;
 	}

@@ -1,7 +1,4 @@
-'use strict';
-
-var timeout = 30000;
-var wait = 8000;
+const wait = 8000;
 
 module.exports = {
 
@@ -12,7 +9,7 @@ module.exports = {
 	'Step 1: go to leaderboard with custom targeting demo page': function (browser) {
 		browser
 			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Individual-Ad-with-Custom-Targeting-Values demo', 'Page title is correct')
+			.assert.title('o-ads: Individual-Ad-with-Custom-Targeting-Values demo', 'Page title is correct');
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
@@ -24,7 +21,7 @@ module.exports = {
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'http://com.ft.ads-static-content.s3-website-eu-west-1.amazonaws.com/ci/o-leaderboard.png')
 				// switch focus back to main page
-				.frame(null)
+				.frame(null);
 	},
 	after: function (browser) {
 		browser.end();

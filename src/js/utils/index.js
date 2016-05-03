@@ -3,10 +3,9 @@
  * @author Origami Advertising, origami.advertising@ft.com
  * @module utils
  */
-'use strict';
-var hop = Object.prototype.hasOwnProperty;
+const hop = Object.prototype.hasOwnProperty;
 
-var utils = module.exports;
+const utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
  * IE returns [object Object] for null and undefined so we need to filter those
@@ -16,7 +15,7 @@ var utils = module.exports;
  * @returns The type of the object e.g Array, String, Object
  */
 function is(object) {
-	var type = Object.prototype.toString.call(object)
+	const type = Object.prototype.toString.call(object)
 	.match(/^\[object\s(.*)\]$/)[1];
 
 	if (object === null) {
@@ -58,8 +57,8 @@ function curryIsMethods(obj, classNames) {
 	];
 
 	while (!!classNames.length) {
-		var className = classNames.pop();
-		obj['is' + className] = createIsTest(className);
+		const className = classNames.pop();
+		obj[`is${className}`] = createIsTest(className);
 	}
 
 	return obj;
@@ -82,7 +81,7 @@ module.exports.isWindow = function(obj) {
  * @returns {boolean} true if the object is plain false otherwise
  */
 module.exports.isPlainObject = function(obj) {
-	var hop = Object.prototype.hasOwnProperty;
+	const hop = Object.prototype.hasOwnProperty;
 
 	// Must be an Object.
 	// Because of IE, we also have to check the presence of the constructor property.
@@ -104,8 +103,7 @@ module.exports.isPlainObject = function(obj) {
 
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
-
-	var key;
+	let key;
 	for (key in obj) {}
 
 	return key === undefined || hop.call(obj, key);
@@ -146,11 +144,15 @@ module.exports.extend = extend;
 function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
-	var options, name, src, copy, copyIsArray, clone,
-	target = arguments[0] || {},
-	i = 1,
-	length = arguments.length,
-	deep = false;
+	let options;
+	let src;
+	let copy;
+	let copyIsArray;
+	let clone;
+	let target = arguments[0] || {};
+	let length = arguments.length;
+	let deep = false;
+	let i = 1;
 
 	// Handle a deep copy situation
 	if (typeof target === 'boolean') {
@@ -177,7 +179,11 @@ function extend() {
 		// Only deal with non-null/undefined values
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
-			for (name in options) {
+			for (let name in options) {
+				/* istanbul ignore next */
+				if(!options.hasOwnProperty(name)) {
+					return;
+				}
 				src = target[name];
 				copy = options[name];
 
@@ -211,35 +217,6 @@ function extend() {
 	return target;
 }
 
-module.exports.hasClass = function(node, className) {
-	/* istanbul ignore else  */
-	if (node.nodeType === 1) {
-		return node.className.split(' ').indexOf('o-ads__' + className) > -1 ? true : false;
-	}
-
-	return false;
-};
-
-module.exports.addClass = function(node, className) {
-	if (node.nodeType === 1 && utils.isNonEmptyString(className) && !utils.hasClass(node, className)) {
-		node.className += ' o-ads__' + className.trim();
-	}
-
-	return true;
-};
-
-module.exports.removeClass = function(node, className) {
-	var index, classes;
-	if (node.nodeType === 1 && utils.isNonEmptyString(className) && utils.hasClass(node, className)) {
-		classes = node.className.split(' ');
-		index = classes.indexOf('o-ads__' + className);
-		classes.splice(index, 1);
-		node.className = classes.join(' ');
-	}
-
-	return true;
-};
-
 /**
  * Create an object hash from a delimited string
  * Beware all properties on the resulting object will have string values.
@@ -250,12 +227,13 @@ module.exports.removeClass = function(node, className) {
  *
  */
 module.exports.hash = function(str, delimiter, pairing) {
-	var pair, value, idx, len,
-	hash = {};
+	let pair;
+	let value;
+	const hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
-		for (idx = 0, len = str.length; idx < len; idx += 1) {
+		for (let idx = 0, l = str.length; idx < l; idx += 1) {
 			value = str[idx];
 			pair = value.split(pairing);
 			if (pair.length > 1) {
@@ -278,9 +256,9 @@ module.exports.hash = function(str, delimiter, pairing) {
 * @returns {HTMLElement} the created script tag
 */
 module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
-	var tag = document.createElement('script');
-	var node = document.getElementsByTagName('script')[0];
-	var hasRun = false;
+	const tag = document.createElement('script');
+	const node = document.getElementsByTagName('script')[0];
+	let hasRun = false;
 
 	function processCallback(callback) {
 		/* istanbul ignore else  */
@@ -310,7 +288,7 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 				}
 			};
 		} else {
-			tag.onload =  function() {
+			tag.onload = function() {
 				processCallback(callback);
 			};
 		}
@@ -333,8 +311,8 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 * @return {boolean} true if the file is already referenced else false
 */
 module.exports.isScriptAlreadyLoaded = function(url) {
-	var scripts = document.getElementsByTagName('script');
-	for (var i = scripts.length; i--;) {
+	const scripts = document.getElementsByTagName('script');
+	for (let i = scripts.length; i--;) {
 		if (scripts[i].src === url) return true;
 	}
 
@@ -350,7 +328,7 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 * @returns {HTMLElement} the created XHR object
 */
 module.exports.createCORSRequest = function(url, method, callback, errorcb) {
-	var xhr = new XMLHttpRequest();
+	let xhr = new XMLHttpRequest();
 	/* istanbul ignore else - legacy IE code, won't test */
 	if ('withCredentials' in xhr) {
 		xhr.open(method, url, true);
@@ -415,7 +393,7 @@ module.exports.dehyphenise = function(string) {
 */
 module.exports.hyphenise = function(string) {
 	return string.replace(/([A-Z])/g, function(match, letter) {
-		return '-' + letter.toLowerCase();
+		return `-${letter.toLowerCase()}`;
 	});
 };
 
@@ -425,7 +403,7 @@ module.exports.hyphenise = function(string) {
 * @returns {string}
 */
 module.exports.parseAttributeName = function(attribute) {
-	var name = utils.isString(attribute) ? attribute : attribute.name;
+	const name = utils.isString(attribute) ? attribute : attribute.name;
 	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
 
@@ -454,38 +432,19 @@ module.exports.getQueryString = function() {
 * @returns {string}
 */
 module.exports.getTimestamp = function() {
-	var now = new Date();
+	const now = new Date();
 	return [
 	now.getFullYear(),
-	('0' + (now.getMonth() + 1)).slice(-2),
-	('0' + now.getDate()).slice(-2),
-	('0' + now.getHours()).slice(-2),
-	('0' + now.getMinutes()).slice(-2),
-	('0' + now.getSeconds()).slice(-2)
+	(`0${(now.getMonth() + 1)}`).slice(-2),
+	(`0${now.getDate()}`).slice(-2),
+	(`0${now.getHours()}`).slice(-2),
+	(`0${now.getMinutes()}`).slice(-2),
+	(`0${now.getSeconds()}`).slice(-2)
 	].join("");
 };
 
-/**
-* Converts an array like object e.g arguments into a full array
-* @param {object}  obj an Array like object to convert
-* @returns {array}
-*/
-module.exports.arrayLikeToArray = function(obj) {
-	var array = [];
-	try {
-		array = Array.prototype.slice.call(obj);
-	} catch (error) {
-		/* istanbul ignore next  */
-		for (var i = 0; i < obj.length; i++) {
-			array[i] = obj[i];
-		}
-	}
-
-	return array;
-};
-
 // capture all iframes in the page in a live node list
-var iframes = document.getElementsByTagName('iframe');
+const iframes = document.getElementsByTagName('iframe');
 
 /**
 * Given the window object of an iframe this method returns the o-ads slot name
@@ -495,8 +454,9 @@ var iframes = document.getElementsByTagName('iframe');
 * @returns {String|Boolean}
 */
 module.exports.iframeToSlotName = function(iframeWindow) {
-	var slotName, node;
-	var i = iframes.length;
+	let slotName;
+	let node;
+	let i = iframes.length;
 
 	// Figure out which iframe DOM node we have the window for
 	while (i--) {

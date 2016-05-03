@@ -3,7 +3,6 @@
  * @author Origami Advertising, origami.advertising@ft.com
  * @module utils
  */
-'use strict';
 
 module.exports.messenger = {
 	post: function(message, source) {

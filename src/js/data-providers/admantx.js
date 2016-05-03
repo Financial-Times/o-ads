@@ -1,37 +1,11 @@
-/**
- * @fileOverview
- * Third party library for use with google publisher tags.
- *
- * @author Robin Marr, robin.marr@com
- */
+const utils = require('../utils');
+const config = require('../config');
+const targeting = require('../targeting');
 
-/**
- * ads.admantx provides admantx contextual data target information
- * @name targeting
- * @memberof ads
- */
 
-'use strict';
-
-var utils = require('../utils');
-var config = require('../config');
-var targeting = require('../targeting');
-
-/**
- * The Admantx class defines an ads.admantx instance
- * @class
- * @constructor
-*/
 function Admantx() {
-}
 
-/**
- * initialise Admantx functionality
- * calls Admantx api for targeting information
- * @name init
- * @memberof Admantx
- * @lends Admantx
-*/
+}
 
 Admantx.prototype.init = function() {
 	this.config = config('admantx') || {};
@@ -43,7 +17,7 @@ Admantx.prototype.init = function() {
 };
 
 Admantx.prototype.makeAPIRequest = function() {
-	var requestData = {
+	const requestData = {
 		"key": this.config.id,
 		"method":"descriptor",
 		"mode":"async",
@@ -52,15 +26,14 @@ Admantx.prototype.makeAPIRequest = function() {
 		"type":"URL",
 		"body": encodeURIComponent(utils.getLocation())
 	};
-	var url = this.api + encodeURIComponent(JSON.stringify(requestData));
+	const url = this.api + encodeURIComponent(JSON.stringify(requestData));
 	this.xhr = utils.createCORSRequest(url, 'GET', this.resolve.bind(this), this.resolve.bind(this));
 };
 
 Admantx.prototype.processCollection = function(collection, max) {
-	var names = [];
-	var i = 0;
-	var j = utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
-	for (; i < j; i++) {
+	const names = [];
+	const j = utils.isNumeric(max) ? Math.min(max, collection.length) : collection.length;
+	for (let i=0; i < j; i++) {
 		names.push(collection[i].name || collection[i]);
 	}
 
@@ -68,10 +41,10 @@ Admantx.prototype.processCollection = function(collection, max) {
 };
 
 Admantx.prototype.resolve = function(response){
-	var collection;
-	var collections = this.collections;
-	var shortName;
-	var targetingObj = {};
+	const collections = this.collections;
+	const targetingObj = {};
+	let collection;
+	let shortName;
 	/* istanbul ignore else  */
 	if (utils.isString(response)) {
 		try {
@@ -99,7 +72,7 @@ Admantx.prototype.resolve = function(response){
 };
 
 Admantx.prototype.debug = function() {
-	var log = utils.log;
+	const log = utils.log;
 
 	if (!this.config) {
 			return;

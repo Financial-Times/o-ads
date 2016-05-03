@@ -1,15 +1,3 @@
-/**
- * O-ADS - the origami advertising library
- * @author Advertising Technology origami.advertising.technology@ft.com
- *
- */
-'use strict';
-
-/**
- * Represents an instance of the o-ads on the page.
- * All sub modules are available from the prototype
- * @constructor
- */
 function Ads() {
 }
 
@@ -22,11 +10,15 @@ Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
+<<<<<<< HEAD
 Ads.prototype.metadata = require('./src/js/metadata');
 Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
 Ads.prototype.moat = require('./src/js/data-providers/moat');
 var utils = Ads.prototype.utils = require('./src/js/utils');
+=======
+Ads.prototype.utils = require('./src/js/utils');
+>>>>>>> origin/es6
 
 /**
 * Initialises the ads library and all sub modules
@@ -47,16 +39,16 @@ Ads.prototype.init = function(config) {
 	return this;
 };
 
-var ads = new Ads();
-var initAll = function() {
-	var metas = utils.arrayLikeToArray(document.getElementsByTagName('meta'));
-	var stop = metas.filter(function(meta) {
+const ads = new Ads();
+const initAll = function() {
+	const metas = Array.from(document.getElementsByTagName('meta'));
+	const stop = metas.filter(function(meta) {
 		return meta.name === 'o-ads-stop';
 	});
 	/* istanbul ignore else  */
 	if (!stop.length) {
 		ads.init();
-		var slots = utils.arrayLikeToArray(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	}
 
@@ -64,7 +56,7 @@ var initAll = function() {
 };
 
 Ads.prototype.debug = function (){
-	var remove = true;
+	let remove = true;
 	if (localStorage.getItem('oAds')) {
 		remove = false;
 	} else {
@@ -76,7 +68,6 @@ Ads.prototype.debug = function (){
 	this.krux.debug();
 	this.slots.debug();
 	this.targeting.debug();
-	this.buildURLForVideo.debug();
 
 	if (remove) {
 		localStorage.removeItem('oAds');

@@ -1,14 +1,14 @@
-'use strict';
-
-var callback, breakpoints, current;
-var utils = require('./index.js');
-var oViewport =  require('o-viewport');
+let callback;
+let breakpoints;
+let current;
+const utils = require('./index.js');
+const oViewport = require('o-viewport');
 
 function getNearestBreakpoint() {
-	var winner;
-	var dims = oViewport.getSize();
+	let winner;
+	const dims = oViewport.getSize();
 	function findCurrentBreakpoint(breakpoint) {
-		var breakpointDims = breakpoints[breakpoint];
+		const breakpointDims = breakpoints[breakpoint];
 		if (dims.width >= breakpointDims[0] && dims.height >= breakpointDims[1]) {
 			if (!winner || breakpointDims[0] >= breakpoints[winner][0]) {
 				winner = breakpoint;
@@ -22,7 +22,7 @@ function getNearestBreakpoint() {
 }
 
 function fire() {
-	var winner = getNearestBreakpoint();
+	const winner = getNearestBreakpoint();
 
 	if (current !== winner) {
 		setCurrent(winner);

@@ -1,6 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('Rubicon', {
 	afterEach: function() {
@@ -29,7 +29,7 @@ QUnit.test('init - invokes failure callback when cannot attach the RTP script', 
 		}
 	});
 
-	var logSpy = this.spy(this.utils.log, 'error');
+	const logSpy = this.spy(this.utils.log, 'error');
 
 	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div data-o-ads-name="rubicon-no-target"></div>');
 	this.ads.init({
@@ -81,7 +81,7 @@ QUnit.test('rubicon configured to make request but not add targeting', function(
 		}
 	});
 
-	var slot = this.ads.slots.initSlot('rubicon-no-target');
+	const slot = this.ads.slots.initSlot('rubicon-no-target');
 	assert.equal(slot.container.getAttribute('data-o-ads-rtp'), 400, 'the estimate is added as a data attrbute');
 	assert.notOk(slot.targeting.rtp, 'no slot rtp targeting is set');
 	assert.ok(window.oz_api, 'adds the global attributes');
@@ -113,7 +113,7 @@ QUnit.test('rubicon configured to make request and add targeting', function(asse
 		}
 	});
 
-	var slot = this.ads.slots.initSlot('rubicon-no-target');
+	const slot = this.ads.slots.initSlot('rubicon-no-target');
 	assert.equal(slot.container.getAttribute('data-o-ads-rtp'), 400, 'the estimate is added as a data attrbute');
 	assert.ok(slot.targeting.rtp, 'slot rtp targeting is set');
 	assert.ok(window.oz_api, 'adds the global attributes');
