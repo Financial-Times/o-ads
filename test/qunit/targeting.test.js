@@ -8,13 +8,6 @@ QUnit.module('Targeting', {
 	}
 });
 
-//clear the params we know dont need to test
-function deleteKnownParams(res) {
-	delete res.ts;
-	delete res.rf;
-	delete res.res;
-}
-
 QUnit.test('getFromConfig', function(assert) {
 	this.ads.init({});
 	let result = this.ads.targeting.get();

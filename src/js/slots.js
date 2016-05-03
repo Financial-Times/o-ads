@@ -272,8 +272,8 @@ Slots.prototype.initPostMessage = function() {
 					}
 
 					if (data.mastercompanion) {
-						var size = slot.gpt.size;
-						var format = findFormatBySize(size);
+						const size = slot.gpt.size;
+						const format = findFormatBySize(size);
 						slots.forEach(function(s) {
 							if(s.companion && s.name !== slot.name) {
 								s.fire('masterLoaded', slot);

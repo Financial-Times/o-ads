@@ -77,16 +77,15 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 });
 
 QUnit.test('Post message whoami message with isMaster will fire event on companion slots', function (assert) {
-	var done = assert.async();
-	var callCount = 0;
-	var master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="Leaderboard"></div>');
-	var companion = this.fixturesContainer.add('<div data-o-ads-name="companion" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
-	var notCompanion = this.fixturesContainer.add('<div data-o-ads-name="not-companion" data-o-ads-formats="MediumRectangle" data-o-ads-companion="false"></div>');
+	const done = assert.async();
+	const master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="Leaderboard"></div>');
+	const companion = this.fixturesContainer.add('<div data-o-ads-name="companion" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
+	const notCompanion = this.fixturesContainer.add('<div data-o-ads-name="not-companion" data-o-ads-formats="MediumRectangle" data-o-ads-companion="false"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return 'master';
 	});
 
-	this.stub(this.utils.messenger, 'post', function (message, source) {
+	this.stub(this.utils.messenger, 'post', function () {
 		assert.ok(companionSlot.fire.called, 'the event is is called on the companion');
 		assert.equal(companionSlot.container.getAttribute('data-o-ads-master-loaded'), 'Leaderboard');
 		assert.notOk(masterSlot.fire.called, 'the event method is not called on the master');
@@ -101,9 +100,9 @@ QUnit.test('Post message whoami message with isMaster will fire event on compani
 	});
 
 	this.ads.init();
-	var masterSlot = this.ads.slots.initSlot(master);
-	var companionSlot = this.ads.slots.initSlot(companion);
-	var notCompanionSlot = this.ads.slots.initSlot(notCompanion);
+	const masterSlot = this.ads.slots.initSlot(master);
+	const companionSlot = this.ads.slots.initSlot(companion);
+	const notCompanionSlot = this.ads.slots.initSlot(notCompanion);
 	this.spy(masterSlot, 'fire');
 	this.spy(companionSlot, 'fire');
 	this.spy(notCompanionSlot, 'fire');
@@ -213,9 +212,9 @@ QUnit.test('Passed touch fires an event', function (assert) {
 
 
 QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present on attribute', function (assert) {
-	var done = assert.async();
-	var slotName = 'whoami-collapse-ad';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle" data-o-ads-disable-swipe-default="true"></div>');
+	const done = assert.async();
+	const slotName = 'whoami-collapse-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle" data-o-ads-disable-swipe-default="true"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
@@ -233,14 +232,14 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 	});
 
 	this.ads.init();
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });
 
 QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in slot config', function (assert) {
-	var done = assert.async();
-	var slotName = 'test';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'test';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
@@ -256,15 +255,15 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
 	});
 	this.ads.init({slots: {test: {disableSwipeDefault: true}}});
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });
 
 
 QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in global config', function (assert) {
-	var done = assert.async();
-	var slotName = 'test';
-	var container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	const done = assert.async();
+	const slotName = 'test';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
@@ -280,6 +279,6 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
 	});
 	this.ads.init({disableSwipeDefault: true});
-	var slot = this.ads.slots.initSlot(container);
+	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
 });

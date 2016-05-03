@@ -182,7 +182,7 @@ Slot.prototype.initLazyLoad = function() {
 	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
-		var renderSlot = function(slot) {
+		let renderSlot = function(slot) {
 			/* istanbul ignore else */
 			if(!slot.rendered) {
 				slot.fire('render');
