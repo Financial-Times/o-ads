@@ -1,6 +1,6 @@
 'use strict';
-var utils = require('../utils');
-var config = require('../config');
+const utils = require('../utils');
+const config = require('../config');
 
 function Moat() {
 
@@ -11,7 +11,7 @@ Moat.prototype.init = function() {
 
 	/* istanbul ignore else	*/
 	if (this.config && this.config.id && !utils.isScriptAlreadyLoaded(src)) {
-		var src = "https://z.moatads.com/" + this.config.id + "/moatcontent.js";
+		const src = "https://z.moatads.com/" + this.config.id + "/moatcontent.js";
 		utils.attach(src, true);
 	}
 
