@@ -275,7 +275,7 @@ var slotMethods = {
 			if (!this.outOfPage) {
 				if (breakpoints && utils.isObject(this.sizes)) {
 					this.initResponsive();
-					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [], this.gpt.id).defineSizeMapping(this.gpt.sizes);
 				} else {
 					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
 				}
