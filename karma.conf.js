@@ -21,7 +21,7 @@ let options = {
 	files: [
 		'test/qunit/styles.css',
 		'build/main.scss',
-		'http://polyfill.webservices.ft.com/v2/polyfill.js?ua=safari/4',
+		'http://polyfill.webservices.ft.com/v2/polyfill.js',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/jquery.cookie/index.js',
