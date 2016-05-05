@@ -119,7 +119,6 @@ function Slot(container, screensize) {
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
-	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
