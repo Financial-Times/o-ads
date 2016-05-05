@@ -19,7 +19,7 @@ For basic use, a DFP account with Google is required, each targeting/tracking su
 
 ## Documentation
 ### Quick start
-Include o-ads in the build and and add the following markup to the page:
+Include o-ads JS and SCSS in the build and and add the following markup to the page:
 
 ```html
 <div class="o-ads" data-o-ads-gpt-unit-name="/6355419/Travel" data-o-ads-formats="MediumRectangle"></div>
