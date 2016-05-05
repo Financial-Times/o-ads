@@ -12,7 +12,7 @@
 	 "demos": [
 	 {
 		"name": "Individual-Ad",
-		"template": "/demos/Individual-Ad.html",
+		"template": "/demos/src/individual.mustache",
 		"expanded": true,
 		"description": "",
 		"data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami", "moatid" : "financialtimes506DCcQ32"}
@@ -20,7 +20,7 @@
 	  },
 	  {
 		"name": "Individual-Ad-With-Out-Of-Page",
-		"template": "/demos/Individual-Ad-With-Out-Of-Page.html",
+		"template": "/demos/src/individualoop.mustache",
 		"expanded": false,
 		"description": "",
 		"data": {"name":"halfpage", "formats": "HalfPage",  "network": 5887, "site" : "test.5887.origami"}
@@ -28,7 +28,7 @@
 	  },
 	  {
 		"name": "Individual-Ad-with-Custom-Targeting-Values",
-		"template": "/demos/Individual-Ad-with-Custom-Targeting-Values.html",
+		"template": "/demos/src/individualcustomtargeting.mustache",
 		"expanded": false,
 		"description": "",
 		"data": {"name":"leaderboard", "network": 5887, "site" : "test.5887.origami"}
@@ -36,14 +36,14 @@
 	  },
 	  {
 		"name": "Master-and-Companion",
-		"template": "/demos/Master-and-Companion.html",
+		"template": "/demos/src/masterandcompanion.mustache",
 		"expanded": false,
 		"description": "",
 		"data": {"network": 5887, "site" : "test.5887.origami", "zone": "master-companion-test"}
 	  },
 	  {
 	  	"name": "Responsive-Positions",
-	  	"template": "/demos/Responsive-Positions.html",
+	  	"template": "/demos/src/responsive.mustache",
 	  	"expanded": false,
 	  	"description": "",
 			"data": {"network": 5887, "site" : "test.5887.origami"}
