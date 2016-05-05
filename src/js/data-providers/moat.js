@@ -15,6 +15,7 @@ Moat.prototype.init = function() {
 			utils.attach(src, true);
 		}
 	}
+
 };
 
 module.exports = new Moat();
