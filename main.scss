@@ -1,1 +1,27 @@
+$o-ads-is-silent: true !default;
+
 @import "src/scss/base";
+
+@if($o-ads-is-silent == false) {
+	.o-ads,
+	[data-o-ads-name] {
+		@include oAds();
+	}
+
+	.o-ads--center {
+		@include oAdsCenter();
+	}
+
+	.o-ads--empty {
+		@include oAdsEmpty();
+	}
+
+	.o-ads--label-left {
+		@include oAdsLabel();
+	}
+
+	.o-ads--label-right {
+		@include oAdsLabel("right")
+	}
+
+}
