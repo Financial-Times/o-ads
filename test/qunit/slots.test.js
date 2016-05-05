@@ -147,7 +147,7 @@ QUnit.test('create a slot with an invalid size among multiple sizes', function(a
 });
 
 QUnit.test('create a slot with responsive sizes via sizes attributes', function(assert) {
-	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050"  data-o-ads-sizes-medium="300x400, 300x600"  data-o-ads-sizes-small="false"></div>';
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-sizes-large="300x600,300x1050" data-o-ads-sizes-medium="300x400, 300x600" data-o-ads-sizes-small="false"></div>';
 	const expected = { small:false, medium:[[300, 400], [300, 600]], large:[[300, 600], [300, 1050]]};
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
@@ -178,7 +178,7 @@ QUnit.test('create a slot with sizes via format attribute', function(assert) {
 });
 
 QUnit.test('create a slot with responsive sizes via formats attributes', function(assert) {
-	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard" data-o-ads-formats-medium="MediumRectangle" data-o-ads-formats-small="false"></div>';
 	const expected = { small:false, medium:[[300, 250]], large:[[728, 90]]};
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
@@ -198,7 +198,7 @@ QUnit.test('responsive slot should refresh when a new size exists for a breakpoi
 	this.viewport(700, 700);
 
 
-	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="SuperLeaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="Billboard"></div>';
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="SuperLeaderboard" data-o-ads-formats-medium="MediumRectangle" data-o-ads-formats-small="Billboard"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
@@ -234,7 +234,7 @@ QUnit.test('responsive slot should not make a call when size is false', function
 	const clock = this.date();
 	this.viewport(200, 200);
 
-	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard"  data-o-ads-formats-medium="MediumRectangle"  data-o-ads-formats-small="false"></div>';
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Leaderboard" data-o-ads-formats-medium="MediumRectangle" data-o-ads-formats-small="false"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
@@ -643,7 +643,7 @@ QUnit.test('Slots.submitImpression will submit and impression for a single slot'
 	this.ads.slots.submitImpression(['delayedimpression-1', 'delayedimpression-2']);
 	assert.ok(submitSpy1.calledTwice, 'the submitImpression method has been called twice on slot1');
 	assert.ok(submitSpy2.calledTwice, 'the submitImpression method has been called twice on slot2');
-  assert.ok(submitSpy3.calledOnce, 'the submitImpression method has been called once on slot3');
+	assert.ok(submitSpy3.calledOnce, 'the submitImpression method has been called once on slot3');
 });
 
 

@@ -14,17 +14,17 @@ function Slots() {
 }
 
 function invokeMethodOnSlots(names, method, callback) {
-  let slots = [];
+	let slots = [];
 	names = names || Object.keys(this);
 
-	/* istanbul ignore else  */
+	/* istanbul ignore else	*/
 	if (utils.isNonEmptyString(names)) {
 		slots.push(names);
 	} else if (utils.isArray(names)) {
 		slots = names;
 	}
 
-  slots.forEach(run.bind(null, this, method));
+	slots.forEach(run.bind(null, this, method));
 
 	if(utils.isFunction(callback)){
 			callback.call(this, slots);
@@ -44,11 +44,11 @@ function run(slots, action, name) {
 		if (utils.isFunction(slot[action])) {
 			slot[action]();
 		} else {
-      if(utils.isFunction(slot.fire)){
-        slot.fire(action);
-      } else {
-        utils.log.warn('Attempted to %s on a non-slot %s', action, name);
-      }
+			if(utils.isFunction(slot.fire)){
+				slot.fire(action);
+			} else {
+				utils.log.warn('Attempted to %s on a non-slot %s', action, name);
+			}
 		}
 	} else {
 		utils.log.warn('Attempted to %s non-existant slot %s', action, name);
@@ -61,7 +61,7 @@ function findFormatBySize(size) {
 	}
 	const formats = config('formats');
 	for(let prop in formats) {
-		/* istanbul ignore else  */
+		/* istanbul ignore else	*/
 		if(formats.hasOwnProperty(prop)) {
 
 			let sizes = formats[prop].sizes;
@@ -146,7 +146,7 @@ Slots.prototype.initSlot = function(container) {
 	// add the aria hidden attribute
 	container.setAttribute('aria-hidden', 'true');
 	const slot = new Slot(container, screensize);
-  /* istanbul ignore else  */
+	/* istanbul ignore else	*/
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
 		slot.elementvis = elementvis.track(slot.container);
@@ -161,7 +161,7 @@ Slots.prototype.initSlot = function(container) {
 Slots.prototype.initRefresh = function() {
 	if (config('flags').refresh && config('refresh')) {
 		const data = config('refresh');
-		/* istanbul ignore else  */
+		/* istanbul ignore else	*/
 		if (data.time && !data.inview) {
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
 		}
@@ -171,7 +171,7 @@ Slots.prototype.initRefresh = function() {
 };
 
 Slots.prototype.initInview = function() {
-	/* istanbul ignore else  */
+	/* istanbul ignore else	*/
 	if (config('flags').inview) {
 		onLoad(this);
 	}
@@ -192,7 +192,7 @@ Slots.prototype.initInview = function() {
 
 			slot.inviewport = event.detail.inviewport;
 			slot.percentage = event.detail.percentage;
-			/* istanbul ignore else  */
+			/* istanbul ignore else	*/
 			if (slot.inviewport) {
 				slot.fire('inview', event.detail);
 			}
@@ -209,7 +209,7 @@ Slots.prototype.initInview = function() {
 Slots.prototype.initRendered = function() {
 	utils.on('rendered', function(slots, event) {
 		const slot = slots[event.detail.name];
-		/* istanbul ignore else  */
+		/* istanbul ignore else	*/
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
 			const size = event.detail.gpt.size;
@@ -227,7 +227,7 @@ Slots.prototype.initRendered = function() {
 */
 Slots.prototype.initResponsive = function() {
 	const breakpoints = config('responsive');
-	/* istanbul ignore else  */
+	/* istanbul ignore else	*/
 	if (utils.isObject(breakpoints)) {
 		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
 	}
@@ -240,7 +240,7 @@ Slots.prototype.initResponsive = function() {
 */
 function onBreakpointChange(slots, screensize) {
 	slots.forEach(function(slot) {
-		/* istanbul ignore else  */
+		/* istanbul ignore else	*/
 		if (slot) {
 			slot.screensize = screensize;
 			slot.fire('breakpoint', { screensize: screensize });
@@ -257,7 +257,7 @@ Slots.prototype.initPostMessage = function() {
 
 	function pmHandler(slots, event) {
 		const data = utils.messenger.parse(event.data);
-		/* istanbul ignore else  don't process messages with a non oAds type*/
+		/* istanbul ignore else	don't process messages with a non oAds type*/
 		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
 			const type = data.type.replace('oAds\.', '');
 			let slot = data.name ? slots[data.name] : false;
@@ -312,7 +312,7 @@ Slots.prototype.initPostMessage = function() {
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(name => {
 		const slot = this[name];
-		/* istanbul ignore else  */
+		/* istanbul ignore else	*/
 		if (slot instanceof Slot) {
 			fn.call(this, slot);
 		}
@@ -349,10 +349,11 @@ Slots.prototype.debug = function (){
 		};
 		data.push(row);
 	});
-
-	log.start('Creatives');
-	log.table(data);
-	log.end();
+	if (data.length > 0) {
+		log.start('Creatives');
+		log.table(data);
+		log.end();
+	}
 };
 
 module.exports = new Slots();

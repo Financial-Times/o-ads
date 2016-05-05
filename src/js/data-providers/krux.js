@@ -161,7 +161,7 @@ Krux.prototype.events.fire = function(id, attrs) {
 
 Krux.prototype.events.init = function() {
 	let event;
-    const configured = config('krux') && config('krux').events;
+		const configured = config('krux') && config('krux').events;
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(configured)) {
 		for (event in configured) {

@@ -64,6 +64,21 @@ Ads.prototype.debug = function (){
 	}
 };
 
+Ads.prototype.destroy = function () {
+	const adScripts = Array.from(document.querySelectorAll('[o-ads]'));
+	adScripts.forEach(script => {
+		script.remove();
+	});
+
+	this.slots.destroy();
+	this.utils.timers.stopall();
+
+	const adSlots = Array.from(document.querySelectorAll('.o-ads__outer'));
+	adSlots.forEach(slot => {
+		slot.remove();
+	});
+};
+
 document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
 
 module.exports = ads;

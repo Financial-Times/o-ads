@@ -93,11 +93,9 @@ function Timers() {
 
 	function all(method) {
 		return function() {
-			const j = scope.timers.length;
-
-			for (let i = 0; i < j; i++) {
-				scope.timers[i][method]();
-			}
+			scope.timers.forEach(timer => {
+				timer[method]();
+			});
 		};
 	}
 
