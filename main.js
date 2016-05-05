@@ -6,7 +6,6 @@ Ads.prototype.config = require('./src/js/config');
 Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
-Ads.prototype.cb = require('./src/js/data-providers/chartbeat');
 Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
@@ -24,7 +23,6 @@ Ads.prototype.init = function(config) {
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
-	this.cb.init();
 	this.moat.init();
 	this.rubicon.init();
 	this.admantx.init();
@@ -56,7 +54,6 @@ Ads.prototype.debug = function (){
 		localStorage.setItem('oAds', true);
 	}
 	this.admantx.debug();
-	this.cb.debug();
 	this.gpt.debug();
 	this.krux.debug();
 	this.slots.debug();

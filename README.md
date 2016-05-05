@@ -124,7 +124,7 @@ We currently support these additional features
 - [Slot configuration full reference](https://github.com/Financial-Times/o-ads/blob/master/docs/SLOT_CONFIG_REFERENCE.md)
 
 As well as these [3rd party providers](https://github.com/Financial-Times/o-ads/blob/master/docs/DATA_PROVIDERS.md)
-- Krux
-- Chartbeat
-- Admantx
-- Rubicon
+- Krux (Behavioural targeting)
+- Moat (Viewability tracking)
+- Admantx (Contextual targeting)
+- Rubicon (Programmatic advertising)

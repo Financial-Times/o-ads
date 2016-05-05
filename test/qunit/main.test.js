@@ -19,7 +19,6 @@ QUnit.test('init All', function(assert) {
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
 	const admantxDebug = this.spy(this.ads.admantx, 'debug');
-	const cbDebug = this.spy(this.ads.cb, 'debug');
 	const gptDebug = this.spy(this.ads.gpt, 'debug');
 	const kruxDebug = this.spy(this.ads.krux, 'debug');
 	const slotsDebug = this.spy(this.ads.slots, 'debug');
@@ -28,7 +27,6 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 	this.ads.debug();
 
 	assert.ok(admantxDebug.called, 'Admantx debug function is called');
-	assert.ok(cbDebug.called, 'Chartbeat debug function is called');
 	assert.ok(gptDebug.called, 'gpt debug function is called');
 	assert.ok(kruxDebug.called, 'Krux debug function is called');
 	assert.ok(slotsDebug.called, 'Slots debug function is called');
