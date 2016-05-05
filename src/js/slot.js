@@ -92,6 +92,7 @@ function Slot(container, screensize) {
 	this.container = container;
 
 	// the current responsive screensize
+	/* istanbul ignore else	*/
 	if (screensize) {
 		this.screensize = screensize;
 	}

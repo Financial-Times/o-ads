@@ -92,6 +92,7 @@ Targeting.prototype.getSocialReferrer = function() {
 			/* istanbul ignore else  */
 			if (lookup.hasOwnProperty(refUrl)) {
 				const refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
+				/* istanbul ignore else  */
 				if (refUrl !== undefined && refererRegex.test(referrer)) {
 					codedValue = lookup[refUrl];
 					break;
@@ -107,6 +108,7 @@ Targeting.prototype.searchTerm = function() {
 	const qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
 	let keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
+	/* istanbul ignore else	*/
 	if (keywords && keywords !== '') {
 		keywords = unescape(keywords).toLowerCase()
 		.replace(/[';\^\+]/g, ' ')
@@ -128,8 +130,8 @@ Targeting.prototype.responsive = function() {
 Targeting.prototype.debug = function () {
 	const log = utils.log;
 	const parameters = this.get();
+	/* istanbul ignore else  */
 	if (Object.keys(parameters).length !== 0) {
-		/* istanbul ignore else  */
 		log.start('Targeting');
 		log.attributeTable(this.get());
 		log.end();

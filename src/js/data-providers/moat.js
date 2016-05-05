@@ -11,6 +11,7 @@ Moat.prototype.init = function() {
 	/* istanbul ignore else	*/
 	if (this.config && this.config.id) {
 		const src = "https://z.moatads.com/" + this.config.id + "/moatcontent.js";
+		/* istanbul ignore else	*/
 		if (!utils.isScriptAlreadyLoaded(src)) {
 			utils.attach(src, true);
 		}
