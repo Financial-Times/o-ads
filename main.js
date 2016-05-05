@@ -64,6 +64,6 @@ Ads.prototype.debug = function (){
 	}
 };
 
-document.documentElement.addEventListener('o.DOMContentLoaded', initAll);
+document.addEventListener('o.DOMContentLoaded', initAll);
 
 module.exports = ads;

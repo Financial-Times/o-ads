@@ -43,15 +43,6 @@ First you will need to have the markup for configuration:
 </script>
 ```
 
-**Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded` on `document.documentElement`.
-
-```js
-document.addEventListener('o.DOMContentLoaded', function(e) {
-    document.documentElement.dispatchEvent(new CustomEvent(e.type));
-});
-```
-
-
 ### Calling public API
 
 This example demonstrates instantiating o-ads, setting the network code and ad formats (position name & sizes) via the configuration object being passed directly to the `init` method.

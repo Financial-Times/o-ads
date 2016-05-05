@@ -13,7 +13,7 @@ QUnit.test('init All', function(assert) {
 		assert.deepEqual(event.detail.slot.sizes, [[300, 250]], 'with the correct sizes');
 		done();
 	});
-	this.trigger(document.body, 'o.DOMContentLoaded');
+	this.trigger(document, 'o.DOMContentLoaded');
 
 });
 
