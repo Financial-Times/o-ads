@@ -1,6 +1,6 @@
-/* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('Targeting', {
 	beforeEach: function() {
@@ -10,74 +10,45 @@ QUnit.module('Targeting', {
 
 QUnit.test('getFromConfig', function(assert) {
 	this.ads.init({});
-	var result = this.ads.targeting.get();
-	assert.deepEqual(result, {}, 'No dfp_targeting returns no targetting params');
-
+	let result = this.ads.targeting.get();
+	delete result.rf; //Qunit sometimes has referrer
+	assert.ok(result.ts, 'timestamp exists');
+	assert.ok(result.res, 'responsive breakpoint exists');
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
+	delete result.rf; //Qunit sometimes has referrer
+	assert.deepEqual(Object.keys(result).length, 2, 'Empty string dfp_targeting returns only default params');
 
-	assert.deepEqual(result, {}, 'Empty string dfp_targeting returns no params');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;targeting=params');
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Simple params are parsed correctly');
+	assert.deepEqual(result.some, 'test', 'Simple params are parsed correctly');
+	assert.deepEqual(result.targeting, 'params', 'Simple params are parsed correctly');
+
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 'some=test;;targeting=params');
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {some: 'test', targeting: 'params'}, 'Double semi-colons still parse correctly');
+	assert.deepEqual(result.some, 'test', 'Double ; are handled');
+	assert.deepEqual(result.targeting, 'params', 'Double ; are handled');
 
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', 's@me=test;targeting=par@ms$\'');
 	result = this.ads.targeting.get();
 
-	assert.deepEqual(result, {'s@me': 'test', targeting: 'par@ms$\''}, 'Special characters parse correctly');
-});
-
-QUnit.test('cookieConsent', function(assert) {
-	this.cookies({ cookieconsent: 'accepted'});
-	this.ads.init({ cookieConsent: true });
-	var result = this.ads.targeting.get();
-	assert.equal(result.cc, 'y', 'Cookie consent accepted is reported');
-
-	this.cookies({});
-	this.ads.init({cookieConsent: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.cc, 'n', 'Cookie consent not accepted is reported');
-});
-
-QUnit.test('encodedIP', function(assert) {
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182.1344916650137365" };
-	this.ads.init();
-	var result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "complete FTUserTrack information");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182" };
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "203.190.72.182 - incomplete FTUserTrack information");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72."};
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhcz', "203.190.72. - incomplete IP in FTUserTrack");
-
-	this.ads.utils.cookies = { FTUserTrack: "203.190.72.182.aaaaa"};
-	this.ads.init();
-	result = this.ads.targeting.get();
-	assert.equal(result.loc, 'cadzbjazhczbic', "203.190.72.182.aaaaa - malformed FTUserTrack");
+	assert.deepEqual(result['s@me'], 'test', 'Special characters in targeting key handled');
+	assert.deepEqual(result.targeting, 'par@ms$\'', 'Special characters in targeting value handled');
 });
 
 QUnit.test("social referrer", function(assert) {
-	var result;
-	var referrer = this.stub(this.ads.utils, 'getReferrer');
+	let result;
+	const referrer = this.stub(this.ads.utils, 'getReferrer');
 
 	referrer.returns('');
 	this.ads.init({ socialReferrer: true });
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {}, "No document referrer, returns no targeting params");
 	assert.equal(result.socref, undefined, "No document referrer, socref key returns undefined");
 
 	referrer.returns('http://t.co/cjPOFshzk2');
@@ -122,13 +93,12 @@ QUnit.test("social referrer", function(assert) {
 });
 
 QUnit.test('Page referrer', function(assert) {
-	var result;
-	var referrer = this.stub(this.ads.utils, 'getReferrer');
+	let result;
+	const referrer = this.stub(this.ads.utils, 'getReferrer');
 
 	referrer.returns('');
 	this.ads.init({ pageReferrer: true });
 	result = this.ads.targeting.get();
-	assert.deepEqual(result, {}, "with no referrer no targetting param is added");
 	assert.equal(result.rf, undefined, "calling rf returns undefined");
 
 	referrer.returns('http://www.example.com/some/page?some=param');
@@ -138,8 +108,8 @@ QUnit.test('Page referrer', function(assert) {
 });
 
 QUnit.test("search term", function(assert) {
-	var result;
-	var querystring = this.stub(this.ads.utils, 'getQueryString');
+	let result;
+	const querystring = this.stub(this.ads.utils, 'getQueryString');
 
 	querystring.returns();
 	this.ads.init();
@@ -239,10 +209,10 @@ QUnit.test("search term", function(assert) {
 
 QUnit.test("timestamp", function(assert) {
 	// we get the date millis in this way so the test works in different time zones
-	var curTime = new Date(Date.UTC(2013, 10, 18, 23, 30, 7));
-	var clock = this.date(curTime.valueOf());
+	const curTime = new Date(Date.UTC(2013, 10, 18, 23, 30, 7));
+	const clock = this.date(curTime.valueOf());
 	this.ads.init({ timestamp: true });
-	var result = this.ads.targeting.get();
+	let result = this.ads.targeting.get();
 	assert.equal(result.ts, '20131118233007', "timestamp value returns correctly");
 
 	// Fast forward one hour
@@ -253,41 +223,28 @@ QUnit.test("timestamp", function(assert) {
 
 QUnit.test("responsive", function(assert) {
 
-	var breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
+	const breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
 	breakpoint.returns("small");
 	this.ads.init({responsive: [] });
-	var result = this.ads.targeting.get();
+	const result = this.ads.targeting.get();
 
 	assert.equal(result.res, 'small');
 });
 
 QUnit.test("Responsive targeting on non-responsive page", function(assert) {
 
-	var breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
+	const breakpoint = this.stub(this.ads.utils.responsive, 'getCurrent');
 	breakpoint.returns("small");
-	this.ads.init();
-	var result = this.ads.targeting.get();
+	this.ads.init({responsive: false});
+	const result = this.ads.targeting.get();
 
 	assert.equal(result.hasOwnProperty('res'), false);
 });
 
-QUnit.test("Library Version", function(assert) {
-	this.ads.init({ version: true });
-	var result = this.ads.targeting.get();
-	assert.equal(result.ver, '${project.version}', "library version returned correctly");
-});
-
-QUnit.test('debug returns early if no config is set', function(assert) {
-	this.ads.init();
-	var start = this.spy(this.utils.log, "start");
-
-	this.ads.targeting.debug();
-	assert.notOk(start.called, "`utils.start` wasn't called for 'targeting'");
-});
 
 QUnit.test('debug starts logging data', function(assert) {
 	this.ads.init({dfp_targeting: {data: {allOfThe: 'targeting data'}}});
-	var start = this.spy(this.utils.log, "start");
+	const start = this.spy(this.utils.log, "start");
 
 	this.ads.targeting.debug();
 	assert.ok(start.called, "`utils.start` was called for 'targeting'");

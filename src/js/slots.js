@@ -1,9 +1,8 @@
-'use strict';
-var utils = require('./utils');
-var config = require('./config');
-var Slot = require('./slot');
-var elementvis = require('o-element-visibility');
-var screensize = null;
+const utils = require('./utils');
+const config = require('./config');
+const Slot = require('./slot');
+const elementvis = require('o-element-visibility');
+let screensize = null;
 
 /**
 * The Slots instance tracks all ad slots on the page
@@ -15,12 +14,12 @@ function Slots() {
 }
 
 function invokeMethodOnSlots(names, method, callback) {
-  var slots = [];
+  let slots = [];
 	names = names || Object.keys(this);
 
 	/* istanbul ignore else  */
 	if (utils.isNonEmptyString(names)) {
-		slots.push(names)
+		slots.push(names);
 	} else if (utils.isArray(names)) {
 		slots = names;
 	}
@@ -40,7 +39,7 @@ function invokeMethodOnSlots(names, method, callback) {
 * @param slots the slots object
 */
 function run(slots, action, name) {
-	var slot = slots[name];
+	const slot = slots[name];
 	if (slot) {
 		if (utils.isFunction(slot[action])) {
 			slot[action]();
@@ -60,14 +59,14 @@ function findFormatBySize(size) {
 	if(!size) {
 		return false;
 	}
-	var formats = config('formats');
-	for(var prop in formats) {
+	const formats = config('formats');
+	for(let prop in formats) {
 		/* istanbul ignore else  */
 		if(formats.hasOwnProperty(prop)) {
 
-			var sizes = formats[prop].sizes;
+			let sizes = formats[prop].sizes;
 			sizes = utils.isArray(sizes[0]) ? sizes : [sizes];
-			var match = sizes.filter(function(s) {
+			const match = sizes.filter(function(s) {
 				return (s[0] === parseInt(size[0]) && s[1] === parseInt(size[1]));
 			});
 			if(match.length) {
@@ -110,10 +109,10 @@ Slots.prototype.clear = function(names) {
 */
 Slots.prototype.destroy = function(names) {
 	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
-			names.forEach(function(name){
+			names.forEach(name => {
 				this[name] = null;
 				delete this[name];
-			}.bind(this));
+			});
 	});
 };
 
@@ -131,7 +130,7 @@ Slots.prototype.initSlot = function(container) {
 	// if container is a string this is a legacy implementation using ids
 	// find the element and remove the ID in favour of a data attribute
 	if (utils.isString(container)) {
-		container = document.getElementById(container) || document.querySelector('[data-o-ads-name="' + container + '"]');
+		container = document.getElementById(container) || document.querySelector(`[data-o-ads-name="${container}"]`);
 		if (container && container.id) {
 			container.setAttribute('data-o-ads-name', container.id);
 			container.removeAttribute('id');
@@ -146,7 +145,7 @@ Slots.prototype.initSlot = function(container) {
 
 	// add the aria hidden attribute
 	container.setAttribute('aria-hidden', 'true');
-	var slot = new Slot(container, screensize);
+	const slot = new Slot(container, screensize);
   /* istanbul ignore else  */
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
@@ -161,7 +160,7 @@ Slots.prototype.initSlot = function(container) {
 
 Slots.prototype.initRefresh = function() {
 	if (config('flags').refresh && config('refresh')) {
-		var data = config('refresh');
+		const data = config('refresh');
 		/* istanbul ignore else  */
 		if (data.time && !data.inview) {
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
@@ -186,10 +185,10 @@ Slots.prototype.initInview = function() {
 	}
 
 	function onInview(slots, event) {
-		var element = event.detail.element;
-		var name = element.node.getAttribute('data-o-ads-name');
+		const element = event.detail.element;
+		const name = element.node.getAttribute('data-o-ads-name');
 		if (slots[name]) {
-			var slot = slots[name];
+			const slot = slots[name];
 
 			slot.inviewport = event.detail.inviewport;
 			slot.percentage = event.detail.percentage;
@@ -209,12 +208,12 @@ Slots.prototype.initInview = function() {
 */
 Slots.prototype.initRendered = function() {
 	utils.on('rendered', function(slots, event) {
-		var slot = slots[event.detail.name];
+		const slot = slots[event.detail.name];
 		/* istanbul ignore else  */
 		if (slot) {
 			utils.extend(slot[slot.server], event.detail[slot.server]);
-			var size = event.detail.gpt.size;
-			var format = findFormatBySize(size);
+			const size = event.detail.gpt.size;
+			const format = findFormatBySize(size);
 			slot.setFormatLoaded(format);
 			slot.maximise(size);
 			slot.fire('complete', event.detail);
@@ -227,7 +226,7 @@ Slots.prototype.initRendered = function() {
 * if responsive configuration exists listen for breakpoint changes
 */
 Slots.prototype.initResponsive = function() {
-	var breakpoints = config('responsive');
+	const breakpoints = config('responsive');
 	/* istanbul ignore else  */
 	if (utils.isObject(breakpoints)) {
 		screensize = utils.responsive(breakpoints, onBreakpointChange.bind(null, this));
@@ -257,14 +256,14 @@ Slots.prototype.initPostMessage = function() {
 	window.addEventListener('message', pmHandler.bind(null, this), false);
 
 	function pmHandler(slots, event) {
-		var data = utils.messenger.parse(event.data);
+		const data = utils.messenger.parse(event.data);
 		/* istanbul ignore else  don't process messages with a non oAds type*/
 		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
-			var type = data.type.replace('oAds\.', '');
-			var slot = data.name ? slots[data.name] : false;
+			const type = data.type.replace('oAds\.', '');
+			let slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami' && event.source) {
-				var messageToSend = { type: 'oAds.youare' };
-				var slotName = utils.iframeToSlotName(event.source.window);
+				const messageToSend = { type: 'oAds.youare' };
+				const slotName = utils.iframeToSlotName(event.source.window);
 				slot = slots[slotName] || false;
 
 				if(slot) {
@@ -273,8 +272,8 @@ Slots.prototype.initPostMessage = function() {
 					}
 
 					if (data.mastercompanion) {
-						var size = slot.gpt.size;
-						var format = findFormatBySize(size);
+						const size = slot.gpt.size;
+						const format = findFormatBySize(size);
 						slots.forEach(function(s) {
 							if(s.companion && s.name !== slot.name) {
 								s.fire('masterLoaded', slot);
@@ -311,13 +310,13 @@ Slots.prototype.initPostMessage = function() {
 };
 
 Slots.prototype.forEach = function(fn) {
-	Object.keys(this).forEach(function(name) {
-		var slot = this[name];
+	Object.keys(this).forEach(name => {
+		const slot = this[name];
 		/* istanbul ignore else  */
 		if (slot instanceof Slot) {
 			fn.call(this, slot);
 		}
-	}.bind(this));
+	});
 	return this;
 };
 
@@ -335,18 +334,18 @@ Slots.prototype.init = function() {
 Slots.prototype.timers = {};
 
 Slots.prototype.debug = function (){
-	var log = utils.log;
-	var data = [];
+	const log = utils.log;
+	const data = [];
 
 	this.forEach(function (slot) {
-		var row = {
+		const row = {
 			name: slot.name,
 			'unit name': slot.gpt.unitName,
 			'creative id': slot.gpt.creativeId || 'N/A',
 			'line item id': slot.gpt.lineItemId || 'N/A',
 			size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
 			sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
-			targeting: Object.keys(slot.targeting).map(function (param) { return param + '=' + slot.targeting[param]}).join(', ')
+			targeting: Object.keys(slot.targeting).map(function (param) { return `${param}=${slot.targeting[param]}`;} ).join(', ')
 		};
 		data.push(row);
 	});

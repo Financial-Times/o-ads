@@ -1,19 +1,7 @@
-/**
- * @fileOverview
- * Third party library for use with google publisher tags.
- *
- * @author Robin Marr, robin.marr@ft.com
- */
-/**
- * FT.ads.targeting is an object providing properties and methods for accessing targeting parameters from various sources including FT Track and Audience Science and passing them into DFP
- * @name targeting
- * @memberof FT.ads
-
-*/
-'use strict';
-var utils = require('../utils');
-var config = require('../config');
-var delegate = require('ftdomdelegate');
+const utils = require('../utils');
+const config = require('../config');
+const Delegate = require('ftdomdelegate');
+const targeting = require('../targeting');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -24,7 +12,7 @@ function Krux() {
 
 }
 
-Krux.prototype.init = function(impl) {
+Krux.prototype.init = function() {
 	this.config = config('krux');
 	if (this.config && this.config.id) {
 
@@ -39,20 +27,21 @@ Krux.prototype.init = function(impl) {
 		this.api = window.Krux;
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
-			this.setAttributes('page_attr_',  this.config.attributes.page || {});
-			this.setAttributes('user_attr_',  this.config.attributes.user || {});
-			this.setAttributes('',  this.config.attributes.custom || {});
+			this.setAttributes('page_attr_', this.config.attributes.page || {});
+			this.setAttributes('user_attr_', this.config.attributes.user || {});
+			this.setAttributes('', this.config.attributes.custom || {});
 		}
 
-		var src;
-		var m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
+		let src;
+		const m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
 		if (m) {
 			src = decodeURIComponent(m[1]);
 		}
-		var finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :  "//cdn.krxd.net/controltag?confid=" + this.config.id;
+		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag?confid=${this.config.id}`;
 
 		utils.attach(finalSrc, true);
 		this.events.init();
+		targeting.add(this.targeting());
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
 	}
@@ -65,12 +54,12 @@ Krux.prototype.init = function(impl) {
 * @lends Krux
 */
 Krux.prototype.retrieve = function(name) {
-	var value;
-	name = 'kx' + name;
+	let value;
+	name = `kx${name}`;
 	/* istanbul ignore else  */
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
-	}  else if (utils.cookie(name)) {
+	} else if (utils.cookie(name)) {
 		value = utils.cookie(name);
 	}
 
@@ -95,7 +84,7 @@ Krux.prototype.segments = function() {
 * @lends Krux
 */
 Krux.prototype.targeting = function() {
-	var segs = this.segments();
+	let segs = this.segments();
 	/* istanbul ignore else  */
 	if (segs) {
 		segs = segs.split(',');
@@ -123,10 +112,10 @@ Krux.prototype.events = {
 	dwell_time: function(config) {
 		/* istanbul ignore else  */
 		if (config) {
-			var fire = this.fire,
-			interval = config.interval || 5,
-			max = (config.total / interval) || 120,
-			uid = config.id;
+			const fire = this.fire;
+			const interval = config.interval || 5;
+			const max = (config.total / interval) || 120;
+			const uid = config.id;
 			utils.timers.create(interval, (function() {
 				return function() {
 					fire(uid, {dwell_time: (this.interval * this.ticks) / 1000 });
@@ -139,16 +128,16 @@ Krux.prototype.events = {
 		if (window.addEventListener) {
 			/* istanbul ignore else  */
 			if (config) {
-				var fire = this.fire;
-				var eventScope = function(kEvnt) {
-					return function(e, t) {
+				const fire = this.fire;
+				const eventScope = function(kEvnt) {
+					return function() {
 						fire(config[kEvnt].id);
 					};
 				};
 
 				window.addEventListener('load', function() {
-					var delEvnt = new delegate(document.body);
-					for (var kEvnt in config) {
+					const delEvnt = new Delegate(document.body);
+					for (let kEvnt in config) {
 						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
@@ -164,14 +153,15 @@ Krux.prototype.events.fire = function(id, attrs) {
 	/* istanbul ignore else  */
 	if (id) {
 		attrs = utils.isPlainObject(attrs) ? attrs : {};
-		return window.Krux('admEvent', id, attrs);
+		return window.Krux('admEvent', id, attrs); // eslint-disable-line new-cap
 	}
 
 	return false;
 };
 
 Krux.prototype.events.init = function() {
-	var event, configured = config('krux') && config('krux').events;
+	let event;
+    const configured = config('krux') && config('krux').events;
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(configured)) {
 		for (event in configured) {
@@ -188,14 +178,14 @@ Krux.prototype.events.init = function() {
 Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
-		Object.keys(attributes).forEach(function(item) {
-			this.api('set',  prefix + item, attributes[item]);
-		}.bind(this));
+		Object.keys(attributes).forEach(item => {
+			this.api('set', prefix + item, attributes[item]);
+		});
 	}
 };
 
 Krux.prototype.debug = function() {
-	var log = utils.log;
+	const log = utils.log;
 	if (!this.config) {
 		return;
 	}
@@ -207,7 +197,7 @@ Krux.prototype.debug = function() {
 		}
 
 		if (this.config.attributes) {
-			var attributes = this.config.attributes;
+			const attributes = this.config.attributes;
 			log.start('Attributes');
 				log.start('Page');
 					log.attributeTable(attributes.page);
@@ -223,7 +213,7 @@ Krux.prototype.debug = function() {
 			log.end();
 		}
 		if (this.config.events) {
-			var events = this.config.events;
+			const events = this.config.events;
 			log.start('Events');
 				if (events.dwell_time) {
 					log.start('Dwell Time');
@@ -238,14 +228,14 @@ Krux.prototype.debug = function() {
 			log.end();
 		}
 
-		var targeting = this.targeting();
+		const targeting = this.targeting();
 		log.start('Targeting');
 			log.attributeTable(targeting);
 		log.end();
 
-		var tags = utils.arrayLikeToArray(document.querySelectorAll(".kxinvisible"));
+		const tags = Array.from(document.querySelectorAll(".kxinvisible"));
 		if (tags.length) {
-			log.start(tags.length + " Supertag© scripts");
+			log.start(`${tags.length} Supertag© scripts`);
 				tags.forEach(function(tag) {
 					log(tag.dataset.alias, tag.querySelector("script"));
 				});

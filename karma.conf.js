@@ -1,4 +1,8 @@
-/* jshint node: true */
+
+/* globals process: true */
+
+'use strict'; //eslint-disable-line
+
 // if you want a different local configuration create a file called karma.local.js
 // the file should export a function that takes the current options object and
 // returns an amended one e.g.
@@ -6,18 +10,18 @@
 // 	var options.test = "it works!";
 // 	return options;
 // }
-'use strict';
 
 process.env['BROWSERIFYSWAP_ENV'] = 'karma';
 
-var options = {
+let options = {
 	basePath: '',
 	autoWatch: true,
 	singleRun: false,
 	frameworks: ['browserify', 'qunit'],
 	files: [
 		'test/qunit/styles.css',
-		'build/main.css',
+		'build/main.scss',
+		'http://polyfill.webservices.ft.com/v2/polyfill.js',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/jquery.cookie/index.js',
@@ -39,9 +43,7 @@ var options = {
 	preprocessors: {
 		'main.js': ['browserify'],
 		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify'],
-		'test/qunit/video.mainplayer.test.js': ['browserify'],
-		'test/qunit/version.test.js': ['browserify']
+		'test/qunit/setup.js': ['browserify']
 	}
 };
 
@@ -64,7 +66,7 @@ if (process.env.CI === 'true') {
 	options.browserify.debug = true;
 }
 
-var coverageChecks = {
+const coverageChecks = {
 	global: {
 		statements: 100,
 		branches: 100,

@@ -1,12 +1,12 @@
-/* jshint globalstrict: true */
 /* globals QUnit: false */
-"use strict";
+
+'use strict'; //eslint-disable-line
 
 QUnit.module('utils.events');
 
 QUnit.test('We can broadcast an event to the body', function(assert) {
-	var utils = this.ads.utils;
-	var done = assert.async();
+	const utils = this.ads.utils;
+	const done = assert.async();
 
 	document.body.addEventListener('oAds.ahoy', function(ev) {
 		assert.strictEqual(ev.type, 'oAds.ahoy', 'the event type is set');
@@ -20,10 +20,10 @@ QUnit.test('We can broadcast an event to the body', function(assert) {
 });
 
 QUnit.test('We can broadcast an from an element', function(assert) {
-	var utils = this.ads.utils;
-	var done = assert.async();
+	const utils = this.ads.utils;
+	const done = assert.async();
 
-	var element = document.createElement('div');
+	const element = document.createElement('div');
 	this.fixturesContainer.appendChild(element);
 	element.addEventListener('oAds.ahoy', function(ev) {
 		assert.strictEqual(ev.type, 'oAds.ahoy', 'the event type is set');
@@ -37,10 +37,10 @@ QUnit.test('We can broadcast an from an element', function(assert) {
 });
 
 QUnit.test('We can broadcast from an element and it bubbles to the body', function(assert) {
-	var utils = this.ads.utils;
-	var done = assert.async();
+	const utils = this.ads.utils;
+	const done = assert.async();
 
-	var element = document.createElement('div');
+	const element = document.createElement('div');
 	function testFunc() {}
 
 	this.fixturesContainer.appendChild(element);
@@ -58,11 +58,11 @@ QUnit.test('We can broadcast from an element and it bubbles to the body', functi
 });
 
 QUnit.test('We can listen to a one time event', function(assert) {
-	var utils = this.ads.utils;
-	var done = assert.async();
-	var listened = 0;
+	const utils = this.ads.utils;
+	const done = assert.async();
+	let listened = 0;
 
-	utils.once('ahoy', function(ev) {
+	utils.once('ahoy', function() {
 		listened++;
 	});
 

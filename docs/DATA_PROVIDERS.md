@@ -26,23 +26,6 @@ oAds.init({
 
 The attributes object can take user, page and custom data objects to send to Krux.
 
-## [Chartbeat](https://chartbeat.com/about/)
-### Configuration
-```js
-oAds.init({
-  ...
-  chartbeat: {
-    pageType: pageType,
-    uid: '14181',
-    domain: 'next.ft.com',
-    loadsJS: true,
-    demographics: getDemographicsData()
-  },
-  ...
-});
-
-```
-
 ## [Moat](https://moat.com/)
 ### Configuration
 ```js

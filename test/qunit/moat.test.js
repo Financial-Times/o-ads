@@ -1,6 +1,6 @@
 /* jshint globalstrict: true, browser: true */
 /* globals QUnit: false */
-'use strict';
+'use strict'; //eslint-disable-line
 
 QUnit.module('Moat', {
 

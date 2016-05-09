@@ -1,37 +1,31 @@
-
-	// center adverts in slots
-.o-ads__center {
-	width: 100%;
-	text-align: center;
-}
-
-// remove this rule if transitions are added to all slots
-.o-ads__empty {
-	width: 0;
-	height: 0;
-	display: none;
-	visibility: hidden;
-}
-
-// add a label above the ad slot
-.o-ads__label-right .o-ads__inner::before {
-	content: "▼ Advertisement ▼";
-	display: block;
-	text-align: right;
-	font-size: 14px;
-}
-
-.o-ads__label-left .o-ads__inner::before {
-	content: "▼ Advertisement ▼";
-	display: block;
-	font-size: 14px;
-}
-
-.o-ads,
-[data-oads-name] {
+@mixin oAds {
 	animation-name: none;
 	//remove background from iframes.
 	iframe {
 		background: none transparent;
 	}
 }
+
+@mixin oAdsCenter {
+	width: 100%;
+	text-align: center;
+}
+
+@mixin oAdsEmpty {
+	width: 0;
+	height: 0;
+	display: none;
+	visibility: hidden;
+}
+
+@mixin oAdsLabel($pos: "left") {
+	.o-ads__inner::before {
+		content: "▼ Advertisement ▼";
+		display: block;
+		font-size: 14px;
+		@if($pos == right) {
+			text-align: right;
+		}
+	}
+}
+

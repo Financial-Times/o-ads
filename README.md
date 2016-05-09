@@ -1,6 +1,6 @@
 # oAds ![CircleCI Status](https://circleci.com/gh/Financial-Times/o-ads.svg?style=shield&circle-token=36a37c6ca27a08408c2575c7834f5f6f5c5c9d21)
 ## Introduction
-This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Chartbeat](https://chartbeat.com/).
+This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)), demographics and semantic (via [Admantx](http://admantx.com/)) targeting and audited ad tracking with [Moat](https://moat.com/).
 
 ## Installation
 Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](https://github.com/Financial-Times/o-ads/blob/master/docs/INTEGRATION.md)
@@ -19,7 +19,7 @@ For basic use, a DFP account with Google is required, each targeting/tracking su
 
 ## Documentation
 ### Quick start
-Include o-ads in the build and and add the following markup to the page:
+Include o-ads JS and SCSS in the build and and add the following markup to the page:
 
 ```html
 <div class="o-ads" data-o-ads-gpt-unit-name="/6355419/Travel" data-o-ads-formats="MediumRectangle"></div>
@@ -42,15 +42,6 @@ First you will need to have the markup for configuration:
 		}
 </script>
 ```
-
-**Note:** O-ads _**does not**_ initialise with [`o-autoinit`](http://registry.origami.ft.com/components/o-autoinit) like other [FT Origami](http://origami.ft.com/) modules. The final o-ads initialisation happens on `o.DOMContentLoaded` on `document.documentElement`.
-
-```js
-document.addEventListener('o.DOMContentLoaded', function(e) {
-    document.documentElement.dispatchEvent(new CustomEvent(e.type));
-});
-```
-
 
 ### Calling public API
 
@@ -124,7 +115,7 @@ We currently support these additional features
 - [Slot configuration full reference](https://github.com/Financial-Times/o-ads/blob/master/docs/SLOT_CONFIG_REFERENCE.md)
 
 As well as these [3rd party providers](https://github.com/Financial-Times/o-ads/blob/master/docs/DATA_PROVIDERS.md)
-- Krux
-- Chartbeat
-- Admantx
-- Rubicon
+- Krux (Behavioural targeting)
+- Moat (Viewability tracking)
+- Admantx (Contextual targeting)
+- Rubicon (Programmatic advertising)

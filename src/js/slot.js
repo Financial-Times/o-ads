@@ -1,8 +1,7 @@
-'use strict';
-var utils = require('./utils');
-var config = require('./config');
+const utils = require('./utils');
+const config = require('./config');
 
-var attributeParsers = {
+const attributeParsers = {
 	sizes: function(value, sizes) {
 		if (value === false || value === 'false') {
 			return false;
@@ -21,21 +20,21 @@ var attributeParsers = {
 		if (value === false || value === 'false') {
 			sizes = false;
 		} else {
-			var mapping = config().formats;
-			var formats = utils.isArray(value) ? value : value.split(',');
-			formats.forEach(function(format) {
+			const mapping = config().formats;
+			const formats = utils.isArray(value) ? value : value.split(',');
+			formats.forEach(format => {
 				if (mapping && mapping[format]) {
 					format = mapping[format];
 					if (utils.isArray(format.sizes[0])) {
-						for (var j = 0; j < format.sizes.length; j++) {
-							sizes.push(format.sizes[j]);
-						}
+						format.sizes.forEach(size => {
+							sizes.push(size);
+						});
 					}
 					else {
 						sizes.push(format.sizes);
 					}
 				} else {
-					utils.log.error('Slot configured with unknown format ' + format);
+					utils.log.error(`Slot configured with unknown format ${format}`);
 				}
 			});
 		}
@@ -44,7 +43,7 @@ var attributeParsers = {
 	},
 
 	responsiveSizes: function(name, value, sizes) {
-		var screenName = name.replace(/^sizes/, '').toLowerCase();
+		const screenName = name.replace(/^sizes/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -54,7 +53,7 @@ var attributeParsers = {
 	},
 
 	responsiveFormats: function(name, value, sizes) {
-		var screenName = name.replace(/^formats/, '').toLowerCase();
+		const screenName = name.replace(/^formats/, '').toLowerCase();
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -86,13 +85,14 @@ var attributeParsers = {
 * @constructor
 */
 function Slot(container, screensize) {
-	var slotConfig = config('slots') || {};
-	var disableSwipeDefault = config('disableSwipeDefault') || false;
+	let slotConfig = config('slots') || {};
+	let disableSwipeDefault = config('disableSwipeDefault') || false;
 
 	// store the container
 	this.container = container;
 
 	// the current responsive screensize
+	/* istanbul ignore else	*/
 	if (screensize) {
 		this.screensize = screensize;
 	}
@@ -120,15 +120,14 @@ function Slot(container, screensize) {
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
-	this.chartbeat = slotConfig.chartbeat || config('chartbeat');
 
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
 	}	else if (utils.isPlainObject(slotConfig.formats)) {
 		this.sizes = {};
-		Object.keys(slotConfig.formats).forEach(function(screenName) {
+		Object.keys(slotConfig.formats).forEach(screenName => {
 			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
-		}.bind(this));
+		});
 	}
 
 	// extend with imperative configuration options
@@ -150,9 +149,9 @@ function Slot(container, screensize) {
 * parse slot attribute config
 */
 Slot.prototype.parseAttributeConfig = function() {
-	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
-		var name = utils.parseAttributeName(attribute.name);
-		var value = attribute.value;
+	Array.from(this.container.attributes).forEach(attribute => {
+		const name = utils.parseAttributeName(attribute.name);
+		const value = attribute.value;
 		if (name === 'formats') {
 			this[name] = attributeParsers[name](value, this.sizes);
 		} else if (attributeParsers[name]) {
@@ -164,12 +163,12 @@ Slot.prototype.parseAttributeConfig = function() {
 		} else if (this.hasOwnProperty(name)) {
 			this[name] = attributeParsers.base(value);
 		}
-	}.bind(this));
+	});
 };
 
 Slot.prototype.getAttributes = function() {
-	var attributes = {};
-	utils.arrayLikeToArray(this.container.attributes).forEach(function(attribute) {
+	const attributes = {};
+	Array.from(this.container.attributes).forEach(attribute => {
 		attributes[utils.parseAttributeName(attribute)] = attribute.value;
 	});
 	this.attributes = attributes;
@@ -183,7 +182,7 @@ Slot.prototype.initLazyLoad = function() {
 	/* istanbul ignore else  */
 	if (this.lazyLoad) {
 		this.defer = true;
-		var renderSlot = function(slot) {
+		let renderSlot = function(slot) {
 			/* istanbul ignore else */
 			if(!slot.rendered) {
 				slot.fire('render');
@@ -215,7 +214,7 @@ Slot.prototype.initResponsive = function() {
 		}
 
 		utils.on('breakpoint', function(event) {
-			var slot = event.detail.slot;
+			const slot = event.detail.slot;
 			slot.screensize = event.detail.screensize;
 
 			if (slot.hasValidSize()) {
@@ -246,7 +245,7 @@ Slot.prototype.maximise = function (size) {
 Slot.prototype.setName = function() {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
 	if (!this.name) {
-		this.name = 'o-ads-slot-' + (Math.floor(Math.random() * 10000));
+		this.name = `o-ads-slot-${(Math.floor(Math.random() * 10000))}`;
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
 	return this;
@@ -265,8 +264,8 @@ Slot.prototype.setResponsiveCreative = function (value) {
 * add the empty class to the slot
 */
 Slot.prototype.collapse = function() {
-	utils.addClass(this.container, 'empty');
-	utils.addClass(document.body, 'no-' + this.name);
+	this.container.classList.add('o-ads--empty');
+	document.body.classList.add(`o-ads-no-${this.name}`);
 	return this;
 };
 
@@ -282,8 +281,8 @@ Slot.prototype.setFormatLoaded = function(format) {
 * remove the empty class from the slot
 */
 Slot.prototype.uncollapse = function() {
-	utils.removeClass(this.container, 'empty');
-	utils.removeClass(document.body, 'no-' + this.name);
+	this.container.classList.remove('o-ads--empty');
+	document.body.classList.remove(`o-ads-no-${this.name}`);
 	return this;
 };
 
@@ -313,7 +312,7 @@ Slot.prototype.submitImpression = function() {
 *	fire an event on the slot
 */
 Slot.prototype.fire = function(name, data) {
-	var details = {
+	const details = {
 		name: this.name,
 		slot: this
 	};
@@ -330,12 +329,12 @@ Slot.prototype.fire = function(name, data) {
 *	add a div tag into the current slot container
 **/
 Slot.prototype.addContainer = function(node, attrs) {
-	var container = '<div ';
+	let container = '<div ';
 	/* istanbul ignore else  */
 	if(attrs) {
 		Object.keys(attrs).forEach(function(attr) {
-			var value = attrs[attr];
-			container += attr + '=' + value + ' ';
+			const value = attrs[attr];
+			container += `${attr}=${value} `;
 		});
 	}
 	container += '></div>';
@@ -358,7 +357,7 @@ Slot.prototype.hasValidSize = function(screensize) {
 */
 Slot.prototype.centerContainer = function() {
 	if (this.center) {
-		utils.addClass(this.container, 'center');
+		this.container.classList.add('o-ads--center');
 	}
 
 	return this;
@@ -369,14 +368,16 @@ Slot.prototype.centerContainer = function() {
 * Add a label class to the main container
 */
 Slot.prototype.labelContainer = function() {
-	var className;
+	let className;
 	if (this.label === true || this.label === 'left') {
 		className = 'label-left';
 	} else if (this.label === 'right') {
 		className = 'label-right';
 	}
 
-	utils.addClass(this.container, className);
+	if (className) {
+		this.container.classList.add(`o-ads--${className}`);
+	}
 	return this;
 };
 

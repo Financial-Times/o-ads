@@ -1,11 +1,10 @@
-'use strict';
 
 function now() {
 	return (new Date()).valueOf();
 }
 
 function Timer(interval, fn, maxTicks, opts) {
-	this.interval = (parseFloat(interval) || 1)  * 1000;
+	this.interval = (parseFloat(interval) || 1) * 1000;
 	this.maxTicks = parseInt(maxTicks, 10) || 0;
 	this.fn = fn;
 	this.ticks = 0;
@@ -15,7 +14,7 @@ function Timer(interval, fn, maxTicks, opts) {
 }
 
 Timer.prototype.tick = function() {
-	var Timer = this;
+	const Timer = this;
 	return function() {
 		Timer.ticks++;
 		Timer.fn.apply(Timer);
@@ -89,14 +88,14 @@ function Timers() {
 		return new Timers();
 	}
 
-	var scope =  this;
+	const scope = this;
 	this.timers = [];
 
 	function all(method) {
 		return function() {
-			var j = scope.timers.length;
+			const j = scope.timers.length;
 
-			for (var i = 0; i < j; i++) {
+			for (let i = 0; i < j; i++) {
 				scope.timers[i][method]();
 			}
 		};
@@ -104,11 +103,11 @@ function Timers() {
 
 	function hasExecutionPaused(fn) {
 		return function() {
-			var Timer = this,
-			time = now() - Timer.lastTick - Timer.interval,
-			threshhold = Timer.interval * 1.5;
+			const Timer = this;
+			const time = now() - Timer.lastTick - Timer.interval;
+			const threshold = Timer.interval * 1.5;
 
-			if (threshhold < time) {
+			if (threshold < time) {
 					Timer.reset();
 			}
 
@@ -121,7 +120,7 @@ function Timers() {
 			fn = hasExecutionPaused(fn);
 		}
 
-		var timer  = new Timer(interval, fn, maxTicks, opts);
+		const timer = new Timer(interval, fn, maxTicks, opts);
 		scope.timers.push(timer);
 		return timer;
 	}
