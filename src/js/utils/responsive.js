@@ -6,7 +6,7 @@ const oViewport = require('o-viewport');
 
 function getNearestBreakpoint() {
 	let winner;
-	const dims = oViewport.getSize();
+	const dims = oViewport.getSize(true);
 	function findCurrentBreakpoint(breakpoint) {
 		const breakpointDims = breakpoints[breakpoint];
 		if (dims.width >= breakpointDims[0] && dims.height >= breakpointDims[1]) {
