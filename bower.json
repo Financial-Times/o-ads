@@ -8,7 +8,7 @@
   "ignore": [],
   "dependencies": {
     "ftdomdelegate": "https://github.com/ftlabs/ftdomdelegate.git#^2.0.3",
-    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#>=1.5.0 < 3",
+    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#>=2.1.0 < 3",
     "o-element-visibility": "https://github.com/Financial-Times/o-element-visibility.git#^2.1.0"
   },
   "devDependencies": {
