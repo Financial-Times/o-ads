@@ -168,22 +168,18 @@ module.exports.server = function(clock) {
 // and return the mocked width or height when the actual width and height are provided as arguments
 // this could go bad if your code is using Math.max and happens to provide the window width/height as an argument
 module.exports.viewport = function(width, height) {
-	if (Math.max.restore) {
-		Math.max.restore();
+
+	if (oViewport.getSize.restore) {
+		oViewport.getSize.restore();
 	}
 
-	const _max = Math.max;
-	this.stub(Math, 'max', function() {
-		if (document.documentElement.clientWidth === arguments[0] || window.innerWidth === arguments[0]) {
-			return width;
+	this.stub(oViewport, 'getSize', function() {
+		return {
+			height: height,
+			width: width
 		}
-
-		if (document.documentElement.clientHeight === arguments[0] || window.innerHeight === arguments[0]) {
-			return height;
-		}
-
-		return _max.apply(null, [].slice.call(arguments));
 	});
+
 };
 
 /* Add meta data to the page */
