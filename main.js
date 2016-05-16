@@ -25,7 +25,6 @@ Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.metadata = require('./src/js/metadata');
 Ads.prototype.version = require('./src/js/version');
 Ads.prototype.buildURLForVideo = require('./src/js/video');
-Ads.prototype.moat = require('./src/js/data-providers/moat');
 var utils = Ads.prototype.utils = require('./src/js/utils');
 
 /**
@@ -40,7 +39,6 @@ Ads.prototype.init = function(config) {
 	this.gpt.init();
 	this.krux.init();
 	this.cb.init();
-	this.moat.init();
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
