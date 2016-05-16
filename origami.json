@@ -15,7 +15,7 @@
 		"template": "/demos/src/individual.mustache",
 		"expanded": true,
 		"description": "",
-		"data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami", "moatid" : "financialtimes506DCcQ32"}
+		"data": {"name":"leaderboard", "formats" : "SuperLeaderboard", "network": 5887, "site" : "test.5887.origami"}
 
 	  },
 	  {

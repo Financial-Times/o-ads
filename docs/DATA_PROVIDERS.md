@@ -25,16 +25,3 @@ oAds.init({
 ```
 
 The attributes object can take user, page and custom data objects to send to Krux.
-
-## [Moat](https://moat.com/)
-### Configuration
-```js
-oAds.init({
-  ...
-  moat: {
-    id: "moatid1234"
-  },
-  ...
-});
-
-```
