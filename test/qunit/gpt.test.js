@@ -169,20 +169,6 @@ QUnit.test('catches slot in view render event and display it if method is ready'
 	assert.ok(displaySpy.calledOnce, 'slot dislpay method has been triggered');
 });
 
-QUnit.test('on slot refresh event sets the iframe width and height', function(assert) {
-	const done = assert.async();
-	const slotHTML = '<div data-o-ads-formats="MediumRectangle"></div>';
-	const node = this.fixturesContainer.add(slotHTML);
-	this.ads.init();
-	document.body.addEventListener('oAds.rendered', function(event) {
-		const iframe = event.detail.gpt.iframe;
-		assert.equal(iframe.style.width, '300px');
-		assert.equal(iframe.style.height, '250px');
-		done();
-	});
-	this.ads.slots.initSlot(node);
-});
-
 QUnit.test('on slot refresh event updates targeting', function(assert) {
 	const slotHTML = '<div data-o-ads-formats="MediumRectangle" data-o-ads-targeting="random=1"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
