@@ -250,10 +250,6 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
-	if(detail.size) {
-		detail.iframe.style.width = detail.size[0] + 'px';
-		detail.iframe.style.height = detail.size[1] + 'px';
-	}
 	utils.broadcast('rendered', data);
 }
 
