@@ -425,7 +425,7 @@ QUnit.test('createCORSRequest timeout', function(assert) {
 	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/xhr-response.js';
 	const errorCallback = function(){console.log('error callback');};
 	const successCallback = function(){console.log('successCallback');};
-	const xhr = this.ads.utils.createCORSRequest(url, 'GET', successCallback, errorCallback, true );
+	const xhr = this.ads.utils.createCORSRequest(url, 'GET', successCallback, errorCallback, 500);
   assert.equal(xhr.timeout, 500,'the xhr timeout value has been set to 500ms');
 	done();
 });

@@ -342,8 +342,8 @@ module.exports.createCORSRequest = function(url, method, callback, errorcb, time
 	}
 
 	/* istanbul ignore else */
-	if (timeout) {
-			xhr.timeout = 500;
+	if (typeof timeout === "number") {
+			xhr.timeout = timeout;
 	}
 
 	xhr.onload = function(xhrEvent) {
