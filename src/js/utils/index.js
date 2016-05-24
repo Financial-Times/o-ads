@@ -327,7 +327,7 @@ module.exports.isScriptAlreadyLoaded = function(url) {
 * @param {function} A function to run if the request fails
 * @returns {HTMLElement} the created XHR object
 */
-module.exports.createCORSRequest = function(url, method, callback, errorcb) {
+module.exports.createCORSRequest = function(url, method, callback, errorcb, timeout) {
 	let xhr = new XMLHttpRequest();
 	/* istanbul ignore else - legacy IE code, won't test */
 	if ('withCredentials' in xhr) {
@@ -339,6 +339,11 @@ module.exports.createCORSRequest = function(url, method, callback, errorcb) {
 	} else {
 		xhr = null;
 		errorcb();
+	}
+
+	/* istanbul ignore else */
+	if (typeof timeout === "number") {
+			xhr.timeout = timeout;
 	}
 
 	xhr.onload = function(xhrEvent) {
