@@ -2,10 +2,24 @@ machine:
   node:
     version: 4.4.0
 dependencies:
+  post:
+    - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
+    - tar -xzf sc-latest-linux.tar.gz
   override:
     - npm install
   cache_directories:
     - "node_modules"
 test:
   override:
-    - ./node_modules/.bin/obt test --browserTest --browserTestFailBuild --environments=chrome_latest_sauce,chrome_latest-1_sauce,firefox_latest_sauce,firefox_latest-1_sauce
+    - ./node_modules/.bin/obt test
+    - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
+        background: true
+    # Wait for tunnel to be ready
+    - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
+    - ./node_modules/.bin/obt demo --local --runServer:
+        background: true
+    # Wait for app to be ready
+    - sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
+    # Run nightwatch tests
+    - ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,ie_11_sauce,ie_10_sauce,ios_9_sauce,ios_8_sauce
+    - ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce

@@ -45,8 +45,5 @@
       ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
     }
   },
-  "license": "MIT",
-  "dependencies": {
-    "http-server": "^0.9.0"
-  }
+  "license": "MIT"
 }

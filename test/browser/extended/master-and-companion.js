@@ -25,6 +25,7 @@ module.exports = {
 	},
 	'Step 3: verify the companion advert is displayed': function (browser) {
 		browser
+			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait)
 			.assert.visible('#rectangle-gpt', 'Companion advert has been initiated and visible')
 				// switch focus to second iframe
 				.frame(2)

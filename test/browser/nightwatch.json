@@ -1,5 +1,5 @@
 {
-  "src_folders" : ["test/browser/tests"],
+  "src_folders" : ["test/browser"],
   "output_folder" : "./reports",
 
   "selenium" : {
@@ -10,9 +10,9 @@
 
   "test_settings" : {
     "default" : {
-      "launch_url" : "${TEST_URL}",
-      "selenium_port"  : 80,
-      "selenium_host"  : "${SELENIUM_HOST}",
+      "launch_url" : "http://localhost:8080/demos/local",
+      "selenium_port"  : 4445,
+      "selenium_host"  : "localhost",
       "silent": true,
       "screenshots" : {
         "enabled" : false
@@ -57,36 +57,78 @@
       "desiredCapabilities": {
         "browserName": "internet explorer",
         "version": "11.0",
-        "platform": "Windows 7"
+        "platform": "Windows 8.1",
+        "acceptSslCerts": true
       }
     },
     "ie_10_sauce" : {
       "desiredCapabilities": {
         "browserName": "internet explorer",
         "version": "10.0",
-        "platform": "Windows 7"
+        "platform": "Windows 7",
+        "acceptSslCerts": true
       }
     },
     "ie_9_sauce" : {
       "desiredCapabilities": {
         "browserName": "internet explorer",
         "version": "9.0",
-        "platform": "Windows 7"
+        "platform": "Windows 7",
+        "acceptSslCerts": true
       }
     },
     "safari_9_sauce" : {
       "desiredCapabilities": {
         "browserName": "safari",
         "version": "9.0",
-        "platform": "OS X 10.11"
+        "platform": "OS X 10.11",
+        "acceptSslCerts": true
       }
     },
     "safari_8_sauce" : {
       "desiredCapabilities": {
         "browserName": "safari",
         "version": "8.0",
-        "platform": "OS X 10.10"
+        "platform": "OS X 10.10",
+        "acceptSslCerts": true
+      }
+    },
+    "ios_9_sauce" : {
+      "desiredCapabilities": {
+        "deviceName": "iPhone 6",
+        "deviceOrientation": "portrait",
+        "version": "9.2",
+        "platform": "OS X 10.10",
+        "acceptSslCerts": true
+      }
+    },
+    "ios_8_sauce" : {
+      "desiredCapabilities": {
+        "deviceName": "iPhone 5",
+        "deviceOrientation": "portrait",
+        "version": "8.0",
+        "platform": "OS X 10.10",
+        "acceptSslCerts": true
+      }
+    },
+    "ios_8_sauce" : {
+      "desiredCapabilities": {
+        "deviceName": "iPhone 5",
+        "deviceOrientation": "portrait",
+        "version": "8.0",
+        "platform": "OS X 10.10",
+        "acceptSslCerts": true
+      }
+    },
+    "galaxy_s4_emulator": {
+       "desiredCapabilities": {
+        "deviceName": "Samsung Galaxy S4 Emulator",
+        "deviceOrientation": "portrait",
+        "version": "4.4",
+        "platform": "Linux",
+        "acceptSslCerts": true
       }
     }
+
   }
 }
