@@ -116,7 +116,7 @@ function Slot(container, screensize) {
 	this.center = slotConfig.center || false;
 	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
-	this.lazyLoad = slotConfig.lazyLoad || false;
+
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
@@ -129,6 +129,13 @@ function Slot(container, screensize) {
 			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
 		});
 	}
+
+	if(typeof slotConfig.lazyLoad !== 'undefined') {
+		this.lazyLoad = slotConfig.lazyLoad;
+	} else {
+		this.lazyLoad = config('lazyLoad') || false;
+	}
+
 
 	// extend with imperative configuration options
 	this.parseAttributeConfig();

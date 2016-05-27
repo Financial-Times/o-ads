@@ -712,6 +712,40 @@ QUnit.test('lazy loading', function(assert) {
 	this.ads.slots.initSlot(node);
 });
 
+QUnit.test('lazy loading global config', function(assert) {
+	const done = assert.async();
+	const done2 = assert.async();
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+	document.body.addEventListener('oAds.inview', function(event) {
+		if (event.detail.name === 'lazy-test') {
+			assert.ok('our test slot is inview');
+			done();
+		}
+	});
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done2();
+		}
+	});
+
+	this.ads.init({lazyLoad: true});
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+});
+
+QUnit.test('lazy loading slot config takes precedence over global config', function(assert) {
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="false" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+
+	this.ads.init({lazyLoad: true});
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false);
+});
+
 QUnit.test('lazy loading a companion slot', function(assert) {
 	const done = assert.async();
 	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
