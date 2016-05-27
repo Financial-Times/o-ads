@@ -736,6 +736,16 @@ QUnit.test('lazy loading global config', function(assert) {
 	this.ads.slots.initSlot(node);
 });
 
+QUnit.test('lazy loading slot config takes precedence over global config', function(assert) {
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="false" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+
+	this.ads.init({lazyLoad: true});
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false);
+});
+
 QUnit.test('lazy loading a companion slot', function(assert) {
 	const done = assert.async();
 	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
