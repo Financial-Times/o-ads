@@ -116,7 +116,7 @@ function Slot(container, screensize) {
 	this.center = slotConfig.center || false;
 	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
-	this.lazyLoad = slotConfig.lazyLoad || false;
+	this.lazyLoad = slotConfig.lazyLoad || config('lazyLoad') || false;
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
