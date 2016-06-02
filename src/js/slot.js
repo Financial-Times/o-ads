@@ -44,6 +44,7 @@ const attributeParsers = {
 
 	responsiveSizes: function(name, value, sizes) {
 		const screenName = name.replace(/^sizes/, '').toLowerCase();
+		/* istanbul ignore else	*/
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -54,6 +55,7 @@ const attributeParsers = {
 
 	responsiveFormats: function(name, value, sizes) {
 		const screenName = name.replace(/^formats/, '').toLowerCase();
+		/* istanbul ignore else	*/
 		if (!utils.isPlainObject(sizes)) {
 			sizes = {};
 		}
@@ -69,6 +71,7 @@ const attributeParsers = {
 	},
 
 	base: function(value) {
+		/* istanbul ignore else	*/
 		if (value === '' || value === 'true') {
 			value = true;
 		} else if (value === 'false') {
@@ -92,6 +95,7 @@ function Slot(container, screensize) {
 	this.container = container;
 
 	// the current responsive screensize
+
 	/* istanbul ignore else	*/
 	if (screensize) {
 		this.screensize = screensize;
@@ -120,26 +124,27 @@ function Slot(container, screensize) {
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = (slotConfig.companion === false ? false : true);
 	this.collapseEmpty = slotConfig.collapseEmpty;
-
+	 /* istanbul ignore else */
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
-	}	else if (utils.isPlainObject(slotConfig.formats)) {
+	}
+	else if (utils.isPlainObject(slotConfig.formats)) {
 		this.sizes = {};
 		Object.keys(slotConfig.formats).forEach(screenName => {
 			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
 		});
 	}
-
+	//TODO Write a test for when lazyload is set in slot config.
+	/* istanbul ignore if */
 	if(typeof slotConfig.lazyLoad !== 'undefined') {
 		this.lazyLoad = slotConfig.lazyLoad;
 	} else {
 		this.lazyLoad = config('lazyLoad') || false;
 	}
 
-
 	// extend with imperative configuration options
 	this.parseAttributeConfig();
-
+ 	/* istanbul ignore else	*/
 	if (!this.sizes.length && !utils.isPlainObject(this.sizes)) {
 		utils.log.error('slot %s has no configured sizes!', this.name);
 		return false;

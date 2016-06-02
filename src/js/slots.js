@@ -243,6 +243,7 @@ function onBreakpointChange(slots, screensize) {
 		/* istanbul ignore else  */
 		if (slot) {
       // ADS-766 if format name is Responsive then we have requested a responsive creative and do not want to request new ads at different breakpoints
+      /* istanbul ignore else  */
       if (slot.container && slot.container.dataset.oAdsLoaded && slot.container.dataset.oAdsLoaded==="Responsive") {
         return false;
       }
