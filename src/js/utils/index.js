@@ -351,8 +351,8 @@ module.exports.createCORSRequest = function(url, method, callback, errorcb, time
 	};
 
 	if (utils.isFunction(errorcb)) {
-		xhr.onerror = errorcb();
-		xhr.ontimeout = errorcb();
+		xhr.onerror = errorcb;
+		xhr.ontimeout = errorcb;
 	}
 
 	xhr.send();
