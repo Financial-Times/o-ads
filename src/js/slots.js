@@ -242,7 +242,11 @@ function onBreakpointChange(slots, screensize) {
 	slots.forEach(function(slot) {
 		/* istanbul ignore else  */
 		if (slot) {
-			slot.screensize = screensize;
+      // ADS-766 if format name is Responsive then we have requested a responsive creative and do not want to request new ads at different breakpoints
+      if (slot.container && slot.container.dataset.oAdsLoaded && slot.container.dataset.oAdsLoaded==="Responsive") {
+        return false;
+      }
+      slot.screensize = screensize;
 			slot.fire('breakpoint', { screensize: screensize });
 		}
 	});
