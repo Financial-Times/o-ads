@@ -268,10 +268,11 @@ QUnit.test('responsive slot should not make a call when size is false', function
 });
 
 
+
 QUnit.test('Responsive format type (for responsive creatives) should not refresh even when loaded in a responsive configured slot', function(assert) {
 	const clock = this.date();
 	this.viewport(700, 700);
-	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Responsive"  data-o-ads-formats-medium="Responsive"  data-o-ads-formats-small="Responsive"></div>';
+	const slotHTML = '<div data-o-ads-name="mpu" data-o-ads-formats-large="Responsive"  data-o-ads-formats-medium="Responsive"  data-o-ads-formats-small="false"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({
 		responsive: {
@@ -295,12 +296,13 @@ QUnit.test('Responsive format type (for responsive creatives) should not refresh
 	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'Responsive');
 	assert.equal(this.ads.targeting.get().res, 'medium');
 	assert.deepEqual(iframeSize, ['2', '2'], 'The iframe size is unchanged.');
+	assert.notOk($(slot.container).hasClass('o-ads--empty'), 'The ad slot is displayed.');
 	this.viewport(200,200);
 	window.dispatchEvent(new Event('resize'));
 	clock.tick(300);
-	assert.equal(this.gpt.pubads().refresh.callCount, 0, 'When screen size is changed no new ad call is made for Responsive format');
+	assert.equal(this.gpt.pubads().refresh.callCount, 0, 'When screen size is changed to small (set to false) it removes the ad');
 	assert.equal(this.ads.targeting.get().res, 'small');
-	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'Responsive');
+	assert.ok($(slot.container).hasClass('o-ads--empty'), 'The ad slot is not displayed.');
 });
 
 QUnit.test('Center container', function(assert) {
