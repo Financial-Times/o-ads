@@ -271,7 +271,7 @@ Slots.prototype.initPostMessage = function() {
 				const slotName = utils.iframeToSlotName(event.source.window);
 				slot = slots[slotName] || false;
 
-				if(slot) {
+				if (slot) {
 					if (data.collapse) {
 						slot.collapse();
 					}
@@ -287,9 +287,9 @@ Slots.prototype.initPostMessage = function() {
 						});
 					}
 
-          if(slot.disableSwipeDefault) {
-            messageToSend.disableDefaultSwipeHandler = true;
-          }
+					if(slot.disableSwipeDefault) {
+						messageToSend.disableDefaultSwipeHandler = true;
+					}
 
 					messageToSend.name = slotName;
 					messageToSend.sizes = slot.sizes;
@@ -299,16 +299,23 @@ Slots.prototype.initPostMessage = function() {
 					utils.log.error('Message received from unidentified slot');
 					utils.messenger.post(messageToSend, event.source);
 				}
-			} else if(type === 'responsive') {
-				slot.setResponsiveCreative(true);
-			} else if (utils.isFunction(slot[type])) {
-				slot[type]();
-			} else if (/^touch/.test(data.type)) {
-				slots[data.name].fire('touch', data);
 			} else {
-				delete data.type;
-				delete data.name;
-				slot.fire(type, data);
+				if (!slot) {
+					utils.log.error('Message received from unidentified slot');
+					return;
+				}
+
+				if(type === 'responsive') {
+					slot.setResponsiveCreative(true);
+				} else if (utils.isFunction(slot[type])) {
+					slot[type]();
+				} else if (/^touch/.test(data.type)) {
+					slot.fire('touch', data);
+				} else {
+					delete data.type;
+					delete data.name;
+					slot.fire(type, data);
+				}
 			}
 		}
 	}

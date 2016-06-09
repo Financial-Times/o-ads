@@ -1,9 +1,10 @@
 /* globals QUnit: false */
 
 'use strict'; //eslint-disable-line
-
+let errorStub;
 QUnit.module('Slots - post message', {
 	beforeEach: function() {
+		errorStub = this.stub(this.utils.log, 'error');
 		window.scrollTo(0, 0);
 		const eventListeners = this.eventListeners = [];
 		eventListeners;
@@ -21,6 +22,7 @@ QUnit.module('Slots - post message', {
 		this.eventListeners.forEach(function (item) {
 			window.removeEventListener(item.type, item.handler);
 		});
+		errorStub.reset();
 	}
 });
 
@@ -107,6 +109,7 @@ QUnit.test('Post message whoami message with isMaster will fire event on compani
 	this.spy(companionSlot, 'fire');
 	this.spy(notCompanionSlot, 'fire');
 });
+
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
 	const done = assert.async();
 	const slotName = 'whoami-ad';
@@ -115,7 +118,6 @@ QUnit.test('Post message from unknown slot logs an error and sends a repsonse', 
 		return 'unknown-slot';
 	});
 
-	const errorStub = this.stub(this.utils.log, 'error');
 
 	this.stub(this.utils.messenger, 'post', function (message, source) {
 		assert.ok(errorStub.calledWith('Message received from unidentified slot'), 'the error is logged');
@@ -281,4 +283,21 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 	this.ads.init({disableSwipeDefault: true});
 	const slot = this.ads.slots.initSlot(container);
 	this.spy(slot, 'collapse');
+});
+
+
+QUnit.test('Post message catches the event when the message comes not from a slot that is does not exist', function (assert) {
+	const done = assert.async();
+	const slotName = 'responsive-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.responsive", "name": "unknown"}', '*');
+		// as there is no event fired when no slot available, we use timeout to let the error call execute
+		setTimeout(function() {
+			assert.ok(errorStub.calledWith('Message received from unidentified slot'), 'the error is logged');
+			done();
+		}, 500);
+	});
+	this.ads.init();
+	const slot = this.ads.slots.initSlot(container);
 });
