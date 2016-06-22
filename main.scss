@@ -24,4 +24,8 @@ $o-ads-is-silent: true !default;
 		@include oAdsLabel("right")
 	}
 
+	.o-ads__report-link {
+		@include oAdsReportLink();
+	}
+
 }

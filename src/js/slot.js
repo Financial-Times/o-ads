@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const config = require('./config');
+const Reporter = require('./reporter');
 
 const attributeParsers = {
 	sizes: function(value, sizes) {
@@ -90,6 +91,7 @@ const attributeParsers = {
 function Slot(container, screensize) {
 	let slotConfig = config('slots') || {};
 	let disableSwipeDefault = config('disableSwipeDefault') || false;
+	let showBrokenAdReporter = config('flags').brokenAdReporter === 'on';
 
 	// store the container
 	this.container = container;
@@ -104,6 +106,10 @@ function Slot(container, screensize) {
 	// init slot dom structure
 	this.outer = this.addContainer(container, { 'class': 'o-ads__outer' });
 	this.inner = this.addContainer(this.outer, { 'class': 'o-ads__inner'});
+
+	if (showBrokenAdReporter) {
+		this.reporter = new Reporter(this.outer);
+	}
 
 	// make sure the slot has a name
 	this.setName();
@@ -391,6 +397,16 @@ Slot.prototype.labelContainer = function() {
 		this.container.classList.add(`o-ads--${className}`);
 	}
 	return this;
+};
+
+
+Slot.prototype.setReporter = function(gptEvent) {
+	if (this.reporter) {
+		this.reporter.setData({
+			gpt: gptEvent,
+			targeting: this.targeting
+		});
+	}
 };
 
 module.exports = Slot;
