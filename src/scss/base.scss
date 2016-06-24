@@ -29,3 +29,17 @@
 	}
 }
 
+@mixin oAdsReportLink {
+	font-size: 12px;
+	line-height: 22px;
+	padding: 2px 0;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+
+	&:before,
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+}

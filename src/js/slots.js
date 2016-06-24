@@ -216,6 +216,7 @@ Slots.prototype.initRendered = function() {
 			const format = findFormatBySize(size);
 			slot.setFormatLoaded(format);
 			slot.maximise(size);
+			slot.setReporter(event.detail.gpt);
 			slot.fire('complete', event.detail);
 		}
 	}.bind(null, this));
