@@ -86,23 +86,6 @@ function fetchDeclaritiveConfig() {
 /**
 * @private
 * @function
-* fetchCookieNextFlags pulls out 'next-flag' cookie key value pairs into an object returns the object
-*/
-function fetchCookieNextFlags() {
-	let nextFlags = {};
-	const cookie = utils.cookie('next-flags') || null;
-	if (cookie) {
-		cookie.split(',').forEach(pair => {
-			const [key, val] = pair.split(':');
-			nextFlags[key] = val;
-		});
-	}
-	return { flags: nextFlags };
-}
-
-/**
-* @private
-* @function
 * fetchCanonicalURL Grabs the canonical URL from the page meta if it exists.
 */
 function fetchCanonicalURL() {
@@ -153,7 +136,7 @@ Config.prototype.clear = function(key) {
 };
 
 Config.prototype.init = function() {
-	this.store = utils.extend(true, {}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig(), fetchCookieNextFlags());
+	this.store = utils.extend(true, {}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
 	return this.store;
 };
 

@@ -91,7 +91,7 @@ const attributeParsers = {
 function Slot(container, screensize) {
 	let slotConfig = config('slots') || {};
 	let disableSwipeDefault = config('disableSwipeDefault') || false;
-	let showBrokenAdReporter = config('flags').brokenAdReporter === 'on';
+	let showBrokenAdReporter = config('reporter_link');
 
 	// store the container
 	this.container = container;
@@ -108,7 +108,7 @@ function Slot(container, screensize) {
 	this.inner = this.addContainer(this.outer, { 'class': 'o-ads__inner'});
 
 	if (showBrokenAdReporter) {
-		this.reporter = new Reporter(this.outer);
+		this.reporter = new Reporter(container);
 	}
 
 	// make sure the slot has a name

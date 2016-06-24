@@ -98,8 +98,7 @@ function getRegExp(name, param) {
 		"FT_U": "underscoreEquals",
 		"FT_Remember": "colonEquals",
 		"FT_User": "colonEquals",
-		"FTQA": "commaEquals",
-		"next-flags": "commaColon"
+		"FTQA": "commaEquals"
 	};
 
 	switch (formats[name]) {
@@ -114,9 +113,6 @@ function getRegExp(name, param) {
 		break;
 	case "commaEquals":
 		re = `${param}=([^,]*)`;
-		break;
-	case "commaColon":
-		re = `${param}:([^,]*)`;
 		break;
 	default:
 		re = /((.|\n)*)/; // match everything
