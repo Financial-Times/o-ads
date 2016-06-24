@@ -7,7 +7,7 @@
 */
 function Reporter (container) {
 	this.config = {
-		next_ads_reporter_url: 'TO_BE_FINALISED', // app that handles POST report
+		next_ads_reporter_url: '/broken-ad-reporter/report/', // endpoint that handles POST report, TODO: add the next-ads-reporter app to the service registry
 		slack_channel: 'https://financialtimes.slack.com/messages/general', // slack channel for reporting broken ads
 		default_text: 'Report broken Ad', // default text on the link
 		css_class: 'o-ads__report-link' // link css class
