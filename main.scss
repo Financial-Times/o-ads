@@ -24,4 +24,5 @@ $o-ads-is-silent: true !default;
 		@include oAdsLabel("right")
 	}
 
+	$o-ads-is-silent: true !global;
 }
