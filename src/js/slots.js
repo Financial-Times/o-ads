@@ -268,9 +268,7 @@ Slots.prototype.initPostMessage = function() {
 			let slot = data.name ? slots[data.name] : false;
 			if (type === 'whoami' && event.source) {
 
-				if (/spoor-id=3/.test(document.cookie)) {
-					sendAdLoadedTrackingEvent();
-				}
+				document.body.dispatchEvent( new CustomEvent('oAds.adIframeLoaded'));
 
 				const messageToSend = { type: 'oAds.youare' };
 				const slotName = utils.iframeToSlotName(event.source.window);
@@ -324,40 +322,6 @@ Slots.prototype.initPostMessage = function() {
 			}
 		}
 	}
-
-	function sendAdLoadedTrackingEvent () {
-		const performance = window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
-		if (performance && performance.mark) {
-			const currentTime = new Date().getTime();
-			const offsets = {
-				domContentLoadedEventEnd: {
-					adsIframeLoad: currentTime - performance.timing['domContentLoadedEventEnd'],
-					loadEventEnd: currentTime - performance.timing['loadEventEnd'],
-					domInteractive: currentTime - performance.timing['domInteractive'],
-				}
-			};
-
-			const marks = performance.getEntriesByType ?
-				performance.getEntriesByName('firstAdLoaded')
-					.reduce((marks, mark) => {
-						marks[mark.name] = Math.round(mark.startTime);
-						return marks;
-					}, {}) :
-				{};
-
-			window.document.body.dispatchEvent(
-				new CustomEvent('oTracking.event', {
-					detail: {
-						category: 'ads',
-						action: 'ads-iframe-load',
-						timings: { offsets, marks }
-					},
-					bubbles: true
-				})
-			);
-		}
-	}
-
 };
 
 Slots.prototype.forEach = function(fn) {
