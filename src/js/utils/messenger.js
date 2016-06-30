@@ -11,6 +11,12 @@ module.exports.messenger = {
 		source.postMessage(message, '*');
 	},
 	parse: function(message) {
+
+		// Check whether the message looks like an object before trying to parse it
+		if (typeof message !== 'string' || message[0] !== '{') {
+			return message;
+		}
+
 		// try returning the parsed object
 		try {
 			return JSON.parse(message);
