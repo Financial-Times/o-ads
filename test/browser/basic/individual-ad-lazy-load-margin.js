@@ -3,7 +3,7 @@ const wait = 8000;
 module.exports = {
 
 	before: function (browser) {
-		browser.url(browser.launch_url + '/Individual-Ad-Lazy-Load.html');
+		browser.url(browser.launch_url + '/Individual-Ad-Lazy-Load-Margin.html');
 	},
 
 	'Step 1: go to leaderboard demo page': function (browser) {
@@ -13,10 +13,7 @@ module.exports = {
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
-			.assert.hidden('#leaderboard-gpt', 'Advert has not been initiated and is not visible')
-				.execute('scrollTo(0,10000)')
-				.pause(wait / 2)
-				.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
+			.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
 				.frame(0)
 				// wait for 1 second for advert to appear
