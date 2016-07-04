@@ -136,12 +136,24 @@ function Slot(container, screensize) {
       this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
     });
   }
-  //TODO Write a test for when lazyload is set in slot config.
-  /* istanbul ignore if */
+
   if (typeof slotConfig.lazyLoad !== 'undefined') {
     this.lazyLoad = slotConfig.lazyLoad;
   } else {
     this.lazyLoad = config('lazyLoad') || false;
+  }
+
+  if (typeof slotConfig.lazyLoadMargin !== 'undefined') {
+    this.lazyLoadMargin = slotConfig.lazyLoadMargin;
+  } else {
+    this.lazyLoadMargin = config('lazyLoadMargin') || false;
+  }
+
+
+  if (typeof slotConfig.lazyLoadPercent !== 'undefined') {
+    this.lazyLoadPercent = slotConfig.lazyLoadPercent;
+  } else {
+    this.lazyLoadPercent = config('lazyLoadPercent') || 0;
   }
 
   // extend with imperative configuration options
@@ -156,6 +168,8 @@ function Slot(container, screensize) {
   this.labelContainer();
 
   this.initResponsive();
+
+
   this.initLazyLoad();
 }
 
@@ -196,21 +210,34 @@ Slot.prototype.initLazyLoad = function() {
   /* istanbul ignore else  */
   if ('IntersectionObserver' in window && this.lazyLoad) {
     this.defer = true;
-    // create an observer
-    var observer = new IntersectionObserver(onChange.bind(this), {
-      // rootMargin: '50% 0%'
-      // threshold: [0.5]
-    });
-    observer.observe(this.container);
+
+    let options = {};
+    /* istanbul ignore else  */
+    if(this.lazyLoadPercent) {
+      options.threshold = [this.lazyLoadPercent / 100]
+    }
+    /* istanbul ignore else  */
+    if(this.lazyLoadMargin) {
+      options.rootMargin = this.lazyLoadMargin
+    }
 
     function onChange() {
       this.fire('render');
       observer.unobserve(this.container);
     }
+
+    // create an observer
+    const observer = new IntersectionObserver(onChange.bind(this), options);
+    observer.observe(this.container);
+
+    /* istanbul ignore else */
+		if(this.companion) {
+			utils.once('masterLoaded', onChange.bind(this), this.container);
+		}
   }
+  return this;
 }
-return this;
-};
+
 
 /**
  *	Listen to responsive breakpoints and collapse slots
