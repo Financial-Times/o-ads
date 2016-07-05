@@ -730,6 +730,7 @@ QUnit.test('lazy loading', function(assert) {
 	this.ads.init();
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, true);
 });
 
 QUnit.test('lazy loading global config', function(assert) {
@@ -744,9 +745,12 @@ QUnit.test('lazy loading global config', function(assert) {
 		}
 	});
 
-	this.ads.init({lazyLoad: true});
+	this.ads.init({
+		lazyLoad: true
+	});
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, true);
 });
 
 QUnit.test('lazy loading slot config takes precedence over global config', function(assert) {
@@ -805,7 +809,9 @@ QUnit.test('lazy loading supports in view threshold', function(assert) {
 	this.trigger(window, 'load');
 
 	this.ads.init({
-		lazyLoadPercent: 100
+		lazyLoad: {
+			threshold: 100
+		}
 	});
 
 	this.ads.slots.initSlot(node);
@@ -814,18 +820,20 @@ QUnit.test('lazy loading supports in view threshold', function(assert) {
 });
 
 
-
 QUnit.test('lazy loading supports slot level config', function(assert) {
-	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-lazy-load-percent="90" data-o-ads-lazy-load-margin="10%" data-o-ads-formats="MediumRectangle"></div>`);
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="90" data-o-ads-lazy-load-viewport-margin="10%" data-o-ads-formats="MediumRectangle"></div>`);
 	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2"></div>`);
 	this.ads.init({
-		lazyLoadPercent: 100,
-		lazyLoadMargin: '100% 0%',
+		lazyLoad: {
+			viewportMargin: '100% 0%',
+			threshold: 100
+		},
 		slots: {
 			'lazy-test-2': {
-				lazyLoadPercent: 80,
-				lazyLoadMargin: '50%',
-				lazyLoad: true,
+				lazyLoad: {
+					viewportMargin: '50%',
+					threshold: 80,
+				},
 				formats: ['MediumRectangle']
 			}
 		}
@@ -834,27 +842,25 @@ QUnit.test('lazy loading supports slot level config', function(assert) {
 	this.ads.slots.initSlot(node);
 	this.ads.slots.initSlot(node2);
 
-	assert.equal(this.ads.slots['lazy-test'].lazyLoadPercent, 90, 'first slot level condifiguration for lazy load in view percent');
-	assert.equal(this.ads.slots['lazy-test'].lazyLoadMargin, '10%', 'first slot level condifiguration for lazy load margin');
-	assert.equal(this.ads.slots['lazy-test-2'].lazyLoadPercent, 80, 'second slot level condifiguration for lazy load in view percent');
-	assert.equal(this.ads.slots['lazy-test-2'].lazyLoadMargin, '50%', 'second slot level condifiguration for lazy load margin');
-	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad, true, 'second slot level condifiguration for lazy load');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.threshold, 90, 'first slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '10%', 'first slot level condifiguration for lazy load margin');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad.threshold, 80, 'second slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad.viewportMargin, '50%', 'second slot level condifiguration for lazy load margin');
 });
 
 QUnit.test('lazy loading supports global config', function(assert) {
 	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>`;
 	const node = this.fixturesContainer.add(slotHTML);
-	this.ads.init({
-		lazyLoad: true,
-		lazyLoadPercent: 100,
-		lazyLoadMargin: '100% 0%'
-	});
+	const config = {
+		lazyLoad: {
+			viewportMargin: '100% 0%',
+			threshold: 100
+		}
+	};
+	this.ads.init(config);
 	this.ads.slots.initSlot(node);
-	assert.equal(this.ads.slots['lazy-test'].lazyLoad, true, 'slot level condifiguration for lazy load in view percent');
+	assert.deepEqual(this.ads.slots['lazy-test'].lazyLoad, config.lazyLoad, 'slot level condifiguration for lazy load in view percent');
 });
-
-
-
 
 QUnit.test('lazy loading triggers event at the correct point with no intersection observer viewport margin set', function(assert) {
 	const done = assert.async();
@@ -884,7 +890,6 @@ QUnit.test('lazy loading triggers event at the correct point with no intersectio
 
 });
 
-
 QUnit.test('lazy loading triggers event at the correct point with intersection observer viewport margin is set', function(assert) {
 	const done = assert.async();
 	const advertHeight = 90;
@@ -910,7 +915,9 @@ QUnit.test('lazy loading triggers event at the correct point with intersection o
 	this.trigger(window, 'load');
 
 	this.ads.init({
-		lazyLoadMargin: '100% 0%'
+		lazyLoad: {
+			viewportMargin : '100% 0%'
+		}
 	});
 
 	this.ads.slots.initSlot(node);
@@ -952,7 +959,6 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	this.ads.slots.initSlot(node);
 	this.utils.broadcast('masterLoaded', {}, node);
 });
-
 
 QUnit.test('complete events fire', function(assert) {
 	const done = assert.async();

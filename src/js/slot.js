@@ -143,18 +143,17 @@ function Slot(container, screensize) {
     this.lazyLoad = config('lazyLoad') || false;
   }
 
-  if (typeof slotConfig.lazyLoadMargin !== 'undefined') {
-    this.lazyLoadMargin = slotConfig.lazyLoadMargin;
-  } else {
-    this.lazyLoadMargin = config('lazyLoadMargin') || false;
+  if(this.lazyLoad) {
+    if (slotConfig.viewportMargin && typeof slotConfig.lazyLoad.viewportMargin !== 'undefined') {
+      this.lazyLoad.viewportMargin = slotConfig.lazyLoad.viewportMargin;
+    }
+
+    if (slotConfig.threshold && typeof slotConfig.lazyLoad.threshold !== 'undefined') {
+      this.lazyLoad.threshold = slotConfig.threshold;
+    }
   }
 
 
-  if (typeof slotConfig.lazyLoadPercent !== 'undefined') {
-    this.lazyLoadPercent = slotConfig.lazyLoadPercent;
-  } else {
-    this.lazyLoadPercent = config('lazyLoadPercent') || 0;
-  }
 
   // extend with imperative configuration options
   this.parseAttributeConfig();
@@ -182,13 +181,18 @@ Slot.prototype.parseAttributeConfig = function() {
     const value = attribute.value;
     if (name === 'formats') {
       this[name] = attributeParsers[name](value, this.sizes);
+    } else if (name === 'lazyLoadThreshold' && this.lazyLoad) {
+      this.lazyLoad.threshold = attributeParsers.base(value);
+    } else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
+      this.lazyLoad.viewportMargin = attributeParsers.base(value);
     } else if (attributeParsers[name]) {
       this[name] = attributeParsers[name](value, this[name]);
     } else if (/^formats\w*/.test(name)) {
       this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
     } else if (/^sizes\w*/.test(name)) {
       this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
-    } else if (this.hasOwnProperty(name)) {
+    }
+    else if (this.hasOwnProperty(name)) {
       this[name] = attributeParsers.base(value);
     }
   });
@@ -210,16 +214,19 @@ Slot.prototype.initLazyLoad = function() {
   /* istanbul ignore else  */
   if ('IntersectionObserver' in window && this.lazyLoad) {
     this.defer = true;
-
     let options = {};
-    /* istanbul ignore else  */
-    if(this.lazyLoadPercent) {
-      options.threshold = [this.lazyLoadPercent / 100]
+
+
+    if(typeof this.lazyLoad === 'object') {
+      if(this.lazyLoad.viewportMargin){
+        options.rootMargin = this.lazyLoad.viewportMargin;
+      }
+      if(this.lazyLoad.threshold){
+        options.threshold = [this.lazyLoad.threshold / 100];
+      }
     }
     /* istanbul ignore else  */
-    if(this.lazyLoadMargin) {
-      options.rootMargin = this.lazyLoadMargin
-    }
+
 
     function onChange() {
       this.fire('render');
