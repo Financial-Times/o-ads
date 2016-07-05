@@ -6,7 +6,7 @@ module.exports = {
 		browser.url(browser.launch_url + '/Individual-Ad-Lazy-Load.html');
 	},
 
-	'Step 1: go to leaderboard demo page': function (browser) {
+	'Step 1: go to lazy load demo page': function (browser) {
 		browser
 			.waitForElementVisible('body', wait)
 			.assert.title('o-ads: Individual-Ad-Lazy-Load demo', 'Page title is correct');
