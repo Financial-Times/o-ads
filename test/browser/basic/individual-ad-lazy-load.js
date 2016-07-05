@@ -11,11 +11,14 @@ module.exports = {
 			.waitForElementVisible('body', wait)
 			.assert.title('o-ads: Individual-Ad-Lazy-Load demo', 'Page title is correct');
 	},
-	'Step 2: verify the leaderboard advert is displayed': function (browser) {
+	'Step 2: verify the leaderboard advert is not displayed and scroll down': function (browser) {
 		browser
 			.assert.hidden('#leaderboard-gpt', 'Advert has not been initiated and is not visible')
 				.execute(function() { window.scrollBy(0, 10000); }, [])
 				.pause(wait / 2)
+	},
+	'Step 3: Veridy the advert is displayed': function (browser) {
+			browser
 				.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
 				.frame(0)
