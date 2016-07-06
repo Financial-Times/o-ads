@@ -182,7 +182,7 @@ The library comes with the following default options:
 
 ***Note:*** Formats can only be configured via JSON configuration. Also once added, they can be used a number of slots alongside the default formats. Also the formats are a global configuration, and you cannot define a format per slot and re-use it on other slots.
 
-Once the advert is loaded, an attribute called `data-o-ads-loaded` will be added to the slot, with the name of the ad format that was actually loaded into the slot.
+Once the ad is loaded, an attribute called `data-o-ads-loaded` will be added to the slot, with the name of the ad format that was actually loaded into the slot.
 
 #### JSON Configuration
 ```js

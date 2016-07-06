@@ -115,7 +115,7 @@ Triggered if the library fails to load external JS GPT library, meaning no adver
 Slot has been inited in the oAds library and is about to be requested from the ad server (deferred if lazy loading is on)
 
 ### `oAds.rendered`
-Triggered once the as has been rendered on the page.
+Triggered once the ad has been rendered on the page.
 
 ### `oAds.complete`
 Advert has now been inited in the oAds, requested from the ad server and displayed if one was returned. Triggered after `oAds.rendered`
