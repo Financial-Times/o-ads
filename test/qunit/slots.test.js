@@ -848,6 +848,20 @@ QUnit.test('lazy loading supports slot level config', function(assert) {
 	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad.viewportMargin, '50%', 'second slot level condifiguration for lazy load margin');
 });
 
+
+QUnit.test('lazy loading onlu works if explicitely told to do so', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="90" data-o-ads-formats="MediumRectangle"></div>`);
+	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2" data-o-ads-lazy-load-viewport-margin="10%" data-o-ads-formats="MediumRectangle"></div>`);
+	this.ads.init();
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.initSlot(node2);
+
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false, 'first slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad, false, 'second slot level condifiguration for lazy load in view percent');
+});
+
+
 QUnit.test('lazy loading supports global config', function(assert) {
 	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>`;
 	const node = this.fixturesContainer.add(slotHTML);
