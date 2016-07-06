@@ -25,3 +25,5 @@ oAds.init({
 ```
 
 The attributes object can take user, page and custom data objects to send to Krux.
+
+The krux script is loaded when the page is idle (using `requestIdleCallback` if supported) or with a `setTimeout` of 100ms if it is not supported. An `oAds.kruxScriptLoaded` event is fired when the krux script has loaded (on it's onload callback - not necessarily when it's executed).

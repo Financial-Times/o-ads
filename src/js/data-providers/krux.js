@@ -38,9 +38,20 @@ Krux.prototype.init = function() {
 			src = decodeURIComponent(m[1]);
 		}
 		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag?confid=${this.config.id}`;
+		
+		const loadKruxScript = () => {
+			utils.attach(finalSrc, true, () => {
+				utils.broadcast('kruxScriptLoaded');
+			});
+			this.events.init();
+		};
 
-		utils.attach(finalSrc, true);
-		this.events.init();
+		if('requestIdleCallback' in window) {
+			requestIdleCallback(loadKruxScript);
+		} else {
+			setTimeout(loadKruxScript, 100);
+		}
+
 		targeting.add(this.targeting());
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
