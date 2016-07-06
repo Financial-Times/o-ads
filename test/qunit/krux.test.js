@@ -14,6 +14,8 @@ QUnit.module('Krux', {
 
 QUnit.test("control tag is attached when initialised", function(assert) {
 	this.ads.init({krux: {id: 'hello'}});
+	const clock = this.date();
+	clock.tick(1001);
 	assert.ok(this.ads.utils.attach.withArgs('oxnso'), 'the krux control tag file is attached to the page');
 });
 
@@ -26,7 +28,9 @@ QUnit.test('sets global Krux if one is not available yet', function(assert) {
 QUnit.test('adds a script from url when location contains krux src', function(assert) {
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=http%3A%2F%2Fcdn.krxd.net%3A123%2F');
 	this.stub(this.utils, 'broadcast');
+	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+	clock.tick(1001);
 	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
 	assert.ok(this.utils.broadcast.calledWith('kruxScriptLoaded'));
 });
@@ -37,15 +41,16 @@ QUnit.test('adds Krux script after a timeout if requestIdleCallback doesn\'t exi
 	delete window.requestIdleCallback;
 	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
-	assert.notOk(this.utils.broadcast.calledWith('kruxScriptLoaded'));
-	clock.tick(101);
+	clock.tick(1001);
 	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
 	assert.ok(this.utils.broadcast.calledWith('kruxScriptLoaded'));
 });
 
 QUnit.test('does not add a script from url when location contains krux src that is set to disable', function(assert) {
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=disable');
+	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
+	clock.tick(1001);
 	assert.ok(this.attach.calledWith('', true), 'the url passed to attach is empty');
 });
 
@@ -145,6 +150,8 @@ QUnit.test('event pixel - dwell time', function(assert) {
 		}
 	});
 
+	clock.tick(1001);
+
 	clock.tick(11000);
 	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'fired after first interval');
 
@@ -182,6 +189,7 @@ QUnit.test('event pixel - dwell time defaults', function(assert) {
 		}
 	});
 
+	clock.tick(1001);
 	clock.tick(5100);
 	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 5}), 'fired after first interval');
 

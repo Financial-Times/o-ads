@@ -45,12 +45,13 @@ Krux.prototype.init = function() {
 			});
 			this.events.init();
 		};
-
-		if('requestIdleCallback' in window) {
-			requestIdleCallback(loadKruxScript);
-		} else {
-			setTimeout(loadKruxScript, 100);
-		}
+		setTimeout(() => {
+			if('requestIdleCallback' in window) {
+				requestIdleCallback(loadKruxScript);
+			} else {
+				loadKruxScript();
+			}
+		}, 1000);
 
 		targeting.add(this.targeting());
 	} else {
