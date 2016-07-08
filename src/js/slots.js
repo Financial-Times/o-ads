@@ -244,7 +244,10 @@ function onBreakpointChange(slots, screensize) {
 		if (slot) {
 			// ADS-766 if format name is Responsive then we have requested a responsive creative and do not want to request new ads at different breakpoints
 			/* istanbul ignore else	*/
-			if (slot.container && slot.container.getAttribute('data-o-ads-loaded') && (slot.container.getAttribute('data-o-ads-loaded') === "Responsive") && slot.sizes[screensize] !== false) {
+			const isCurrentlyResponsive = slot.container && slot.container.getAttribute('data-o-ads-loaded') === 'Responsive';
+			const stillWantsResponsive = slot.sizes[screensize] && slot.sizes[screensize].filter(size => findFormatBySize(size) === 'Responsive').length > 0;
+
+			if (isCurrentlyResponsive && stillWantsResponsive) {
 				return false;
 			}
 			slot.screensize = screensize;

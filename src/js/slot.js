@@ -277,6 +277,7 @@ Slot.prototype.setResponsiveCreative = function (value) {
 */
 Slot.prototype.collapse = function() {
 	this.container.classList.add('o-ads--empty');
+	this.setFormatLoaded(false);
 	document.body.classList.add(`o-ads-no-${this.name}`);
 	return this;
 };
@@ -363,6 +364,7 @@ Slot.prototype.hasValidSize = function(screensize) {
 
 	return true;
 };
+
 
 /**
 * Add a center class to the main container
