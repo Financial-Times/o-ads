@@ -42,8 +42,8 @@
             "zone": "master-companion-test"
         }
     }, {
-        "name": "Responsive-Slots",
-        "template": "/demos/src/responsive-slots.mustache",
+        "name": "Responsive-Positions",
+        "template": "/demos/src/responsive-positions.mustache",
         "expanded": false,
         "description": "",
         "data": {
