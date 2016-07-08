@@ -19,7 +19,7 @@ module.exports = {
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Advert image is visible')
 				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097')
+				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14996284403552849686')
 				// switch focus back to main page
 				.frame(null);
 	},
