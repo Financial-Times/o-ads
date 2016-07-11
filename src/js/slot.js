@@ -233,6 +233,7 @@ Slot.prototype.initResponsive = function() {
 				slot.uncollapse();
 			} else {
 				slot.collapse();
+				slot.clear();
 			}
 		}, this.container);
 	}
