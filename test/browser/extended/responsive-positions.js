@@ -58,7 +58,7 @@ module.exports = {
 		browser
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
 				// switch focus to second iframe
-				.frame(2)
+				.frame(1)
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
 				// make sure we can see the correct URL
