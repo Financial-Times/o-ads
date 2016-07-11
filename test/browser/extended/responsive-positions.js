@@ -56,9 +56,10 @@ module.exports = {
 
 	'Step 6: verify bottom slot is displaying an mpu': function (browser) {
 		browser
+			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait, 'MPU loaded')
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
 				// switch focus to second iframe
-				.frame(1)
+				.frame(0)
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
 				// make sure we can see the correct URL
