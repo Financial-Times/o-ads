@@ -13,13 +13,13 @@ module.exports = {
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
-			.assert.visible('#Leaderboard-gpt', 'Advert has been initiated and visible')
+			.assert.visible('#SuperLeaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
 				.frame(0)
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Advert image is visible')
 				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097')
+				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14996284403552849686')
 				// switch focus back to main page
 				.frame(null);
 	},
