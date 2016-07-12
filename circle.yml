@@ -21,5 +21,5 @@ test:
     # Wait for app to be ready
     - sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
     # Run nightwatch tests
-    - ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,ie_11_sauce,ie_10_sauce,ios_9_sauce,ios_8_sauce
+    - ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,ie_11_sauce,ie_10_sauce,ios_9_sauce,ios_8_sauce,ms_edge
     - ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce
