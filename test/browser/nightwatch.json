@@ -131,7 +131,7 @@
     },
     "ms_edge": {
        "desiredCapabilities": {
-        "deviceName": "MicrosoftEdge",
+        "browserName": "MicrosoftEdge",
         "version": "13.10586",
         "platform": "Windows 10",
         "acceptSslCerts": true
