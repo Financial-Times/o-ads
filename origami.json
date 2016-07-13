@@ -28,14 +28,14 @@
  		"template": "/demos/src/individuallazyload.mustache",
  		"expanded": true,
  		"description": "",
- 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "lazyLoadMargin": "0%"}
+ 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "viewportMargin": "0%"}
  	  },
 		{
  		"name": "Individual-Ad-Lazy-Load-Margin",
  		"template": "/demos/src/individuallazyload.mustache",
  		"expanded": true,
  		"description": "",
- 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "lazyLoadMargin": "3000px 0px"}
+ 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "viewportMargin": "3000px 0px"}
  	  },
 	  {
 		"name": "Individual-Ad-With-Out-Of-Page",
