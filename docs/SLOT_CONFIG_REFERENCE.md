@@ -143,6 +143,12 @@ Support following properties:
 * **threshold** -  Sets threshold at which advert should be requested and displayed. Value can be anything between 0 and 100. Default is `0`, which means as soon as first pixel in in view the advert will get loaded.
 
 
+**IMPORTANT** Starting with version 5 oAds is relying on [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). If one ins not avaailable in browser, you may need to provide a polyfill. The easiest way is to include with [Polyfill.io] on your page.
+E.g.
+```html
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver|always|gated"></script>
+```
+
 #### JSON Configuration
 ```js
 {

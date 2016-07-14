@@ -14,11 +14,12 @@ module.exports = {
 	'Step 2: verify the leaderboard advert is not displayed and scroll down': function (browser) {
 		browser
 			.assert.hidden('#leaderboard-gpt', 'Advert has not been initiated and is not visible')
-				.execute(function() { window.scrollBy(0, 10000); }, [])
+				.moveToElement('#leaderboard-gpt', 0, 1)
 				.pause(wait)
 	},
 	'Step 3: Verify the advert is displayed': function (browser) {
 			browser
+				.pause(wait)
 				.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
 				.frame(0)
