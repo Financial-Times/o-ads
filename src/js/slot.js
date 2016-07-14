@@ -240,6 +240,7 @@ Slot.prototype.initLazyLoad = function() {
     const observer = new IntersectionObserver(onChange.bind(this), options);
     observer.observe(this.container);
 
+    //Master/Companion ads don't work with lazy loading, so if a master ad loads trigger
     /* istanbul ignore else */
 		if(this.companion) {
 			utils.once('masterLoaded', onChange.bind(this), this.container);
