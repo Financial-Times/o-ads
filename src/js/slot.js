@@ -143,13 +143,16 @@ function Slot(container, screensize) {
     this.lazyLoad = config('lazyLoad') || false;
   }
 
+  /* istanbul ignore else */
   if(this.lazyLoad) {
-    if (slotConfig.viewportMargin && typeof slotConfig.lazyLoad.viewportMargin !== 'undefined') {
+
+    /* istanbul ignore else */
+    if (slotConfig.lazyLoad && typeof slotConfig.lazyLoad.viewportMargin !== 'undefined') {
       this.lazyLoad.viewportMargin = slotConfig.lazyLoad.viewportMargin;
     }
-
-    if (slotConfig.threshold && typeof slotConfig.lazyLoad.threshold !== 'undefined') {
-      this.lazyLoad.threshold = slotConfig.threshold;
+    /* istanbul ignore else */
+    if (slotConfig.lazyLoad && typeof slotConfig.lazyLoad.threshold !== 'undefined') {
+      this.lazyLoad.threshold = slotConfig.lazyLoad.threshold;
     }
   }
 
@@ -216,17 +219,17 @@ Slot.prototype.initLazyLoad = function() {
     this.defer = true;
     let options = {};
 
-
+    /* istanbul ignore else	*/
     if(typeof this.lazyLoad === 'object') {
+      /* istanbul ignore else	*/
       if(this.lazyLoad.viewportMargin){
         options.rootMargin = this.lazyLoad.viewportMargin;
       }
+      /* istanbul ignore else	*/
       if(this.lazyLoad.threshold){
         options.threshold = [this.lazyLoad.threshold / 100];
       }
     }
-    /* istanbul ignore else  */
-
 
     function onChange() {
       this.fire('render');
