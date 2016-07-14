@@ -250,28 +250,29 @@ Slot.prototype.initLazyLoad = function() {
  *	Listen to responsive breakpoints and collapse slots
  * where the configured size is set to false
  */
-Slot.prototype.initResponsive = function() {
-  /* istanbul ignore else  */
-  if (utils.isPlainObject(this.sizes)) {
+ Slot.prototype.initResponsive = function() {
+ 	/* istanbul ignore else  */
+ 	if (utils.isPlainObject(this.sizes)) {
 
-    if (!this.hasValidSize()) {
-      this.collapse();
-    }
+ 		if (!this.hasValidSize()) {
+ 			this.collapse();
+ 		}
 
-    utils.on('breakpoint', function(event) {
-      const slot = event.detail.slot;
-      slot.screensize = event.detail.screensize;
+ 		utils.on('breakpoint', function(event) {
+ 			const slot = event.detail.slot;
+ 			slot.screensize = event.detail.screensize;
 
-      if (slot.hasValidSize()) {
-        slot.uncollapse();
-      } else {
-        slot.collapse();
-      }
-    }, this.container);
-  }
+ 			if (slot.hasValidSize()) {
+ 				slot.uncollapse();
+ 			} else {
+ 				slot.collapse();
+ 				slot.clear();
+ 			}
+ 		}, this.container);
+ 	}
 
-  return this;
-};
+ 	return this;
+ };
 
 /**
  * Maximise the slot when size is 100x100
@@ -309,9 +310,10 @@ Slot.prototype.setResponsiveCreative = function(value) {
  * add the empty class to the slot
  */
 Slot.prototype.collapse = function() {
-  this.container.classList.add('o-ads--empty');
-  document.body.classList.add(`o-ads-no-${this.name}`);
-  return this;
+	this.container.classList.add('o-ads--empty');
+	this.setFormatLoaded(false);
+	document.body.classList.add(`o-ads-no-${this.name}`);
+	return this;
 };
 
 /**
@@ -396,6 +398,7 @@ Slot.prototype.hasValidSize = function(screensize) {
 
   return true;
 };
+
 
 /**
  * Add a center class to the main container

@@ -128,6 +128,14 @@
         "platform": "Linux",
         "acceptSslCerts": true
       }
+    },
+    "ms_edge": {
+       "desiredCapabilities": {
+        "browserName": "MicrosoftEdge",
+        "version": "13.10586",
+        "platform": "Windows 10",
+        "acceptSslCerts": true
+      }
     }
 
   }
