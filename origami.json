@@ -1,69 +1,85 @@
 {
-	"description": "Advertising",
-	"origamiType": "module",
-	"origamiVersion": 1,
-	"support": "origami.advertising.technology@ft.com",
-	"supportStatus": "active",
-	"demosDefaults": {
-	 "template": "demos/src/individual.mustache",
-	 "sass": "demos/src/demo.scss",
-	 "js": "demos/src/demo.js"
-	 },
-	 "browserFeatures": {
-		 "required": [
-			 "Array.from",
-			 "IntersectionObserver"
-		 ]
-	 },
-	 "demos": [
-	 {
-		"name": "Individual-Ad",
-		"template": "/demos/src/individual.mustache",
-		"expanded": true,
-		"description": "",
-		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami"}
-	  },
-		{
- 		"name": "Individual-Ad-Lazy-Load",
- 		"template": "/demos/src/individuallazyload.mustache",
- 		"expanded": true,
- 		"description": "",
- 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "viewportMargin": "0%"}
- 	  },
-		{
- 		"name": "Individual-Ad-Lazy-Load-Margin",
- 		"template": "/demos/src/individuallazyload.mustache",
- 		"expanded": true,
- 		"description": "",
- 		"data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami", "top": "2000", "viewportMargin": "3000px 0px"}
- 	  },
-	  {
-		"name": "Individual-Ad-With-Out-Of-Page",
-		"template": "/demos/src/individualoop.mustache",
-		"expanded": false,
-		"description": "",
-		"data": {"name":"halfpage", "formats": "HalfPage",  "network": 5887, "site" : "test.5887.origami"}
-	  },
-	  {
-		"name": "Individual-Ad-with-Custom-Targeting-Values",
-		"template": "/demos/src/individualcustomtargeting.mustache",
-		"expanded": false,
-		"description": "",
-		"data": {"name":"leaderboard", "network": 5887, "site" : "test.5887.origami"}
-	  },
-	  {
-		"name": "Master-and-Companion",
-		"template": "/demos/src/masterandcompanion.mustache",
-		"expanded": false,
-		"description": "",
-		"data": {"network": 5887, "site" : "test.5887.origami", "zone": "master-companion-test"}
-	  },
-	  {
-	  	"name": "Responsive-Positions",
-	  	"template": "/demos/src/responsive.mustache",
-	  	"expanded": false,
-	  	"description": "",
-			"data": {"network": 5887, "site" : "test.5887.origami"}
-	  }
-  	]
+    "description": "Advertising",
+    "origamiType": "module",
+    "origamiVersion": 1,
+    "support": "origami.advertising.technology@ft.com",
+    "supportStatus": "active",
+    "demosDefaults": {
+        "template": "demos/src/individual.mustache",
+        "sass": "demos/src/demo.scss",
+        "js": "demos/src/demo.js"
+    },
+    "browserFeatures": {
+        "required": [
+            "Array.from",
+            "IntersectionObserver"
+        ]
+    },
+    "demos": [{
+        "name": "Individual-Ad",
+        "template": "/demos/src/individual.mustache",
+        "expanded": true,
+        "description": "",
+        "data": {
+            "name": "leaderboard",
+            "formats": "Leaderboard",
+            "network": 5887,
+            "site": "test.5887.origami"
+        }
+    }, {
+        "name": "Individual-Ad-Lazy-Load",
+        "template": "/demos/src/individuallazyload.mustache",
+        "expanded": true,
+        "description": "",
+        "data": {
+            "name": "leaderboard",
+            "formats": "Leaderboard",
+            "network": 5887,
+            "site": "test.5887.origami",
+            "top": "2000",
+            "viewportMargin": "0%"
+        }
+    }, {
+        "name": "Individual-Ad-Lazy-Load-Margin",
+        "template": "/demos/src/individuallazyload.mustache",
+        "expanded": true,
+        "description": "",
+        "data": {
+            "name": "leaderboard",
+            "formats": "Leaderboard",
+            "network": 5887,
+            "site": "test.5887.origami",
+            "top": "2000",
+            "viewportMargin": "3000px 0px"
+        }
+    }, {
+        "name": "Individual-Ad-with-Custom-Targeting-Values",
+        "template": "/demos/src/individualcustomtargeting.mustache",
+        "expanded": false,
+        "description": "",
+        "data": {
+            "name": "leaderboard",
+            "network": 5887,
+            "site": "test.5887.origami"
+        }
+    }, {
+        "name": "Master-and-Companion",
+        "template": "/demos/src/masterandcompanion.mustache",
+        "expanded": false,
+        "description": "",
+        "data": {
+            "network": 5887,
+            "site": "test.5887.origami",
+            "zone": "master-companion-test"
+        }
+    }, {
+        "name": "Responsive-Positions",
+        "template": "/demos/src/responsive-positions.mustache",
+        "expanded": false,
+        "description": "",
+        "data": {
+            "network": 5887,
+            "site": "test.5887.origami"
+        }
+    }]
 }
