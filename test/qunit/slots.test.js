@@ -974,6 +974,24 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	this.utils.broadcast('masterLoaded', {}, node);
 });
 
+
+QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not available', function(assert) {
+	const originalObserver = window.IntersectionObserver;
+	delete window.IntersectionObserver;
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({
+		lazyLoad: true
+	});
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+	const slot = this.ads.slots['lazy-test'];
+	assert.equal(slot.lazyLoad, true);
+	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'MediumRectangle');
+	window.IntersectionObserver = originalObserver;
+});
+
+
 QUnit.test('complete events fire', function(assert) {
 	const done = assert.async();
 	const done2 = assert.async();
