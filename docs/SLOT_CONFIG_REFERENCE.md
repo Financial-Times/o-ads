@@ -146,7 +146,7 @@ Support following properties:
 **IMPORTANT** Starting with version 5 oAds is relying on [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). If one ins not avaailable in browser, you may need to provide a polyfill. The easiest way is to include with [Polyfill.io] on your page.
 E.g.
 ```html
-<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver|gated"></script>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
 ```
 
 #### JSON Configuration
