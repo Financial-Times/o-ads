@@ -81,6 +81,12 @@ const attributeParsers = {
   }
 };
 
+const convertLazyLoadBooleanToObject = (obj) => {
+  if(obj.lazyLoad === true) {
+    obj.lazyLoad = {};
+  }
+}
+
 /**
  * The Slot class.
  * @class
@@ -145,7 +151,7 @@ function Slot(container, screensize) {
 
   /* istanbul ignore else */
   if(this.lazyLoad) {
-
+    convertLazyLoadBooleanToObject(this);
     /* istanbul ignore else */
     if (slotConfig.lazyLoad && typeof slotConfig.lazyLoad.viewportMargin !== 'undefined') {
       this.lazyLoad.viewportMargin = slotConfig.lazyLoad.viewportMargin;
@@ -185,8 +191,10 @@ Slot.prototype.parseAttributeConfig = function() {
     if (name === 'formats') {
       this[name] = attributeParsers[name](value, this.sizes);
     } else if (name === 'lazyLoadThreshold' && this.lazyLoad) {
+      convertLazyLoadBooleanToObject(this);
       this.lazyLoad.threshold = attributeParsers.base(value);
     } else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
+      convertLazyLoadBooleanToObject(this);
       this.lazyLoad.viewportMargin = attributeParsers.base(value);
     } else if (attributeParsers[name]) {
       this[name] = attributeParsers[name](value, this[name]);

@@ -607,7 +607,7 @@ QUnit.test('lazy loading global config', function(assert) {
 	});
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
-	assert.equal(this.ads.slots['lazy-test'].lazyLoad, true);
+	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
 });
 
 QUnit.test('lazy loading slot config takes precedence over global config', function(assert) {
@@ -706,9 +706,19 @@ QUnit.test('lazy loading supports slot level config', function(assert) {
 });
 
 
-QUnit.test('lazy loading onlu works if explicitely told to do so', function(assert) {
-	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="90" data-o-ads-formats="MediumRectangle"></div>`);
-	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2" data-o-ads-lazy-load-viewport-margin="10%" data-o-ads-formats="MediumRectangle"></div>`);
+QUnit.test('lazy loading works with old DOM slot level configuration', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-lazy-load-threshold="90" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.threshold, 90, 'slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '15%', 'slot level condifiguration for lazy load margin');
+});
+
+
+QUnit.test('lazy loading only works if explicitely told to do so', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="80" data-o-ads-formats="MediumRectangle"></div>`);
+	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
 	this.ads.init();
 
 	this.ads.slots.initSlot(node);
@@ -843,7 +853,7 @@ QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not 
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
 	const slot = this.ads.slots['lazy-test'];
-	assert.equal(slot.lazyLoad, true);
+	assert.ok(slot.lazyLoad);
 	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'MediumRectangle');
 	window.IntersectionObserver = originalObserver;
 });
