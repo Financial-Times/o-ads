@@ -134,23 +134,36 @@ To serve pop-up, pop-under, or floating creatives to your website, you’ll need
 <div data-o-ads-out-of-page="true"></div>
 ```
 
-
+---------------------------------------
 
 ### Lazy load
 Defines if the slot should be lazy loaded, e.g. only requested from the advertising server once it comes into view. Default is `false`.
+Support following properties:
+* **viewportMargin** - Sets the margin of viewport to use when deciding if the advert is in view. Useful if you want to request and display the advert just before it comes into view. Works as regular margin definitions. Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 0%`, or `100px 0px`. Default is `0%`.
+* **threshold** -  Sets threshold at which advert should be requested and displayed. Value can be anything between 0 and 100. Default is `0`, which means as soon as first pixel in in view the advert will get loaded.
+
+
+**IMPORTANT** Starting with version 5 oAds is relying on [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). If one ins not avaailable in browser, you may need to provide a polyfill. The easiest way is to include with [Polyfill.io] on your page.
+E.g.
+```html
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+```
 
 #### JSON Configuration
 ```js
 {
   ...
-  lazyLoad: true
+  lazyLoad: {
+    viewportMargin: '0% 0% 100% 0%',
+    threshold: 50
+  }
   ...
 }
 ```
 
 #### DOM Configuration
 ```html
-<div data-o-ads-lazy-load="true"></div>
+<div data-o-ads-lazy-load="true" data-o-ads-lazy-load="true" data-o-ads-lazy-load-threshold="90" data-o-ads-lazy-load-viewport-margin="10%"></div>
 ```
 
 ---------------------------------------
@@ -171,10 +184,11 @@ The library comes with the following default options:
 * AdhesionBanner `320x50`
 * MicroBar `88x31`
 * Button2 `120x60`
+* Responsive `2x2`
 
 ***Note:*** Formats can only be configured via JSON configuration. Also once added, they can be used a number of slots alongside the default formats. Also the formats are a global configuration, and you cannot define a format per slot and re-use it on other slots.
 
-Once the advert is loaded, an attribute called `data-o-ads-loaded` will be added to the slot, with the name of the ad format that was actually loaded into the slot.
+Once the ad is loaded, an attribute called `data-o-ads-loaded` will be added to the slot, with the name of the ad format that was actually loaded into the slot.
 
 #### JSON Configuration
 ```js

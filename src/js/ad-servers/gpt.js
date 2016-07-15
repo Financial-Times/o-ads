@@ -179,10 +179,9 @@ function onReady(slotMethods, event) {
 */
 function onRender(event) {
 	const slot = event.detail.slot;
+	/* istanbul ignore else  */
 	if (utils.isFunction(slot.display)) {
 		slot.display();
-	} else {
-		slot.defer = false;
 	}
 }
 

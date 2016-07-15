@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-	<title>o-ads: Individual-Ad-with-Custom-Targeting-Values demo</title>
+	<title>o-ads: Individual-Ad demo</title>
 	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 	<script src="//cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,IntersectionObserver"></script>
 	<style>body { margin: 0; } .demo-js .o--if-nojs { display: none; }</style>
@@ -16,11 +16,18 @@
 		"gpt": {
 			"network": 5887,
 			"site": "test.5887.origami"
-		}
+		},
+		"responsive": {
+			"extra": [1025, 0],
+			"large": [1000, 0],
+			"medium": [760, 0],
+			"small": [0, 0]
+		},
+		"lazyLoad": true
 	}
 </script>
 
-<div data-o-ads-name="Leaderboard" data-o-ads-formats="Leaderboard"></div>
+<div data-o-ads-name="leaderboard" data-o-ads-formats="Leaderboard" position="top: 3000px;"></div>
 
 <script src="/bundles/js?modules=o-ads:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>

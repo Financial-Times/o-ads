@@ -3,15 +3,15 @@ const wait = 8000;
 module.exports = {
 
 	before: function (browser) {
-		browser.url(browser.launch_url + '/Individual-Ad.html');
+		browser.url(browser.launch_url + '/Individual-Ad-Lazy-Load-Margin.html');
 	},
 
-	'Step 1: go to leaderboard demo page': function (browser) {
+	'Step 1: go to lazy load with viewport margin demo page': function (browser) {
 		browser
 			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Individual-Ad demo', 'Page title is correct');
+			.assert.title('o-ads: Individual-Ad-Lazy-Load-Margin demo', 'Page title is correct');
 	},
-	'Step 2: verify the leaderboard advert is displayed': function (browser) {
+	'Step 2: verify the leaderboard advert is displayed right away': function (browser) {
 		browser
 			.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe

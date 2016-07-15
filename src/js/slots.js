@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const config = require('./config');
 const Slot = require('./slot');
-const elementvis = require('o-element-visibility');
+
 let screensize = null;
 
 /**
@@ -149,7 +149,6 @@ Slots.prototype.initSlot = function(container) {
 	/* istanbul ignore else	*/
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
-		slot.elementvis = elementvis.track(slot.container);
 		slot.fire('ready');
 	} else if (this[slot.name]) {
 		utils.log.error('slot %s is already defined!', slot.name);
@@ -164,38 +163,6 @@ Slots.prototype.initRefresh = function() {
 		/* istanbul ignore else	*/
 		if (data.time && !data.inview) {
 			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
-		}
-	}
-
-	return this;
-};
-
-Slots.prototype.initInview = function() {
-	/* istanbul ignore else	*/
-	if (config('flags').inview) {
-		onLoad(this);
-	}
-
-	function onLoad(slots) {
-		document.documentElement.addEventListener('oVisibility.inview', onInview.bind(null, slots));
-		slots.forEach(function(slot) {
-			slot.elementvis.updatePosition();
-			slot.elementvis.update(true);
-		});
-	}
-
-	function onInview(slots, event) {
-		const element = event.detail.element;
-		const name = element.node.getAttribute('data-o-ads-name');
-		if (slots[name]) {
-			const slot = slots[name];
-
-			slot.inviewport = event.detail.inviewport;
-			slot.percentage = event.detail.percentage;
-			/* istanbul ignore else	*/
-			if (slot.inviewport) {
-				slot.fire('inview', event.detail);
-			}
 		}
 	}
 
@@ -343,7 +310,6 @@ Slots.prototype.forEach = function(fn) {
 */
 Slots.prototype.init = function() {
 	this.initRefresh();
-	this.initInview();
 	this.initRendered();
 	this.initResponsive();
 	this.initPostMessage();

@@ -571,64 +571,43 @@ QUnit.test('configure refresh globally on a timer', function (assert) {
 	clock.tick(1025);
 });
 
-QUnit.test('elementvisibility is update on load', function(assert) {
-	const slotHTML = '<div data-o-ads-name="visibility-test" data-o-ads-formats="MediumRectangle"></div>';
-	const node = this.fixturesContainer.add(slotHTML);
-
-	const slot = this.ads.slots.initSlot(node);
-	const updatePositionSpy = this.spy(slot.elementvis, 'updatePosition');
-	const updateSpy = this.spy(slot.elementvis, 'update');
-	this.ads.init();
-	assert.ok(updatePositionSpy.called, 'position is updated on load');
-	assert.ok(updateSpy.called, 'visibility is updated on load');
-});
-
 QUnit.test('lazy loading', function(assert) {
 	const done = assert.async();
-	const done2 = assert.async();
 	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
-	document.body.addEventListener('oAds.inview', function(event) {
-		if (event.detail.name === 'lazy-test') {
-			assert.ok('our test slot is inview');
-			done();
-		}
-	});
+
 
 	document.body.addEventListener('oAds.render', function(event) {
 		if(event.detail.name === 'lazy-test') {
 			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
-			done2();
+			done();
 		}
 	});
 
 	this.ads.init();
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, true);
 });
 
 QUnit.test('lazy loading global config', function(assert) {
 	const done = assert.async();
-	const done2 = assert.async();
 	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
-	document.body.addEventListener('oAds.inview', function(event) {
-		if (event.detail.name === 'lazy-test') {
-			assert.ok('our test slot is inview');
-			done();
-		}
-	});
 
 	document.body.addEventListener('oAds.render', function(event) {
 		if(event.detail.name === 'lazy-test') {
 			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
-			done2();
+			done();
 		}
 	});
 
-	this.ads.init({lazyLoad: true});
+	this.ads.init({
+		lazyLoad: true
+	});
 	this.trigger(window, 'load');
 	this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
 });
 
 QUnit.test('lazy loading slot config takes precedence over global config', function(assert) {
@@ -640,6 +619,192 @@ QUnit.test('lazy loading slot config takes precedence over global config', funct
 	this.ads.slots.initSlot(node);
 	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false);
 });
+
+
+
+
+QUnit.test('lazy loading triggers event if the advert is in view', function(assert) {
+	const done = assert.async();
+	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
+	const node = this.fixturesContainer.add(slotHTML);
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.ads.init();
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+
+});
+
+QUnit.test('lazy loading supports in view threshold', function(assert) {
+	const done = assert.async();
+	const advertHeight = 90;
+	const iframe = window.top.document.querySelector('iframe').contentWindow;
+	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
+	const node = this.fixturesContainer.add(slotHTML);
+	const advertTopPosition = iframe.innerHeight * 2;
+
+	const element = document.querySelector('[data-o-ads-name="lazy-test"]')
+	element.style.position = 'absolute';
+	element.style.top = advertTopPosition + 'px';
+	element.style.width = '700px';
+	element.style.height = '90px';
+
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.trigger(window, 'load');
+
+	this.ads.init({
+		lazyLoad: {
+			threshold: 100
+		}
+	});
+
+	this.ads.slots.initSlot(node);
+	window.top.scroll(0, window.top.innerHeight);
+	iframe.scroll(0, iframe.innerHeight + advertHeight)
+});
+
+
+QUnit.test('lazy loading supports slot level config', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="90" data-o-ads-lazy-load-viewport-margin="10%" data-o-ads-formats="MediumRectangle"></div>`);
+	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2"></div>`);
+	this.ads.init({
+		lazyLoad: {
+			viewportMargin: '100% 0%',
+			threshold: 100
+		},
+		slots: {
+			'lazy-test-2': {
+				lazyLoad: {
+					viewportMargin: '50%',
+					threshold: 80,
+				},
+				formats: ['MediumRectangle']
+			}
+		}
+	});
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.initSlot(node2);
+
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.threshold, 90, 'first slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '10%', 'first slot level condifiguration for lazy load margin');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad.threshold, 80, 'second slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad.viewportMargin, '50%', 'second slot level condifiguration for lazy load margin');
+});
+
+
+QUnit.test('lazy loading works with old DOM slot level configuration', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-lazy-load-threshold="90" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.threshold, 90, 'slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '15%', 'slot level condifiguration for lazy load margin');
+});
+
+
+QUnit.test('lazy loading only works if explicitely told to do so', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load-threshold="80" data-o-ads-formats="MediumRectangle"></div>`);
+	const node2 = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test-2" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
+	this.ads.init();
+
+	this.ads.slots.initSlot(node);
+	this.ads.slots.initSlot(node2);
+
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false, 'first slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test-2'].lazyLoad, false, 'second slot level condifiguration for lazy load in view percent');
+});
+
+
+QUnit.test('lazy loading supports global config', function(assert) {
+	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>`;
+	const node = this.fixturesContainer.add(slotHTML);
+	const config = {
+		lazyLoad: {
+			viewportMargin: '100% 0%',
+			threshold: 100
+		}
+	};
+	this.ads.init(config);
+	this.ads.slots.initSlot(node);
+	assert.deepEqual(this.ads.slots['lazy-test'].lazyLoad, config.lazyLoad, 'slot level condifiguration for lazy load in view percent');
+});
+
+QUnit.test('lazy loading triggers event at the correct point with no intersection observer viewport margin set', function(assert) {
+	const done = assert.async();
+	const advertHeight = 90;
+	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; width:728px; height:90px;"></div>`;
+	const node = this.fixturesContainer.add(slotHTML);
+	const advertTopPosition = window.innerHeight * 4;
+	const triggerPoint = window.innerHeight * 3 + advertHeight;
+	const element = document.querySelector('[data-o-ads-name="lazy-test"]')
+	element.style.top = advertTopPosition + 'px';
+
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.ads.init();
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+
+	for(let step = 0; step < 5; step++) {
+		window.scrollTo(0, step * window.innerHeight);
+	}
+
+});
+
+QUnit.test('lazy loading triggers event at the correct point with intersection observer viewport margin is set', function(assert) {
+	const done = assert.async();
+	const advertHeight = 90;
+	const iframe = window.top.document.querySelector('iframe').contentWindow;
+	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
+	const node = this.fixturesContainer.add(slotHTML);
+	const advertTopPosition = iframe.innerHeight * 2;
+
+	const element = document.querySelector('[data-o-ads-name="lazy-test"]')
+	element.style.position = 'absolute';
+	element.style.top = advertTopPosition + 'px';
+	element.style.width = '700px';
+	element.style.height = '90px';
+
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-test') {
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.trigger(window, 'load');
+
+	this.ads.init({
+		lazyLoad: {
+			viewportMargin : '100% 0%'
+		}
+	});
+
+	this.ads.slots.initSlot(node);
+	iframe.scroll(0, iframe.innerHeight + advertHeight)
+});
+
 
 QUnit.test('lazy loading a companion slot', function(assert) {
 	const done = assert.async();
@@ -659,6 +824,39 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 });
 
 
+QUnit.test('lazy loading a companion slot', function(assert) {
+	const done = assert.async();
+	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+
+	document.body.addEventListener('oAds.render', function(event) {
+		if(event.detail.name === 'lazy-companion-test') {
+			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the render event');
+			done();
+		}
+	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	this.utils.broadcast('masterLoaded', {}, node);
+});
+
+
+QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not available', function(assert) {
+	const originalObserver = window.IntersectionObserver;
+	delete window.IntersectionObserver;
+	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+	this.ads.init({
+		lazyLoad: true
+	});
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+	const slot = this.ads.slots['lazy-test'];
+	assert.ok(slot.lazyLoad);
+	assert.equal(slot.container.getAttribute('data-o-ads-loaded'), 'MediumRectangle');
+	window.IntersectionObserver = originalObserver;
+});
 
 
 QUnit.test('complete events fire', function(assert) {

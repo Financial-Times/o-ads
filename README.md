@@ -107,6 +107,34 @@ Parameter | Description
 --------- | --------------------------------
 slot      | slot name or array of slot names
 
+## Events
+### `oAds.adServerLoadError`
+Triggered if the library fails to load external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
+
+### `oAds.ready`
+Slot has been inited in the oAds library and is about to be requested from the ad server (deferred if lazy loading is on)
+
+### `oAds.rendered`
+Triggered once the ad has been rendered on the page.
+
+### `oAds.complete`
+Advert has now been inited in the oAds, requested from the ad server and displayed if one was returned. Triggered after `oAds.rendered`
+
+### `oAds.render`
+Lazy loaded advert has been requested.
+
+### `oAds.refresh`
+A refresh event has been triggered on an advert, prompting to make a new request to ad server.
+
+### `oAds.breakpoint`
+If the oAds is configured to use responsive adverts with set breakpoints, it will trigger the event on each of the breakpoints that was specified in the congig. Note that the breakpoint triggering does not take the scrollbar into configuration. For more information read about [DFP - Build responsive ads](https://support.google.com/dfp_premium/answer/3423562?hl=en)
+
+
+## Debugging
+If you wish to debug some errors you might be having with setting up the library, there are 2 ways to enable you see any errors that might be coming from library.
+* In the URL add following get parameter `DEBUG=OADS`
+* Add a key `oAds` to your localStorage with value of `true`
+
 ## Additional Configuration
 We currently support these additional features
 - [Targeting](https://github.com/Financial-Times/o-ads/blob/master/docs/TARGETING_CONFIG.md)
