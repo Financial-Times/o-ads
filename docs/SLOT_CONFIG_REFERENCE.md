@@ -46,14 +46,14 @@ Configuration for slot advert sizes. You can define multiple, all will be sent t
 ```js
 {
   ...
-  sizes: [[970, 90], [970, 66], [180, 50]]
+  sizes: [[970, 90], [970, 66], [180, 50], ["fluid"]]
   ...
 }
 ```
 
 #### DOM Configuration
 ```html
-<div data-o-ads-sizes="970x90,970x66,180x50"></div>
+<div data-o-ads-sizes="970x90,970x66,180x50,fluid"></div>
 ```
 
 ---------------------------------------
