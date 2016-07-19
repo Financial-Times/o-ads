@@ -85,6 +85,28 @@ QUnit.test('creates add based on a format with multiple sizes defined', function
 	assert.deepEqual(slot.sizes, sizes, 'slot contains all sizes defined in the format defined');
 });
 
+QUnit.test('allows fluid as a creative format size', function(assert) {
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="FluidFormat" data-o-ads-sizes></div>');
+	const sizes = [['fluid'], [970, 90]];
+
+	this.ads.init({
+		formats: {
+			FluidFormat: { sizes: sizes } 
+		}
+	});
+	const slot = this.ads.slots.initSlot(node);
+	assert.deepEqual(slot.sizes, sizes, 'slot contains all sizes defined in the format defined');
+});
+
+QUnit.test('allows fluid as a slot size', function(assert) {
+	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-sizes="fluid" data-o-ads-sizes></div>');
+
+	this.ads.init({});
+	const slot = this.ads.slots.initSlot(node);
+	assert.deepEqual(slot.sizes, ["fluid"], 'slot contains all sizes defined in the format defined');
+});
+
+
 QUnit.test('converts false string value of a property to a boolean', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-center="false" data-o-ads-sizes="600x300,300x600,720x30"></div>');
 	this.ads.init();

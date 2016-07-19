@@ -1,6 +1,8 @@
 const utils = require('./utils');
 const config = require('./config');
 
+const VALID_SIZE_STRINGS = ['fluid'];
+
 const attributeParsers = {
   sizes: function(value, sizes) {
     if (value === false || value === 'false') {
@@ -8,11 +10,17 @@ const attributeParsers = {
     }
     /* istanbul ignore else  */
     else if (utils.isArray(sizes)) {
-      value.replace(/(\d+)x(\d+)/g, function(match, width, height) {
-        sizes.push([parseInt(width, 10), parseInt(height, 10)]);
-      });
+			const regex = /(\d+)x(\d+)/;
+			value.split(',').filter(size => size.length).forEach(size => {
+				if(regex.test(size)) {
+					size.replace(regex, function(match, width, height) {
+						sizes.push([parseInt(width, 10), parseInt(height, 10)]);
+					});
+				} else if (VALID_SIZE_STRINGS.indexOf(size) >= 0) {
+					sizes.push(size);
+				}
+			});
     }
-
     return sizes;
   },
 
