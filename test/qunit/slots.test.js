@@ -87,7 +87,7 @@ QUnit.test('creates add based on a format with multiple sizes defined', function
 
 QUnit.test('allows fluid as a creative format size', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="FluidFormat" data-o-ads-sizes></div>');
-	const sizes = [['fluid'], [970, 90]];
+	const sizes = ['fluid', [970, 90]];
 
 	this.ads.init({
 		formats: {
