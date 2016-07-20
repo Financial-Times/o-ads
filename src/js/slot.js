@@ -33,7 +33,7 @@ const attributeParsers = {
       formats.forEach(format => {
         if (mapping && mapping[format]) {
           format = mapping[format];
-          if (utils.isArray(format.sizes[0])) {
+          if (utils.isArray(format.sizes[0]) || VALID_SIZE_STRINGS.indexOf(format.sizes[0]) >= 0) {
             format.sizes.forEach(size => {
               sizes.push(size);
             });
