@@ -1,2 +1,12 @@
 $o-ads-is-silent: false;
 @import "../../main";
+
+.story {
+	box-sizing: border-box;
+	font-size: 24px;
+	width: 48%;
+	margin: 1%;
+	padding: 10px;
+	float: left;
+	background-color: #ee0000;
+}
