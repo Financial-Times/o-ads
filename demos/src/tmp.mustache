@@ -1,0 +1,26 @@
+<script>
+document.addEventListener("custommessage", function() {
+ console.log('custommessage recieved');
+});
+document.addEventListener("render", function() {
+ console.log('custommessage recieved');
+});
+</script>
+<script data-o-ads-config type="application/json">
+	{
+		"gpt": {
+			"network": 5887,
+			"site": "test.5887.html5-app"
+		},
+		"dfp_targeting": {
+			"pos": "fullpage",
+			"eid" : "10145460"
+		},
+    "slots": {
+      "test": {"outOfPage": true}
+    }
+
+	}
+</script>
+
+<div data-o-ads-name="test" class="o-ads"></div>
