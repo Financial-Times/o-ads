@@ -71,12 +71,6 @@
 	  	"expanded": false,
 	  	"description": "",
 			"data": {"network": 5887, "site" : "test.5887.origami"}
-	  },
-		{
-			"name": "tmp",
-			"template": "/demos/src/tmp.mustache",
-			"expanded": false,
-			"description": ""
-		}
+	  }
   	]
 }
