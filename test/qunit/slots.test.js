@@ -663,6 +663,29 @@ QUnit.test('lazy loading triggers event if the advert is in view', function(asse
 
 });
 
+QUnit.test('lazy loading triggers in top-down order if multiple ads in view', function(assert) {
+	const done = assert.async();
+	const slot1HTML = `<div data-o-ads-name="lazy-test-bottom" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; top: 40px"></div>`;
+	const slot2HTML = `<div data-o-ads-name="lazy-test-top" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
+	const node1 = this.fixturesContainer.add(slot1HTML);
+	const node2 = this.fixturesContainer.add(slot2HTML);
+	let count=0;
+	document.body.addEventListener('oAds.render', function(event) {
+		count++;
+		if(event.detail.name === 'lazy-test-bottom') {
+			assert.equal(event.detail.name, 'lazy-test-bottom', 'our test slot fired the render event');
+			assert.equal(count, 2, 'bottom slot is the last to fire');
+			done();
+		}
+	});
+
+	this.ads.init();
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node1);
+	this.ads.slots.initSlot(node2);
+
+});
+
 QUnit.test('lazy loading supports in view threshold', function(assert) {
 	const done = assert.async();
 	const advertHeight = 90;
