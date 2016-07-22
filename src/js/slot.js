@@ -245,7 +245,7 @@ Slot.prototype.render = function() {
  Slot.prototype.initResponsive = function() {
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(this.sizes)) {
-
+		/* istanbul ignore else  */
 		if (!this.hasValidSize()) {
 			this.collapse();
 		}

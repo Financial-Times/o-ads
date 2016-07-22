@@ -298,6 +298,7 @@ Slots.prototype.initPostMessage = function() {
 Slots.prototype.initLazyLoading = function(slotConfig) {
 	const lazyLoadingConfig = config('lazyLoad') || slotConfig;
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
+	/* istanbul ignore else	*/
 	if('IntersectionObserver' in window && !this.lazyLoadObserver && !!lazyLoadingConfig) {
 		let options = {};
 
@@ -319,7 +320,7 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 				options.rootMargin = lazyLoadingConfig.viewportMargin;
 			}
 			/* istanbul ignore else	*/
-			if(lazyLoadingConfig.threshold){
+			if(lazyLoadingConfig.threshold) {
 				options.threshold = [lazyLoadingConfig.threshold / 100];
 			}
 		}
