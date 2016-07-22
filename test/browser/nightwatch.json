@@ -111,15 +111,6 @@
         "acceptSslCerts": true
       }
     },
-    "ios_8_sauce" : {
-      "desiredCapabilities": {
-        "deviceName": "iPhone 5",
-        "deviceOrientation": "portrait",
-        "version": "8.0",
-        "platform": "OS X 10.10",
-        "acceptSslCerts": true
-      }
-    },
     "galaxy_s4_emulator": {
        "desiredCapabilities": {
         "deviceName": "Samsung Galaxy S4 Emulator",
