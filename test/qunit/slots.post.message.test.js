@@ -301,3 +301,22 @@ QUnit.test('Post message catches the event when the message comes not from a slo
 	this.ads.init();
 	const slot = this.ads.slots.initSlot(container);
 });
+
+QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
+	const done = assert.async();
+	const slotName = 'custom-message';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+	document.body.addEventListener('oAds.complete', function () {
+		window.postMessage('{"collapse":false,"mastercompanion":false,"customMessages":{"arrow-buttons-disabled":"true"},"type":"oAds.whoami","name":"custom-message"}', '*');
+
+	});
+document.body.addEventListener("oAds.customMessages", function() {
+	 assert.equal(event.detail.name, 'custom-message', 'test slot fired the customMessages event');
+	 	done();
+	});
+	this.ads.init();
+	const slot = this.ads.slots.initSlot(container);
+});
