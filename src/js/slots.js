@@ -145,7 +145,8 @@ Slots.prototype.initSlot = function(container) {
 
 	// add the aria hidden attribute
 	container.setAttribute('aria-hidden', 'true');
-	const slot = new Slot(container, screensize);
+	// pass the method to retrieve or create the single IntersectionObserver instance
+	const slot = new Slot(container, screensize, this.initLazyLoading.bind(this));
 	/* istanbul ignore else	*/
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
@@ -294,6 +295,41 @@ Slots.prototype.initPostMessage = function() {
 	}
 };
 
+Slots.prototype.initLazyLoading = function(slotConfig) {
+	const lazyLoadingConfig = config('lazyLoad') || slotConfig;
+	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
+	if('IntersectionObserver' in window && !this.lazyLoadObserver && !!lazyLoadingConfig) {
+		let options = {};
+
+		function onChange(changes) {
+			//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
+			changes
+			.sort((a,b) => a.intersectionRect.top - b.intersectionRect.top)
+			.forEach((change) => {
+				const slotName = change.target.getAttribute('data-o-ads-name');
+				if(slotName) {
+					invokeMethodOnSlots.call(this, slotName, 'render');
+				}
+			})
+		}
+		/* istanbul ignore else	*/
+		if(typeof lazyLoadingConfig  === 'object') {
+			/* istanbul ignore else	*/
+			if(lazyLoadingConfig.viewportMargin){
+				options.rootMargin = lazyLoadingConfig.viewportMargin;
+			}
+			/* istanbul ignore else	*/
+			if(lazyLoadingConfig.threshold){
+				options.threshold = [lazyLoadingConfig.threshold / 100];
+			}
+		}
+		this.lazyLoadObserver = new IntersectionObserver(onChange.bind(this), options);
+	}
+
+	return this.lazyLoadObserver;
+
+};
+
 Slots.prototype.forEach = function(fn) {
 	Object.keys(this).forEach(name => {
 		const slot = this[name];
@@ -313,6 +349,7 @@ Slots.prototype.init = function() {
 	this.initRendered();
 	this.initResponsive();
 	this.initPostMessage();
+	this.initLazyLoading();
 };
 
 Slots.prototype.timers = {};
