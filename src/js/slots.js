@@ -260,7 +260,9 @@ Slots.prototype.initPostMessage = function() {
 							}
 						});
 					}
-
+          if (data.customMessages && typeof data.customMessages === "object") {
+							slot.fire('customMessages', data.customMessages);
+          }
 					if(slot.disableSwipeDefault) {
 						messageToSend.disableDefaultSwipeHandler = true;
 					}
