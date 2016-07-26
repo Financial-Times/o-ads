@@ -1,6 +1,7 @@
 {
 	"description": "Advertising",
 	"origamiType": "module",
+	"origamiGroup": "component",
 	"origamiVersion": 1,
 	"support": "origami.advertising.technology@ft.com",
 	"supportStatus": "active",
