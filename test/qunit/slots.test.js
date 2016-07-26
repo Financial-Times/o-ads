@@ -91,7 +91,7 @@ QUnit.test('allows fluid as a creative format size', function(assert) {
 
 	this.ads.init({
 		formats: {
-			FluidFormat: { sizes: sizes } 
+			FluidFormat: { sizes: sizes }
 		}
 	});
 	const slot = this.ads.slots.initSlot(node);
@@ -665,8 +665,8 @@ QUnit.test('lazy loading triggers event if the advert is in view', function(asse
 
 QUnit.test('lazy loading triggers in top-down order if multiple ads in view', function(assert) {
 	const done = assert.async();
-	const slot1HTML = `<div data-o-ads-name="lazy-test-bottom" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; top: 40px"></div>`;
-	const slot2HTML = `<div data-o-ads-name="lazy-test-top" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
+	const slot1HTML = `<div data-o-ads-name="lazy-test-bottom" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="width: 100%; position: absolute; top: 40px"></div>`;
+	const slot2HTML = `<div data-o-ads-name="lazy-test-top" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="width: 100%;"></div>`;
 	const node1 = this.fixturesContainer.add(slot1HTML);
 	const node2 = this.fixturesContainer.add(slot2HTML);
 	let count=0;
