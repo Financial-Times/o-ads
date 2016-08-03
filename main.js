@@ -32,7 +32,6 @@ Ads.prototype.init = function(config) {
 	return this;
 };
 
-const ads = new Ads();
 const initAll = function() {
 	const metas = Array.from(document.getElementsByTagName('meta'));
 	const stop = metas.filter(function(meta) {
@@ -65,10 +64,11 @@ Ads.prototype.debug = function (){
 };
 
 function addDOMEventListener() {
-document.addEventListener('o.DOMContentLoaded', initAll);
+	document.addEventListener('o.DOMContentLoaded', initAll);
 }
 function removeDOMEventListener() {
 	document.removeEventListener('o.DOMContentLoaded', initAll);
 }
 
+const ads = new Ads();
 module.exports = ads;
