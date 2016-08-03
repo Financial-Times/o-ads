@@ -48,6 +48,7 @@ function decorateModule() {
 		return {
 			beforeEach: function() {
 				let mod;
+				this.adsConstructor = Ads;
 				this.ads = new Ads();
 				this.utils = utils;
 				window.scroll(0, 0);
