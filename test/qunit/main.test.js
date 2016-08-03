@@ -14,8 +14,18 @@ QUnit.test('init All', function(assert) {
 		done();
 	});
 	this.trigger(document, 'o.DOMContentLoaded');
-
 });
+
+QUnit.test('init all only is triggered once', function(assert) {
+	const ads = new this.adsConstructor();
+	const gptInit = this.spy(ads.gpt, 'init');
+
+	this.trigger(document, 'o.DOMContentLoaded');
+	assert.ok(gptInit.calledOnce, 'gpt init function is called once via initAll');
+
+	this.trigger(document, 'o.DOMContentLoaded');
+	assert.ok(gptInit.calledOnce, 'gpt init function is called exactly once via multiple initAll calls');
+})
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
 	const admantxDebug = this.spy(this.ads.admantx, 'debug');
