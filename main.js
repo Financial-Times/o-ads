@@ -1,4 +1,5 @@
 function Ads() {
+	addDOMEventListener();
 }
 
 // bung all our modules on the protoype
@@ -25,6 +26,9 @@ Ads.prototype.init = function(config) {
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
+
+	removeDOMEventListener();
+
 	return this;
 };
 
@@ -40,8 +44,6 @@ const initAll = function() {
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	}
-
-	document.documentElement.removeEventListener('o.DOMContentLoaded', initAll);
 };
 
 Ads.prototype.debug = function (){
@@ -62,6 +64,11 @@ Ads.prototype.debug = function (){
 	}
 };
 
+function addDOMEventListener() {
 document.addEventListener('o.DOMContentLoaded', initAll);
+}
+function removeDOMEventListener() {
+	document.removeEventListener('o.DOMContentLoaded', initAll);
+}
 
 module.exports = ads;
