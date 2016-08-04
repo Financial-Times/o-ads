@@ -14,7 +14,35 @@ QUnit.test('init All', function(assert) {
 		done();
 	});
 	this.trigger(document, 'o.DOMContentLoaded');
+});
 
+QUnit.test('init all only is triggered once', function(assert) {
+	const ads = new this.adsConstructor();
+	const gptInit = this.spy(ads.gpt, 'init');
+
+	assert.equal(gptInit.callCount, 0, 'gpt init function is not called on construction');
+
+	this.trigger(document, 'o.DOMContentLoaded');
+	assert.ok(gptInit.calledOnce, 'gpt init function is called once via initAll');
+
+	this.trigger(document, 'o.DOMContentLoaded');
+	assert.ok(gptInit.calledOnce, 'gpt init function is called exactly once via multiple initAll calls');
+});
+
+QUnit.test('manual inits always trigger but DOM inits do not override', function (assert) {
+	const ads = new this.adsConstructor();
+	const gptInit = this.spy(ads.gpt, 'init');
+
+	assert.equal(gptInit.callCount, 0, 'gpt init function is not called on construction');
+
+	ads.init();
+	assert.ok(gptInit.calledOnce, 'gpt init function is called once via manual init');
+
+	this.trigger(document, 'o.DOMContentLoaded');
+	assert.ok(gptInit.calledOnce, 'gpt init function is called exactly once despite subsequent DOMContentLoaded event');
+
+	ads.init();
+	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');
 });
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
