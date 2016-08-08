@@ -232,11 +232,14 @@ Slot.prototype.initLazyLoad = function() {
 }
 
 Slot.prototype.render = function() {
-	this.fire('render');
-	if(this.lazyLoadObserver) {
-		this.lazyLoadObserver.unobserve(this.container);
+	if (this.hasValidSize()){
+		this.fire('render');
+		if(this.lazyLoadObserver) {
+			this.lazyLoadObserver.unobserve(this.container);
+		}
 	}
 };
+
 
 /**
  *	Listen to responsive breakpoints and collapse slots
