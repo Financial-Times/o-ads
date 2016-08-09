@@ -84,7 +84,7 @@ const coverageChecks = {
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.browserify.transform.push(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
+	options.browserify.transform.unshift(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
