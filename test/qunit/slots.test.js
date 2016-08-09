@@ -765,8 +765,8 @@ QUnit.test('lazy loading allows multiple thresholds to be configure from DOM dat
 	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-lazy-load-threshold="0.9,0.5" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
 	this.ads.init();
 	this.ads.slots.initSlot(node);
-	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
-	assert.deepEqual(this.ads.slots['lazy-test'].lazyLoad.threshold, [0.9, 0.5], 'slot level condifiguration for lazy load in view percent');
+	assert.ok((this.ads.slots['lazy-test'].lazyLoad.threshold[this.ads.slots['lazy-test'].lazyLoad.threshold.indexOf(0.9)] === 0.9), 'slot level condifiguration for lazy load in view percent first value exists');
+	assert.ok((this.ads.slots['lazy-test'].lazyLoad.threshold[this.ads.slots['lazy-test'].lazyLoad.threshold.indexOf(0.5)] === 0.5), 'slot level condifiguration for lazy load in view percent second value exists');
 	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '15%', 'slot level condifiguration for lazy load margin');
 });
 

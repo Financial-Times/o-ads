@@ -156,7 +156,7 @@ E.g.
   ...
   lazyLoad: {
     viewportMargin: '0% 0% 100% 0%',
-    threshold: 50
+    threshold: [0.5]
   }
   ...
 }
