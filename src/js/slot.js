@@ -224,7 +224,9 @@ Slot.prototype.initLazyLoad = function() {
 		/* istanbul ignore else */
 		if(this.companion) {
 			utils.once('masterLoaded', () => {
-				this.render();
+				if (this.hasValidSize()){
+					this.render();
+				}
 			}, this.container);
 		}
 	}
@@ -232,11 +234,9 @@ Slot.prototype.initLazyLoad = function() {
 }
 
 Slot.prototype.render = function() {
-	if (this.hasValidSize()){
-		this.fire('render');
-		if(this.lazyLoadObserver) {
-			this.lazyLoadObserver.unobserve(this.container);
-		}
+	this.fire('render');
+	if(this.lazyLoadObserver) {
+		this.lazyLoadObserver.unobserve(this.container);
 	}
 };
 

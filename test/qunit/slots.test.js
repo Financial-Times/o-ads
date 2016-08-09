@@ -886,6 +886,15 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	this.utils.broadcast('masterLoaded', {}, node);
 });
 
+QUnit.test('companion slots which are configured as false for a specific screensize should not render at that screensize', function(assert) {
+	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats-default="false" data-o-ads-formats-large="false" data-o-ads-formats-small="false" data-o-ads-formats-medium="false" data-o-ads-formats-extra="false" style="position: absolute; left: -1000px; top: -1000px"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	const slot = this.ads.slots.initSlot(node);
+	const renderSpy = this.spy(slot, 'render');
+	this.utils.broadcast('masterLoaded', {}, node);
+	assert.notOk(renderSpy.calledOnce, 'slot fire method is not called');
+});
 
 QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not available', function(assert) {
 	const originalObserver = window.IntersectionObserver;
