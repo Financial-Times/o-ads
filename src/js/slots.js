@@ -306,11 +306,13 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 
 		function onChange(changes) {
 			//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
+			/* istanbul ignore next */
 			changes
 			.filter(a => a.intersectionRect.height || a.intersectionRect.width || a.intersectionRect.top || a.intersectionRect.left)
 			.sort((a,b) => a.intersectionRect.top - b.intersectionRect.top)
 			.forEach((change) => {
 				const slotName = change.target.getAttribute('data-o-ads-name');
+				/* istanbul ignore else */
 				if(slotName) {
 					invokeMethodOnSlots.call(this, slotName, 'render');
 				}
@@ -324,7 +326,7 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 			}
 			/* istanbul ignore else	*/
 			if(lazyLoadingConfig.threshold) {
-				options.threshold = [lazyLoadingConfig.threshold / 100];
+				options.threshold = lazyLoadingConfig.threshold;
 			}
 		}
 		this.lazyLoadObserver = new IntersectionObserver(onChange.bind(this), options);

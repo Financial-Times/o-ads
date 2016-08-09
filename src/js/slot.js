@@ -71,6 +71,10 @@ const attributeParsers = {
 		return sizes;
 	},
 
+	lazyLoadThreshold: function(value) {
+		return value.split(',').map(Number);
+	},
+
 	targeting: function(value, targeting) {
 		value = utils.hash(value, ';', '=');
 		utils.extend(targeting, value);
@@ -186,7 +190,7 @@ Slot.prototype.parseAttributeConfig = function() {
 			this[name] = attributeParsers[name](value, this.sizes);
 		} else if (name === 'lazyLoadThreshold' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
-			this.lazyLoad.threshold = attributeParsers.base(value);
+			this.lazyLoad.threshold = attributeParsers.lazyLoadThreshold(value);
 		} else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
 			this.lazyLoad.viewportMargin = attributeParsers.base(value);} else if (attributeParsers[name]) {
@@ -233,6 +237,7 @@ Slot.prototype.initLazyLoad = function() {
 
 Slot.prototype.render = function() {
 	this.fire('render');
+	/* istanbul ignore else  */
 	if(this.lazyLoadObserver) {
 		this.lazyLoadObserver.unobserve(this.container);
 	}
@@ -243,9 +248,9 @@ Slot.prototype.render = function() {
  * where the configured size is set to false
  */
  Slot.prototype.initResponsive = function() {
-	/* istanbul ignore else  */
+	/* istanbul ignore else */
 	if (utils.isPlainObject(this.sizes)) {
-		/* istanbul ignore else  */
+		/* istanbul ignore else */
 		if (!this.hasValidSize()) {
 			this.collapse();
 		}
