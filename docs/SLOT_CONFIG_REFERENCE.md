@@ -141,7 +141,7 @@ To serve pop-up, pop-under, or floating creatives to your website, you’ll need
 Defines if the slot should be lazy loaded, e.g. only requested from the advertising server once it comes into view. Default is `false`.
 Support following properties:
 * **viewportMargin** - Sets the margin of viewport to use when deciding if the advert is in view. Useful if you want to request and display the advert just before it comes into view. Works as regular margin definitions. Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 0%`, or `100px 0px`. Default is `0%`.
-* **threshold** -  Sets threshold at which advert should be requested and displayed. Value can be anything between 0 and 100. Default is `0`, which means as soon as first pixel in in view the advert will get loaded.
+* **threshold** - An array of values where callback will be called. A threshold is a ratio of intersection area to bounding box area of an observed target. [More here](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver) Thresholds can be any value between 0.0 and 1.0, inclusive. Default is `0`, which means as soon as first pixel in in view the advert will get loaded.
 
 
 **IMPORTANT** Starting with version 5 oAds is relying on [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). If one ins not avaailable in browser, you may need to provide a polyfill. The easiest way is to include with [Polyfill.io] on your page.

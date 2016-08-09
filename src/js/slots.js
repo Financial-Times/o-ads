@@ -324,7 +324,7 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 			}
 			/* istanbul ignore else	*/
 			if(lazyLoadingConfig.threshold) {
-				options.threshold = [lazyLoadingConfig.threshold / 100];
+				options.threshold = lazyLoadingConfig.threshold;
 			}
 		}
 		this.lazyLoadObserver = new IntersectionObserver(onChange.bind(this), options);
