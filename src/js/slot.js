@@ -228,7 +228,9 @@ Slot.prototype.initLazyLoad = function() {
 		/* istanbul ignore else */
 		if(this.companion) {
 			utils.once('masterLoaded', () => {
-				this.render();
+				if (this.hasValidSize()){
+					this.render();
+				}
 			}, this.container);
 		}
 	}
@@ -242,6 +244,7 @@ Slot.prototype.render = function() {
 		this.lazyLoadObserver.unobserve(this.container);
 	}
 };
+
 
 /**
  *	Listen to responsive breakpoints and collapse slots
