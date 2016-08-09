@@ -894,6 +894,7 @@ QUnit.test('companion slots which are configured as false for a specific screens
 	const renderSpy = this.spy(slot, 'render');
 	this.utils.broadcast('masterLoaded', {}, node);
 	assert.notOk(renderSpy.calledOnce, 'slot fire method is not called');
+	renderSpy.restore();
 });
 
 QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not available', function(assert) {
