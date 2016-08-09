@@ -760,6 +760,17 @@ QUnit.test('lazy loading works with old DOM slot level configuration', function(
 	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '15%', 'slot level condifiguration for lazy load margin');
 });
 
+
+QUnit.test('lazy loading allows multiple thresholds to be configure from DOM data attribute', function(assert) {
+	const node = this.fixturesContainer.add(`<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-lazy-load-threshold="0.9,0.5" data-o-ads-lazy-load-viewport-margin="15%" data-o-ads-formats="MediumRectangle"></div>`);
+	this.ads.init();
+	this.ads.slots.initSlot(node);
+	assert.ok(this.ads.slots['lazy-test'].lazyLoad);
+	assert.deepEqual(this.ads.slots['lazy-test'].lazyLoad.threshold, [0.9, 0.5], 'slot level condifiguration for lazy load in view percent');
+	assert.equal(this.ads.slots['lazy-test'].lazyLoad.viewportMargin, '15%', 'slot level condifiguration for lazy load margin');
+});
+
+
 QUnit.test('lazy loading passes threshold to IntersectionObserver', function(assert) {
 	const observeStub = this.stub();
 
