@@ -110,7 +110,7 @@ slot      | slot name or array of slot names
 ## Events
 
 ### `oAds.initialised`
-Triggered when the library has been initialised and the config has been set.
+Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
 
 ### `oAds.adServerLoadError`
 Triggered if the library fails to load external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
