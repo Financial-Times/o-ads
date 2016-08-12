@@ -16,6 +16,17 @@ QUnit.test('init All', function(assert) {
 	this.trigger(document, 'o.DOMContentLoaded');
 });
 
+QUnit.test('init fires an event once done', function(assert) {
+
+	const done = assert.async();
+	const ads = new this.adsConstructor();
+	document.body.addEventListener('oAds.initialised', function(e) {
+		assert.equal(e.detail, ads);
+		done();
+	});
+	ads.init();	
+});
+
 QUnit.test('init all only is triggered once', function(assert) {
 	const ads = new this.adsConstructor();
 	const gptInit = this.spy(ads.gpt, 'init');
@@ -40,6 +51,7 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 
 	this.trigger(document, 'o.DOMContentLoaded');
 	assert.ok(gptInit.calledOnce, 'gpt init function is called exactly once despite subsequent DOMContentLoaded event');
+	
 
 	ads.init();
 	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');

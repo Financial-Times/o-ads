@@ -26,7 +26,7 @@ Ads.prototype.init = function(config) {
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
-
+	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
 
 	return this;
