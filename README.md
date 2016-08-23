@@ -5,15 +5,6 @@ This module enables display advertising from [Googles DFP Ad server](http://www.
 ## Installation
 Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](https://github.com/Financial-Times/o-ads/blob/master/docs/INTEGRATION.md)
 
-## Browser support
-
-Browsers | Primary Experience | Core Experience
-:------: | :----------------: | :-------------:
-Chrome   | 35+                | 35+
-Firefox  | 30+                | 30+
-Safari   | 7+                 | 7+
-IE       | 8+                 | 8+
-
 ## Requirements
 For basic use, a DFP account with Google is required, each targeting/tracking supplier will require their own configuration and setup.
 
