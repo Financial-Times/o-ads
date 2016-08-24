@@ -5,6 +5,20 @@ $o-ads-is-silent: true !default;
 @import "bower_components/o-colors/main";
 
 @if($o-ads-is-silent == false) {
+
+	.o-ads-advert {
+		position: relative;
+	}
+	.core .o-ads {
+		display: none;
+	}
+
+	@media print{
+		.o-ads {
+			display: none !important;
+		}
+	}
+
 	.o-ads,
 	[data-o-ads-name] {
 		@include oAds();
@@ -23,7 +37,11 @@ $o-ads-is-silent: true !default;
 	}
 
 	.o-ads--label-right {
-		@include oAdsLabel("right")
+		@include oAdsLabel("right");
+	}
+
+	.o-ads--transition {
+		@include oAdsTransition();
 	}
 
 	.o-ads--background {

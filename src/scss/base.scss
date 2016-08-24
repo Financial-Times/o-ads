@@ -1,4 +1,6 @@
 @import "bower_components/o-grid/main";
+@import "bower_components/o-visual-effects/main";
+
 $ad-max-responsive-width: 1440px;
 
 @mixin oAds {
@@ -35,6 +37,8 @@ $ad-max-responsive-width: 1440px;
 @mixin oAdsReserve90 {
 	min-height: 90px;
 	height: 90px;
+	padding: 10px 0;
+	overflow: hidden;
 
 	&[data-o-ads-loaded="MediumRectangle"],
 	&[data-o-ads-loaded="Billboard"] {
@@ -46,6 +50,7 @@ $ad-max-responsive-width: 1440px;
 	height: 250px;
 	min-height: 250px;
 	padding: 10px 0;
+	overflow: hidden;
 
 	&[data-o-ads-loaded="Leaderboard"],
 	&[data-o-ads-loaded="SuperLeaderboard"] {
@@ -72,4 +77,12 @@ $ad-max-responsive-width: 1440px;
 				min-height: calc(100vw * 0.481);
 			}
 		}
+}
+
+@mixin oAdsTransition {
+	will-change: min-height, padding, height;
+	transform: translate3d(0, 0, 0);
+	transition: height 0.35s ease-in-out,
+							min-height 0.35s ease-in-out,
+							padding 0.35s ease-in-out;
 }
