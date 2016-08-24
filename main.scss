@@ -3,7 +3,6 @@ $o-ads-is-silent: true !default;
 @import "src/scss/base";
 @import "bower_components/o-visual-effects/main";
 @import "bower_components/o-colors/main";
-@import "bower_components/o-grid/main";
 
 @if($o-ads-is-silent == false) {
 	.o-ads,
@@ -29,6 +28,19 @@ $o-ads-is-silent: true !default;
 
 	.o-ads--background {
 		@include oEffectsBackgroundsPinStripe($background: oColorsGetPaletteColor('pink-tint2'), $style: 'sparse');
+	}
+
+	.o-ads--reserve-90 {
+		@include oAdsReserve90();
+	}
+
+	.o-ads--reserve-250 {
+		@include oAdsReserve250();
+	}
+
+	.o-ads--reserve-90,
+	.o-ads--reserve-250 {
+		@include oAdsResponsiveReserve();
 	}
 
 	$o-ads-is-silent: true !global;
