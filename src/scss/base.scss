@@ -1,5 +1,5 @@
-@import "bower_components/o-grid/main";
-@import "bower_components/o-visual-effects/main";
+@import "o-grid/main";
+@import "o-visual-effects/main";
 
 $ad-max-responsive-width: 1440px;
 
@@ -82,7 +82,7 @@ $ad-max-responsive-width: 1440px;
 @mixin oAdsTransition {
 	will-change: min-height, padding, height;
 	transform: translate3d(0, 0, 0);
-	transition: height 0.35s ease-in-out,
-							min-height 0.35s ease-in-out,
-							padding 0.35s ease-in-out;
+	transition: height 0.35s $o-visual-effects-transition-slide,
+							min-height 0.35s $o-visual-effects-transition-slide,
+							padding 0.35s $o-visual-effects-transition-slide;
 }

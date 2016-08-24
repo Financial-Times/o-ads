@@ -1,17 +1,10 @@
 $o-ads-is-silent: true !default;
 
 @import "src/scss/base";
-@import "bower_components/o-visual-effects/main";
-@import "bower_components/o-colors/main";
+@import "o-visual-effects/main";
+@import "o-colors/main";
 
 @if($o-ads-is-silent == false) {
-
-	.o-ads-advert {
-		position: relative;
-	}
-	.core .o-ads {
-		display: none;
-	}
 
 	@media print{
 		.o-ads {
