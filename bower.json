@@ -15,6 +15,7 @@
     "sinon-1.10.3": "http://sinonjs.org/releases/sinon-1.10.3.js",
     "sinon.ie.timers-1.10.3": "http://sinonjs.org/releases/sinon-timers-ie-1.10.3.js",
     "o-visual-effects": "^0.1.3",
-    "o-grid": "^4.2.1"
+    "o-grid": "^4.2.1",
+    "o-colors": "^3.5.0"
   }
 }
