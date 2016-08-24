@@ -6,7 +6,7 @@ dependencies:
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
   override:
-    - npm install
+    - obt install
   cache_directories:
     - "node_modules"
 test:

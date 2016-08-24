@@ -5,7 +5,6 @@
   "main": "main.js",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "install": "bower install --config.interactive=false",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify"
