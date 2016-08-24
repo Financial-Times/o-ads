@@ -5,6 +5,8 @@ dependencies:
   post:
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
+    - npm install -g Financial-Times/origami-build-tools#node4
+dependencies:
   override:
     - obt install
   cache_directories:
