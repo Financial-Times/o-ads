@@ -72,6 +72,14 @@
 	  	"expanded": false,
 	  	"description": "",
 			"data": {"network": 5887, "site" : "test.5887.origami"}
+	  },
+	  {
+	  	"name": "Multiple-Next-Styles",
+	  	"template": "/demos/src/multiplenextstyles.mustache",
+	  	"expanded": false,
+	  	"description": "",
+			"data": {"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition", "name":"billboard", "formats" : "Billboard", "network": 5887, "site" : "test.5887.origami"}
+
 	  }
   	]
 }
