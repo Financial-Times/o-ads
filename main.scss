@@ -38,7 +38,7 @@ $o-ads-is-silent: true !default;
 	}
 
 	.o-ads--background {
-		@include oEffectsBackgroundsPinStripe($background: oColorsGetPaletteColor('pink-tint2'), $style: 'sparse');
+		@include oEffectsBackgroundsPinStripe($background: oColorsGetPaletteColor('pink-tint2'), $style: 'dense');
 	}
 
 	.o-ads--reserve-90 {
