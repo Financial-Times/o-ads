@@ -7,7 +7,6 @@ dependencies:
   post:
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
-dependencies:
   override:
     - obt install
   cache_directories:
