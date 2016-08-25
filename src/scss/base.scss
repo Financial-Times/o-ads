@@ -82,7 +82,7 @@ $ad-max-responsive-width: 1440px;
 @mixin oAdsTransition {
 	will-change: min-height, padding, height;
 	transform: translate3d(0, 0, 0);
-	transition: height 0.35s $o-visual-effects-transition-slide,
-							min-height 0.35s $o-visual-effects-transition-slide,
-							padding 0.35s $o-visual-effects-transition-slide;
+	transition: height 0.35s $o-visual-effects-transition-expand,
+							min-height 0.35s $o-visual-effects-transition-expand,
+							padding 0.35s $o-visual-effects-transition-expand;
 }
