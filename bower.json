@@ -7,7 +7,10 @@
   "ignore": [],
   "dependencies": {
     "ftdomdelegate": "https://github.com/ftlabs/ftdomdelegate.git#^2.0.3",
-    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#>=1.5.0 < 3"
+    "o-viewport": "https://github.com/Financial-Times/o-viewport.git#>=1.5.0 < 3",
+    "o-grid": "^4.0.0",
+    "o-visual-effects": "^0.1.0",
+    "o-colors": "^3.0.0"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
