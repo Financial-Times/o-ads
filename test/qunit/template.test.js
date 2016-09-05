@@ -52,6 +52,7 @@ QUnit.only("does not overwrite existing data in config", function(assert) {
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user'
     },
+    dfp_targeting: "custom_key=custom_value",
     krux: {
       id: '1234',
       attributes: {
@@ -64,7 +65,7 @@ QUnit.only("does not overwrite existing data in config", function(assert) {
 
 	setTimeout(function() {
 		const result = ads.config();
-    const dfp = 'slv=int;loggedIn=true;device_spoor_id=cis61kpxo00003k59j4xnd8kx;guid=d1359df2-4fe6-4dd6-bb11-eb4342f352ec;gender=F'
+    const dfp = 'custom_key=custom_value;slv=int;loggedIn=true;device_spoor_id=cis61kpxo00003k59j4xnd8kx;guid=d1359df2-4fe6-4dd6-bb11-eb4342f352ec;gender=F'
     const krux_user =  {
           "custom_key": "custom value",
           "device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
@@ -74,7 +75,7 @@ QUnit.only("does not overwrite existing data in config", function(assert) {
           "gender": "F"
     };
 
-		// assert.equal(result.dfp_targeting, dfp, 'the dfp is added as targeting');
+		assert.equal(result.dfp_targeting, dfp, 'the dfp is added as targeting');
     assert.deepEqual(result.krux.attributes.user, krux_user, 'the krux attributes are correct');
 
     done();

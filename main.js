@@ -24,41 +24,50 @@ const buildObjectFromArray = (targetObject) =>
 
 Ads.prototype.init = function(config) {
 	const targetingApi = config.targetingApi
+	// make request if targetingApi available
 	if(targetingApi) {
 		fetch(targetingApi.user, {
 			timeout: 2000,
 			useCorsProxy: true
 		})
+		//return json object
 		.then(res => res.json())
+		// convert json object to correct data format
 		.then(response => {
-			config.dfp_targeting = this.utils.keyValueString(buildObjectFromArray(response.dfp.targeting));
-			if(config.krux && config.krux.id) {
-				if(!config.krux.attributes) { config.krux.attributes = {}; }
-				config.krux.attributes.user = buildObjectFromArray(response.krux.attributes);
+			//if no config present, generate string accordingly
+			if(!config.dfp_targeting) {
+				config.dfp_targeting = this.utils.keyValueString(buildObjectFromArray(response.dfp.targeting));
+			} else {
+				// if data present, append 'custom' parameters
+				let customObject = this.utils.hash(config.dfp_targeting, ';', '=');
+				config.dfp_targeting = this.utils.keyValueString(this.utils.extend(customObject, buildObjectFromArray(response.dfp.targeting)));
+
 			}
 
-			// check if krux id has been passed
-			// if true, add krux *user* attributes
-			// if not - nada
+			// if krux present, and id present, assign *user* attributes
+			if(config.krux && config.krux.id) {
+				//if no attributes present, create object && assign user attributes.
+				if(!config.krux.attributes) {
+					config.krux.attributes = {};
+					config.krux.attributes.user = buildObjectFromArray(response.krux.attributes);
+				} else {
+				//if attributes present, append user attributes
+					this.utils.extend(config.krux.attributes.user, buildObjectFromArray(response.krux.attributes));
+				}
+			}
+			//run all the other things.
 			this.things(config);
 		})
 		.catch((e) => console.log('WHYYYYYYYYYYY!', e) );
 	} else {
+		//run all the other things
 		this.things(config);
 	}
 
 	return this;
-	// we need to check if targetinApi has been passed as part of config
-	// if it was passed we need to make a fetch request to targetingApi.user
-	// once we get a respose we need to parse/format it
-	// then add it to the config.dfp_targeting and config.krux.attributes?
-	// then we init the rest
-
-	// if no config.targetingApi was passed, behave as before and just init
 };
 
 Ads.prototype.things = function (config) {
-	console.log('NOW YOU SEE ME!');
 	this.config.init();
 	this.config(config);
 	this.slots.init();
