@@ -32,6 +32,14 @@ Ads.prototype.init = function(config) {
 		.then(res => res.json())
 		.then(response => {
 			config.dfp_targeting = this.utils.keyValueString(buildObjectFromArray(response.dfp.targeting));
+			if(config.krux && config.krux.id) {
+				if(!config.krux.attributes) { config.krux.attributes = {}; }
+				config.krux.attributes.user = buildObjectFromArray(response.krux.attributes);
+			}
+
+			// check if krux id has been passed
+			// if true, add krux *user* attributes
+			// if not - nada
 			this.things(config);
 		})
 		.catch((e) => console.log('WHYYYYYYYYYYY!', e) );
