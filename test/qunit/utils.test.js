@@ -299,7 +299,7 @@ QUnit.test('hash method', function(assert) {
 	}
 });
 
-QUnit.test('attach method success', function(assert) {
+QUnit.only('attach method success', function(assert) {
 	const done = assert.async();
 	this.ads.utils.attach.restore();
 

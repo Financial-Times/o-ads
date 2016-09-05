@@ -23,6 +23,9 @@ const buildObjectFromArray = (targetObject) =>
 		}, {});
 
 Ads.prototype.init = function(config) {
+	if(!config){
+		config = {};
+	}
 	const targetingApi = config.targetingApi
 	// make request if targetingApi available
 	if(targetingApi) {
@@ -56,18 +59,18 @@ Ads.prototype.init = function(config) {
 				}
 			}
 			//run all the other things.
-			this.things(config);
+			this.initLibrary(config);
 		})
 		.catch((e) => console.log('WHYYYYYYYYYYY!', e) );
 	} else {
 		//run all the other things
-		this.things(config);
+		this.initLibrary(config);
 	}
 
 	return this;
 };
 
-Ads.prototype.things = function (config) {
+Ads.prototype.initLibrary = function (config) {
 	this.config.init();
 	this.config(config);
 	this.slots.init();

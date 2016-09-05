@@ -6,7 +6,7 @@ const fetchMock = require('fetch-mock');
 
 QUnit.module('ads API config', {});
 
-QUnit.test("tests that no calls have been made to the api", function(assert) {
+QUnit.skip("tests that no calls have been made to the api", function(assert) {
 
 });
 
@@ -42,7 +42,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 	}, 20);
 });
 
-QUnit.only("does not overwrite existing data in config", function(assert) {
+QUnit.test("does not overwrite existing data in config", function(assert) {
   const done = assert.async();
 	const given = JSON.stringify(this.fixtures.user);
 
@@ -82,7 +82,7 @@ QUnit.only("does not overwrite existing data in config", function(assert) {
 	}, 20);
 });
 
-QUnit.test("makes api call to correct content url and adds correct data to targeting", function(assert) {
+QUnit.skip("makes api call to correct content url and adds correct data to targeting", function(assert) {
 	// assert mock url has been called
 	// assert dfp-targeting holds returned data
 	// assert krux-targeting holds returned data
@@ -92,11 +92,9 @@ QUnit.test("makes api call to correct content url and adds correct data to targe
 
 });
 
-QUnit.test("makes api call to correct concept url and adds correct data to targeting", function(assert) {
+QUnit.skip("makes api call to correct concept url and adds correct data to targeting", function(assert) {
 	// assert mock url has been called
 	// assert dfp-targeting holds returned data
 	// assert krux-targeting holds returned data
 
 });
-
-QUnit.test("")
