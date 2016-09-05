@@ -25,6 +25,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
     }
 	});
 
+  // wait for a second as we need that time to fire the krux script
 	setTimeout(function() {
 		const result = ads.config();
     const dfp = 'slv=int;loggedIn=true;device_spoor_id=cis61kpxo00003k59j4xnd8kx;guid=d1359df2-4fe6-4dd6-bb11-eb4342f352ec;gender=F'
@@ -39,7 +40,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 		assert.equal(result.dfp_targeting, dfp, 'the dfp is added as targeting');
     assert.deepEqual(result.krux.attributes.user, krux_user, 'the krux attributes are correct');
   	done();
-	}, 20);
+	}, 1050);
 });
 
 QUnit.test("does not overwrite existing data in config", function(assert) {
@@ -63,6 +64,7 @@ QUnit.test("does not overwrite existing data in config", function(assert) {
     }
 	});
 
+  // wait for a second as we need that time to fire the krux script
 	setTimeout(function() {
 		const result = ads.config();
     const dfp = 'custom_key=custom_value;slv=int;loggedIn=true;device_spoor_id=cis61kpxo00003k59j4xnd8kx;guid=d1359df2-4fe6-4dd6-bb11-eb4342f352ec;gender=F'
@@ -79,7 +81,7 @@ QUnit.test("does not overwrite existing data in config", function(assert) {
     assert.deepEqual(result.krux.attributes.user, krux_user, 'the krux attributes are correct');
 
     done();
-	}, 20);
+	}, 1050);
 });
 
 QUnit.skip("makes api call to correct content url and adds correct data to targeting", function(assert) {
