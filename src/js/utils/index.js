@@ -488,6 +488,11 @@ module.exports.iframeToSlotName = function(iframeWindow) {
 	return false;
 };
 
+module.exports.keyValueString = function keyValueString (obj) {
+	return Object.keys(obj).map(function (key) {
+		return key + '=' + obj[key];
+	}).join(';');
+}
 extend(module.exports, require('./cookie.js'));
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));

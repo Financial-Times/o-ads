@@ -16,8 +16,41 @@ Ads.prototype.utils = require('./src/js/utils');
 * Initialises the ads library and all sub modules
 * @param config {object} a JSON object containing configuration for the current page
 */
+const buildObjectFromArray = (targetObject) =>
+	targetObject.reduce((prev, data) => {
+			prev[data.key] = data.value;
+			return prev;
+		}, {});
 
 Ads.prototype.init = function(config) {
+	const targetingApi = config.targetingApi
+	if(targetingApi) {
+		fetch(targetingApi.user, {
+			timeout: 2000,
+			useCorsProxy: true
+		})
+		.then(res => res.json())
+		.then(response => {
+			config.dfp_targeting = this.utils.keyValueString(buildObjectFromArray(response.dfp.targeting));
+			this.things(config);
+		})
+		.catch((e) => console.log('WHYYYYYYYYYYY!', e) );
+	} else {
+		this.things(config);
+	}
+
+	return this;
+	// we need to check if targetinApi has been passed as part of config
+	// if it was passed we need to make a fetch request to targetingApi.user
+	// once we get a respose we need to parse/format it
+	// then add it to the config.dfp_targeting and config.krux.attributes?
+	// then we init the rest
+
+	// if no config.targetingApi was passed, behave as before and just init
+};
+
+Ads.prototype.things = function (config) {
+	console.log('NOW YOU SEE ME!');
 	this.config.init();
 	this.config(config);
 	this.slots.init();
@@ -28,8 +61,8 @@ Ads.prototype.init = function(config) {
 	this.utils.on('debug', this.debug.bind(this));
 	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
-
 	return this;
+
 };
 
 const initAll = function() {

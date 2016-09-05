@@ -43,7 +43,8 @@ let options = {
 	preprocessors: {
 		'main.js': ['browserify'],
 		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify']
+		'test/qunit/setup.js': ['browserify'],
+		'test/qunit/template.test.js': ['browserify']
 	}
 };
 
