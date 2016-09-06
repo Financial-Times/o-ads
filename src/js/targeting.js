@@ -37,7 +37,6 @@ Targeting.prototype.clear = function() {
 	parameters = {};
 };
 
-
 /**
 * getFromConfig returns an object containing all the key values pairs specified in the dfp_targeting
 * config.
@@ -137,5 +136,6 @@ Targeting.prototype.debug = function () {
 		log.end();
 	}
 };
+
 
 module.exports = new Targeting();

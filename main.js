@@ -21,9 +21,6 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(config) {
 	if(!config) { config = {}; }
 	const targetingApi = config.targetingApi
-	const generateDfpString = (object) =>
-		config.dfp_targeting = this.utils.keyValueString(object);
-	const append = (newValue, existingValue) => this.utils.extend(newValue, existingValue)
 
 	if(targetingApi) {
 		fetch(targetingApi.user, {
@@ -32,22 +29,16 @@ Ads.prototype.init = function(config) {
 		})
 		.then(res => res.json())
 		.then(response => {
-			let targetingObject = this.utils.buildObjectFromArray(response.dfp.targeting);
-			let kruxObject = this.utils.buildObjectFromArray(response.krux.attributes);
 
-			if(!config.dfp_targeting) {
-				generateDfpString(targetingObject);
-			} else {
-				let customObject = this.utils.hash(config.dfp_targeting, ';', '=');
-				generateDfpString(append(customObject, targetingObject));
-			}
+			let kruxObject = this.utils.buildObjectFromArray(response.krux.attributes);
+			this.targeting.add(this.utils.buildObjectFromArray(response.dfp.targeting));
 
 			if(config.krux && config.krux.id) {
 				if(!config.krux.attributes) {
 					config.krux.attributes = {};
 					config.krux.attributes.user = kruxObject;
 				} else {
-					append(config.krux.attributes.user, kruxObject);
+					this.utils.extend(config.krux.attributes.user, kruxObject);
 				}
 			}
 			this.initLibrary(config);
