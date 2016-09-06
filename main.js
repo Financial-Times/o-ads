@@ -16,54 +16,44 @@ Ads.prototype.utils = require('./src/js/utils');
 * Initialises the ads library and all sub modules
 * @param config {object} a JSON object containing configuration for the current page
 */
-const buildObjectFromArray = (targetObject) =>
-	targetObject.reduce((prev, data) => {
-			prev[data.key] = data.value;
-			return prev;
-		}, {});
+
 
 Ads.prototype.init = function(config) {
-	if(!config){
-		config = {};
-	}
+	if(!config) { config = {}; }
 	const targetingApi = config.targetingApi
-	// make request if targetingApi available
+	const generateDfpString = (object) =>
+		config.dfp_targeting = this.utils.keyValueString(object);
+	const append = (newValue, existingValue) => this.utils.extend(newValue, existingValue)
+
 	if(targetingApi) {
 		fetch(targetingApi.user, {
 			timeout: 2000,
 			useCorsProxy: true
 		})
-		//return json object
 		.then(res => res.json())
-		// convert json object to correct data format
 		.then(response => {
-			//if no config present, generate string accordingly
-			if(!config.dfp_targeting) {
-				config.dfp_targeting = this.utils.keyValueString(buildObjectFromArray(response.dfp.targeting));
-			} else {
-				// if data present, append 'custom' parameters
-				let customObject = this.utils.hash(config.dfp_targeting, ';', '=');
-				config.dfp_targeting = this.utils.keyValueString(this.utils.extend(customObject, buildObjectFromArray(response.dfp.targeting)));
+			let targetingObject = this.utils.buildObjectFromArray(response.dfp.targeting);
+			let kruxObject = this.utils.buildObjectFromArray(response.krux.attributes);
 
+			if(!config.dfp_targeting) {
+				generateDfpString(targetingObject);
+			} else {
+				let customObject = this.utils.hash(config.dfp_targeting, ';', '=');
+				generateDfpString(append(customObject, targetingObject));
 			}
 
-			// if krux present, and id present, assign *user* attributes
 			if(config.krux && config.krux.id) {
-				//if no attributes present, create object && assign user attributes.
 				if(!config.krux.attributes) {
 					config.krux.attributes = {};
-					config.krux.attributes.user = buildObjectFromArray(response.krux.attributes);
+					config.krux.attributes.user = kruxObject;
 				} else {
-				//if attributes present, append user attributes
-					this.utils.extend(config.krux.attributes.user, buildObjectFromArray(response.krux.attributes));
+					append(config.krux.attributes.user, kruxObject);
 				}
 			}
-			//run all the other things.
 			this.initLibrary(config);
 		})
-		.catch((e) => console.log('WHYYYYYYYYYYY!', e) );
+		.catch((e) => console.error(e.stack) );
 	} else {
-		//run all the other things
 		this.initLibrary(config);
 	}
 
