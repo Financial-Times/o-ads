@@ -11,6 +11,7 @@ Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
+Ads.prototype.api = require('./src/js/data-providers/api-call');
 
 /**
 * Initialises the ads library and all sub modules
@@ -23,16 +24,19 @@ Ads.prototype.init = function(config) {
 	const targetingApi = config.targetingApi
 
 	if(targetingApi) {
-		fetch(targetingApi.user, {
-			timeout: 2000,
-			useCorsProxy: true
-		})
-		.then(res => res.json())
+		Promise.all([this.api.fetchData(targetingApi.user)])
 		.then(response => {
-			this.targeting.add(this.utils.buildObjectFromArray(response.dfp.targeting));
-			this.krux.add({user: this.utils.buildObjectFromArray(response.krux.attributes)});
-			this.initLibrary(config);
+			for(let i = 0; i < response.length; i++){
+				let objArray = ['user', 'content', 'concept']
+				this.targeting.add(this.utils.buildObjectFromArray(response[i].dfp.targeting));
+				console.log(objArray[i])
+				this.krux.add({`${objArray[i]}`: this.utils.buildObjectFromArray(response[i].krux.attributes)});
+			}
+			// this.targeting.add(this.utils.buildObjectFromArray(response[0].dfp.targeting));
+			// this.krux.add({user: this.utils.buildObjectFromArray(response[0].krux.attributes)});
+			// this.initLibrary(config);
 		})
+		.then(this.initLibrary(config))
 		.catch((e) => console.error(e.stack) );
 	} else {
 		this.initLibrary(config);

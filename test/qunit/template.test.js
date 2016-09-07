@@ -10,7 +10,7 @@ QUnit.skip("tests that no calls have been made to the api", function(assert) {
 
 });
 
-QUnit.test("makes api call to correct user url and adds correct data to targeting", function(assert) {
+QUnit.only("makes api call to correct user url and adds correct data to targeting", function(assert) {
   const done = assert.async();
 	const given = JSON.stringify(this.fixtures.user);
 
