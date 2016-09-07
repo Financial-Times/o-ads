@@ -2,15 +2,18 @@ const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
 const targeting = require('../targeting');
-
+// let thang = {};
 /**
  * The Krux class defines an FT.ads.krux instance
  * @class
  * @constructor
 */
 function Krux() {
-
+ this.customAttributes = {}
 }
+Krux.prototype.add = function (target) {
+	utils.extend(true, this.customAttributes, target);
+};
 
 Krux.prototype.init = function() {
 	this.config = config('krux');
@@ -27,8 +30,9 @@ Krux.prototype.init = function() {
 		this.api = window.Krux;
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
+			this.add(this.config.attributes)
 			this.setAttributes('page_attr_', this.config.attributes.page || {});
-			this.setAttributes('user_attr_', this.config.attributes.user || {});
+			this.setAttributes('user_attr_', this.customAttributes.user || {});
 			this.setAttributes('', this.config.attributes.custom || {});
 		}
 
@@ -38,7 +42,7 @@ Krux.prototype.init = function() {
 			src = decodeURIComponent(m[1]);
 		}
 		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag?confid=${this.config.id}`;
-		
+
 		const loadKruxScript = () => {
 			utils.attach(finalSrc, true, () => {
 				utils.broadcast('kruxScriptLoaded');

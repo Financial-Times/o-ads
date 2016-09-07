@@ -29,18 +29,8 @@ Ads.prototype.init = function(config) {
 		})
 		.then(res => res.json())
 		.then(response => {
-
-			let kruxObject = this.utils.buildObjectFromArray(response.krux.attributes);
 			this.targeting.add(this.utils.buildObjectFromArray(response.dfp.targeting));
-
-			if(config.krux && config.krux.id) {
-				if(!config.krux.attributes) {
-					config.krux.attributes = {};
-					config.krux.attributes.user = kruxObject;
-				} else {
-					this.utils.extend(config.krux.attributes.user, kruxObject);
-				}
-			}
+			this.krux.add({user: this.utils.buildObjectFromArray(response.krux.attributes)});
 			this.initLibrary(config);
 		})
 		.catch((e) => console.error(e.stack) );

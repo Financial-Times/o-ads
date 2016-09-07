@@ -311,3 +311,9 @@ QUnit.test("debug logs segment limit data if set", function(assert) {
 	this.ads.krux.debug();
 	assert.ok(log.calledWith('%c segment limit:'), "segment limit was logged'");
 });
+
+QUnit.test("adds data to config", function(assert) {
+	let input = { "key" : "value" }
+	this.ads.krux.add(input)
+	assert.deepEqual(this.ads.krux.customAttributes, input, 'win');
+})

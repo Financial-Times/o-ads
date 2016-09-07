@@ -10,7 +10,7 @@ QUnit.skip("tests that no calls have been made to the api", function(assert) {
 
 });
 
-QUnit.test ("makes api call to correct user url and adds correct data to targeting", function(assert) {
+QUnit.test("makes api call to correct user url and adds correct data to targeting", function(assert) {
   const done = assert.async();
 	const given = JSON.stringify(this.fixtures.user);
 
@@ -37,17 +37,19 @@ QUnit.test ("makes api call to correct user url and adds correct data to targeti
           "gender": "F"
     };
     const krux_targeting =  {
-          "device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-          "guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
-          "subscription_level": "int",
-          "loggedIn": true,
-          "gender": "F"
+            "user": {
+            "device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+            "guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+            "subscription_level": "int",
+            "loggedIn": true,
+            "gender": "F"
+          }
     };
 
     Object.keys(dfp_targeting).forEach((key) => {
-        assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+      assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
     });
-    assert.deepEqual(config.krux.attributes.user, krux_targeting, 'the krux attributes are correct');
+    assert.deepEqual(ads.krux.customAttributes, krux_targeting, 'the krux attributes are correct');
   	done();
 	}, 1050);
 });
@@ -98,7 +100,7 @@ QUnit.test("does not overwrite existing data in config", function(assert) {
         assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
     });
 
-    assert.deepEqual(config.krux.attributes.user, krux_targeting, 'the krux attributes are correct');
+    assert.deepEqual(ads.krux.customAttributes.user, krux_targeting, 'the krux attributes are correct');
 
     done();
 	}, 1050);
