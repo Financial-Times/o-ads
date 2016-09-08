@@ -11,7 +11,6 @@ Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
 Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
-Ads.prototype.api = require('./src/js/data-providers/api-call');
 
 /**
 * Initialises the ads library and all sub modules
@@ -25,10 +24,11 @@ Ads.prototype.init = function(options) {
 
 	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
-		Promise.all([this.api.fetchData(targetingApi.user), this.api.fetchData(targetingApi.page)])
+		Promise.all([fetchData(targetingApi.user), fetchData(targetingApi.page)])
 		.then(response => {
 
 			for(let i = 0; i < response.length; i++){
+			//	if(response[i])
 				let keys = ['user', 'page'];
 				let kruxObj = {}
 
@@ -37,17 +37,26 @@ Ads.prototype.init = function(options) {
 				this.krux.add(kruxObj)
 			}
 
+			this.initLibrary();
 		})
-		.then(this.initLibrary(this.config()))
-		.catch((e) => console.error(e.stack) );
+		.catch(this.initLibrary());
 	} else {
-		this.initLibrary(this.config());
+		this.initLibrary();
 	}
 
 	return this;
 };
 
-Ads.prototype.initLibrary = function (options) {
+const fetchData = function(target) {
+  if(!target) { return Promise.resolve(false) };
+  return fetch(target, {
+    timeout: 2000,
+  })
+  .then(res => {return res.json()})
+  .catch(() => {});
+};
+
+Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();

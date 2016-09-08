@@ -2,7 +2,7 @@ const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
 const targeting = require('../targeting');
-// let thang = {};
+
 /**
  * The Krux class defines an FT.ads.krux instance
  * @class

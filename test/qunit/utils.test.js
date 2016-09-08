@@ -430,10 +430,6 @@ QUnit.test('createCORSRequest timeout', function(assert) {
 	done();
 });
 
-QUnit.skip("parses key value hash to key value string", function(assert) {
-	assert.equal(this.ads.utils.keyValueString({"first key": "first value", "second key": "second value"}), "first key=first value;second key=second value", 'converts object to string')
-})
-
 QUnit.test("builds an object from array", function(assert) {
 	let array = [{
             "name": "subscription",
