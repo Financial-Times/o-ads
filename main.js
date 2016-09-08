@@ -22,19 +22,19 @@ Ads.prototype.api = require('./src/js/data-providers/api-call');
 Ads.prototype.init = function(config) {
 	if(!config) { config = {}; }
 	const targetingApi = config.targetingApi
-
 	if(targetingApi) {
 		Promise.all([this.api.fetchData(targetingApi.user)])
 		.then(response => {
+
 			for(let i = 0; i < response.length; i++){
-				let objArray = ['user', 'content', 'concept']
+				let keys = ['user', 'page'];
+				let kruxObj = {}
+				kruxObj[keys[i]] = this.utils.buildObjectFromArray(response[i].krux.attributes)
+
 				this.targeting.add(this.utils.buildObjectFromArray(response[i].dfp.targeting));
-				console.log(objArray[i])
-				this.krux.add({`${objArray[i]}`: this.utils.buildObjectFromArray(response[i].krux.attributes)});
+				this.krux.add(kruxObj)
 			}
-			// this.targeting.add(this.utils.buildObjectFromArray(response[0].dfp.targeting));
-			// this.krux.add({user: this.utils.buildObjectFromArray(response[0].krux.attributes)});
-			// this.initLibrary(config);
+
 		})
 		.then(this.initLibrary(config))
 		.catch((e) => console.error(e.stack) );
