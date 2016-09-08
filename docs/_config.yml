@@ -1,0 +1,5 @@
+title: FT Advertising
+# Build settings
+markdown: kramdown
+theme: minima
+baseurl: /o-ads

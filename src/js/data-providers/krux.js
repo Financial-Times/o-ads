@@ -42,7 +42,8 @@ Krux.prototype.init = function() {
 		if (m) {
 			src = decodeURIComponent(m[1]);
 		}
-		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag?confid=${this.config.id}`;
+
+		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag/${this.config.id}.js`;
 
 		const loadKruxScript = () => {
 			utils.attach(finalSrc, true, () => {

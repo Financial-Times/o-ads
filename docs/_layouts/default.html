@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>{{ page.title }} - {{ site.title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="https://origami-build.ft.com/v2/bundles/css?modules=o-techdocs@^6.0.0" rel="stylesheet" />
+</head>
+<body class="o-techdocs">
+
+	<header data-o-component="o-techdocs-header" class="o-techdocs-header">
+		<div class="o-techdocs-header__container">
+			<div class="o-techdocs-header__primary">
+				<div class="o-techdocs-header__primary__left">
+					<h1 class="o-techdocs-header__title"><a href="/">{{site.title}}</a></h1>
+				</div>
+			</div>
+			<div class="o-techdocs-header__secondary"></div>
+		</div>
+	</header>
+
+	<div class="o-techdocs-container">
+		<div class="o-techdocs-layout">
+
+			<div class="o-techdocs-sidebar">
+				<ul class="o-techdocs-nav">
+					<li {% if page.title == 'Overview' %} aria-expanded="true" aria-selected="true"{% endif %}>
+					<a href="{{ site.baseurl }}/">Overview</a>
+					</li>
+					<li {% if page.title == 'Building with Ads' %} aria-expanded="true" aria-selected="true"{% endif %}>
+						<a href="{{ site.baseurl }}/docs/developer-guide/">Building with Ads</a>
+					{% if page.section == 'building' %}
+					<ul class="o-techdocs-nav o-techdocs-nav--sub">
+						<li{% if page.title == 'Setting up a new product' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/new-product">Setting up a new product</a>
+						</li>
+						<li{% if page.title == 'Display Ads' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/display">Adding Display Ads</a>
+						</li>
+						<li{% if page.title == 'Advanced usage' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/advanced-display">Advanced usage</a>
+						</li>
+						<li{% if page.title == 'Native Ads' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/native">Native Ads</a>
+						</li>
+						<li{% if page.title == 'Video Ads' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/video">Video Ads</a>
+						</li>
+						<li{% if page.title == 'Debugging' %} aria-selected="true"{% endif %}>
+							<a href="{{ site.baseurl }}/docs/developer-guide/debugging">Debugging</a>
+						</li>
+					</ul>
+
+					{% endif %}
+					</li>
+					<li{% if page.title == 'Measuring' %} aria-selected="true"{% endif %}>
+						<a href="{{ site.baseurl }}/docs/measuring">Measuring</a>
+					</li>
+					<li{% if page.title == 'Glossary' %} aria-selected="true"{% endif %}>
+						<a href="{{ site.baseurl }}/docs/glossary">Glossary</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="o-techdocs-main">
+				<div class="o-techdocs-content">
+
+						<h1>{{page.title}}</h1>
+
+				{{ content }}
+				</div>
+			</div>
+
+	</div>
+
+<footer class="o-techdocs-footer">
+	<div class="o-techdocs-footer__inner">
+		<p class="o-techdocs-footer__secondary"><a href="http://github.com/financial-times/ft-origami">View project on GitHub</a></p>
+		<p>&#xA9; THE FINANCIAL TIMES LTD. FT and 'Financial Times' are trademarks of The Financial Times Ltd.</p>
+	</div>
+</footer>
+
+	<script src="https://origami-build.ft.com/v2/bundles/js?modules=o-techdocs@^6.0.0"></script>
+</body>
+</html
