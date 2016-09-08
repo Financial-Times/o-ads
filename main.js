@@ -23,7 +23,7 @@ Ads.prototype.init = function(config) {
 	if(!config) { config = {}; }
 	const targetingApi = config.targetingApi
 	if(targetingApi) {
-		Promise.all([this.api.fetchData(targetingApi.user)])
+		Promise.all([this.api.fetchData(targetingApi.user), this.api.fetchData(targetingApi.page)])
 		.then(response => {
 
 			for(let i = 0; i < response.length; i++){
