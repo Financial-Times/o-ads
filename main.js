@@ -23,7 +23,6 @@ Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
 
-	// if(!options) { options = {}; }
 	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
 		Promise.all([this.api.fetchData(targetingApi.user), this.api.fetchData(targetingApi.page)])
@@ -32,8 +31,8 @@ Ads.prototype.init = function(options) {
 			for(let i = 0; i < response.length; i++){
 				let keys = ['user', 'page'];
 				let kruxObj = {}
-				kruxObj[keys[i]] = this.utils.buildObjectFromArray(response[i].krux.attributes)
 
+				kruxObj[keys[i]] = this.utils.buildObjectFromArray(response[i].krux.attributes)
 				this.targeting.add(this.utils.buildObjectFromArray(response[i].dfp.targeting));
 				this.krux.add(kruxObj)
 			}
@@ -49,8 +48,6 @@ Ads.prototype.init = function(options) {
 };
 
 Ads.prototype.initLibrary = function (options) {
-	// this.config.init();
-	// this.config(config);
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
