@@ -19,9 +19,12 @@ Ads.prototype.api = require('./src/js/data-providers/api-call');
 */
 
 
-Ads.prototype.init = function(config) {
-	if(!config) { config = {}; }
-	const targetingApi = config.targetingApi
+Ads.prototype.init = function(options) {
+	this.config.init();
+	this.config(options);
+
+	// if(!options) { options = {}; }
+	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
 		Promise.all([this.api.fetchData(targetingApi.user), this.api.fetchData(targetingApi.page)])
 		.then(response => {
@@ -36,18 +39,18 @@ Ads.prototype.init = function(config) {
 			}
 
 		})
-		.then(this.initLibrary(config))
+		.then(this.initLibrary(this.config()))
 		.catch((e) => console.error(e.stack) );
 	} else {
-		this.initLibrary(config);
+		this.initLibrary(this.config());
 	}
 
 	return this;
 };
 
-Ads.prototype.initLibrary = function (config) {
-	this.config.init();
-	this.config(config);
+Ads.prototype.initLibrary = function (options) {
+	// this.config.init();
+	// this.config(config);
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();

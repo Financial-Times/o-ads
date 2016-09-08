@@ -9,11 +9,8 @@ AdsApi.prototype.fetchData = function (target) {
     timeout: 2000,
     useCorsProxy: true
   })
-  .then (res => {return res.json()})
-  // .then(response => {
-  //   this.targeting.add(this.utils.buildObjectFromArray(response.dfp.targeting));
-  //   this.krux.add({user: this.utils.buildObjectFromArray(response.krux.attributes)})
-  // })
+  .then(res => {return res.json()})
+  .catch(() => {});
 };
 
 module.exports = new AdsApi();

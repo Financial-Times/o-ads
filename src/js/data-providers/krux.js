@@ -11,6 +11,7 @@ const targeting = require('../targeting');
 function Krux() {
  this.customAttributes = {}
 }
+
 Krux.prototype.add = function (target) {
 	utils.extend(true, this.customAttributes, target);
 };
