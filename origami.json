@@ -13,7 +13,8 @@
 	 "browserFeatures": {
 		 "required": [
 			 "Array.from",
-			 "IntersectionObserver"
+			 "IntersectionObserver",
+			 "fetch"
 		 ]
 	 },
 	 "demos": [
