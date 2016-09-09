@@ -13,7 +13,7 @@ module.exports = {
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
-			.assert.visible('#SuperLeaderboard-gpt', 'Advert has been initiated and visible')
+			.assert.visible('#Billboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
 				.frame(0)
 				// wait for 1 second for advert to appear
