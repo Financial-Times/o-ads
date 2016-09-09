@@ -28,13 +28,18 @@ Ads.prototype.init = function(options) {
 		.then(response => {
 
 			for(let i = 0; i < response.length; i++){
-			//	if(response[i])
+				let responseObj = response[i]
 				let keys = ['user', 'page'];
 				let kruxObj = {}
 
-				kruxObj[keys[i]] = this.utils.buildObjectFromArray(response[i].krux.attributes)
-				this.targeting.add(this.utils.buildObjectFromArray(response[i].dfp.targeting));
-				this.krux.add(kruxObj)
+				if(responseObj.krux && responseObj.krux.attributes) {
+					kruxObj[keys[i]] = this.utils.buildObjectFromArray(responseObj.krux.attributes)
+					this.krux.add(kruxObj)
+				}
+
+				if(responseObj.dfp && responseObj.dfp.targeting) {
+					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
+				}
 			}
 
 			this.initLibrary();
@@ -48,7 +53,7 @@ Ads.prototype.init = function(options) {
 };
 
 const fetchData = function(target) {
-  if(!target) { return Promise.resolve(false) };
+  if(!target) { return Promise.resolve({}) };
   return fetch(target, {
     timeout: 2000,
   })

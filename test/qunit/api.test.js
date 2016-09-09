@@ -13,15 +13,12 @@ QUnit.skip("tests that no calls have been made to the api", function(assert) {
 QUnit.test("makes api call to correct user url and adds correct data to targeting", function(assert) {
   const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
-	const pageJSON = JSON.stringify(this.fixtures.content);
 
   fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
-  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
 
   const ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
-			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
     },
     krux: {
       id: '1234'
@@ -61,15 +58,12 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 QUnit.test("does not overwrite existing data in user config", function(assert) {
   const done = assert.async();
   const userJSON = JSON.stringify(this.fixtures.user);
-  const pageJSON = JSON.stringify(this.fixtures.content);
 
   fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
-  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
 
   const ads = this.ads.init({
     targetingApi: {
       user: 'https://ads-api.ft.com/v1/user',
-      page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
     },
     dfp_targeting: "custom_key=custom_value",
     krux: {
@@ -115,15 +109,12 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 
 QUnit.test("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
   const done = assert.async();
-	const userJSON = JSON.stringify(this.fixtures.user);
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
-  fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
   fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
 
   const ads = this.ads.init({
 		targetingApi: {
-			user: 'https://ads-api.ft.com/v1/user',
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
     },
     krux: {
