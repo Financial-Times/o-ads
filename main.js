@@ -21,10 +21,9 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
-
 	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
-		Promise.all([fetchData(targetingApi.user), fetchData(targetingApi.page)])
+		return Promise.all([fetchData(targetingApi.user), fetchData(targetingApi.page)])
 		.then(response => {
 
 			for(let i = 0; i < response.length; i++){
@@ -41,15 +40,12 @@ Ads.prototype.init = function(options) {
 					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
 				}
 			}
-
-			this.initLibrary();
+			return this.initLibrary();
 		})
-		.catch(this.initLibrary());
+		.catch(this.initLibrary);
 	} else {
-		this.initLibrary();
+		return Promise.resolve(this.initLibrary());
 	}
-
-	return this;
 };
 
 const fetchData = function(target) {
@@ -71,7 +67,6 @@ Ads.prototype.initLibrary = function() {
 	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
 	return this;
-
 };
 
 const initAll = function() {
@@ -81,9 +76,12 @@ const initAll = function() {
 	});
 	/* istanbul ignore else  */
 	if (!stop.length) {
-		ads.init();
-		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+
+		ads.init().then(() => {
+			const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+			slots.forEach(ads.slots.initSlot.bind(ads.slots));
+		})
+
 	}
 };
 

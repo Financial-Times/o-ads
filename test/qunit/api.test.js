@@ -16,7 +16,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 
   fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
 
-  const ads = this.ads.init({
+  let ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
     },
@@ -25,9 +25,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
     }
 	});
 
-
-  // wait for a second as we need that time to fire the krux script
-	setTimeout(function() {
+  ads.then((ads) => {
     const targeting = ads.targeting.get();
     const config = ads.config();
     const dfp_targeting =  {
@@ -51,8 +49,9 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
       assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
     });
     assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
-  	done();
-	}, 1050);
+    done();
+  });
+
 });
 
 QUnit.test("does not overwrite existing data in user config", function(assert) {
@@ -76,8 +75,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
     }
 	});
 
-  // wait for a second as we need that time to fire the krux script
-	setTimeout(function() {
+  ads.then((ads) => {
 		const targeting = ads.targeting.get();
     const config = ads.config();
     const dfp_targeting =  {
@@ -104,7 +102,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
     assert.deepEqual(ads.krux.customAttributes.user, krux_targeting, 'the krux attributes are correct');
 
     done();
-	}, 1050);
+	});
 });
 
 QUnit.test("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
@@ -123,8 +121,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 	});
 
 
-  // wait for a second as we need that time to fire the krux script
-	setTimeout(function() {
+  ads.then((ads) => {
     const targeting = ads.targeting.get();
     const config = ads.config();
     const dfp_targeting =  {
@@ -146,8 +143,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 
     assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
   	done();
-	}, 1050);
-  // expect(withoutAttrs.krux.attributes.page.unitName).to.equal('5887/ft.com/testDfpSite/testDfpZone');
+	});
 
 
 });
@@ -177,8 +173,7 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 	});
 
 
-  // wait for a second as we need that time to fire the krux script
-	setTimeout(function() {
+  ads.then((ads) => {
     const targeting = ads.targeting.get();
     const config = ads.config();
     const dfp_targeting =  {
@@ -202,6 +197,5 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 
     assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
   	done();
-	}, 1050);
-  // expect(withoutAttrs.krux.attributes.page.unitName).to.equal('5887/ft.com/testDfpSite/testDfpZone');
+	});
 });
