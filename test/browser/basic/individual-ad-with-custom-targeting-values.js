@@ -13,7 +13,7 @@ module.exports = {
 		browser
 			.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
-				.frame(0)
+				.frame('google_ads_iframe_/5887/test.5887.origami_0')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', 15000, 'Advert image is visible')
 				// make sure we can see the correct URL
