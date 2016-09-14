@@ -52,6 +52,8 @@ const fetchData = function(target) {
   if(!target) { return Promise.resolve({}) };
   return fetch(target, {
     timeout: 2000,
+		// temporary solution for [next.]ft.com > IE9
+		useCorsProxy: true
   })
   .then(res => {return res.json()})
   .catch(() => {});
