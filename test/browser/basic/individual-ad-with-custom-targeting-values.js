@@ -12,6 +12,8 @@ module.exports = {
 	'Step 2: verify the Billboard advert is displayed': function (browser) {
 		browser
 			.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
+			  // give time for the advert to initialise
+				.pause(8000)
 				// switch focus to first iframe
 				.frame('google_ads_iframe_/5887/test.5887.origami_0')
 				// wait for 1 second for advert to appear
