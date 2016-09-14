@@ -65,6 +65,7 @@ Ads.prototype.initLibrary = function() {
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
 	this.utils.broadcast('initialised', this);
+	this.isInitialised = true;
 	removeDOMEventListener();
 	return this;
 };
