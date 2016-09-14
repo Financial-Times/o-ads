@@ -64,8 +64,8 @@ Ads.prototype.initLibrary = function() {
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
-	this.utils.broadcast('initialised', this);
 	this.isInitialised = true;
+	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
 	return this;
 };
