@@ -39,6 +39,13 @@ Ads.prototype.init = function(options) {
 				if(responseObj.dfp && responseObj.dfp.targeting) {
 					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
 				}
+
+				if(targetingApi.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
+					const gpt = this.config('gpt');
+					if(gpt && gpt.zone) {
+						gpt.zone = responseObj.dfp.adUnit.join('/');
+					}
+				}
 			}
 			return this.initLibrary();
 		})

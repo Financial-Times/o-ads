@@ -169,7 +169,10 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
           custom_key: 'custom_value'
         }
       }
-    }
+    },
+		gpt: {
+			
+		}
 	});
 
 
@@ -198,4 +201,87 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
     assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
   	done();
 	});
+});
+
+QUnit.test('overwrites the config gpt zone with the adunit from the page response if "usePageZone" is true', function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+
+  const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			usePageZone: true
+    },
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'old/zone'
+		}
+	});
+
+
+  ads.then((ads) => {
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+		assert.equal(config.gpt.site, 'ft.com');
+		assert.equal(config.gpt.zone, 'companies/technology');
+  	done();
+	});
+
+});
+
+QUnit.test('does not overwrite the config gpt zone with the adunit from the page response by default', function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+
+  const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
+    },
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'old/zone'
+		}
+	});
+
+
+  ads.then((ads) => {
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+		assert.equal(config.gpt.site, 'ft.com');
+		assert.equal(config.gpt.zone, 'old/zone');
+  	done();
+	});
+
+});
+
+QUnit.test('does not overwrite the config gpt zone if using adUnit instead of site/zone', function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+
+  const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
+    },
+		gpt: {
+			adUnit: '5887/ft.com/site/zone'
+		}
+	});
+
+
+  ads.then((ads) => {
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+		assert.equal(config.gpt.adUnit, '5887/ft.com/site/zone');
+		assert.equal(config.gpt.zone, undefined);
+  	done();
+	});
+
 });

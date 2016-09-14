@@ -94,18 +94,23 @@ The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints tha
 Below is a rough sketch of how you might get all that data, and pass it in to the initialisation of o-ads:
 
 ```
-//IE9 and CORS don't play nicely, so you need to proxy the response from your own domain.
+//IE9 and CORS don't play nicely, so you need to proxy the response from your own domain for older browsers.
 const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-api.ft.com/v1' : 'https://mydomain.ft.com/proxy/ads-api/v1';
 
 	oAds.init({
 		targetingApi: {
 			user: `${apiUrlRoot}/user`,
-			page: `${apiUrlRoot}/content/1234`
+			page: `${apiUrlRoot}/content/1234`,
+			usePageZone: true //overwrites the gpt zone - this option is false by default 
 		},
 		dfp_targeting: 'some_other_key=value' //This would be all the data from contextualData and userData as a key/value string. TODO: make this much easier,
 		krux: {
 			id: '1234', //get this from AdOps
-		}
+		},
+		gpt: {
+			network: 5887,
+			site: 'ft.com',
+			zone: 'unclassified' // default zone, will be overwritten by the response from the API
 	})
 });
 
