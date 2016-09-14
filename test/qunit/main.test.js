@@ -20,8 +20,10 @@ QUnit.test('init fires an event once done', function(assert) {
 
 	const done = assert.async();
 	const ads = new this.adsConstructor();
+	assert.equal(ads.isInitialised, undefined);
 	document.body.addEventListener('oAds.initialised', function(e) {
 		assert.equal(e.detail, ads);
+		assert.equal(ads.isInitialised, true);
 		done();
 	});
 	ads.init();

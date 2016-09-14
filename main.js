@@ -39,6 +39,13 @@ Ads.prototype.init = function(options) {
 				if(responseObj.dfp && responseObj.dfp.targeting) {
 					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
 				}
+
+				if(targetingApi.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
+					const gpt = this.config('gpt');
+					if(gpt && gpt.zone) {
+						gpt.zone = responseObj.dfp.adUnit.join('/');
+					}
+				}
 			}
 			return this.initLibrary();
 		})
@@ -66,8 +73,8 @@ Ads.prototype.initLibrary = function() {
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
-	this.utils.broadcast('initialised', this);
 	this.isInitialised = true;
+	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
 	return this;
 };
