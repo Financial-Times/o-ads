@@ -42,6 +42,7 @@ Ads.prototype.init = function(options) {
 
 				if(targetingApi.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
 					const gpt = this.config('gpt');
+					/* istanbul ignore else  */
 					if(gpt && gpt.zone) {
 						gpt.zone = responseObj.dfp.adUnit.join('/');
 					}
