@@ -1,0 +1,49 @@
+{
+    "uuid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+    "dfp": {
+        "targeting": [{
+            "name": "subscription",
+            "key": "slv",
+            "value": "int"
+        }, {
+            "name": "loggedInStatus",
+            "key": "loggedIn",
+            "value": true
+        }, {
+            "name": "Spoor ID of Browser/Device",
+            "key": "device_spoor_id",
+            "value": "cis61kpxo00003k59j4xnd8kx"
+        }, {
+            "name": "User UUID",
+            "key": "guid",
+            "value": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec"
+        }, {
+            "name": "Derived gender from redshift",
+            "key": "gender",
+            "value": "F"
+        }]
+    },
+    "krux": {
+        "attributes": [{
+            "name": "Spoor ID of Browser/Device",
+            "key": "device_spoor_id",
+            "value": "cis61kpxo00003k59j4xnd8kx"
+        }, {
+            "name": "User UUID",
+            "key": "guid",
+            "value": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec"
+        }, {
+            "name": "subscription",
+            "key": "subscription_level",
+            "value": "int"
+        }, {
+            "name": "loggedInStatus",
+            "key": "loggedIn",
+            "value": true
+        }, {
+            "name": "Derived gender from redshift",
+            "key": "gender",
+            "value": "F"
+        }]
+    }
+}

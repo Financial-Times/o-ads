@@ -488,6 +488,13 @@ module.exports.iframeToSlotName = function(iframeWindow) {
 	return false;
 };
 
+module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject) {
+	return targetObject.reduce((prev, data) => {
+		prev[data.key] = data.value;
+		return prev;
+	}, {});
+}
+
 extend(module.exports, require('./cookie.js'));
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));

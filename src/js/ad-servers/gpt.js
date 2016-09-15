@@ -24,7 +24,6 @@ function init() {
 	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	initGoogleTag();
-
 	utils.on('ready', onReady.bind(null, slotMethods));
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);

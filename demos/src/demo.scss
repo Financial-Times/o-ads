@@ -10,3 +10,30 @@ $o-ads-is-silent: false;
 	float: left;
 	background-color: #ee0000;
 }
+
+.header {
+	height: 90px;
+	text-align: center;
+}
+
+.navbar {
+	height: 25px;
+	text-align: center;
+}
+
+.article-title {
+	margin-left: 170px;
+	width: 580px;
+	font-size: 36px;
+	line-height: 40px;
+	margin-top: 50px;
+	font-family: serif;
+}
+
+.article-blurb {
+	margin-left: 170px;
+	width: 580px;
+	font-size: 20px; 
+	margin-top: 10px;
+	font-family: sans-serif;
+}

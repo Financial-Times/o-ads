@@ -1,0 +1,42 @@
+{
+    "uuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
+    "dfp": {
+        "targeting": [{
+            "name": "articleUUID",
+            "key": "auuid",
+            "value": "13abbe62-70db-11e6-a0c9-1365ce54b926"
+        }, {
+            "name": "admants",
+            "key": "ad",
+            "value": "ft11,s03,sm01,s05,s04,ft13"
+        }, {
+            "name": "categories",
+            "key": "ca",
+            "value": "finance,company,business"
+        }],
+        "adUnit": ["companies", "technology"]
+    },
+    "krux": {
+        "attributes": [{
+            "name": "authors",
+            "key": "authors",
+            "value": ["Jung-a Song"]
+        }, {
+            "name": "genre",
+            "key": "genre",
+            "value": ["News"]
+        }, {
+            "name": "primarySection",
+            "key": "primarySection",
+            "value": ["Technology"]
+        }, {
+            "name": "specialReports",
+            "key": "specialReports",
+            "value": []
+        }, {
+            "name": "topics",
+            "key": "topics",
+            "value": ["Mobile devices", "Batteries"]
+        }]
+    }
+}

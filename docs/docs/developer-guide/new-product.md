@@ -11,6 +11,7 @@ Include the latest version of o-ads via bower or the Build Service (see the [Ori
 The Ad Unit is DFP's categorisation of sites and products across the FT estate. It is the most basic form of being able to target ads at specific areas.
 
 It generally follows the pattern:
+
 ```
 {
 	network: 5887, //DFP's network code - 5887 is the main code for the FT
@@ -93,48 +94,31 @@ The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints tha
 Below is a rough sketch of how you might get all that data, and pass it in to the initialisation of o-ads:
 
 ```
-const apiUrlRoot = 'https://ads-api.ft.com/v1';
+//IE9 and CORS don't play nicely, so you need to proxy the response from your own domain for older browsers.
+const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-api.ft.com/v1' : 'https://mydomain.ft.com/proxy/ads-api/v1';
 
-function getContextualTargetingPromise (appName) {
-
-		const uuid = '5d608f40-6a16-11e6-ae5b-a7cc5dd5a28c';
-		const referrer = document.referrer;
-		url = `${apiUrlRoot}/content/${uuid}`;
-		if(referrer) {
-			url += `?referrer=${encodeURIComponent(referrer.split(/[?#]/)[0])}`;
-		}
-
-		return (uuid && url) ? fetch(url)
-		.then(res => res.json())
-		.catch(() => ({})) : Promise.resolve({});
-};
-
-function getUserTargetingPromise () {
-	const apiUrlRoot = 'https://ads-api.ft.com/v1/';
-	return fetch(`${apiUrlRoot}/user`, {
-		credentials: 'include'
-	})
-	.then(res => res.json())
-	.catch(() => ({}));
-};
-
-Promise.all([ getContextualTargetingPromise(), getUserTargetingPromise()])
-.then((data) => {
-	const contextualData = data[0];
-	const userData = data[1];
-	//Grab data from response and pass it into oAds.init()
 	oAds.init({
-		gpt: {
-			...
+		targetingApi: {
+			user: `${apiUrlRoot}/user`,
+			page: `${apiUrlRoot}/content/1234`,
+			usePageZone: true //overwrites the gpt zone - this option is false by default 
 		},
-		dfp_targeting: '' //This would be all the data from contextualData and userData as a key/value string. TODO: make this much easier,
+		dfp_targeting: 'some_other_key=value' //This would be all the data from contextualData and userData as a key/value string. TODO: make this much easier,
 		krux: {
 			id: '1234', //get this from AdOps
-			attributes: {} //
-		}
+		},
+		gpt: {
+			network: 5887,
+			site: 'ft.com',
+			zone: 'unclassified' // default zone, will be overwritten by the response from the API
 	})
 });
 
 ```
 
+If you need to know when oAds has been initialised with all the API calls, this can be done in the following ways:
 
+* oAds.init() returns a Promise - so you can do `oAds.init().then(myStuff)`;
+* We fire an event `oAds.initialised` on the document
+
+* We set a boolean property on the oAds instance: `oAds.isInitialised`

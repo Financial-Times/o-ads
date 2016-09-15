@@ -17,18 +17,66 @@ Ads.prototype.utils = require('./src/js/utils');
 * @param config {object} a JSON object containing configuration for the current page
 */
 
-Ads.prototype.init = function(config) {
+
+Ads.prototype.init = function(options) {
 	this.config.init();
-	this.config(config);
+	this.config(options);
+	const targetingApi = this.config().targetingApi
+	if(targetingApi) {
+		return Promise.all([fetchData(targetingApi.user), fetchData(targetingApi.page)])
+		.then(response => {
+
+			for(let i = 0; i < response.length; i++){
+				let responseObj = response[i]
+				let keys = ['user', 'page'];
+				let kruxObj = {}
+
+				if(responseObj.krux && responseObj.krux.attributes) {
+					kruxObj[keys[i]] = this.utils.buildObjectFromArray(responseObj.krux.attributes)
+					this.krux.add(kruxObj)
+				}
+
+				if(responseObj.dfp && responseObj.dfp.targeting) {
+					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
+				}
+
+				if(targetingApi.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
+					const gpt = this.config('gpt');
+					/* istanbul ignore else  */
+					if(gpt && gpt.zone) {
+						gpt.zone = responseObj.dfp.adUnit.join('/');
+					}
+				}
+			}
+			return this.initLibrary();
+		})
+		.catch(this.initLibrary);
+	} else {
+		return Promise.resolve(this.initLibrary());
+	}
+};
+
+const fetchData = function(target) {
+  if(!target) { return Promise.resolve({}) };
+  return fetch(target, {
+    timeout: 2000,
+		// temporary solution for [next.]ft.com > IE9
+		useCorsProxy: true
+  })
+  .then(res => {return res.json()})
+  .catch(() => {});
+};
+
+Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
 	this.rubicon.init();
 	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
+	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
-
 	return this;
 };
 
@@ -39,9 +87,12 @@ const initAll = function() {
 	});
 	/* istanbul ignore else  */
 	if (!stop.length) {
-		ads.init();
-		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+
+		ads.init().then(() => {
+			const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+			slots.forEach(ads.slots.initSlot.bind(ads.slots));
+		})
+
 	}
 };
 

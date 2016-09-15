@@ -31,7 +31,10 @@ module.exports.createDummyFrame = function (content, target) {
 };
 
 module.exports.fixtures = {
-	admantx: require('../fixtures/admantx-response.json')
+	admantx: require('../fixtures/admantx-response.json'),
+	user: require('../fixtures/user-api-response.json'),
+	content: require('../fixtures/content-api-response.json'),
+	concept: require('../fixtures/concept-api-response.json')
 };
 
 /* the google library mock*/

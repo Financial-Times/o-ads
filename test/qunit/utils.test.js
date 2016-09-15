@@ -429,3 +429,16 @@ QUnit.test('createCORSRequest timeout', function(assert) {
   assert.equal(xhr.timeout, 500,'the xhr timeout value has been set to 500ms');
 	done();
 });
+
+QUnit.test("builds an object from array", function(assert) {
+	let array = [{
+            "name": "subscription",
+            "key": "slv",
+            "value": "int"
+        }, {
+            "name": "loggedInStatus",
+            "key": "loggedIn",
+            "value": true
+        }]
+	assert.deepEqual(this.ads.utils.buildObjectFromArray(array), { "slv": "int", "loggedIn": true }, 'converts array to object')
+})
