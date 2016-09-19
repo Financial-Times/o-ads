@@ -23,7 +23,7 @@ Ads.prototype.init = function(options) {
 	this.config(options);
 	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
-		return Promise.all([fetchData(targetingApi.user), fetchData(targetingApi.page)])
+		return Promise.all([fetchData(targetingApi.user, true), fetchData(targetingApi.page)])
 		.then(response => {
 
 			for(let i = 0; i < response.length; i++){
@@ -56,10 +56,11 @@ Ads.prototype.init = function(options) {
 	}
 };
 
-const fetchData = function(target) {
+const fetchData = function(target, withCredentials) {
   if(!target) { return Promise.resolve({}) };
   return fetch(target, {
     timeout: 2000,
+		credentials: withCredentials ? 'include' : null,
 		// temporary solution for [next.]ft.com > IE9
 		useCorsProxy: true
   })
