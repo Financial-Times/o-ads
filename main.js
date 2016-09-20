@@ -58,14 +58,17 @@ Ads.prototype.init = function(options) {
 
 const fetchData = function(target, withCredentials) {
   if(!target) { return Promise.resolve({}) };
-  return fetch(target, {
-    timeout: 2000,
-		credentials: withCredentials ? 'include' : null,
+	const opts = {
+		timeout: 2000,
 		// temporary solution for [next.]ft.com > IE9
 		useCorsProxy: true
-  })
-  .then(res => {return res.json()})
-  .catch(() => {});
+	};
+	if(withCredentials) {
+		opts.credentials = 'include';
+	}
+  return fetch(target, opts)
+	  .then(res => {return res.json()})
+  .catch(() => ({}));
 };
 
 Ads.prototype.initLibrary = function() {
