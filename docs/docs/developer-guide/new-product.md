@@ -103,7 +103,7 @@ const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-ap
 			page: `${apiUrlRoot}/content/1234`,
 			usePageZone: true //overwrites the gpt zone - this option is false by default 
 		},
-		dfp_targeting: 'some_other_key=value' //This would be all the data from contextualData and userData as a key/value string. TODO: make this much easier,
+		dfp_targeting: 'some_other_key=value',
 		krux: {
 			id: '1234', //get this from AdOps
 		},
