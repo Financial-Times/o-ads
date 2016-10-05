@@ -500,6 +500,5 @@ extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));
 module.exports.responsive = require('./responsive.js');
 module.exports.timers = require('./timers.js')();
-module.exports.queue = require('./queue.js');
 module.exports.log = require('./log');
 curryIsMethods(module.exports);
