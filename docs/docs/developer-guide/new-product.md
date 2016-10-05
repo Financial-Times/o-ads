@@ -4,10 +4,19 @@ title: Setting up a new product
 section: building
 ---
 
-### 1. Include o-ads on your site
-Include the latest version of o-ads via bower or the Build Service (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
+## 1. Include o-ads on your site
+Include the latest version of o-ads via `bower` or the [Origami Build Service](http://build.origami.ft.com/v2/) — which which we recommend for use on the websites. This way you can get updates automatically and you do not have to build the module manually from source (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
 
-### 2. Set up the ad unit information.
+Alternately, you may use the [Origami Build Tools](http://origami.ft.com/docs/developer-guide/modules/building-modules/) to include the library as a part of your codebase and build it manually. This option involves a certain level of setup.
+
+**Extra step for FT Teams**
+
+Please feed back the following information to the Dev Test and Advertising team:
+* Where you integrate it (Site, URL?)
+* How you are using it (Build Service or Manual Build)
+* Which version you are using (do you use a specific version and is there auto upgrade link, e.g. http://semver.org/, patch only, version only, etc.)
+
+## 2. Set up the ad unit information.
 The Ad Unit is DFP's categorisation of sites and products across the FT estate. It is the most basic form of being able to target ads at specific areas.
 
 It generally follows the pattern:
@@ -21,13 +30,13 @@ It generally follows the pattern:
 
 ```
 
-For FT.com, the 'zone' can be retrieved from the Ads API (see [Targeting]({{site.baseurl}}/docs/developer-guide/targeting) for more details.)
+For FT.com, the 'zone' can be retrieved from the Ads API (see [Targeting]({{site.baseurl}}/docs/developer-guide/new-product#targeting) for more details.)
 
-For new products, you will need to liase with AdOps to decide on the site and zone hierachy.
+For new products, you will need to liaise with AdOps to decide on the site and zone hierarchy.
 
-### 3. Initialise o-ads
+## 3. Initialise o-ads
 * Declaratively:
-```
+```html
 	<script data-o-ads-config="" type="application/json">
 		{
 			"gpt": {
@@ -39,18 +48,18 @@ For new products, you will need to liase with AdOps to decide on the site and zo
 ```
 
 * Imperatively
-```
+```js
 const oAds = require('o-ads');
 oAds.init({...});
 ```
 
-### 4. Targeting
+## 4. Targeting
 
 Products should provide as much targeting as possible to allow the full range of adverts to be served. They generally are sent to the ad server in the form of key/value pairs.
 
 We can target ads in the following ways:
 
-* **Geographical**
+* **Geographic**
 Geographic targeting is provided by DFP based on the IP address that the ad request was made from. We don't need to do anything to enable this.
 
 * **Demographic**
@@ -65,7 +74,7 @@ Behavioural targeting at the FT is provided by a third party called [Krux](http:
 
 This can then be initialised by o-ads:
 
-```
+```js
 oAds.init({
 	krux: {
 		id: '1234',
@@ -84,7 +93,7 @@ oAds.init({
 ```
 
 * **Contextual**
-The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints that give targeting information relevant to the context the user is on. This context can be a content UUID, or the UUID of a concept/thing recognised by the content API. It is powered by both metadata from the Content API and a third party called AdmantX.
+The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints that give targeting information relevant to the context the user is on. This context can be a content UUID, or the UUID of a concept/thing recognised by the content API. It is powered by both metadata from the Content API and a third party called [AdmantX](http://www.admantx.com/).
 
 `https://ads-api.ft.com/v1/content/<uuid>`
 
@@ -93,7 +102,7 @@ The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints tha
 
 Below is a rough sketch of how you might get all that data, and pass it in to the initialisation of o-ads:
 
-```
+```js
 //IE9 and CORS don't play nicely, so you need to proxy the response from your own domain for older browsers.
 const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-api.ft.com/v1' : 'https://mydomain.ft.com/proxy/ads-api/v1';
 
@@ -101,7 +110,7 @@ const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-ap
 		targetingApi: {
 			user: `${apiUrlRoot}/user`,
 			page: `${apiUrlRoot}/content/1234`,
-			usePageZone: true //overwrites the gpt zone - this option is false by default 
+			usePageZone: true //overwrites the gpt zone - this option is false by default
 		},
 		dfp_targeting: 'some_other_key=value' //This would be all the data from contextualData and userData as a key/value string. TODO: make this much easier,
 		krux: {
