@@ -31,7 +31,6 @@ module.exports.createDummyFrame = function (content, target) {
 };
 
 module.exports.fixtures = {
-	admantx: require('../fixtures/admantx-response.json'),
 	user: require('../fixtures/user-api-response.json'),
 	content: require('../fixtures/content-api-response.json'),
 	concept: require('../fixtures/concept-api-response.json')
@@ -41,11 +40,6 @@ module.exports.fixtures = {
 const gpt = require('./mocks/gpt-mock');
 
 module.exports.gpt = gpt.mock;
-
-/* the rubicon library mock*/
-const rubicon = require('./mocks/rubicon-mock');
-
-module.exports.rubicon = rubicon.mock;
 
 /* A method for logging warnings about tests that didn't run for some reason */
 /* such as tests that mock read only properties in a browser that doesn't allow this */
@@ -332,7 +326,6 @@ module.exports.clear = function() {
 	sandbox._windowEventListeners = [];
 	// restore stubs & mocks
 	gpt.restore();
-	rubicon.restore();
 	sandbox.restore();
 };
 
