@@ -404,16 +404,6 @@ QUnit.test('find a name of the ad from an iframe', function(assert) {
 		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
 });
 
-QUnit.test('createCORSRequest timeout', function(assert) {
-	const done = assert.async();
-	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/xhr-response.js';
-	const errorCallback = function(){};
-	const successCallback = function(){};
-	const xhr = this.ads.utils.createCORSRequest(url, 'GET', successCallback, errorCallback, 500);
-  assert.equal(xhr.timeout, 500,'the xhr timeout value has been set to 500ms');
-	done();
-});
-
 QUnit.test("builds an object from array", function(assert) {
 	let array = [{
             "name": "subscription",

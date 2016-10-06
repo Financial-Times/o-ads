@@ -66,12 +66,12 @@ function curryIsMethods(obj, classNames) {
 
 /**
  * Test if an object is the global window object
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is the window obj, otherwise false
- */
-module.exports.isWindow = function(obj) {
-	return obj && obj !== null && obj === window;
-};
+  * @param {object} obj The object to be tested
+	 * @returns {boolean} true if the object is the window obj, otherwise false
+	  */
+		module.exports.isWindow = function(obj) {
+				return obj && obj !== null && obj === window;
+		};
 
 /**
  * Test if an object inherits from any other objects, used in extend
@@ -303,46 +303,6 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 	// Use insert before, append child has issues with script tags in some browsers.
 	node.parentNode.insertBefore(tag, node);
 	return tag;
-};
-
-/*
-* Make a cross domain XHR request
-* @param {string} The url to request
-* @param {string} THe method of the request (GET, POST).
-* @param {function} callback A function to run when the request succeeds
-* @param {function} A function to run if the request fails
-* @returns {HTMLElement} the created XHR object
-*/
-module.exports.createCORSRequest = function(url, method, callback, errorcb, timeout) {
-	let xhr = new XMLHttpRequest();
-	/* istanbul ignore else - legacy IE code, won't test */
-	if ('withCredentials' in xhr) {
-		xhr.open(method, url, true);
-		xhr.responseType = 'json';
-	} else if (typeof XDomainRequest !== "undefined") {
-		xhr = new XDomainRequest();
-		xhr.open(method, url, true);
-	} else {
-		xhr = null;
-		errorcb();
-	}
-
-	/* istanbul ignore else */
-	if (typeof timeout === "number") {
-			xhr.timeout = timeout;
-	}
-
-	xhr.onload = function(xhrEvent) {
-		callback.call(this, this.response || this.responseText, xhrEvent);
-	};
-
-	if (utils.isFunction(errorcb)) {
-		xhr.onerror = errorcb;
-		xhr.ontimeout = errorcb;
-	}
-
-	xhr.send();
-	return xhr;
 };
 
 /**
