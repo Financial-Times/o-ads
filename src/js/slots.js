@@ -165,10 +165,11 @@ Slots.prototype.initRefresh = function() {
 		/* istanbul ignore else	*/
 		if (data.time && !data.inview) {
 			const refresh = () => {
+				/* istanbul ignore else */
 				if(!data.max || this.refreshCount++ < data.max) {
 					this.refresh();
 				} else if (this.refreshCount >= data.max) {
-					removeInterval(refresh);
+					clearInterval(refresh);
 				}
 			};
 			setInterval(refresh, (parseFloat(data.time) || 1) * 1000)
