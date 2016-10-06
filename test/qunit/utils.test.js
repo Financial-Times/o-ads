@@ -383,22 +383,6 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 	}, 200);
 });
 
-
-QUnit.test('isScriptAlreadyLoaded method when script is not present', function(assert) {
-	const url = 'http://local.ft.com/null.js';
-	assert.ok(!this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
-});
-
-QUnit.test('isScriptAlreadyLoaded method when script is present', function(assert) {
-	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/null.js';
-	const tag = document.createElement('script');
-	const node = document.getElementsByTagName('script')[0];
-	tag.setAttribute('src', url);
-	node.parentNode.insertBefore(tag, node);
-	assert.ok(this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns true when a script with the given url is present in the page dom');
-	node.parentNode.removeChild(tag);
-});
-
 QUnit.test('string is capitalised', function(assert) {
 	assert.equal(this.ads.utils.capitalise('abcdefghijklmnopqrstuvwxyz1234567890!'), 'Abcdefghijklmnopqrstuvwxyz1234567890!', 'returns all letters in upper case');
 });

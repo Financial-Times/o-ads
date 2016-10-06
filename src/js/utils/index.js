@@ -306,20 +306,6 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 };
 
 /*
-* Test to see if a script file is already referenced from the dom
-* @param {string} url The URL to look for
-* @return {boolean} true if the file is already referenced else false
-*/
-module.exports.isScriptAlreadyLoaded = function(url) {
-	const scripts = document.getElementsByTagName('script');
-	for (let i = scripts.length; i--;) {
-		if (scripts[i].src === url) return true;
-	}
-
-	return false;
-};
-
-/*
 * Make a cross domain XHR request
 * @param {string} The url to request
 * @param {string} THe method of the request (GET, POST).
