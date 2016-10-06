@@ -65,6 +65,23 @@ QUnit.test('isObject method', function(assert) {
 	assert.ok(!this.ads.utils.isObject(true), 'Boolean returns false');
 });
 
+QUnit.test('isWindow method', function(assert) {
+	assert.ok($.type(this.ads.utils.isWindow) === 'function', 'The function exists');
+	assert.ok(this.ads.utils.isWindow(window), 'window');
+	assert.ok(!this.ads.utils.isWindow(), 'empty');
+	assert.ok(!this.ads.utils.isWindow(null), 'null');
+	assert.ok(!this.ads.utils.isWindow(undefined), 'undefined');
+	assert.ok(!this.ads.utils.isWindow(document), 'document');
+	assert.ok(!this.ads.utils.isWindow(document.documentElement), 'documentElement');
+	assert.ok(!this.ads.utils.isWindow(''), 'string');
+	assert.ok(!this.ads.utils.isWindow(1), 'number');
+	assert.ok(!this.ads.utils.isWindow(true), 'boolean');
+	assert.ok(!this.ads.utils.isWindow({}), 'object');
+	assert.ok(!this.ads.utils.isWindow({ setInterval: function() {} }), 'fake window');
+	assert.ok(!this.ads.utils.isWindow(/window/), 'regexp');
+	assert.ok(!this.ads.utils.isWindow(function() {}), 'function');
+});
+
 QUnit.test('isNonEmptyString method', function(assert) {
 	assert.ok($.type(this.ads.utils.isNonEmptyString) === 'function', 'The function exists');
 	assert.ok(this.ads.utils.isNonEmptyString('hello'), 'string with length');
