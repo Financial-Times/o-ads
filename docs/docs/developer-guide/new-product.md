@@ -67,7 +67,7 @@ Demographic data is provided by the [Ads API](https://github.com/Financial-Times
 
 `https://ads-api.ft.com/v1/user`
 
-This endpoint provides a list of keys values including industry/job positions provided by users when registering, demographic/behavioural models from HUI/Data Warehouse, user IDs etc.
+This endpoint provides a list of key-values including industry/job positions provided by users when registering, demographic/behavioural models from HUI/Data Warehouse, user IDs etc.
 
 * **Behavioural**
 Behavioural targeting at the FT is provided by a third party called [Krux](http://www.krux.com/). To enable Krux for your product, you need a Krux ID, which can be provided by AdOps.
@@ -93,12 +93,17 @@ oAds.init({
 ```
 
 * **Contextual**
-The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints that give targeting information relevant to the context the user is on. This context can be a content UUID, or the UUID of a concept/thing recognised by the content API. It is powered by both metadata from the Content API and a third party called [AdmantX](http://www.admantx.com/).
+The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints that give targeting information relevant to the context the user is on. This context can be a content UUID, or the UUID of a concept/thing recognised by the content API. It's powered by both metadata from the Content API and a third party called [AdmantX](http://www.admantx.com/).
 
 `https://ads-api.ft.com/v1/content/<uuid>`
 
 `https://ads-api.ft.com/v1/concept/<uuid>`
 
+For non-next pages that don't use content or concept UUIDs, but instead the full URL of the page, the endpoint for contextual targeting information is:
+
+`https://ads-api.ft.com/v1/page/<url>`
+
+The initialisation of o-ads is currently included in n-ui along with specific configuration that handles the first two endpoints. If your product is not Next we recommend the following:
 
 Below is a rough sketch of how you might get all that data, and pass it in to the initialisation of o-ads:
 
@@ -109,10 +114,10 @@ const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-ap
 	oAds.init({
 		targetingApi: {
 			user: `${apiUrlRoot}/user`,
-			page: `${apiUrlRoot}/content/1234`,
+			page: `${apiUrlRoot}/page/<url>`,
 			usePageZone: true //overwrites the gpt zone - this option is false by default
 		},
-		dfp_targeting: 'some_other_key=value',
+		dfp_targeting: 'some_other_key=value' // TODO: pass an object here
 		krux: {
 			id: '1234', //get this from AdOps
 		},
@@ -127,7 +132,6 @@ const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-ap
 
 If you need to know when oAds has been initialised with all the API calls, this can be done in the following ways:
 
-* oAds.init() returns a Promise - so you can do `oAds.init().then(myStuff)`;
+* `oAds.init()` returns a Promise - so you can do `oAds.init().then(myStuff)`;
 * We fire an event `oAds.initialised` on the document
-
 * We set a boolean property on the oAds instance: `oAds.isInitialised`
