@@ -7,16 +7,16 @@ section: building
 The delivery of FT Adverts is facilitated by a range of libraries, APIs and third party products:
 
 ### DFP
-DFP (DoubleClick for Publishers) is our primary ad server. It is used to traffic and orchestrate which ads get served where and to whom. It is primarily managed by the AdOps team.
+[DFP](https://www.google.com/dfp) (DoubleClick for Publishers) is our primary ad server. It is used to traffic and orchestrate which ads get served where and to whom. It is primarily managed by the AdOps team. Within DFP, adverts are referred to as 'creatives' or 'line items' and have respective ids, which are useful for debugging.
 
-### o-ads
+### o-ads & GPT
 
-o-ads is an Origami component that provides the client-side integration with our ad server, by interfacing with GPT (Google Publisher Tag). For some cases, this might be all you need to get up and running with ads.
+[o-ads](https://github.com/Financial-Times/o-ads) is an Origami component that provides the client-side integration with our ad server, by interfacing with [GPT](https://support.google.com/dfp_premium/answer/181073?hl=en) (Google Publisher Tag), which builds ad requests for you and includes specific details such as ad sizing or targeting. For some cases, this might be all you need to get up and running with ads.
 
-### Ads API
+### Ads API & Admantx
 
-The Ads API is an attempt to centralise and standardise how we get data for targeting adverts. It provides key/values that you can pass to o-ads to be able to target an FT User or context (article or concept).
+The [Ads API](https://github.com/Financial-Times/ads-api) is an attempt to centralise and standardise how we get data for advert targeting. It provides key/values that you can pass to [Admantx](http://www.admantx.com/) (contextual targeting) through o-ads to be able to target an FT User or context (article or concept).
 
 ### Krux
 
-Krux is a DMP (Data Management Platform) that is used primarily to behaviourally categorise and target our users. It can be included in your product via o-ads.
+[Krux](http://www.krux.com/) is a DMP (Data Management Platform) that is used primarily to categorise and target our users and categorise them by behaviour. It can be included in your product via o-ads.
