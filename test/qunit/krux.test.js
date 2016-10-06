@@ -9,6 +9,8 @@ QUnit.module('Krux', {
 	},
 	afterEach: function() {
 		delete window.Krux;
+		document.cookie = "kxsegs=null";
+		document.cookie = "kxuser=null";
 	}
 });
 
@@ -71,7 +73,7 @@ QUnit.test('targeting data is generated correctly from localStorage', function(a
 });
 
 QUnit.test('targeting data is generated correctly from cookies', function(assert) {
-	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
+	document.cookie = "kxsegs=seg1,seg2,seg3,seg4; kxuser=kxuser";
 	this.ads.init({ krux: {id: '112233'}});
 
 	const result = this.ads.krux.targeting();
@@ -81,7 +83,7 @@ QUnit.test('targeting data is generated correctly from cookies', function(assert
 });
 
 QUnit.test('number of Krux segments can be limited', function(assert) {
-	this.cookies({ kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'});
+	document.cookie = "kxsegs=seg1,seg2,seg3,seg4; kxuser=kxuser";
 	this.ads.init({ krux: {id: '112233', limit: 2}});
 
 	const result = this.ads.krux.targeting();

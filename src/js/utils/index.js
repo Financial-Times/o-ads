@@ -495,7 +495,11 @@ module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject
 	}, {});
 }
 
-extend(module.exports, require('./cookie.js'));
+module.exports.cookie = function(name) {
+	let val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+  return val ? val.pop() : null;
+}
+
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));
 module.exports.responsive = require('./responsive.js');

@@ -75,10 +75,14 @@ Krux.prototype.retrieve = function(name) {
 	let value;
 	name = `kx${name}`;
 	/* istanbul ignore else  */
+	console.log('krux retrieve', name);
 	if (window.localStorage && localStorage.getItem(name)) {
 		value = localStorage.getItem(name);
+		console.log('got from localstorage', value);
 	} else if (utils.cookie(name)) {
+		console.log('about to call utils.cookie')
 		value = utils.cookie(name);
+		console.log('got from cookie', value);
 	}
 
 	return value;

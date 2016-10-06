@@ -209,17 +209,6 @@ module.exports.meta = function(data) {
 	return data;
 };
 
-/* Mock cookies */
-module.exports.cookies = function(data) {
-	const utils = require('../../src/js/utils');
-	if ($.isPlainObject(data)) {
-		sandbox._cookies = utils.cookies;
-		utils.cookies = data;
-	} else {
-		throw new CookiesException('Invalid data for cookies.');
-	}
-};
-
 /* Mock global vars */
 module.exports.window = function(data) {
 	if ($.isPlainObject(data)) {
