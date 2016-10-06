@@ -288,11 +288,6 @@ module.exports.clear = function() {
 		delete sandbox._localStorage;
 	}
 
-	// restore cookies
-	if (sandbox._cookies) {
-		this.ads.utils.cookies = sandbox._cookies;
-	}
-
 	// delete global vars
 	if (sandbox._globals) {
 		Object.keys(sandbox._globals).forEach(function(name) {
@@ -330,14 +325,8 @@ function LocalStorageException(message) {
 	this.name = 'LocalStorageException';
 }
 
-/* exception to be thrown by cookies if invalid data is supplied */
-function CookiesException(message) {
-	this.message = message;
-	this.name = 'CookiesException';
-}
-
-/* exception to be thrown by cookies if invalid data is supplied */
+/* exception to be thrown for globals if invalid data is supplied */
 function GlobalsException(message) {
 	this.message = message;
-	this.name = 'CookiesException';
+	this.name = 'GlobalsException';
 }
