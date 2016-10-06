@@ -14,7 +14,7 @@ module.exports = {
 	'Step 2: verify the leaderboard advert is not displayed and scroll down': function (browser) {
 		browser
 			.assert.hidden('#leaderboard-gpt', 'Advert has not been initiated and is not visible')
-				.moveToElement('#leaderboard-gpt', 0, 1)
+				.execute(function() { document.getElementById('leaderboard-gpt').scrollIntoView(true); })
 				.pause(wait)
 	},
 	'Step 3: Verify the advert is displayed': function (browser) {

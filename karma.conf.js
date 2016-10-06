@@ -24,7 +24,6 @@ let options = {
 		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,IntersectionObserver',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
-		'bower_components/jquery.cookie/index.js',
 		'bower_components/sinon-1.10.3/index.js',
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',

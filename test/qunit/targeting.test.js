@@ -3,9 +3,6 @@
 'use strict'; //eslint-disable-line
 
 QUnit.module('Targeting', {
-	beforeEach: function() {
-		this.cookies({});
-	}
 });
 
 QUnit.test('getFromConfig', function(assert) {

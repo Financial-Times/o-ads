@@ -367,6 +367,18 @@ QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
 	this.ads.slots.refresh('refresh-test');
 });
 
+QUnit.test('Slots.refresh will refresh a single slot', function(assert) {
+	const done = assert.async();
+	const node = this.fixturesContainer.add('<div data-o-ads-name="refresh-test" data-o-ads-formats="MediumRectangle"></div>');
+
+	node.addEventListener('oAds.refresh', function(event) {
+		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
+		done();
+	});
+	this.ads.slots.initSlot(node);
+	this.ads.slots.refresh('refresh-test');
+});
+
 QUnit.test('Slots.destroy will destroy a single slot', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
 	const slot = this.ads.slots.initSlot(node);
@@ -588,9 +600,48 @@ QUnit.test('configure refresh globally on a timer', function (assert) {
 		done();
 	});
 
-	this.ads.init({ refresh: { time: 1 }});
+	this.ads.init({ refresh: { time: 2 }});
+	this.ads.slots.initSlot(node);
+	clock.tick(2025);
+});
+
+QUnit.test('configure refresh globally on a timer with a default time of 1 second', function (assert) {
+	const done = assert.async();
+	const clock = this.date();
+	const slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+
+	document.body.addEventListener('oAds.refresh', function(event) {
+		assert.equal(event.detail.name, 'refresh-test', 'our test slot is refreshed');
+		done();
+	});
+
+	this.ads.init({ refresh: { time: 'invalid' } });
 	this.ads.slots.initSlot(node);
 	clock.tick(1025);
+});
+
+
+QUnit.test('configure refresh on a timer for a max number of times', function (assert) {
+	const clock = this.date();
+	const slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
+	const node = this.fixturesContainer.add(slotHTML);
+	let count = 0;
+	document.body.addEventListener('oAds.refresh', function(event) {
+		count++;
+	});
+
+	this.ads.init({ refresh: { time: 1, max: 3 }});
+	this.ads.slots.initSlot(node);
+	assert.equal(count, 0);
+	clock.tick(1001);
+	assert.equal(count, 1);
+	clock.tick(1001);
+	assert.equal(count, 2);
+	clock.tick(1001);
+	assert.equal(count, 3);
+	clock.tick(1001);
+	assert.equal(count, 3);
 });
 
 QUnit.test('lazy loading', function(assert) {

@@ -31,7 +31,6 @@ module.exports.createDummyFrame = function (content, target) {
 };
 
 module.exports.fixtures = {
-	admantx: require('../fixtures/admantx-response.json'),
 	user: require('../fixtures/user-api-response.json'),
 	content: require('../fixtures/content-api-response.json'),
 	concept: require('../fixtures/concept-api-response.json')
@@ -41,11 +40,6 @@ module.exports.fixtures = {
 const gpt = require('./mocks/gpt-mock');
 
 module.exports.gpt = gpt.mock;
-
-/* the rubicon library mock*/
-const rubicon = require('./mocks/rubicon-mock');
-
-module.exports.rubicon = rubicon.mock;
 
 /* A method for logging warnings about tests that didn't run for some reason */
 /* such as tests that mock read only properties in a browser that doesn't allow this */
@@ -215,17 +209,6 @@ module.exports.meta = function(data) {
 	return data;
 };
 
-/* Mock cookies */
-module.exports.cookies = function(data) {
-	const utils = require('../../src/js/utils');
-	if ($.isPlainObject(data)) {
-		sandbox._cookies = utils.cookies;
-		utils.cookies = data;
-	} else {
-		throw new CookiesException('Invalid data for cookies.');
-	}
-};
-
 /* Mock global vars */
 module.exports.window = function(data) {
 	if ($.isPlainObject(data)) {
@@ -305,11 +288,6 @@ module.exports.clear = function() {
 		delete sandbox._localStorage;
 	}
 
-	// restore cookies
-	if (sandbox._cookies) {
-		this.ads.utils.cookies = sandbox._cookies;
-	}
-
 	// delete global vars
 	if (sandbox._globals) {
 		Object.keys(sandbox._globals).forEach(function(name) {
@@ -332,7 +310,6 @@ module.exports.clear = function() {
 	sandbox._windowEventListeners = [];
 	// restore stubs & mocks
 	gpt.restore();
-	rubicon.restore();
 	sandbox.restore();
 };
 
@@ -348,14 +325,8 @@ function LocalStorageException(message) {
 	this.name = 'LocalStorageException';
 }
 
-/* exception to be thrown by cookies if invalid data is supplied */
-function CookiesException(message) {
-	this.message = message;
-	this.name = 'CookiesException';
-}
-
-/* exception to be thrown by cookies if invalid data is supplied */
+/* exception to be thrown for globals if invalid data is supplied */
 function GlobalsException(message) {
 	this.message = message;
-	this.name = 'CookiesException';
+	this.name = 'GlobalsException';
 }

@@ -66,12 +66,12 @@ function curryIsMethods(obj, classNames) {
 
 /**
  * Test if an object is the global window object
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is the window obj, otherwise false
- */
-module.exports.isWindow = function(obj) {
-	return obj && obj !== null && obj === window;
-};
+  * @param {object} obj The object to be tested
+	 * @returns {boolean} true if the object is the window obj, otherwise false
+	  */
+		module.exports.isWindow = function(obj) {
+				return obj && obj !== null && obj === window;
+		};
 
 /**
  * Test if an object inherits from any other objects, used in extend
@@ -120,15 +120,6 @@ module.exports.isNonEmptyString = function(str) {
 
 module.exports.isElement = function(element) {
 	return element && element.nodeType === 1 && element.tagName || false;
-};
-
-/**
- * Test if an object is a finite number
- * @param {object} The object to be tested
- * @returns {boolean} true if the object is a finite number, can be a float or int but not NaN or Infinity
- */
-module.exports.isNumeric = function(num) {
-	return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
 /**
@@ -305,60 +296,6 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 	return tag;
 };
 
-/*
-* Test to see if a script file is already referenced from the dom
-* @param {string} url The URL to look for
-* @return {boolean} true if the file is already referenced else false
-*/
-module.exports.isScriptAlreadyLoaded = function(url) {
-	const scripts = document.getElementsByTagName('script');
-	for (let i = scripts.length; i--;) {
-		if (scripts[i].src === url) return true;
-	}
-
-	return false;
-};
-
-/*
-* Make a cross domain XHR request
-* @param {string} The url to request
-* @param {string} THe method of the request (GET, POST).
-* @param {function} callback A function to run when the request succeeds
-* @param {function} A function to run if the request fails
-* @returns {HTMLElement} the created XHR object
-*/
-module.exports.createCORSRequest = function(url, method, callback, errorcb, timeout) {
-	let xhr = new XMLHttpRequest();
-	/* istanbul ignore else - legacy IE code, won't test */
-	if ('withCredentials' in xhr) {
-		xhr.open(method, url, true);
-		xhr.responseType = 'json';
-	} else if (typeof XDomainRequest !== "undefined") {
-		xhr = new XDomainRequest();
-		xhr.open(method, url, true);
-	} else {
-		xhr = null;
-		errorcb();
-	}
-
-	/* istanbul ignore else */
-	if (typeof timeout === "number") {
-			xhr.timeout = timeout;
-	}
-
-	xhr.onload = function(xhrEvent) {
-		callback.call(this, this.response || this.responseText, xhrEvent);
-	};
-
-	if (utils.isFunction(errorcb)) {
-		xhr.onerror = errorcb;
-		xhr.ontimeout = errorcb;
-	}
-
-	xhr.send();
-	return xhr;
-};
-
 /**
 * return the current documents referrer or an empty string if non exists
 * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
@@ -370,17 +307,6 @@ module.exports.getReferrer = function() {
 };
 
 /**
-* Capitalise a string
-* @param {string} string the string to capitalise
-* @returns {string}
-*/
-module.exports.capitalise = function(string) {
-	return string.replace(/(^[a-z])/, function(match, letter) {
-		return letter.toUpperCase();
-	});
-};
-
-/**
 * Remove hyphens from a string and upper case the following letter
 * @param {string} string the string to parse
 * @returns {string}
@@ -388,17 +314,6 @@ module.exports.capitalise = function(string) {
 module.exports.dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
-	});
-};
-
-/**
-* Find uppercase characters in a string, lower case them and add a preceding hyphen
-* @param {string} string the string to parse
-* @returns {string}
-*/
-module.exports.hyphenise = function(string) {
-	return string.replace(/([A-Z])/g, function(match, letter) {
-		return `-${letter.toLowerCase()}`;
 	});
 };
 
@@ -495,11 +410,13 @@ module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject
 	}, {});
 }
 
-extend(module.exports, require('./cookie.js'));
+module.exports.cookie = function(name) {
+	let val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+  return val ? val.pop() : null;
+}
+
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));
 module.exports.responsive = require('./responsive.js');
-module.exports.timers = require('./timers.js')();
-module.exports.queue = require('./queue.js');
 module.exports.log = require('./log');
 curryIsMethods(module.exports);

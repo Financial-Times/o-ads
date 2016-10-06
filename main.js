@@ -7,8 +7,6 @@ Ads.prototype.config = require('./src/js/config');
 Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
-Ads.prototype.rubicon = require('./src/js/data-providers/rubicon');
-Ads.prototype.admantx = require('./src/js/data-providers/admantx');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
@@ -75,8 +73,6 @@ Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
-	this.rubicon.init();
-	this.admantx.init();
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -85,19 +81,10 @@ Ads.prototype.initLibrary = function() {
 };
 
 const initAll = function() {
-	const metas = Array.from(document.getElementsByTagName('meta'));
-	const stop = metas.filter(function(meta) {
-		return meta.name === 'o-ads-stop';
-	});
-	/* istanbul ignore else  */
-	if (!stop.length) {
-
-		ads.init().then(() => {
-			const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-			slots.forEach(ads.slots.initSlot.bind(ads.slots));
-		})
-
-	}
+	return ads.init().then(() => {
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+	})
 };
 
 Ads.prototype.debug = function (){
@@ -107,7 +94,6 @@ Ads.prototype.debug = function (){
 	} else {
 		localStorage.setItem('oAds', true);
 	}
-	this.admantx.debug();
 	this.gpt.debug();
 	this.krux.debug();
 	this.slots.debug();
