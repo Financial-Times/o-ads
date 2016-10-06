@@ -81,19 +81,10 @@ Ads.prototype.initLibrary = function() {
 };
 
 const initAll = function() {
-	const metas = Array.from(document.getElementsByTagName('meta'));
-	const stop = metas.filter(function(meta) {
-		return meta.name === 'o-ads-stop';
-	});
-	/* istanbul ignore else  */
-	if (!stop.length) {
-
-		ads.init().then(() => {
-			const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-			slots.forEach(ads.slots.initSlot.bind(ads.slots));
-		})
-
-	}
+	return ads.init().then(() => {
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+	})
 };
 
 Ads.prototype.debug = function (){
