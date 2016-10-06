@@ -10,7 +10,7 @@ These come in a variety of sizes, some of which are standard [IAB](https://iabuk
 
 An ad slot can be added to your page by including a `div` with some attributes. o-ads will then request an advert for that slot, which will be displayed within an iframe container. Below is a simple example that will display a horizontal billboard/leaderboard sized ad at certain breakpoints:
 
-```
+```html
 <div
   class="o-ads o-ads--center"
   data-o-ads-name="mpu"
@@ -25,20 +25,22 @@ An ad slot can be added to your page by including a `div` with some attributes. 
 
 ## Formats
 
-o-ads comes with these formats out of the box:
+o-ads comes with these formats out of the box:  
 
-* MediumRectangle `300x250`
-* Rectangle `180x50`
-* WideSkyscraper `160x600`
-* Leaderboard `728x90`
-* SuperLeaderboard `970x90` or `970x66`
-* HalfPage `300x600`
-* Billboard `970x250`
-* Portrait `300x1050`
-* AdhesionBanner `320x50`
-* MicroBar `88x31`
-* Button2 `120x60`
-* Responsive `2x2`
+Format Name | Size  
+---|---  
+MediumRectangle (MPU) | `300x250`
+Rectangle | `180x50`
+Leaderboard | `728x90`
+SuperLeaderboard | `970x90` or `970x66`
+Billboard | `970x250`
+Responsive | `2x2`
+WideSkyscraper | `160x600`
+HalfPage | `300x600`
+Portrait | `300x1050`
+AdhesionBanner | `320x50`
+MicroBar | `88x31`
+Button2 | `120x60`
 
 If you require a different "sized" ad for bespoke purposes, this can be defined when initialising o-ads:
 
@@ -58,13 +60,12 @@ The default "breakpoints" for ads (e.g. data-o-ads-formats-medium) differ slight
 
 The default breakpoints provided in o-ads are as follows:
 
-* small: 0px (This is the size where it is appropriate to show a MediumRectangle)
-* medium: 760px (This is the size where it is appropriate to show a Leaderboard)
-* large: 1000px (This is the size where it is appropriate to show a SuperLeaderboard,  and roughly equates to a landscape tablet)
-* extra: 1025px (This additional breakpoint can fit a SuperLeaderboard/Billboard, and roughly equates to a larger desktop)
+* `small: 0px` (This is the size where it is appropriate to show a MediumRectangle)
+* `medium: 760px` (This is the size where it is appropriate to show a Leaderboard)
+* `large: 1000px` (This is the size where it is appropriate to show a SuperLeaderboard,  and roughly equates to a landscape tablet)
+* `extra: 1025px` (This additional breakpoint can fit a SuperLeaderboard/Billboard, and roughly equates to a larger desktop)
 
-If, for whatever reason you need to amend the default breakpoints, they can be updated in the oAds init config object.
-
+If, for whatever reason, you need to amend the default breakpoints, they can be updated in the oAds init config object.  
 *Note:* please speak to AdOps or a member of the Advertising team before doing this, since it may affect their campaign targeting.
 
 ```js
@@ -87,20 +88,20 @@ The `responsive` object's keys can be any name. Values are an array containing w
 
 The `Responsive (2x2)` format is specifically used for creatives that respond to the width of the browser (and so can be used at any breakpoint). As such, if a responsive creative is served, o-ads will not request another ad when the breakpoint changes.
 
-### Targeting
+## Targeting
 
 You can provide specific targeting key/values for a slot:
 
 `data-o-ads-targeting="key=value;key2=value2;"`
 
-The most common use case for this is what is known as the `pos` key. This is used by ad-ops to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
+The most common use case for this is what is known as the `pos` key. This is used by ad-ops to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page, respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
 
-### Styling/classes
+## Styling with Classes
 
 o-ads provides some classes to add some basic branded styling to the ad slot.
 
 * `.o-ads--reserve-90`
-This placeholds an area of height 90px (with padding) in the slot. This is used to prevent the page jumping when an ad loads. (at least when a Leaderboard/Superleaderboard height ad is served)
+This is a placeholder for an area of height 90px (with padding) in the slot. This is used to prevent the page jumping when an ad loads (at least when a Leaderboard/SuperLeaderboard height ad is served).
 
 * `.o-ads--reserve-250`
 As above - but should only really be used if _only_ a 250px height ad will be used in that slot (as other ads would have empty space around as a result).
@@ -112,7 +113,7 @@ This adds a shaded background in the slot. In principle, this is only really use
 Adds an animation to the container to ease the UX when an ad loads.
 
 * `.o-ads--center`
-Horizontally enters the ad.
+Horizontally centres the ad.
 
 * `.o-ads--label-left`
-Adds a label above the ad indicating that it is an advertisment. This is required for when the ad sits in between content (e.g. in the middle of an article).
+Adds a label above the ad indicating that it is an advertisement. This is required for when the ad sits in between content (e.g. in the middle of an article).
