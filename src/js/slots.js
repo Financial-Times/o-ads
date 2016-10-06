@@ -161,9 +161,17 @@ Slots.prototype.initSlot = function(container) {
 Slots.prototype.initRefresh = function() {
 	if (config('flags').refresh && config('refresh')) {
 		const data = config('refresh');
+		this.refreshCount = 0;
 		/* istanbul ignore else	*/
 		if (data.time && !data.inview) {
-			this.timers.refresh = utils.timers.create(data.time, this.refresh.bind(this), data.max || 0);
+			const refresh = () => {
+				if(!data.max || this.refreshCount++ < data.max) {
+					this.refresh();
+				} else if (this.refreshCount >= data.max) {
+					removeInterval(refresh);
+				}
+			};
+			setInterval(refresh, (parseFloat(data.time) || 1) * 1000)
 		}
 	}
 
@@ -357,8 +365,6 @@ Slots.prototype.init = function() {
 	this.initPostMessage();
 	this.initLazyLoading();
 };
-
-Slots.prototype.timers = {};
 
 Slots.prototype.debug = function (){
 	const log = utils.log;

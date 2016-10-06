@@ -131,73 +131,6 @@ QUnit.test('events on DOM elements ', function(assert) {
 	}
 });
 
-QUnit.test('event pixel - dwell time', function(assert) {
-	const dwellTimeId = 'dwell-time';
-	const dwellTimeInterval = 10;
-	const dwellTimeTotal = 30;
-	const clock = this.date();
-
-	this.ads.init({
-		krux: {
-			id: '112233',
-			events: {
-				dwell_time: {
-					interval: dwellTimeInterval,
-					id: dwellTimeId,
-					total: dwellTimeTotal
-				}
-			}
-		}
-	});
-
-	clock.tick(1001);
-
-	clock.tick(11000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'fired after first interval');
-
-	clock.tick(11000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
-
-	clock.tick(11000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
-
-	clock.tick(41000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 10}), 'if js execution is paused the event resets');
-
-	clock.tick(11000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 20}), 'fired after second interval');
-
-	clock.tick(11000);
-	assert.ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 30}), 'fired after third interval');
-
-	clock.tick(11000);
-	assert.ok(window.Krux.neverCalledWith('admEvent', {dwell_time: 40}), 'doesn\'t fire once max interval is reached');
-});
-
-QUnit.test('event pixel - dwell time defaults', function(assert) {
-	const dwellTimeId = 'dwell-time-default';
-	const clock = this.date();
-
-	this.ads.init({
-		krux: {
-			id: '112233',
-			events: {
-				dwell_time: {
-					id: dwellTimeId,
-				}
-			}
-		}
-	});
-
-	clock.tick(1001);
-	clock.tick(5100);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 5}), 'fired after first interval');
-
-	clock.tick(1400000);
-	assert.ok(window.Krux.calledWith('admEvent', dwellTimeId, {dwell_time: 600}), 'fired the maximum interval');
-	assert.ok(window.Krux.neverCalledWith('admEvent', dwellTimeId, {dwell_time: 605}), 'doesn\'t fire once max interval is reached');
-});
-
 QUnit.test('page attributes are set correctly and sent to Krux', function(assert) {
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 
@@ -276,22 +209,6 @@ QUnit.test("debug logs events data if set", function(assert) {
 	this.ads.krux.debug();
 	assert.ok(start.calledWith('Events'), "`utils.start` was called for 'Events'");
 	assert.ok(start.calledWith('Delegated'), "`utils.start` was called for 'Delegated'");
-});
-
-QUnit.test("debug doesn't log dwell time data if none is set", function(assert) {
-	this.ads.init({krux: {events: {}}});
-	const start = this.spy(this.utils.log, 'start');
-
-	this.ads.krux.debug();
-	assert.notOk(start.calledWith('Dwell Time'), "`utils.start` wasn't called for 'Dwell Time'");
-});
-
-QUnit.test("debug logs dwell time data if set", function(assert) {
-	this.ads.init({krux: {events: {dwell_time: {}}}});
-	const start = this.spy(this.utils.log, 'start');
-
-	this.ads.krux.debug();
-	assert.ok(start.calledWith('Dwell Time'), "`utils.start` was called for 'Dwell Time'");
 });
 
 QUnit.test('debug logs number of supertag scripts', function(assert) {
