@@ -123,15 +123,6 @@ module.exports.isElement = function(element) {
 };
 
 /**
- * Test if an object is a finite number
- * @param {object} The object to be tested
- * @returns {boolean} true if the object is a finite number, can be a float or int but not NaN or Infinity
- */
-module.exports.isNumeric = function(num) {
-	return !isNaN(parseFloat(num)) && isFinite(num);
-};
-
-/**
  * Merge or clone objects
  * @function
  * @param {boolean/object} deep/target If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
@@ -316,17 +307,6 @@ module.exports.getReferrer = function() {
 };
 
 /**
-* Capitalise a string
-* @param {string} string the string to capitalise
-* @returns {string}
-*/
-module.exports.capitalise = function(string) {
-	return string.replace(/(^[a-z])/, function(match, letter) {
-		return letter.toUpperCase();
-	});
-};
-
-/**
 * Remove hyphens from a string and upper case the following letter
 * @param {string} string the string to parse
 * @returns {string}
@@ -334,17 +314,6 @@ module.exports.capitalise = function(string) {
 module.exports.dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
-	});
-};
-
-/**
-* Find uppercase characters in a string, lower case them and add a preceding hyphen
-* @param {string} string the string to parse
-* @returns {string}
-*/
-module.exports.hyphenise = function(string) {
-	return string.replace(/([A-Z])/g, function(match, letter) {
-		return `-${letter.toLowerCase()}`;
 	});
 };
 
