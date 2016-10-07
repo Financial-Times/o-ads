@@ -8,37 +8,36 @@ section: Overview
 A request from the webpage to the ad server to display an online advert
 
 **AD UNIT**  
-Any defined vehicle that’s used for promotional messaging and paid for with the intent of promoting a product or service.  
+Any defined vehicle that’s used for promotional messaging and paid for with the intent of promoting a product or service  
 
 **CPM**  
 Cost per thousand impressions
 
 **CREATIVE**  
-Used by the Ads team as a reference to the actual advert
+Used in the advertising industry to refer to the actual displayed advert  
 
 **DATA MANAGEMENT PLATFORM**  
-Self-service “dashboard” tools that perform a range of services from
-collecting, managing, segmenting, sharing, and analysing marketers’ advertising data including assuring publishers that their data is their data.
+Self-service “dashboard” tools that perform a range of services from collecting, managing, segmenting, sharing, and analysing marketers’ advertising data including assuring publishers that their data is their data.
 
 **IMPRESSION**  
-A single instance of an online advert being called to appear on a page
+A single instance of an online creative being called to appear on a page
 
 **INVENTORY**  
-The amount of space availabie for advertising on a website. Measured in ad impressions.
+The amount of space available for advertising on a website. Measured in ad impressions
 
 **LINE ITEM**  
-Used by DFP to denote an advert
+Used by DFP to denote a creative
 
 **PROGRAMMATIC**  
 Software used to automate buying and selling of media inventory through a bidding system. The FT uses a platform called [Rubicon](http://rubiconproject.com/) to enable this.
 
 **SPOOR**  
-The FT data processing pipeline, which analyses in-app events. API documentation [here](http://spoor-docs.herokuapp.com/).  
+The FT data processing pipeline, which analyses in-app events and feeds real-time newsroom dashboards. API documentation [here](http://spoor-docs.herokuapp.com/)  
 
 **TARGETING**  
 Criteria to make ad rendering more tailored and precise.
 - _DEMOGRAPHIC_  
-References gender, age, income, &c, of a user.   
+References gender, age, income, etc, of a user.   
 - _GEOGRAPHIC_  
 Shows adverts based on a users physical location (usually determined by the IP address)
 - _BEHAVIOURAL_  
@@ -49,8 +48,8 @@ Analyses the content of the page being viewed, and renders ads which are context
 **VIEWABILITY**  
 Viewability is an online advertising metric that aims to track only impressions that can actually be seen by users.
 
-**VIEWABLE IMPRESSION**
-A digital ad that had the opportunity to be seen, sometimes referred to through the traditional print media term of being “above the fold”. The current industry criteria for a standard ad unit to be considered viewable is that 50% of the canvas was within the consumer’s rendered window for a minimum of 1 second – the time required for a consumer to understand that the unit is a piece of advertising.
+**VIEWABLE IMPRESSION**  
+A digital creative that has the opportunity to be seen, sometimes referred to through the traditional print media term of being “above the fold”. The current industry criteria for a standard ad unit to be considered viewable is that 50% of the canvas was within the consumer’s rendered window for a minimum of 1 second – the time required for a consumer to understand that the unit is a piece of advertising.
 
 References:  
 [FT Glossary](https://docs.google.com/spreadsheets/d/1d-iy36QBhP94vfcEjFpdKnF_m-1NAtcQHY4m9h2vHdk/edit#gid=0)  

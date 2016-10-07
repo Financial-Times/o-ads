@@ -6,7 +6,7 @@ section: building
 
 Display advertising consists of the traditional "banner" or square advertising slots seen on a page.
 
-These come in a variety of sizes, some of which are standard [IAB](https://iabuk.net)(Interne Advertising Bureau) formats, and some which are bespoke to the FT.
+These come in a variety of sizes, some of which are standard [IAB](https://iabuk.net)(Internet Advertising Bureau) formats, and some which are bespoke to the FT.
 
 An ad slot can be added to your page by including a `div` with some attributes. o-ads will then request an advert for that slot, which will be displayed within an iframe container. Below is a simple example that will display a horizontal billboard/leaderboard sized ad at certain breakpoints:
 
