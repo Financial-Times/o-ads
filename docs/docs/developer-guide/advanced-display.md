@@ -77,7 +77,7 @@ This is when the ad server fails to return any ad. This could be caused by an ad
  > Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.  
 
  >To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.
- [DFP documentation](https://support.google.com/dfp_premium/answer/1154352?hl=en)
+ [DFP traffic and serve out-of-page creatives](https://support.google.com/dfp_premium/answer/1154352?hl=en)
 
 ```
 <div data-o-ads-out-of-page="true"></div>

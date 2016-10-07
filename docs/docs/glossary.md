@@ -54,5 +54,5 @@ A digital ad that had the opportunity to be seen, sometimes referred to through 
 
 References:  
 [FT Glossary](https://docs.google.com/spreadsheets/d/1d-iy36QBhP94vfcEjFpdKnF_m-1NAtcQHY4m9h2vHdk/edit#gid=0)  
-[IAB Jargon](https://www.iabuk.net/resources/jargon-buster#buSYZekHExElAx5X.99)
+[IAB Jargon](https://www.iabuk.net/resources/jargon-buster#buSYZekHExElAx5X.99)  
 [PubMatic Glossary](https://0e656acf-a-4e80c146-s-sites.googlegroups.com/a/ft.com/advertising-enablement/advertising-industry/the-pubmatic-glossary.pdf?attachauth=ANoY7cp1Bx45lPsYXp0brk_BO5OCC50dajdGBz3GF6dOm3-lWvAv_ffRAFqAkFgEKrulL-3i8AM22gnYXeZ9FW12h-hclXQjArqyeVhU1Skp8kxg7-trsfGkknqWwO-kAJPWOtSA7UCtDmhiYljFsvTJ4i7L4N3ZVgiH78iLJO2oDWRtb559dW8PQDOLYXmQHxywrHP1e3jvmHfD4uEDHQdPvZEkj7K3xunN0Qd8ZvwKTM1sML5Bkxj6y3vukmJPVhO0qkbrl0qm&attredirects=1)
