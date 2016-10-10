@@ -313,6 +313,7 @@ Slot.prototype.collapse = function() {
 	this.container.classList.add('o-ads--empty');
 	this.setFormatLoaded(false);
 	document.body.classList.add(`o-ads-no-${this.name}`);
+	utils.broadcast('collapsed', this);
 	return this;
 };
 
