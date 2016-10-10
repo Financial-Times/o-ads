@@ -26,7 +26,7 @@ function broadcast(name, data, target) {
 
 /**
 * Sets an event listener for an oAds event
-* @param {string} name The name of the event 
+* @param {string} name The name of the event
 * @param {function} callback The function to execute on the event
 * @param {HTMLElement} target The element to attach the event listener to
 */
