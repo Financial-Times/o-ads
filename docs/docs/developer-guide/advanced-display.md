@@ -108,3 +108,6 @@ A refresh event has been triggered on an advert, prompting a new request to the 
 
 #### `oAds.breakpoint`
 If the oAds is configured to use responsive adverts with set breakpoints, it will trigger the event on each of the breakpoints that was specified in the config. Note that the breakpoint triggering does not take the scrollbar into consideration. For more information read about [DFP - Build responsive ads](https://support.google.com/dfp_premium/answer/3423562?hl=en).
+
+#### `oAds.collapse`
+Event is emitted when the slot is collapsed. The event detail contains oAds slot instance.
