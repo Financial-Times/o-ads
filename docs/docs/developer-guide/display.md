@@ -94,7 +94,7 @@ You can provide specific targeting key/values for a slot:
 
 `data-o-ads-targeting="key=value;key2=value2;"`
 
-The most common use case for this is what is known as the `pos` key. This is used by ad-ops to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page, respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
+The most common use case for this is what is known as the `pos` key. This is used by AdOPs to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page, respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
 
 ## Styling with Classes
 

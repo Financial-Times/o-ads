@@ -30,6 +30,9 @@ oAds.config({
 
 <div class="o-ads" data-o-ads-lazy-load="false"></div>
 ```
+
+There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which overrides lazy loading.
+
 **Options:**
 
 * `viewportMargin` - Sets a new margin within the viewport that determines at what point the advert is in view. We suggest setting this option when you want to request and display the advert just _before_ it comes into view. This works as regular margin definitions.   
@@ -60,7 +63,7 @@ In addition - all ad slots will have an attribute added called `data-o-ads-maste
 
 ## Collapsing / No Ads
 
-There are a few instances when no ad might serve:
+A creative may not be served under one of the following circumstances:
 
 * _A bug in the creative_  
 The ad server served an ad correctly, but some bug in the creative causes it not to display anything. A common example of this would be if the ad's assets were insecure. This needs to be reported to AdOps as soon as possible - ideally with the [creativeId or line item Id]({{ site.baseurl }}/docs/developer-guide/debugging#oadsdebug)
@@ -89,7 +92,7 @@ This is when the ad server fails to return any ad. This could be caused by an ad
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
 
 #### `oAds.adServerLoadError`
-Triggered if the library fails to load external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
+Triggered if the library fails to load the external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
 
 #### `oAds.ready`
 Slot has been inited in the oAds library and is about to be requested from the ad server (deferred if lazy loading is on).
@@ -98,7 +101,7 @@ Slot has been inited in the oAds library and is about to be requested from the a
 Triggered once the ad has been rendered on the page.
 
 #### `oAds.complete`
-Advert has now been inited in the oAds, requested from the ad server and displayed if one was returned. Triggered after `oAds.rendered`.
+If and when a creative has been returned, this event announces it has now been initialised in oAds, requested from the ad server and displayed. Triggered after `oAds.rendered`.
 
 #### `oAds.render`
 Lazy loaded advert has been requested.

@@ -5,7 +5,7 @@ section: building
 ---
 
 ## 1. Include o-ads on your site
-Include the latest version of o-ads via `bower` or the [Origami Build Service](http://build.origami.ft.com/v2/) — which which we recommend for use on the websites. This way you can get updates automatically and you do not have to build the module manually from source (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
+Include the latest version of o-ads via `bower` or the [Origami Build Service](http://build.origami.ft.com/v2/) — which we recommend for use on the websites. This way you can get updates automatically and you do not have to build the module manually from source (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
 
 Alternately, you may use the [Origami Build Tools](http://origami.ft.com/docs/developer-guide/modules/building-modules/) to include the library as a part of your codebase and build it manually. This option involves a certain level of setup.
 

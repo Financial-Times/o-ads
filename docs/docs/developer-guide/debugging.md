@@ -6,7 +6,7 @@ section: building
 
 ## Checking ad calls
 
-You can inspect that an ad call is being made by looking at the Network tab (or Charles). An ad call looks something like this:
+You can inspect that an ad call is being made by looking at the Network tab (or [Charles](https://www.charlesproxy.com/)). An ad call looks something like this:
 `https://securepubads.g.doubleclick.net/gampad/ads?gdfp_req=1&correlator=4083593754103292&output=json_html&....`
 
 Some useful URL parameters in the ad call:

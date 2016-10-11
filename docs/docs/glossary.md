@@ -26,7 +26,7 @@ A single instance of an online creative being called to appear on a page
 The amount of space available for advertising on a website. Measured in ad impressions
 
 **LINE ITEM**  
-Used by DFP to denote a creative
+Used by DFP to denote a particular creative. It includes various details about said creative, such as its name, status (in/active), type, start/end times, impressions, etc.
 
 **PROGRAMMATIC**  
 Software used to automate buying and selling of media inventory through a bidding system. The FT uses a platform called [Rubicon](http://rubiconproject.com/) to enable this.
