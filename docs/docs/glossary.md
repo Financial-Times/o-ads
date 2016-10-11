@@ -46,7 +46,7 @@ Analyses a users previous decision making behaviour and delivers relevant advert
 Analyses the content of the page being viewed, and renders ads which are contextually relevant
 
 **VIEWABILITY**  
-Viewability is an online advertising metric that aims to track only impressions that can actually be seen by users.
+Viewability is an online advertising metric that aims to track only impressions that can actually be seen by users. The FT uses a platform called [Moat](https://moat.com/) to enable this.
 
 **VIEWABLE IMPRESSION**  
 A digital creative that has the opportunity to be seen, sometimes referred to through the traditional print media term of being “above the fold”. The current industry criteria for a standard ad unit to be considered viewable is that 50% of the canvas was within the consumer’s rendered window for a minimum of 1 second – the time required for a consumer to understand that the unit is a piece of advertising.

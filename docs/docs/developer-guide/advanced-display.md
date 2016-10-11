@@ -32,11 +32,11 @@ oAds.config({
 ```
 **Options:**
 
-* `viewportMargin` - Sets a new margin within the viewport that determines at what point the advert is 'in view'. We suggest setting this option when you want to request and display the advert just _before_ it comes into view. This works as regular margin definitions.   
+* `viewportMargin` - Sets a new margin within the viewport that determines at what point the advert is in view. We suggest setting this option when you want to request and display the advert just _before_ it comes into view. This works as regular margin definitions.   
 Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 0%`, or `100px 0px`. Default is `0%`.
 
 * `threshold` - An array of values that determine at what point a callback will be triggered.  
- In this case, the threshold is a percentage of the intersection area in relation to the area of the target's bounding box (where the target is a DOM element relative to a containing element or to the top-level viewport). [More here](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver).  
+ In this case, the threshold is a percentage of the intersection area in relation to the area of the target's bounding box (where the target is a DOM element relative to a containing element or to the top-level viewport). [Intersection Observer](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver).  
  Thresholds can be any value between 0.0 and 1.0, inclusive. Default is `0`, meaning that as soon as the first pixel comes into view, the advert will be loaded.
 
 
