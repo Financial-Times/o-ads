@@ -98,14 +98,3 @@ QUnit.test('localStorage is restored after test', function(assert) {
 	assert.equal(window.localStorage, _localStorage, 'localStorage is not mocked');
 	assert.strictEqual(localStorage.getItem('Brandon'), null, 'Mock data is not in localStorage');
 });
-
-QUnit.test('Cookies mocking', function(assert) {
-	$.cookie('monkey', 'see');
-	this.cookies({monkey: 'do'});
-	assert.equal(this.ads.utils.cookie('monkey'), 'do', 'Mocked cookie value is returned');
-});
-
-QUnit.test('Cookies restored', function(assert) {
-	assert.strictEqual($.cookie('monkey'), 'see', 'Real cookie value is returned');
-	$.removeCookie('monkey');
-});

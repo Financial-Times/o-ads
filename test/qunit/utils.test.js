@@ -99,25 +99,6 @@ QUnit.test('isNonEmptyString method', function(assert) {
 	assert.ok(!this.ads.utils.isNonEmptyString(function() {}), 'function');
 });
 
-QUnit.test('isNumeric method', function(assert) {
-	assert.ok($.type(this.ads.utils.isNumeric) === 'function', 'The function exists');
-	assert.ok(this.ads.utils.isNumeric(42), 'integer');
-	assert.ok(this.ads.utils.isNumeric(-42), 'negative integer');
-	assert.ok(this.ads.utils.isNumeric(3.142), 'float');
-	assert.ok(this.ads.utils.isNumeric(-3.142), 'negative float');
-	assert.ok(!this.ads.utils.isNumeric(NaN), 'NaN');
-	assert.ok(!this.ads.utils.isNumeric(Infinity), 'NaN');
-	assert.ok(!this.ads.utils.isNumeric('hello'), 'string with length');
-	assert.ok(!this.ads.utils.isNumeric(''), 'empty string');
-	assert.ok(!this.ads.utils.isNumeric(), 'empty');
-	assert.ok(!this.ads.utils.isNumeric(null), 'null');
-	assert.ok(!this.ads.utils.isNumeric(undefined), 'undefined');
-	assert.ok(!this.ads.utils.isNumeric(true), 'boolean true');
-	assert.ok(!this.ads.utils.isNumeric(false), 'boolean false');
-	assert.ok(!this.ads.utils.isNumeric({}), 'object');
-	assert.ok(!this.ads.utils.isNumeric(function() {}), 'function');
-});
-
 QUnit.test('isPlainObject method', function(assert) {
 	assert.ok($.type(this.ads.utils.isPlainObject) === 'function', 'The function exists');
 
@@ -383,30 +364,6 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 	}, 200);
 });
 
-
-QUnit.test('isScriptAlreadyLoaded method when script is not present', function(assert) {
-	const url = 'http://local.ft.com/null.js';
-	assert.ok(!this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns false when a script with the given url is not present in the page dom');
-});
-
-QUnit.test('isScriptAlreadyLoaded method when script is present', function(assert) {
-	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/null.js';
-	const tag = document.createElement('script');
-	const node = document.getElementsByTagName('script')[0];
-	tag.setAttribute('src', url);
-	node.parentNode.insertBefore(tag, node);
-	assert.ok(this.ads.utils.isScriptAlreadyLoaded(url), 'The function returns true when a script with the given url is present in the page dom');
-	node.parentNode.removeChild(tag);
-});
-
-QUnit.test('string is capitalised', function(assert) {
-	assert.equal(this.ads.utils.capitalise('abcdefghijklmnopqrstuvwxyz1234567890!'), 'Abcdefghijklmnopqrstuvwxyz1234567890!', 'returns all letters in upper case');
-});
-
-QUnit.test('hyphenises upper case characeters', function(assert) {
-	assert.equal(this.ads.utils.hyphenise('abcDEFghIjklmNOPQrestuvWxYz1234567890!'), 'abc-d-e-fgh-ijklm-n-o-p-qrestuv-wx-yz1234567890!', 'hyphenises and lower cases all upper case characters');
-});
-
 QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
 		const frameContentWindow = this.createDummyFrame('test').window;
 		const result = this.utils.iframeToSlotName(frameContentWindow);
@@ -418,16 +375,6 @@ QUnit.test('find a name of the ad from an iframe', function(assert) {
 		const frameContentWindow = this.createDummyFrame('test', node).window;
 		const result = this.utils.iframeToSlotName(frameContentWindow);
 		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
-});
-
-QUnit.test('createCORSRequest timeout', function(assert) {
-	const done = assert.async();
-	const url = location.protocol + '//' + location.host + '/base/test/qunit/mocks/xhr-response.js';
-	const errorCallback = function(){};
-	const successCallback = function(){};
-	const xhr = this.ads.utils.createCORSRequest(url, 'GET', successCallback, errorCallback, 500);
-  assert.equal(xhr.timeout, 500,'the xhr timeout value has been set to 500ms');
-	done();
 });
 
 QUnit.test("builds an object from array", function(assert) {

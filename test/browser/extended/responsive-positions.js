@@ -46,7 +46,7 @@ module.exports = {
 	'Step 4: Resize browser window to fit mobile break point': function (browser) {
 		browser
 			.resizeWindow(320, 800)
-			.pause(2000);
+			.pause(wait);
 	},
 
 	'Step 5: verify top advert is not displayed have been showed': function (browser) {

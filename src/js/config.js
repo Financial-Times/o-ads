@@ -52,27 +52,6 @@ const defaults = {
 	}
 };
 
-/**
-* @private
-* @function
-* fetchMetaConfig pulls out metatag key value pairs into an object returns the object
-*/
-function fetchMetaConfig() {
-	let results = {};
-	const metas = Array.from(document.getElementsByTagName('meta'));
-	metas.forEach(meta => {
-		if (meta.name) {
-			if (meta.getAttribute('data-contenttype') === 'json') {
-				results[meta.name] = (window.JSON) ? JSON.parse(meta.content) : 'UNSUPPORTED';
-			} else {
-				results[meta.name] = meta.content;
-			}
-		}
-	});
-
-	return results;
-}
-
 function fetchDeclaritiveConfig() {
 	let results = {};
 	const scripts = Array.from(document.querySelectorAll('script[data-o-ads-config]'));
@@ -136,7 +115,7 @@ Config.prototype.clear = function(key) {
 };
 
 Config.prototype.init = function() {
-	this.store = utils.extend(true, {}, defaults, fetchMetaConfig(), fetchCanonicalURL(), fetchDeclaritiveConfig());
+	this.store = utils.extend(true, {}, defaults, fetchCanonicalURL(), fetchDeclaritiveConfig());
 	return this.store;
 };
 

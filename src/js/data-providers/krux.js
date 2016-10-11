@@ -127,20 +127,7 @@ Krux.prototype.targeting = function() {
 * @lends Krux
 */
 Krux.prototype.events = {
-	dwell_time: function(config) {
-		/* istanbul ignore else  */
-		if (config) {
-			const fire = this.fire;
-			const interval = config.interval || 5;
-			const max = (config.total / interval) || 120;
-			const uid = config.id;
-			utils.timers.create(interval, (function() {
-				return function() {
-					fire(uid, {dwell_time: (this.interval * this.ticks) / 1000 });
-				};
-			}()), max, {reset: true});
-		}
-	},
+
 	delegated: function(config) {
 		/* istanbul ignore else  */
 		if (window.addEventListener) {
@@ -233,13 +220,6 @@ Krux.prototype.debug = function() {
 		if (this.config.events) {
 			const events = this.config.events;
 			log.start('Events');
-				if (events.dwell_time) {
-					log.start('Dwell Time');
-						log('%c interval:', 'font-weight: bold', events.dwell_time.interval);
-						log('%c id:', 'font-weight: bold', events.dwell_time.id);
-						log('%c total:', 'font-weight: bold', events.dwell_time.total);
-					log.end();
-				}
 				log.start('Delegated');
 					log.table(events.delegated);
 				log.end();

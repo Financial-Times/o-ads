@@ -64,49 +64,6 @@ QUnit.test('Config get/set - mulitple', function(assert) {
 	assert.deepEqual(result, obj, 'get returns the new values.');
 });
 
-QUnit.test('Config fetchMetaConfig', function(assert) {
-	this.meta({
-		metaconf1: 'I&#39;m so meta, even this acronym.'
-	});
-	this.ads.config.init(true);
-	const result = this.ads.config();
-
-	assert.ok(result.hasOwnProperty('metaconf1'), 'Meta value has been added to config');
-	assert.equal(this.ads.config('metaconf1'), 'I\'m so meta, even this acronym.', 'Config returns the correct value');
-});
-
-
-QUnit.test('Config fetchMetaConfigJSON', function(assert) {
-	if (window.JSON) {
-		const save = window.JSON;
-		this.meta({
-			metaconfjson1: {
-				content: '{"testing":"blah"}',
-				"data-contenttype": 'json'
-			}
-		});
-
-		this.ads.init();
-		let result = this.ads.config();
-
-		assert.ok(result.hasOwnProperty('metaconfjson1'), 'Meta value has been added to config');
-		assert.equal(this.ads.config('metaconfjson1').testing, 'blah', 'Config returns the correct value');
-
-		window['JSON'] = undefined;
-
-		this.ads.init();
-		result = this.ads.config();
-
-		assert.ok(result.hasOwnProperty('metaconfjson1'), 'When JSON is not available - meta value has been added to config');
-		assert.equal(this.ads.config('metaconfjson1'), 'UNSUPPORTED', 'When JSON is not available - config returns the correct value');
-
-		window['JSON'] = save;
-
-	} else {
-		assert.ok(true, "JSON is not defined -- FAIL");
-	}
-});
-
 QUnit.test('Config defaults', function(assert) {
 	this.ads.init();
 	const flags = {

@@ -7,8 +7,8 @@
 
 /**
 * Broadscasts an o-ads event
-* @param {string} name The name of the cookie to be read/written
-* @param {object} data The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {string} name The name of the event
+* @param {object} data The data to send as event detail
 * @param {HTMLElement} target The element to attach the event listener to
 */
 module.exports.broadcast = broadcast;
@@ -26,8 +26,8 @@ function broadcast(name, data, target) {
 
 /**
 * Sets an event listener for an oAds event
-* @param {string} name The name of the cookie to be read/written
-* @param {function} callback The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {string} name The name of the event
+* @param {function} callback The function to execute on the event
 * @param {HTMLElement} target The element to attach the event listener to
 */
 
@@ -41,8 +41,8 @@ function on(name, callback, target) {
 
 /**
 * Sets a one time event listener for an oAds event
-* @param {string} name The name of the cookie to be read/written
-* @param {function} callback The value to set to the written cookie (if param is missing the cookie will be read)
+* @param {string} name The name of the event
+* @param {function} callback The function to execute on the event
 * @param {HTMLElement} target The element to attach the event listener to
 */
 module.exports.once = once;
