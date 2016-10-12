@@ -35,7 +35,7 @@ For FT.com, the 'zone' can be retrieved from the Ads API (see [Targeting]({{site
 For new products, you will need to liaise with AdOps to decide on the site and zone hierarchy.
 
 ## 3. Initialise o-ads
-* Declaratively:
+* Declaratively:  
 ```html
 	<script data-o-ads-config="" type="application/json">
 		{
@@ -47,7 +47,7 @@ For new products, you will need to liaise with AdOps to decide on the site and z
 	</script>
 ```
 
-* Imperatively
+* Imperatively   
 ```js
 const oAds = require('o-ads');
 oAds.init({...});
