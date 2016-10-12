@@ -36,6 +36,7 @@ For new products, you will need to liaise with AdOps to decide on the site and z
 
 ## 3. Initialise o-ads
 * Declaratively:  
+
 ```html
 	<script data-o-ads-config="" type="application/json">
 		{
@@ -48,6 +49,7 @@ For new products, you will need to liaise with AdOps to decide on the site and z
 ```
 
 * Imperatively   
+
 ```js
 const oAds = require('o-ads');
 oAds.init({...});
