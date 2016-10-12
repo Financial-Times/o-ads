@@ -1,13 +1,14 @@
 # oAds ![CircleCI Status](https://circleci.com/gh/Financial-Times/o-ads.svg?style=shield&circle-token=36a37c6ca27a08408c2575c7834f5f6f5c5c9d21)
-## Introduction
-This module enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), enables custom behavioural (via [Krux](http://www.krux.com/)) and demographics and semantic (via [Admantx](http://admantx.com/)) targeting.
 
-## Installation
-Please refer to [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) If you are enabling this module on one of the FT sites please do refer to the [_Integration guidelines_](https://github.com/Financial-Times/o-ads/blob/master/docs/INTEGRATION.md)
+This is an Origami module that enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), and provides customised demographic, behavioural (via [Krux](http://www.krux.com/)), and contextual (via [Admantx](http://admantx.com/)) targeting.
 
-## Requirements
-For basic use, a DFP account with Google is required, each targeting/tracking supplier will require their own configuration and setup.
+### Requirements
+For basic use, a DFP account with Google is required.  
+Each targeting/tracking supplier will require their own configuration and setup.
 
-## Documentation
+### Demos
+Demos for all ads currently served across ft.com are available in the [Origami Registry](http://registry.origami.ft.com/components/o-ads).
 
-See [here](https://financial-times.github.io/o-ads).
+### [Documentation](https://financial-times.github.io/o-ads)
+
+Includes detailed installation and set-up instructions, along with details about the module.
