@@ -31,7 +31,7 @@ oAds.config({
 <div class="o-ads" data-o-ads-lazy-load="false"></div>
 ```
 
-There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which overrides lazy loading.
+There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which [overrides lazy loading]({{ site.baseurl }}/docs/developer-guide/advanced-display#mastercompanion).
 
 **Options:**
 
@@ -66,10 +66,10 @@ In addition - all ad slots will have an attribute added called `data-o-ads-maste
 A creative may not be served under one of the following circumstances:
 
 * _A bug in the creative_  
-The ad server served an ad correctly, but some bug in the creative causes it not to display anything. A common example of this would be if the ad's assets were insecure. This needs to be reported to AdOps as soon as possible - ideally with the [creativeId or line item Id]({{ site.baseurl }}/docs/developer-guide/debugging#oadsdebug)
+The ad server served an ad correctly, but some bug in the creative causes it not to display anything. A common example of this would be if the ad's assets were insecure. This needs to be reported to AdOps as soon as possible - ideally with the [creative Id or line item Id]({{ site.baseurl }}/docs/developer-guide/debugging#oadsdebug)
 
 * _Collapsed ad_  
-This is when AdOps explicitly send instructions to an ad slot not to show anything. This is done via a particular creative that contains some [code](https://github.com/Financial-Times/o-ads-embed) telling it to collapse itself. It should then append the class `o-ads--empty` to the ad slot.
+This is when AdOps explicitly send instructions to an ad slot not to show anything. This is done via a particular creative that contains some code implemented throught [o-ads-embed](https://github.com/Financial-Times/o-ads-embed) telling it to collapse itself. It should then append the class `o-ads--empty` to the ad slot.
 
 This is done in instances where an advertiser wants exclusivity on the page, but might not have assets with all the correct sizes.
 
@@ -79,7 +79,7 @@ This is when the ad server fails to return any ad. This could be caused by an ad
 ## Out-of-page
  > Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.  
 
- >To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.
+ >To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.  
  [DFP traffic and serve out-of-page creatives](https://support.google.com/dfp_premium/answer/1154352?hl=en)
 
 ```
