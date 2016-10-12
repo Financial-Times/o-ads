@@ -35,11 +35,11 @@ Software used to automate buying and selling of media inventory through a biddin
 The FT data processing pipeline, which analyses in-app events and feeds real-time newsroom dashboards. API documentation [here](http://spoor-docs.herokuapp.com/)  
 
 **TARGETING**  
-Criteria to make ad rendering more tailored and precise.
+Criteria to make ad rendering more tailored and precise.  
 - _DEMOGRAPHIC_  
 References gender, age, income, etc, of a user.   
 - _GEOGRAPHIC_  
-Shows adverts based on a users physical location (usually determined by the IP address)
+Shows adverts based on a users physical location (usually determined by the IP address)  
 - _BEHAVIOURAL_  
 Analyses a users previous decision making behaviour and delivers relevant adverts (e.g. visiting certain areas of a site frequently)  
 - _CONTEXTUAL_  
