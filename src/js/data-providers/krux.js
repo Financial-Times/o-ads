@@ -33,6 +33,7 @@ Krux.prototype.init = function() {
 		if(this.config.attributes) {
 			this.add(this.config.attributes)
 		}
+		/* istanbul ignore else  */
 		if(this.customAttributes) {
 			this.setAttributes('page_attr_', this.customAttributes.page || {});
 			this.setAttributes('user_attr_', this.customAttributes.user || {});
