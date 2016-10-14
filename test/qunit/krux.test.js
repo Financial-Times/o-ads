@@ -145,7 +145,8 @@ QUnit.test('user attributes are set correctly and sent to Krux', function(assert
 	assert.ok(window.Krux.withArgs("set", "user_attr_eid", "123").calledOnce, "user attributes sent to Krux");
 });
 
-QUnit.test('custom attributes are set correctly and sent to Krux', function(assert) {
+
+QUnit.test('other attributes are set correctly and sent to Krux', function(assert) {
 	this.ads.init({ krux: {id: '112233', attributes: {custom: {test: '123'}} }});
 
 	assert.ok(window.Krux.withArgs("set", "test", "123").calledOnce, "custom attributes sent to Krux");
@@ -235,4 +236,11 @@ QUnit.test("adds data to config", function(assert) {
 	let input = { "key" : "value" }
 	this.ads.krux.add(input)
 	assert.deepEqual(this.ads.krux.customAttributes, input, 'win');
-})
+});
+
+QUnit.test('customAttributes are sent even if no config attributes are', function(assert) {
+	this.ads.krux.add({user: {"key": "value"}});
+	this.ads.init({ krux: {id: '112233'}});
+
+	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
+});
