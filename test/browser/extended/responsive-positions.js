@@ -54,6 +54,7 @@ module.exports = {
 			.assert.hidden('#responsive-1-gpt', 'First adaptive advert is not visible anymoe');
 	},
 
+/*
 	'Step 6: verify bottom slot is displaying an mpu': function (browser) {
 		browser
 			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait, 'MPU loaded')
@@ -67,6 +68,7 @@ module.exports = {
 				// switch focus back to main page
 				.frame(null);
 	},
+	*/
 
 
 	after: function (browser) {
