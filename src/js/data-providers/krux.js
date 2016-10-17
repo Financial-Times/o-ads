@@ -32,6 +32,9 @@ Krux.prototype.init = function() {
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
 			this.add(this.config.attributes)
+		}
+		/* istanbul ignore else  */
+		if(this.customAttributes) {
 			this.setAttributes('page_attr_', this.customAttributes.page || {});
 			this.setAttributes('user_attr_', this.customAttributes.user || {});
 			this.setAttributes('', this.customAttributes.custom || {});
