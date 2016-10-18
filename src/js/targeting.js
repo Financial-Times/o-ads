@@ -9,7 +9,6 @@ function Targeting() {
 Targeting.prototype.get = function() {
 	const methods = {
 		socialReferrer: this.getSocialReferrer,
-		pageReferrer: this.getPageReferrer,
 		timestamp: this.timestamp,
 		responsive: this.responsive
 	};
@@ -51,26 +50,6 @@ Targeting.prototype.getFromConfig = function() {
 	}
 
 	return targeting;
-};
-
-Targeting.prototype.getPageReferrer = function() {
-	let hostRegex;
-	let match = null;
-	const referrer = utils.getReferrer();
-
-	//referrer is not article
-	if (referrer !== '') {
-		hostRegex = /^.*?:\/\/.*?(\/.*)$/;
-
-		//remove hostname from results
-		match = hostRegex.exec(referrer)[1];
-		/* istanbul ignore else  */
-		if (match !== null) {
-			match.substring(1);
-		}
-	}
-
-	return match && {rf: match.substring(1)} || {};
 };
 
 Targeting.prototype.getSocialReferrer = function() {
