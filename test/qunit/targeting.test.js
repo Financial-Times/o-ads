@@ -8,13 +8,11 @@ QUnit.module('Targeting', {
 QUnit.test('getFromConfig', function(assert) {
 	this.ads.init({});
 	let result = this.ads.targeting.get();
-	delete result.rf; //Qunit sometimes has referrer
 	assert.ok(result.ts, 'timestamp exists');
 	assert.ok(result.res, 'responsive breakpoint exists');
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
-	delete result.rf; //Qunit sometimes has referrer
 	assert.deepEqual(Object.keys(result).length, 2, 'Empty string dfp_targeting returns only default params');
 
 
@@ -87,21 +85,6 @@ QUnit.test("social referrer", function(assert) {
 	this.ads.init({ socialReferrer: true });
 	result = this.ads.targeting.get();
 	assert.equal(result.socref, "dru", "Via login, drudge should be mapped from drudgereport.com to dru");
-});
-
-QUnit.test('Page referrer', function(assert) {
-	let result;
-	const referrer = this.stub(this.ads.utils, 'getReferrer');
-
-	referrer.returns('');
-	this.ads.init({ pageReferrer: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.rf, undefined, "calling rf returns undefined");
-
-	referrer.returns('http://www.example.com/some/page?some=param');
-	this.ads.init({ pageReferrer: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.rf, 'some/page?some=param', "referrer is returned without domain");
 });
 
 QUnit.test("search term", function(assert) {
