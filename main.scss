@@ -38,7 +38,7 @@ $o-ads-is-silent: true !default;
 	}
 
 	.o-ads--background {
-		background-color: getColor('pink-tint3');
+		background-color: oColorsGetPaletteColor('pink-tint3');
 	}
 
 	.o-ads--reserve-90 {
