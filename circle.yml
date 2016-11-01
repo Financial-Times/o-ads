@@ -14,7 +14,7 @@ dependencies:
 test:
   override:
     - ./node_modules/.bin/obt test
-    - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
+    - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready --wait-tunnel-shutdown --no-proxy-caching:
         background: true
     # Wait for tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
