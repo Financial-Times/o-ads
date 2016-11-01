@@ -20,8 +20,5 @@ module.exports = {
 				.waitForElementPresent('.responsive-ad', wait, 'Advert is visible')
 				// switch focus back to main page
 				.frame(null);
-	},
-	after: function (browser) {
-		browser.end();
 	}
 };

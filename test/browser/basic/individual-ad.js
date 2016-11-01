@@ -22,8 +22,5 @@ module.exports = {
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097', 'Correct image is displayed for leaderboard')
 				// switch focus back to main page
 				.frame(null);
-	},
-	after: function (browser) {
-		browser.end();
 	}
 };
