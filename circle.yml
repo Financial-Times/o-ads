@@ -25,7 +25,7 @@ test:
     # Run nightwatch tests
     # Run one browser at a time for basic tests
     -  >
-      for BROWSER in chrome_latest_sauce,firefox_latest_sauce ie_11_sauce,ie_10_sauce ios_9_sauce,ios_8_sauce ms_edge;
+      for BROWSER in chrome_latest_sauce firefox_latest_sauce ie_11_sauce ie_10_sauce ios_9_sauce ios_8_sauce ms_edge;
       do
         ./node_modules/.bin/nightwatch --config test/browser/nightwatch.json --group basic --env $BROWSER
       done
