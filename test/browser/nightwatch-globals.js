@@ -17,6 +17,10 @@ const notify = (sessionId, passed, opts) =>
 
 module.exports = {
 
+	waitForConditionPollInterval: 300,
+
+	waitForConditionTimeout : 60000,
+
 	afterEach: (browser, done) => {
 		const sessionId = browser.sessionId;
 		const currentTest = browser.currentTest;
