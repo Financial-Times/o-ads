@@ -110,7 +110,8 @@
         "version": "9.2",
         "platform": "OS X 10.10",
         "acceptSslCerts": true,
-        "maxInstances": 1
+        "maxInstances": 1,
+        "autoAcceptAlerts": true
       }
     },
     "ios_8_sauce" : {
@@ -120,7 +121,8 @@
         "version": "8.4",
         "platform": "OS X 10.10",
         "acceptSslCerts": true,
-        "maxInstances": 1
+        "maxInstances": 1,
+        "autoAcceptAlerts": true
       }
     },
     "galaxy_s4_emulator": {
