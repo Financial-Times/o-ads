@@ -16,10 +16,12 @@ const notify = (sessionId, passed, opts) =>
 		});
 
 module.exports = {
-
+	maxDuration: 1800,
+	idleTimeout: 180,
+	commandTimeout: 180,
 	waitForConditionPollInterval: 300,
-
 	waitForConditionTimeout : 60000,
+	concurrency: 4,
 
 	afterEach: (browser, done) => {
 		const sessionId = browser.sessionId;
