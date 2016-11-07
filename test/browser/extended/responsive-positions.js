@@ -21,7 +21,7 @@ module.exports = {
 		browser
 			.assert.visible('#responsive-1-gpt', 'First adaptive advert is visible')
 				// switch focus to first iframe
-				.frame(0)
+				.frame('google_ads_iframe_/5887/test.5887.origami_0')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'First adaptive advert image is visible')
 				// make sure we can see the correct URL
@@ -34,7 +34,7 @@ module.exports = {
 		browser
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
 				// switch focus to second iframe
-				.frame(2)
+				.frame('google_ads_iframe_/5887/test.5887.origami_1')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
 				// make sure we can see the correct URL
@@ -54,24 +54,18 @@ module.exports = {
 			.assert.hidden('#responsive-1-gpt', 'First adaptive advert is not visible anymoe');
 	},
 
-/*
+
 	'Step 6: verify bottom slot is displaying an mpu': function (browser) {
 		browser
 			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait, 'MPU loaded')
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
 				// switch focus to second iframe
-				.frame(0)
+				.frame('google_ads_iframe_/5887/test.5887.origami_1')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/11544125268120182564')
 				// switch focus back to main page
 				.frame(null);
-	},
-	*/
-
-
-	after: function (browser) {
-		browser.end();
 	}
 };

@@ -15,7 +15,7 @@ module.exports = {
 		browser
 			.assert.visible('#leaderboard-gpt', 'Master advert has been initiated and visible')
 				// switch focus to first iframe
-				.frame(0)
+				.frame('google_ads_iframe_/5887/test.5887.origami/master-companion-test_0')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Master advert image is visible')
 				// make sure we can see the correct URL
@@ -28,15 +28,12 @@ module.exports = {
 			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait)
 			.assert.visible('#rectangle-gpt', 'Companion advert has been initiated and visible')
 				// switch focus to second iframe
-				.frame(2)
+				.frame('google_ads_iframe_/5887/test.5887.origami/master-companion-test_1')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Companion advert image is visible')
 				// make sure we can see the correct URL
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14580659904523692186')
 				// switch focus back to main page
 				.frame(null);
-	},
-	after: function (browser) {
-		browser.end();
 	}
 };

@@ -22,8 +22,5 @@ module.exports = {
 				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14891015459176126032')
 				// switch focus back to main page
 				.frame(null);
-	},
-	after: function (browser) {
-		browser.end();
 	}
 };
