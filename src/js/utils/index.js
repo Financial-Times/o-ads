@@ -172,33 +172,32 @@ function extend() {
 			// Extend the base object
 			for (let name in options) {
 				/* istanbul ignore next */
-				if(!options.hasOwnProperty(name)) {
-					return;
-				}
-				src = target[name];
-				copy = options[name];
+				if(options.hasOwnProperty(name)) {
+					src = target[name];
+					copy = options[name];
 
-				// Prevent never-ending loop
-				if (target === copy) {
-					continue;
-				}
-
-				// Recurse if we're merging arrays
-				if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
-					copyIsArray = utils.isArray(copy);
-					if (copyIsArray) {
-						copyIsArray = false;
-						clone = src && utils.isArray(src) ? src : [];
-					} else {
-						clone = src && utils.isObject(src) ? src : {};
+					// Prevent never-ending loop
+					if (target === copy) {
+						continue;
 					}
 
-					// Never move original objects, clone them
-					target[name] = extend(deep, clone, copy);
+					// Recurse if we're merging arrays
+					if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
+						copyIsArray = utils.isArray(copy);
+						if (copyIsArray) {
+							copyIsArray = false;
+							clone = src && utils.isArray(src) ? src : [];
+						} else {
+							clone = src && utils.isObject(src) ? src : {};
+						}
 
-					// Don't bring in undefined values
-				} else if (copy !== undefined) {
-					target[name] = copy;
+						// Never move original objects, clone them
+						target[name] = extend(deep, clone, copy);
+
+						// Don't bring in undefined values
+					} else if (copy !== undefined) {
+						target[name] = copy;
+					}
 				}
 			}
 		}
