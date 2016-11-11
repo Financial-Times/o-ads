@@ -106,3 +106,26 @@ QUnit.test('Config deep extends so default options like formats aren\'t overwrit
 	assert.ok(result.formats.HalfPage, 'predefined formats still exist');
 	assert.ok(result.formats.someNewFormat, 'new format is added');
 });
+
+QUnit.test('Config works as expected even when there are custom prorotype methods defined (e.g. polyfill)', function(assert) {
+	// define a custom prototype method
+	Array.prototype.cusotmTestFunction = function () {};
+	this.ads.init();
+	const flags = {
+		refresh: true,
+		inview: true
+	};
+	const repsonsiveDefaults = {
+		extra: [1025, 0],
+		large: [1000, 0],
+		medium: [760, 0],
+		small: [0, 0]
+	}
+	const result = this.ads.config();
+	assert.ok(result.hasOwnProperty('flags'), 'default properties have been added to config');
+	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');
+	assert.deepEqual(this.ads.config('responsive'), repsonsiveDefaults, 'Config returns the correct values for responsive slots');
+
+	delete Array.prototype.cusotmTestFunction;
+
+});
