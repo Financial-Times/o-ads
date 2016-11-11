@@ -26,7 +26,7 @@ QUnit.test('can handle errors in the api response', function(assert) {
   ads.then((ads) => {
     const targeting = ads.targeting.get();
     const config = ads.config();
-		
+
 		assert.equal(ads.isInitialised, true);
 		assert.equal(config.gpt.zone, 'unclassified');
   	done();
@@ -205,7 +205,7 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
       }
     },
 		gpt: {
-			
+
 		}
 	});
 
@@ -316,6 +316,233 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 		assert.equal(config.gpt.adUnit, '5887/ft.com/site/zone');
 		assert.equal(config.gpt.zone, undefined);
   	done();
+	});
+
+});
+
+QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
+  const done = assert.async();
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+  // mocks api response
+  const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
+
+  let ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+    },
+    krux: {
+      id: '1234'
+    }
+	});
+
+  ads.then((ads) => {
+    // get config and targeting
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+
+    // expectations
+    const dfp_targeting =  {
+          "device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+          "guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+          "slv": "int",
+          "loggedIn": true,
+          "gender": "F"
+    };
+    const krux_targeting =  {
+            "user": {
+            "device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+            "guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+            "subscription_level": "int",
+            "loggedIn": true,
+            "gender": "F"
+          }
+    };
+		const lastCallOpts = apiCallMock.lastCall()[1];
+		assert.equal(lastCallOpts.credentials, "include");
+		assert.equal(lastCallOpts.timeout, 2000);
+		assert.equal(lastCallOpts.useCorsProxy, true);
+
+    // assertions
+    Object.keys(dfp_targeting).forEach((key) => {
+      assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+    });
+    assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
+    // CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE KRUX AND USER TARGETING  //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // mock the API response with a new user data (or anonymous)
+    const userAnonymousJSON = JSON.stringify(this.fixtures.userAnonymous);
+    fetchMock.get('https://ads-api.ft.com/v1/user', userAnonymousJSON);
+    // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
+    ads.getUserTargetingFromServer('https://ads-api.ft.com/v1/user').then(() => {
+      // same as above, get the targeting and config based in order to test
+      const targeting = ads.targeting.get();
+      const config = ads.config();
+
+      // define the new expectations
+      const dfp_targeting_anon =  {
+            "slv": "anon",
+            "loggedIn": false
+      };
+
+      const krux_targeting_anon =  {
+              "user": {
+              "subscription_level": "anon",
+              "loggedIn": false
+            }
+      };
+
+      // run the assertions
+      Object.keys(dfp_targeting).forEach((key) => {
+        assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+      });
+      // make sure we have removed old keys (thats where anonymous user helps)
+      assert.notOk(dfp_targeting['device_spoor_id'], 'previous user dfp keys have been removed');
+
+      assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
+      // make sure we have removed old keys (thats where anonymous user helps)
+      assert.notOk(dfp_targeting['device_spoor_id'], 'previous user krux keys have been removed');
+
+      done();
+    });
+
+
+  });
+
+});
+
+
+
+
+
+
+QUnit.test("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+  const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+
+  const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
+    },
+    krux: {
+      id: '1234'
+    }
+	});
+
+
+	const lastCallOpts = apiCallMock.lastCall()[1];
+	assert.equal(lastCallOpts.credentials, null);
+	assert.equal(lastCallOpts.timeout, 2000);
+	assert.equal(lastCallOpts.useCorsProxy, true);
+
+  ads.then((ads) => {
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+    const dfp_targeting =  {
+          "auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
+          "ad": "ft11,s03,sm01,s05,s04,ft13",
+          "ca": "finance,company,business"
+    };
+    const krux_targeting =  {
+      "authors": ["Jung-a Song"],
+      "genre": ["News"],
+      "primarySection": ["Technology"],
+      "specialReports": [],
+      "topics": ["Mobile devices", "Batteries"]
+    };
+
+    Object.keys(dfp_targeting).forEach((key) => {
+      assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+    });
+
+    assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
+    // CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE TARGETING                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    const anotherContentJSON = JSON.stringify(this.fixtures.anotherContent);
+    const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/11111111-2222-3333-4444-555555555555', anotherContentJSON)
+    // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
+    ads.getConceptTargetingFromServer('https://ads-api.ft.com/v1/concept/anotherId').then(function() {
+
+      const targeting = ads.targeting.get();
+      const config = ads.config();
+      const dfp_targeting_updated =  {
+            "auuid": "11111111-2222-3333-4444-555555555555",
+            "ad": "s03,sm01",
+            "ca": "random,answers,here"
+      };
+      const krux_targeting_updated =  {
+        "authors": ["Jung-a Song1"],
+        "genre": ["News2"],
+        "primarySection": ["Technology3"],
+        "specialReports": [],
+        "topics": ["Mobile devices4", "Batteries5"]
+      };
+
+      Object.keys(dfp_targeting).forEach((key) => {
+        assert.equal(dfp_targeting_updated[key], targeting[key], 'the dfp is added as targeting');
+      });
+
+      assert.deepEqual(ads.krux.customAttributes.page, krux_targeting_updated, 'the krux attributes are correct');
+      done();
+    });
+
+	});
+
+
+});
+
+
+
+
+QUnit.test("allows single page app to update the concept targeting from API on the fly", function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.concept);
+
+  fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+
+  const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
+    },
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'old/zone'
+		}
+	});
+
+
+  ads.then((ads) => {
+    const targeting = ads.targeting.get();
+    const config = ads.config();
+		assert.equal(config.gpt.site, 'ft.com');
+		assert.equal(config.gpt.zone, 'old/zone');
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
+    // CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE TARGETING                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
+    ads.getConceptTargetingFromServer('https://ads-api.ft.com/v1/concept/anotherId').then(function() {
+      const targeting_updated = ads.targeting.get();
+      const config_updated = ads.config();
+      assert.equal(config_updated.gpt.site, 'ft.com');
+      assert.equal(config_updated.gpt.zone, 'work.and.career');
+      done();
+    });
+
 	});
 
 });
