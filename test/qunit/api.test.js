@@ -473,7 +473,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
     const anotherContentJSON = JSON.stringify(this.fixtures.anotherContent);
     const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/11111111-2222-3333-4444-555555555555', anotherContentJSON)
     // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
-    ads.getConceptTargetingFromServer('https://ads-api.ft.com/v1/concept/anotherId').then(function() {
+    ads.getContentTargetingFromServer('https://ads-api.ft.com/v1/concept/anotherId').then(function() {
 
       const targeting = ads.targeting.get();
       const config = ads.config();
