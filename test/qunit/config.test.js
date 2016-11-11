@@ -107,9 +107,9 @@ QUnit.test('Config deep extends so default options like formats aren\'t overwrit
 	assert.ok(result.formats.someNewFormat, 'new format is added');
 });
 
-QUnit.test('Config works as expected even when there are custom prorotype methods defined (e.g. polyfill)', function(assert) {
+QUnit.test('Config works as expected even when there are custom prototype methods defined (e.g. polyfill)', function(assert) {
 	// define a custom prototype method
-	Array.prototype.cusotmTestFunction = function () {};
+	Array.prototype.customTestFunction = function () {};
 	this.ads.init();
 	const flags = {
 		refresh: true,
@@ -126,6 +126,6 @@ QUnit.test('Config works as expected even when there are custom prorotype method
 	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');
 	assert.deepEqual(this.ads.config('responsive'), repsonsiveDefaults, 'Config returns the correct values for responsive slots');
 
-	delete Array.prototype.cusotmTestFunction;
+	delete Array.prototype.customTestFunction;
 
 });
