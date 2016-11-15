@@ -16,6 +16,30 @@ Krux.prototype.add = function (target) {
 	utils.extend(true, this.customAttributes, target);
 };
 
+Krux.prototype.resetAttributes = function() {
+	['user', 'page', 'custom'].forEach(type => {
+		if(this.customAttributes[type]) {
+			Object.keys(this.customAttributes[type]).forEach(key => {
+				this.api('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
+			});
+		}
+	});
+
+	this.customAttributes = {};
+}
+
+Krux.prototype.sendNewPixel = function(pageLoad) {
+	const pixel = this.api('require:pixel');
+
+	if(pixel && pixel.send) {
+		if(pageLoad) {
+			pixel.send();
+		} else {
+			pixel.send('', false);
+		}
+	};
+}
+
 Krux.prototype.init = function() {
 	this.config = config('krux');
 	if (this.config && this.config.id) {
@@ -49,7 +73,7 @@ Krux.prototype.init = function() {
 		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag/${this.config.id}.js`;
 
 		const loadKruxScript = () => {
-			utils.attach(finalSrc, true, () => {
+			this.kruxScript = utils.attach(finalSrc, true, () => {
 				utils.broadcast('kruxScriptLoaded');
 			});
 			this.events.init();
@@ -71,7 +95,7 @@ Krux.prototype.init = function() {
 /**
 * retrieve Krux values from localstorage or cookies in older browsers.
 * @name retrieve
-* @memberof Krux
+* @memberof 
 * @lends Krux
 */
 Krux.prototype.retrieve = function(name) {

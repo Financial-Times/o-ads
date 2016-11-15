@@ -320,7 +320,7 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 
 });
 
-QUnit.skip("allows single page app to update the user targeting from API on the fly", function(assert) {
+QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
   const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
@@ -378,9 +378,11 @@ QUnit.skip("allows single page app to update the user targeting from API on the 
 
     // mock the API response with a new user data (or anonymous)
     const userAnonymousJSON = JSON.stringify(this.fixtures.userAnonymous);
-    fetchMock.get('https://ads-api.ft.com/v1/user', userAnonymousJSON);
-    // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
-    ads.getUserTargetingFromServer('https://ads-api.ft.com/v1/user').then(() => {
+    fetchMock.restore().mock('https://ads-api.ft.com/v1/user', userAnonymousJSON);
+
+		ads.api.reset();
+    ads.api.init({ user: 'https://ads-api.ft.com/v1/user'}, ads).then(() => {
+
       // same as above, get the targeting and config based in order to test
       const targeting = ads.targeting.get();
       const config = ads.config();
@@ -393,21 +395,18 @@ QUnit.skip("allows single page app to update the user targeting from API on the 
 
       const krux_targeting_anon =  {
               "user": {
-              "subscription_level": "anon",
-              "loggedIn": false
             }
       };
-
       // run the assertions
-      Object.keys(dfp_targeting).forEach((key) => {
-        assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+      Object.keys(dfp_targeting_anon).forEach((key) => {
+        assert.equal(dfp_targeting_anon[key], targeting[key], 'the dfp is added as targeting');
       });
       // make sure we have removed old keys (thats where anonymous user helps)
-      assert.notOk(dfp_targeting['device_spoor_id'], 'previous user dfp keys have been removed');
+      assert.notOk(targeting['device_spoor_id'], 'previous user dfp keys have been removed');
 
-      assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
+      assert.deepEqual(ads.krux.customAttributes.user, krux_targeting_anon.user, 'the krux attributes are correct');
       // make sure we have removed old keys (thats where anonymous user helps)
-      assert.notOk(dfp_targeting['device_spoor_id'], 'previous user krux keys have been removed');
+      assert.notOk(ads.krux.customAttributes.user['device_spoor_id'], 'previous user krux keys have been removed');
 
       done();
     });
@@ -419,7 +418,7 @@ QUnit.skip("allows single page app to update the user targeting from API on the 
 
 
 
-QUnit.skip("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
+QUnit.test("Single Page app can update page context data", function(assert) {
   const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
@@ -468,9 +467,9 @@ QUnit.skip("makes api call to correct page/content url and adds correct data to 
     // CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE TARGETING                //
     ////////////////////////////////////////////////////////////////////////////////////////////////
     const anotherContentJSON = JSON.stringify(this.fixtures.anotherContent);
-    const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/11111111-2222-3333-4444-555555555555', anotherContentJSON)
-    // PROBABLY PUT METHOD ELSEWHERE AND NAME IT MORE APPROPRIETLY
-    ads.getContentTargetingFromServer('https://ads-api.ft.com/v1/concept/anotherId').then(function() {
+    const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/anotherId', anotherContentJSON)
+		ads.api.reset();
+    ads.api.init({ page: 'https://ads-api.ft.com/v1/concept/anotherId'}, ads).then(function() {
 
       const targeting = ads.targeting.get();
       const config = ads.config();
@@ -487,7 +486,7 @@ QUnit.skip("makes api call to correct page/content url and adds correct data to 
         "topics": ["Mobile devices4", "Batteries5"]
       };
 
-      Object.keys(dfp_targeting).forEach((key) => {
+      Object.keys(dfp_targeting_updated).forEach((key) => {
         assert.equal(dfp_targeting_updated[key], targeting[key], 'the dfp is added as targeting');
       });
 

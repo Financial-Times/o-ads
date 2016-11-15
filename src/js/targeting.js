@@ -32,6 +32,12 @@ Targeting.prototype.add = function(obj) {
 	}
 };
 
+Targeting.prototype.remove = function(key) {
+	if(parameters[key]) {
+		delete parameters[key];
+	}
+}
+
 Targeting.prototype.clear = function() {
 	parameters = {};
 };

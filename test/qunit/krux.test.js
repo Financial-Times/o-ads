@@ -244,3 +244,34 @@ QUnit.test('customAttributes are sent even if no config attributes are', functio
 
 	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
 });
+
+QUnit.test('sendNewPixel sends a new pixel for page loads', function(assert) {
+	this.ads.init({krux: {id: '112233'}});
+	const pixelStub = this.stub();
+	window.Krux.returns({ send: pixelStub });
+	this.ads.krux.sendNewPixel(true);
+	assert.ok(pixelStub.withArgs().calledOnce, "user attributes sent to Krux");
+});
+
+QUnit.test('sendNewPixel sends a new pixel for non-page loads', function(assert) {
+	this.ads.init({krux: {id: '112233'}});
+	const pixelStub = this.stub();
+	window.Krux.returns({ send: pixelStub });
+	this.ads.krux.sendNewPixel(false);
+	assert.ok(pixelStub.withArgs('', false).calledOnce, "user attributes sent to Krux");
+});
+
+QUnit.test('resetAttributes resets all attributes', function(assert) {
+	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
+
+	this.ads.init({ krux: { id: '112233' }});
+	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
+
+	this.ads.krux.resetAttributes();
+
+	assert.ok(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
+	assert.ok(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
+	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
+	assert.ok(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
+
+});

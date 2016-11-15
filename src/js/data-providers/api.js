@@ -1,6 +1,6 @@
 
 function Api() {
-	this.data = {};
+	this.data = [];
 	this.config = {};
 }
 
@@ -27,23 +27,25 @@ Api.prototype.getPageData = function(target) {
 	.catch(() => Promise.resolve({}));
 }
 
-Api.prototype.handleResponse = function(oAds, response) {
+Api.prototype.handleResponse = function(response) {
+	this.data = response;
+
 	for(let i = 0; i < response.length; i++) {
 		let responseObj = response[i]
 		let keys = ['user', 'page'];
 		let kruxObj = {}
 
 		if(responseObj.krux && responseObj.krux.attributes) {
-			kruxObj[keys[i]] = oAds.utils.buildObjectFromArray(responseObj.krux.attributes)
-			oAds.krux.add(kruxObj)
+			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes)
+			this.instance.krux.add(kruxObj)
 		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
-			oAds.targeting.add(oAds.utils.buildObjectFromArray(responseObj.dfp.targeting));
+			this.instance.targeting.add(this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting));
 		}
 
 		if(this.config.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
-			const gpt = oAds.config('gpt');
+			const gpt = this.instance.config('gpt');
 
 			/* istanbul ignore else  */
 			if(gpt && gpt.zone) {
@@ -55,12 +57,25 @@ Api.prototype.handleResponse = function(oAds, response) {
 
 Api.prototype.init = function(config, oAds) {
 	this.config = config;
+	this.instance = oAds;
+
 	if(!config) {
 		return Promise.resolve();
 	}
 
 	return Promise.all([this.getUserData(config.user), this.getPageData(config.page)])
-	.then(this.handleResponse.bind(this, oAds))
+	.then(this.handleResponse.bind(this))
+}
+
+Api.prototype.reset = function() {
+	this.instance.krux.resetAttributes();
+	this.data.forEach(responseObj => {
+		if(responseObj.dfp && responseObj.dfp.targeting) {
+			responseObj.dfp.targeting.forEach(kv => {
+				this.instance.targeting.remove(kv.key);
+			});
+		}
+	})
 }
 
 module.exports = new Api();
