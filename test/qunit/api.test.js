@@ -320,7 +320,7 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 
 });
 
-QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
+QUnit.skip("allows single page app to update the user targeting from API on the fly", function(assert) {
   const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
@@ -419,10 +419,7 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 
 
 
-
-
-
-QUnit.test("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
+QUnit.skip("makes api call to correct page/content url and adds correct data to targeting", function(assert) {
   const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
@@ -506,7 +503,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 
 
 
-QUnit.test("allows single page app to update the concept targeting from API on the fly", function(assert) {
+QUnit.skip("allows single page app to update the concept targeting from API on the fly", function(assert) {
   const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.concept);
 
@@ -546,3 +543,5 @@ QUnit.test("allows single page app to update the concept targeting from API on t
 	});
 
 });
+
+
