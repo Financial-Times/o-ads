@@ -30,14 +30,21 @@ Ads.prototype.init = function(options) {
 	}
 };
 
-Ads.prototype.updateContext = function(options) {
+Ads.prototype.updateContext = function(options, isNewPage) {
 	this.config(options);
+
+	/* istanbul ignore else */
+	if(this.config('krux')) {
+		this.krux.sendNewPixel(isNewPage);
+	}
+
 	if(options.targetingApi) {
 		this.api.reset();
 		return this.api.init(options.targetingApi, this);
 	} else {
 		return Promise.resolve();
 	}
+
 }
 
 Ads.prototype.initLibrary = function() {

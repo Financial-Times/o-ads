@@ -64,8 +64,9 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 	const ads = new this.adsConstructor();
 	const gptInit = this.spy(this.ads.gpt, 'init');
 	const userDataStub = this.stub(this.ads.api, 'getUserData');
+	const kruxPixelStub = this.stub(this.ads.krux, 'sendNewPixel');
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
+	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}, krux: { id: 'hello' }})
 	.then(() => {
 			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
 			assert.equal(this.ads.targeting.get().a, '1');
@@ -73,9 +74,9 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 
 			//change the user
 			userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'b', value: '1'}, { key: 'c', value: '2'}]}}));
-			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }})
+			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
 			.then(() => {
-				
+				assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');	
 				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
 				assert.equal(this.ads.targeting.get().a, undefined);
 				assert.equal(this.ads.targeting.get().b, '1');
