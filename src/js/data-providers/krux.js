@@ -95,7 +95,7 @@ Krux.prototype.init = function() {
 /**
 * retrieve Krux values from localstorage or cookies in older browsers.
 * @name retrieve
-* @memberof 
+* @memberof Krux 
 * @lends Krux
 */
 Krux.prototype.retrieve = function(name) {

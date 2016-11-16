@@ -33,14 +33,15 @@ Ads.prototype.init = function(options) {
 Ads.prototype.updateContext = function(options, isNewPage) {
 	this.config(options);
 
-	/* istanbul ignore else */
-	if(this.config('krux')) {
-		this.krux.sendNewPixel(isNewPage);
-	}
-
 	if(options.targetingApi) {
 		this.api.reset();
-		return this.api.init(options.targetingApi, this);
+		return this.api.init(options.targetingApi, this)
+			.then(() => {
+				/* istanbul ignore else */
+					if(this.config('krux')) {
+						this.krux.sendNewPixel(isNewPage);
+					}
+			});
 	} else {
 		return Promise.resolve();
 	}
