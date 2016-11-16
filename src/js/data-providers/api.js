@@ -36,7 +36,7 @@ Api.prototype.handleResponse = function(response) {
 		let kruxObj = {}
 
 		if(responseObj.krux && responseObj.krux.attributes) {
-			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes)
+			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes);
 			this.instance.krux.add(kruxObj)
 		}
 

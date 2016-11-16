@@ -16,20 +16,10 @@ Krux.prototype.add = function (target) {
 	utils.extend(true, this.customAttributes, target);
 };
 
-Krux.prototype.resetAttributes = function() {
-	['user', 'page', 'custom'].forEach(type => {
-		if(this.customAttributes[type]) {
-			Object.keys(this.customAttributes[type]).forEach(key => {
-				this.api('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
-			});
-		}
-	});
 
-	this.customAttributes = {};
-}
 
 Krux.prototype.sendNewPixel = function(pageLoad) {
-	const pixel = this.api('require:pixel');
+	const pixel = window.Krux && window.Krux('require:pixel');
 	/* istanbul ignore else */
 	if(pixel && pixel.send) {
 		if(pageLoad) {
@@ -57,12 +47,8 @@ Krux.prototype.init = function() {
 		if(this.config.attributes) {
 			this.add(this.config.attributes)
 		}
-		/* istanbul ignore else  */
-		if(this.customAttributes) {
-			this.setAttributes('page_attr_', this.customAttributes.page || {});
-			this.setAttributes('user_attr_', this.customAttributes.user || {});
-			this.setAttributes('', this.customAttributes.custom || {});
-		}
+
+		this.setAllAttributes();
 
 		let src;
 		const m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
@@ -211,10 +197,31 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
 		Object.keys(attributes).forEach(item => {
-			this.api('set', prefix + item, attributes[item]);
+			window.Krux('set', prefix + item, attributes[item]);
 		});
 	}
 };
+
+Krux.prototype.setAllAttributes = function() {
+	/* istanbul ignore else  */
+	if(this.customAttributes) {
+		this.setAttributes('page_attr_', this.customAttributes.page || {});
+		this.setAttributes('user_attr_', this.customAttributes.user || {});
+		this.setAttributes('', this.customAttributes.custom || {});
+	}
+}
+
+Krux.prototype.resetAttributes = function() {
+	['user', 'page', 'custom'].forEach(type => {
+		if(this.customAttributes[type]) {
+			Object.keys(this.customAttributes[type]).forEach(key => {
+				window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
+			});
+		}
+	});
+
+	this.customAttributes = {};
+}
 
 Krux.prototype.debug = function() {
 	const log = utils.log;

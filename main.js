@@ -37,8 +37,10 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		this.api.reset();
 		return this.api.init(options.targetingApi, this)
 			.then(() => {
+					this.gpt.updatePageTargeting(this.targeting.get());
 				/* istanbul ignore else */
 					if(this.config('krux')) {
+						this.krux.setAllAttributes();
 						this.krux.sendNewPixel(isNewPage);
 					}
 			});
