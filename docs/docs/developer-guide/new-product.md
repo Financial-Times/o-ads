@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Setting up a new product
+title: Setting up o-ads
 section: building
 ---
 
@@ -137,3 +137,52 @@ If you need to know when oAds has been initialised with all the API calls, this 
 * `oAds.init()` returns a Promise - so you can do `oAds.init().then(myStuff)`;
 * We fire an event `oAds.initialised` on the document
 * We set a boolean property on the oAds instance: `oAds.isInitialised`
+## Single Page Apps
+
+Single page apps are likely to want to update the targeting throughout the lifecycle of the page (for example, if a user logs out, or a new article is loaded but without loading a new page).
+
+For this use case, a method is provided, which will:
+
+* update the configuration with any new configuration
+* Re-make any API calls (if new URLs are passed) and reset any leftover targeting from old API calls
+* Trigger a new Krux pixel
+
+`oAds.updateContext(config, isNewPageView)`
+
+e.g.
+
+```
+	oAds.init({ 
+		gpt: { 
+			network:'5887', 
+			site: 'ft.com', 
+			zone: 'world'
+		},
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/content/abc'
+		}
+	});
+
+	function onSomeUserActionThatChangesThePage() {
+		//change the zone and reget contextual targeting
+		oAds.updateContext({
+			gpt: {
+				zone: 'uk'
+			},
+			targetingApi: {
+				page: 'https://ads-api.ft.com/v1/content/def'
+			}
+		}, true);
+	}
+
+	function onUserLogout() {
+		//update the user targeting details
+		oAds.updateContext({
+			targetingApi: {
+				user: 'https://ads-api.ft.com/v1/user'
+			}
+		});
+	}
+
+```

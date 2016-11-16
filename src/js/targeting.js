@@ -32,6 +32,7 @@ Targeting.prototype.add = function(obj) {
 };
 
 Targeting.prototype.remove = function(key) {
+	/* istanbul ignore else */
 	if(parameters[key]) {
 		delete parameters[key];
 	}

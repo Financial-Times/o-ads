@@ -6,14 +6,26 @@ const fetchMock = require('fetch-mock');
 
 QUnit.module('ads API config', {});
 
+QUnit.test('resolves with an empty promise if called without any urls', function(assert) {
+  const done = assert.async();
+
+	this.ads.api.init()
+	.then(res => {
+		assert.equal(res, undefined);
+		done();
+	});
+
+});
 QUnit.test('can handle errors in the api response', function(assert) {
   const done = assert.async();
 
   fetchMock.get('https://ads-api.ft.com/v1/concept/error', 500)
+  fetchMock.get('https://ads-api.ft.com/v1/user/error', 500)
 
   const ads = this.ads.init({
 		targetingApi: {
-			page: 'https://ads-api.ft.com/v1/concept/error'
+			page: 'https://ads-api.ft.com/v1/concept/error',
+			user: 'https://ads-api.ft.com/v1/user/error'
     },
 		gpt: {
 			network: '5887',

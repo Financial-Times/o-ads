@@ -30,7 +30,7 @@ Krux.prototype.resetAttributes = function() {
 
 Krux.prototype.sendNewPixel = function(pageLoad) {
 	const pixel = this.api('require:pixel');
-
+	/* istanbul ignore else */
 	if(pixel && pixel.send) {
 		if(pageLoad) {
 			pixel.send();
