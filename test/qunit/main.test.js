@@ -59,6 +59,35 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');
 });
 
+QUnit.only('updateContext updates the config and redoes the API calls', function(assert) {
+	const done = assert.async();
+	const ads = new this.adsConstructor();
+	const gptInit = this.spy(this.ads.gpt, 'init');
+	const userDataStub = this.stub(this.ads.api, 'getUserData');
+	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
+	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
+	.then(() => {
+			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
+			assert.equal(this.ads.targeting.get().a, '1');
+			assert.equal(this.ads.targeting.get().b, '2');
+
+			//change the user
+			userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'b', value: '1'}, { key: 'c', value: '2'}]}}));
+			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }})
+			.then(() => {
+				
+				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
+				assert.equal(this.ads.targeting.get().a, undefined);
+				assert.equal(this.ads.targeting.get().b, '1');
+				assert.equal(this.ads.targeting.get().c, '2');
+				done();
+			});
+
+	});
+
+
+});
+
 QUnit.test("debug calls modules' debug functions", function(assert) {
 	const gptDebug = this.spy(this.ads.gpt, 'debug');
 	const kruxDebug = this.spy(this.ads.krux, 'debug');

@@ -30,6 +30,16 @@ Ads.prototype.init = function(options) {
 	}
 };
 
+Ads.prototype.updateContext = function(options) {
+	this.config(options);
+	if(options.targetingApi) {
+		this.api.reset();
+		return this.api.init(options.targetingApi, this);
+	} else {
+		return Promise.resolve();
+	}
+}
+
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();

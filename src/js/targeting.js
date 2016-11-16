@@ -12,7 +12,6 @@ Targeting.prototype.get = function() {
 		timestamp: this.timestamp,
 		responsive: this.responsive
 	};
-
 	utils.extend(parameters, this.getFromConfig(), this.searchTerm());
 
 	for (let item in methods) {
