@@ -109,6 +109,23 @@ function setPageTargeting(targetingData) {
 }
 
 /**
+* Removes page targeting for a specified key from GPT ad calls
+*/
+function clearPageTargetingForKey(key) {
+	if (!window.googletag) {
+		utils.log.warn('Attempting to clear page targeting before the GPT library has initialized');
+		return;
+	}
+	if (!key) {
+		utils.log.warn('Refusing to unset all keys - a key must be specified');
+		return;
+	}
+	googletag.cmd.push(() => {
+		googletag.pubads().clearTargeting(key);
+	});
+}
+
+/**
 * Sets behaviour of empty slots can be 'after', 'before' or 'never'
 * * after collapse slots that return an empty ad
 * * before collapses all slots and only displays them on
@@ -453,6 +470,7 @@ function updatePageTargeting(override) {
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = updatePageTargeting;
+module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
 
 module.exports.debug = () => {
 	const log = utils.log;

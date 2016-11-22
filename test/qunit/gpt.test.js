@@ -66,27 +66,28 @@ QUnit.test('override page targetting catches and warns when googletag is not ava
 	window.googletag = this.gpt;
 });
 
-QUnit.test('override page targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
-	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
-	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
-
-	this.ads.gpt.updatePageTargeting({overrideKey: 'overrideValue'});
-	assert.ok(googletag.pubads().setTargeting.calledWith('overrideKey', 'overrideValue'), 'the params are queued with GPT');
-
-	this.ads.gpt.updatePageTargeting('anotherOverrideKey=anotherOverrideValue');
-	assert.ok(googletag.pubads().setTargeting.neverCalledWith('anotherOverrideKey', 'anotherOverrideValue'), 'the params are queued with GPT');
-});
-
-QUnit.test('catches and warns when targeting is not set', function(assert) {
-	this.stub(this.utils, 'isPlainObject', function() {
-		return false;
-	});
-	const warnSpy = this.spy(this.utils.log, 'warn');
+QUnit.test('unset page targeting', function(assert) {
 	this.ads.init();
-	assert.ok(warnSpy.calledOnce, 'logs a warning for invalid targeting');
+
+	this.ads.gpt.clearPageTargetingForKey('test');
+	assert.ok(googletag.pubads().clearTargeting.calledWith('test'), 'removals of custom params are queued with GPT');
 });
 
+QUnit.test('unsetting page targeting catches and warns when about to unset all or if googletag is not available', function(assert) {
+	const errorSpy = this.spy(this.utils.log, 'warn');
+	this.ads.init();
+
+	this.ads.gpt.clearPageTargetingForKey();
+	assert.equal(googletag.pubads().clearTargeting.callCount, 0, 'all params are not accidentally cleared');
+
+	// delete mock
+	delete window.googletag;
+	this.ads.gpt.clearPageTargetingForKey('test');
+	assert.ok(errorSpy.calledWith('Attempting to clear page targeting before the GPT library has initialized'), 'warns that googletag is not available');
+
+	// reinstate mock
+	window.googletag = this.gpt;
+});
 
 QUnit.test('set sync rendering', function(assert) {
 	this.ads.init({ gpt: {rendering: 'sync'}});
