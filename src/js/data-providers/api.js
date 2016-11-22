@@ -73,6 +73,7 @@ Api.prototype.reset = function() {
 		if(responseObj.dfp && responseObj.dfp.targeting) {
 			responseObj.dfp.targeting.forEach(kv => {
 				this.instance.targeting.remove(kv.key);
+				this.instance.gpt.clearPageTargetingForKey(kv.key);
 			});
 		}
 	})
