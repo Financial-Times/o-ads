@@ -93,21 +93,36 @@ function setRenderingMode(gptConfig) {
 * @memberof GPT
 * @lends GPT
 */
-function setPageTargeting(targeting) {
-
-	function setTargeting(key, value) {
-		googletag.pubads().setTargeting(key, value);
-	}
-
-	if (utils.isPlainObject(targeting)) {
-		Object.keys(targeting).forEach(function(param) {
-			googletag.cmd.push(setTargeting.bind(null, param, targeting[param]));
+function setPageTargeting(targetingData) {
+	if (utils.isPlainObject(targetingData)) {
+		googletag.cmd.push(() => {
+			const pubads = googletag.pubads();
+			Object.keys(targetingData).forEach(key => {
+				pubads.setTargeting(key, targetingData[key])
+			});
 		});
 	} else {
-		utils.log.warn('invalid targeting object passed', targeting);
+		utils.log.warn('invalid targeting object passed', targetingData);
 	}
 
-	return targeting;
+	return targetingData;
+}
+
+/**
+* Removes page targeting for a specified key from GPT ad calls
+*/
+function clearPageTargetingForKey(key) {
+	if (!window.googletag) {
+		utils.log.warn('Attempting to clear page targeting before the GPT library has initialized');
+		return;
+	}
+	if (!key) {
+		utils.log.warn('Refusing to unset all keys - a key must be specified');
+		return;
+	}
+	googletag.cmd.push(() => {
+		googletag.pubads().clearTargeting(key);
+	});
 }
 
 /**
@@ -455,6 +470,7 @@ function updatePageTargeting(override) {
 module.exports.init = init;
 module.exports.updateCorrelator = updateCorrelator;
 module.exports.updatePageTargeting = updatePageTargeting;
+module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
 
 module.exports.debug = () => {
 	const log = utils.log;

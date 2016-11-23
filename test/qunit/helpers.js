@@ -32,7 +32,9 @@ module.exports.createDummyFrame = function (content, target) {
 
 module.exports.fixtures = {
 	user: require('../fixtures/user-api-response.json'),
+	userAnonymous: require('../fixtures/user-api-anonymous-response.json'),
 	content: require('../fixtures/content-api-response.json'),
+	anotherContent: require('../fixtures/another-content-api-response.json'),
 	concept: require('../fixtures/concept-api-response.json')
 };
 

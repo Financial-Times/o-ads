@@ -7,6 +7,7 @@ Ads.prototype.config = require('./src/js/config');
 Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
+Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
@@ -21,53 +22,33 @@ Ads.prototype.init = function(options) {
 	this.config(options);
 	const targetingApi = this.config().targetingApi
 	if(targetingApi) {
-		return Promise.all([fetchData(targetingApi.user, true), fetchData(targetingApi.page)])
-		.then(response => {
-
-			for(let i = 0; i < response.length; i++){
-				let responseObj = response[i]
-				let keys = ['user', 'page'];
-				let kruxObj = {}
-
-				if(responseObj.krux && responseObj.krux.attributes) {
-					kruxObj[keys[i]] = this.utils.buildObjectFromArray(responseObj.krux.attributes)
-					this.krux.add(kruxObj)
-				}
-
-				if(responseObj.dfp && responseObj.dfp.targeting) {
-					this.targeting.add(this.utils.buildObjectFromArray(responseObj.dfp.targeting));
-				}
-
-				if(targetingApi.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
-					const gpt = this.config('gpt');
-					/* istanbul ignore else  */
-					if(gpt && gpt.zone) {
-						gpt.zone = responseObj.dfp.adUnit.join('/');
-					}
-				}
-			}
-			return this.initLibrary();
-		})
-		.catch(this.initLibrary);
+		return this.api.init(targetingApi, this)
+		.then(this.initLibrary.bind(this))
+		.catch(this.initLibrary.bind(this));
 	} else {
 		return Promise.resolve(this.initLibrary());
 	}
 };
 
-const fetchData = function(target, withCredentials) {
-  if(!target) { return Promise.resolve({}) };
-	const opts = {
-		timeout: 2000,
-		// temporary solution for [next.]ft.com > IE9
-		useCorsProxy: true
-	};
-	if(withCredentials) {
-		opts.credentials = 'include';
+Ads.prototype.updateContext = function(options, isNewPage) {
+	this.config(options);
+
+	if(options.targetingApi) {
+		this.api.reset();
+		return this.api.init(options.targetingApi, this)
+			.then(() => {
+					this.gpt.updatePageTargeting(this.targeting.get());
+				/* istanbul ignore else */
+					if(this.config('krux')) {
+						this.krux.setAllAttributes();
+						this.krux.sendNewPixel(isNewPage);
+					}
+			});
+	} else {
+		return Promise.resolve();
 	}
-  return fetch(target, opts)
-	  .then(res => {return res.json()})
-  .catch(() => ({}));
-};
+
+}
 
 Ads.prototype.initLibrary = function() {
 	this.slots.init();

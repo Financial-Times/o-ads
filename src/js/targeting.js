@@ -12,7 +12,6 @@ Targeting.prototype.get = function() {
 		timestamp: this.timestamp,
 		responsive: this.responsive
 	};
-
 	utils.extend(parameters, this.getFromConfig(), this.searchTerm());
 
 	for (let item in methods) {
@@ -31,6 +30,13 @@ Targeting.prototype.add = function(obj) {
 		utils.extend(parameters, obj);
 	}
 };
+
+Targeting.prototype.remove = function(key) {
+	/* istanbul ignore else */
+	if(parameters[key]) {
+		delete parameters[key];
+	}
+}
 
 Targeting.prototype.clear = function() {
 	parameters = {};

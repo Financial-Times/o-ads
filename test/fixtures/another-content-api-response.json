@@ -1,0 +1,42 @@
+{
+    "uuid": "11111111-2222-3333-4444-555555555555",
+    "dfp": {
+        "targeting": [{
+            "name": "articleUUID",
+            "key": "auuid",
+            "value": "11111111-2222-3333-4444-555555555555"
+        }, {
+            "name": "admants",
+            "key": "ad",
+            "value": "s03,sm01"
+        }, {
+            "name": "categories",
+            "key": "ca",
+            "value": "random,answers,here"
+        }],
+        "adUnit": ["something", "else"]
+    },
+    "krux": {
+        "attributes": [{
+            "name": "authors",
+            "key": "authors",
+            "value": ["Jung-a Song1"]
+        }, {
+            "name": "genre",
+            "key": "genre",
+            "value": ["News2"]
+        }, {
+            "name": "primarySection",
+            "key": "primarySection",
+            "value": ["Technology3"]
+        }, {
+            "name": "specialReports",
+            "key": "specialReports",
+            "value": []
+        }, {
+            "name": "topics",
+            "key": "topics",
+            "value": ["Mobile devices4", "Batteries5"]
+        }]
+    }
+}
