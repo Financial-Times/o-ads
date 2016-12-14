@@ -242,6 +242,9 @@ function onRenderEnded(event) {
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
 	detail.iframe = document.getElementById(iframeId);
+	detail.iframe.setAttribute('tabindex', '-1');
+	detail.iframe.setAttribute('aria-hidden', 'true');
+	detail.iframe.setAttribute('role', 'presentation');
 	utils.broadcast('rendered', data);
 }
 
