@@ -245,6 +245,7 @@ function onRenderEnded(event) {
 	detail.iframe.setAttribute('tabindex', '-1');
 	detail.iframe.setAttribute('aria-hidden', 'true');
 	detail.iframe.setAttribute('role', 'presentation');
+	detail.iframe.setAttribute('title', 'Advertisement');
 	utils.broadcast('rendered', data);
 }
 
