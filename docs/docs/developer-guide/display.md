@@ -90,11 +90,21 @@ The `Responsive (2x2)` format is specifically used for creatives that respond to
 
 ## Targeting
 
-You can provide specific targeting key/values for a slot:
+Custom targeting involves sending key/value pairs in the Ad Request to DFP - these custom targeting parameters are used by Ad Ops to traffic specific ads to specific keys/values.
+There are two levels of targeting that can be applied, these are Page Level and Slot Level.
+
+### Page level
+Page level targeting will be appended to all ad calls on the page.
+Typically we will use the "dfp_targeting" element in the o-ads configuration object to pass page level targeting. The dfp_targeting element should take the form of a semi-colon delimited string. For example if we want to send a user-id and a page type as custom targeting parameters for all ads on a page:
+
+dfp_targeting : "user-id=123;page-type=article"
+
+### Slot level targeting
+You can provide specific targeting key/values for a slot, this is done via adding a data-o-ads-targeting attribute to the slot's mark-up:
 
 `data-o-ads-targeting="key=value;key2=value2;"`
 
-The most common use case for this is what is known as the `pos` key. This is used by AdOPs to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page, respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
+The most common use case for this is what is known as the `pos` key. This is used by AdOps to identify the position of the ad on the page. The most common values used at the FT are `pos=top` and `pos=mid` for the first and second ad on the page, respectively. However, when adding a new ad slot, this value should be confirmed with AdOps.
 
 ## Styling with Classes
 
