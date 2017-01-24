@@ -97,7 +97,7 @@ There are two levels of targeting that can be applied, these are Page Level and 
 Page level targeting will be appended to all ad calls on the page.
 Typically we will use the "dfp_targeting" element in the o-ads configuration object to pass page level targeting. The dfp_targeting element should take the form of a semi-colon delimited string. For example if we want to send a user-id and a page type as custom targeting parameters for all ads on a page:
 
-dfp_targeting : "user-id=123;page-type=article"
+`dfp_targeting : "user-id=123;page-type=article"`
 
 ### Slot level targeting
 You can provide specific targeting key/values for a slot, this is done via adding a data-o-ads-targeting attribute to the slot's mark-up:
