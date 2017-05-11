@@ -200,7 +200,7 @@ QUnit.test("makes use of custom set timeout when calling getPageData directly", 
 
   const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/content/16502d40-3559-11e7-99bd-13beb0903fa3', pageJSON);
 
-  const ads = this.ads.api.getPageData('16502d40-3559-11e7-99bd-13beb0903fa3', 300);
+  const ads = this.ads.api.getPageData('https://ads-api.ft.com/v1/content/16502d40-3559-11e7-99bd-13beb0903fa3', 300);
 
 
 	const lastCallOpts = apiCallMock.lastCall()[1];
