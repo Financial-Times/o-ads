@@ -194,6 +194,22 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 
 });
 
+QUnit.test("makes use of custom set timeout when calling getPageData directly", function(assert) {
+  const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+  const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/content/16502d40-3559-11e7-99bd-13beb0903fa3');
+
+  const ads = this.ads.api.getPageData('16502d40-3559-11e7-99bd-13beb0903fa3', 300);
+
+
+	const lastCallOpts = apiCallMock.lastCall()[1];
+	assert.equal(lastCallOpts.credentials, null);
+	assert.equal(lastCallOpts.timeout, 300);
+	assert.equal(lastCallOpts.useCorsProxy, true);
+
+});
+
 QUnit.test("does not overwrite existing data in page config", function(assert) {
   const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
@@ -554,5 +570,3 @@ QUnit.skip("allows single page app to update the concept targeting from API on t
 	});
 
 });
-
-
