@@ -212,20 +212,20 @@ Krux.prototype.setAllAttributes = function() {
 }
 
 Krux.prototype.resetAttributes = function(attributes) {
-	allAttributes = ['user', 'page', 'custom'];
+	const allAttributes = ['user', 'page', 'custom'];
 	attributes = Array.isArray(attributes) ? attributes : [attributes];
 	attributes = attributes
 		? attributes.map(attr => allAttributes.indexOf(attr) > -1)
 		: allAttributes;
-	['user', 'page', 'custom'].forEach(type => {
+	attributes.forEach(type => {
 		if(this.customAttributes[type]) {
 			Object.keys(this.customAttributes[type]).forEach(key => {
 				window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
 			});
+			delete this.customAttributes[type];
 		}
 	});
 
-	this.customAttributes = {};
 }
 
 Krux.prototype.debug = function() {
