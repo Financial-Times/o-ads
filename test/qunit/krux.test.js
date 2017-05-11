@@ -276,62 +276,17 @@ QUnit.test('resetAttributes resets all attributes', function(assert) {
 
 });
 
-QUnit.test('resetAttributes with a valid array of attributes resets just those', function(assert) {
+QUnit.test('resetSpecificAttributes resets just that attribute', function(assert) {
 	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
 
 	this.ads.init({ krux: { id: '112233' }});
 	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
 
-	this.ads.krux.resetAttributes(['user', 'page']);
-
-	assert.ok(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
-	assert.ok(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
-	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
-	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
-
-});
-
-QUnit.test('resetAttributes with an array of attributes only resets valid keys', function(assert) {
-	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
-
-	this.ads.init({ krux: { id: '112233' }});
-	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
-
-	this.ads.krux.resetAttributes(['notValid', 'page']);
+	this.ads.krux.resetSpecificAttribute('page');
 
 	assert.notOk(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
 	assert.ok(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
 	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
-	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
-
-});
-
-QUnit.test('resetAttributes with a string attribute will still work if valid key', function(assert) {
-	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
-
-	this.ads.init({ krux: { id: '112233' }});
-	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
-
-	this.ads.krux.resetAttributes('page');
-
-	assert.notOk(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
-	assert.ok(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
-	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
-	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
-
-});
-
-QUnit.test('resetAttributes with a non-array attribute will not do anything if not valid key', function(assert) {
-	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
-
-	this.ads.init({ krux: { id: '112233' }});
-	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
-
-	this.ads.krux.resetAttributes(true);
-
-	assert.notOk(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
-	assert.notOk(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
-	assert.notOk(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
 	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
 
 });
