@@ -16,11 +16,12 @@ Api.prototype.getUserData = function(target) {
 
 }
 
-Api.prototype.getPageData = function(target) {
+Api.prototype.getPageData = function(target, timeout) {
 	if(!target) { return Promise.resolve({}) };
 
+	timeout = timeout || 2000;
 	return fetch(target, {
-		timeout: 2000,
+		timeout: timeout,
 		useCorsProxy: true
 	})
 	.then( res => res.json())

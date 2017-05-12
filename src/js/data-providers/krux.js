@@ -81,7 +81,7 @@ Krux.prototype.init = function() {
 /**
 * retrieve Krux values from localstorage or cookies in older browsers.
 * @name retrieve
-* @memberof Krux 
+* @memberof Krux
 * @lends Krux
 */
 Krux.prototype.retrieve = function(name) {
@@ -179,7 +179,7 @@ Krux.prototype.events.fire = function(id, attrs) {
 
 Krux.prototype.events.init = function() {
 	let event;
-    const configured = config('krux') && config('krux').events;
+	const configured = config('krux') && config('krux').events;
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(configured)) {
 		for (event in configured) {
@@ -221,6 +221,15 @@ Krux.prototype.resetAttributes = function() {
 	});
 
 	this.customAttributes = {};
+}
+
+Krux.prototype.resetSpecificAttribute = function(type) {
+	if(this.customAttributes[type]) {
+		Object.keys(this.customAttributes[type]).forEach(key => {
+			window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
+		});
+		delete this.customAttributes[type];
+	}
 }
 
 Krux.prototype.debug = function() {

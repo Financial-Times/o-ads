@@ -275,3 +275,18 @@ QUnit.test('resetAttributes resets all attributes', function(assert) {
 	assert.ok(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
 
 });
+
+QUnit.test('resetSpecificAttributes resets just that attribute', function(assert) {
+	this.ads.krux.add({user: { "key": "value" }, page: { "key1": "value", "key2": false }, custom: { "key": "value" }});
+
+	this.ads.init({ krux: { id: '112233' }});
+	assert.ok(window.Krux.withArgs("set", "user_attr_key", "value").calledOnce, "user attributes sent to Krux");
+
+	this.ads.krux.resetSpecificAttribute('page');
+
+	assert.notOk(window.Krux.withArgs("set", "user_attr_key", null).calledOnce, "user attributes nulled out");
+	assert.ok(window.Krux.withArgs("set", "page_attr_key1", null).calledOnce, "page attributes nulled out");
+	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
+	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
+
+});
