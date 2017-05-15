@@ -97,6 +97,7 @@ function setPageTargeting(targetingData) {
 	if (utils.isPlainObject(targetingData)) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
+			pubads.clearTargeting();
 			Object.keys(targetingData).forEach(key => {
 				pubads.setTargeting(key, targetingData[key])
 			});
