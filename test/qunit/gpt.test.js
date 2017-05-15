@@ -78,7 +78,7 @@ QUnit.test('unsetting page targeting catches and warns when about to unset all o
 	this.ads.init();
 
 	this.ads.gpt.clearPageTargetingForKey();
-	assert.equal(googletag.pubads().clearTargeting.callCount, 0, 'all params are not accidentally cleared');
+	assert.ok(errorSpy.calledWith('Refusing to unset all keys - a key must be specified'), 'all params are not accidentally cleared');
 
 	// delete mock
 	delete window.googletag;
