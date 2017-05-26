@@ -2,7 +2,7 @@ machine:
   node:
     version: 4.4.0
   post:
-    - npm install -g Financial-Times/origami-build-tools#node4
+    - npm install -g Financial-Times/origami-build-tools
 dependencies:
   post:
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz

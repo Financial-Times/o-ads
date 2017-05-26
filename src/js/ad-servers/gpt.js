@@ -320,10 +320,11 @@ const slotMethods = {
 	*	Tell gpt to request an ad
 	*/
 	display: function() {
-		window.googletag.cmd.push(() => {
-			googletag.display(this.gpt.id);
-		});
-		return this;
+	  window.googletag.cmd.push(() => {
+	    utils.broadcast('gptDisplay');
+	    googletag.display(this.gpt.id);
+	  });
+	  return this;
 	},
 	/**
 	* Set the DFP unit name for the slot.
