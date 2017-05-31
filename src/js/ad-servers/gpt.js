@@ -97,7 +97,6 @@ function setPageTargeting(targetingData) {
 	if (utils.isPlainObject(targetingData)) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
-			pubads.clearTargeting();
 			Object.keys(targetingData).forEach(key => {
 				pubads.setTargeting(key, targetingData[key])
 			});
@@ -466,6 +465,10 @@ function updateCorrelator() {
 function updatePageTargeting(override) {
 	if (window.googletag) {
 		const params = utils.isPlainObject(override) ? override : targeting.get();
+		if (!override) {
+			const pubads = googletag.pubads();
+			pubads.clearTargeting();
+		}
 		setPageTargeting(params);
 	}
 	else {
