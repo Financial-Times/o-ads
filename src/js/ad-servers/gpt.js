@@ -466,8 +466,9 @@ function updatePageTargeting(override) {
 	if (window.googletag) {
 		const params = utils.isPlainObject(override) ? override : targeting.get();
 		if (!override) {
-			const pubads = googletag.pubads();
-			pubads.clearTargeting();
+			googletag.cmd.push(() => {
+				googletag.pubads().clearTargeting();
+			});
 		}
 		setPageTargeting(params);
 	}
