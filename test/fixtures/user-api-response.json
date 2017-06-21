@@ -1,5 +1,5 @@
 {
-    "uuid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+    "uuid": "11111111-2222-3333-4444-555555555555",
     "dfp": {
         "targeting": [{
             "name": "subscription",
@@ -16,7 +16,7 @@
         }, {
             "name": "User UUID",
             "key": "guid",
-            "value": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec"
+            "value": "11111111-2222-3333-4444-555555555555"
         }, {
             "name": "Derived gender from redshift",
             "key": "gender",
@@ -31,7 +31,7 @@
         }, {
             "name": "User UUID",
             "key": "guid",
-            "value": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec"
+            "value": "11111111-2222-3333-4444-555555555555"
         }, {
             "name": "subscription",
             "key": "subscription_level",

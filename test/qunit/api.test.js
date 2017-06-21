@@ -67,7 +67,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 		const config = ads.config();
 		const dfp_targeting =  {
 					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+					"guid": "11111111-2222-3333-4444-555555555555",
 					"slv": "int",
 					"loggedIn": true,
 					"gender": "F"
@@ -75,7 +75,7 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 		const krux_targeting =  {
 						"user": {
 						"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-						"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+						"guid": "11111111-2222-3333-4444-555555555555",
 						"subscription_level": "int",
 						"loggedIn": true,
 						"gender": "F"
@@ -122,7 +122,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 		const dfp_targeting =  {
 					"custom_key": "custom_value",
 					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+					"guid": "11111111-2222-3333-4444-555555555555",
 					"slv": "int",
 					"loggedIn": true,
 					"gender": "F"
@@ -130,7 +130,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 		const krux_targeting =  {
 					"custom_key": "custom value",
 					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+					"guid": "11111111-2222-3333-4444-555555555555",
 					"subscription_level": "int",
 					"loggedIn": true,
 					"gender": "F"
@@ -375,7 +375,7 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 		// expectations
 		const dfp_targeting =  {
 					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+					"guid": "11111111-2222-3333-4444-555555555555",
 					"slv": "int",
 					"loggedIn": true,
 					"gender": "F"
@@ -383,7 +383,7 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 		const krux_targeting =  {
 						"user": {
 						"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-						"guid": "d1359df2-4fe6-4dd6-bb11-eb4342f352ec",
+						"guid": "11111111-2222-3333-4444-555555555555",
 						"subscription_level": "int",
 						"loggedIn": true,
 						"gender": "F"
