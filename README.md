@@ -10,6 +10,7 @@ Each targeting/tracking supplier will require their own configuration and setup.
 Demos for all ads currently served across ft.com are available in the [Origami Registry](http://registry.origami.ft.com/components/o-ads).
 
 ### [Documentation](https://financial-times.github.io/o-ads)
+Includes detailed installation and set-up instructions, along with details about the module.
 
 ## Migration Guide
 
@@ -18,4 +19,3 @@ Demos for all ads currently served across ft.com are available in the [Origami R
   - o-ads v7 introduces new major versions of [o-colors](https://registry.origami.ft.com/components/o-colors) and [o-visual-effects](https://registry.origami.ft.com/components/o-visual-effects). If you're using o-colors v3 or earlier or o-visual-effects v1, your build will break. Update to o-colors v4 and o-visual-effects v2 to resolve conflicts.
   - No other breaking changes in this release.
 
-Includes detailed installation and set-up instructions, along with details about the module.
