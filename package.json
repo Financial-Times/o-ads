@@ -57,5 +57,8 @@
         "node_modules/.bin/secret-squirrel"
       ]
     }
+  },
+  "release": {
+    "analyzeCommits": "simple-commit-message"
   }
 }

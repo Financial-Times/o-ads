@@ -2,7 +2,6 @@
 const config = require('./config');
 const utils = require('./utils');
 let parameters = {};
-
 function Targeting() {
 }
 
@@ -12,15 +11,13 @@ Targeting.prototype.get = function() {
 		timestamp: this.timestamp,
 		responsive: this.responsive
 	};
-	utils.extend(parameters, this.getFromConfig(), this.searchTerm());
-
+	utils.extend(parameters, this.getFromConfig(), this.searchTerm(), this.socialFlow());
 	for (let item in methods) {
 	/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
 			utils.extend(parameters, methods[item]());
 		}
 	}
-
 	return parameters;
 };
 
@@ -56,6 +53,19 @@ Targeting.prototype.getFromConfig = function() {
 	}
 
 	return targeting;
+};
+
+/**
+ * If there is a query parameter called socialflow=xxx, we need to add it
+ * as a tag
+ */
+Targeting.prototype.socialFlow = function() {
+	const sf = utils.getQueryParamByName('socialflow');
+	if(!!sf) {
+		return {
+			socialflow: sf
+		}
+	}
 };
 
 Targeting.prototype.getSocialReferrer = function() {

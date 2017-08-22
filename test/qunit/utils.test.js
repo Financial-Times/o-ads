@@ -386,6 +386,14 @@ QUnit.test("builds an object from array", function(assert) {
             "name": "loggedInStatus",
             "key": "loggedIn",
             "value": true
-        }]
+        }];
 	assert.deepEqual(this.ads.utils.buildObjectFromArray(array), { "slv": "int", "loggedIn": true }, 'converts array to object')
-})
+});
+
+QUnit.test("getQueryParamByName", function(assert) {
+	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow=hey'), 'hey');
+    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?param=shoe&socialflow=hey'), 'hey');
+    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow=hey+there'), 'hey there');
+    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com'), null);
+    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow='), '');
+});
