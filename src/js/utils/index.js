@@ -346,6 +346,23 @@ module.exports.getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
 
+
+/**
+ * Get a query string parameter by name from a url
+ * @param name
+ * @param url
+ * @returns {string | null}
+ */
+module.exports.getQueryParamByName = function(name, url) {
+    url = url || window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
 /**
 * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
 * @returns {string}
