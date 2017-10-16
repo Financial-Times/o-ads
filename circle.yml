@@ -13,7 +13,7 @@ dependencies:
     - "node_modules"
 test:
   override:
-    - obt demo --demo-filter pa11y
+    - obt demo --demo-filter pa11y --suppress-errors
     - ./node_modules/.bin/obt test
     - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
         background: true
