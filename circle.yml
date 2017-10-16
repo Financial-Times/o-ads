@@ -1,8 +1,8 @@
 machine:
   node:
-    version: 4.4.0
+    version: 6
   post:
-    - npm install -g Financial-Times/origami-build-tools
+    - npm install -g Financial-Times/origami-build-tools@^7
 dependencies:
   post:
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
@@ -13,6 +13,7 @@ dependencies:
     - "node_modules"
 test:
   override:
+    - obt demo --demo-filter pa11y
     - ./node_modules/.bin/obt test
     - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
         background: true
