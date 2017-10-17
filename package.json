@@ -58,6 +58,9 @@
       ]
     }
   },
+  "engines": {
+    "node": "^8.6.0"
+  },
   "release": {
     "analyzeCommits": "simple-commit-message"
   }

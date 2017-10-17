@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 6
+    version: 8
   post:
     - npm install -g origami-build-tools@^7
 dependencies:
