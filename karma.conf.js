@@ -17,7 +17,7 @@ let options = {
 	basePath: '',
 	autoWatch: true,
 	singleRun: true,
-	frameworks: ['browserify', 'qunit'],
+	frameworks: ['browserify', 'mocha'],
 	files: [
 		'tests/qunit/styles.css',
 		'build/main.css',
@@ -49,7 +49,7 @@ let options = {
 		"karma-browserify",
     "karma-chrome-launcher",
     "karma-coverage",
-    "karma-qunit"
+    "karma-mocha"
 	],
 };
 
