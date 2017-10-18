@@ -199,7 +199,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
 		Object.keys(attributes).forEach(item => {
-			window.Krux('set', prefix + item, attributes[item]);  // eslint-disable-line new-cap
+			window.Krux('set', prefix + item, attributes[item]); // eslint-disable-line new-cap
 		});
 	}
 };
