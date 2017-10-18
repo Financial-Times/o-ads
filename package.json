@@ -47,7 +47,7 @@
       "lodash/date/now"
     ],
     "karma": {
-      ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
+      ".*lodash/date/now.js$": "./tests/qunit/mocks/now.js"
     }
   },
   "license": "MIT",

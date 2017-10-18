@@ -5,7 +5,7 @@
 const oViewport = require('o-viewport');
 
 /* a URL that can be used in tests without causing 404 errors */
-module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
+module.exports.nullUrl = 'base/tests/qunit/mocks/null.js';
 
 /* container for fixtures */
 module.exports.fixturesContainer = document.getElementById('qunit-fixtures');
