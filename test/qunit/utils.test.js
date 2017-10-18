@@ -153,15 +153,15 @@ QUnit.module('utils.extend');
 QUnit.test('extend method', function(assert) {
 
 	let settings = { 'xnumber1': 5, 'xnumber2': 7, 'xstring1': 'peter', 'xstring2': 'pan' };
-	let options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
-	let optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
-	let merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' };
-	let deep1 = { 'foo': { 'bar': true } };
-	let deep2 = { 'foo': { 'baz': true }};
-	let deep2copy = { 'foo': { 'baz': true }};
-	let deepmerged = { 'foo': { 'bar': true, 'baz': true }};
-	let arr = [1, 2, 3];
-	let nestedarray = { 'arr': arr };
+	const options = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	const optionsCopy = { 'xnumber2': 1, 'xstring2': 'x', 'xxx': 'newstring' };
+	const merged = { 'xnumber1': 5, 'xnumber2': 1, 'xstring1': 'peter', 'xstring2': 'x', 'xxx': 'newstring' };
+	const deep1 = { 'foo': { 'bar': true } };
+	const deep2 = { 'foo': { 'baz': true }};
+	const deep2copy = { 'foo': { 'baz': true }};
+	const deepmerged = { 'foo': { 'bar': true, 'baz': true }};
+	const arr = [1, 2, 3];
+	const nestedarray = { 'arr': arr };
 
 	this.ads.utils.extend(settings, options);
 	assert.deepEqual(settings, merged, 'Check if extended: settings must be extended');
@@ -263,7 +263,7 @@ QUnit.module('utils miscellanious methods');
 
 QUnit.test('hash method', function(assert) {
 	let result;
-	let test = 'a:1,b:2,c:3,a:12';
+	const test = 'a:1,b:2,c:3,a:12';
 	result = this.ads.utils.hash(test, ',', ':');
 
 	assert.ok(this.ads.utils.isObject(result), 'the result is an object');
@@ -365,35 +365,35 @@ QUnit.test('attach method failedi with only an error callback specified', functi
 });
 
 QUnit.test('fail nicely when cannot find a name of the ad from an iframe', function(assert) {
-		const frameContentWindow = this.createDummyFrame('test').window;
-		const result = this.utils.iframeToSlotName(frameContentWindow);
-		assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
+	const frameContentWindow = this.createDummyFrame('test').window;
+	const result = this.utils.iframeToSlotName(frameContentWindow);
+	assert.notOk(result, 'return false when no data-o-ads-name found on any of the parent nodes');
 });
 
 QUnit.test('find a name of the ad from an iframe', function(assert) {
-		const node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
-		const frameContentWindow = this.createDummyFrame('test', node).window;
-		const result = this.utils.iframeToSlotName(frameContentWindow);
-		assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
+	const node = this.fixturesContainer.add('<div data-o-ads-name="iframe-advert-test"></div>');
+	const frameContentWindow = this.createDummyFrame('test', node).window;
+	const result = this.utils.iframeToSlotName(frameContentWindow);
+	assert.equal(result, 'iframe-advert-test', 'return value of first data-o-ads-name found on any of the parent nodes');
 });
 
 QUnit.test("builds an object from array", function(assert) {
-	let array = [{
-            "name": "subscription",
-            "key": "slv",
-            "value": "int"
-        }, {
-            "name": "loggedInStatus",
-            "key": "loggedIn",
-            "value": true
-        }];
-	assert.deepEqual(this.ads.utils.buildObjectFromArray(array), { "slv": "int", "loggedIn": true }, 'converts array to object')
+	const array = [{
+		"name": "subscription",
+		"key": "slv",
+		"value": "int"
+	}, {
+		"name": "loggedInStatus",
+		"key": "loggedIn",
+		"value": true
+	}];
+	assert.deepEqual(this.ads.utils.buildObjectFromArray(array), { "slv": "int", "loggedIn": true }, 'converts array to object');
 });
 
 QUnit.test("getQueryParamByName", function(assert) {
 	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow=hey'), 'hey');
-    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?param=shoe&socialflow=hey'), 'hey');
-    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow=hey+there'), 'hey there');
-    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com'), null);
-    assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow='), '');
+	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?param=shoe&socialflow=hey'), 'hey');
+	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow=hey+there'), 'hey there');
+	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com'), null);
+	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow='), '');
 });

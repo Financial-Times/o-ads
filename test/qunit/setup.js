@@ -34,7 +34,7 @@ const helpers = require('./helpers.js');
 
 // Curry helper methods
 function addHelpers(obj) {
-	for (let key in helpers) {
+	for (const key in helpers) {
 		if (helpers.hasOwnProperty(key)) {
 			obj[key] = helpers[key];
 		}

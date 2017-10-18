@@ -70,8 +70,8 @@ function slotRender(slot, color) {
 
 	slot = slots[slot];
 
-	const trackingDiv = (slot.hasOwnProperty('outOfPage') && slot.id !== 'delayedimpression-missing-tracking-div-gpt') ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
-	const html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\'';
+	const trackingDiv = slot.hasOwnProperty('outOfPage') && slot.id !== 'delayedimpression-missing-tracking-div-gpt' ? '<div id="tracking" data-o-ads-impression-url="https://www.ft.com"></div>' : '';
+	const html = 'javascript:\'<html><body style="background:' + color + ';">'+trackingDiv+'</body></html>\''; // eslint-disable-line no-script-url
 	if (slot.responsive) {
 		size = getResponsiveSizes(slot.sizes)[0];
 	} else {
@@ -102,7 +102,7 @@ function slotRenderEnded(slot) {
 	slot = slots[slot];
 	const size = [slot.iframe.width, slot.iframe.height];
 	const event = {
-		isEmpty: !!slot.iframe.width,
+		isEmpty: Boolean(slot.iframe.width),
 		creativeId: Math.floor(Math.random() * 1e11),
 		lineItemId: Math.floor(Math.random() * 1e9),
 		serviceName: 'publisher_ads',

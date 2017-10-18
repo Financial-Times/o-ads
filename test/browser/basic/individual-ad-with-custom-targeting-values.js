@@ -13,14 +13,14 @@ module.exports = {
 		browser
 			// give time for the advert to initialise
 			.pause(8000)
-				.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
-				// switch focus to first iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_0')
-				// wait for 1 second for advert to appear
-				.waitForElementPresent('img', 15000, 'Advert image is visible')
-				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14891015459176126032')
-				// switch focus back to main page
-				.frame(null);
+			.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
+		// switch focus to first iframe
+			.frame('google_ads_iframe_/5887/test.5887.origami_0')
+		// wait for 1 second for advert to appear
+			.waitForElementPresent('img', 15000, 'Advert image is visible')
+		// make sure we can see the correct URL
+			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14891015459176126032')
+		// switch focus back to main page
+			.frame(null);
 	}
 };

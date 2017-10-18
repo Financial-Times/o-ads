@@ -20,11 +20,11 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
-	const targetingApi = this.config().targetingApi
+	const targetingApi = this.config().targetingApi;
 	if(targetingApi) {
 		return this.api.init(targetingApi, this)
-		.then(this.initLibrary.bind(this))
-		.catch(this.initLibrary.bind(this));
+			.then(this.initLibrary.bind(this))
+			.catch(this.initLibrary.bind(this));
 	} else {
 		return Promise.resolve(this.initLibrary());
 	}
@@ -37,18 +37,18 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		this.api.reset();
 		return this.api.init(options.targetingApi, this)
 			.then(() => {
-					this.gpt.updatePageTargeting(this.targeting.get());
+				this.gpt.updatePageTargeting(this.targeting.get());
 				/* istanbul ignore else */
-					if(this.config('krux')) {
-						this.krux.setAllAttributes();
-						this.krux.sendNewPixel(isNewPage);
-					}
+				if(this.config('krux')) {
+					this.krux.setAllAttributes();
+					this.krux.sendNewPixel(isNewPage);
+				}
 			});
 	} else {
 		return Promise.resolve();
 	}
 
-}
+};
 
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
@@ -65,7 +65,7 @@ const initAll = function() {
 	return ads.init().then(() => {
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
-	})
+	});
 };
 
 Ads.prototype.debug = function (){

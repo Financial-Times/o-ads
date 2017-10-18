@@ -105,7 +105,7 @@ document.body.addEventListener = function(type, listener) {
 document.body.removeEventListener = function(type, listener) {
 	let remove;
 	sandbox._eventListeners.forEach(function(item, index) {
-		if (item.type === type && listener === listener) {
+		if (item.type === type && listener) {
 			remove = index;
 		}
 	});
@@ -128,7 +128,7 @@ window.addEventListener = function(type, listener) {
 window.removeEventListener = function(type, listener) {
 	let remove;
 	sandbox._windowEventListeners.forEach(function(item, index) {
-		if (item.type === type && listener === listener) {
+		if (item.type === type && listener) {
 			remove = index;
 		}
 	});
@@ -176,7 +176,7 @@ module.exports.viewport = function(width, height) {
 		return {
 			height: height,
 			width: width
-		}
+		};
 	});
 
 };
@@ -225,7 +225,7 @@ module.exports.window = function(data) {
 
 /* Mock localStorage */
 module.exports.localStorage = function(data) {
-	let canMock = !!window.localStorage;
+	let canMock = Boolean(window.localStorage);
 	let fake;
 	if (canMock) {
 		// remember original local storage
@@ -237,7 +237,7 @@ module.exports.localStorage = function(data) {
 				},
 				setItem: function(key, value) {
 					data[key] = value;
-					return;
+
 				},
 				removeItem: function(key) {
 					delete data[key];

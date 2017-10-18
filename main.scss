@@ -6,9 +6,11 @@ $o-ads-is-silent: true !default;
 
 @if($o-ads-is-silent == false) {
 
-	@media print{
+	@media print {
 		.o-ads {
+			// sass-lint:disable no-important
 			display: none !important;
+			// sass-lint:enable no-important
 		}
 	}
 

@@ -24,7 +24,7 @@ QUnit.test("control tag is attached when initialised", function(assert) {
 QUnit.test('sets global Krux if one is not available yet', function(assert) {
 	delete window.Krux;
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
-	assert.ok((window.Krux), 'Krux is set in the init');
+	assert.ok(window.Krux, 'Krux is set in the init');
 });
 
 QUnit.test('adds a script from url when location contains krux src', function(assert) {
@@ -233,8 +233,8 @@ QUnit.test("debug logs segment limit data if set", function(assert) {
 });
 
 QUnit.test("adds data to config", function(assert) {
-	let input = { "key" : "value" }
-	this.ads.krux.add(input)
+	const input = { "key" : "value" };
+	this.ads.krux.add(input);
 	assert.deepEqual(this.ads.krux.customAttributes, input, 'win');
 });
 

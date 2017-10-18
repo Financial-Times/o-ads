@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // eslint-disable-line strict
 
 require('isomorphic-fetch');
 const notifySauceLabs = require('notify-saucelabs');

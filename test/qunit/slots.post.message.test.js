@@ -7,7 +7,6 @@ QUnit.module('Slots - post message', {
 		errorStub = this.stub(this.utils.log, 'error');
 		window.scrollTo(0, 0);
 		const eventListeners = this.eventListeners = [];
-		eventListeners;
 		const _addEventListener = window.addEventListener;
 		window.addEventListener = function (type, handler) {
 			if(type === 'message'){
@@ -41,7 +40,7 @@ QUnit.test('Post message whoami message reply is sent', function (assert) {
 		assert.notOk(slot.collapse.called, 'the collapse method is not called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', 	function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
@@ -67,7 +66,7 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 		assert.ok(slot.collapse.called, 'the collapse method is called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.whoami", "collapse": true}', '*');
@@ -93,7 +92,7 @@ QUnit.test('Post message whoami message with isMaster will fire event on compani
 		assert.notOk(masterSlot.fire.called, 'the event method is not called on the master');
 		assert.notOk(notCompanionSlot.fire.called, 'the collapse method is not called on a non companion');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', function (slot) {
 		if(slot.detail.name === 'master') {
@@ -227,7 +226,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
@@ -251,7 +250,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
@@ -275,7 +274,7 @@ QUnit.test('Post message replies with correct disable default swipe handler para
 		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
-	}.bind(this));
+	});
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
@@ -299,7 +298,7 @@ QUnit.test('Post message catches the event when the message comes not from a slo
 		}, 500);
 	});
 	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
+	this.ads.slots.initSlot(container);
 });
 
 QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
@@ -313,10 +312,10 @@ QUnit.test('Post message collapse calls the collapse method on the slot', functi
 		window.postMessage('{"collapse":false,"mastercompanion":false,"customMessages":{"arrow-buttons-disabled":"true"},"type":"oAds.whoami","name":"custom-message"}', '*');
 
 	});
-document.body.addEventListener("oAds.customMessages", function() {
+	document.body.addEventListener("oAds.customMessages", function() {
 	 assert.equal(event.detail.name, 'custom-message', 'test slot fired the customMessages event');
 	 	done();
 	});
 	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
+	this.ads.slots.initSlot(container);
 });

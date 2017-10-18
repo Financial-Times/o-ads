@@ -27,7 +27,7 @@ function invokeMethodOnSlots(names, method, callback) {
 	slots.forEach(run.bind(null, this, method));
 
 	if(utils.isFunction(callback)){
-			callback.call(this, slots);
+		callback.call(this, slots);
 	}
 
 	return this;
@@ -60,14 +60,14 @@ function findFormatBySize(size) {
 		return false;
 	}
 	const formats = config('formats');
-	for(let prop in formats) {
+	for(const prop in formats) {
 		/* istanbul ignore else	*/
 		if(formats.hasOwnProperty(prop)) {
 
 			let sizes = formats[prop].sizes;
 			sizes = utils.isArray(sizes[0]) ? sizes : [sizes];
 			const match = sizes.filter(function(s) {
-				return (s[0] === parseInt(size[0]) && s[1] === parseInt(size[1]));
+				return s[0] === parseInt(size[0], 10) && s[1] === parseInt(size[1], 10);
 			});
 			if(match.length) {
 				return prop;
@@ -109,10 +109,10 @@ Slots.prototype.clear = function(names) {
 */
 Slots.prototype.destroy = function(names) {
 	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
-			names.forEach(name => {
-				this[name] = null;
-				delete this[name];
-			});
+		names.forEach(name => {
+			this[name] = null;
+			delete this[name];
+		});
 	});
 };
 
@@ -172,7 +172,7 @@ Slots.prototype.initRefresh = function() {
 					clearInterval(refresh);
 				}
 			};
-			setInterval(refresh, (parseFloat(data.time) || 1) * 1000)
+			setInterval(refresh, (parseFloat(data.time) || 1) * 1000);
 		}
 	}
 
@@ -269,9 +269,9 @@ Slots.prototype.initPostMessage = function() {
 							}
 						});
 					}
-          if (data.customMessages && typeof data.customMessages === "object") {
-							slot.fire('customMessages', data.customMessages);
-          }
+					if (data.customMessages && typeof data.customMessages === "object") {
+						slot.fire('customMessages', data.customMessages);
+					}
 					if(slot.disableSwipeDefault) {
 						messageToSend.disableDefaultSwipeHandler = true;
 					}
@@ -308,15 +308,10 @@ Slots.prototype.initPostMessage = function() {
 
 Slots.prototype.initLazyLoading = function(slotConfig) {
 	const lazyLoadingConfig = config('lazyLoad') || slotConfig;
-	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
-	/* istanbul ignore else	*/
-	if('IntersectionObserver' in window && !this.lazyLoadObserver && !!lazyLoadingConfig) {
-		let options = {};
-
-		function onChange(changes) {
-			//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
-			/* istanbul ignore next */
-			changes
+	function onChange(changes) {
+		//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
+		/* istanbul ignore next */
+		changes
 			.filter(a => a.intersectionRect.height || a.intersectionRect.width || a.intersectionRect.top || a.intersectionRect.left)
 			.sort((a,b) => a.intersectionRect.top - b.intersectionRect.top)
 			.forEach((change) => {
@@ -325,10 +320,14 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 				if(slotName) {
 					invokeMethodOnSlots.call(this, slotName, 'render');
 				}
-			})
-		}
+			});
+	}
+	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
+	/* istanbul ignore else	*/
+	if('IntersectionObserver' in window && !this.lazyLoadObserver && Boolean(lazyLoadingConfig)) {
+		const options = {};
 		/* istanbul ignore else	*/
-		if(typeof lazyLoadingConfig  === 'object') {
+		if(typeof lazyLoadingConfig === 'object') {
 			/* istanbul ignore else	*/
 			if(lazyLoadingConfig.viewportMargin){
 				options.rootMargin = lazyLoadingConfig.viewportMargin;
@@ -378,8 +377,8 @@ Slots.prototype.debug = function (){
 			'unit name': slot.gpt.unitName,
 			'creative id': slot.gpt.creativeId || 'N/A',
 			'line item id': slot.gpt.lineItemId || 'N/A',
-			size: (utils.isArray(slot.gpt.size) && slot.gpt.size.join('×')) || (slot.gpt.isEmpty && 'empty') || 'N/A',
-			sizes: (utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ')) || 'responsive slot',
+			size: utils.isArray(slot.gpt.size) && slot.gpt.size.join('×') || slot.gpt.isEmpty && 'empty' || 'N/A',
+			sizes: utils.isArray(slot.sizes) && slot.sizes.map(function(item){ return item.join('×'); }).join(', ') || 'responsive slot',
 			targeting: Object.keys(slot.targeting).map(function (param) { return `${param}=${slot.targeting[param]}`;} ).join(', ')
 		};
 		data.push(row);
