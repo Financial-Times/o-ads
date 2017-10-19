@@ -1,3 +1,5 @@
+'use-strict';
+
 const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
@@ -9,7 +11,7 @@ const targeting = require('../targeting');
  * @constructor
 */
 function Krux() {
- this.customAttributes = {}
+	this.customAttributes = {};
 }
 
 Krux.prototype.add = function (target) {
@@ -19,7 +21,7 @@ Krux.prototype.add = function (target) {
 
 
 Krux.prototype.sendNewPixel = function(pageLoad) {
-	const pixel = window.Krux && window.Krux('require:pixel');
+	const pixel = window.Krux && window.Krux('require:pixel'); // eslint-disable-line new-cap
 	/* istanbul ignore else */
 	if(pixel && pixel.send) {
 		if(pageLoad) {
@@ -27,8 +29,8 @@ Krux.prototype.sendNewPixel = function(pageLoad) {
 		} else {
 			pixel.send('', false);
 		}
-	};
-}
+	}
+};
 
 Krux.prototype.init = function() {
 	this.config = config('krux');
@@ -36,16 +38,16 @@ Krux.prototype.init = function() {
 
 		/* istanbul ignore else  */
 		if (!window.Krux) {
-			((window.Krux = function() {
+			(window.Krux = function() {
 				window.Krux.q.push(arguments);
 			}).q = []
-			);
+			;
 		}
 
 		this.api = window.Krux;
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
-			this.add(this.config.attributes)
+			this.add(this.config.attributes);
 		}
 
 		this.setAllAttributes();
@@ -155,7 +157,7 @@ Krux.prototype.events = {
 
 				window.addEventListener('load', function() {
 					const delEvnt = new Delegate(document.body);
-					for (let kEvnt in config) {
+					for (const kEvnt in config) {
 						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
@@ -197,7 +199,7 @@ Krux.prototype.setAttributes = function (prefix, attributes) {
 	/* istanbul ignore else  */
 	if(attributes){
 		Object.keys(attributes).forEach(item => {
-			window.Krux('set', prefix + item, attributes[item]);
+			window.Krux('set', prefix + item, attributes[item]); // eslint-disable-line new-cap
 		});
 	}
 };
@@ -209,28 +211,28 @@ Krux.prototype.setAllAttributes = function() {
 		this.setAttributes('user_attr_', this.customAttributes.user || {});
 		this.setAttributes('', this.customAttributes.custom || {});
 	}
-}
+};
 
 Krux.prototype.resetAttributes = function() {
 	['user', 'page', 'custom'].forEach(type => {
 		if(this.customAttributes[type]) {
 			Object.keys(this.customAttributes[type]).forEach(key => {
-				window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
+				window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null); // eslint-disable-line new-cap
 			});
 		}
 	});
 
 	this.customAttributes = {};
-}
+};
 
 Krux.prototype.resetSpecificAttribute = function(type) {
 	if(this.customAttributes[type]) {
 		Object.keys(this.customAttributes[type]).forEach(key => {
-			window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null);
+			window.Krux('set', type === 'custom' ? key : `${type}_attr_${key}`, null); // eslint-disable-line new-cap
 		});
 		delete this.customAttributes[type];
 	}
-}
+};
 
 Krux.prototype.debug = function() {
 	const log = utils.log;
@@ -238,50 +240,50 @@ Krux.prototype.debug = function() {
 		return;
 	}
 	log.start('Krux©');
-		log('%c id:', 'font-weight: bold', this.config.id);
+	log('%c id:', 'font-weight: bold', this.config.id);
 
-		if (this.config.limit) {
-			log('%c segment limit:', 'font-weight: bold', this.config.limit);
-		}
+	if (this.config.limit) {
+		log('%c segment limit:', 'font-weight: bold', this.config.limit);
+	}
 
-		if (this.config.attributes) {
-			const attributes = this.config.attributes;
-			log.start('Attributes');
-				log.start('Page');
-					log.attributeTable(attributes.page);
-				log.end();
-
-				log.start('User');
-					log.attributeTable(attributes.user);
-				log.end();
-
-				log.start('Custom');
-					log.attributeTable(attributes.custom);
-				log.end();
-			log.end();
-		}
-		if (this.config.events) {
-			const events = this.config.events;
-			log.start('Events');
-				log.start('Delegated');
-					log.table(events.delegated);
-				log.end();
-			log.end();
-		}
-
-		const targeting = this.targeting();
-		log.start('Targeting');
-			log.attributeTable(targeting);
+	if (this.config.attributes) {
+		const attributes = this.config.attributes;
+		log.start('Attributes');
+		log.start('Page');
+		log.attributeTable(attributes.page);
 		log.end();
 
-		const tags = Array.from(document.querySelectorAll(".kxinvisible"));
-		if (tags.length) {
-			log.start(`${tags.length} Supertag© scripts`);
-				tags.forEach(function(tag) {
-					log(tag.dataset.alias, tag.querySelector("script"));
-				});
-			log.end();
-		}
+		log.start('User');
+		log.attributeTable(attributes.user);
+		log.end();
+
+		log.start('Custom');
+		log.attributeTable(attributes.custom);
+		log.end();
+		log.end();
+	}
+	if (this.config.events) {
+		const events = this.config.events;
+		log.start('Events');
+		log.start('Delegated');
+		log.table(events.delegated);
+		log.end();
+		log.end();
+	}
+
+	const targeting = this.targeting();
+	log.start('Targeting');
+	log.attributeTable(targeting);
+	log.end();
+
+	const tags = Array.from(document.querySelectorAll(".kxinvisible"));
+	if (tags.length) {
+		log.start(`${tags.length} Supertag© scripts`);
+		tags.forEach(function(tag) {
+			log(tag.dataset.alias, tag.querySelector("script"));
+		});
+		log.end();
+	}
 	log.end();
 };
 

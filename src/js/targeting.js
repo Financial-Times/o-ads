@@ -12,7 +12,7 @@ Targeting.prototype.get = function() {
 		responsive: this.responsive
 	};
 	utils.extend(parameters, this.getFromConfig(), this.searchTerm(), this.socialFlow());
-	for (let item in methods) {
+	for (const item in methods) {
 	/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
 			utils.extend(parameters, methods[item]());
@@ -33,7 +33,7 @@ Targeting.prototype.remove = function(key) {
 	if(parameters[key]) {
 		delete parameters[key];
 	}
-}
+};
 
 Targeting.prototype.clear = function() {
 	parameters = {};
@@ -61,10 +61,10 @@ Targeting.prototype.getFromConfig = function() {
  */
 Targeting.prototype.socialFlow = function() {
 	const sf = utils.getQueryParamByName('socialflow');
-	if(!!sf) {
+	if(sf) {
 		return {
 			socialflow: sf
-		}
+		};
 	}
 };
 
@@ -105,9 +105,9 @@ Targeting.prototype.searchTerm = function() {
 	/* istanbul ignore else	*/
 	if (keywords && keywords !== '') {
 		keywords = unescape(keywords).toLowerCase()
-		.replace(/[';\^\+]/g, ' ')
-		.replace(/\s+/g, ' ')
-		.trim();
+			.replace(/[';\^\+]/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
 	}
 
 	return {kw: keywords};

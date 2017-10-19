@@ -16,19 +16,19 @@ process.env['BROWSERIFYSWAP_ENV'] = 'karma';
 let options = {
 	basePath: '',
 	autoWatch: true,
-	singleRun: false,
-	frameworks: ['browserify', 'qunit'],
+	singleRun: true,
+	frameworks: ['browserify', 'mocha'],
 	files: [
-		'test/qunit/styles.css',
+		'tests/qunit/styles.css',
 		'build/main.css',
 		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,IntersectionObserver',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/sinon-1.10.3/index.js',
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
-		'test/qunit/setup.js',
-		{ pattern: 'test/qunit/mocks/*', included: false },
-	 	'test/qunit/*.test.js',
+		'tests/qunit/setup.js',
+		{ pattern: 'tests/qunit/mocks/*', included: false },
+	 	'tests/qunit/*.test.js',
 	],
 	customLaunchers: {
 		Chrome_with_flags: {
@@ -42,9 +42,15 @@ let options = {
 	preprocessors: {
 		'main.js': ['browserify'],
 		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify'],
-		'test/qunit/api.test.js': ['browserify']
-	}
+		'tests/qunit/setup.js': ['browserify'],
+		'tests/qunit/api.test.js': ['browserify']
+	},
+	plugins: [
+		"karma-browserify",
+		"karma-chrome-launcher",
+		"karma-coverage",
+		"karma-mocha"
+	],
 };
 
 
@@ -84,7 +90,7 @@ const coverageChecks = {
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.browserify.transform.unshift(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
+	options.browserify.transform.unshift(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/tests/**'}]);
 	options.reporters.push('coverage');
 	options.coverageReporter = {
 		dir: 'reports/coverage/',

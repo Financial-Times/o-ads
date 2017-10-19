@@ -1,3 +1,5 @@
+'use-strict';
+
 const utils = require('./utils');
 const config = require('./config');
 
@@ -97,7 +99,7 @@ const convertLazyLoadBooleanToObject = (obj) => {
 	if(obj.lazyLoad === true) {
 		obj.lazyLoad = {};
 	}
-}
+};
 
 /**
  * The Slot class.
@@ -106,7 +108,7 @@ const convertLazyLoadBooleanToObject = (obj) => {
  */
 function Slot(container, screensize, initLazyLoading) {
 	let slotConfig = config('slots') || {};
-	let disableSwipeDefault = config('disableSwipeDefault') || false;
+	const disableSwipeDefault = config('disableSwipeDefault') || false;
 
 	// store the container
 	this.container = container;
@@ -142,7 +144,7 @@ function Slot(container, screensize, initLazyLoading) {
 	this.outOfPage = slotConfig.outOfPage || false;
 
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
-	this.companion = (slotConfig.companion === false ? false : true);
+	this.companion = slotConfig.companion === false ? false : true;
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	/* istanbul ignore else */
 	if (utils.isArray(slotConfig.formats)) {
@@ -193,7 +195,8 @@ Slot.prototype.parseAttributeConfig = function() {
 			this.lazyLoad.threshold = attributeParsers.lazyLoadThreshold(value);
 		} else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
-			this.lazyLoad.viewportMargin = attributeParsers.base(value);} else if (attributeParsers[name]) {
+			this.lazyLoad.viewportMargin = attributeParsers.base(value);
+		} else if (attributeParsers[name]) {
 			this[name] = attributeParsers[name](value, this[name]);
 		} else if (/^formats\w*/.test(name)) {
 			this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
@@ -235,7 +238,7 @@ Slot.prototype.initLazyLoad = function() {
 		}
 	}
 	return this;
-}
+};
 
 Slot.prototype.render = function() {
 	this.fire('render');
@@ -250,7 +253,7 @@ Slot.prototype.render = function() {
  *	Listen to responsive breakpoints and collapse slots
  * where the configured size is set to false
  */
- Slot.prototype.initResponsive = function() {
+Slot.prototype.initResponsive = function() {
 	/* istanbul ignore else */
 	if (utils.isPlainObject(this.sizes)) {
 		/* istanbul ignore else */
@@ -272,13 +275,13 @@ Slot.prototype.render = function() {
 	}
 
 	return this;
- };
+};
 
 /**
  * Maximise the slot when size is 100x100
  */
 Slot.prototype.maximise = function(size) {
-	if (size && +size[0] === 100 && +size[1] === 100) {
+	if (size && Number(size[0]) === 100 && Number(size[1]) === 100) {
 		this.fire('resize', {
 			size: ['100%', '100%']
 		});

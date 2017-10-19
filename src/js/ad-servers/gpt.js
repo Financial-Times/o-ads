@@ -7,6 +7,8 @@
 * @author Robin Marr, robin.marr@ft.com
 */
 
+'use-strict';
+
 const config = require('../config');
 const utils = require('../utils');
 const targeting = require('../targeting');
@@ -98,7 +100,7 @@ function setPageTargeting(targetingData) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
 			Object.keys(targetingData).forEach(key => {
-				pubads.setTargeting(key, targetingData[key])
+				pubads.setTargeting(key, targetingData[key]);
 			});
 		});
 	} else {
@@ -177,10 +179,10 @@ function onReady(slotMethods, event) {
 		// setup the gpt configuration the ad
 		googletag.cmd.push(() => {
 			slot.defineSlot()
-			.addServices()
-			.setCollapseEmpty()
-			.setTargeting()
-			.setURL();
+				.addServices()
+				.setCollapseEmpty()
+				.setTargeting()
+				.setURL();
 
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
@@ -387,16 +389,16 @@ const slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
+		function getImpressionURL(iframe) {
+			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+			if (trackingUrlElement) {
+				return trackingUrlElement.dataset.oAdsImpressionUrl;
+			} else {
+				utils.log.warn('Impression URL not found, this is set via a creative template.');
+				return false;
+			}
+		}
 		if (this.outOfPage && this.gpt.iframe) {
-			function getImpressionURL(iframe) {
-				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
-				if (trackingUrlElement) {
-					return trackingUrlElement.dataset.oAdsImpressionUrl;
-				} else {
-					utils.log.warn('Impression URL not found, this is set via a creative template.');
-					return false;
-				}
-			};
 			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
@@ -423,7 +425,7 @@ const slotMethods = {
 		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			const canonical = config('canonical');
-			gptSlot.set('page_url', (canonical ? canonical : utils.getLocation()));
+			gptSlot.set('page_url', canonical ? canonical : utils.getLocation());
 		});
 		return this;
 	},
@@ -490,6 +492,6 @@ module.exports.debug = () => {
 	}
 
 	log.start('gpt');
-		log.attributeTable(conf);
+	log.attributeTable(conf);
 	log.end();
 };
