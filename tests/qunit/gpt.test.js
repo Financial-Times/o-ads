@@ -1,4 +1,4 @@
-/* globals QUnit: false, googletag: false, sinon: false */
+/* globals assert, googletag, sinon */
 
 'use strict'; //eslint-disable-line
 

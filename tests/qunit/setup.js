@@ -3,7 +3,7 @@
 'use strict'; //eslint-disable-line
 global.QUnit = {};
 global.QUnit.config = {};
-QUnit.config.urlConfig = []
+QUnit.config.urlConfig = [];
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
 	value: 'OADS',

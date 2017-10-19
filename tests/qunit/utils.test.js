@@ -1,3 +1,4 @@
+/* global assert, $, jQuery */
 'use strict'; //eslint-disable-line
 
 describe('utils.isType methods', function () {
@@ -258,7 +259,7 @@ describe('utils.extend', function () {
 		assert.deepEqual(this.ads.utils.extend('test'), {}, 'passing a string returns empty object');
 	});
 });
-	describe('utils miscellanious methods', function () {
+describe('utils miscellanious methods', function () {
 
 	it('hash method', function () {
 		let result;

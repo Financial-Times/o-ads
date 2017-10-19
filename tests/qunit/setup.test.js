@@ -1,4 +1,4 @@
-/* globals QUnit: false, sinon: false, $: false, jQuery: false */
+/* globals assert, $, jQuery, sinon */
 
 'use strict'; //eslint-disable-line
 

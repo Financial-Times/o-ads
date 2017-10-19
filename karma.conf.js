@@ -47,9 +47,9 @@ let options = {
 	},
 	plugins: [
 		"karma-browserify",
-    "karma-chrome-launcher",
-    "karma-coverage",
-    "karma-mocha"
+		"karma-chrome-launcher",
+		"karma-coverage",
+		"karma-mocha"
 	],
 };
 

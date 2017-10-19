@@ -1,4 +1,4 @@
-/* global QUnit: false */
+/* globals assert */
 
 'use strict'; //eslint-disable-line
 
