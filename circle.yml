@@ -2,7 +2,7 @@ machine:
   node:
     version: 8.6.0
   post:
-    - npm install -g Financial-Times/origami-build-tools
+    - npm install -g origami-build-tools@^7
 dependencies:
   post:
     - wget https://saucelabs.com/downloads/sc-4.4.9-linux.tar.gz
@@ -13,12 +13,12 @@ dependencies:
     - "node_modules"
 test:
   override:
-    - ./node_modules/.bin/obt test
+    - obt test
     - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
         background: true
     # Wait for tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - ./node_modules/.bin/obt demo --local --runServer:
+    - obt demo --local --runServer:
         background: true
     # Wait for app to be ready
     - sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
