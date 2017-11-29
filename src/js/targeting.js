@@ -2,8 +2,7 @@
 const config = require('./config');
 const utils = require('./utils');
 let parameters = {};
-function Targeting() {
-}
+function Targeting() {}
 
 Targeting.prototype.get = function() {
 	const methods = {
@@ -70,31 +69,24 @@ Targeting.prototype.socialFlow = function() {
 
 Targeting.prototype.getSocialReferrer = function() {
 	let codedValue;
-	let refUrl;
 	const referrer = utils.getReferrer();
-	const refererRegexTemplate = '^http(|s)://(www.)*(SUBSTITUTION)/|_i_referer=http(|s)(:|%3A)(\/|%2F){2}(www.)*(SUBSTITUTION)(\/|%2F)';
+	// TODO: add on.ft.com
 	const lookup = {
 		't.co': 'twi',
 		'facebook.com': 'fac',
 		'linkedin.com': 'lin',
-		'drudgereport.com': 'dru'
+		'drudgereport.com': 'dru',
+		'dianomi.com': 'dia',
+		'google': 'goo'
 	};
 
-	/* istanbul ignore else  */
-	if (utils.isString(referrer)) {
-		for (refUrl in lookup) {
-			/* istanbul ignore else  */
-			if (lookup.hasOwnProperty(refUrl)) {
-				const refererRegex = new RegExp(refererRegexTemplate.replace(/SUBSTITUTION/g, refUrl));
-				/* istanbul ignore else  */
-				if (refUrl !== undefined && refererRegex.test(referrer)) {
-					codedValue = lookup[refUrl];
-					break;
-				}
-			}
+	Object.keys(lookup).forEach((url) => {
+		let refererRegex = new RegExp(`^http(|s):\/\/(www.)*(${url})`);
+		/* istanbul ignore else  */
+		if (refererRegex.test(referrer)) {
+			codedValue = lookup[url];
 		}
-	}
-
+	});
 	return codedValue && { socref: codedValue } || {};
 };
 

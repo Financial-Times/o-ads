@@ -66,25 +66,15 @@ QUnit.test("social referrer", function(assert) {
 	result = this.ads.targeting.get();
 	assert.equal(result.socref, "dru", "Already logged in, drudge should be mapped from drudgereport.com to dru");
 
-	referrer.returns('http://www.ft.com/cms/s/ed72d2ac-cf4e-11e2-be7b-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Fed72d2ac-cf4e-11e2-be7b-00144feab7de.html&_i_referer=http%3A%2F%2Ft.co%2F9So3Xw9qFH');
+	referrer.returns('http://dianomi.com');
 	this.ads.init({ socialReferrer: true });
 	result = this.ads.targeting.get();
-	assert.equal(result.socref, "twi", "via login, twitter should be mapped from t.co to twi");
+	assert.equal(result.socref, "dia", "Already logged in, drudge should be mapped from dianomi.com to dia");
 
-	referrer.returns('http://www.ft.com/cms/s/cece477a-ceca-11e2-8e16-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Fcece477a-ceca-11e2-8e16-00144feab7de.html&_i_referer=http%3A%2F%2Fwww.facebook.com%2Fl.php%3Fu%3Dhttp%253A%252F%252Fon.ft.com%252FZSTiyP%26h%3DLAQGl0DzT%26s%3D1');
+	referrer.returns('http://google.com/');
 	this.ads.init({ socialReferrer: true });
 	result = this.ads.targeting.get();
-	assert.equal(result.socref, "fac", "Via login, facebook should be mapped from facebook.com to fac");
-
-	referrer.returns('http://www.ft.com/cms/s/af925250-c765-11e2-9c52-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Faf925250-c765-11e2-9c52-00144feab7de.html&_i_referer=http%3A%2F%2Fwww.linkedin.com%2Fcompany%2F4697%3Ftrk%3DNUS-body-company-name');
-	this.ads.init({ socialReferrer: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.socref, "lin", "Via login, linkedin should be mapped from linkedin.com to lin");
-
-	referrer.returns('http://www.ft.com/cms/s/af925250-c765-11e2-9c52-00144feab7de,Authorised=false.html?_i_location=http%3A%2F%2Fwww.ft.com%2Fcms%2Fs%2F0%2Faf925250-c765-11e2-9c52-00144feab7de.html&_i_referer=http%3A%2F%2Fwww.drudgereport.com%2F');
-	this.ads.init({ socialReferrer: true });
-	result = this.ads.targeting.get();
-	assert.equal(result.socref, "dru", "Via login, drudge should be mapped from drudgereport.com to dru");
+	assert.equal(result.socref, "goo", "Already logged in, drudge should be mapped from google.com to goo");
 });
 
 QUnit.test("search term", function(assert) {
