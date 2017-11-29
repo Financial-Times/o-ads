@@ -13,12 +13,12 @@ dependencies:
     - "node_modules"
 test:
   override:
-    - obt test
+    - ./node_modules/.bin/obt test
     - cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready:
         background: true
     # Wait for tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - obt demo --local --runServer:
+    - ./node_modules/.bin/obt demo --local --runServer:
         background: true
     # Wait for app to be ready
     - sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
