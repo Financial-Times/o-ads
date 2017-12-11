@@ -126,7 +126,10 @@ Krux.prototype.targeting = function() {
 	}
 
 	return {
+		// kuid was actually pulling in the user. We can't change the key
+		// so added a new one called "kxid". Don't ask.
 		"kuid": this.retrieve('user'),
+		"kxid": this.retrieve('kuid'),
 		"ksg": segs,
 		"khost": encodeURIComponent(location.hostname),
 		"bht": segs && segs.length > 0 ? 'true' : 'false'

@@ -57,13 +57,14 @@ QUnit.test('does not add a script from url when location contains krux src that 
 });
 
 QUnit.test('targeting data is generated correctly from localStorage', function(assert) {
-	const kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser'};
+	const kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser', kxkuid: 'xxxx'};
 	const localstorageMock = this.localStorage(kruxData);
 	if (localstorageMock) {
 		this.ads.init({ krux: { krux: {id: '112233'}}});
 		const result = this.ads.krux.targeting();
 		assert.deepEqual(result.ksg, ["seg1", "seg2", "seg3", "seg4"], "segments in localStorage returned correctly");
 		assert.equal(result.kuid, kruxData.kxuser, "user id returned correctly from localStorage");
+		assert.equal(result.kxid, kruxData.kxkuid, "krux id returned correctly from localStorage");
 		assert.equal(result.khost, encodeURIComponent(location.hostname), "host returned correctly");
 		assert.equal(result.bht, "true", "Behavioural flag is set, when local storage is used");
 	} else {
