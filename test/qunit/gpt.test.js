@@ -179,6 +179,16 @@ QUnit.test('on slot refresh event updates targeting', function(assert) {
 	assert.ok(slot.gpt.slot.setTargeting.calledWith('test', true), 'setTargeting has been passed correct argument');
 });
 
+QUnit.test('provides api to destroy the slot', function(assert) {
+	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(slotHTML);
+	this.ads.init();
+	const slot = this.ads.slots.initSlot('test1');
+	assert.equal(slot.destroySlot(), true, 'a call to destroy slot returns a boolean');
+	assert.ok(googletag.destroySlots.calledOnce, 'destroy api has been called');
+	assert.ok(googletag.destroySlots.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
+});
+
 QUnit.test('provides api to clear the slot', function(assert) {
 	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(slotHTML);

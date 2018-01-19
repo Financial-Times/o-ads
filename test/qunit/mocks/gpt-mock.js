@@ -175,6 +175,8 @@ stubs.stub(pubads, 'refresh', function(slots) {
 	return slots;
 });
 
+googletag.destroySlots = stubs.stub().returns(true);
+
 googletag.pubads = stubs.stub().returns(pubads);
 googletag.pubadsReady = true;
 

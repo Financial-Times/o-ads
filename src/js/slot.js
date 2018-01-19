@@ -99,6 +99,18 @@ const convertLazyLoadBooleanToObject = (obj) => {
 	}
 }
 
+const onChangeBreakpoint = (event) => {
+	const slot = event.detail.slot;
+	slot.screensize = event.detail.screensize;
+	if (slot.hasValidSize()) {
+		slot.uncollapse();
+	} else {
+		slot.collapse();
+		slot.clear();
+	}
+};
+
+
 /**
  * The Slot class.
  * @class
@@ -245,7 +257,6 @@ Slot.prototype.render = function() {
 	}
 };
 
-
 /**
  *	Listen to responsive breakpoints and collapse slots
  * where the configured size is set to false
@@ -257,18 +268,7 @@ Slot.prototype.render = function() {
 		if (!this.hasValidSize()) {
 			this.collapse();
 		}
-
-		utils.on('breakpoint', function(event) {
-			const slot = event.detail.slot;
-			slot.screensize = event.detail.screensize;
-
-			if (slot.hasValidSize()) {
-				slot.uncollapse();
-			} else {
-				slot.collapse();
-				slot.clear();
-			}
-		}, this.container);
+		utils.on('breakpoint', onChangeBreakpoint, this.container);
 	}
 
 	return this;
@@ -346,6 +346,19 @@ Slot.prototype.clear = function() {
 };
 
 /**
+ * call the ad server destroySlot method on the slot if one exists
+ */
+Slot.prototype.destroy = function() {
+	/* istanbul ignore else  */
+	if (utils.isFunction(this['destroySlot'])) {
+		utils.off('breakpoint', onChangeBreakpoint, this.container);
+		this.destroySlot();
+		this.container.removeChild(this.outer);
+	}
+	return this;
+};
+
+/**
  * call the ad server impression URL for an out of page slot if it has been configured correctly for delayed impressions
  */
 Slot.prototype.submitImpression = function() {
@@ -389,7 +402,6 @@ Slot.prototype.addContainer = function(node, attrs) {
 	node.insertAdjacentHTML('beforeend', container);
 	return node.lastChild;
 };
-
 
 Slot.prototype.hasValidSize = function(screensize) {
 	screensize = screensize || this.screensize;

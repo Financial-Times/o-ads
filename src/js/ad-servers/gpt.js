@@ -315,6 +315,18 @@ const slotMethods = {
 		});
 		return this;
 	},
+
+	/**
+	* Tell gpt to destroy the slot and its metadata
+	*/
+	destroySlot: function(gptSlot) {
+		if (window.googletag.pubadsReady && window.googletag.pubads) {
+			gptSlot = gptSlot || this.gpt.slot;
+			return googletag.destroySlots([gptSlot]);
+		} else {
+			return false;
+		}
+	},
 	/*
 	*	Tell gpt to request an ad
 	*/
