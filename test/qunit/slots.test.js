@@ -394,10 +394,10 @@ QUnit.test('Slots.destroy will destroy a single slot', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="destroy-test" data-o-ads-formats="MediumRectangle"></div>');
 	const slot = this.ads.slots.initSlot(node);
 	assert.ok(this.ads.slots['destroy-test'], 'slot to be destoryed has been initialised');
-	const clearSpy = this.spy(slot, 'destroy');
+	const destroySpy = this.spy(slot, 'destroy');
 	this.ads.slots.destroy('destroy-test');
 	assert.notOk(this.ads.slots['destroy-test'], 'slot has been destoryed and reference to it has been removed');
-	assert.ok(clearSpy.calledOnce, 'clear method has been called on a slot');
+	assert.ok(destroySpy.calledOnce, 'clear method has been called on a slot');
 });
 
 QUnit.test('Slots.destroy will call destroySlot method from the ad server provider when one is present', function(assert) {
