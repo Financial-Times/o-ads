@@ -4,6 +4,7 @@
 
 QUnit.module('utils.events');
 
+
 QUnit.test('We can broadcast an event to the body', function(assert) {
 	const utils = this.ads.utils;
 	const done = assert.async();
@@ -57,17 +58,62 @@ QUnit.test('We can broadcast from an element and it bubbles to the body', functi
 	}, element);
 });
 
+QUnit.test('We can subscribe to an event', function(assert) {
+	const utils = this.ads.utils;
+	const done = assert.async();
+	const stub = sinon.stub();
+
+	utils.on('ahoy', stub);
+
+	setTimeout(function() {
+		assert.ok(stub.calledTwice, 'We reacted to the events');
+		stub.reset();
+		done();
+	}, 750);
+
+	utils.broadcast('ahoy', {
+		there: 'matey',
+	});
+
+	utils.broadcast('ahoy', {
+		there: 'again',
+	});
+});
+
+QUnit.test('We can unsubscribe from an event', function(assert) {
+	const utils = this.ads.utils;
+	const done = assert.async();
+	const stub = sinon.stub();
+
+	utils.on('ahoy', stub);
+
+	setTimeout(function() {
+		utils.off('ahoy', stub);
+		utils.broadcast('ahoy', { there: 'arrr' })
+		assert.ok(stub.calledTwice, 'We reacted to the events only before off');
+		stub.reset();
+		done();
+	}, 750);
+
+	utils.broadcast('ahoy', {
+		there: 'matey',
+	});
+
+	utils.broadcast('ahoy', {
+		there: 'again',
+	});
+});
+
 QUnit.test('We can listen to a one time event', function(assert) {
 	const utils = this.ads.utils;
 	const done = assert.async();
-	let listened = 0;
+	const stub = sinon.stub();
 
-	utils.once('ahoy', function() {
-		listened++;
-	});
+	utils.once('ahoy',stub);
 
 	setTimeout(function() {
-		assert.equal(listened, 1, 'We only reacted to the first event');
+		assert.ok(stub.calledOnce, 'We only reacted to the first event');
+		stub.reset();
 		done();
 	}, 750);
 

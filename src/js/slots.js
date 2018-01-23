@@ -105,10 +105,10 @@ Slots.prototype.clear = function(names) {
 };
 
 /**
-* Given a slot name or an array of slot names will clear the slots using the clear method on the slot and remove the reference to the slot
+* Given a slot name or an array of slot names will destroy the slots using the destroySlot method on the slot and remove the reference to the slot
 */
 Slots.prototype.destroy = function(names) {
-	return invokeMethodOnSlots.call(this, names, 'clear', function(names){
+	return invokeMethodOnSlots.call(this, names, 'destroy', function(names){
 			names.forEach(name => {
 				this[name] = null;
 				delete this[name];
@@ -389,7 +389,5 @@ Slots.prototype.debug = function (){
 	log.table(data);
 	log.end();
 };
-
-
 
 module.exports = new Slots();

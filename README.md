@@ -14,9 +14,6 @@ Includes detailed installation and set-up instructions, along with details about
 
 ## Migration Guide
 
-### Upgrading to v7
-
-  - o-ads v7 introduces new major versions of [o-colors](https://registry.origami.ft.com/components/o-colors) and [o-visual-effects](https://registry.origami.ft.com/components/o-visual-effects). If you're using o-colors v3 or earlier or o-visual-effects v1, your build will break. Update to o-colors v4 and o-visual-effects v2 to resolve conflicts.
-  - No other breaking changes in this release.
-  
-
+### Upgrading to v8
+- Breaking change: If you use the destroy method on a slots instance, this will now properly destroy the given slots rather than just clear them
+- New feature: util event 'off' - remove an event listener
