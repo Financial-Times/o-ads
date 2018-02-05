@@ -308,6 +308,10 @@ Slots.prototype.initPostMessage = function() {
 
 Slots.prototype.initLazyLoading = function(slotConfig) {
 	const lazyLoadingConfig = config('lazyLoad') || slotConfig;
+	// reset the observer if it is tied to a since-removed root
+	if (this.lazyLoadObserver && this.lazyLoadObserver.root && !(document.contains(this.lazyLoadObserver.root))) {
+			this.lazyLoadObserver = null;
+	}
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
 	/* istanbul ignore else	*/
 	if('IntersectionObserver' in window && !this.lazyLoadObserver && !!lazyLoadingConfig) {
