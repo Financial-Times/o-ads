@@ -306,15 +306,27 @@ Slots.prototype.initPostMessage = function() {
 	}
 };
 
+// remove any observers tied to elements no longer in the DOM
+// e.g. app page has been swiped out from the gallery
+Slots.prototype.flushLazyLoading = function() {
+	this.lazyLoadingObservers = this.lazyLoadingObservers.filter(observer => {
+		return Boolean(!observer.root || document.contains(observer.root));
+	});
+};
+
 Slots.prototype.initLazyLoading = function(slotConfig) {
-	const lazyLoadingConfig = config('lazyLoad') || slotConfig;
-	// reset the observer if it is tied to a since-removed root
-	if (this.lazyLoadObserver && this.lazyLoadObserver.root && !(document.contains(this.lazyLoadObserver.root))) {
-			this.lazyLoadObserver = null;
-	}
+	const lazyLoadingConfig = config('lazyLoad') || slotConfig | {};
+	this.lazyLoadingObservers = this.lazyLoadingObservers || [];
+	this.flushLazyLoading();
+	// find any pre-existing observers
+	let lazyLoadingObserver = this.lazyLoadingObservers.find(observer => {
+		// deliberately double-equals to match null and undefined where the viewport is being observed
+		return lazyLoadingConfig.root == observer.root;
+	});
+
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
 	/* istanbul ignore else	*/
-	if('IntersectionObserver' in window && !this.lazyLoadObserver && !!lazyLoadingConfig) {
+	if('IntersectionObserver' in window && !lazyLoadingObserver && !!lazyLoadingConfig) {
 		let options = {};
 
 		function onChange(changes) {
@@ -343,10 +355,11 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 			}
 			options.root = lazyLoadingConfig.root || null;
 		}
-		this.lazyLoadObserver = new IntersectionObserver(onChange.bind(this), options);
+		lazyLoadingObserver = new IntersectionObserver(onChange.bind(this), options);
+		this.lazyLoadingObservers.push(lazyLoadingObserver);
 	}
 
-	return this.lazyLoadObserver;
+	return lazyLoadingObserver;
 
 };
 
