@@ -319,10 +319,10 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 	this.lazyLoadingObservers = this.lazyLoadingObservers || [];
 	this.flushLazyLoading();
 	// find any pre-existing observers
-	let lazyLoadingObserver = this.lazyLoadingObservers.find(observer => {
+	let lazyLoadingObserver = this.lazyLoadingObservers.filter(observer => {
 		// deliberately double-equals to match null and undefined where the viewport is being observed
 		return lazyLoadingConfig.root == observer.root;
-	});
+	})[0];
 
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
 	/* istanbul ignore else	*/
