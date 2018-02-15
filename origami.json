@@ -17,6 +17,7 @@
 	 "browserFeatures": {
 		 "required": [
 			 "Array.from",
+			 "Array.prototype.find",
 			 "IntersectionObserver",
 			 "fetch"
 		 ]

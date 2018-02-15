@@ -21,7 +21,7 @@ let options = {
 	files: [
 		'test/qunit/styles.css',
 		'build/main.css',
-		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,IntersectionObserver',
+		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,Array.prototype.find,IntersectionObserver',
 		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/sinon-1.10.3/index.js',
