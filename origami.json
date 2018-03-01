@@ -86,6 +86,13 @@
 	  	"description": "",
 			"data": {"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition", "name":"billboard", "formats" : "Billboard", "network": 5887, "site" : "test.5887.origami"}
 
-	  }
+	  },
+		{
+		 "name": "Validate-Traffic-Ad",
+		 "template": "/demos/src/validatetraffic.mustache",
+		 "expanded": true,
+		 "description": "",
+		 "data": {"name":"leaderboard", "formats" : "Leaderboard", "network": 5887, "site" : "test.5887.origami"}
+		},
   	]
 }

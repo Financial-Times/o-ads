@@ -20,11 +20,23 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
-	const targetingApi = this.config().targetingApi
-	if(targetingApi) {
-		return this.api.init(targetingApi, this)
-		.then(this.initLibrary.bind(this))
-		.catch(this.initLibrary.bind(this));
+	const targetingApi = this.config().targetingApi;
+	const validateTraffic = this.config().validateTraffic;
+	
+	if(targetingApi && validateTraffic) {
+		const validateTrafficPromise = this.api.validate();
+		const targetingApiPromise = this.api.init(targetingApi, this);
+		
+		Promise.all([targetingApiPromise, validateTrafficPromise])
+			.then(values => {
+				if(!values[0]) {
+					return false
+				}
+				this.initLibrary.bind(this)
+				
+			})
+			// If anything fails, default to load ads without targeting
+			.catch(this.initLibrary.bind(this));
 	} else {
 		return Promise.resolve(this.initLibrary());
 	}
