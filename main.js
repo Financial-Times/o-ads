@@ -32,6 +32,7 @@ Ads.prototype.init = function(options) {
 		.then(responses => responses[0].json())
 		.then(botVsHumanResponse => {
 			// TODO: Change me to whatever the API response will be
+			// At the moment this works by looking at a json file with a "valid" property
 			if(!botVsHumanResponse.valid) {
 				throw IvtError();
 			}
@@ -67,7 +68,6 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 };
 
 Ads.prototype.initLibrary = function() {
-	console.log("InitLibrary()")
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
@@ -80,7 +80,6 @@ Ads.prototype.initLibrary = function() {
 
 const initAll = function() {
 	return ads.init().then(() => {
-		console.log('initAll')
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	})
