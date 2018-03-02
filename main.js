@@ -8,6 +8,7 @@ Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
+Ads.prototype.botVsHuman = require('./src/js/data-providers/botVsHuman');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
@@ -17,29 +18,32 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 
+
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
 	const targetingApi = this.config().targetingApi;
-	const validateTraffic = this.config().validateTraffic;
+	const botVsHumanApi = this.config().botVsHumanApi;
 	
-	if(targetingApi && validateTraffic) {
-		const validateTrafficPromise = this.api.validate();
-		const targetingApiPromise = this.api.init(targetingApi, this);
-		
-		Promise.all([targetingApiPromise, validateTrafficPromise])
-			.then(values => {
-				if(!values[0]) {
-					return false
-				}
-				this.initLibrary.bind(this)
-				
-			})
-			// If anything fails, default to load ads without targeting
-			.catch(this.initLibrary.bind(this));
-	} else {
-		return Promise.resolve(this.initLibrary());
-	}
+	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
+	const botVsHumanPromise = botVsHumanApi ? this.botVsHuman.validate(botVsHumanApi) : Promise.resolve();
+	
+	return Promise.all([botVsHumanPromise, targetingPromise])
+		.then(responses => responses[0].json())
+		.then(botVsHumanResponse => {
+			// TODO: Change me to whatever the API response will be
+			if(!botVsHumanResponse.valid) {
+				throw IvtError();
+			}
+			this.initLibrary();
+		})
+		// If anything fails, default to load ads without targeting
+		.catch(e => {
+			if(e && e.name === 'IVTError') {
+				throw e;
+			}
+			this.initLibrary();
+		});
 };
 
 Ads.prototype.updateContext = function(options, isNewPage) {
@@ -60,9 +64,10 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		return Promise.resolve();
 	}
 
-}
+};
 
 Ads.prototype.initLibrary = function() {
+	console.log("InitLibrary()")
 	this.slots.init();
 	this.gpt.init();
 	this.krux.init();
@@ -75,6 +80,7 @@ Ads.prototype.initLibrary = function() {
 
 const initAll = function() {
 	return ads.init().then(() => {
+		console.log('initAll')
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
 	})
@@ -96,6 +102,14 @@ Ads.prototype.debug = function (){
 		localStorage.removeItem('oAds');
 	}
 };
+
+function IvtError() {
+	const error = new Error();
+	error.name = 'IVTError';
+	error.message = 'Invalid traffic detected, we will not load ads';
+	
+	return error;
+}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);
