@@ -33,6 +33,9 @@ Ads.prototype.init = function(options) {
 		.then(botVsHumanResponse => {
 			// TODO: Change me to whatever the API response will be
 			// At the moment this works by looking at a json file with a "valid" property
+			// I got some cors issues when I tried loading from a different local server on a different port
+			// so what I did was I just put a file called "validate.json" in the /demos/local folder and
+			// set the botVsHumanApi path to there.
 			if(!botVsHumanResponse.valid) {
 				throw IvtError();
 			}

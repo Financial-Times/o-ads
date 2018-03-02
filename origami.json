@@ -92,7 +92,16 @@
 		 "template": "/demos/src/validatetraffic.mustache",
 		 "expanded": true,
 		 "description": "",
-			"data": { "user": "https://ads-api.ft.com/v1/user", "page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35", "class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition", "name": "leaderboard", "format":"Leaderboard", "network": 5887, "site" : "test.5887.origami"}
+			"data": {
+				"user": "https://ads-api.ft.com/v1/user",
+				"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
+				"botVsHumanApi": "http://localhost:8999/demos/local/validate.json",
+				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
+				"name": "leaderboard",
+				"format":"Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
 		}
   	]
 }
