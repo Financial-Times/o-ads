@@ -8,6 +8,7 @@ module.exports = {
 			'demos/src/masterandcompanion.mustache',
 			'demos/src/multiplenextstyles.mustache',
 			'demos/src/native.mustache',
+			'demos/src/validatetraffic.mustache',
 			'demos/src/responsive-ad.mustache',
 			'demos/src/responsive-positions.mustache',
 			'docs/Gemfile',
