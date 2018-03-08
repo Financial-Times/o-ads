@@ -8,7 +8,6 @@ Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
-Ads.prototype.botVsHuman = require('./src/js/data-providers/botVsHuman');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
@@ -26,7 +25,7 @@ Ads.prototype.init = function(options) {
 	const botVsHumanApi = this.config().botVsHumanApi;
 	
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const botVsHumanPromise = botVsHumanApi ? this.botVsHuman.validate(botVsHumanApi) : Promise.resolve();
+	const botVsHumanPromise = botVsHumanApi ? fetch(botVsHumanApi) : Promise.resolve();
 	
 	return Promise.all([botVsHumanPromise, targetingPromise])
 		.then(responses => responses[0].json())
@@ -36,14 +35,14 @@ Ads.prototype.init = function(options) {
 			// I got some cors issues when I tried loading from a different local server on a different port
 			// so what I did was I just put a file called "validate.json" in the /demos/local folder and
 			// set the botVsHumanApi path to there.
-			if(!botVsHumanResponse.valid) {
-				throw IvtError();
+			if(botVsHumanResponse.isRobot) {
+				throw new Error('Invalid traffic detected');
 			}
 			this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
-			if(e && e.name === 'IVTError') {
+			if(e && e.message === 'Invalid traffic detected') {
 				throw e;
 			}
 			this.initLibrary();
@@ -104,14 +103,6 @@ Ads.prototype.debug = function (){
 		localStorage.removeItem('oAds');
 	}
 };
-
-function IvtError() {
-	const error = new Error();
-	error.name = 'IVTError';
-	error.message = 'Invalid traffic detected, we will not load ads';
-	
-	return error;
-}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);
