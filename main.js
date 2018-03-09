@@ -32,6 +32,11 @@ Ads.prototype.init = function(options) {
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const botVsHumanPromise = botVsHumanApi ? fetch(botVsHumanApi) : Promise.resolve();
 	
+	/*
+		We only want to stop the oAds library from initializing if
+		the botVsHumanApi says the user is a robot. Otherwise we catch()
+		all errors and initialise the library anyway.
+	 */
 	return Promise.all([botVsHumanPromise, targetingPromise])
 		.then(responses => responses[0].json())
 		.then(botVsHumanResponse => {
