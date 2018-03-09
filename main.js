@@ -24,28 +24,28 @@ Ads.prototype.init = function(options) {
 	const targetingApi = this.config().targetingApi;
 	const botVsHumanApi = this.config().botVsHumanApi;
 	
+	// Don't need to fetch anything if no targeting or bot APIs configured.
+	if(!targetingApi && !botVsHumanApi) {
+		return Promise.resolve(this.initLibrary());
+	}
+	
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const botVsHumanPromise = botVsHumanApi ? fetch(botVsHumanApi) : Promise.resolve();
 	
 	return Promise.all([botVsHumanPromise, targetingPromise])
 		.then(responses => responses[0].json())
 		.then(botVsHumanResponse => {
-			// TODO: Change me to whatever the API response will be
-			// At the moment this works by looking at a json file with a "valid" property
-			// I got some cors issues when I tried loading from a different local server on a different port
-			// so what I did was I just put a file called "validate.json" in the /demos/local folder and
-			// set the botVsHumanApi path to there.
 			if(botVsHumanResponse.isRobot) {
 				throw new Error('Invalid traffic detected');
 			}
-			this.initLibrary();
+			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
 			if(e && e.message === 'Invalid traffic detected') {
 				throw e;
 			}
-			this.initLibrary();
+			return this.initLibrary();
 		});
 };
 
