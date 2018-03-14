@@ -17,7 +17,7 @@ module.exports = {
 				// switch focus to first iframe
 				.frame('google_ads_iframe_/5887/test.5887.origami_0')
 				// wait for 1 second for advert to appear
-				.waitForElementPresent('.responsive-ad', wait, 'Advert is visible')
+				.waitForElementPresent('.wve-section', wait, 'Advert is visible')
 				// switch focus back to main page
 				.frame(null);
 	}
