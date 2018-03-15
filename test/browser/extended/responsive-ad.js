@@ -1,7 +1,5 @@
 const wait = 8000;
-
 module.exports = {
-
 	// AF on 15/03/2018.
 	// responsive ads throw JS errors and don't load properly each time
 	// causing builds to fail all the time.
