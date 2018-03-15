@@ -17,17 +17,41 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 
+
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
-	const targetingApi = this.config().targetingApi
-	if(targetingApi) {
-		return this.api.init(targetingApi, this)
-		.then(this.initLibrary.bind(this))
-		.catch(this.initLibrary.bind(this));
-	} else {
+	const targetingApi = this.config().targetingApi;
+	const botVsHumanApi = this.config().botVsHumanApi;
+	
+	// Don't need to fetch anything if no targeting or bot APIs configured.
+	if(!targetingApi && !botVsHumanApi) {
 		return Promise.resolve(this.initLibrary());
 	}
+	
+	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
+	const botVsHumanPromise = botVsHumanApi ? fetch(botVsHumanApi) : Promise.resolve();
+	
+	/*
+		We only want to stop the oAds library from initializing if
+		the botVsHumanApi says the user is a robot. Otherwise we catch()
+		all errors and initialise the library anyway.
+	 */
+	return Promise.all([botVsHumanPromise, targetingPromise])
+		.then(responses => responses[0].json())
+		.then(botVsHumanResponse => {
+			if(botVsHumanResponse.isRobot) {
+				throw new Error('Invalid traffic detected');
+			}
+			return this.initLibrary();
+		})
+		// If anything fails, default to load ads without targeting
+		.catch(e => {
+			if(e && e.message === 'Invalid traffic detected') {
+				throw e;
+			}
+			return this.initLibrary();
+		});
 };
 
 Ads.prototype.updateContext = function(options, isNewPage) {
@@ -48,7 +72,7 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		return Promise.resolve();
 	}
 
-}
+};
 
 Ads.prototype.initLibrary = function() {
 	this.slots.init();

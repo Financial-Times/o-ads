@@ -2,6 +2,8 @@
 
 'use strict'; //eslint-disable-line
 
+const fetchMock = require('fetch-mock');
+
 QUnit.module('Main');
 
 QUnit.test('init All', function(assert) {
@@ -152,4 +154,75 @@ QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", funct
 	this.ads.debug();
 	assert.ok(gptDebug.called, 'gpt debug function is called');
 	assert.notOk(localStorage.getItem('oAds'), 'oAds value in local storage was removed');
-})
+});
+
+QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", function(assert) {
+	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
+	this.ads.init();
+	assert.ok(initLibrarySpy.called, 'initLibrary() function is called');
+	
+});
+
+
+QUnit.test("oAds library is NOT initialised if a botVsHumanAPI decides the user is a robot", function(assert) {
+	const done = assert.async();
+	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: true });
+	
+	this.ads.init({
+		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+	}).then(() => {
+		assert.notOk(initLibrarySpy.called, 'initLibrary() shouldn\'t be called');
+		done();
+	}).catch(e => {
+		assert.equal(e.message, 'Invalid traffic detected');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+QUnit.test("oAds library is initialised if a botVsHumanAPI decides the user is NOT a robot", function(assert) {
+	const done = assert.async();
+	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
+	fetchMock.get('http://ads-api.ft.com/v1/user', 200);
+	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
+	
+	this.ads.init({
+		targetingApi: {
+			user: 'http://ads-api.ft.com/v1/user',
+			page: 'http://ads-api.ft.com/v1/page'
+		},
+		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+	}).then(() => {
+		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+QUnit.test("oAds library is initialised by default, even if there are API errors", function(assert) {
+	const done = assert.async();
+	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', 500);
+	fetchMock.get('http://ads-api.ft.com/v1/user', 500);
+	fetchMock.get('http://ads-api.ft.com/v1/page', 500);
+	
+	this.ads.init({
+		targetingApi: {
+			user: 'http://ads-api.ft.com/v1/user',
+			page: 'http://ads-api.ft.com/v1/page'
+		},
+		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+	}).then(() => {
+		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
