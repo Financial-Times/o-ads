@@ -118,6 +118,16 @@
         "maxInstances": 1
       }
     },
+    "ios_9_sauce" : {
+      "desiredCapabilities": {
+        "deviceName": "iPhone 6",
+        "deviceOrientation": "portrait",
+        "version": "9.2",
+        "platform": "OS X 10.10",
+        "acceptSslCerts": true,
+        "maxInstances": 1
+      }
+    },
     "galaxy_s4_emulator": {
        "desiredCapabilities": {
         "deviceName": "Samsung Galaxy S4 Emulator",
