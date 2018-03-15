@@ -26,6 +26,21 @@
         "maxInstances": 1
       }
     },
+    "local" : {
+      "launch_url" : "http://localhost:8999/demos/local",
+      "selenium_port"  : 4444,
+      "selenium_host"  : "localhost",
+      "silent": true,
+      "screenshots" : {
+        "enabled" : false
+      },
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true,
+        "maxInstances": 1
+      }
+    },
     "chrome_latest_sauce" : {
       "desiredCapabilities": {
         "browserName": "chrome",

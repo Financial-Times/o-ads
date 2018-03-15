@@ -19,7 +19,7 @@ module.exports = {
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Master advert image is visible')
 				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/9281177167350826970')
+				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097')
 				// switch focus back to main page
 				.frame(null);
 	},
@@ -32,7 +32,7 @@ module.exports = {
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Companion advert image is visible')
 				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/14580659904523692186')
+				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/11544125268120182564')
 				// switch focus back to main page
 				.frame(null);
 	}
