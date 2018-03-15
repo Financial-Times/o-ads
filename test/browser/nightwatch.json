@@ -120,12 +120,12 @@
     },
     "ios_9_sauce" : {
       "desiredCapabilities": {
-        "deviceName": "iPhone 6",
+        "appiumVersion": "1.7.2",
+        "browserName": "Safari",
+        "deviceName": "iPhone 6s Simulator",
         "deviceOrientation": "portrait",
-        "version": "9.2",
-        "platform": "OS X 10.10",
-        "acceptSslCerts": true,
-        "maxInstances": 1
+        "platformName": "iOS",
+        "platformVersion": "11.0"
       }
     },
     "galaxy_s4_emulator": {
