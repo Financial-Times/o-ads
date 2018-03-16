@@ -164,14 +164,14 @@ QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", fun
 });
 
 
-QUnit.test("oAds library is NOT initialised if a botVsHumanAPI decides the user is a robot", function(assert) {
+QUnit.test("oAds library is NOT initialised if the validateAdsTraffic API decides the user is a robot", function(assert) {
 	const done = assert.async();
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	
 	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: true });
 	
 	this.ads.init({
-		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
 	}).then(() => {
 		assert.notOk(initLibrarySpy.called, 'initLibrary() shouldn\'t be called');
 		done();
@@ -183,7 +183,7 @@ QUnit.test("oAds library is NOT initialised if a botVsHumanAPI decides the user 
 	fetchMock.restore();
 });
 
-QUnit.test("oAds library is initialised if a botVsHumanAPI decides the user is NOT a robot", function(assert) {
+QUnit.test("oAds library is initialised if the validateAdsTraffic API decides the user is NOT a robot", function(assert) {
 	const done = assert.async();
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	
@@ -196,7 +196,7 @@ QUnit.test("oAds library is initialised if a botVsHumanAPI decides the user is N
 			user: 'http://ads-api.ft.com/v1/user',
 			page: 'http://ads-api.ft.com/v1/page'
 		},
-		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
 	}).then(() => {
 		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
 		done();
@@ -218,7 +218,7 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 			user: 'http://ads-api.ft.com/v1/user',
 			page: 'http://ads-api.ft.com/v1/page'
 		},
-		botVsHumanApi: 'http://ads-api.ft.com/v1/validate-traffic'
+		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
 	}).then(() => {
 		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
 		done();
