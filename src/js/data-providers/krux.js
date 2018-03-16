@@ -242,25 +242,18 @@ Krux.prototype.debug = function() {
 	}
 	log.start('Krux©');
 		log('%c id:', 'font-weight: bold', this.config.id);
-
 		if (this.config.limit) {
 			log('%c segment limit:', 'font-weight: bold', this.config.limit);
 		}
 
-		if (this.config.attributes) {
-			const attributes = this.config.attributes;
+		const attrs = utils.extend(true, this.config.attributes, this.customAttributes);
+		if (Object.keys(attrs).length > 0) {
 			log.start('Attributes');
-				log.start('Page');
-					log.attributeTable(attributes.page);
-				log.end();
-
-				log.start('User');
-					log.attributeTable(attributes.user);
-				log.end();
-
-				log.start('Custom');
-					log.attributeTable(attributes.custom);
-				log.end();
+				Object.keys(attrs).forEach((key) => {
+					log.start(`${key}`);
+						log.attributeTable(attrs[key]);
+					log.end();
+				});
 			log.end();
 		}
 		if (this.config.events) {
@@ -271,7 +264,6 @@ Krux.prototype.debug = function() {
 				log.end();
 			log.end();
 		}
-
 		const targeting = this.targeting();
 		log.start('Targeting');
 			log.attributeTable(targeting);

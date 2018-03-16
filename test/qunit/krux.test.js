@@ -181,21 +181,26 @@ QUnit.test('debug starts logging Krux data', function(assert) {
 
 QUnit.test("debug doesn't log attributes data if none is set", function(assert) {
 	this.ads.init({krux: {}});
+	this.ads.krux.customAttributes = {};
 	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.krux.debug();
 	assert.notOk(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
 });
 
-QUnit.test("debug logs attributes data if set", function(assert) {
-	this.ads.init({krux: {attributes: {page: {}, user: {}, custom: {}}}});
+QUnit.test('debug logs attributes data is set', function(assert) {
+	const configAttrs = {custom1: {}, custom2: {} };
+	this.ads.init({krux: {attributes: configAttrs}});
+	this.ads.krux.customAttributes = { page: {}, user: {}};
+	const allAttrs = this.utils.extend(true, configAttrs, this.ads.krux.customAttributes);
 	const start = this.spy(this.utils.log, 'start');
-
 	this.ads.krux.debug();
+
 	assert.ok(start.calledWith('Attributes'), "`utils.start` was called for 'Attributes'");
-	assert.ok(start.calledWith('Page'), "`utils.start` was called for 'Page'");
-	assert.ok(start.calledWith('User'), "`utils.start` was called for 'User'");
-	assert.ok(start.calledWith('Custom'), "`utils.start` was called for 'Custom'");
+
+	Object.keys(allAttrs).forEach(function(key) {
+		assert.ok(start.calledWith(key), `utils.start was called for ${key} attribute`);
+	});
 });
 
 QUnit.test("debug doesn't log events data if none is set", function(assert) {
