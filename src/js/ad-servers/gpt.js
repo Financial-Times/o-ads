@@ -68,6 +68,7 @@ function setup(gptConfig) {
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty(gptConfig);
 	googletag.enableServices();
+	googletag.pubads().setTargeting('url', window.location.href);
 	return true;
 }
 
