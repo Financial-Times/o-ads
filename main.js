@@ -17,7 +17,6 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 
-
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
@@ -42,7 +41,6 @@ Ads.prototype.init = function(options) {
 		.then(validateAdsTrafficResponse => {
 			if(validateAdsTrafficResponse.isRobot) {
 				this.config({"dfp_targeting": {"ivtmvt": "1"}});
-				throw new Error('Invalid traffic detected');
 			}
 			return this.initLibrary();
 		})
