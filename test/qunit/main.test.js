@@ -183,7 +183,7 @@ QUnit.test("oAds library is NOT initialised if the validateAdsTraffic API decide
 
 QUnit.test("oAds library is initialised if the validateAdsTraffic API decides the user is NOT a robot", function(assert) {
 	const done = assert.async();
-//	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
+	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 
 	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
 	fetchMock.get('http://ads-api.ft.com/v1/user', 200);
