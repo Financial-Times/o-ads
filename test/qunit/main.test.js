@@ -196,8 +196,7 @@ QUnit.test("oAds library is initialised if the validateAdsTraffic API decides th
 		},
 		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
 	}).then(() => {
-		let ivtParam = this.ads.config('dfp_targeting');
-		assert.equal(ivtParam.ivtmvt, null);
+		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
 		done();
 	});
 
