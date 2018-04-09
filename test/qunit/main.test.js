@@ -83,9 +83,9 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 
 			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
 			.then(function() {
-				assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');	
-				assert.ok(kruxAttributesStub.calledOnce, 'resets the krux attributes');	
-				assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');	
+				assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');
+				assert.ok(kruxAttributesStub.calledOnce, 'resets the krux attributes');
+				assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
 				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
 				assert.equal(ads.targeting.get().a, undefined);
 				assert.equal(ads.targeting.get().b, '1');
@@ -128,7 +128,7 @@ QUnit.test('updateContext updates the config only if no API calls', function(ass
 			//change the user
 			ads.updateContext({ gpt: { zone: '456' }})
 			.then(function() {
-				
+
 				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
 				assert.equal(this.ads.targeting.get().a, '1');
 				assert.equal(this.ads.targeting.get().b, '2');
@@ -160,37 +160,35 @@ QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", fun
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	this.ads.init();
 	assert.ok(initLibrarySpy.called, 'initLibrary() function is called');
-	
+
 });
 
 
 QUnit.test("oAds library is NOT initialised if the validateAdsTraffic API decides the user is a robot", function(assert) {
 	const done = assert.async();
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
-	
+
 	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: true });
-	
+
 	this.ads.init({
 		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
 	}).then(() => {
-		assert.notOk(initLibrarySpy.called, 'initLibrary() shouldn\'t be called');
-		done();
-	}).catch(e => {
-		assert.equal(e.message, 'Invalid traffic detected');
+		let ivtParam = this.ads.config('dfp_targeting');
+		assert.equal(ivtParam.ivtmvt, '1');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
 QUnit.test("oAds library is initialised if the validateAdsTraffic API decides the user is NOT a robot", function(assert) {
 	const done = assert.async();
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
-	
+
 	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
 	fetchMock.get('http://ads-api.ft.com/v1/user', 200);
 	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
-	
+
 	this.ads.init({
 		targetingApi: {
 			user: 'http://ads-api.ft.com/v1/user',
@@ -201,18 +199,18 @@ QUnit.test("oAds library is initialised if the validateAdsTraffic API decides th
 		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
 QUnit.test("oAds library is initialised by default, even if there are API errors", function(assert) {
 	const done = assert.async();
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
-	
+
 	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', 500);
 	fetchMock.get('http://ads-api.ft.com/v1/user', 500);
 	fetchMock.get('http://ads-api.ft.com/v1/page', 500);
-	
+
 	this.ads.init({
 		targetingApi: {
 			user: 'http://ads-api.ft.com/v1/user',
@@ -223,6 +221,6 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 		assert.ok(initLibrarySpy.called, 'initLibrary() was called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });

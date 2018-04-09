@@ -17,21 +17,20 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 
-
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
-	
+
 	// Don't need to fetch anything if no targeting or bot APIs configured.
 	if(!targetingApi && !validateAdsTrafficApi) {
 		return Promise.resolve(this.initLibrary());
 	}
-	
+
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi) : Promise.resolve();
-	
+
 	/*
 		We only want to stop the oAds library from initializing if
 		the validateAdsTrafficApi says the user is a robot. Otherwise we catch()
@@ -41,7 +40,7 @@ Ads.prototype.init = function(options) {
 		.then(responses => responses[0].json())
 		.then(validateAdsTrafficResponse => {
 			if(validateAdsTrafficResponse.isRobot) {
-				throw new Error('Invalid traffic detected');
+				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
 			return this.initLibrary();
 		})
