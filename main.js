@@ -30,7 +30,7 @@ Ads.prototype.init = function(options) {
 	}
 	
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi) : Promise.resolve();
+	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
 	
 	/*
 		We only want to stop the oAds library from initializing if
@@ -38,12 +38,11 @@ Ads.prototype.init = function(options) {
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(responses => responses[0].json())
-		.then(validateAdsTrafficResponse => {
+		.then(([validateAdsTrafficResponse, targetingResponse]) => {
 			if(validateAdsTrafficResponse.isRobot) {
 				throw new Error('Invalid traffic detected');
 			}
-			return this.initLibrary();
+			return this.initLibrary({ enableKrux: shouldEnableKrux(targetingResponse) });
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
@@ -74,10 +73,12 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 };
 
-Ads.prototype.initLibrary = function() {
+Ads.prototype.initLibrary = function(options = { enableKrux: true}) {
 	this.slots.init();
 	this.gpt.init();
-	this.krux.init();
+	if(options.enableKrux) {
+		this.krux.init();
+	}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -108,6 +109,10 @@ Ads.prototype.debug = function (){
 		localStorage.removeItem('oAds');
 	}
 };
+
+function shouldEnableKrux([userApiResponse]) {
+	return userApiResponse.consent.behavioural;
+}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);
