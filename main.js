@@ -38,8 +38,11 @@ Ads.prototype.init = function(options) {
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
+		.then(res => {
+			return res;
+		})
 		.then(([validateAdsTrafficResponse, targetingResponse]) => {
-			if(validateAdsTrafficResponse.isRobot) {
+			if(isRobot(validateAdsTrafficResponse)) {
 				throw new Error('Invalid traffic detected');
 			}
 			return this.initLibrary({ enableKrux: shouldEnableKrux(targetingResponse) });
@@ -110,8 +113,18 @@ Ads.prototype.debug = function (){
 	}
 };
 
-function shouldEnableKrux([userApiResponse]) {
-	return userApiResponse.consent.behavioural;
+function isRobot(validateAdsTrafficResponse) {
+	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
+}
+
+// targetingResponse is of the form [userTargetingResponse, pageTargetingResponse]
+function shouldEnableKrux(targetingResponse) {
+	try {
+		return targetingResponse[0].consent.behavioural;
+	} catch(e) {
+		// Enable krux by default
+		return true;
+	}
 }
 
 function addDOMEventListener() {
