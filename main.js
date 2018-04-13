@@ -23,12 +23,12 @@ Ads.prototype.init = function(options) {
 	this.config(options);
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
-	
+
 	// Don't need to fetch anything if no targeting or bot APIs configured.
 	if(!targetingApi && !validateAdsTrafficApi) {
 		return Promise.resolve(this.initLibrary());
 	}
-	
+
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
 	
