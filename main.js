@@ -39,17 +39,22 @@ Ads.prototype.init = function(options) {
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
 		.then(([validateAdsTrafficResponse, targetingResponse]) => {
-			if(isRobot(validateAdsTrafficResponse)) {
-				throw new Error('Invalid traffic detected');
+			if (isRobot(validateAdsTrafficResponse)) {
+				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
-			return this.initLibrary({ enableKrux: shouldEnableKrux(targetingResponse) });
+			
+			const enableKrux = shouldEnableKrux(targetingResponse);
+			if (!enableKrux && localStorage.getItem('kxkuid')) {
+					Object
+						.keys(localStorage)
+						.filter((key) => /(^kx)|(^_kx)/.test(key))
+						.forEach(item => localStorage.removeItem(item));
+			}
+			
+			return this.initLibrary({ enableKrux: enableKrux });
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
-			// Unless we detect invalid traffic, then stop.
-			if(e && e.message === 'Invalid traffic detected') {
-				throw e;
-			}
 			return this.initLibrary();
 		});
 };
