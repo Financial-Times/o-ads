@@ -13,11 +13,8 @@ Ads.prototype.utils = require('./src/js/utils');
 
 /**
 * Initialises the ads library and all sub modules
-* @param config {object} a JSON object containing configuration for the current page
+* @param options {object} a JSON object containing configuration for the current page
 */
-
-
-
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
