@@ -270,7 +270,6 @@ QUnit.test("Krux is NOT initialised if ads-api says so", function(assert) {
 			behavioural: false
 		}
 	});
-	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
 	
 	this.ads.init({
 		targetingApi: {

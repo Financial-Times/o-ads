@@ -38,9 +38,6 @@ Ads.prototype.init = function(options) {
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(res => {
-			return res;
-		})
 		.then(([validateAdsTrafficResponse, targetingResponse]) => {
 			if(isRobot(validateAdsTrafficResponse)) {
 				throw new Error('Invalid traffic detected');
@@ -49,6 +46,7 @@ Ads.prototype.init = function(options) {
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
+			// Unless we detect invalid traffic, then stop.
 			if(e && e.message === 'Invalid traffic detected') {
 				throw e;
 			}
