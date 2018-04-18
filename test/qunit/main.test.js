@@ -156,6 +156,7 @@ QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", funct
 	assert.notOk(localStorage.getItem('oAds'), 'oAds value in local storage was removed');
 });
 
+
 QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", function(assert) {
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	this.ads.init();
@@ -222,5 +223,88 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 		done();
 	});
 
+	fetchMock.restore();
+});
+
+
+QUnit.test("Krux is initialised by default", function(assert) {
+	const done = assert.async();
+	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+	
+	this.ads.init().then(() => {
+		assert.ok(kruxInitSpy.called, 'krux.init() was called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+QUnit.test("Krux is initialised when traffic is valid but no user api has been configured", function(assert) {
+	const done = assert.async();
+	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
+	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
+	
+	this.ads.init({
+		targetingApi: {
+			page: 'http://ads-api.ft.com/v1/page'
+		},
+		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
+	}).then(() => {
+		assert.ok(kruxInitSpy.called, 'krux.init() was called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+QUnit.test("Krux is NOT initialised if behavioural consent is missing", function(assert) {
+	const done = assert.async();
+	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/user', {
+		consent: {
+			behavioural: false
+		}
+	});
+	
+	this.ads.init({
+		targetingApi: {
+			user: 'http://ads-api.ft.com/v1/user'
+		}
+	}).then(() => {
+		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
+	const done = assert.async();
+	localStorage.setItem('kxkuid', '1234');
+	localStorage.setItem('_kxkuid', '1234');
+	localStorage.setItem('kxuser', 'itsme');
+	localStorage.setItem('_kxuser', 'itsmeagain');
+	
+	fetchMock.get('http://ads-api.ft.com/v1/user', {
+		consent: {
+			behavioural: false
+		}
+	});
+	
+	this.ads.init({
+		targetingApi: {
+			user: 'http://ads-api.ft.com/v1/user'
+		}
+	}).then(() => {
+		assert.notOk(localStorage.getItem('kxkuid'));
+		assert.notOk(localStorage.getItem('_kxkuid'));
+		assert.notOk(localStorage.getItem('kxuser'));
+		assert.notOk(localStorage.getItem('_kxuser'));
+		done();
+	});
+	
 	fetchMock.restore();
 });

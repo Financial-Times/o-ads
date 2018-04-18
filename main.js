@@ -13,10 +13,8 @@ Ads.prototype.utils = require('./src/js/utils');
 
 /**
 * Initialises the ads library and all sub modules
-* @param config {object} a JSON object containing configuration for the current page
+* @param options {object} a JSON object containing configuration for the current page
 */
-
-
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
@@ -29,26 +27,31 @@ Ads.prototype.init = function(options) {
 	}
 
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi) : Promise.resolve();
-
+	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
+	
 	/*
 		We only want to stop the oAds library from initializing if
 		the validateAdsTrafficApi says the user is a robot. Otherwise we catch()
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(responses => responses[0].json())
-		.then(validateAdsTrafficResponse => {
-			if(validateAdsTrafficResponse.isRobot) {
+		.then(([validateAdsTrafficResponse, targetingResponse]) => {
+			if (isRobot(validateAdsTrafficResponse)) {
 				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
-			return this.initLibrary();
+			
+			const enableKrux = shouldEnableKrux(targetingResponse);
+			if (!enableKrux && localStorage.getItem('kxkuid')) {
+					Object
+						.keys(localStorage)
+						.filter((key) => /(^kx)|(^_kx)/.test(key))
+						.forEach(item => localStorage.removeItem(item));
+			}
+			
+			return this.initLibrary({ enableKrux: enableKrux });
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
-			if(e && e.message === 'Invalid traffic detected') {
-				throw e;
-			}
 			return this.initLibrary();
 		});
 };
@@ -73,10 +76,12 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 };
 
-Ads.prototype.initLibrary = function() {
+Ads.prototype.initLibrary = function(options = { enableKrux: true}) {
 	this.slots.init();
 	this.gpt.init();
-	this.krux.init();
+	if(options.enableKrux) {
+		this.krux.init();
+	}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -107,6 +112,20 @@ Ads.prototype.debug = function (){
 		localStorage.removeItem('oAds');
 	}
 };
+
+function isRobot(validateAdsTrafficResponse) {
+	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
+}
+
+// targetingResponse is of the form [userTargetingResponse, pageTargetingResponse]
+function shouldEnableKrux(targetingResponse) {
+	try {
+		return targetingResponse[0].consent.behavioural;
+	} catch(e) {
+		// Enable krux by default
+		return true;
+	}
+}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);

@@ -14,7 +14,7 @@ Api.prototype.getUserData = function(target) {
 	.then( res => res.json())
 	.catch(() => Promise.resolve({}));
 
-}
+};
 
 Api.prototype.getPageData = function(target, timeout) {
 	if(!target) { return Promise.resolve({}) };
@@ -26,7 +26,7 @@ Api.prototype.getPageData = function(target, timeout) {
 	})
 	.then( res => res.json())
 	.catch(() => Promise.resolve({}));
-}
+};
 
 Api.prototype.handleResponse = function(response) {
 	this.data = response;
@@ -54,7 +54,9 @@ Api.prototype.handleResponse = function(response) {
 			}
 		}
 	}
-}
+	
+	return response;
+};
 
 Api.prototype.init = function(config, oAds) {
 	this.config = config;
@@ -66,7 +68,7 @@ Api.prototype.init = function(config, oAds) {
 
 	return Promise.all([this.getUserData(config.user), this.getPageData(config.page)])
 	.then(this.handleResponse.bind(this))
-}
+};
 
 Api.prototype.reset = function() {
 	this.instance.krux.resetAttributes();
@@ -78,6 +80,6 @@ Api.prototype.reset = function() {
 			});
 		}
 	})
-}
+};
 
 module.exports = new Api();
