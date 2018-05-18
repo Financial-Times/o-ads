@@ -226,10 +226,11 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 	fetchMock.restore();
 });
 
-
-QUnit.test("Krux is initialised by default", function(assert) {
+QUnit.test("Krux is initialised when behaviouralAds consent is present", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+	
+	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 	
 	this.ads.init().then(() => {
 		assert.ok(kruxInitSpy.called, 'krux.init() was called');
@@ -239,41 +240,13 @@ QUnit.test("Krux is initialised by default", function(assert) {
 	fetchMock.restore();
 });
 
-QUnit.test("Krux is initialised when traffic is valid but no user api has been configured", function(assert) {
+QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
 	
-	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
-	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
 	
-	this.ads.init({
-		targetingApi: {
-			page: 'http://ads-api.ft.com/v1/page'
-		},
-		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
-	}).then(() => {
-		assert.ok(kruxInitSpy.called, 'krux.init() was called');
-		done();
-	});
-	
-	fetchMock.restore();
-});
-
-QUnit.test("Krux is NOT initialised if behavioural consent is missing", function(assert) {
-	const done = assert.async();
-	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
-	fetchMock.get('http://ads-api.ft.com/v1/user', {
-		consent: {
-			behavioural: false
-		}
-	});
-	
-	this.ads.init({
-		targetingApi: {
-			user: 'http://ads-api.ft.com/v1/user'
-		}
-	}).then(() => {
+	this.ads.init().then(() => {
 		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
 		done();
 	});
@@ -281,24 +254,32 @@ QUnit.test("Krux is NOT initialised if behavioural consent is missing", function
 	fetchMock.restore();
 });
 
+QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(assert) {
+	const done = assert.async();
+	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+	
+	this.ads.init().then(() => {
+		assert.notOk(kruxInitSpy.called, 'krux.init() was NOT called');
+		done();
+	});
+	
+	fetchMock.restore();
+});
+
+
+
 QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
 	const done = assert.async();
+	
+	document.cookie = 'behaviouraladsOnsite:off;';
+	
 	localStorage.setItem('kxkuid', '1234');
 	localStorage.setItem('_kxkuid', '1234');
 	localStorage.setItem('kxuser', 'itsme');
 	localStorage.setItem('_kxuser', 'itsmeagain');
 	
-	fetchMock.get('http://ads-api.ft.com/v1/user', {
-		consent: {
-			behavioural: false
-		}
-	});
 	
-	this.ads.init({
-		targetingApi: {
-			user: 'http://ads-api.ft.com/v1/user'
-		}
-	}).then(() => {
+	this.ads.init().then(() => {
 		assert.notOk(localStorage.getItem('kxkuid'));
 		assert.notOk(localStorage.getItem('_kxkuid'));
 		assert.notOk(localStorage.getItem('kxuser'));

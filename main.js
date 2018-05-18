@@ -11,6 +11,7 @@ Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
+
 /**
 * Initialises the ads library and all sub modules
 * @param options {object} a JSON object containing configuration for the current page
@@ -18,41 +19,42 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
+	
+	const enableKrux = shouldEnableKrux();
+	// Delete the krux data from local storage if we need to
+	if (!enableKrux && localStorage.getItem('kxkuid')) {
+		Object
+			.keys(localStorage)
+			.filter((key) => /(^kx)|(^_kx)/.test(key))
+			.forEach(item => localStorage.removeItem(item));
+	}
+	
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
-
+	
 	// Don't need to fetch anything if no targeting or bot APIs configured.
 	if(!targetingApi && !validateAdsTrafficApi) {
-		return Promise.resolve(this.initLibrary());
+		return Promise.resolve(this.initLibrary({ enableKrux }));
 	}
 
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
-	
 	/*
 		We only want to stop the oAds library from initializing if
 		the validateAdsTrafficApi says the user is a robot. Otherwise we catch()
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(([validateAdsTrafficResponse, targetingResponse]) => {
+		.then(([validateAdsTrafficResponse]) => {
 			if (isRobot(validateAdsTrafficResponse)) {
 				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
 			
-			const enableKrux = shouldEnableKrux(targetingResponse);
-			if (!enableKrux && localStorage.getItem('kxkuid')) {
-					Object
-						.keys(localStorage)
-						.filter((key) => /(^kx)|(^_kx)/.test(key))
-						.forEach(item => localStorage.removeItem(item));
-			}
-			
-			return this.initLibrary({ enableKrux: enableKrux });
+			return this.initLibrary({ enableKrux });
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
-			return this.initLibrary();
+			return this.initLibrary({ enableKrux });
 		});
 };
 
@@ -76,7 +78,7 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 };
 
-Ads.prototype.initLibrary = function(options = { enableKrux: true}) {
+Ads.prototype.initLibrary = function(options = { enableKrux: false}) {
 	this.slots.init();
 	this.gpt.init();
 	if(options.enableKrux) {
@@ -117,13 +119,14 @@ function isRobot(validateAdsTrafficResponse) {
 	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
 }
 
-// targetingResponse is of the form [userTargetingResponse, pageTargetingResponse]
-function shouldEnableKrux(targetingResponse) {
-	try {
-		return targetingResponse[0].consent.behavioural;
-	} catch(e) {
-		// Enable krux by default
-		return true;
+function shouldEnableKrux() {
+	const re = new RegExp('FTConsent=([^;]+)');
+	const match = document.cookie.match(re);
+	
+	if (!match) return false;
+	else {
+		const consentCookie = match[1];
+		return !!consentCookie.split(',').find(v => v === 'behaviouraladsOnsite:on');
 	}
 }
 
