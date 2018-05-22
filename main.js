@@ -19,19 +19,19 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	this.config.init();
 	this.config(options);
-	
+
 	const enableKrux = shouldEnableKrux();
 	// Delete the krux data from local storage if we need to
-	if (!enableKrux && localStorage.getItem('kxkuid')) {
+	if (!cookieConsent().krux && localStorage.getItem('kxkuid')) {
 		Object
 			.keys(localStorage)
 			.filter((key) => /(^kx)|(^_kx)/.test(key))
 			.forEach(item => localStorage.removeItem(item));
 	}
-	
+
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
-	
+
 	// Don't need to fetch anything if no targeting or bot APIs configured.
 	if(!targetingApi && !validateAdsTrafficApi) {
 		return Promise.resolve(this.initLibrary({ enableKrux }));
@@ -49,7 +49,7 @@ Ads.prototype.init = function(options) {
 			if (isRobot(validateAdsTrafficResponse)) {
 				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
-			
+
 			return this.initLibrary({ enableKrux });
 		})
 		// If anything fails, default to load ads without targeting
@@ -119,14 +119,22 @@ function isRobot(validateAdsTrafficResponse) {
 	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
 }
 
-function shouldEnableKrux() {
-	const re = new RegExp('FTConsent=([^;]+)');
-	const match = document.cookie.match(re);
-	
-	if (!match) return false;
-	else {
-		const consentCookie = match[1];
-		return !!consentCookie.split(',').find(v => v === 'behaviouraladsOnsite:on');
+let cookieConsent = function(){
+		const re = new RegExp('FTConsent=([^;]+)');
+		const match = document.cookie.match(re);
+		let enableBehv = false;
+		let enableProg = 'n';
+		if (!match){
+			return {
+				krux : false,
+				programmatic : 'n'
+		}}
+		else {
+			const consentCookie = match[1];
+			return {
+				krux : !!consentCookie.split(',').find(v => v === 'behaviouralAdsOnsite:on'),
+				programmatic : !!consentCookie.split(',').find(v => v === 'programmaticAdsOnsite:on')
+		};
 	}
 }
 
