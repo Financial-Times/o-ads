@@ -127,8 +127,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 					"guid": "11111111-2222-3333-4444-555555555555",
 					"slv": "int",
 					"loggedIn": true,
-					"gender": "F",
-					"cc" : "y"
+					"gender": "F"
 		};
 		const krux_targeting =  {
 					"custom_key": "custom value",

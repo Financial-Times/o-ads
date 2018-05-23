@@ -271,7 +271,7 @@ QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(as
 QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
 	const done = assert.async();
 
-	document.cookie = 'behaviouraladsOnsite:off;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
 
 	localStorage.setItem('kxkuid', '1234');
 	localStorage.setItem('_kxkuid', '1234');
@@ -287,5 +287,34 @@ QUnit.test("Krux is deleted from localStorage if behavioural consent is missing"
 		done();
 	});
 
+	fetchMock.restore();
+});
+
+
+QUnit.test("No cc targeting parameter is set if the library is initialised with cookieconsent disabled", function(assert) {
+	const done = assert.async();
+	this.ads.init({disableConsentCookie: true}).then(() => {
+		assert.equal(this.ads.targeting.get().cc, undefined);
+		done();
+	});
+	fetchMock.restore();
+});
+
+QUnit.test("cc targeting parameter is set to 'n' when no consentCookie is present and cookieconsent has not been explictely disabled", function(assert) {
+	const done = assert.async();
+	this.ads.init().then(() => {
+		assert.equal(this.ads.targeting.get().cc, 'n');
+		done();
+	});
+	fetchMock.restore();
+});
+
+QUnit.test("cc targeting parameter is set to 'y' consentCookie is present and programmatic consent is true", function(assert) {
+	const done = assert.async();
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off,programmaticadsOnsite:on;';
+	this.ads.init().then(() => {
+		assert.equal(this.ads.targeting.get().cc, 'y');
+		done();
+	});
 	fetchMock.restore();
 });
