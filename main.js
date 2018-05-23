@@ -17,32 +17,33 @@ Ads.prototype.utils = require('./src/js/utils');
 * @param options {object} a JSON object containing configuration for the current page
 */
 
-
-	let getConsents = function(disabled) {
-		if (disabled) {
-			// cookie consent has been explicitely disabled via config options
-			return { behavioral : true, programmatic : 'y'};
-		}
-		else {
-			// derive consent options from ft consent cookie
-			const re = new RegExp('FTConsent=([^;]+)');
-			const match = document.cookie.match(re);
-			if (!match) {
-				// cookie stasis or no consent cookie found.
-				return { behavioral : true, programmatic : 'y'};
-			}
-			else {
-				const consentCookie = match[1];
-				return {
-					behavioral : !!consentCookie.split(',').find(v => v === 'behaviouraladsOnsite:on'),
-					programmatic : !!consentCookie.split(',').find(v => v === 'programmaticadsOnsite:on')
-				};
-			}
-		}
+	const getConsents = (disabled) => {
+	    if (disabled) {
+	        // cookie consent has been explicitly disabled via config options
+	        return {
+	            behavioral : true,
+	            programmatic : 'y'
+	        };
+	    }
+	    // derive consent options from ft consent cookie
+	    const re = /FTConsent=([^;]+)/;
+	    const match = document.cookie.match(re);
+	    if (!match) {
+	        // cookie stasis or no consent cookie found
+	        return {
+	            behavioral : true,
+	            programmatic : 'y'
+	        };
+	    }
+	    const consentCookie = match[1];
+	    return {
+	        behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+	        programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? 'y' : 'n'
+	    };
 	};
 
-
 	Ads.prototype.init = function(options) {
+	options = options || {}; 
 	this.config.init();
 	this.config(options);
 	this.consents = getConsents(options.disableConsentCookie);
