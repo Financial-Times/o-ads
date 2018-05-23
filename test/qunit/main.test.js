@@ -229,40 +229,40 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 QUnit.test("Krux is initialised when behaviouralAds consent is present", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
+
 	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
-	
+
 	this.ads.init().then(() => {
 		assert.ok(kruxInitSpy.called, 'krux.init() was called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
 QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
+
 	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
-	
+
 	this.ads.init().then(() => {
 		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
 QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
+
 	this.ads.init().then(() => {
 		assert.notOk(kruxInitSpy.called, 'krux.init() was NOT called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
@@ -270,15 +270,15 @@ QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(as
 
 QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
 	const done = assert.async();
-	
+
 	document.cookie = 'behaviouraladsOnsite:off;';
-	
+
 	localStorage.setItem('kxkuid', '1234');
 	localStorage.setItem('_kxkuid', '1234');
 	localStorage.setItem('kxuser', 'itsme');
 	localStorage.setItem('_kxuser', 'itsmeagain');
-	
-	
+
+
 	this.ads.init().then(() => {
 		assert.notOk(localStorage.getItem('kxkuid'));
 		assert.notOk(localStorage.getItem('_kxkuid'));
@@ -286,6 +286,6 @@ QUnit.test("Krux is deleted from localStorage if behavioural consent is missing"
 		assert.notOk(localStorage.getItem('_kxuser'));
 		done();
 	});
-	
+
 	fetchMock.restore();
 });

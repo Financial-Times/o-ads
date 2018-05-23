@@ -98,8 +98,8 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 QUnit.test("does not overwrite existing data in user config", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
-	
-	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
+
+	document.cookie = 'FTConsent=behaviouraladsOnsite:on,programmaticadsOnsite:on';
 
 	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
 
@@ -127,7 +127,8 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 					"guid": "11111111-2222-3333-4444-555555555555",
 					"slv": "int",
 					"loggedIn": true,
-					"gender": "F"
+					"gender": "F",
+					"cc" : "y"
 		};
 		const krux_targeting =  {
 					"custom_key": "custom value",
@@ -137,13 +138,10 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 					"loggedIn": true,
 					"gender": "F"
 		};
-
 		Object.keys(dfp_targeting).forEach((key) => {
-				assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-
 		assert.deepEqual(ads.krux.customAttributes.user, krux_targeting, 'the krux attributes are correct');
-
 		done();
 	});
 });
@@ -356,7 +354,7 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
-	
+
 	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 
 	// mocks api response
@@ -456,7 +454,7 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 QUnit.test("Single Page app can update page context data", function(assert) {
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
-	
+
 	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
 
 	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
