@@ -16,26 +16,7 @@ Ads.prototype.utils = require('./src/js/utils');
 * Initialises the ads library and all sub modules
 * @param options {object} a JSON object containing configuration for the current page
 */
-
-	const getConsents = () => {
-		// derive consent options from ft consent cookie
-		const re = /FTConsent=([^;]+)/;
-		const match = document.cookie.match(re);
-		if (!match) {
-			// cookie stasis or no consent cookie found
-			return {
-				behavioral : false,
-				programmatic : false
-			};
-		}
-		const consentCookie = decodeURIComponent(match[1]);
-		return {
-			behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
-			programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
-		};
-	};
-
-	Ads.prototype.init = function(options) {
+Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
 	this.config(options);
@@ -43,7 +24,10 @@ Ads.prototype.utils = require('./src/js/utils');
 		this.consents =  {
 			behavioral : true
 		};
-	} else {this.consents = getConsents();}
+	}
+	else {
+		this.consents = getConsents();
+	}
 
 	// Delete the krux data from local storage if we need to
 	if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
@@ -128,6 +112,25 @@ Ads.prototype.debug = function (){
 	if (remove) {
 		localStorage.removeItem('oAds');
 	}
+};
+
+
+const getConsents = () => {
+	// derive consent options from ft consent cookie
+	const re = /FTConsent=([^;]+)/;
+	const match = document.cookie.match(re);
+	if (!match) {
+		// cookie stasis or no consent cookie found
+		return {
+			behavioral : false,
+			programmatic : false
+		};
+	}
+	const consentCookie = decodeURIComponent(match[1]);
+	return {
+		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
+	};
 };
 
 
