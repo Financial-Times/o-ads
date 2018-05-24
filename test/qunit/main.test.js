@@ -226,85 +226,95 @@ QUnit.test("oAds library is initialised by default, even if there are API errors
 	fetchMock.restore();
 });
 
-
-QUnit.test("Krux is initialised by default", function(assert) {
+QUnit.test("Krux is initialised when behaviouralAds consent is present", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
+
+	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
+
 	this.ads.init().then(() => {
 		assert.ok(kruxInitSpy.called, 'krux.init() was called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
-QUnit.test("Krux is initialised when traffic is valid but no user api has been configured", function(assert) {
+QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", function(assert) {
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
-	fetchMock.get('http://ads-api.ft.com/v1/validate-traffic', { isRobot: false });
-	fetchMock.get('http://ads-api.ft.com/v1/page', 200);
-	
-	this.ads.init({
-		targetingApi: {
-			page: 'http://ads-api.ft.com/v1/page'
-		},
-		validateAdsTrafficApi: 'http://ads-api.ft.com/v1/validate-traffic'
-	}).then(() => {
-		assert.ok(kruxInitSpy.called, 'krux.init() was called');
-		done();
-	});
-	
-	fetchMock.restore();
-});
 
-QUnit.test("Krux is NOT initialised if behavioural consent is missing", function(assert) {
-	const done = assert.async();
-	const kruxInitSpy = this.spy(this.ads.krux, 'init');
-	
-	fetchMock.get('http://ads-api.ft.com/v1/user', {
-		consent: {
-			behavioural: false
-		}
-	});
-	
-	this.ads.init({
-		targetingApi: {
-			user: 'http://ads-api.ft.com/v1/user'
-		}
-	}).then(() => {
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
+
+	this.ads.init().then(() => {
 		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
 		done();
 	});
-	
+
 	fetchMock.restore();
 });
 
+QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(assert) {
+	const done = assert.async();
+	const kruxInitSpy = this.spy(this.ads.krux, 'init');
+
+	this.ads.init().then(() => {
+		assert.notOk(kruxInitSpy.called, 'krux.init() was NOT called');
+		done();
+	});
+
+	fetchMock.restore();
+});
+
+
+
 QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
 	const done = assert.async();
+
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
+
 	localStorage.setItem('kxkuid', '1234');
 	localStorage.setItem('_kxkuid', '1234');
 	localStorage.setItem('kxuser', 'itsme');
 	localStorage.setItem('_kxuser', 'itsmeagain');
-	
-	fetchMock.get('http://ads-api.ft.com/v1/user', {
-		consent: {
-			behavioural: false
-		}
-	});
-	
-	this.ads.init({
-		targetingApi: {
-			user: 'http://ads-api.ft.com/v1/user'
-		}
-	}).then(() => {
+
+
+	this.ads.init().then(() => {
 		assert.notOk(localStorage.getItem('kxkuid'));
 		assert.notOk(localStorage.getItem('_kxkuid'));
 		assert.notOk(localStorage.getItem('kxuser'));
 		assert.notOk(localStorage.getItem('_kxuser'));
 		done();
 	});
-	
+
+	fetchMock.restore();
+});
+
+
+QUnit.test("No cc targeting parameter is set if the library is initialised with cookieconsent disabled", function(assert) {
+	const done = assert.async();
+	this.ads.init({disableConsentCookie: true}).then(() => {
+		assert.equal(this.ads.targeting.get().cc, undefined);
+		done();
+	});
+	fetchMock.restore();
+});
+
+QUnit.test("cc targeting parameter is set to 'n' when no consentCookie is present and cookieconsent has not been explictely disabled", function(assert) {
+	const done = assert.async();
+	this.ads.init().then(() => {
+		assert.equal(this.ads.targeting.get().cc, 'n');
+		done();
+	});
+	fetchMock.restore();
+});
+
+QUnit.test("cc targeting parameter is set to 'y' consentCookie is present and programmatic consent is true", function(assert) {
+	const done = assert.async();
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off,programmaticadsOnsite:on;';
+	this.ads.init().then(() => {
+		assert.equal(this.ads.targeting.get().cc, 'y');
+		done();
+	});
 	fetchMock.restore();
 });

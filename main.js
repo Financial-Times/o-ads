@@ -11,13 +11,45 @@ Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 
+
 /**
 * Initialises the ads library and all sub modules
 * @param options {object} a JSON object containing configuration for the current page
 */
-Ads.prototype.init = function(options) {
+
+	const getConsents = () => {
+	    // derive consent options from ft consent cookie
+	    const re = /FTConsent=([^;]+)/;
+	    const match = document.cookie.match(re);
+	    if (!match) {
+	        // cookie stasis or no consent cookie found
+	        return {
+	            behavioral : false,
+	            programmatic : "n"
+	        };
+	    }
+	    const consentCookie = match[1];
+	    return {
+	        behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+	        programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? "y" : "n"
+	    };
+	};
+
+	Ads.prototype.init = function(options) {
+	options = options || {};
 	this.config.init();
 	this.config(options);
+	if (options.disableConsentCookie) {
+		this.consents = {};
+	} else {this.consents = getConsents();}
+
+	// Delete the krux data from local storage if we need to
+		if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
+			Object
+				.keys(localStorage)
+				.filter((key) => /(^kx)|(^_kx)/.test(key))
+				.forEach(item => localStorage.removeItem(item));
+		}
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
 
@@ -28,27 +60,18 @@ Ads.prototype.init = function(options) {
 
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
-	
 	/*
 		We only want to stop the oAds library from initializing if
 		the validateAdsTrafficApi says the user is a robot. Otherwise we catch()
 		all errors and initialise the library anyway.
 	 */
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(([validateAdsTrafficResponse, targetingResponse]) => {
+		.then(([validateAdsTrafficResponse]) => {
 			if (isRobot(validateAdsTrafficResponse)) {
 				this.config({"dfp_targeting": {"ivtmvt": "1"}});
 			}
-			
-			const enableKrux = shouldEnableKrux(targetingResponse);
-			if (!enableKrux && localStorage.getItem('kxkuid')) {
-					Object
-						.keys(localStorage)
-						.filter((key) => /(^kx)|(^_kx)/.test(key))
-						.forEach(item => localStorage.removeItem(item));
-			}
-			
-			return this.initLibrary({ enableKrux: enableKrux });
+
+			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
 		.catch(e => {
@@ -65,7 +88,7 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 			.then(() => {
 					this.gpt.updatePageTargeting(this.targeting.get());
 				/* istanbul ignore else */
-					if(this.config('krux')) {
+					if(this.config('krux') && this.consents.behavioral) {
 						this.krux.setAllAttributes();
 						this.krux.sendNewPixel(isNewPage);
 					}
@@ -76,12 +99,11 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 };
 
-Ads.prototype.initLibrary = function(options = { enableKrux: true}) {
+Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
-	if(options.enableKrux) {
-		this.krux.init();
-	}
+ 	if (this.consents.behavioral) {this.krux.init();}
+	if (this.consents.programmatic) {this.targeting.add({"cc" : this.consents.programmatic});}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -115,16 +137,6 @@ Ads.prototype.debug = function (){
 
 function isRobot(validateAdsTrafficResponse) {
 	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
-}
-
-// targetingResponse is of the form [userTargetingResponse, pageTargetingResponse]
-function shouldEnableKrux(targetingResponse) {
-	try {
-		return targetingResponse[0].consent.behavioural;
-	} catch(e) {
-		// Enable krux by default
-		return true;
-	}
 }
 
 function addDOMEventListener() {

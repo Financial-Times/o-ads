@@ -99,6 +99,8 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
+	document.cookie = 'FTConsent=behaviouraladsOnsite:on,programmaticadsOnsite:on';
+
 	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
 
 	const ads = this.ads.init({
@@ -135,13 +137,10 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 					"loggedIn": true,
 					"gender": "F"
 		};
-
 		Object.keys(dfp_targeting).forEach((key) => {
-				assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
+			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-
 		assert.deepEqual(ads.krux.customAttributes.user, krux_targeting, 'the krux attributes are correct');
-
 		done();
 	});
 });
@@ -355,6 +354,8 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
+	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
+
 	// mocks api response
 	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
 
@@ -452,6 +453,8 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 QUnit.test("Single Page app can update page context data", function(assert) {
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
+
+	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
 
 	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
 

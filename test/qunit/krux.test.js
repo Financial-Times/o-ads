@@ -4,13 +4,12 @@
 
 QUnit.module('Krux', {
 	beforeEach: function() {
+		document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 		window.requestIdleCallback = function(cb) { cb(); };
 		window.Krux = this.stub();
 	},
 	afterEach: function() {
 		delete window.Krux;
-		document.cookie = "kxsegs=null";
-		document.cookie = "kxuser=null";
 	}
 });
 
