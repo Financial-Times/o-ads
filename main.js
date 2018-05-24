@@ -18,21 +18,21 @@ Ads.prototype.utils = require('./src/js/utils');
 */
 
 	const getConsents = () => {
-	    // derive consent options from ft consent cookie
-	    const re = /FTConsent=([^;]+)/;
-	    const match = document.cookie.match(re);
-	    if (!match) {
-	        // cookie stasis or no consent cookie found
-	        return {
-	            behavioral : false,
-	            programmatic : "n"
-	        };
-	    }
-	    const consentCookie = match[1];
-	    return {
-	        behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
-	        programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? "y" : "n"
-	    };
+		// derive consent options from ft consent cookie
+		const re = /FTConsent=([^;]+)/;
+		const match = document.cookie.match(re);
+		if (!match) {
+			// cookie stasis or no consent cookie found
+			return {
+				behavioral : false,
+				programmatic : "n"
+			};
+		}
+		const consentCookie = match[1];
+		return {
+			behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+			programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? "y" : "n"
+		};
 	};
 
 	Ads.prototype.init = function(options) {
@@ -102,7 +102,7 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
- 	if (this.consents.behavioral) {this.krux.init();}
+	if (this.consents.behavioral) {this.krux.init();}
 	if (this.consents.programmatic) {this.targeting.add({"cc" : this.consents.programmatic});}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
