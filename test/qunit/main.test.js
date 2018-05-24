@@ -300,16 +300,8 @@ QUnit.test("No cc targeting parameter is set if the library is initialised with 
 	fetchMock.restore();
 });
 
-QUnit.test("cc targeting parameter is set to 'n' when no consentCookie is present and cookieconsent has not been explictely disabled", function(assert) {
-	const done = assert.async();
-	this.ads.init().then(() => {
-		assert.equal(this.ads.targeting.get().cc, 'n');
-		done();
-	});
-	fetchMock.restore();
-});
 
-QUnit.test("cc targeting parameter is set to 'y' consentCookie is present and programmatic consent is true", function(assert) {
+QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present and programmatic consent is true", function(assert) {
 	const done = assert.async();
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
 	this.ads.init().then(() => {
