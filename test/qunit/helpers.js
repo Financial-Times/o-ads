@@ -315,6 +315,10 @@ module.exports.clear = function() {
 	sandbox.restore();
 };
 
+module.exports.deleteCookie = function(name) {
+	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+};
+
 /* exception to be thrown by meta if invalid data is supplied */
 function MetaException(message) {
 	this.message = message;

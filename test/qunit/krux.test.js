@@ -10,6 +10,7 @@ QUnit.module('Krux', {
 	},
 	afterEach: function() {
 		delete window.Krux;
+		this.deleteCookie('FTConsent');
 	}
 });
 

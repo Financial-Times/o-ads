@@ -45,11 +45,13 @@ Ads.prototype.init = function(options) {
 	}
 	
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = this.config().validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
+	const validateAdsTrafficPromise = validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
 	
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
 		.then(([validateAdsTrafficResponse]) => {
-			this.targeting.add(validateAdsTrafficResponse);
+			if(validateAdsTrafficResponse) {
+				this.targeting.add(validateAdsTrafficResponse);
+			}
 			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
@@ -81,8 +83,12 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
-	if (this.consents.behavioral) {this.krux.init();}
-	if (this.consents.programmatic) {this.targeting.add({"cc" : "y"});}
+	if (this.consents.behavioral) {
+		this.krux.init();
+	}
+	if (this.consents.programmatic) {
+		this.targeting.add({"cc" : "y"});
+	}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);

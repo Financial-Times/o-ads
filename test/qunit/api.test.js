@@ -4,11 +4,15 @@
 
 const fetchMock = require('fetch-mock');
 
-QUnit.module('ads API config', {});
+QUnit.module('ads API config', {
+	afterEach: function() {
+		this.deleteCookie('FTConsent');
+	}
+});
 
 QUnit.test('resolves with an empty promise if called without any urls', function(assert) {
 	const done = assert.async();
-
+	
 	this.ads.api.init()
 	.then(res => {
 		assert.equal(res, undefined);
@@ -101,7 +105,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon%2CprogrammaticadsOnsite%3Aon';
 
-	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -216,8 +220,10 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 	const pageJSON = JSON.stringify(this.fixtures.content);
-
-	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
+	
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon%2CprogrammaticadsOnsite%3Aon';
+	
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
 	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
 
 	const ads = this.ads.init({

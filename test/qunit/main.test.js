@@ -4,7 +4,11 @@
 
 const fetchMock = require('fetch-mock');
 
-QUnit.module('Main');
+QUnit.module('Main', {
+	beforeEach: function() {
+		this.deleteCookie('FTConsent');
+	}
+});
 
 QUnit.test('init All', function(assert) {
 	const done = assert.async();
@@ -69,6 +73,8 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 	const kruxPixelStub = this.stub(this.ads.krux, 'sendNewPixel');
 	const kruxAttributesStub = this.stub(this.ads.krux, 'setAllAttributes');
 	const updatePageTargetingStub = this.stub(this.ads.gpt, 'updatePageTargeting');
+	
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
 	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}, krux: { id: 'hello' }})
@@ -175,6 +181,7 @@ QUnit.test("Krux is initialised when behaviouralAds consent is present", functio
 		done();
 	});
 
+	document.cookie = ' ';
 	fetchMock.restore();
 });
 
@@ -188,7 +195,8 @@ QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", funct
 		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
 		done();
 	});
-
+	
+	document.cookie = ' ';
 	fetchMock.restore();
 });
 
@@ -224,7 +232,8 @@ QUnit.test("Krux is deleted from localStorage if behavioural consent is missing"
 		assert.notOk(localStorage.getItem('_kxuser'));
 		done();
 	});
-
+	
+	document.cookie = ' ';
 	fetchMock.restore();
 });
 
@@ -242,10 +251,12 @@ QUnit.test("No cc targeting parameter is set if the library is initialised with 
 QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present and programmatic consent is true", function(assert) {
 	const done = assert.async();
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
+	
 	this.ads.init().then(() => {
 		assert.equal(this.ads.targeting.get().cc, 'y');
 		done();
 	});
+	document.cookie = ' ';
 	fetchMock.restore();
 });
 
@@ -274,6 +285,19 @@ QUnit.test("mhv targeting parameter is set to 'n' if the traffic is NOT valid", 
 	
 	this.ads.init({ validateAdsTraffic: true }).then(() => {
 		assert.equal(this.ads.targeting.get().mhv, 'n');
+		done();
+	});
+	fetchMock.restore();
+});
+
+QUnit.test("When ValidateAdsTraffic is NOT specified, the mhv targeting parameter should NOT be set", function(assert) {
+	const done = assert.async();
+	const setSpy = this.spy(this.ads.targeting, 'add');
+	
+	this.ads.init({
+		targetingApi: { user: 'https://www.google.com' }
+	}).then(() => {
+		assert.equal(setSpy.callCount, 0, 'mhv targeting parameter should not be set');
 		done();
 	});
 	fetchMock.restore();
