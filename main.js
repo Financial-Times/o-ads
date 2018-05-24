@@ -16,16 +16,35 @@ Ads.prototype.utils = require('./src/js/utils');
 * Initialises the ads library and all sub modules
 * @param options {object} a JSON object containing configuration for the current page
 */
-Ads.prototype.init = function(options) {
+
+	const getConsents = () => {
+		// derive consent options from ft consent cookie
+		const re = /FTConsent=([^;]+)/;
+		const match = document.cookie.match(re);
+		if (!match) {
+			// cookie stasis or no consent cookie found
+			return {
+				behavioral : false,
+				programmatic : false
+			};
+		}
+		const consentCookie = decodeURIComponent(match[1]);
+		return {
+			behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+			programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
+		};
+	};
+
+	Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
 	this.config(options);
 	if (options.disableConsentCookie) {
-		this.consents = {};
-	} else {
-		this.consents = getConsents();
-	}
-	
+		this.consents =  {
+			behavioral : true
+		};
+	} else {this.consents = getConsents();}
+
 	// Delete the krux data from local storage if we need to
 	if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
 		Object
@@ -78,8 +97,8 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
- 	if (this.consents.behavioral) {this.krux.init();}
-	if (this.consents.programmatic) {this.targeting.add({"cc" : this.consents.programmatic});}
+	if (this.consents.behavioral) {this.krux.init();}
+	if (this.consents.programmatic) {this.targeting.add({"cc" : "y"});}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -133,25 +152,6 @@ function getMoatIvtResponse() {
 		}, 1000);
 	});
 }
-
-
-const getConsents = () => {
-	// derive consent options from ft consent cookie
-	const re = /FTConsent=([^;]+)/;
-	const match = document.cookie.match(re);
-	if (!match) {
-		// cookie stasis or no consent cookie found
-		return {
-			behavioral : false,
-			programmatic : "n"
-		};
-	}
-	const consentCookie = match[1];
-	return {
-		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
-		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? "y" : "n"
-	};
-};
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);

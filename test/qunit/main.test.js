@@ -168,7 +168,7 @@ QUnit.test("Krux is initialised when behaviouralAds consent is present", functio
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
 
-	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
 	this.ads.init().then(() => {
 		assert.ok(kruxInitSpy.called, 'krux.init() was called');
@@ -182,7 +182,7 @@ QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", funct
 	const done = assert.async();
 	const kruxInitSpy = this.spy(this.ads.krux, 'init');
 
-	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff;';
 
 	this.ads.init().then(() => {
 		assert.notOk(kruxInitSpy.called, 'krux.init() should NOT be called');
@@ -209,7 +209,7 @@ QUnit.test("Krux is NOT initialised if no FTConsent cookie present", function(as
 QUnit.test("Krux is deleted from localStorage if behavioural consent is missing", function(assert) {
 	const done = assert.async();
 
-	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff;';
 
 	localStorage.setItem('kxkuid', '1234');
 	localStorage.setItem('_kxkuid', '1234');
@@ -238,18 +238,10 @@ QUnit.test("No cc targeting parameter is set if the library is initialised with 
 	fetchMock.restore();
 });
 
-QUnit.test("cc targeting parameter is set to 'n' when no consentCookie is present and cookieconsent has not been explictely disabled", function(assert) {
-	const done = assert.async();
-	this.ads.init().then(() => {
-		assert.equal(this.ads.targeting.get().cc, 'n');
-		done();
-	});
-	fetchMock.restore();
-});
 
 QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present and programmatic consent is true", function(assert) {
 	const done = assert.async();
-	document.cookie = 'FTConsent=behaviouraladsOnsite:off,programmaticadsOnsite:on;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
 	this.ads.init().then(() => {
 		assert.equal(this.ads.targeting.get().cc, 'y');
 		done();
