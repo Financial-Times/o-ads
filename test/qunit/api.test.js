@@ -99,7 +99,7 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
-	document.cookie = 'FTConsent=behaviouraladsOnsite:on,programmaticadsOnsite:on';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon%2CprogrammaticadsOnsite%3Aon';
 
 	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
 
