@@ -28,7 +28,7 @@ Ads.prototype.utils = require('./src/js/utils');
 				programmatic : "n"
 			};
 		}
-		const consentCookie = match[1];
+		const consentCookie = decodeURIComponent(match[1]);
 		return {
 			behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
 			programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1 ? "y" : "n"
