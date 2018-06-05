@@ -41,6 +41,14 @@ $o-ads-is-silent: true !default;
 		background-color: oColorsGetPaletteColor('black-20');
 	}
 
+	.o-ads--slate-background {
+		background-color: oColorsGetPaletteColor('slate');
+	}
+
+	.o-ads--placeholder {
+		background: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon:more?source=next&tint=999999,999999') 50%/25% no-repeat transparent;
+	}
+
 	.o-ads--reserve-90 {
 		@include oAdsReserve90();
 	}
