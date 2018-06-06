@@ -10,6 +10,7 @@ Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
+const bowerJson = require('./bower.json');
 
 
 /**
@@ -135,6 +136,10 @@ Ads.prototype.debug = function (){
 	if (remove) {
 		localStorage.removeItem('oAds');
 	}
+};
+
+Ads.prototype.version = function() {
+	console.log(`o-ads version: ${bowerJson.version}`);
 };
 
 function isRobot(validateAdsTrafficResponse) {
