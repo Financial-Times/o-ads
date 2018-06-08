@@ -10,6 +10,7 @@ Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
+const bowerJson = require('./bower.json');
 
 
 /**
@@ -96,13 +97,6 @@ Ads.prototype.initLibrary = function() {
 	return this;
 };
 
-const initAll = function() {
-	return ads.init().then(() => {
-		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-		slots.forEach(ads.slots.initSlot.bind(ads.slots));
-	})
-};
-
 Ads.prototype.debug = function (){
 	let remove = true;
 	if (localStorage.getItem('oAds')) {
@@ -120,24 +114,18 @@ Ads.prototype.debug = function (){
 	}
 };
 
-
-const getConsents = () => {
-	// derive consent options from ft consent cookie
-	const re = /FTConsent=([^;]+)/;
-	const match = document.cookie.match(re);
-	if (!match) {
-		// cookie stasis or no consent cookie found
-		return {
-			behavioral : false,
-			programmatic : false
-		};
-	}
-	const consentCookie = decodeURIComponent(match[1]);
-	return {
-		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
-		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
-	};
+Ads.prototype.version = function() {
+	console.log(`o-ads version: ${bowerJson.version}`);
 };
+
+const initAll = function() {
+	return ads.init().then(() => {
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+	})
+};
+
+
 
 
 /**
@@ -162,12 +150,34 @@ function getMoatIvtResponse() {
 	});
 }
 
+function getConsents() {
+	// derive consent options from ft consent cookie
+	const re = /FTConsent=([^;]+)/;
+	const match = document.cookie.match(re);
+	if (!match) {
+		// cookie stasis or no consent cookie found
+		return {
+			behavioral : false,
+			programmatic : false
+		};
+	}
+	const consentCookie = decodeURIComponent(match[1]);
+	return {
+		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
+	};
+};
+
+function isRobot(validateAdsTrafficResponse) {
+	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
+}
+
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);
 }
 function removeDOMEventListener() {
 	document.removeEventListener('o.DOMContentLoaded', initAll);
 }
-
+	
 const ads = new Ads();
 module.exports = ads;

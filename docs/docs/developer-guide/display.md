@@ -119,6 +119,12 @@ As above - but should only really be used if _only_ a 250px height ad will be us
 * `.o-ads--background`
 This adds a shaded background in the slot. In principle, this is only really used when an ad is at the top of the page above a header, in order to give some indication that the empty space is intentional.
 
+* `.o-ads--slate-background`
+This is the same as `.o-ads--background` except that the background is slate (almost black).
+
+* `.o-ads--placeholder`
+This displays a backgound image (currently an ellipsis) to give the user a clear indication that something will be loaded in this place.
+
 * `.o-ads--transition`
 Adds an animation to the container to ease the UX when an ad loads.
 
