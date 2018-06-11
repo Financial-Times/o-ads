@@ -17,26 +17,7 @@ const bowerJson = require('./bower.json');
 * Initialises the ads library and all sub modules
 * @param options {object} a JSON object containing configuration for the current page
 */
-
-	const getConsents = () => {
-		// derive consent options from ft consent cookie
-		const re = /FTConsent=([^;]+)/;
-		const match = document.cookie.match(re);
-		if (!match) {
-			// cookie stasis or no consent cookie found
-			return {
-				behavioral : false,
-				programmatic : false
-			};
-		}
-		const consentCookie = decodeURIComponent(match[1]);
-		return {
-			behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
-			programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
-		};
-	};
-
-	Ads.prototype.init = function(options) {
+Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
 	this.config(options);
@@ -44,36 +25,34 @@ const bowerJson = require('./bower.json');
 		this.consents =  {
 			behavioral : true
 		};
-	} else {this.consents = getConsents();}
-
-	// Delete the krux data from local storage if we need to
-		if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
-			Object
-				.keys(localStorage)
-				.filter((key) => /(^kx)|(^_kx)/.test(key))
-				.forEach(item => localStorage.removeItem(item));
-		}
-	const targetingApi = this.config().targetingApi;
-	const validateAdsTrafficApi = this.config().validateAdsTrafficApi;
-
-	// Don't need to fetch anything if no targeting or bot APIs configured.
-	if(!targetingApi && !validateAdsTrafficApi) {
-		return Promise.resolve(this.initLibrary());
+	}
+	else {
+		this.consents = getConsents();
 	}
 
+	// Delete the krux data from local storage if we need to
+	if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
+		Object
+			.keys(localStorage)
+			.filter((key) => /(^kx)|(^_kx)/.test(key))
+			.forEach(item => localStorage.removeItem(item));
+	}
+	const targetingApi = this.config().targetingApi;
+	const validateAdsTraffic = this.config().validateAdsTraffic;
+
+	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
+	if(!targetingApi && !validateAdsTraffic) {
+		return Promise.resolve(this.initLibrary());
+	}
+	
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTrafficApi ? fetch(validateAdsTrafficApi).then(res => res.json()) : Promise.resolve();
-	/*
-		We only want to stop the oAds library from initializing if
-		the validateAdsTrafficApi says the user is a robot. Otherwise we catch()
-		all errors and initialise the library anyway.
-	 */
+	const validateAdsTrafficPromise = validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
+	
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
 		.then(([validateAdsTrafficResponse]) => {
-			if (isRobot(validateAdsTrafficResponse)) {
-				this.config({"dfp_targeting": {"ivtmvt": "1"}});
+			if(validateAdsTrafficResponse) {
+				this.targeting.add(validateAdsTrafficResponse);
 			}
-
 			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
@@ -105,20 +84,17 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
-	if (this.consents.behavioral) {this.krux.init();}
-	if (this.consents.programmatic) {this.targeting.add({"cc" : "y"});}
+	if (this.consents.behavioral) {
+		this.krux.init();
+	}
+	if (this.consents.programmatic) {
+		this.targeting.add({"cc" : "y"});
+	}
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
 	removeDOMEventListener();
 	return this;
-};
-
-const initAll = function() {
-	return ads.init().then(() => {
-		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
-		slots.forEach(ads.slots.initSlot.bind(ads.slots));
-	})
 };
 
 Ads.prototype.debug = function (){
@@ -142,6 +118,56 @@ Ads.prototype.version = function() {
 	console.log(`o-ads version: ${bowerJson.version}`);
 };
 
+const initAll = function() {
+	return ads.init().then(() => {
+		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+		slots.forEach(ads.slots.initSlot.bind(ads.slots));
+	})
+};
+
+
+
+
+/**
+ * Wait for moat script to load and return a response based on their API
+ * @returns {Promise}
+ */
+function getMoatIvtResponse() {
+	return new Promise((resolve, reject) => {
+		const intervalId = setInterval(() => {
+			if(window.moatPrebidApi) {
+				clearInterval(intervalId);
+				clearTimeout(timeoutId);
+				resolve({
+					mhv: window.moatPrebidApi.pageDataAvailable() ? 'n' : 'y'
+				});
+			}
+		}, 50);
+		const timeoutId = setTimeout(() => {
+			clearInterval(intervalId);
+			reject(new Error('Timeout while fetching moat invalid traffic script'));
+		}, 1000);
+	});
+}
+
+function getConsents() {
+	// derive consent options from ft consent cookie
+	const re = /FTConsent=([^;]+)/;
+	const match = document.cookie.match(re);
+	if (!match) {
+		// cookie stasis or no consent cookie found
+		return {
+			behavioral : false,
+			programmatic : false
+		};
+	}
+	const consentCookie = decodeURIComponent(match[1]);
+	return {
+		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
+		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
+	};
+};
+
 function isRobot(validateAdsTrafficResponse) {
 	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
 }
@@ -152,6 +178,6 @@ function addDOMEventListener() {
 function removeDOMEventListener() {
 	document.removeEventListener('o.DOMContentLoaded', initAll);
 }
-
+	
 const ads = new Ads();
 module.exports = ads;
