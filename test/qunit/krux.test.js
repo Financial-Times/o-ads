@@ -1,16 +1,19 @@
 /* globals QUnit: false */
 
 'use strict'; //eslint-disable-line
+//const fetchMock = require('fetch-mock');
 
 QUnit.module('Krux', {
 	beforeEach: function() {
 		document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 		window.requestIdleCallback = function(cb) { cb(); };
 		window.Krux = this.stub();
+	fetchMock.mock(' https://consumer.krxd.net/consent/set/', 200);
 	},
 	afterEach: function() {
 		delete window.Krux;
 		this.deleteCookie('FTConsent');
+		fetchMock.restore();
 	}
 });
 
@@ -296,3 +299,16 @@ QUnit.test('resetSpecificAttributes resets just that attribute', function(assert
 	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
 
 });
+
+
+// QUnit.test( 'consentApi', function( assert ) {
+//
+//
+//
+//   var done = assert.async();
+//   this.ads.init({krux: {id: '112233'}});
+// 	document.body.addEventListener('oAds.kruxScriptLoaded', function(event) {
+// 		assert.ok(window.Krux.consents.calledOnce(), 'our test slot is requested');
+// 		done();
+// 	});
+// });
