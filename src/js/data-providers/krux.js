@@ -73,6 +73,7 @@ Krux.prototype.init = function() {
 		}, 1000);
 
 		targeting.add(this.targeting());
+    utils.on('kruxScriptLoaded', this.consents);
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
 	}
@@ -225,6 +226,23 @@ Krux.prototype.resetAttributes = function() {
 
 	this.customAttributes = {};
 }
+
+Krux.prototype.consents = function() {
+  if (!localStorage.getItem('krxconsent')) {
+    const kuid =  localStorage.getItem('kxkuid');
+    const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=bk&bk=kuid&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
+
+    function setLocalStorageConsentFlag() {
+      localStorage.setItem('krxconsent', true);
+    }
+
+    fetch(consentApi, {
+      timeout: 2000
+    })
+    .then(setLocalStorageConsentFlag())
+    .catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
+  }
+};
 
 Krux.prototype.resetSpecificAttribute = function(type) {
 	if(this.customAttributes[type]) {

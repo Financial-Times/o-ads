@@ -2,15 +2,21 @@
 
 'use strict'; //eslint-disable-line
 
+const fetchMock = require('fetch-mock');
+
 QUnit.module('Krux', {
 	beforeEach: function() {
 		document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 		window.requestIdleCallback = function(cb) { cb(); };
 		window.Krux = this.stub();
+	fetchMock.mock('https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=bk&bk=kuid&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=null', 200);
+	window.localStorage.removeItem('krxconsent');
 	},
 	afterEach: function() {
 		delete window.Krux;
 		this.deleteCookie('FTConsent');
+		fetchMock.restore();
+		window.localStorage.removeItem('krxconsent');
 	}
 });
 
