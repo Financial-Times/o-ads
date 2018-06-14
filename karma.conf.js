@@ -44,7 +44,8 @@ let options = {
 		'src/**/*.js': ['browserify'],
 		'test/qunit/setup.js': ['browserify'],
 		'test/qunit/main.test.js': ['browserify'],
-		'test/qunit/api.test.js': ['browserify']
+		'test/qunit/api.test.js': ['browserify'],
+		'test/qunit/krux.test.js': ['browserify']
 	}
 };
 

@@ -1,19 +1,22 @@
 /* globals QUnit: false */
 
 'use strict'; //eslint-disable-line
-//const fetchMock = require('fetch-mock');
+
+const fetchMock = require('fetch-mock');
 
 QUnit.module('Krux', {
 	beforeEach: function() {
 		document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 		window.requestIdleCallback = function(cb) { cb(); };
 		window.Krux = this.stub();
-	fetchMock.mock(' https://consumer.krxd.net/consent/set/', 200);
+	fetchMock.mock('https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=bk&bk=kuid&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=null', 200);
+//	window.localStorage.removeItem('krxconsent');
 	},
 	afterEach: function() {
 		delete window.Krux;
 		this.deleteCookie('FTConsent');
 		fetchMock.restore();
+//		window.localStorage.removeItem('krxconsent');
 	}
 });
 
@@ -300,15 +303,12 @@ QUnit.test('resetSpecificAttributes resets just that attribute', function(assert
 
 });
 
-
-// QUnit.test( 'consentApi', function( assert ) {
-//
-//
-//
-//   var done = assert.async();
-//   this.ads.init({krux: {id: '112233'}});
-// 	document.body.addEventListener('oAds.kruxScriptLoaded', function(event) {
-// 		assert.ok(window.Krux.consents.calledOnce(), 'our test slot is requested');
-// 		done();
-// 	});
-// });
+QUnit.test('When krux is initialised a consent property is in local storage', function(assert) {
+		let fetchSpy1= this.spy(window,'fetch');
+		const done = assert.async();
+		document.body.addEventListener('oAds.kruxScriptLoaded', function(e) {
+			assert.ok(localStorage.getItem('krxconsent'), "fetch called");
+		done();
+	});
+	this.ads.init({krux: {id: '112233'}});
+});
