@@ -240,7 +240,7 @@ Krux.prototype.consents = function() {
       timeout: 2000
     })
     .then(setLocalStorageConsentFlag())
-    .catch(() => Promise.resolve({}));
+    .catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
   }
 };
 

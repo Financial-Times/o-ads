@@ -304,10 +304,10 @@ QUnit.test('resetSpecificAttributes resets just that attribute', function(assert
 });
 
 QUnit.test('When krux is initialised a consent property is in local storage', function(assert) {
-		let fetchSpy1= this.spy(window,'fetch');
-		const done = assert.async();
-		document.body.addEventListener('oAds.kruxScriptLoaded', function(e) {
-			assert.ok(localStorage.getItem('krxconsent'), "fetch called");
+	let fetchSpy1= this.spy(window,'fetch');
+	const done = assert.async();
+	document.body.addEventListener('oAds.kruxScriptLoaded', function(e) {
+		assert.ok(localStorage.getItem('krxconsent'), "fetch called");
 		done();
 	});
 	this.ads.init({krux: {id: '112233'}});
