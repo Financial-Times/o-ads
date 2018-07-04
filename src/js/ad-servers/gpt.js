@@ -69,6 +69,9 @@ function setup(gptConfig) {
 	setPageCollapseEmpty(gptConfig);
 	googletag.enableServices();
 	googletag.pubads().setTargeting('url', window.location.href);
+	console.log(gptConfig.nonPersonalized);
+	console.log("That was nonPersonalized value");
+	googletag.pubads().setRequestNonPersonalizedAds(gptConfig.nonPersonalized ? 0 : 1);
 	return true;
 }
 
