@@ -62,6 +62,7 @@ function initGoogleTag() {
 * when the library is available
 */
 function setup(gptConfig) {
+	const nonPersonalized = (config('nonPersonalized')) ? 1 : 0;
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
@@ -69,9 +70,7 @@ function setup(gptConfig) {
 	setPageCollapseEmpty(gptConfig);
 	googletag.enableServices();
 	googletag.pubads().setTargeting('url', window.location.href);
-	console.log(gptConfig.nonPersonalized);
-	console.log("That was nonPersonalized value");
-	googletag.pubads().setRequestNonPersonalizedAds(gptConfig.nonPersonalized ? 0 : 1);
+	googletag.pubads().setRequestNonPersonalizedAds(nonPersonalized);
 	return true;
 }
 

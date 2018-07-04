@@ -25,10 +25,10 @@ Ads.prototype.init = function(options) {
 		this.consents =  {
 			behavioral : true
 		};
-		this.config({'gpt' : {'nonPersonalized' : false }});
+		this.config({'nonPersonalized' : false });
 	}
 	else {
-		this.config({'gpt' : {'nonPersonalized' : true }});
+		this.config({'nonPersonalized' : true });
 		this.consents = getConsents();
 	}
 
@@ -85,14 +85,15 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
+	if (this.consents.programmatic) {
+		this.config({'nonPersonalized' : false });
+		this.targeting.add({"cc" : "y"});
+	}
 	this.gpt.init();
 	if (this.consents.behavioral) {
 		this.krux.init();
 	}
-	if (this.consents.programmatic) {
-		this.config({'gpt' : {'nonPersonalized' : false }});
-		this.targeting.add({"cc" : "y"});
-	}
+
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
