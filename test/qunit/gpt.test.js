@@ -784,3 +784,15 @@ QUnit.test('onRefresh is added to command queue when googletag is not available'
 	// reinstate mock
 	window.googletag = this.gpt;
 });
+
+QUnit.test('nonPersonalized request mode', function(assert) {
+	this.ads.init({gpt: true});
+	assert.ok(googletag.pubads().setRequestNonPersonalizedAds.calledWith(1), 'nonPersonalized request mode initialised when programmatic consent has not been given');
+});
+
+QUnit.test('nonPersonalized request mode', function(assert) {
+		document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
+	this.ads.init({gpt: true});
+	assert.ok(googletag.pubads().setRequestNonPersonalizedAds.calledWith(0), 'nonPersonalized request mode disabled (called with "0") when programmatic consent given.');
+	this.deleteCookie('FTConsent');
+});

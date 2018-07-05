@@ -25,8 +25,10 @@ Ads.prototype.init = function(options) {
 		this.consents =  {
 			behavioral : true
 		};
+		this.config({'nonPersonalized' : false });
 	}
 	else {
+		this.config({'nonPersonalized' : true });
 		this.consents = getConsents();
 	}
 
@@ -44,10 +46,10 @@ Ads.prototype.init = function(options) {
 	if(!targetingApi && !validateAdsTraffic) {
 		return Promise.resolve(this.initLibrary());
 	}
-	
+
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
-	
+
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
 		.then(([validateAdsTrafficResponse]) => {
 			if(validateAdsTrafficResponse) {
@@ -83,13 +85,15 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
+	if (this.consents.programmatic) {
+		this.config({'nonPersonalized' : false });
+		this.targeting.add({"cc" : "y"});
+	}
 	this.gpt.init();
 	if (this.consents.behavioral) {
 		this.krux.init();
 	}
-	if (this.consents.programmatic) {
-		this.targeting.add({"cc" : "y"});
-	}
+
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
 	this.utils.broadcast('initialised', this);
@@ -178,6 +182,6 @@ function addDOMEventListener() {
 function removeDOMEventListener() {
 	document.removeEventListener('o.DOMContentLoaded', initAll);
 }
-	
+
 const ads = new Ads();
 module.exports = ads;

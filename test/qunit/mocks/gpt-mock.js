@@ -28,6 +28,7 @@ googletag.defineSizeMapping = stubs.stub();
 googletag.companionAds = stubs.stub().returns({setRefreshUnfilledSlots: stubs.stub()});
 googletag.enableServices = stubs.stub();
 
+
 function GPTSlot(name, sizes, id) {
 	// @todo: we need to make sure the config flags from Slot get propagated here, as we are mocking slots and whole slot itself withing this mock
 	this.name = name;
@@ -158,7 +159,8 @@ const pubads = {
 	setTargeting: stubs.stub(),
 	clearTargeting: stubs.stub(),
 	addEventListener: function() {},
-	updateCorrelator: stubs.stub()
+	updateCorrelator: stubs.stub(),
+	setRequestNonPersonalizedAds : stubs.stub()
 };
 
 stubs.stub(pubads, 'addEventListener', function(eventName, fn) {
