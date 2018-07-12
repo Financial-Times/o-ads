@@ -54,11 +54,16 @@ $ad-max-responsive-width: 1440px;
 
 	&[data-o-ads-loaded="Leaderboard"],
 	&[data-o-ads-loaded="SuperLeaderboard"] {
-			.o-ads__outer {
-				position: relative;
-				top: 100%;
-				margin-top: -90px;
-			}
+		.o-ads__outer {
+			position: relative;
+			top: 100%;
+			margin-top: -90px;
+		}
+
+		&:not[data-o-ads-targeting="pos=top;"] .o-ads__outer {
+			top: 50%;
+			margin-top: -45px;
+		}
 	}
 }
 
