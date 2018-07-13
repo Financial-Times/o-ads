@@ -60,7 +60,7 @@ $ad-max-responsive-width: 1440px;
 			margin-top: -90px;
 		}
 
-		&:not[data-o-ads-targeting="pos=top;"] .o-ads__outer {
+		&:not([data-o-ads-targeting="pos=top;"]) .o-ads__outer {
 			top: 50%;
 			margin-top: -45px;
 		}
