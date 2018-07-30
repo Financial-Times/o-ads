@@ -228,20 +228,23 @@ Krux.prototype.resetAttributes = function() {
 }
 
 Krux.prototype.consents = function() {
-  if (!localStorage.getItem('kxftconsent')) {
+  if (config.consentState) {
     const kuid =  localStorage.getItem('kxkuid');
-    if (!kuid) {return false;}
-    const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
+    if (kuid) {
+      const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
 
-    function setLocalStorageConsentFlag() {
-      localStorage.setItem('kxftconsent', true);
+      function setLocalStorageConsentFlag() {
+        localStorage.setItem('kxftconsent', true);
+      }
+
+      fetch(consentApi, {
+        timeout: 2000
+      })
+      .then(console.log("called endpoint!!!");))
+      .catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
     }
-
-    fetch(consentApi, {
-      timeout: 2000
-    })
-    .then(setLocalStorageConsentFlag())
-    .catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
+    else {window.setTimeout(this.consents.bind(this), 200);
+      console.log("RETRYING !!!");}
   }
 };
 

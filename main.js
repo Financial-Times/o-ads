@@ -44,10 +44,10 @@ Ads.prototype.init = function(options) {
 	if(!targetingApi && !validateAdsTraffic) {
 		return Promise.resolve(this.initLibrary());
 	}
-	
+
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
 	const validateAdsTrafficPromise = validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
-	
+
 	return Promise.all([validateAdsTrafficPromise, targetingPromise])
 		.then(([validateAdsTrafficResponse]) => {
 			if(validateAdsTrafficResponse) {
@@ -84,8 +84,10 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 Ads.prototype.initLibrary = function() {
 	this.slots.init();
 	this.gpt.init();
+	this.krux.init();
 	if (this.consents.behavioral) {
-		this.krux.init();
+		// set krux config option to opt-in /consented
+		this.config({'krux': {'consentState' : true}})
 	}
 	if (this.consents.programmatic) {
 		this.targeting.add({"cc" : "y"});
@@ -178,6 +180,6 @@ function addDOMEventListener() {
 function removeDOMEventListener() {
 	document.removeEventListener('o.DOMContentLoaded', initAll);
 }
-	
+
 const ads = new Ads();
 module.exports = ads;
