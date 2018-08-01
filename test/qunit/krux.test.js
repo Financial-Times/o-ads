@@ -16,7 +16,6 @@ QUnit.module('Krux', {
 		delete window.Krux;
 		this.deleteCookie('FTConsent');
 		fetchMock.restore();
-		window.localStorage.removeItem('krxconsent');
 	}
 });
 
@@ -301,4 +300,30 @@ QUnit.test('resetSpecificAttributes resets just that attribute', function(assert
 	assert.ok(window.Krux.withArgs("set", "page_attr_key2", null).calledOnce, "page attributes nulled out");
 	assert.notOk(window.Krux.withArgs("set", "key", null).calledOnce, "custom attributes nulled out");
 
+});
+
+QUnit.test("Krux is initialised when behaviouralAds consent is present", function(assert) {
+	const done = assert.async();
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
+
+	this.ads.init({krux: {id: '112233'}}).then(() => {
+		assert.ok(this.ads.config('krux').consentState, 'consentState is false');
+		done();
+	});
+
+	document.cookie = ' ';
+	fetchMock.restore();
+});
+
+QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", function(assert) {
+	const done = assert.async();
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff;';
+
+	this.ads.init({krux: {id: '112233'}}).then(() => {
+		assert.notOk(this.ads.config('krux').consentState, 'consentState is false');
+		done();
+	});
+
+	document.cookie = ' ';
+	fetchMock.restore();
 });
