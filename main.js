@@ -30,13 +30,13 @@ Ads.prototype.init = function(options) {
 		this.consents = getConsents();
 	}
 
-	// Delete the krux data from local storage if we need to
-	if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
-		Object
-			.keys(localStorage)
-			.filter((key) => /(^kx)|(^_kx)/.test(key))
-			.forEach(item => localStorage.removeItem(item));
-	}
+	// // Delete the krux data from local storage if we need to
+	// if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
+	// 	Object
+	// 		.keys(localStorage)
+	// 		.filter((key) => /(^kx)|(^_kx)/.test(key))
+	// 		.forEach(item => localStorage.removeItem(item));
+	// }
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
