@@ -31,14 +31,7 @@ Ads.prototype.init = function(options) {
 		this.config({'nonPersonalized' : true });
 		this.consents = getConsents();
 	}
-
-	// Delete the krux data from local storage if we need to
-	if (!this.consents.behavioral && localStorage.getItem('kxkuid')) {
-		Object
-			.keys(localStorage)
-			.filter((key) => /(^kx)|(^_kx)/.test(key))
-			.forEach(item => localStorage.removeItem(item));
-	}
+	
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
@@ -90,8 +83,10 @@ Ads.prototype.initLibrary = function() {
 		this.targeting.add({"cc" : "y"});
 	}
 	this.gpt.init();
+	this.krux.init();
 	if (this.consents.behavioral) {
-		this.krux.init();
+		// set krux config option to opt-in /consented
+		this.config({'krux': {'consentState' : true}})
 	}
 
 	this.utils.on('debug', this.debug.bind(this));
