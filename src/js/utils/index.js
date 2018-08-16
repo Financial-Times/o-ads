@@ -379,9 +379,6 @@ module.exports.getTimestamp = function() {
 	].join("");
 };
 
-// capture all iframes in the page in a live node list
-const iframes = document.getElementsByTagName('iframe');
-
 /**
 * Given the window object of an iframe this method returns the o-ads slot name
 * that rendered the iframe, if the iframe was not rendered by o-ads this will
@@ -390,6 +387,8 @@ const iframes = document.getElementsByTagName('iframe');
 * @returns {String|Boolean}
 */
 module.exports.iframeToSlotName = function(iframeWindow) {
+	// capture all iframes in the page in a live node list
+	const iframes = document.getElementsByTagName('iframe');
 	let slotName;
 	let node;
 	let i = iframes.length;
