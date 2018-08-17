@@ -1,6 +1,7 @@
 
 const config = require('./config');
 const utils = require('./utils');
+const oTrackingCore = require('o-tracking/src/javascript/core.js');
 let parameters = {};
 function Targeting() {}
 
@@ -10,7 +11,13 @@ Targeting.prototype.get = function() {
 		timestamp: this.timestamp,
 		responsive: this.responsive
 	};
-	utils.extend(parameters, this.getFromConfig(), this.searchTerm(), this.socialFlow());
+	utils.extend(
+		parameters, 
+		this.getFromConfig(), 
+		this.searchTerm(), 
+		this.socialFlow(),
+		this.getRootId()
+	);
 	for (let item in methods) {
 	/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
@@ -53,6 +60,12 @@ Targeting.prototype.getFromConfig = function() {
 
 	return targeting;
 };
+
+Targeting.prototype.getRootId = function() {
+	return {
+		rootid: oTrackingCore.getRootID()
+	}
+}
 
 /**
  * If there is a query parameter called socialflow=xxx, we need to add it
