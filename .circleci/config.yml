@@ -39,7 +39,7 @@ jobs:
           command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run:
           name: Run demo server
-          command: npx origami-build-tools@^7 demo -- --local --runServer
+          command: ./node-modules/.bin/obt demo --local --runServer
           background: true
       - run:
           name: Waiting for the app to be ready
