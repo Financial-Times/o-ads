@@ -1,7 +1,7 @@
 {
-  "src_folders" : ["test/browser"],
+  "src_folders" : ["test-nightwatch"],
   "output_folder" : "./reports",
-  "globals_path": "test/browser/nightwatch-globals.js",
+  "globals_path": "test-nightwatch/nightwatch-globals.js",
   "selenium" : {
     "start_process" : false,
     "server_path" : "",
