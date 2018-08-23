@@ -37,6 +37,10 @@ $o-ads-is-silent: true !default;
 		@include oAdsTransition();
 	}
 
+	.o-ads--label-with-borders {
+		@include oAdsLabelWithBorders();
+	}
+
 	.o-ads--background {
 		background-color: oColorsGetPaletteColor('black-20');
 	}

@@ -145,6 +145,7 @@ Slots.prototype.initSlot = function(container) {
 
 	// add the aria hidden attribute
 	container.setAttribute('aria-hidden', 'true');
+
 	// pass the method to retrieve or create the single IntersectionObserver instance
 	const slot = new Slot(container, screensize, this.initLazyLoading.bind(this));
 	/* istanbul ignore else	*/

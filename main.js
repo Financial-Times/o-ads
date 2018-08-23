@@ -21,17 +21,17 @@ Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
 	this.config(options);
+	this.config({ nonPersonalized : !options.disableConsentCookie });
+
 	if (options.disableConsentCookie) {
-		this.consents =  {
+		this.consents = {
 			behavioral : true
 		};
-		this.config({'nonPersonalized' : false });
 	}
 	else {
-		this.config({'nonPersonalized' : true });
 		this.consents = getConsents();
 	}
-	
+
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
@@ -48,12 +48,10 @@ Ads.prototype.init = function(options) {
 			if(validateAdsTrafficResponse) {
 				this.targeting.add(validateAdsTrafficResponse);
 			}
-			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
-		.catch(e => {
-			return this.initLibrary();
-		});
+		.catch(e => e)
+		.then(() => this.initLibrary());
 };
 
 Ads.prototype.updateContext = function(options, isNewPage) {
