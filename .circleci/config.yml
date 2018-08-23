@@ -1,49 +1,49 @@
 version: 2
 jobs:
   test:
-  docker:
-    - image: circleci/node:8-browsers
-  steps:
-    - checkout
-    - run:
-        name: Ensure package.json exists for caching
-        command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
-    - restore-cache:
-        key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-    - run:
-        name: Install dependencies
-        command: npx origami-build-tools@^7 install
-    - save_cache:
-        key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-        paths:
-           - node_modules
-           - bower_components
-    - run:
-        name: Get Saucelabs
-        command: wget https://saucelabs.com/downloads/sc-4.4.9-linux.tar.gz
-    - run:
-        name: Unpack Saucelabs
-        command: tar -xzf sc-4.4.9-linux.tar.gz
-    - run:
-        name: Run tests
-        command: npx origami-build-tools@^7 test
-    - run:
-        name: Run Selenium Server
-        command: cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready
-        background: true
-    - run:
-        name: Wait for tunnel to be ready
-        command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - run:
-        name: Run demo server
-        command: npx origami-build-tools@^7 demo -- --local -- --runServer
-        background: true
-    - run:
-        name: Waiting for the app to be ready
-        command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
-    - run:
-        name: Run basic nightwatch tests
-        command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,safari_latest_sauce,ie_11_sauce,ie_10_sauce,ios_11_sauce,ios_10_sauce,android_7_sauce,ms_edge_sauce
-    - run:
-        name: Run extended nightwatch tests
-        command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      - checkout
+      - run:
+          name: Ensure package.json exists for caching
+          command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
+      - restore-cache:
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+      - run:
+          name: Install dependencies
+          command: npx origami-build-tools@^7 install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+          paths:
+             - node_modules
+             - bower_components
+      - run:
+          name: Get Saucelabs
+          command: wget https://saucelabs.com/downloads/sc-4.4.9-linux.tar.gz
+      - run:
+          name: Unpack Saucelabs
+          command: tar -xzf sc-4.4.9-linux.tar.gz
+      - run:
+          name: Run tests
+          command: npx origami-build-tools@^7 test
+      - run:
+          name: Run Selenium Server
+          command: cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready
+          background: true
+      - run:
+          name: Wait for tunnel to be ready
+          command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
+      - run:
+          name: Run demo server
+          command: npx origami-build-tools@^7 demo -- --local -- --runServer
+          background: true
+      - run:
+          name: Waiting for the app to be ready
+          command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
+      - run:
+          name: Run basic nightwatch tests
+          command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,safari_latest_sauce,ie_11_sauce,ie_10_sauce,ios_11_sauce,ios_10_sauce,android_7_sauce,ms_edge_sauce
+      - run:
+          name: Run extended nightwatch tests
+          command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce
