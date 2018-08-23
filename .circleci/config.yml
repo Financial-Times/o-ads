@@ -43,7 +43,7 @@ jobs:
           background: true
       - run:
           name: Waiting for the app to be ready
-          command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8080
+          command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
       - run:
           name: Run basic nightwatch tests
           command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,safari_latest_sauce,ie_11_sauce,ie_10_sauce,ios_11_sauce,ios_10_sauce,android_7_sauce,ms_edge_sauce
