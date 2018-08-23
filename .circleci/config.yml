@@ -47,3 +47,8 @@ jobs:
       - run:
           name: Run extended nightwatch tests
           command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
