@@ -19,24 +19,11 @@ jobs:
              - node_modules
              - bower_components
       - run:
-          name: Get Saucelabs
-          command: wget https://saucelabs.com/downloads/sc-4.4.9-linux.tar.gz
-      - run:
-          name: Unpack Saucelabs
-          command: tar -xzf sc-4.4.9-linux.tar.gz
-      - run:
           name: Run tests
           command: npm test
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
           # command: npx origami-build-tools@^7 test
-      - run:
-          name: Run Selenium Server
-          command: cd sc-*-linux && ./bin/sc --user $SELENIUM_USER --api-key $SELENIUM_KEY --readyfile ~/sauce_is_ready
-          background: true
-      - run:
-          name: Wait for tunnel to be ready
-          command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run:
           name: Run demo server
           command: npm run demo-server
@@ -46,10 +33,14 @@ jobs:
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
       - run:
           name: Run basic nightwatch tests
-          command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group basic --env chrome_latest_sauce,firefox_latest_sauce,safari_latest_sauce,ie_11_sauce,ie_10_sauce,ios_11_sauce,ios_10_sauce,android_7_sauce,ms_edge_sauce
+          command: npm run test-browser-basic
       - run:
           name: Run extended nightwatch tests
-          command: ./node_modules/.bin/nightwatch --suiteRetries 3 --config test/browser/nightwatch.json --group extended --env chrome_latest_sauce,firefox_latest_sauce
+          command: npm run test-browser-extended
+      - run:
+          # There's a bug with gecko driver where it does not allow switching frames by element id, instead it needs the frame number. TO FIX
+          name: Run basic tests in firefox nightwatch tests
+          command: npm run test-browser-firefox-temp
 workflows:
   version: 2
   test:
