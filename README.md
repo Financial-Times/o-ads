@@ -17,3 +17,9 @@ Includes detailed installation and set-up instructions, along with details about
 ### Upgrading to v8
 - Breaking change: If you use the destroy method on a slots instance, this will now properly destroy the given slots rather than just clear them
 - New feature: util event 'off' - remove an event listener
+
+### Upgrading to v9
+- Breaking change: o-ads now requires consent before loading Krux or adding custom targeting to the ad calls. Consent can be provided in two ways:
+
+1. Provide a cookie with the name `FTConsent` and specify which consent the user has given as part of the value like this: `behaviouraladsOnsite:on,programmaticadsOnsite:on`
+2. Initialise o-ads with the `disableConsentCookie` option.
