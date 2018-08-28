@@ -109,7 +109,7 @@ $ad-max-responsive-width: 1440px;
 
 	font-size: 14px;
 
-	@if($pos == right) {
+	@if($pos == 'right') {
 		text-align: right;
 	}
 

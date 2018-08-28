@@ -20,8 +20,9 @@ const bowerJson = require('./bower.json');
 Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
-	this.config(options);
-	this.config({ nonPersonalized : !options.disableConsentCookie });
+	this.config(Object.assign(options, {
+		nonPersonalized : !options.disableConsentCookie,
+	}));
 
 	if (options.disableConsentCookie) {
 		this.consents = {
@@ -48,10 +49,11 @@ Ads.prototype.init = function(options) {
 			if(validateAdsTrafficResponse) {
 				this.targeting.add(validateAdsTrafficResponse);
 			}
+
+			return this.initLibrary();
 		})
 		// If anything fails, default to load ads without targeting
-		.catch(e => e)
-		.then(() => this.initLibrary());
+		.catch(() => this.initLibrary());
 };
 
 Ads.prototype.updateContext = function(options, isNewPage) {
