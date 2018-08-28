@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      - checkout
+      - run:
+          name: Ensure package.json exists for caching
+          command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
+      - restore-cache:
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+      - run:
+          name: Install dependencies
+          command: npx origami-build-tools@^7 install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+          paths:
+             - node_modules
+             - bower_components
+      - run:
+          name: Run tests
+          command: npm test
+          # Running OBT test doesn't work because we need to pass a custom Karma
+          # config to OBT which OBT doesn't support yet
+          # command: npx origami-build-tools@^7 test
+      - run:
+          name: Run demo server
+          command: npm run demo-server
+          background: true
+      - run:
+          name: Waiting for the app to be ready
+          command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
+      - run:
+          name: Run basic nightwatch tests
+          command: npm run test-browser-basic
+      - run:
+          name: Run extended nightwatch tests
+          command: npm run test-browser-extended
+      - run:
+          # There's a bug with gecko driver where it does not allow switching frames by element id, instead it needs the frame number. TO FIX
+          name: Run basic tests in firefox nightwatch tests
+          command: npm run test-browser-firefox-temp
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

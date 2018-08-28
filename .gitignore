@@ -8,6 +8,7 @@ test-results.xml
 .haikro-cache/
 node*linux*/
 */*.xml
+.env
 
 # Local config files #
 ######################
