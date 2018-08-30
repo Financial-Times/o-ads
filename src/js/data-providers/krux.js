@@ -32,6 +32,10 @@ Krux.prototype.sendNewPixel = function(pageLoad) {
 
 Krux.prototype.init = function() {
 	this.config = config('krux');
+
+	//Add the rootid as a custom page parameter
+	this.add({ page: targeting.getRootId() });
+	
 	if (this.config && this.config.id) {
 
 		/* istanbul ignore else  */
@@ -73,7 +77,7 @@ Krux.prototype.init = function() {
 		}, 1000);
 
 		targeting.add(this.targeting());
-    utils.on('kruxScriptLoaded', this.consents);
+    	utils.on('kruxScriptLoaded', this.consents);
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
 	}
