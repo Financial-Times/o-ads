@@ -28,6 +28,18 @@ jobs:
           name: Run demo server
           command: npm run demo-server
           background: true
+
+      - run:
+          name: Make app url publicly accessible
+          command: wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          command: tar -xzf ngrok-stable-linux-amd64.zip
+          command: ngrok authtoken $NGROK_KEY 
+          command: ngrok http 3002
+          background: true
+          
+      - run:
+          command: export BROWSERSTACK_URL=`npm run get-ngrok-url`
+          
       - run:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
