@@ -8,7 +8,7 @@
 	"public-test-url": "wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && tar -xzf ngrok-stable-linux-amd64.zip && ngrok authtoken $NGROK_KEY && ngrok http 3002 && export BROWSERSTACK_URL=`npm run get-ngrok-url`",
     "demo-server": "obt demo --runServer --port=3002",
     "test": "karma start karma.conf.js",
-    "test-browser-basic": "nightwatch -c ./test/browser/config/nightwatch.conf.js --group basic --env chrome,ie10,ie11,edge,galaxy_s8,iphone7",
+    "test-browser-basic": "nightwatch -c ./test/browser/config/nightwatch.conf.js --group basic --env chrome,ie10,ie11,edge,galaxy_s8,iphone_7",
 	"test-browser-extended": "nightwatch -c ./test/browser/config/nightwatch.conf.js --group extended --env chrome",
     "test-browser-gecko-temp": "nightwatch -c ./test/browser/config/nightwatch.conf.js --group gecko-temp --env firefox,safari",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
