@@ -41,7 +41,6 @@ jobs:
           background: true 
       - run:
           command: export BROWSERSTACK_URL=`npm run get-ngrok-url`
-
       - run:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
