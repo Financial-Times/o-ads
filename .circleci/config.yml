@@ -31,7 +31,6 @@ jobs:
 
       - run:
           name: Make app url publicly accessible
-      - run:
           command: wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
       - run:
           command: tar -xzf ngrok-stable-linux-amd64.zip
