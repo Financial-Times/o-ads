@@ -31,15 +31,18 @@ jobs:
 
       - run:
           name: Make app url publicly accessible
+      - run:
           command: wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+      - run:
           command: tar -xzf ngrok-stable-linux-amd64.zip
-          command: ngrok authtoken $NGROK_KEY 
+      - run:
+          command: ngrok authtoken $NGROK_KEY
+      - run:
           command: ngrok http 3002
-          background: true
-          
+          background: true 
       - run:
           command: export BROWSERSTACK_URL=`npm run get-ngrok-url`
-          
+
       - run:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
