@@ -1,5 +1,3 @@
-console.log("argv", process.argv);
-
 let config = {
 	src_folders: ['./test/browser'],
 	output_folder: './test/browser/reports',
@@ -24,7 +22,7 @@ let config = {
 		default: {
 			end_session_on_fail: false,
 			skip_testcases_on_fail: false,
-			launch_url: process.env.BROWSERSTACK_URL || "http://localhost:3002/demos/local",
+			launch_url: `${process.env.BROWSERSTACK_URL}/demos/local` || "http://localhost:3002/demos/local",
 			screenshots: {
 				enabled: false
 			},
