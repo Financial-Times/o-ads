@@ -35,9 +35,9 @@ jobs:
       - run:
           command: unzip ./ngrok-stable-linux-amd64.zip
       - run:
-          command: ngrok authtoken $NGROK_KEY
+          command: ./ngrok authtoken $NGROK_KEY
       - run:
-          command: ngrok http 3002
+          command: ./ngrok http 3002
           background: true 
       - run:
           command: export BROWSERSTACK_URL=`npm run get-ngrok-url`
