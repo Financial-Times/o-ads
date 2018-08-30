@@ -30,6 +30,10 @@ jobs:
           background: true
 
       - run:
+          command: export BROWSERSTACK_TESTING=hey.com
+      - run:
+          command: echo $BROWSERSTACK_TESTING
+      - run:
           name: Make app url publicly accessible
           command: wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
       - run:
