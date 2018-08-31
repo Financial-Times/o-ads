@@ -177,7 +177,7 @@ function Slot(container, screensize, initLazyLoading) {
 
 	outerEl = container.querySelector('.o-ads__outer');
 
-	if (outerEl && cfg.displayLabelWithBorders) {
+	if (outerEl && cfg.displayLabelWithBorders && this.container.getAttribute('data-o-ads-label')) {
 		utils.once(renderEvent, data => {
 			outerEl.classList.add('o-ads--label-with-borders');
 		});
@@ -441,13 +441,14 @@ Slot.prototype.centerContainer = function() {
  */
 Slot.prototype.labelContainer = function() {
 	let className;
+
 	if (this.label === true || this.label === 'left') {
 		className = 'label-left';
 	} else if (this.label === 'right') {
 		className = 'label-right';
 	}
 
-	if (className) {
+	if (className && !config('displayLabelWithBorders')) {
 		this.container.classList.add(`o-ads--${className}`);
 	}
 	return this;
