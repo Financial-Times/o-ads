@@ -117,8 +117,11 @@ const onChangeBreakpoint = (event) => {
  * @constructor
  */
 function Slot(container, screensize, initLazyLoading) {
+	const renderEvent = 'rendered';
+	const cfg = config();
 	let slotConfig = config('slots') || {};
 	let disableSwipeDefault = config('disableSwipeDefault') || false;
+	let outerEl;
 
 	// store the container
 	this.container = container;
@@ -170,6 +173,14 @@ function Slot(container, screensize, initLazyLoading) {
 		this.lazyLoad = slotConfig.lazyLoad;
 	} else {
 		this.lazyLoad = config('lazyLoad') || false;
+	}
+
+	outerEl = container.querySelector('.o-ads__outer');
+
+	if (outerEl && cfg.displayLabelWithBorders) {
+		utils.once(renderEvent, data => {
+			outerEl.classList.add('o-ads--label-with-borders');
+		});
 	}
 
 	// extend with imperative configuration options

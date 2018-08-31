@@ -23,7 +23,7 @@ $ad-max-responsive-width: 1440px;
 	visibility: hidden;
 }
 
-@mixin oAdsLabel($pos: "left") {
+@mixin oAdsLabel($pos: 'left') {
 	.o-ads__inner::before {
 		content: "▼ Advertisement ▼";
 		display: block;
@@ -100,6 +100,36 @@ $ad-max-responsive-width: 1440px;
 	will-change: min-height, padding, height;
 	transform: translate3d(0, 0, 0);
 	transition: height 0.35s $o-visual-effects-transition-expand,
-							min-height 0.35s $o-visual-effects-transition-expand,
-							padding 0.35s $o-visual-effects-transition-expand;
+	min-height 0.35s $o-visual-effects-transition-expand,
+	padding 0.35s $o-visual-effects-transition-expand;
+}
+
+@mixin oAdsLabelWithBorders($pos: 'left') {
+	$padding: 20px;
+
+	font-size: 14px;
+
+	@if($pos == 'right') {
+		text-align: right;
+	}
+
+	&:before,
+	&:after {
+		display: block;
+		border-color: black;
+		border-style: solid;
+		border-width: 0;
+	}
+
+	&:before {
+		content: 'Advertisement';
+		padding: ($padding / 2) 0;
+		border-top-width: 1px;
+	}
+
+	&:after {
+		content: '';
+		padding-top: $padding;
+		border-bottom-width: 1px;
+	}
 }

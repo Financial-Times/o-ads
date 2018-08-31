@@ -49,7 +49,8 @@ const defaults = {
 	flags: {
 		refresh: true,
 		inview: true
-	}
+	},
+	displayLabelWithBorders: false,
 };
 
 function fetchDeclaritiveConfig() {
