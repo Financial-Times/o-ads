@@ -105,16 +105,13 @@ $ad-max-responsive-width: 1440px;
 }
 
 @mixin oAdsLabelWithBorders($pos: 'left') {
-	$padding: 20px;
+	$padding: 25px;
 
 	font-size: 14px;
 
-	@if($pos == 'right') {
-		text-align: right;
-	}
-
 	&:before,
 	&:after {
+		text-align: left;
 		display: block;
 		border-color: black;
 		border-style: solid;
@@ -123,7 +120,8 @@ $ad-max-responsive-width: 1440px;
 
 	&:before {
 		content: 'Advertisement';
-		padding: ($padding / 2) 0;
+		padding: $padding 0 ($padding - 5px);
+		margin-top: $padding / 2;
 		border-top-width: 1px;
 	}
 
@@ -131,5 +129,9 @@ $ad-max-responsive-width: 1440px;
 		content: '';
 		padding-top: $padding;
 		border-bottom-width: 1px;
+	}
+
+	@if($pos == 'right') {
+		text-align: right;
 	}
 }
