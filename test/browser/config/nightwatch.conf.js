@@ -1,3 +1,4 @@
+console.log(`http://${process.env.BROWSERSTACK_URL}/demos/local`);
 let config = {
 	src_folders: ['./test/browser'],
 	output_folder: './test/browser/reports',
@@ -22,7 +23,7 @@ let config = {
 		default: {
 			end_session_on_fail: false,
 			skip_testcases_on_fail: false,
-			launch_url: "http://localhost:8999/demos/local",
+			launch_url: `http://${process.env.BROWSERSTACK_URL}/demos/local` || "http://localhost:3002/demos/local",
 			screenshots: {
 				enabled: false
 			},
@@ -48,9 +49,10 @@ let config = {
 		},
 		safari: {
 			desiredCapabilities: {
-				'os': 'OS X',
-  				'os_version': 'High Sierra',
-  				'browser': 'Safari',
+				os: 'OS X',
+				os_version: 'Sierra',
+				browser: 'Safari',
+				browser_version: '10.1',
 				acceptSslCerts: true
 			}
 		},
