@@ -21,7 +21,7 @@ jobs:
             mkdir browserstack
             mv ./BrowserStackLocal ./browserstack/BrowserStackLocal
       - persist_to_workspace:
-          root: ./
+          root: /home/circleci/project
           path: browserstack
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
