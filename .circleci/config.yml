@@ -43,9 +43,6 @@ jobs:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
       - run:
-          name: Wait for browserstack tunnel to be ready
-          command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-      - run:
           name: Run basic nightwatch tests
           command: npm run test-browser-basic
       - run:
