@@ -5,11 +5,11 @@
   "main": "main.js",
   "scripts": {
 	"bs-local": "node ./test/browser/config/nightwatch-local.js --suiteRetries 3 -c ./test/browser/config/nightwatch.conf.js",
-    "demo-server": "obt demo --local --runServer",
+    "demo-server": "obt demo --local --runServer --port=3002",
     "test": "karma start karma.conf.js",
     "test-browser-basic": "npm run bs-local -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8",
 	"test-browser-extended": "npm run bs-local -- --group extended --env chrome",
-	"test-browser-firefox-temp": "npm run bs-local -- --group firefox-temp --env firefox",
+	"test-browser-firefox-temp": "npm run bs-local -- --group gecko-temp --env firefox,safari",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify"
@@ -46,7 +46,7 @@
     "karma-webdriver-launcher": "^1.0.4",
     "nightwatch": "^0.9.21",
     "notify-saucelabs": "^1.0.3",
-    "origami-build-tools": "^7.8.1",
+    "origami-build-tools": "^7.9.0",
     "phantomjs": "^2.1.7",
     "pre-git": "^3.15.0",
     "qunitjs": "^1.20.0"
