@@ -18,9 +18,10 @@ jobs:
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
+            mv ./BrowserStackLocal ./browserstack/BrowserStackLocal
       - persist_to_workspace:
           root: ./
-          path: ./BrowserStackLocal
+          path: ./browserstack
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
@@ -45,7 +46,7 @@ jobs:
       
       - run:
           name: Connect browserstack tunnel
-          command: /tmp/workspace/BrowserStackLocal --key=$BROWSERSTACK_KEY
+          command: /tmp/workspace/browserstack/BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       
       - run:
