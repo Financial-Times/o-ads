@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8-browsers
+    working_directory: ~/project/build
     steps:
       - checkout
       - run:
@@ -19,9 +20,9 @@ jobs:
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
       - persist_to_workspace:
-          root: .
+          root: ~/project
           paths: 
-            - .
+            - build
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
@@ -30,9 +31,10 @@ jobs:
   test:
     docker:
       - image: circleci/node:8-browsers
+    working_directory: ~/project
     steps:
       - attach_workspace:
-          at: .
+          at: ~/project
       - run:
           name: Run tests
           command: npm test
