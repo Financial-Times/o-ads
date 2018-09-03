@@ -22,7 +22,7 @@ jobs:
             mv ./BrowserStackLocal ./browserstack/BrowserStackLocal
       - persist_to_workspace:
           root: ./
-          path: ./browserstack
+          path: browserstack
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
