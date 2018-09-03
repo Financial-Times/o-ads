@@ -4,12 +4,12 @@
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
-	"bs-local": "node ./test/browser/config/nightwatch-local.js --suiteRetries 3 -c ./test/browser/config/nightwatch.conf.js",
+	"bs-local": "node ./test/browser/config/nightwatch-local.js -c ./test/browser/config/nightwatch.conf.js",
     "demo-server": "obt demo --local --runServer --port=3002",
     "test": "karma start karma.conf.js",
     "test-browser-basic": "npm run bs-local -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8",
-	"test-browser-extended": "npm run bs-local -- --group extended --env chrome",
-	"test-browser-firefox-temp": "npm run bs-local -- --group gecko-temp --env firefox,safari",
+	"test-browser-extended": "npm run bs-local -- --group extended --env iphone_7",
+	"test-browser-gecko-temp": "npm run bs-local -- --group gecko-temp --env firefox,safari",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify"
