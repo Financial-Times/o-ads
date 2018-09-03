@@ -18,6 +18,7 @@ jobs:
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
+            mkdir browserstack
             mv ./BrowserStackLocal ./browserstack/BrowserStackLocal
       - persist_to_workspace:
           root: ./
