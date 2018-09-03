@@ -31,7 +31,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:8-browsers
-    working_directory: ~/project
+    working_directory: ~/project/build
     steps:
       - attach_workspace:
           at: ~/project
