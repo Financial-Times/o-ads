@@ -28,6 +28,15 @@ jobs:
           name: Run demo server
           command: npm run demo-server
           background: true
+      
+      - run:
+          name: Connect browserstack tunnel
+          command: |
+            wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+            unzip ./BrowserStackLocal-linux-x64.zip
+            ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          background: true
+      
       - run:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
@@ -40,7 +49,10 @@ jobs:
       - run:
           # There's a bug with gecko driver where it does not allow switching frames by element id, instead it needs the frame number. TO FIX
           name: Run basic tests in firefox nightwatch tests
-          command: npm run test-browser-firefox-temp
+          command: npm run test-browser-gecko-temp
+      - run:
+          name: Kill BrowserStackLocal tunnel
+          command: pkill BrowserStackLocal
 workflows:
   version: 2
   test:
