@@ -48,7 +48,7 @@ jobs:
       
       - run:
           name: Connect browserstack tunnel
-          command: /tmp/workspace/browserstack/BrowserStackLocal --key=$BROWSERSTACK_KEY
+          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       
       - run:
