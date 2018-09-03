@@ -13,6 +13,11 @@ jobs:
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
+      - run:
+          name: Download Browserstack tunnel
+          command: |
+            wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+            unzip ./BrowserStackLocal-linux-x64.zip
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
@@ -31,15 +36,15 @@ jobs:
       
       - run:
           name: Connect browserstack tunnel
-          command: |
-            wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-            unzip ./BrowserStackLocal-linux-x64.zip
-            ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       
       - run:
           name: Waiting for the app to be ready
           command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      - run:
+          name: Wait for browserstack tunnel to be ready
+          command: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run:
           name: Run basic nightwatch tests
           command: npm run test-browser-basic
