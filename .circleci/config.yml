@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/node:8-browsers
     steps:
@@ -18,11 +18,20 @@ jobs:
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
+      - persist_to_workspace:
+          root: ./
+          path: BrowserStackLocal
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
              - node_modules
              - bower_components
+  test:
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Run tests
           command: npm test
@@ -36,7 +45,7 @@ jobs:
       
       - run:
           name: Connect browserstack tunnel
-          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          command: /tmp/workspace/BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       
       - run:
@@ -52,11 +61,9 @@ jobs:
           # There's a bug with gecko driver where it does not allow switching frames by element id, instead it needs the frame number. TO FIX
           name: Run basic tests in firefox nightwatch tests
           command: npm run test-browser-gecko-temp
-      - run:
-          name: Kill BrowserStackLocal tunnel
-          command: pkill BrowserStackLocal
 workflows:
   version: 2
-  test:
+  build-test:
     jobs:
+      - build
       - test
