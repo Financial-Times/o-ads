@@ -37,11 +37,13 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
+          command: ls -la
+      - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
           # command: npx origami-build-tools@^7 test
           name: Run unit tests
-          command: npm run test-unit
+          command: npm test
       - run:
           name: Run demo server
           command: npm run demo-server
