@@ -24,13 +24,13 @@ jobs:
           paths:
              - node_modules
              - bower_components
+      - store_artifacts:
+          path: build-state
+          destination: build-state
       - persist_to_workspace:
           root: ~/project
           paths: 
             - build
-      - store_artifacts:
-          path: build-state
-          destination: build-state
   
   test:
     docker:
