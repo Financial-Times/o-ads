@@ -2,7 +2,7 @@
 
 const Nightwatch = require('nightwatch');
 const browserstack = require('browserstack-local');
-const { exec, spawn } = require('child_process');
+const { exec } = require('child_process');
 
 // In production, the BrowserStackLocal tunnel is loaded as a separate process
 // to speed up the build
@@ -60,7 +60,8 @@ try {
 		});
 	});
 } catch (ex) {
-  console.log('There was an error while starting the test runner:\n\n');
-  process.stderr.write(ex.stack + '\n');
-  process.exit(2);
+	bs_local.stop(function(){});
+  	console.log('There was an error while starting the test runner:\n\n');
+  	process.stderr.write(ex.stack + '\n');
+  	process.exit(2);
 }
