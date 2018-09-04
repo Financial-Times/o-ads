@@ -1,8 +1,9 @@
 version: 2
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/node:8-browsers
+    working_directory: ~/project/build
     steps:
       - checkout
       - run:
@@ -13,36 +14,61 @@ jobs:
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
+      - run:
+          name: Download Browserstack tunnel
+          command: |
+            wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+            unzip ./BrowserStackLocal-linux-x64.zip
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
              - node_modules
              - bower_components
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - build
+      - store_artifacts:
+          path: build-state
+          destination: build-state
+  
+  test:
+    docker:
+      - image: circleci/node:8-browsers
+    working_directory: ~/project/build
+    steps:
+      - attach_workspace:
+          at: ~/project
       - run:
-          name: Run tests
-          command: npm test
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
           # command: npx origami-build-tools@^7 test
+          name: Run unit tests
+          command: npm run test-unit
       - run:
           name: Run demo server
           command: npm run demo-server
           background: true
       - run:
+          name: Connect browserstack tunnel
+          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          background: true
+      - run:
           name: Waiting for the app to be ready
-          command: sleep 2 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:8999
+          command: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
       - run:
-          name: Run basic nightwatch tests
-          command: npm run test-browser-basic
-      - run:
-          name: Run extended nightwatch tests
-          command: npm run test-browser-extended
-      - run:
-          # There's a bug with gecko driver where it does not allow switching frames by element id, instead it needs the frame number. TO FIX
-          name: Run basic tests in firefox nightwatch tests
-          command: npm run test-browser-firefox-temp
+          name: Run browser tests in browserstack
+          command: npm run test-browser
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: test-results
 workflows:
   version: 2
-  test:
+  build-test:
     jobs:
-      - test
+      - build
+      - test:
+          requires:
+            - build

@@ -22,7 +22,7 @@ let config = {
 		default: {
 			end_session_on_fail: false,
 			skip_testcases_on_fail: false,
-			launch_url: "http://localhost:8999/demos/local",
+			launch_url: "http://localhost:3002/demos/local",
 			screenshots: {
 				enabled: false
 			},
@@ -31,7 +31,6 @@ let config = {
 		chrome: {
 			desiredCapabilities: {
 				browser: 'chrome',
-				browser_version: '64', //TODO: there's a bug in the ChromeDriver version used by Browserstack on v66, so keep on an older version until 67 comes out
 				os: 'Windows',
 				os_version: '7',
 				acceptSslCerts: true
@@ -42,7 +41,6 @@ let config = {
 				os: 'Windows',
   				os_version: '7',
 				browser: 'Firefox',
-				browser_version: '61.0',
 				acceptSslCerts: true
 			}
 		},
