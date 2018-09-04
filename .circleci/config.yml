@@ -19,15 +19,18 @@ jobs:
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
-      - persist_to_workspace:
-          root: ~/project
-          paths: 
-            - build
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
              - node_modules
              - bower_components
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - build
+      - store_artifacts:
+          path: build-state
+          destination: build-state
   
   test:
     docker:
@@ -37,13 +40,11 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
-          command: ls -la
-      - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
           # command: npx origami-build-tools@^7 test
           name: Run unit tests
-          command: npm test
+          command: npm run test-unit
       - run:
           name: Run demo server
           command: npm run demo-server

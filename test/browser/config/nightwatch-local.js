@@ -4,9 +4,9 @@ const Nightwatch = require('nightwatch');
 const browserstack = require('browserstack-local');
 const { exec } = require('child_process');
 
-// In production, the BrowserStackLocal tunnel is loaded as a separate process
+// In CircleCI, the BrowserStackLocal tunnel is loaded as a separate process
 // to speed up the build
-if(process.env.NODE_ENV === 'production') {
+if(process.env.CI) {
 	Nightwatch.cli(function(argv) {
 		Nightwatch.CliRunner(argv)
 		.setup(null, function(){
