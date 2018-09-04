@@ -19,15 +19,15 @@ jobs:
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
             unzip ./BrowserStackLocal-linux-x64.zip
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - build
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
           paths:
              - node_modules
              - bower_components
-      - persist_to_workspace:
-          root: ~/project
-          paths: 
-            - build
   
   test:
     docker:
