@@ -44,7 +44,7 @@ jobs:
           # config to OBT which OBT doesn't support yet
           # command: npx origami-build-tools@^7 test
           name: Run unit tests
-          command: npm test-unit
+          command: npm run test-unit
       - run:
           name: Run demo server
           command: npm run demo-server
