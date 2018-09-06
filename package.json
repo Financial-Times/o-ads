@@ -9,7 +9,7 @@
     "test": "npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
     "test-unit": "karma start karma.conf.js",
     "test-browser": "npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
-    "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8",
+    "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8,firefox,safari",
     "test-browser-extended": "npm run nightwatch-bs -- --group extended --env chrome",
     "test-browser-gecko-temp": "npm run nightwatch-bs -- --group gecko-temp --env firefox,safari",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",

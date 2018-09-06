@@ -13,9 +13,10 @@ module.exports = {
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
+			.page.ad()
 			.assert.visible('#leaderboard-gpt', 'Advert has been initiated and visible')
 				// switch focus to first iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_0')
+				.cleverFrame('google_ads_iframe_/5887/test.5887.origami_0')
 				// wait for 1 second for advert to appear
 				.waitForElementPresent('img', wait, 'Advert image is visible')
 				// make sure we can see the correct URL
