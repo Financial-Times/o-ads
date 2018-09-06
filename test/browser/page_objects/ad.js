@@ -2,7 +2,7 @@ const commands = {
 	cleverFrame: function(selector) {
 		const browserName = this.client.options.desiredCapabilities.browser;
 
-		if (browserName === 'Firefox') {
+		if (browserName === 'Firefox' || browserName === 'Safari') {
 			return this.api.frame(1);
 		}
 
