@@ -11,16 +11,17 @@ module.exports = {
 	},
 	'Step 2: verify the Billboard advert is displayed': function (browser) {
 		browser
-			// give time for the advert to initialise
+		// give time for the advert to initialise
 			.pause(8000)
-				.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
-				// switch focus to first iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_0')
-				// wait for 1 second for advert to appear
-				.waitForElementPresent('img', 15000, 'Advert image is visible')
-				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/6935553857235402720')
-				// switch focus back to main page
-				.frame(null);
+			.page.ad()
+			.assert.visible('#billboard-gpt', 'Advert has been initiated and visible')
+		// switch focus to first iframe
+			.cleverFrame('google_ads_iframe_/5887/test.5887.origami_0')
+		// wait for 1 second for advert to appear
+			.waitForElementPresent('img', 15000, 'Advert image is visible')
+		// make sure we can see the correct URL
+			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/6935553857235402720')
+		// switch focus back to main page
+			.frame(null);
 	}
 };
