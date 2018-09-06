@@ -191,45 +191,8 @@ QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present a
 	fetchMock.restore();
 });
 
-QUnit.test("mhv targeting parameter is set to 'y' if the traffic is valid", function(assert) {
-	const done = assert.async();
-
-	window.moatPrebidApi = {
-		pageDataAvailable: () => false
-	};
-
-	this.ads.init({ validateAdsTraffic: true }).then(() => {
-		assert.equal(this.ads.targeting.get().mhv, 'y');
-		done();
-	});
-	fetchMock.restore();
-});
-
-
-
-QUnit.test("mhv targeting parameter is set to 'n' if the traffic is NOT valid", function(assert) {
-	const done = assert.async();
-
-	window.moatPrebidApi = {
-		pageDataAvailable: () => true
-	};
-
-	this.ads.init({ validateAdsTraffic: true }).then(() => {
-		assert.equal(this.ads.targeting.get().mhv, 'n');
-		done();
-	});
-	fetchMock.restore();
-});
-
-QUnit.test("When ValidateAdsTraffic is NOT specified, the mhv targeting parameter should NOT be set", function(assert) {
-	const done = assert.async();
-	const setSpy = this.spy(this.ads.targeting, 'add');
-
-	this.ads.init({
-		targetingApi: { user: 'https://www.google.com' }
-	}).then(() => {
-		assert.equal(setSpy.callCount, 0, 'mhv targeting parameter should not be set');
-		done();
-	});
-	fetchMock.restore();
+QUnit.test("If validateAdsTraffic option is true, moat script runs before o-ads library initialises", function(assert) {
+	const moatInitSpy = this.spy(this.ads.moat, 'init');
+	this.ads.init({ validateAdsTraffic: true });
+	assert.ok(moatInitSpy.called, 'moat.init() function is called');
 });

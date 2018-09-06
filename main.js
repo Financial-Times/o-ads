@@ -8,6 +8,7 @@ Ads.prototype.slots = require('./src/js/slots');
 Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
+Ads.prototype.moat = require('./src/js/data-providers/moat');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
 const bowerJson = require('./bower.json');
@@ -42,18 +43,22 @@ Ads.prototype.init = function(options) {
 	}
 
 	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTraffic ? getMoatIvtResponse() : Promise.resolve();
+	const validateAdsTrafficPromise = validateAdsTraffic ? this.moat.init() : Promise.resolve();
 
-	return Promise.all([validateAdsTrafficPromise, targetingPromise])
-		.then(([validateAdsTrafficResponse]) => {
-			if(validateAdsTrafficResponse) {
-				this.targeting.add(validateAdsTrafficResponse);
-			}
-
-			return this.initLibrary();
-		})
-		// If anything fails, default to load ads without targeting
-		.catch(() => this.initLibrary());
+	/**
+	Need to wait for the moat script to load to validate ads 
+	and the targeting API to return before we initialise the library.
+	The targeting values are set on the instance of this.api, therefore 
+	response is irrelevant
+	*/
+	return Promise.all([targetingPromise, validateAdsTrafficPromise])
+		.then(() => this.initLibrary())
+		.catch((e) => {
+			// If anything fails, default to load ads without targeting
+			console.error(e);
+			console.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
+			this.initLibrary();
+		});
 };
 
 Ads.prototype.updateContext = function(options, isNewPage) {
@@ -124,31 +129,6 @@ const initAll = function() {
 	})
 };
 
-
-
-
-/**
- * Wait for moat script to load and return a response based on their API
- * @returns {Promise}
- */
-function getMoatIvtResponse() {
-	return new Promise((resolve, reject) => {
-		const intervalId = setInterval(() => {
-			if(window.moatPrebidApi) {
-				clearInterval(intervalId);
-				clearTimeout(timeoutId);
-				resolve({
-					mhv: window.moatPrebidApi.pageDataAvailable() ? 'n' : 'y'
-				});
-			}
-		}, 50);
-		const timeoutId = setTimeout(() => {
-			clearInterval(intervalId);
-			reject(new Error('Timeout while fetching moat invalid traffic script'));
-		}, 1000);
-	});
-}
-
 function getConsents() {
 	// derive consent options from ft consent cookie
 	const re = /FTConsent=([^;]+)/;
@@ -166,10 +146,6 @@ function getConsents() {
 		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
 	};
 };
-
-function isRobot(validateAdsTrafficResponse) {
-	return validateAdsTrafficResponse && validateAdsTrafficResponse.isRobot;
-}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);
