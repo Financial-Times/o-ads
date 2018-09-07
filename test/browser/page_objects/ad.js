@@ -11,10 +11,6 @@ const commands = {
 };
 
 module.exports = {
-	// url: function(pathname) {
-	// 	console.log('pathname', pathname);
-	// 	return this.api.launch_url + '/Individual-Ad.html';
-	// },
 	// The 'elements' property is required, even if it's empty,
 	// as per this comment (https://github.com/nightwatchjs/nightwatch/issues/570#issuecomment-123085090)
 	elements: {},
