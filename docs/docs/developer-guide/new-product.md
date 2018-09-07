@@ -9,6 +9,23 @@ Include the latest version of o-ads via `bower` or the [Origami Build Service](h
 
 Alternately, you may use the [Origami Build Tools](http://origami.ft.com/docs/developer-guide/modules/building-modules/) to include the library as a part of your codebase and build it manually. This option involves a certain level of setup.
 
+**IMPORTANT NOTE ABOUT CONSENT**
+Since GDPR came into effect in May 2018, o-ads library now requires consent for custom targeting. By default, the o-ads library will check for consent in a cookie with the name `FTConsent`. It will look for 2 types of consent:
+
+- demographic (or programmatic) - it will check for `programmaticadsOnsite:on` inside the cookie.
+- behavioural - it will check for `behaviouraladsOnsite:on` inside the cookie. 
+
+If these are present, then extra targeting information (see section 4 below) can be added to the ad requests.
+
+To disable the consent check, you can set the `disableConsentCookie` key to `true` when configuring o-ads.
+
+```
+oAds.init({
+	disableConsentCookie: true
+})
+```
+
+
 **Extra step for FT Teams**
 
 Please feed back the following information to the Dev Test and Advertising team:
