@@ -13,7 +13,8 @@
     "test-browser-extended": "npm run nightwatch-bs -- --group extended --env chrome",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
-    "verify": "obt verify"
+    "verify": "obt verify",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -73,5 +74,8 @@
   },
   "release": {
     "analyzeCommits": "simple-commit-message"
+  },
+  "dependencies": {
+    "eslint": "^5.5.0"
   }
 }
