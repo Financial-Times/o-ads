@@ -22,7 +22,7 @@
   },
   "author": "",
   "devDependencies": {
-    "@financial-times/secret-squirrel": "^2.5.5",
+    "@financial-times/secret-squirrel": "^2.10.3",
     "babel-core": "^6.26.0",
     "babelify": "^6.0.3",
     "bower": "^1.7.1",
