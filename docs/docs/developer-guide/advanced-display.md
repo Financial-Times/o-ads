@@ -42,6 +42,19 @@ Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 
  In this case, the threshold is a percentage of the intersection area in relation to the area of the target's bounding box (where the target is a DOM element relative to a containing element or to the top-level viewport). [Intersection Observer](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver).  
  Thresholds can be any value between 0.0 and 1.0, inclusive. Default is `0`, meaning that as soon as the first pixel comes into view, the advert will be loaded.
 
+## Invalid Traffic
+
+The library provide the option to check for invalid traffic before serving an ad. This relies on a third party script from Moat which is loaded and executed before any ad calls are made. This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide weather to serve an ad or not. 
+
+To enable this feature,
+
+```
+oAds.config({
+	...
+	validateAdsTraffic: true,
+	...
+});
+```
 
 ## Changing behaviour based on which ad loads
 
