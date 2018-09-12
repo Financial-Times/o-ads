@@ -77,8 +77,8 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}, krux: { id: 'hello' }})
-	.then(function() {
+	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}, krux: { id: 'hello' }})
+		.then(function() {
 			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
 			assert.equal(ads.targeting.get().a, '1');
 			assert.equal(ads.targeting.get().b, '2');
@@ -88,18 +88,18 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 			kruxAttributesStub.reset();
 
 			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
-			.then(function() {
-				assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');
-				assert.ok(kruxAttributesStub.calledOnce, 'resets the krux attributes');
-				assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
-				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
-				assert.equal(ads.targeting.get().a, undefined);
-				assert.equal(ads.targeting.get().b, '1');
-				assert.equal(ads.targeting.get().c, '2');
-				done();
-			}.bind(this));
+				.then(function() {
+					assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');
+					assert.ok(kruxAttributesStub.calledOnce, 'resets the krux attributes');
+					assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
+					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
+					assert.equal(ads.targeting.get().a, undefined);
+					assert.equal(ads.targeting.get().b, '1');
+					assert.equal(ads.targeting.get().c, '2');
+					done();
+				});
 
-	}.bind(this));
+		});
 
 
 });
@@ -124,23 +124,23 @@ QUnit.test('updateContext updates the config only if no API calls', function(ass
 	const ads = new this.adsConstructor();
 	const userDataStub = this.stub(this.ads.api, 'getUserData');
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: {  network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
-	.then(function() {
+	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
+		.then(function() {
 			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
 			assert.equal(this.ads.targeting.get().a, '1');
 			assert.equal(this.ads.targeting.get().b, '2');
 
 			//change the user
 			ads.updateContext({ gpt: { zone: '456' }})
-			.then(function() {
+				.then(function() {
 
-				assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
-				assert.equal(this.ads.targeting.get().a, '1');
-				assert.equal(this.ads.targeting.get().b, '2');
-				done();
-			}.bind(this));
+					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
+					assert.equal(this.ads.targeting.get().a, '1');
+					assert.equal(this.ads.targeting.get().b, '2');
+					done();
+				}.bind(this));
 
-	}.bind(this));
+		}.bind(this));
 
 
 });

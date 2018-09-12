@@ -9,7 +9,7 @@ const targeting = require('../targeting');
  * @constructor
 */
 function Krux() {
- this.customAttributes = {}
+	this.customAttributes = {};
 }
 
 Krux.prototype.add = function (target) {
@@ -27,29 +27,29 @@ Krux.prototype.sendNewPixel = function(pageLoad) {
 		} else {
 			pixel.send('', false);
 		}
-	};
-}
+	}
+};
 
 Krux.prototype.init = function() {
 	this.config = config('krux');
 
 	//Add the rootid as a custom page parameter
 	this.add({ page: targeting.getRootId() });
-	
+
 	if (this.config && this.config.id) {
 
 		/* istanbul ignore else  */
 		if (!window.Krux) {
-			((window.Krux = function() {
+			(window.Krux = function() {
 				window.Krux.q.push(arguments);
 			}).q = []
-			);
+			;
 		}
 
 		this.api = window.Krux;
 		/* istanbul ignore else  */
 		if(this.config.attributes) {
-			this.add(this.config.attributes)
+			this.add(this.config.attributes);
 		}
 
 		this.setAllAttributes();
@@ -163,7 +163,7 @@ Krux.prototype.events = {
 
 				window.addEventListener('load', function() {
 					const delEvnt = new Delegate(document.body);
-					for (let kEvnt in config) {
+					for (const kEvnt in config) {
 						/* istanbul ignore else  */
 						if (config.hasOwnProperty(kEvnt)) {
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
@@ -217,7 +217,7 @@ Krux.prototype.setAllAttributes = function() {
 		this.setAttributes('user_attr_', this.customAttributes.user || {});
 		this.setAttributes('', this.customAttributes.custom || {});
 	}
-}
+};
 
 Krux.prototype.resetAttributes = function() {
 	['user', 'page', 'custom'].forEach(type => {
@@ -229,23 +229,23 @@ Krux.prototype.resetAttributes = function() {
 	});
 
 	this.customAttributes = {};
-}
+};
 
 Krux.prototype.consents = function() {
-  if (config('krux') && config('krux').consentState) {
-    const kuid =  localStorage.getItem('kxkuid');
-    if (kuid) {
-      const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
+	if (config('krux') && config('krux').consentState) {
+		const kuid = localStorage.getItem('kxkuid');
+		if (kuid) {
+			const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
 
-      fetch(consentApi, {
-        timeout: 2000
-      })
-      .catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
-    }
-    else {
-      window.setTimeout(Krux.prototype.consents.bind(Krux), 1000);
-    }
-  }
+			fetch(consentApi, {
+				timeout: 2000
+			})
+				.catch(() => Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api')));
+		}
+		else {
+			window.setTimeout(Krux.prototype.consents.bind(Krux), 1000);
+		}
+	}
 };
 
 Krux.prototype.resetSpecificAttribute = function(type) {
@@ -255,7 +255,7 @@ Krux.prototype.resetSpecificAttribute = function(type) {
 		});
 		delete this.customAttributes[type];
 	}
-}
+};
 
 Krux.prototype.debug = function() {
 	const log = utils.log;
@@ -263,42 +263,42 @@ Krux.prototype.debug = function() {
 		return;
 	}
 	log.start('Krux©');
-		log('%c id:', 'font-weight: bold', this.config.id);
-		if (this.config.limit) {
-			log('%c segment limit:', 'font-weight: bold', this.config.limit);
-		}
+	log('%c id:', 'font-weight: bold', this.config.id);
+	if (this.config.limit) {
+		log('%c segment limit:', 'font-weight: bold', this.config.limit);
+	}
 
-		const attrs = utils.extend(true, this.config.attributes, this.customAttributes);
-		if (Object.keys(attrs).length > 0) {
-			log.start('Attributes');
-				Object.keys(attrs).forEach((key) => {
-					log.start(`${key}`);
-						log.attributeTable(attrs[key]);
-					log.end();
-				});
+	const attrs = utils.extend(true, this.config.attributes, this.customAttributes);
+	if (Object.keys(attrs).length > 0) {
+		log.start('Attributes');
+		Object.keys(attrs).forEach((key) => {
+			log.start(`${key}`);
+			log.attributeTable(attrs[key]);
 			log.end();
-		}
-		if (this.config.events) {
-			const events = this.config.events;
-			log.start('Events');
-				log.start('Delegated');
-					log.table(events.delegated);
-				log.end();
-			log.end();
-		}
-		const targeting = this.targeting();
-		log.start('Targeting');
-			log.attributeTable(targeting);
+		});
 		log.end();
+	}
+	if (this.config.events) {
+		const events = this.config.events;
+		log.start('Events');
+		log.start('Delegated');
+		log.table(events.delegated);
+		log.end();
+		log.end();
+	}
+	const targeting = this.targeting();
+	log.start('Targeting');
+	log.attributeTable(targeting);
+	log.end();
 
-		const tags = Array.from(document.querySelectorAll(".kxinvisible"));
-		if (tags.length) {
-			log.start(`${tags.length} Supertag© scripts`);
-				tags.forEach(function(tag) {
-					log(tag.dataset.alias, tag.querySelector("script"));
-				});
-			log.end();
-		}
+	const tags = Array.from(document.querySelectorAll(".kxinvisible"));
+	if (tags.length) {
+		log.start(`${tags.length} Supertag© scripts`);
+		tags.forEach(function(tag) {
+			log(tag.dataset.alias, tag.querySelector("script"));
+		});
+		log.end();
+	}
 	log.end();
 };
 

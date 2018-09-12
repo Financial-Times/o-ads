@@ -46,9 +46,9 @@ Ads.prototype.init = function(options) {
 	const validateAdsTrafficPromise = validateAdsTraffic ? this.moat.init() : Promise.resolve();
 
 	/**
-	Need to wait for the moat script to load to validate ads 
+	Need to wait for the moat script to load to validate ads
 	and the targeting API to return before we initialise the library.
-	The targeting values are set on the instance of this.api, therefore 
+	The targeting values are set on the instance of this.api, therefore
 	response is irrelevant
 	*/
 	return Promise.all([targetingPromise, validateAdsTrafficPromise])
@@ -68,12 +68,12 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		this.api.reset();
 		return this.api.init(options.targetingApi, this)
 			.then(() => {
-					this.gpt.updatePageTargeting(this.targeting.get());
+				this.gpt.updatePageTargeting(this.targeting.get());
 				/* istanbul ignore else */
-					if(this.config('krux') && this.consents.behavioral) {
-						this.krux.setAllAttributes();
-						this.krux.sendNewPixel(isNewPage);
-					}
+				if(this.config('krux') && this.consents.behavioral) {
+					this.krux.setAllAttributes();
+					this.krux.sendNewPixel(isNewPage);
+				}
 			});
 	} else {
 		return Promise.resolve();
@@ -91,7 +91,7 @@ Ads.prototype.initLibrary = function() {
 	this.krux.init();
 	if (this.consents.behavioral) {
 		// set krux config option to opt-in /consented
-		this.config({'krux': {'consentState' : true}})
+		this.config({'krux': {'consentState' : true}});
 	}
 
 	this.utils.on('debug', this.debug.bind(this));
@@ -126,7 +126,7 @@ const initAll = function() {
 	return ads.init().then(() => {
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
-	})
+	});
 };
 
 function getConsents() {
@@ -145,7 +145,7 @@ function getConsents() {
 		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1,
 		programmatic: consentCookie.indexOf('programmaticadsOnsite:on') !== -1
 	};
-};
+}
 
 function addDOMEventListener() {
 	document.addEventListener('o.DOMContentLoaded', initAll);

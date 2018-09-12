@@ -524,8 +524,8 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	document.body.addEventListener('oAds.complete', function(event) {
 		const iframe = event.detail.slot.gpt.iframe;
 		const iframeSize = [iframe.width, iframe.height];
-			assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
-			done();
+		assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
+		done();
 	});
 
 	const slotHTML = '<div data-o-ads-name="fullpage" data-o-ads-sizes="100x100"></div>';
@@ -644,7 +644,7 @@ QUnit.test('initResponsive is added to command queue when googletag is not avail
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.initResponsive();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'initResponsive function added to command queue');
@@ -676,7 +676,7 @@ QUnit.test('setUnitName is added to command queue when googletag is not availabl
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setUnitName();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setUnitName function added to command queue');
@@ -692,7 +692,7 @@ QUnit.test('addServices is added to command queue when googletag is not availabl
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.addServices();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'addServices function added to command queue');
@@ -708,7 +708,7 @@ QUnit.test('setCollapseEmpty is added to command queue when googletag is not ava
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setCollapseEmpty();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setCollapseEmpty function added to command queue');
@@ -723,7 +723,7 @@ QUnit.test('setURL is added to command queue when googletag is not available', f
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setURL();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setURL function added to command queue');
@@ -738,7 +738,7 @@ QUnit.test('setTargeting is added to command queue when googletag is not availab
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.setTargeting();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'setTargeting function added to command queue');
@@ -752,7 +752,7 @@ QUnit.test('updateCorrelator is added to command queue when googletag is not ava
 
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	this.ads.gpt.updateCorrelator();
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'updateCorrelator function added to command queue');
@@ -776,7 +776,7 @@ QUnit.test('onRefresh is added to command queue when googletag is not available'
 	this.fixturesContainer.add('<div class="o-ads" data-o-ads-companion="false" data-o-ads-name="TestFormat" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({gpt: {companions: true}});
 	const slot = this.ads.slots.initSlot('TestFormat');
-	let gptCommandsQueued = window.googletag.cmd.length;
+	const gptCommandsQueued = window.googletag.cmd.length;
 
 	slot.fire('refresh');
 	assert.equal(window.googletag.cmd.length, gptCommandsQueued + 1, 'onRefresh function added to command queue');
@@ -791,7 +791,7 @@ QUnit.test('nonPersonalized request mode', function(assert) {
 });
 
 QUnit.test('nonPersonalized request mode', function(assert) {
-		document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
+	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff%2CprogrammaticadsOnsite%3Aon;';
 	this.ads.init({gpt: true});
 	assert.ok(googletag.pubads().setRequestNonPersonalizedAds.calledWith(0), 'nonPersonalized request mode disabled (called with "0") when programmatic consent given.');
 	this.deleteCookie('FTConsent');

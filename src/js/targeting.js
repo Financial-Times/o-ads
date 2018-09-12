@@ -12,13 +12,13 @@ Targeting.prototype.get = function() {
 		responsive: this.responsive
 	};
 	utils.extend(
-		parameters, 
-		this.getFromConfig(), 
-		this.searchTerm(), 
+		parameters,
+		this.getFromConfig(),
+		this.searchTerm(),
 		this.socialFlow(),
 		this.getRootId()
 	);
-	for (let item in methods) {
+	for (const item in methods) {
 	/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
 			utils.extend(parameters, methods[item]());
@@ -39,7 +39,7 @@ Targeting.prototype.remove = function(key) {
 	if(parameters[key]) {
 		delete parameters[key];
 	}
-}
+};
 
 Targeting.prototype.clear = function() {
 	parameters = {};
@@ -64,8 +64,8 @@ Targeting.prototype.getFromConfig = function() {
 Targeting.prototype.getRootId = function() {
 	return {
 		rootid: oTrackingCore.getRootID()
-	}
-}
+	};
+};
 
 /**
  * If there is a query parameter called socialflow=xxx, we need to add it
@@ -73,10 +73,10 @@ Targeting.prototype.getRootId = function() {
  */
 Targeting.prototype.socialFlow = function() {
 	const sf = utils.getQueryParamByName('socialflow');
-	if(!!sf) {
+	if(sf) {
 		return {
 			socialflow: sf
-		}
+		};
 	}
 };
 
@@ -94,7 +94,7 @@ Targeting.prototype.getSocialReferrer = function() {
 	};
 
 	Object.keys(lookup).forEach((url) => {
-		let refererRegex = new RegExp(`^http(|s):\/\/(www.)*(${url})`);
+		const refererRegex = new RegExp(`^http(|s):\/\/(www.)*(${url})`);
 		/* istanbul ignore else  */
 		if (refererRegex.test(referrer)) {
 			codedValue = lookup[url];
@@ -110,9 +110,9 @@ Targeting.prototype.searchTerm = function() {
 	/* istanbul ignore else	*/
 	if (keywords && keywords !== '') {
 		keywords = unescape(keywords).toLowerCase()
-		.replace(/[';\^\+]/g, ' ')
-		.replace(/\s+/g, ' ')
-		.trim();
+			.replace(/[';\^\+]/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
 	}
 
 	return {kw: keywords};

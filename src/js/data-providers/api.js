@@ -5,40 +5,40 @@ function Api() {
 }
 
 Api.prototype.getUserData = function(target) {
-	if(!target) { return Promise.resolve({}) };
+	if(!target) { return Promise.resolve({}); }
 	return fetch(target, {
 		timeout: 2000,
 		useCorsProxy: true,
 		credentials: 'include'
 	})
-	.then( res => res.json())
-	.catch(() => Promise.resolve({}));
+		.then( res => res.json())
+		.catch(() => Promise.resolve({}));
 
 };
 
 Api.prototype.getPageData = function(target, timeout) {
-	if(!target) { return Promise.resolve({}) };
+	if(!target) { return Promise.resolve({}); }
 
 	timeout = timeout || 2000;
 	return fetch(target, {
 		timeout: timeout,
 		useCorsProxy: true
 	})
-	.then( res => res.json())
-	.catch(() => Promise.resolve({}));
+		.then( res => res.json())
+		.catch(() => Promise.resolve({}));
 };
 
 Api.prototype.handleResponse = function(response) {
 	this.data = response;
 
 	for(let i = 0; i < response.length; i++) {
-		let responseObj = response[i]
-		let keys = ['user', 'page'];
-		let kruxObj = {}
+		const responseObj = response[i];
+		const keys = ['user', 'page'];
+		const kruxObj = {};
 
 		if(responseObj.krux && responseObj.krux.attributes) {
 			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes);
-			this.instance.krux.add(kruxObj)
+			this.instance.krux.add(kruxObj);
 		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
@@ -54,7 +54,7 @@ Api.prototype.handleResponse = function(response) {
 			}
 		}
 	}
-	
+
 	return response;
 };
 
@@ -67,7 +67,7 @@ Api.prototype.init = function(config, oAds) {
 	}
 
 	return Promise.all([this.getUserData(config.user), this.getPageData(config.page)])
-	.then(this.handleResponse.bind(this))
+		.then(this.handleResponse.bind(this));
 };
 
 Api.prototype.reset = function() {
@@ -79,7 +79,7 @@ Api.prototype.reset = function() {
 				this.instance.gpt.clearPageTargetingForKey(kv.key);
 			});
 		}
-	})
+	});
 };
 
 module.exports = new Api();

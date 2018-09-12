@@ -89,7 +89,7 @@ QUnit.test('We can unsubscribe from an event', function(assert) {
 
 	setTimeout(function() {
 		utils.off('ahoy', stub);
-		utils.broadcast('ahoy', { there: 'arrr' })
+		utils.broadcast('ahoy', { there: 'arrr' });
 		assert.ok(stub.calledTwice, 'We reacted to the events only before off');
 		stub.reset();
 		done();

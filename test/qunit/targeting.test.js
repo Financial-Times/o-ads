@@ -38,7 +38,7 @@ QUnit.test('getFromConfig', function(assert) {
 });
 
 QUnit.test("root id", function(assert) {
-	const getRootId = this.stub(this.ads.targeting, 'getRootId'); 
+	const getRootId = this.stub(this.ads.targeting, 'getRootId');
 	getRootId.returns({
 		rootid: '123'
 	});
