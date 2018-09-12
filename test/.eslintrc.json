@@ -1,0 +1,11 @@
+{
+  "env": {
+    "qunit": true
+  },
+  "rules": {
+    "no-console": 0
+  },
+  "globals": {
+    "sinon": true
+  }
+}
