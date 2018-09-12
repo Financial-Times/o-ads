@@ -13,19 +13,19 @@ QUnit.module('ads API config', {
 
 QUnit.test('resolves with an empty promise if called without any urls', function(assert) {
 	const done = assert.async();
-	
+
 	this.ads.api.init()
-	.then(res => {
-		assert.equal(res, undefined);
-		done();
-	});
+		.then(res => {
+			assert.equal(res, undefined);
+			done();
+		});
 
 });
 QUnit.test('can handle errors in the api response', function(assert) {
 	const done = assert.async();
 
-	fetchMock.get('https://ads-api.ft.com/v1/concept/error', 500)
-	fetchMock.get('https://ads-api.ft.com/v1/user/error', 500)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/error', 500);
+	fetchMock.get('https://ads-api.ft.com/v1/user/error', 500);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -56,9 +56,9 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 
-	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
+	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
 
-	let ads = this.ads.init({
+	const ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
 		},
@@ -70,21 +70,21 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 	ads.then((ads) => {
 		const targeting = ads.targeting.get();
 		const config = ads.config();
-		const dfp_targeting =  {
-					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "11111111-2222-3333-4444-555555555555",
-					"slv": "int",
-					"loggedIn": true,
-					"gender": "F"
+		const dfp_targeting = {
+			"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+			"guid": "11111111-2222-3333-4444-555555555555",
+			"slv": "int",
+			"loggedIn": true,
+			"gender": "F"
 		};
-		const krux_targeting =  {
-						"user": {
-						"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-						"guid": "11111111-2222-3333-4444-555555555555",
-						"subscription_level": "int",
-						"loggedIn": true,
-						"gender": "F"
-					}
+		const krux_targeting = {
+			"user": {
+				"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+				"guid": "11111111-2222-3333-4444-555555555555",
+				"subscription_level": "int",
+				"loggedIn": true,
+				"gender": "F"
+			}
 		};
 		const lastCallOpts = apiCallMock.lastCall()[1];
 		assert.equal(lastCallOpts.credentials, "include");
@@ -126,21 +126,21 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 	ads.then((ads) => {
 		const targeting = ads.targeting.get();
 		const config = ads.config();
-		const dfp_targeting =  {
-					"custom_key": "custom_value",
-					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "11111111-2222-3333-4444-555555555555",
-					"slv": "int",
-					"loggedIn": true,
-					"gender": "F"
+		const dfp_targeting = {
+			"custom_key": "custom_value",
+			"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+			"guid": "11111111-2222-3333-4444-555555555555",
+			"slv": "int",
+			"loggedIn": true,
+			"gender": "F"
 		};
-		const krux_targeting =  {
-					"custom_key": "custom value",
-					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "11111111-2222-3333-4444-555555555555",
-					"subscription_level": "int",
-					"loggedIn": true,
-					"gender": "F"
+		const krux_targeting = {
+			"custom_key": "custom value",
+			"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+			"guid": "11111111-2222-3333-4444-555555555555",
+			"subscription_level": "int",
+			"loggedIn": true,
+			"gender": "F"
 		};
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
@@ -154,7 +154,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
-	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -174,12 +174,12 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 	ads.then((ads) => {
 		const targeting = ads.targeting.get();
 		const config = ads.config();
-		const dfp_targeting =  {
-					"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
-					"ad": "ft11,s03,sm01,s05,s04,ft13",
-					"ca": "finance,company,business"
+		const dfp_targeting = {
+			"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
+			"ad": "ft11,s03,sm01,s05,s04,ft13",
+			"ca": "finance,company,business"
 		};
-		const krux_targeting =  {
+		const krux_targeting = {
 			"authors": ["Jung-a Song"],
 			"genre": ["News"],
 			"primarySection": ["Technology"],
@@ -222,11 +222,11 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 	const done = assert.async();
 	const userJSON = JSON.stringify(this.fixtures.user);
 	const pageJSON = JSON.stringify(this.fixtures.content);
-	
+
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon%2CprogrammaticadsOnsite%3Aon';
-	
+
 	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
-	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -251,13 +251,13 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 	ads.then((ads) => {
 		const targeting = ads.targeting.get();
 		const config = ads.config();
-		const dfp_targeting =  {
-					"custom_key": "custom_value",
-					"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
-					"ad": "ft11,s03,sm01,s05,s04,ft13",
-					"ca": "finance,company,business"
+		const dfp_targeting = {
+			"custom_key": "custom_value",
+			"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
+			"ad": "ft11,s03,sm01,s05,s04,ft13",
+			"ca": "finance,company,business"
 		};
-		const krux_targeting =  {
+		const krux_targeting = {
 			"custom_key": "custom_value",
 			"authors": ["Jung-a Song"],
 			"genre": ["News"],
@@ -280,7 +280,7 @@ QUnit.test('overwrites the config gpt zone with the adunit from the page respons
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
-	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -309,7 +309,7 @@ QUnit.test('does not overwrite the config gpt zone with the adunit from the page
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
-	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -337,7 +337,7 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 
-	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -366,9 +366,9 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 	document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 
 	// mocks api response
-	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON)
+	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
 
-	let ads = this.ads.init({
+	const ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
 		},
@@ -383,21 +383,21 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 		const config = ads.config();
 
 		// expectations
-		const dfp_targeting =  {
-					"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-					"guid": "11111111-2222-3333-4444-555555555555",
-					"slv": "int",
-					"loggedIn": true,
-					"gender": "F"
+		const dfp_targeting = {
+			"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+			"guid": "11111111-2222-3333-4444-555555555555",
+			"slv": "int",
+			"loggedIn": true,
+			"gender": "F"
 		};
-		const krux_targeting =  {
-						"user": {
-						"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-						"guid": "11111111-2222-3333-4444-555555555555",
-						"subscription_level": "int",
-						"loggedIn": true,
-						"gender": "F"
-					}
+		const krux_targeting = {
+			"user": {
+				"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
+				"guid": "11111111-2222-3333-4444-555555555555",
+				"subscription_level": "int",
+				"loggedIn": true,
+				"gender": "F"
+			}
 		};
 		const lastCallOpts = apiCallMock.lastCall()[1];
 		assert.equal(lastCallOpts.credentials, "include");
@@ -429,14 +429,14 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 			const config = ads.config();
 
 			// define the new expectations
-			const dfp_targeting_anon =  {
-						"slv": "anon",
-						"loggedIn": false
+			const dfp_targeting_anon = {
+				"slv": "anon",
+				"loggedIn": false
 			};
 
-			const krux_targeting_anon =  {
-							"user": {
-						}
+			const krux_targeting_anon = {
+				"user": {
+				}
 			};
 			// run the assertions
 			Object.keys(dfp_targeting_anon).forEach((key) => {
@@ -465,7 +465,7 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 
 	document.cookie = 'FTConsent=behaviouraladsOnsite:off;';
 
-	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	const apiCallMock = fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {
@@ -485,12 +485,12 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 	ads.then((ads) => {
 		const targeting = ads.targeting.get();
 		const config = ads.config();
-		const dfp_targeting =  {
-					"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
-					"ad": "ft11,s03,sm01,s05,s04,ft13",
-					"ca": "finance,company,business"
+		const dfp_targeting = {
+			"auuid": "13abbe62-70db-11e6-a0c9-1365ce54b926",
+			"ad": "ft11,s03,sm01,s05,s04,ft13",
+			"ca": "finance,company,business"
 		};
-		const krux_targeting =  {
+		const krux_targeting = {
 			"authors": ["Jung-a Song"],
 			"genre": ["News"],
 			"primarySection": ["Technology"],
@@ -511,18 +511,18 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 		// CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE TARGETING                //
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		const anotherContentJSON = JSON.stringify(this.fixtures.anotherContent);
-		const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/anotherId', anotherContentJSON)
+		const apiCallMock2 = fetchMock.get('https://ads-api.ft.com/v1/concept/anotherId', anotherContentJSON);
 		ads.api.reset();
 		ads.api.init({ page: 'https://ads-api.ft.com/v1/concept/anotherId'}, ads).then(function() {
 
 			const targeting = ads.targeting.get();
 			const config = ads.config();
-			const dfp_targeting_updated =  {
-						"auuid": "11111111-2222-3333-4444-555555555555",
-						"ad": "s03,sm01",
-						"ca": "random,answers,here"
+			const dfp_targeting_updated = {
+				"auuid": "11111111-2222-3333-4444-555555555555",
+				"ad": "s03,sm01",
+				"ca": "random,answers,here"
 			};
-			const krux_targeting_updated =  {
+			const krux_targeting_updated = {
 				"authors": ["Jung-a Song1"],
 				"genre": ["News2"],
 				"primarySection": ["Technology3"],
@@ -550,7 +550,7 @@ QUnit.skip("allows single page app to update the concept targeting from API on t
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.concept);
 
-	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON)
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
 
 	const ads = this.ads.init({
 		targetingApi: {

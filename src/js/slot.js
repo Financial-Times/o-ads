@@ -97,7 +97,7 @@ const convertLazyLoadBooleanToObject = (obj) => {
 	if(obj.lazyLoad === true) {
 		obj.lazyLoad = {};
 	}
-}
+};
 
 const onChangeBreakpoint = (event) => {
 	const slot = event.detail.slot;
@@ -120,7 +120,7 @@ function Slot(container, screensize, initLazyLoading) {
 	const renderEvent = 'rendered';
 	const cfg = config();
 	let slotConfig = config('slots') || {};
-	let disableSwipeDefault = config('disableSwipeDefault') || false;
+	const disableSwipeDefault = config('disableSwipeDefault') || false;
 	let outerEl;
 
 	// store the container
@@ -157,7 +157,7 @@ function Slot(container, screensize, initLazyLoading) {
 	this.outOfPage = slotConfig.outOfPage || false;
 
 	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
-	this.companion = (slotConfig.companion === false ? false : true);
+	this.companion = slotConfig.companion === false ? false : true;
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	/* istanbul ignore else */
 	if (utils.isArray(slotConfig.formats)) {
@@ -258,7 +258,7 @@ Slot.prototype.initLazyLoad = function() {
 		}
 	}
 	return this;
-}
+};
 
 Slot.prototype.render = function() {
 	this.fire('render');
@@ -272,7 +272,7 @@ Slot.prototype.render = function() {
  *	Listen to responsive breakpoints and collapse slots
  * where the configured size is set to false
  */
- Slot.prototype.initResponsive = function() {
+Slot.prototype.initResponsive = function() {
 	/* istanbul ignore else */
 	if (utils.isPlainObject(this.sizes)) {
 		/* istanbul ignore else */
@@ -283,13 +283,13 @@ Slot.prototype.render = function() {
 	}
 
 	return this;
- };
+};
 
 /**
  * Maximise the slot when size is 100x100
  */
 Slot.prototype.maximise = function(size) {
-	if (size && +size[0] === 100 && +size[1] === 100) {
+	if (size && Number(size[0]) === 100 && Number(size[1]) === 100) {
 		this.fire('resize', {
 			size: ['100%', '100%']
 		});

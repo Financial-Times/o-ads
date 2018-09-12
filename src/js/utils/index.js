@@ -16,7 +16,7 @@ const utils = module.exports;
  */
 function is(object) {
 	const type = Object.prototype.toString.call(object)
-	.match(/^\[object\s(.*)\]$/)[1];
+		.match(/^\[object\s(.*)\]$/)[1];
 
 	if (object === null) {
 		return "Null";
@@ -49,14 +49,14 @@ function createIsTest(className) {
  */
 function curryIsMethods(obj, classNames) {
 	classNames = classNames || [
-	'Array',
-	'Object',
-	'String',
-	'Function',
-	'Storage'
+		'Array',
+		'Object',
+		'String',
+		'Function',
+		'Storage'
 	];
 
-	while (!!classNames.length) {
+	while (classNames.length) {
 		const className = classNames.pop();
 		obj[`is${className}`] = createIsTest(className);
 	}
@@ -69,9 +69,9 @@ function curryIsMethods(obj, classNames) {
   * @param {object} obj The object to be tested
 	 * @returns {boolean} true if the object is the window obj, otherwise false
 	  */
-		module.exports.isWindow = function(obj) {
-				return obj && obj !== null && obj === window;
-		};
+module.exports.isWindow = function(obj) {
+	return obj && obj !== null && obj === window;
+};
 
 /**
  * Test if an object inherits from any other objects, used in extend
@@ -115,7 +115,7 @@ module.exports.isPlainObject = function(obj) {
  * @returns {boolean} true if the object is a string with a length greater than 0
  */
 module.exports.isNonEmptyString = function(str) {
-	return utils.isString(str) && !!str.length;
+	return utils.isString(str) && Boolean(str.length);
 };
 
 module.exports.isElement = function(element) {
@@ -141,7 +141,7 @@ function extend() {
 	let copyIsArray;
 	let clone;
 	let target = arguments[0] || {};
-	let length = arguments.length;
+	const length = arguments.length;
 	let deep = false;
 	let i = 1;
 
@@ -170,7 +170,7 @@ function extend() {
 		// Only deal with non-null/undefined values
 		if ((options = arguments[i]) !== null) {
 			// Extend the base object
-			for (let name in options) {
+			for (const name in options) {
 				/* istanbul ignore next */
 				if(options.hasOwnProperty(name)) {
 					src = target[name];
@@ -354,13 +354,13 @@ module.exports.getQueryString = function() {
  * @returns {string | null}
  */
 module.exports.getQueryParamByName = function(name, url) {
-    url = url || window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-    const results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	url = url || window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+	const results = regex.exec(url);
+	if (!results) {return null;}
+	if (!results[2]) {return '';}
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
 /**
@@ -370,12 +370,12 @@ module.exports.getQueryParamByName = function(name, url) {
 module.exports.getTimestamp = function() {
 	const now = new Date();
 	return [
-	now.getFullYear(),
-	(`0${(now.getMonth() + 1)}`).slice(-2),
-	(`0${now.getDate()}`).slice(-2),
-	(`0${now.getHours()}`).slice(-2),
-	(`0${now.getMinutes()}`).slice(-2),
-	(`0${now.getSeconds()}`).slice(-2)
+		now.getFullYear(),
+		`0${(now.getMonth() + 1)}`.slice(-2),
+		`0${now.getDate()}`.slice(-2),
+		`0${now.getHours()}`.slice(-2),
+		`0${now.getMinutes()}`.slice(-2),
+		`0${now.getSeconds()}`.slice(-2)
 	].join("");
 };
 
@@ -423,12 +423,12 @@ module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject
 		prev[data.key] = data.value;
 		return prev;
 	}, {});
-}
+};
 
 module.exports.cookie = function(name) {
-	let val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
-  return val ? val.pop() : null;
-}
+	const val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+	return val ? val.pop() : null;
+};
 
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));

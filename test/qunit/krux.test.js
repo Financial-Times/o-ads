@@ -9,8 +9,8 @@ QUnit.module('Krux', {
 		document.cookie = 'FTConsent=behaviouraladsOnsite:on;';
 		window.requestIdleCallback = function(cb) { cb(); };
 		window.Krux = this.stub();
-	fetchMock.mock('https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=bk&bk=kuid&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=null', 200);
-	window.localStorage.removeItem('krxconsent');
+		fetchMock.mock('https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=bk&bk=kuid&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=null', 200);
+		window.localStorage.removeItem('krxconsent');
 	},
 	afterEach: function() {
 		delete window.Krux;
@@ -29,7 +29,7 @@ QUnit.test("control tag is attached when initialised", function(assert) {
 QUnit.test('sets global Krux if one is not available yet', function(assert) {
 	delete window.Krux;
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
-	assert.ok((window.Krux), 'Krux is set in the init');
+	assert.ok(window.Krux, 'Krux is set in the init');
 });
 
 QUnit.test('adds a script from url when location contains krux src', function(assert) {
@@ -244,8 +244,8 @@ QUnit.test("debug logs segment limit data if set", function(assert) {
 });
 
 QUnit.test("adds data to config", function(assert) {
-	let input = { "key" : "value" }
-	this.ads.krux.add(input)
+	const input = { "key" : "value" };
+	this.ads.krux.add(input);
 	assert.deepEqual(this.ads.krux.customAttributes, input, 'win');
 });
 
