@@ -44,9 +44,13 @@ Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 
 
 ## Invalid Traffic
 
-The library provide the option to check for invalid traffic before serving an ad. This relies on a third party script from Moat which is loaded and executed before any ad calls are made. This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide weather to serve an ad or not. 
+The library provide the option to check for invalid traffic before serving an ad. This relies on a third party script from Moat which you must include on your page, preferrably in the `<head>` section on your page
 
-To enable this feature,
+```<script async id="moat-ivt" src="https://sejs.moatads.com/financialtimesprebidheader859796398452/yi.js"></script>```
+
+This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide whether to serve an ad or not. 
+
+To enable this feature make sure you have the script above on your page and enable the following config setting:
 
 ```
 oAds.config({
