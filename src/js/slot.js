@@ -2,6 +2,7 @@ const utils = require('./utils');
 const config = require('./config');
 
 const VALID_SIZE_STRINGS = ['fluid'];
+const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];
 
 const attributeParsers = {
 	sizes: function(value, sizes) {
@@ -87,6 +88,17 @@ const attributeParsers = {
 			value = true;
 		} else if (value === 'false') {
 			value = false;
+		}
+
+		return value;
+	},
+	collapseEmpty: function(value) {
+		// can I use Array.includes? clearer imo
+		const isUnknownAttribute = VALID_COLLAPSE_MODES.indexOf(value) === -1;
+
+		if (isUnknownAttribute) {
+			console.warn(`Invalid attribute ${value} used for collapse-empty attribute, please use 'before', 'after' or 'never'`)
+			return undefined;
 		}
 
 		return value;
@@ -211,6 +223,8 @@ Slot.prototype.parseAttributeConfig = function() {
 		const value = attribute.value;
 		if (name === 'formats') {
 			this[name] = attributeParsers[name](value, this.sizes);
+		} else if (name === 'collapseEmpty') {
+			this.collapseEmpty = attributeParsers.collapseEmpty(value);
 		} else if (name === 'lazyLoadThreshold' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
 			this.lazyLoad.threshold = attributeParsers.lazyLoadThreshold(value);
@@ -222,8 +236,7 @@ Slot.prototype.parseAttributeConfig = function() {
 			this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
 		} else if (/^sizes\w*/.test(name)) {
 			this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
-		}
-		else if (this.hasOwnProperty(name)) {
+		} else if (this.hasOwnProperty(name)) {
 			this[name] = attributeParsers.base(value);
 		}
 	});
