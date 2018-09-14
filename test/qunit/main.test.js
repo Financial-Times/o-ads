@@ -196,3 +196,35 @@ QUnit.test("If validateAdsTraffic option is true, moat script runs before o-ads 
 	this.ads.init({ validateAdsTraffic: true });
 	assert.ok(moatInitSpy.called, 'moat.init() function is called');
 });
+
+QUnit.test("moat script loading check is eventually cleared if moat is loaded", function(assert) {
+	const clearIntSpy = this.spy(window, 'clearInterval');
+	window.moatPrebidApi = {};
+	this.ads.moat.init();
+	const done = assert.async();
+
+	setTimeout( () => {
+		assert.ok(clearIntSpy.called);
+		done();
+	}, 1000);
+});
+
+QUnit.test("moat script loading check is eventually cleared if moat is not loaded", function(assert) {
+	const clearIntSpy = this.spy(window, 'clearInterval');
+	window.moatPrebidApi = null;
+	this.ads.moat.init();
+	const done = assert.async();
+
+	setTimeout( () => {
+		assert.ok(clearIntSpy.called);
+		done();
+	}, 1000);
+});
+
+QUnit.test(".version logs the right format", function(assert) {
+	const consoleSpy = this.spy(console, 'log');
+	this.ads.init({ validateAdsTraffic: true });
+	this.ads.version();
+	const loggedMessage = consoleSpy.args[0][0];
+	assert.ok(/o-ads version: \d\d?\.\d\d?\.\d\d?/.test(loggedMessage));
+});
