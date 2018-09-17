@@ -113,36 +113,68 @@ QUnit.test('enables companion ads', function(assert) {
 	assert.ok(googletag.companionAds().setRefreshUnfilledSlots.calledWith(true), 'companion ads api called with correct param');
 });
 
-QUnit.test('set correct collapse mode when collapseEmpty is after', function(assert) {
+QUnit.test('set correct collapse mode when config collapseEmpty is after', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: 'after'});
 	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
-	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true), 'call collapse empty slot gpt api with correct parameters');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true), 'call collapse empty slot gpt api with correct parameters');
 });
 
-QUnit.test('set correct collapse mode when collapseEmpty is before', function(assert) {
+QUnit.test('set correct collapse mode when config collapseEmpty is before', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: 'before'});
 	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
-	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(true, true), 'call collapse empty slot gpt api with correct parameters');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
 });
 
-QUnit.test('set correct collapse mode when collapseEmpty is never', function(assert) {
+QUnit.test('set correct collapse mode when config collapseEmpty is never', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({collapseEmpty: 'never'});
 	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
-	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(false), 'call collapse empty slot gpt api with correct parameters');
 });
 
-QUnit.test('set collapse mode as never if no mode is specified', function(assert) {
+QUnit.test('set collapse mode as "never" if no mode is specified', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({});
 	const slot = this.ads.slots.initSlot('mpu');
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
-	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWith(false), 'call collapse empty slot gpt api with correct parameters');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(false), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('component specific mode overrides config set parameter', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle" data-o-ads-collapse-empty="before"></div>');
+	this.ads.init({collapseEmpty: 'after'});
+	const slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('component specific mode overrides default', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle" data-o-ads-collapse-empty="before"></div>');
+	this.ads.init({});
+	const slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('named component config overrides global config', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({ collapseEmpty: 'after', slots: { mpu: { collapseEmpty: 'before'}}});
+	const slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
+});
+
+QUnit.test('named component config overrides default', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
+	this.ads.init({slots: { mpu: { collapseEmpty: 'before'}}});
+	const slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
 });
 
 QUnit.test('catches slot in view render event and display it if method is ready', function(assert) {
