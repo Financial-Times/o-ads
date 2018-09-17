@@ -161,6 +161,15 @@ QUnit.test('component specific mode overrides default', function(assert) {
 	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true, true), 'call collapse empty slot gpt api with correct parameters');
 });
 
+QUnit.test('component specific mode is not set if attribute value is wrong, and the config set mode is set instead', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle" data-o-ads-collapse-empty="INVALID_PARAMETER"></div>');
+	this.ads.init({collapseEmpty: 'after'});
+	const slot = this.ads.slots.initSlot('mpu');
+	assert.ok(slot.collapseEmpty === undefined, 'collapse empty is not set when attribute value is wrong');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledOnce, 'call collapse empty slot gpt api');
+	assert.ok(slot.gpt.slot.setCollapseEmptyDiv.calledWithExactly(true), 'call collapse empty slot gpt api with correct parameters');
+});
+
 QUnit.test('named component config overrides global config', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="mpu" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ collapseEmpty: 'after', slots: { mpu: { collapseEmpty: 'before'}}});
