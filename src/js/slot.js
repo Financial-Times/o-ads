@@ -93,7 +93,6 @@ const attributeParsers = {
 		return value;
 	},
 	collapseEmpty: function(value) {
-		// can I use Array.includes? clearer imo
 		const isUnknownAttribute = VALID_COLLAPSE_MODES.indexOf(value) === -1;
 
 		if (isUnknownAttribute) {
