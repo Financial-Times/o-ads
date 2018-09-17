@@ -269,16 +269,16 @@ Krux.prototype.debug = function() {
 	}
 
 	const attrs = utils.extend(true, this.config.attributes, this.customAttributes);
-  const keys = Object.keys(attrs);
-  if (keys.length > 0) {
-    log.start('Attributes');
-    keys.forEach((key) => {
-      log.start(`${key}`);
-      log.attributeTable(attrs[key]);
-      log.end();
-    });
-    log.end();
-  }
+	const keys = Object.keys(attrs);
+	if (keys.length > 0) {
+		log.start('Attributes');
+		keys.forEach((key) => {
+			log.start(`${key}`);
+			log.attributeTable(attrs[key]);
+			log.end();
+		});
+		log.end();
+	}
 	if (this.config.events) {
 		const events = this.config.events;
 		log.start('Events');
