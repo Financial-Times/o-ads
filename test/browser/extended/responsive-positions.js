@@ -20,27 +20,27 @@ module.exports = {
 	'Step 3: verify the top slot is displaying a leaderboard': function (browser) {
 		browser
 			.assert.visible('#responsive-1-gpt', 'First adaptive advert is visible')
-				// switch focus to first iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_0')
-				// wait for 1 second for advert to appear
-				.waitForElementPresent('img', wait, 'First adaptive advert image is visible')
-				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097')
-				// switch focus back to main page
-				.frame(null);
+		// switch focus to first iframe
+			.frame('google_ads_iframe_/5887/test.5887.origami_0')
+		// wait for 1 second for advert to appear
+			.waitForElementPresent('img', wait, 'First adaptive advert image is visible')
+		// make sure we can see the correct URL
+			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097')
+		// switch focus back to main page
+			.frame(null);
 	},
 
 	'Step 4: verify the bottom slot is displaying ': function (browser) {
 		browser
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
-				// switch focus to second iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_1')
-				// wait for 1 second for advert to appear
-				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
-				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/13534452929848566596')
-				// switch focus back to main page
-				.frame(null);
+		// switch focus to second iframe
+			.frame('google_ads_iframe_/5887/test.5887.origami_1')
+		// wait for 1 second for advert to appear
+			.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
+		// make sure we can see the correct URL
+			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/13534452929848566596')
+		// switch focus back to main page
+			.frame(null);
 	},
 
 	'Step 4: Resize browser window to fit mobile break point': function (browser) {
@@ -59,13 +59,13 @@ module.exports = {
 		browser
 			.waitForElementPresent('[data-o-ads-loaded="MediumRectangle"]', wait, 'MPU loaded')
 			.assert.visible('#responsive-2-gpt', 'Second adaptive advert is visible')
-				// switch focus to second iframe
-				.frame('google_ads_iframe_/5887/test.5887.origami_1')
-				// wait for 1 second for advert to appear
-				.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
-				// make sure we can see the correct URL
-				.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/11544125268120182564')
-				// switch focus back to main page
-				.frame(null);
+		// switch focus to second iframe
+			.frame('google_ads_iframe_/5887/test.5887.origami_1')
+		// wait for 1 second for advert to appear
+			.waitForElementPresent('img', wait, 'Second adaptive advert image is visible')
+		// make sure we can see the correct URL
+			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/11544125268120182564')
+		// switch focus back to main page
+			.frame(null);
 	}
 };

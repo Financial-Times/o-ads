@@ -32,7 +32,7 @@ QUnit.test('parse plain string', function(assert) {
 	const input = 'random string';
 	const output = this.utils.messenger.parse(input);
 
-	assert.strictEqual(typeof(output), 'string', 'Make sure that output is a string');
+	assert.strictEqual(typeof output, 'string', 'Make sure that output is a string');
 	assert.equal(input, output, 'Make sure output is same as input');
 });
 
@@ -40,7 +40,7 @@ QUnit.test('parse JSON string returns the equivakent JS Object', function(assert
 	const input = '{"test": "value", "anotherKey": 2}';
 	const output = this.utils.messenger.parse(input);
 
-	assert.strictEqual(typeof(output), 'object', 'Make sure that output is an object');
+	assert.strictEqual(typeof output, 'object', 'Make sure that output is an object');
 	assert.deepEqual(output, {test: 'value', anotherKey: 2}, 'Make sure the returned object was parsed correctly');
 });
 
@@ -48,7 +48,7 @@ QUnit.test('parsing an Object returns an object', function(assert) {
 	const input = {"test": "value", "anotherKey": 2};
 	const output = this.utils.messenger.parse(input);
 
-	assert.strictEqual(typeof(output), 'object', 'Make sure that output is a string');
+	assert.strictEqual(typeof output, 'object', 'Make sure that output is a string');
 	assert.deepEqual(output, input, 'Make sure the returned object is the same as the original');
 });
 
@@ -56,6 +56,6 @@ QUnit.test('parse Malformed JSON returns string', function(assert) {
 	const input = '{"test: "value}';
 	const output = this.utils.messenger.parse(input);
 
-	assert.strictEqual(typeof(output), 'string', 'Make sure that output is a string');
+	assert.strictEqual(typeof output, 'string', 'Make sure that output is a string');
 	assert.equal(input, output, 'Make sure output is same as input');
 });

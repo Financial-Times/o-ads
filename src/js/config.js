@@ -57,7 +57,7 @@ function fetchDeclaritiveConfig() {
 	let results = {};
 	const scripts = Array.from(document.querySelectorAll('script[data-o-ads-config]'));
 	scripts.forEach(script => {
-		results = (window.JSON) ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
+		results = window.JSON ? utils.extend(results, JSON.parse(script.innerHTML)) : 'UNSUPPORTED';
 	});
 
 	return results;

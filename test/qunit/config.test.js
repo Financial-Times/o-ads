@@ -9,11 +9,11 @@ QUnit.test('Config get/set', function(assert) {
 	this.ads.config.clear();
 	let result;
 	let obj;
-	let key = 'key';
-	let key2 = 'key2';
-	let invalid = 'invalid';
-	let value = 'value';
-	let value2 = 'value2';
+	const key = 'key';
+	const key2 = 'key2';
+	const invalid = 'invalid';
+	const value = 'value';
+	const value2 = 'value2';
 
 	assert.ok($.isFunction(this.ads.config), 'The set method exists');
 
@@ -120,7 +120,7 @@ QUnit.test('Config works as expected even when there are custom prototype method
 		large: [1000, 0],
 		medium: [760, 0],
 		small: [0, 0]
-	}
+	};
 	const result = this.ads.config();
 	assert.ok(result.hasOwnProperty('flags'), 'default properties have been added to config');
 	assert.deepEqual(this.ads.config('flags'), flags, 'Config returns the correct value');

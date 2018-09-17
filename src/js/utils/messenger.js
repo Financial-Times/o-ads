@@ -6,7 +6,7 @@
 
 module.exports.messenger = {
 	post: function(message, source) {
-		message = (typeof message === 'string') ? message : JSON.stringify(message);
+		message = typeof message === 'string' ? message : JSON.stringify(message);
 		source = arguments[1] || window.top;
 		source.postMessage(message, '*');
 	},
