@@ -269,9 +269,10 @@ Krux.prototype.debug = function() {
 	}
 
 	const attrs = utils.extend(true, this.config.attributes, this.customAttributes);
-	if (Object.keys(attrs).length > 0) {
+	const keys = Object.keys(attrs);
+	if (keys.length > 0) {
 		log.start('Attributes');
-		Object.keys(attrs).forEach((key) => {
+		keys.forEach((key) => {
 			log.start(`${key}`);
 			log.attributeTable(attrs[key]);
 			log.end();
