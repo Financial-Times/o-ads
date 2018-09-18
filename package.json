@@ -42,7 +42,7 @@
     "karma-coverage": "^0.5.3",
     "karma-ie-launcher": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.1",
-    "karma-phantomjs2-launcher": "^0.3.2",
+    "karma-phantomjs2-launcher": "^0.4.0",
     "karma-qunit": "^0.1.8",
     "karma-safari-launcher": "^0.1.1",
     "karma-webdriver-launcher": "^1.0.4",
