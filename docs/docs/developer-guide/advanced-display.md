@@ -16,18 +16,20 @@ By default, lazy loading is disabled.
 
 To enable lazy loading:
 
-```
+``` javascript
 oAds.config({
 	lazyLoad: true
 });
 
 oAds.config({
 	lazyLoad: {
-    viewportMargin: '0% 0% 100% 0%',
-    threshold: [0.5]
-  }
+		viewportMargin: '0% 0% 100% 0%',
+		threshold: [0.5]
+	}
 });
+```
 
+``` html
 <div class="o-ads" data-o-ads-lazy-load="false"></div>
 ```
 
@@ -35,11 +37,11 @@ There is one exception to lazy loading, which is Master/Companion. Based on the 
 
 **Options:**
 
-* `viewportMargin` - Sets a new margin within the viewport that determines at what point the advert is in view. We suggest setting this option when you want to request and display the advert just _before_ it comes into view. This works as regular margin definitions.   
+* `viewportMargin` - Sets a new margin within the viewport that determines at what point the advert is in view. We suggest setting this option when you want to request and display the advert just _before_ it comes into view. This works as regular margin definitions.
 Make sure you always specify the dimensions with either `px` or `%`, e.g. `100% 0%`, or `100px 0px`. Default is `0%`.
 
-* `threshold` - An array of values that determine at what point a callback will be triggered.  
- In this case, the threshold is a percentage of the intersection area in relation to the area of the target's bounding box (where the target is a DOM element relative to a containing element or to the top-level viewport). [Intersection Observer](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver).  
+* `threshold` - An array of values that determine at what point a callback will be triggered.
+ In this case, the threshold is a percentage of the intersection area in relation to the area of the target's bounding box (where the target is a DOM element relative to a containing element or to the top-level viewport). [Intersection Observer](https://wicg.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver).
  Thresholds can be any value between 0.0 and 1.0, inclusive. Default is `0`, meaning that as soon as the first pixel comes into view, the advert will be loaded.
 
 ## Invalid Traffic
@@ -48,13 +50,12 @@ The library provide the option to check for invalid traffic before serving an ad
 
 ```<script async id="moat-ivt" src="https://sejs.moatads.com/financialtimesprebidheader859796398452/yi.js"></script>```
 
-This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide whether to serve an ad or not. 
+This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide whether to serve an ad or not.
 
 To enable this feature make sure you have the script above on your page and enable the following config setting:
 
-```
+``` javascript
 oAds.config({
-	...
 	validateAdsTraffic: true,
 	...
 });
@@ -82,24 +83,71 @@ In addition - all ad slots will have an attribute added called `data-o-ads-maste
 
 A creative may not be served under one of the following circumstances:
 
-* _A bug in the creative_  
+* _A bug in the creative_
 The ad server served an ad correctly, but some bug in the creative causes it not to display anything. A common example of this would be if the ad's assets were insecure. This needs to be reported to AdOps as soon as possible - ideally with the [creative Id or line item Id]({{ site.baseurl }}/docs/developer-guide/debugging#oadsdebug)
 
-* _Collapsed ad_  
+* _Collapsed ad_
 This is when AdOps explicitly send instructions to an ad slot not to show anything. This is done via a particular creative that contains some code implemented throught [o-ads-embed](https://github.com/Financial-Times/o-ads-embed) telling it to collapse itself. It should then append the class `o-ads--empty` to the ad slot.
 
 This is done in instances where an advertiser wants exclusivity on the page, but might not have assets with all the correct sizes.
 
-* _No ad_  
+* _No ad_
 This is when the ad server fails to return any ad. This could be caused by an ad call that is missing the correct targeting parameters and ad unit. However, it _should_ be rare, as AdOps usually fall back to either programmatic advertising or House Ads.
 
-## Out-of-page
- > Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.  
+## Collapsing of empty ad slots
+ There are three options available for how the ad slot should react to the absence of an ad.
 
- >To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.  
- [DFP traffic and serve out-of-page creatives](https://support.google.com/dfp_premium/answer/1154352?hl=en)
+`before`: The ad slot will be collapsed before the ad request until an ad is found.
+
+`after`: The ad slot will be collapsed if no ad is found after the ad request.
+
+`never`: The ad slot never collapses, even if no ad is found.
+
+By default, collapsing of empty ads is disabled (`never`).
+
+Via config for page level:
+
+
+``` javascript
+
+oAds.config({
+	collapseEmpty: "before",
+	...
+});
 
 ```
+
+Via config for a specific slot
+
+``` javascript
+oAds.config({
+	slots: {
+		outstream: {
+			collapseEmpty: "before"
+		}
+	},
+	...
+});
+```
+
+``` html
+<!-- view.html -->
+<div class="o-ads" data-o-ads-name="outstream"></div>
+```
+
+Via component
+
+``` html
+<div class="o-ads" data-o-ads-collapse-empty="before"></div>
+```
+
+## Out-of-page
+ > Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.
+
+ >To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of DFP’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve.
+ [DFP traffic and serve out-of-page creatives](https://support.google.com/dfp_premium/answer/1154352?hl=en)
+
+``` html
 <div data-o-ads-out-of-page="true"></div>
 ```
 

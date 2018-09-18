@@ -6,10 +6,10 @@
 *
 * @author Robin Marr, robin.marr@ft.com
 */
-
 const config = require('../config');
 const utils = require('../utils');
 const targeting = require('../targeting');
+const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
 //###########################
@@ -67,7 +67,7 @@ function setup(gptConfig) {
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
-	setPageCollapseEmpty(gptConfig);
+	setPageCollapseEmpty();
 	googletag.enableServices();
 	googletag.pubads().setTargeting('url', window.location.href);
 	googletag.pubads().setRequestNonPersonalizedAds(nonPersonalized);
@@ -130,22 +130,20 @@ function clearPageTargetingForKey(key) {
 
 /**
 * Sets behaviour of empty slots can be 'after', 'before' or 'never'
-* * after collapse slots that return an empty ad
-* * before collapses all slots and only displays them on
-* true is synonymous with before
-* false is synonymous with never
+* * 'after' collapse slots that return an empty ad
+* * 'before' collapses all slots and only displays them when an ad is found
+* * 'never' does not collapse any empty slot, the collapseEmptyDivs method is not called in that case
 */
-function setPageCollapseEmpty(gptConfig) {
-	const mode = gptConfig.collapseEmpty;
+function setPageCollapseEmpty() {
+	const mode = config('collapseEmpty');
 
-	if (mode === 'before' || mode === true) {
-		googletag.pubads().collapseEmptyDivs(true, true);
-	} else if (mode === 'never' || mode === false) {
-		googletag.pubads().collapseEmptyDivs(false);
-	} else { //default is after
+	if (mode === 'before') {
 		googletag.pubads().collapseEmptyDivs(true);
 	}
 
+	if (mode === 'after') {
+		googletag.pubads().collapseEmptyDivs(false);
+	}
 }
 
 /**
@@ -383,22 +381,20 @@ const slotMethods = {
 	/**
 	* Sets the GPT collapse empty mode for a given slot
 	* values can be 'after', 'before', 'never'
-	* after as in after ads have rendered is the default
-	* true is synonymous with before
-	* false is synonymous with never
 	*/
 	setCollapseEmpty: function() {
 		window.googletag.cmd.push(() => {
-			const mode = this.collapseEmpty || config('collapseEmpty');
+			const mode = this.collapseEmpty || config('collapseEmpty') || DEFAULT_COLLAPSE_MODE;
 
-			if (mode === true || mode === 'after') {
-				this.gpt.slot.setCollapseEmptyDiv(true);
-			} else if (mode === 'before') {
+			if (mode === 'before') {
 				this.gpt.slot.setCollapseEmptyDiv(true, true);
-			} else if (mode === false || mode === 'never') {
+			} else if (mode === 'after') {
+				this.gpt.slot.setCollapseEmptyDiv(true);
+			} else if (mode === 'never') {
 				this.gpt.slot.setCollapseEmptyDiv(false);
 			}
 		});
+
 		return this;
 	},
 	submitGptImpression : function() {
