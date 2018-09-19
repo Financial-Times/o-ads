@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 /**
  * Utility methods for logging.
  * @author Origami Advertising, origami.advertising@ft.com
@@ -17,7 +19,6 @@ module.exports = log;
  */
 function log() {
 	let type;
-	let args;
 	let argsIndex;
 	if ('log warn error info'.indexOf(arguments[0]) === -1) {
 		type = 'log';
@@ -27,7 +28,7 @@ function log() {
 		argsIndex = 1;
 	}
 
-	args = [].slice.call(arguments, argsIndex);
+	const args = [].slice.call(arguments, argsIndex);
 
 	if (log.isOn(type)) {
 		window.console[type].apply(window.console, args);
