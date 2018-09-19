@@ -41,3 +41,11 @@ We also use Nightwatch and Browserstack to run cross browser tests. To run these
 
 1. Provide a cookie with the name `FTConsent` and specify which consent the user has given as part of the value like this: `behaviouraladsOnsite:on,programmaticadsOnsite:on`
 2. Initialise o-ads with the `disableConsentCookie` option.
+
+### Upgrading to v10
+
+- Breaking change: o-ads now defaults to never collapsing empty ads slots following google gpt behavior. 
+- Breaking change: collapsing config oAds takes 3 possible options for the `collapseEmpty` attribute: `'before'`, `'after`', `'never'` and defaults to `'never'`
+- Breaking change: collapsing ads for a specific slot on the markup now uses  `'before'`, `'after`', `'never'` instead of `true` and `false` previously
+- Breaking change: Global collapse empty behavior is set in `config.collapseEmpty` instead of `config.gpt.collapseEmpty` previously
+
