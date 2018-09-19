@@ -105,7 +105,7 @@ document.body.addEventListener = function(type, listener) {
 document.body.removeEventListener = function(type, listener) {
 	let remove;
 	sandbox._eventListeners.forEach(function(item, index) {
-		if (item.type === type && listener === listener) {
+		if (item.type === type && listener === listener) { //eslint-disable-line no-self-compare
 			remove = index;
 		}
 	});
@@ -128,7 +128,7 @@ window.addEventListener = function(type, listener) {
 window.removeEventListener = function(type, listener) {
 	let remove;
 	sandbox._windowEventListeners.forEach(function(item, index) {
-		if (item.type === type && listener === listener) {
+		if (item.type === type && listener === listener) { //eslint-disable-line no-self-compare
 			remove = index;
 		}
 	});

@@ -1,4 +1,3 @@
-
 /**
  * we use a third party script from moat to determine invalid traffic.
  * In ft.com this lives in n-ui.
@@ -7,7 +6,8 @@
  * and if the validateAdsTraffic option is enabled, we need to wait for it to
  * be available before making any ad calls.
  */
-const Moat = function() {};
+const Moat = function() {}; // eslint-disable-line no-empty-function
+
 Moat.prototype.init = function() {
 	return new Promise((resolve, reject) => {
 		const intervalId = setInterval(() => {
