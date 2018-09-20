@@ -3,7 +3,7 @@ const config = require('./config');
 const utils = require('./utils');
 const oTrackingCore = require('o-tracking/src/javascript/core.js');
 let parameters = {};
-function Targeting() {}
+function Targeting() {} //eslint-disable-line no-empty-function
 
 Targeting.prototype.get = function() {
 	const methods = {

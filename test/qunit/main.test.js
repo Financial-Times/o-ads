@@ -25,7 +25,7 @@ QUnit.test('init All', function(assert) {
 QUnit.test('init fires an event once done', function(assert) {
 
 	const done = assert.async();
-	const ads = new this.adsConstructor();
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
 	assert.equal(ads.isInitialised, undefined);
 	document.body.addEventListener('oAds.initialised', function(e) {
 		assert.equal(e.detail, ads);
@@ -36,7 +36,7 @@ QUnit.test('init fires an event once done', function(assert) {
 });
 
 QUnit.test('init all only is triggered once', function(assert) {
-	const ads = new this.adsConstructor();
+	const ads = new this.adsConstructor(); // eslint-disable-line new-cap
 	const gptInit = this.spy(ads.gpt, 'init');
 
 	assert.equal(gptInit.callCount, 0, 'gpt init function is not called on construction');
@@ -49,7 +49,7 @@ QUnit.test('init all only is triggered once', function(assert) {
 });
 
 QUnit.test('manual inits always trigger but DOM inits do not override', function (assert) {
-	const ads = new this.adsConstructor();
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
 	const gptInit = this.spy(ads.gpt, 'init');
 
 	assert.equal(gptInit.callCount, 0, 'gpt init function is not called on construction');
@@ -67,8 +67,8 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 
 QUnit.test('updateContext updates the config and redoes the API calls', function(assert) {
 	const done = assert.async();
-	const ads = new this.adsConstructor();
-	const gptInit = this.spy(this.ads.gpt, 'init');
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
+	this.spy(this.ads.gpt, 'init');
 	const userDataStub = this.stub(this.ads.api, 'getUserData');
 	const kruxPixelStub = this.stub(this.ads.krux, 'sendNewPixel');
 	const kruxAttributesStub = this.stub(this.ads.krux, 'setAllAttributes');
@@ -121,7 +121,7 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 
 QUnit.test('updateContext updates the config only if no API calls', function(assert) {
 	const done = assert.async();
-	const ads = new this.adsConstructor();
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
 	const userDataStub = this.stub(this.ads.api, 'getUserData');
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
 	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
@@ -222,7 +222,7 @@ QUnit.test("moat script loading check is eventually cleared if moat is not loade
 });
 
 QUnit.test(".version logs the right format", function(assert) {
-	const consoleSpy = this.spy(console, 'log');
+	const consoleSpy = this.spy(this.utils, 'log');
 	this.ads.init({ validateAdsTraffic: true });
 	this.ads.version();
 	const loggedMessage = consoleSpy.args[0][0];

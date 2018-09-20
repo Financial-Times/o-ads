@@ -1,3 +1,4 @@
+/* eslint no-inner-declarations: 1 */
 const utils = require('./utils');
 const config = require('./config');
 const Slot = require('./slot');
@@ -10,7 +11,7 @@ let screensize = null;
 * provides utlity methods that act on all slots
 * @constructor
 */
-function Slots() {
+function Slots() { //eslint-disable-line no-empty
 }
 
 function invokeMethodOnSlots(names, method, callback) {
@@ -67,7 +68,7 @@ function findFormatBySize(size) {
 			let sizes = formats[prop].sizes;
 			sizes = utils.isArray(sizes[0]) ? sizes : [sizes];
 			const match = sizes.filter(function(s) {
-				return s[0] === parseInt(size[0]) && s[1] === parseInt(size[1]);
+				return s[0] === parseInt(size[0], 10) && s[1] === parseInt(size[1], 10);
 			});
 			if(match.length) {
 				return prop;
@@ -322,7 +323,7 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 	// find any pre-existing observers
 	let lazyLoadingObserver = this.lazyLoadingObservers.find(observer => {
 		// deliberately double-equals to match null and undefined where the viewport is being observed
-		return lazyLoadingConfig.root == observer.root;
+		return lazyLoadingConfig.root == observer.root; // eslint-disable-line eqeqeq
 	});
 
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.

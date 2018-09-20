@@ -1,5 +1,6 @@
 {
-    "rules": {
-        "valid-jsdoc": 0
-    }
+	"rules": {
+		"valid-jsdoc": 0,
+		"no-prototype-builtins": 0
+	}
 }

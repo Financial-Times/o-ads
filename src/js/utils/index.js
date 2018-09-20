@@ -66,9 +66,9 @@ function curryIsMethods(obj, classNames) {
 
 /**
  * Test if an object is the global window object
-  * @param {object} obj The object to be tested
-	 * @returns {boolean} true if the object is the window obj, otherwise false
-	  */
+ * @param {object} obj The object to be tested
+ * @returns {boolean} true if the object is the window obj, otherwise false
+ */
 module.exports.isWindow = function(obj) {
 	return obj && obj !== null && obj === window;
 };
@@ -104,7 +104,7 @@ module.exports.isPlainObject = function(obj) {
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
 	let key;
-	for (key in obj) {}
+	for (key in obj) {} //eslint-disable-line no-empty
 
 	return key === undefined || hop.call(obj, key);
 };
@@ -236,15 +236,15 @@ module.exports.hash = function(str, delimiter, pairing) {
 };
 
 /**
-* Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
-* The async value of the script can be set by the seccond parameter, which is a boolean
-* Note, we should use protocol-relative URL paths to ensure we don't run into http/https issues
-* @param {string} scriptUrl The url to the script file to be added
-* @param {boolean} async Set the async attribute on the script tag
-* @param {function} callback A function to run when the script loads
-* @param {function} errorcb A function to run if the script fails to load
-* @returns {HTMLElement} the created script tag
-*/
+ * Takes a script URL as a string value, creates a new script element, sets the src and attaches to the page
+ * The async value of the script can be set by the seccond parameter, which is a boolean
+ * Note, we should use protocol-relative URL paths to ensure we don't run into http/https issues
+ * @param {string} scriptUrl The url to the script file to be added
+ * @param {boolean} async Set the async attribute on the script tag
+ * @param {function} callback A function to run when the script loads
+ * @param {function} errorcb A function to run if the script fails to load
+ * @returns {HTMLElement} the created script tag
+ */
 module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
@@ -296,20 +296,20 @@ module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove
 };
 
 /**
-* return the current documents referrer or an empty string if non exists
-* This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
-* @returns {string} document.referrer
-*/
+ * return the current documents referrer or an empty string if non exists
+ * This method enables us to mock the referrer in our tests reliably and doesn't really serve any other purpose
+ * @returns {string} document.referrer
+ */
 /* istanbul ignore next - cannot reliably test value of referer */
 module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
 
 /**
-* Remove hyphens from a string and upper case the following letter
-* @param {string} string the string to parse
-* @returns {string}
-*/
+ * Remove hyphens from a string and upper case the following letter
+ * @param {string} string the string to parse
+ * @returns {string}
+ */
 module.exports.dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
@@ -317,31 +317,31 @@ module.exports.dehyphenise = function(string) {
 };
 
 /**
-* remove prefixes from o-ads data attributes and dehyphenise the name
-* @param {string|} name the name of the attribute to parse
-* @returns {string}
-*/
+ * remove prefixes from o-ads data attributes and dehyphenise the name
+ * @param {string|} name the name of the attribute to parse
+ * @returns {string}
+ */
 module.exports.parseAttributeName = function(attribute) {
 	const name = utils.isString(attribute) ? attribute : attribute.name;
 	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
 
 /**
-* return the current documents url or an empty string if non exists
-* This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
-* @returns {string}
-*/
+ * return the current documents url or an empty string if non exists
+ * This method enables us to mock the document location string in our tests reliably and doesn't really serve any other purpose
+ * @returns {string}
+ */
 /* istanbul ignore next - cannot reliably test value of location */
 module.exports.getLocation = function() {
 	return document.location.href || '';
 };
 
 /**
-* return the current documents search or an empty string if non exists
-* also strips the initial ? from the search string for easier parsing
-* This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
-* @returns {string}
-*/
+ * return the current documents search or an empty string if non exists
+ * also strips the initial ? from the search string for easier parsing
+ * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
+ * @returns {string}
+ */
 module.exports.getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
@@ -364,9 +364,9 @@ module.exports.getQueryParamByName = function(name, url) {
 };
 
 /**
-* returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
-* @returns {string}
-*/
+ * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
+ * @returns {string}
+ */
 module.exports.getTimestamp = function() {
 	const now = new Date();
 	return [
@@ -380,12 +380,12 @@ module.exports.getTimestamp = function() {
 };
 
 /**
-* Given the window object of an iframe this method returns the o-ads slot name
-* that rendered the iframe, if the iframe was not rendered by o-ads this will
-* return false
-* @param {window}  a window object
-* @returns {String|Boolean}
-*/
+ * Given the window object of an iframe this method returns the o-ads slot name
+ * that rendered the iframe, if the iframe was not rendered by o-ads this will
+ * return false
+ * @param {window}  a window object
+ * @returns {String|Boolean}
+ */
 module.exports.iframeToSlotName = function(iframeWindow) {
 	// capture all iframes in the page in a live node list
 	const iframes = document.getElementsByTagName('iframe');

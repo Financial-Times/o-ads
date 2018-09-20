@@ -1,3 +1,5 @@
+/* eslint valid-jsdoc: 0 */
+
 function Ads() {
 	addDOMEventListener();
 }
@@ -55,8 +57,8 @@ Ads.prototype.init = function(options) {
 		.then(() => this.initLibrary())
 		.catch((e) => {
 			// If anything fails, default to load ads without targeting
-			console.error(e);
-			console.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
+			this.utils.log.error(e);
+			this.utils.log.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
 			this.initLibrary();
 		});
 };
@@ -119,7 +121,7 @@ Ads.prototype.debug = function (){
 };
 
 Ads.prototype.version = function() {
-	console.log(`o-ads version: ${bowerJson.version}`);
+	this.utils.log(`o-ads version: ${bowerJson.version}`);
 };
 
 const initAll = function() {

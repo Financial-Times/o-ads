@@ -96,7 +96,7 @@ const attributeParsers = {
 		const isUnknownAttribute = VALID_COLLAPSE_MODES.indexOf(value) === -1;
 
 		if (isUnknownAttribute) {
-			console.warn(`Invalid attribute ${value} used for collapse-empty attribute, please use 'before', 'after' or 'never'`)
+			utils.log.warn(`Invalid attribute ${value} used for collapse-empty attribute, please use 'before', 'after' or 'never'`);
 			return undefined;
 		}
 
@@ -132,7 +132,6 @@ function Slot(container, screensize, initLazyLoading) {
 	const cfg = config();
 	let slotConfig = config('slots') || {};
 	const disableSwipeDefault = config('disableSwipeDefault') || false;
-	let outerEl;
 
 	// store the container
 	this.container = container;
@@ -186,10 +185,10 @@ function Slot(container, screensize, initLazyLoading) {
 		this.lazyLoad = config('lazyLoad') || false;
 	}
 
-	outerEl = container.querySelector('.o-ads__outer');
+	const outerEl = container.querySelector('.o-ads__outer');
 
 	if (outerEl && cfg.displayLabelWithBorders && this.container.getAttribute('data-o-ads-label')) {
-		utils.once(renderEvent, data => {
+		utils.once(renderEvent, () => {
 			outerEl.classList.add('o-ads--label-with-borders');
 		});
 	}
