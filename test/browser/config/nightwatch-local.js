@@ -5,8 +5,6 @@ const Nightwatch = require('nightwatch');
 const browserstack = require('browserstack-local');
 const { exec } = require('child_process');
 
-const noop = function(){} // eslint-disable-line
-
 // In CircleCI, the BrowserStackLocal tunnel is loaded as a separate process
 // to speed up the build
 if(process.env.CI) {
@@ -50,18 +48,18 @@ try {
 			Nightwatch.CliRunner(argv)
 				.setup(null, function(){
 					// Runs after parallel tests
-					bs_local.stop(noop);
+					bs_local.stop(function() {});
 					console.log("Finished running nightwatch tests.");
 				})
 				.runTests(function(){
 					// Runs after single test
-					bs_local.stop(noop);
+					bs_local.stop(function() {});
 					console.log("Finished running single nightwatch test.");
 				});
 		});
 	});
 } catch (ex) {
-	bs_local.stop(noop);
+	bs_local.stop(function() {});
 	console.log('There was an error while starting the test runner:\n\n');
 	process.stderr.write(ex.stack + '\n');
 	process.exit(2);
