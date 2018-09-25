@@ -1,7 +1,7 @@
 const config = {
 	src_folders: ['./test/browser'],
 	output_folder: './test/browser/reports',
-	globals_path: './nightwatch-globals.js',
+	globals_path: './test/browser/config/nightwatch-globals.js',
 	page_objects_path: './test/browser/page_objects',
 	selenium : {
 		start_process : false,
