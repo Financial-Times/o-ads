@@ -188,8 +188,10 @@ QUnit.test("search term", function(assert) {
 });
 
 QUnit.test("timestamp", function(assert) {
-	// we get the date millis in this way so the test works in different time zones
-	const curTime = new Date(Date.UTC(2013, 10, 18, 23, 30, 7));
+	// AF: The function that sets result.ts (under test here) uses `new Date()`
+	// so we need to use the same here. Using Date.UTC() will not work if
+	// you're not in UTC timezone. Found out the hard way!
+	const curTime = new Date(2013, 10, 18, 23, 30, 7);
 	const clock = this.date(curTime.valueOf());
 	this.ads.init({ timestamp: true });
 	let result = this.ads.targeting.get();
