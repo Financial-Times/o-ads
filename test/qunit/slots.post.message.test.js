@@ -7,7 +7,7 @@ QUnit.module('Slots - post message', {
 		errorStub = this.stub(this.utils.log, 'error');
 		window.scrollTo(0, 0);
 		const eventListeners = this.eventListeners = [];
-		eventListeners;
+		eventListeners; // eslint-disable-line no-unused-expressions
 		const _addEventListener = window.addEventListener;
 		window.addEventListener = function (type, handler) {
 			if(type === 'message'){
@@ -299,7 +299,7 @@ QUnit.test('Post message catches the event when the message comes not from a slo
 		}, 500);
 	});
 	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
+	this.ads.slots.initSlot(container);
 });
 
 QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
@@ -318,5 +318,5 @@ QUnit.test('Post message collapse calls the collapse method on the slot', functi
 	 	done();
 	});
 	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
+	this.ads.slots.initSlot(container);
 });

@@ -638,7 +638,7 @@ QUnit.test('configure refresh on a timer for a max number of times', function (a
 	const slotHTML = '<div data-o-ads-name="refresh-test" data-o-ads-formats="Rectangle"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 	let count = 0;
-	document.body.addEventListener('oAds.refresh', function(event) {
+	document.body.addEventListener('oAds.refresh', function() {
 		count++;
 	});
 
@@ -882,11 +882,11 @@ QUnit.test('lazy loading supports global config', function(assert) {
 
 QUnit.test('lazy loading triggers event at the correct point with no intersection observer viewport margin set', function(assert) {
 	const done = assert.async();
-	const advertHeight = 90;
 	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; width:728px; height:90px;"></div>`;
 	const node = this.fixturesContainer.add(slotHTML);
 	const advertTopPosition = window.innerHeight * 4;
-	const triggerPoint = window.innerHeight * 3 + advertHeight;
+	// const advertHeight = 90;
+	// const triggerPoint = window.innerHeight * 3 + advertHeight;
 	const element = document.querySelector('[data-o-ads-name="lazy-test"]');
 	element.style.top = advertTopPosition + 'px';
 

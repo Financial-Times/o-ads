@@ -1,4 +1,5 @@
 /*globals googletag: true */
+/* eslint no-inner-declarations: 1 */
 
 /**
 * @fileOverview

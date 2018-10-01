@@ -1,11 +1,13 @@
 {
-  "env": {
-    "qunit": true
-  },
-  "rules": {
-    "no-console": 0
-  },
-  "globals": {
-    "sinon": true
-  }
+	"env": {
+		"qunit": true
+	},
+	"rules": {
+		"no-console": 0,
+		"no-empty-function": 0,
+		"no-prototype-builtins": 0
+	},
+	"globals": {
+		"sinon": true
+	}
 }

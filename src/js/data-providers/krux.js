@@ -1,3 +1,4 @@
+/* eslint new-cap: 0 */
 const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
@@ -7,7 +8,7 @@ const targeting = require('../targeting');
  * The Krux class defines an FT.ads.krux instance
  * @class
  * @constructor
-*/
+ */
 function Krux() {
 	this.customAttributes = {};
 }
@@ -77,18 +78,18 @@ Krux.prototype.init = function() {
 		}, 1000);
 
 		targeting.add(this.targeting());
-    	utils.on('kruxScriptLoaded', this.consents);
+		utils.on('kruxScriptLoaded', this.consents);
 	} else {
 		// can't initialize Krux because no Krux ID is configured, please add it as key id in krux config.
 	}
 };
 
 /**
-* retrieve Krux values from localstorage or cookies in older browsers.
-* @name retrieve
-* @memberof Krux
-* @lends Krux
-*/
+ * retrieve Krux values from localstorage or cookies in older browsers.
+ * @name retrieve
+ * @memberof Krux
+ * @lends Krux
+ */
 Krux.prototype.retrieve = function(name) {
 	let value;
 	name = `kx${name}`;
@@ -103,22 +104,22 @@ Krux.prototype.retrieve = function(name) {
 };
 
 /**
-* retrieve Krux segments
-* @name segments
-* @memberof Krux
-* @lends Krux
-*/
+ * retrieve Krux segments
+ * @name segments
+ * @memberof Krux
+ * @lends Krux
+ */
 Krux.prototype.segments = function() {
 	return this.retrieve('segs');
 };
 
 /**
-* Retrieve all Krux values used in targeting and return them in an object
-* Also limit the number of segments going into the ad calls via krux.limit config
-* @name targeting
-* @memberof Krux
-* @lends Krux
-*/
+ * Retrieve all Krux values used in targeting and return them in an object
+ * Also limit the number of segments going into the ad calls via krux.limit config
+ * @name targeting
+ * @memberof Krux
+ * @lends Krux
+ */
 Krux.prototype.targeting = function() {
 	let segs = this.segments();
 	/* istanbul ignore else  */
@@ -142,11 +143,11 @@ Krux.prototype.targeting = function() {
 };
 
 /**
-* An object holding methods used by krux event pixels
-* @name events
-* @memberof Krux
-* @lends Krux
-*/
+ * An object holding methods used by krux event pixels
+ * @name events
+ * @memberof Krux
+ * @lends Krux
+ */
 Krux.prototype.events = {
 
 	delegated: function(config) {
@@ -165,7 +166,7 @@ Krux.prototype.events = {
 					const delEvnt = new Delegate(document.body);
 					for (const kEvnt in config) {
 						/* istanbul ignore else  */
-						if (config.hasOwnProperty(kEvnt)) {
+						if (config.hasOwnProperty(kEvnt)) { //eslint-disable-line no-prototype-builtins
 							delEvnt.on(config[kEvnt].eType, config[kEvnt].selector, eventScope(kEvnt));
 						}
 					}

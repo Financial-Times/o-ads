@@ -121,7 +121,7 @@ QUnit.test("search term", function(assert) {
 	result = this.ads.targeting.get();
 	assert.equal(result.kw, "this.is.it", "full-stop escaped as it means something to DFP");
 
-	querystring.returns("q=`!" + '"' + "_%26$%^*_()_+-_={}[]_:@~ '_#<>?,_./|\\");
+	querystring.returns("q=`!\"_%26$%^*_()_+-_={}[]_:@~ '_#<>?,_./|\\");
 	this.ads.init();
 	result = this.ads.targeting.get();
 	assert.equal(result.kw, "`!\"_&$% *_()_ -_={}[]_:@~ _#<>?,_./|\\", "remaining punctuation encoded");
