@@ -66,6 +66,9 @@
     "pre-git": {
       "pre-commit": [
         "node_modules/.bin/secret-squirrel"
+      ],
+      "pre-push": [
+        "node_modules/.bin/eslint . --color"
       ]
     }
   },
