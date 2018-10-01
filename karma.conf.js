@@ -49,14 +49,6 @@ let options = {
 	}
 };
 
-
-// add OS specific browsers
-if(/^win/.test(process.platform)){
-	options.browsers.push('IE');
-} else if (process.platform === 'darwin') {
-	//options.browsers.push('Safari');
-}
-
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
 	console.log('CI options activated');
