@@ -44,8 +44,7 @@
     "nightwatch": "^0.9.21",
     "origami-build-tools": "^7.9.0",
     "pre-git": "^3.17.1",
-    "qunitjs": "^1.20.0",
-    "watchify": "^3.11.0"
+    "qunitjs": "^1.20.0"
   },
   "browserify-swap": {
     "@packages": [
@@ -70,6 +69,7 @@
     "analyzeCommits": "simple-commit-message"
   },
   "dependencies": {
-    "eslint": "^5.5.0"
+    "eslint": "^5.5.0",
+    "watchify": "^3.11.0"
   }
 }
