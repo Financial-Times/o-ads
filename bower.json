@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "9.8.1",
+  "version": "10.0.4",
   "main": [
     "main.scss",
     "main.js"
@@ -11,8 +11,8 @@
     "o-viewport": ">=1.5.0 < 4",
     "o-grid": "^4.0.0",
     "o-visual-effects": "^2.0.0",
-	"o-colors": "^4.0.0",
-	"o-tracking": "^1.3.8"
+    "o-colors": "^4.0.0",
+    "o-tracking": "^1.3.8"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
