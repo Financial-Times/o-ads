@@ -430,6 +430,8 @@ module.exports.cookie = function(name) {
 	return val ? val.pop() : null;
 };
 
+module.exports.getVersion = () => require('../version.js') || 'UNKNOWN';
+
 extend(module.exports, require('./events.js'));
 extend(module.exports, require('./messenger.js'));
 module.exports.responsive = require('./responsive.js');

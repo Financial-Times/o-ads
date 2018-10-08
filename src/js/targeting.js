@@ -16,7 +16,8 @@ Targeting.prototype.get = function() {
 		this.getFromConfig(),
 		this.searchTerm(),
 		this.socialFlow(),
-		this.getRootId()
+		this.getRootId(),
+		this.getVersion()
 	);
 	for (const item in methods) {
 	/* istanbul ignore else  */
@@ -65,6 +66,14 @@ Targeting.prototype.getRootId = function() {
 	return {
 		rootid: oTrackingCore.getRootID()
 	};
+};
+
+Targeting.prototype.getVersion = function() {
+	if (config('passOAdsVersion')) {
+		return {
+			OADS_VERSION: utils.getVersion(),
+		};
+	}
 };
 
 /**
