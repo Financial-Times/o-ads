@@ -9,6 +9,8 @@ test-results.xml
 node*linux*/
 */*.xml
 .env
+cypress/screenshots/
+cypress/videos
 
 # Local config files #
 ######################
