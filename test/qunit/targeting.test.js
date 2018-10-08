@@ -13,7 +13,7 @@ QUnit.test('getFromConfig', function(assert) {
 	this.ads.targeting.clear();
 	this.ads.config('dfp_targeting', '');
 	result = this.ads.targeting.get();
-	assert.deepEqual(Object.keys(result).length, 3, 'Empty string dfp_targeting returns only default params');
+	assert.deepEqual(Object.keys(result).length, 2, 'Empty string dfp_targeting returns only default params');
 
 
 	this.ads.targeting.clear();
@@ -37,14 +37,16 @@ QUnit.test('getFromConfig', function(assert) {
 	assert.deepEqual(result.targeting, 'par@ms$\'', 'Special characters in targeting value handled');
 });
 
-QUnit.test("root id", function(assert) {
-	const getRootId = this.stub(this.ads.targeting, 'getRootId');
-	getRootId.returns({
-		rootid: '123'
-	});
-	this.ads.init({ includeRootId: true });
+QUnit.test("root id is set to value set in config", function(assert) {
+	this.ads.init({ rootid: 'some-root-id' });
 	const result = this.ads.targeting.get();
-	assert.equal(result.rootid, `123`, 'No rootid targeting parameter found');
+	assert.equal(result.rootid, `some-root-id`, 'No rootid targeting parameter found');
+});
+
+QUnit.test("root id is not set if not provided in config", function(assert) {
+	this.ads.init();
+	const result = this.ads.targeting.get();
+	assert.equal(result.rootid, undefined , 'rootid parameter should not be present');
 });
 
 QUnit.test("social referrer", function(assert) {

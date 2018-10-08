@@ -1,7 +1,6 @@
 
 const config = require('./config');
 const utils = require('./utils');
-const oTrackingCore = require('o-tracking/src/javascript/core.js');
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 
@@ -63,9 +62,7 @@ Targeting.prototype.getFromConfig = function() {
 };
 
 Targeting.prototype.getRootId = function() {
-	return {
-		rootid: oTrackingCore.getRootID()
-	};
+	return config('rootid') ? { rootid: config('rootid') } : null;
 };
 
 Targeting.prototype.getVersion = function() {

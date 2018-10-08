@@ -161,7 +161,8 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 		},
 		krux: {
 			id: '1234'
-		}
+		},
+		rootid: 'oh-hey'
 	});
 
 
@@ -260,8 +261,7 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 			"genre": ["News"],
 			"primarySection": ["Technology"],
 			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"],
-			"rootid": targeting.rootid
+			"topics": ["Mobile devices", "Batteries"]
 		};
 
 		Object.keys(dfp_targeting).forEach((key) => {
@@ -492,8 +492,7 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 			"genre": ["News"],
 			"primarySection": ["Technology"],
 			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"],
-			"rootid": targeting.rootid
+			"topics": ["Mobile devices", "Batteries"]
 		};
 
 		Object.keys(dfp_targeting).forEach((key) => {

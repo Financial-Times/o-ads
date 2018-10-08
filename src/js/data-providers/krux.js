@@ -35,7 +35,9 @@ Krux.prototype.init = function() {
 	this.config = config('krux');
 
 	//Add the rootid as a custom page parameter
-	this.add({ page: targeting.getRootId() });
+	if(config('rootid')) {
+		this.add({ page: targeting.getRootId() });
+	}
 
 	if (this.config && this.config.id) {
 
