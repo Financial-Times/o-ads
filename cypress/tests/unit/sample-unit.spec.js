@@ -1,6 +1,6 @@
 describe('My First Test', function() {
 	it('Does not do much!', function() {
-	  expect(true).to.equal(false);
+	  expect(true).to.equal(true);
 	})
 
 	it('Visits the Kitchen Sink', function() {

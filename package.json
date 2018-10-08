@@ -14,7 +14,8 @@
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "author": "",
   "devDependencies": {
+    "@cypress/webpack-preprocessor": "^3.0.0",
     "@financial-times/secret-squirrel": "^2.10.3",
     "babel-core": "^6.26.0",
     "babelify": "^6.0.3",

@@ -1,3 +1,5 @@
 {
-  "projectId": "bxirt8"
+  "projectId": "bxirt8",
+  "baseUrl": "http://localhost:3002",
+  "integrationFolder": "cypress/tests"
 }

@@ -123,6 +123,7 @@ Ads.prototype.version = function() {
 };
 
 const initAll = function() {
+	console.log('in initAll');
 	return ads.init().then(() => {
 		const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
 		slots.forEach(ads.slots.initSlot.bind(ads.slots));
