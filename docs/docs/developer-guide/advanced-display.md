@@ -164,7 +164,7 @@ Via component
 	});
 	```
 
-	Will add `VERSION` key to ad calls with the current o-ads version in cust_params
+	Will add `OADS_VERSION` key to ad calls with the current o-ads version in cust_params
 
 #### `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).

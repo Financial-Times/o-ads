@@ -71,7 +71,7 @@ Targeting.prototype.getRootId = function() {
 Targeting.prototype.getVersion = function() {
 	if (config('passOAdsVersion')) {
 		return {
-			VERSION: utils.getVersion(),
+			OADS_VERSION: utils.getVersion(),
 		};
 	}
 };
