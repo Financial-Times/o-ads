@@ -153,6 +153,19 @@ Via component
 
 ## Events
 
+## Passing version number
+	To pass o-ads library version number along with ads call. (off by default)
+
+	``` javascript
+
+	oAds.config({
+		passOAdsVersion: true,
+		...
+	});
+	```
+
+	Will add `VERSION` key to ad calls with the current o-ads version in cust_params
+
 #### `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
 

@@ -13,7 +13,6 @@ Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.moat = require('./src/js/data-providers/moat');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
-const bowerJson = require('./bower.json');
 
 
 /**
@@ -121,7 +120,12 @@ Ads.prototype.debug = function (){
 };
 
 Ads.prototype.version = function() {
-	this.utils.log(`o-ads version: ${bowerJson.version}`);
+	this.utils.log.warn('DEPRECATION NOTICE: Ads.version() will be deprecated in favour of Ads.getVersion()');
+	this.utils.log(`o-ads version: ${this.utils.getVersion()}`);
+};
+
+Ads.prototype.getVersion = function() {
+	return this.utils.getVersion();
 };
 
 const initAll = function() {
