@@ -15,8 +15,8 @@
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify",
     "lint": "eslint .",
-	"cypress:open": "cypress open",
-	"cypress:run": "cypress run -r spec"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run -r spec"
   },
   "repository": {
     "type": "git",
