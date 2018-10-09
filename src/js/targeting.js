@@ -15,7 +15,6 @@ Targeting.prototype.get = function() {
 		this.getFromConfig(),
 		this.searchTerm(),
 		this.socialFlow(),
-		this.getRootId(),
 		this.getVersion()
 	);
 	for (const item in methods) {
@@ -59,10 +58,6 @@ Targeting.prototype.getFromConfig = function() {
 	}
 
 	return targeting;
-};
-
-Targeting.prototype.getRootId = function() {
-	return config('rootid') ? { rootid: config('rootid') } : null;
 };
 
 Targeting.prototype.getVersion = function() {

@@ -37,18 +37,6 @@ QUnit.test('getFromConfig', function(assert) {
 	assert.deepEqual(result.targeting, 'par@ms$\'', 'Special characters in targeting value handled');
 });
 
-QUnit.test("root id is set to value set in config", function(assert) {
-	this.ads.init({ rootid: 'some-root-id' });
-	const result = this.ads.targeting.get();
-	assert.equal(result.rootid, `some-root-id`, 'No rootid targeting parameter found');
-});
-
-QUnit.test("root id is not set if not provided in config", function(assert) {
-	this.ads.init();
-	const result = this.ads.targeting.get();
-	assert.equal(result.rootid, undefined , 'rootid parameter should not be present');
-});
-
 QUnit.test("social referrer", function(assert) {
 	let result;
 	const referrer = this.stub(this.ads.utils, 'getReferrer');

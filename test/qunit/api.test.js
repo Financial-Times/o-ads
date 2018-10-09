@@ -161,8 +161,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 		},
 		krux: {
 			id: '1234'
-		},
-		rootid: 'oh-hey'
+		}
 	});
 
 
@@ -184,8 +183,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 			"genre": ["News"],
 			"primarySection": ["Technology"],
 			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"],
-			"rootid": targeting.rootid
+			"topics": ["Mobile devices", "Batteries"]
 		};
 
 		Object.keys(dfp_targeting).forEach((key) => {

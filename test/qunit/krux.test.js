@@ -159,10 +159,10 @@ QUnit.test('other attributes are set correctly and sent to Krux', function(asser
 });
 
 QUnit.test('page & user attributes are set correctly and sent to Krux', function(assert) {
-	this.ads.init({ rootid: 'hey-there', krux: {id: '112233', attributes: {page: {uuid: '123'}, user: {eid: '456'}, custom: {test: '789'}} }});
+	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123', rootid: '456'}, user: {eid: '789'}, custom: {test: '789'}} }});
 	assert.ok(window.Krux.withArgs("set", "page_attr_uuid", "123").calledOnce, "uuid page attribute sent to Krux");
-	assert.ok(window.Krux.withArgs("set", "page_attr_rootid", this.ads.targeting.get().rootid).calledOnce, "rootid page attribute sent to Krux");
-	assert.ok(window.Krux.withArgs("set", "user_attr_eid", "456").calledOnce, "user attributes sent to Krux");
+	assert.ok(window.Krux.withArgs("set", "page_attr_rootid", "456").calledOnce, "rootid page attribute sent to Krux");
+	assert.ok(window.Krux.withArgs("set", "user_attr_eid", "789").calledOnce, "user attributes sent to Krux");
 	assert.ok(window.Krux.withArgs("set", "test", "789").calledOnce, "custom attributes sent to Krux");
 	assert.equal(window.Krux.callCount, 4, "Four calls made to Krux");
 });
