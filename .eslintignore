@@ -2,3 +2,4 @@ demos/local
 reports
 test/qunit/mocks/xhr-response.js
 nightwatch-local.js
+build
