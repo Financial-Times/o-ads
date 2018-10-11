@@ -65,6 +65,18 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');
 });
 
+QUnit.test('ads.init().then will receive an object even if moat fails to load', function(assert) {
+	const done = assert.async();
+	const initSpy = this.spy(this.ads, 'init');
+	this.ads.init({ validateAdsTraffic: true });
+	this.trigger(document, 'o.DOMContentLoaded');
+	const promise = initSpy.returnValues[0];
+	promise.then( res => {
+		assert.equal(typeof res, 'object');
+		done();
+	});
+});
+
 QUnit.test('updateContext updates the config and redoes the API calls', function(assert) {
 	const done = assert.async();
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
@@ -229,14 +241,3 @@ QUnit.test(".version logs the right format", function(assert) {
 	assert.ok(/o-ads version: \d\d?\.\d\d?\.\d\d?/.test(loggedMessage));
 });
 
-QUnit.test('ads.init().then will receive an object even if moat fails to load', function(assert) {
-	const done = assert.async();
-	const initSpy = this.spy(this.ads, 'init');
-	this.ads.init({ validateAdsTraffic: true });
-	this.trigger(document, 'o.DOMContentLoaded');
-	const promise = initSpy.returnValues[0];
-	promise.then( res => {
-		assert.equal(typeof res, 'object');
-		done();
-	});
-});
