@@ -228,3 +228,15 @@ QUnit.test(".version logs the right format", function(assert) {
 	const loggedMessage = consoleSpy.args[0][0];
 	assert.ok(/o-ads version: \d\d?\.\d\d?\.\d\d?/.test(loggedMessage));
 });
+
+QUnit.test('ads.init().then will receive an object even if moat fails to load', function(assert) {
+	const done = assert.async();
+	const initSpy = this.spy(this.ads, 'init');
+	this.ads.init({ validateAdsTraffic: true });
+	this.trigger(document, 'o.DOMContentLoaded');
+	const promise = initSpy.returnValues[0];
+	promise.then( res => {
+		assert.equal(typeof res, 'object');
+		done();
+	});
+});
