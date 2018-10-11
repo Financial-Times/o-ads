@@ -58,7 +58,7 @@ Ads.prototype.init = function(options) {
 			// If anything fails, default to load ads without targeting
 			this.utils.log.error(e);
 			this.utils.log.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
-			this.initLibrary();
+			return this.initLibrary();
 		});
 };
 
