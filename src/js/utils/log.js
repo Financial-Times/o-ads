@@ -41,7 +41,7 @@ function log() {
  */
 module.exports.isOn = function(type) {
 	/* istanbul ignore else  */
-	const debug = localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
+	const debug = localStorage && localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
 };
 
