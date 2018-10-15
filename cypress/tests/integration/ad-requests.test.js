@@ -11,6 +11,9 @@ function getQueryParams(url) {
 	return o;
 }
 
+// Integration tests check the ad requests are made properly
+// We can spy on the ad calls and assert on the underlying xhr
+// object, including query parameters and response headers.
 describe('Integration tests', () => {
 	context('Simple ad', () => {
 		it('makes a request to the correct url', () => {
