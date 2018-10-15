@@ -9,7 +9,9 @@ describe("Individual ad", () => {
 		// data-load-complete attribute
 		cy.get('iframe[data-load-complete]').then($iframe => {
 			const $body = $iframe.contents().find('body');
-			cy.wrap($body).find('img').should('be.visible');
+			cy.wrap($body).find('img')
+				.should('be.visible')
+				.should('have.attr', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097');
 		});
 	});
 });
