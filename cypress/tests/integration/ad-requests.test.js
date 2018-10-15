@@ -1,16 +1,15 @@
-// const queryString = require('query-string');
-
-// function getQueryParams(url) {
-// 	const o = {};
-// 	url.slice(url.indexOf('?')+1)
-// 		.split('&')
-// 		.forEach(p => {
-// 			const pp = p.split('=');
-// 			o[decodeURIComponent(pp[0])] = decodeURIComponent(pp[1]);
-// 		});
-// 	console.log('o', o);
-// 	return o;
-// }
+function getQueryParams(url) {
+	console.log('url', url.slice(url.indexOf('?')+1));
+	const o = {};
+	url.slice(url.indexOf('?')+1)
+		.split('&')
+		.forEach(p => {
+			const key = p.slice(0, p.indexOf('='));
+			const value = p.slice(p.indexOf('=')+1);
+			o[decodeURIComponent(key)] = decodeURIComponent(value);
+		});
+	return o;
+}
 
 describe('Integration tests', () => {
 	context('Simple ad', () => {
@@ -20,24 +19,21 @@ describe('Integration tests', () => {
 			// Note: this only works with xhr not fetch at the mo - there are workarounds for fetch
 			cy.server();
 			cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-			
 			cy.visit("/demos/local/test-ad.html");
-			
-			// // Wait for the ad call to be made, then assert on the query string
-			// cy.wait('@AdLoaded').then(xhr => {
-			// 	const qs = queryString.parse(xhr.url);
-			// 	const cust_params = queryString.parse(qs.cust_params);
 
-			// 	// const qsp = getQueryParams(xhr.url);
-			// 	// console.log('qsp', qsp);
-			// 	console.log('qs', qs);
-			// 	console.log('cust_params', qs.cust_params);
+			// Wait for the ad call to be made, then assert on the query string
+			cy.wait('@AdLoaded').then(xhr => {
+				const qsp = getQueryParams(xhr.url);
+				const cust_params = getQueryParams(qsp.cust_params);
+				console.log('qsp', qsp);
+				console.log('cust_params', cust_params);
 
-			// 	// Test the size is set correctly
-			// 	expect(qs.sz).to.equal("728x90");
-			// 	// expect()
+				// Size is set correctly
+				expect(qsp.sz).to.equal("728x90");
+				// Targeting is set correctly
+				expect(qsp.scp).to.equal("pos=top");
 
-			// });
+			});
 		});
 	});
 });
