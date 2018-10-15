@@ -149,6 +149,18 @@
 				"network": 5887,
 				"site" : "test.5887.origami"
 			}
+		},
+		{
+			"name": "Test-Ad",
+			"template": "/demos/src/test-ad.mustache",
+			"expanded": true,
+			"description": "An ad only used for our browser tests - do not change for shits and gigs",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
 		}
   	]
 }

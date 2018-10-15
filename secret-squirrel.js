@@ -11,6 +11,7 @@ module.exports = {
 			'demos/src/validatetraffic.mustache',
 			'demos/src/responsive-ad.mustache',
 			'demos/src/responsive-positions.mustache',
+			'demos/src/test-ad.mustache',
 			'docs/Gemfile',
 			'docs/Gemfile.lock',
 			'docs/_posts/2016-08-19-welcome-to-jekyll.markdown',
