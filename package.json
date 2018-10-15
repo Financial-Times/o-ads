@@ -15,7 +15,8 @@
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify",
     "lint": "eslint .",
-    "lint-complexity": "eslint . -c .eslintrc-complexity.js"
+    "lint-complexity": "eslint . -c .eslintrc-complexity.js",
+    "release": "release-it && genversion --semi src/js/version.js"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,8 @@
     "nightwatch": "^0.9.21",
     "origami-build-tools": "^7.10.0",
     "pre-git": "^3.17.1",
-    "qunitjs": "^1.20.0"
+    "qunitjs": "^1.20.0",
+    "release-it": "^7.6.1"
   },
   "browserify-swap": {
     "@packages": [

@@ -1,6 +1,5 @@
 {
   "name": "o-ads",
-  "version": "10.1.0",
   "main": [
     "main.scss",
     "main.js"
@@ -11,7 +10,7 @@
     "o-viewport": ">=1.5.0 < 4",
     "o-grid": "^4.0.0",
     "o-visual-effects": "^2.0.0",
-	"o-colors": "^4.0.0"
+	  "o-colors": "^4.0.0"
   },
   "devDependencies": {
     "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
