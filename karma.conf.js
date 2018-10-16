@@ -1,4 +1,4 @@
-
+/* eslint no-console: 0 */
 /* globals process: true */
 
 'use strict'; //eslint-disable-line
@@ -28,7 +28,7 @@ let options = {
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
-	 	'test/qunit/*.test.js',
+		'test/qunit/*.test.js',
 	],
 	customLaunchers: {
 		Chrome_with_flags: {
@@ -48,14 +48,6 @@ let options = {
 		'test/qunit/krux.test.js': ['browserify']
 	}
 };
-
-
-// add OS specific browsers
-if(/^win/.test(process.platform)){
-	options.browsers.push('IE');
-} else if (process.platform === 'darwin') {
-	//options.browsers.push('Safari');
-}
 
 // In the CI environment set an environment variable CI = 'true'
 if (process.env.CI === 'true') {
@@ -104,8 +96,7 @@ if (process.env.COVERAGE) {
 	};
 }
 
-if (process.env.CIRCLECI) {
-}
+if (process.env.CIRCLECI) { } // eslint-disable-line no-empty
 
 if (process.env.JENKINS_URL) {
 	// Jenkins options go here

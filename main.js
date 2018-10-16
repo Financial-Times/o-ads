@@ -1,3 +1,5 @@
+/* eslint valid-jsdoc: 0 */
+
 function Ads() {
 	addDOMEventListener();
 }
@@ -11,7 +13,6 @@ Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.moat = require('./src/js/data-providers/moat');
 Ads.prototype.targeting = require('./src/js/targeting');
 Ads.prototype.utils = require('./src/js/utils');
-const bowerJson = require('./bower.json');
 
 
 /**
@@ -55,8 +56,8 @@ Ads.prototype.init = function(options) {
 		.then(() => this.initLibrary())
 		.catch((e) => {
 			// If anything fails, default to load ads without targeting
-			console.error(e);
-			console.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
+			this.utils.log.error(e);
+			this.utils.log.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
 			this.initLibrary();
 		});
 };
@@ -119,7 +120,12 @@ Ads.prototype.debug = function (){
 };
 
 Ads.prototype.version = function() {
-	console.log(`o-ads version: ${bowerJson.version}`);
+	this.utils.log.warn('DEPRECATION NOTICE: Ads.version() will be deprecated in favour of Ads.getVersion()');
+	this.utils.log(`o-ads version: ${this.utils.getVersion()}`);
+};
+
+Ads.prototype.getVersion = function() {
+	return this.utils.getVersion();
 };
 
 const initAll = function() {

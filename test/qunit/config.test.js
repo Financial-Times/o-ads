@@ -8,7 +8,6 @@ QUnit.test('Config get/set', function(assert) {
 	this.ads.config.init();
 	this.ads.config.clear();
 	let result;
-	let obj;
 	const key = 'key';
 	const key2 = 'key2';
 	const invalid = 'invalid';
@@ -21,7 +20,7 @@ QUnit.test('Config get/set', function(assert) {
 	assert.deepEqual(result, value, 'passing a key+value returns the value.');
 
 	result = this.ads.config();
-	obj = {};
+	const obj = {};
 	obj[key] = value;
 	assert.deepEqual(result, obj, 'calling without params returns all config.');
 
@@ -109,7 +108,7 @@ QUnit.test('Config deep extends so default options like formats aren\'t overwrit
 
 QUnit.test('Config works as expected even when there are custom prototype methods defined (e.g. polyfill)', function(assert) {
 	// define a custom prototype method
-	Array.prototype.customTestFunction = function () {};
+	Array.prototype.customTestFunction = function () {}; // eslint-disable-line no-extend-native
 	this.ads.init();
 	const flags = {
 		refresh: true,

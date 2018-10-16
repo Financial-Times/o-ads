@@ -10,136 +10,123 @@
 	},
 	"supportStatus": "active",
 	"demosDefaults": {
-	 "template": "demos/src/individual.mustache",
-	 "sass": "demos/src/demo.scss",
-	 "js": "demos/src/demo.js"
-	 },
-	 "browserFeatures": {
-		 "required": [
-			 "Array.from",
-			 "Array.prototype.find",
-			 "IntersectionObserver",
-			 "fetch"
-		 ]
-	 },
-	 "demos": [
-	 {
-		"name": "Individual-Ad",
-		"template": "/demos/src/individual.mustache",
-		"expanded": true,
-		"description": "",
-		"data": {
-			"name":"leaderboard",
-			"formats" : "Leaderboard",
-			"network": 5887,
-			"site" : "test.5887.origami"
-		}
-	  },
+		"template": "demos/src/individual.mustache",
+		"sass": "demos/src/demo.scss",
+		"js": "demos/src/demo.js"
+	},
+	"browserFeatures": {
+		"required": [
+			"Array.from",
+			"Array.prototype.find",
+			"IntersectionObserver",
+			"fetch"
+		]
+	},
+	"demos": [
 		{
- 		"name": "Responsive-Ad",
- 		"template": "/demos/src/responsive-ad.mustache",
- 		"expanded": true,
- 		"description": "",
- 		"data": {
-			"name": "responsive",
-			"formats" : "Responsive",
-			"network": 5887,
-			"site" : "test.5887.origami"
-		}
- 	  },
+			"name": "Individual-Ad",
+			"template": "/demos/src/individual.mustache",
+			"expanded": true,
+			"description": "",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
 		{
- 		"name": "Individual-Ad-Lazy-Load",
- 		"template": "/demos/src/individuallazyload.mustache",
- 		"expanded": true,
- 		"description": "",
- 		"data": {
-			"name":"leaderboard",
-			"formats" : "Leaderboard",
-			"network": 5887,
-			"site" : "test.5887.origami",
-			"top": "2000",
-			"viewportMargin": "0%"
-		}
- 	  },
+			"name": "Individual-Ad-Lazy-Load",
+			"template": "/demos/src/individuallazyload.mustache",
+			"expanded": true,
+			"description": "",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami",
+				"top": "2000",
+				"viewportMargin": "0%"
+			}
+		},
 		{
- 		"name": "Individual-Ad-Lazy-Load-Margin",
- 		"template": "/demos/src/individuallazyload.mustache",
- 		"expanded": true,
- 		"description": "",
- 		"data": {
-			"name":"leaderboard",
-			"formats" : "Leaderboard",
-			"network": 5887,
-			"site" : "test.5887.origami",
-			"top": "2000",
-			"viewportMargin": "3000px 0px"
-		}
- 	  },
-	  {
-		"name": "Individual-Ad-with-Custom-Targeting-Values",
-		"template": "/demos/src/individualcustomtargeting.mustache",
-		"expanded": false,
-		"description": "",
-		"data": {
-			"user": "https://ads-api.ft.com/v1/user",
-			"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
-			"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
-			"name": "billboard",
-			"formats": "Billboard",
-			"network": 5887,
-			"site" : "test.5887.origami"
-		}
-	  },
-	  {
-		"name": "Master-and-Companion",
-		"template": "/demos/src/masterandcompanion.mustache",
-		"expanded": false,
-		"description": "",
-		"data": {
-			"network": 5887,
-			"site" : "test.5887.origami",
-			"zone": "master-companion-test"
-		}
-	  },
-	  {
-	  	"name": "Responsive-Positions",
-	  	"template": "/demos/src/responsive-positions.mustache",
-	  	"expanded": false,
-	  	"description": "",
+			"name": "Individual-Ad-Lazy-Load-Margin",
+			"template": "/demos/src/individuallazyload.mustache",
+			"expanded": true,
+			"description": "",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami",
+				"top": "2000",
+				"viewportMargin": "3000px 0px"
+			}
+		},
+		{
+			"name": "Individual-Ad-with-Custom-Targeting-Values",
+			"template": "/demos/src/individualcustomtargeting.mustache",
+			"expanded": false,
+			"description": "",
+			"data": {
+				"user": "https://ads-api.ft.com/v1/user",
+				"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
+				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
+				"name": "billboard",
+				"formats": "Billboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
+			"name": "Master-and-Companion",
+			"template": "/demos/src/masterandcompanion.mustache",
+			"expanded": false,
+			"description": "",
+			"data": {
+				"network": 5887,
+				"site" : "test.5887.origami",
+				"zone": "master-companion-test"
+			}
+		},
+		{
+			"name": "Responsive-Positions",
+			"template": "/demos/src/responsive-positions.mustache",
+			"expanded": false,
+			"description": "",
 			"data": {
 				"network": 5887,
 				"site" : "test.5887.origami"
 			}
-	  },
-	  {
-	  	"name": "Native-Ads",
-	  	"template": "/demos/src/native.mustache",
-	  	"expanded": false,
-	  	"description": "",
-		"data": {
-			"network": 5887,
-			"site" : "test.5887.origami"
-		}
-	  },
-	  {
-	  	"name": "Multiple-Next-Styles",
-	  	"template": "/demos/src/multiplenextstyles.mustache",
-	  	"expanded": false,
-	  	"description": "",
-		"data": {
-			"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
-			"name": "billboard",
-			"formats" : "Billboard",
-			"network": 5887,
-			"site" : "test.5887.origami"
-		}
-
-	  },
+		},
 		{
-		 "name": "Validate-Traffic-Ad",
-		 "template": "/demos/src/validatetraffic.mustache",
-		 "expanded": true,
-		 "description": "",
+			"name": "Native-Ads",
+			"template": "/demos/src/native.mustache",
+			"expanded": false,
+			"description": "",
+			"data": {
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
+			"name": "Multiple-Next-Styles",
+			"template": "/demos/src/multiplenextstyles.mustache",
+			"expanded": false,
+			"description": "",
+			"data": {
+				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
+				"name": "billboard",
+				"formats" : "Billboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
+			"name": "Validate-Traffic-Ad",
+			"template": "/demos/src/validatetraffic.mustache",
+			"expanded": true,
+			"description": "",
 			"data": {
 				"user": "https://ads-api.ft.com/v1/user",
 				"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
@@ -162,5 +149,5 @@
 				"site" : "test.5887.origami"
 			}
 		}
-  	]
+	]
 }

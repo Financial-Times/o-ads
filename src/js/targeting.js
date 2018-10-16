@@ -3,7 +3,7 @@ const config = require('./config');
 const utils = require('./utils');
 const oTrackingCore = require('o-tracking/src/javascript/core.js');
 let parameters = {};
-function Targeting() {}
+function Targeting() {} //eslint-disable-line no-empty-function
 
 Targeting.prototype.get = function() {
 	const methods = {
@@ -16,7 +16,8 @@ Targeting.prototype.get = function() {
 		this.getFromConfig(),
 		this.searchTerm(),
 		this.socialFlow(),
-		this.getRootId()
+		this.getRootId(),
+		this.getVersion()
 	);
 	for (const item in methods) {
 	/* istanbul ignore else  */
@@ -65,6 +66,14 @@ Targeting.prototype.getRootId = function() {
 	return {
 		rootid: oTrackingCore.getRootID()
 	};
+};
+
+Targeting.prototype.getVersion = function() {
+	if (config('passOAdsVersion')) {
+		return {
+			OADS_VERSION: utils.getVersion(),
+		};
+	}
 };
 
 /**

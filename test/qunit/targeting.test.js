@@ -47,6 +47,37 @@ QUnit.test("root id", function(assert) {
 	assert.equal(result.rootid, `123`, 'No rootid targeting parameter found');
 });
 
+QUnit.test("OADS_VERSION is set to value set in config", function(assert) {
+	const getVersion = this.stub(this.ads.utils, 'getVersion');
+	getVersion.returns('x.y.z');
+
+	this.ads.init({ passOAdsVersion: true });
+
+	const result = this.ads.targeting.get();
+	assert.ok(getVersion.called, 'utils.getVersion() should be called');
+	assert.equal(result.OADS_VERSION, `x.y.z`, 'OADS_VERSION targeting parameter should be present if passOAdsVersion is set to true');
+});
+
+QUnit.test('OADS_VERSION is not set if the flag is set to false', function(assert) {
+	const getVersion = this.stub(this.ads.utils, 'getVersion');
+	getVersion.returns('x.y.z');
+	this.ads.init({ passOAdsVersion: false });
+
+	const result = this.ads.targeting.get();
+	assert.notOk(getVersion.called, 'utils.getVersion() should not be called');
+	assert.equal(result.OADS_VERSION, undefined , 'OADS_VERSION parameter should not be present when passOAdsVersion is set to false');
+});
+
+QUnit.test('OADS_VERSION is not set if not provided in config', function(assert) {
+	const getVersion = this.stub(this.ads.utils, 'getVersion');
+	getVersion.returns('x.y.z');
+	this.ads.init();
+
+	const result = this.ads.targeting.get();
+	assert.notOk(getVersion.called, 'utils.getVersion() should not be called');
+	assert.equal(result.OADS_VERSION, undefined , 'OADS_VERSION parameter should not be present when passOAdsVersion is not set');
+});
+
 QUnit.test("social referrer", function(assert) {
 	let result;
 	const referrer = this.stub(this.ads.utils, 'getReferrer');
@@ -121,7 +152,7 @@ QUnit.test("search term", function(assert) {
 	result = this.ads.targeting.get();
 	assert.equal(result.kw, "this.is.it", "full-stop escaped as it means something to DFP");
 
-	querystring.returns("q=`!" + '"' + "_%26$%^*_()_+-_={}[]_:@~ '_#<>?,_./|\\");
+	querystring.returns("q=`!\"_%26$%^*_()_+-_={}[]_:@~ '_#<>?,_./|\\");
 	this.ads.init();
 	result = this.ads.targeting.get();
 	assert.equal(result.kw, "`!\"_&$% *_()_ -_={}[]_:@~ _#<>?,_./|\\", "remaining punctuation encoded");
