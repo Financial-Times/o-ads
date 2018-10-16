@@ -35,7 +35,6 @@ describe('Integration tests', () => {
 				expect(qsp.sz).to.equal("728x90");
 				// Targeting is set correctly
 				expect(qsp.scp).to.equal("pos=top");
-
 			});
 		});
 	});

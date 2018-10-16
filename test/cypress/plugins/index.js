@@ -11,7 +11,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const webpack = require('@cypress/webpack-preprocessor')
+const webpack = require('@cypress/webpack-preprocessor');
 
 module.exports = (on) => {
 	const options = {
@@ -20,5 +20,5 @@ module.exports = (on) => {
 		webpackOptions: require('origami-build-tools/config/webpack.config.dev'),
 		watchOptions: {}
 	};
-  	on('file:preprocessor', webpack(options))
-}
+  	on('file:preprocessor', webpack(options));
+};
