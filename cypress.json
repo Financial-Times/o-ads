@@ -1,10 +1,10 @@
 {
-  "projectId": "bxirt8",
-  "baseUrl": "http://localhost:3002",
+	"projectId": "bxirt8",
+	"baseUrl": "http://localhost:3002",
 	"fixturesFolder": "test/cypress/fixtures",
 	"integrationFolder": "test/cypress/integration",
 	"pluginsFile": "test/cypress/plugins/index.js",
 	"screenshotsFolder": "test/cypress/screenshots",
 	"videosFolder": "test/cypress/videos",
 	"supportFile": "test/cypress/support/index.js"
-}
+	}
