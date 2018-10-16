@@ -26,7 +26,6 @@ function init() {
 	breakpoints = config('responsive');
 	initGoogleTag();
 	utils.on('ready', onReady.bind(null, slotMethods));
-	utils.on('ready', () => { console.log('ready fired')});
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
