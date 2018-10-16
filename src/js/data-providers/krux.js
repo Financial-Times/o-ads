@@ -34,9 +34,6 @@ Krux.prototype.sendNewPixel = function(pageLoad) {
 Krux.prototype.init = function() {
 	this.config = config('krux');
 
-	//Add the rootid as a custom page parameter
-	this.add({ page: targeting.getRootId() });
-
 	if (this.config && this.config.id) {
 
 		/* istanbul ignore else  */
@@ -234,7 +231,7 @@ Krux.prototype.resetAttributes = function() {
 
 Krux.prototype.consents = function() {
 	if (config('krux') && config('krux').consentState) {
-		const kuid = localStorage.getItem('kxkuid');
+		const kuid = localStorage && localStorage.getItem('kxkuid');
 		if (kuid) {
 			const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
 
