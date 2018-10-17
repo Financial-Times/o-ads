@@ -3,7 +3,7 @@
 This is an Origami module that enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), and provides customised demographic, behavioural (via [Krux](http://www.krux.com/)), and contextual (via [Admantx](http://admantx.com/)) targeting.
 
 ## Requirements
-For basic use, a DFP account with Google is required.  
+For basic use, a DFP account with Google is required.
 Each targeting/tracking supplier will require their own configuration and setup.
 
 ## Demos
@@ -30,6 +30,14 @@ We also use Nightwatch and Browserstack to run cross browser tests. To run these
 1. `npm run demo-server` in your terminal. This will compile and launch the demos on http://localhost:3002. *This is needed for the next step to work*
 2. `npm run test-browser` will run a local browserstack tunnel and run the tests
 
+  ### Releasing
+
+Run `npm run release (patch|minor|major|x.y.z)` in `master` then follow the interactive steps.
+
+This will bump version numbers in the source and commit them, push to github and create a new release.
+
+The command uses [release-it](https://github.com/webpro/release-it) under the hood as well as genversion to automatically bump version numbers in the source.
+
 ## Migration Guide
 
 ### Upgrading to v8
@@ -44,7 +52,7 @@ We also use Nightwatch and Browserstack to run cross browser tests. To run these
 
 ### Upgrading to v10
 
-- Breaking change: o-ads now defaults to never collapsing empty ads slots following google gpt behavior. 
+- Breaking change: o-ads now defaults to never collapsing empty ads slots following google gpt behavior.
 - Breaking change: collapsing config oAds takes 3 possible options for the `collapseEmpty` attribute: `'before'`, `'after`', `'never'` and defaults to `'never'`
 - Breaking change: collapsing ads for a specific slot on the markup now uses  `'before'`, `'after`', `'never'` instead of `true` and `false` previously
 - Breaking change: Global collapse empty behavior is set in `config.collapseEmpty` instead of `config.gpt.collapseEmpty` previously
