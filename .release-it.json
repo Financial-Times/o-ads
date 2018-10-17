@@ -1,9 +1,11 @@
 {
+  "buildCommand": "npm run version && git add src/js/version.js",
   "src": {
     "tagName": "v%s",
     "commit": true,
     "tag": true,
     "push": true
+
   },
   "github": {
     "release": true

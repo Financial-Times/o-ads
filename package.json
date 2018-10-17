@@ -16,7 +16,8 @@
     "verify": "obt verify",
     "lint": "eslint .",
     "lint-complexity": "eslint . -c .eslintrc-complexity.js",
-    "release": "release-it && genversion --semi src/js/version.js"
+    "release": "release-it",
+    "version": "genversion --semi src/js/version.js"
   },
   "repository": {
     "type": "git",
