@@ -32,6 +32,9 @@ We also use Nightwatch and Browserstack to run cross browser tests. To run these
 
   ### Releasing
 
+You will need a `GITHUB_TOKEN` environment variable with access to the repository in your .env file
+[Get a github token](https://github.com/settings/tokens) with "repo" access and make it accessible as an environment variable.
+
 Run `npm run release (patch|minor|major|x.y.z)` in `master` then follow the interactive steps.
 
 This will bump version numbers in the source and commit them, push to github and create a new release.
