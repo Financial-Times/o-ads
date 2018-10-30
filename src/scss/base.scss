@@ -81,14 +81,9 @@ $ad-max-responsive-width: 1440px;
 
 @mixin oAdsResponsiveReserve {
 		&[data-o-ads-loaded="Responsive"] {
-			height: 250px;
-			min-height: 250px;
-			padding: 10px 0;
-			@include oGridRespondTo($until: $ad-max-responsive-width) {
-				height: auto;
-				min-height: calc(100vw * 0.1734);
-				padding: 0;
-			}
+			height: auto;
+			min-height: calc(100vw * 0.1734);
+			padding: 0;
 			@include oGridRespondTo($until: S) {
 				height: auto;
 				min-height: calc(100vw * 0.481);
