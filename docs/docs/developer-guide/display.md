@@ -23,6 +23,12 @@ An ad slot can be added to your page by including a `div` with some attributes. 
   aria-hidden="true">
 ```
 
+## Name
+The `data-o-ads-name` attribute is optional and `o-ads` will automatically create a unique one and inject it into each element for which it is missing.
+
+That said, in case of having several ad slots on the page, it is recommended to use it and give it a descriptive value as it makes easier to identify slots when debugging, and it is also part of `oAds.debug().Creatives`'s output.
+
+
 ## Formats
 
 o-ads comes with these formats out of the box:  
