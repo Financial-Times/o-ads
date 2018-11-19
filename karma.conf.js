@@ -11,13 +11,11 @@
 // 	return options;
 // }
 
-process.env['BROWSERIFYSWAP_ENV'] = 'karma';
-
 let options = {
 	basePath: '',
 	autoWatch: true,
 	singleRun: false,
-	frameworks: ['browserify', 'qunit'],
+	frameworks: ['qunit'],
 	files: [
 		'test/qunit/styles.css',
 		'build/main.css',
@@ -37,15 +35,20 @@ let options = {
 		}
 	},
 	browsers: ['Chrome_with_flags'],
-	browserify: { transform: ['babelify', 'debowerify', 'browserify-swap'] },
+	// We use the origami-build-tools webpack config and we
+	// overwrite the `output` option.
+	webpack: Object.assign(
+		require('origami-build-tools/config/webpack.config'),
+		{ output: {} }
+	),
 	reporters: ['progress'],
 	preprocessors: {
-		'main.js': ['browserify'],
-		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify'],
-		'test/qunit/main.test.js': ['browserify'],
-		'test/qunit/api.test.js': ['browserify'],
-		'test/qunit/krux.test.js': ['browserify']
+		'main.js': ['webpack'],
+		'src/**/*.js': ['webpack'],
+		'test/qunit/setup.js': ['webpack'],
+		'test/qunit/main.test.js': ['webpack'],
+		'test/qunit/api.test.js': ['webpack'],
+		'test/qunit/krux.test.js': ['webpack']
 	}
 };
 
@@ -57,7 +60,6 @@ if (process.env.CI === 'true') {
 	options.autoWatch = false;
 } else {
 	//options for local go here
-	options.browserify.debug = true;
 }
 
 const coverageChecks = {
@@ -78,7 +80,6 @@ const coverageChecks = {
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.browserify.transform.unshift(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
 	options.reporters.push('coverage');
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
@@ -97,12 +98,6 @@ if (process.env.COVERAGE) {
 }
 
 if (process.env.CIRCLECI) { } // eslint-disable-line no-empty
-
-if (process.env.JENKINS_URL) {
-	// Jenkins options go here
-	options.reporters.push('junit');
-	options.junitReporter = {outputFile: './reports/test-results.xml' };
-}
 
 try {
 	options = require('./karma.local.js')(options);
