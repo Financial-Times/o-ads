@@ -135,6 +135,8 @@ const initAll = function() {
 	});
 };
 
+Ads.prototype.initAll = initAll;
+
 function getConsents() {
 	// derive consent options from ft consent cookie
 	const re = /FTConsent=([^;]+)/;
