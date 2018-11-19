@@ -24,9 +24,6 @@
   "author": "",
   "devDependencies": {
     "@financial-times/secret-squirrel": "^2.10.3",
-    "babel-core": "^6.26.0",
-    "babelify": "^6.0.3",
-    "bower": "^1.7.1",
     "dotenv": "^6.0.0",
     "fetch-mock": "^5.1.1",
     "genversion": "^2.1.0",
