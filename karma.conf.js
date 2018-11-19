@@ -17,10 +17,6 @@ let options = {
 	singleRun: false,
 	frameworks: ['qunit'],
 	files: [
-		'test/qunit/styles.css',
-		'build/main.css',
-		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,Array.prototype.find,IntersectionObserver',
-		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/sinon-1.10.3/index.js',
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
@@ -81,6 +77,11 @@ if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
 	options.reporters.push('coverage');
+	options.coverageIstanbulReporter = {
+		reports: [ 'text-summary' ],
+		fixWebpackSourcePaths: true
+	};
+
 	options.coverageReporter = {
 		dir: 'reports/coverage/',
 		reporters: [
