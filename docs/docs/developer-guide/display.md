@@ -78,6 +78,7 @@ oAds.init({
     medium : [600, 0],
     small : [0, 0]
   }
+  // where each array is in the format [width, height]
   ...
 });
 ```
