@@ -74,6 +74,7 @@
     "analyzeCommits": "simple-commit-message"
   },
   "dependencies": {
+    "dom-delegate": "^2.2.0",
     "eslint": "^5.5.0",
     "watchify": "^3.11.0"
   }

@@ -1,7 +1,7 @@
 /* eslint new-cap: 0 */
 const utils = require('../utils');
 const config = require('../config');
-const Delegate = require('ftdomdelegate');
+const Delegate = require('dom-delegate');
 const targeting = require('../targeting');
 
 /**
