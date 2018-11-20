@@ -34,8 +34,6 @@ let options = {
 		}
 	},
 	browsers: ['Chrome_with_flags'],
-	// We use the origami-build-tools webpack config and we
-	// overwrite the `output` option.
 	webpack: {
 		resolve: {
 			plugins: [new BowerResolvePlugin()],
