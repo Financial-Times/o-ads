@@ -11,6 +11,9 @@
 // 	return options;
 // }
 
+const path = require('path');
+const BowerResolvePlugin = require('bower-resolve-webpack-plugin');
+
 let options = {
 	basePath: '',
 	autoWatch: true,
@@ -33,10 +36,12 @@ let options = {
 	browsers: ['Chrome_with_flags'],
 	// We use the origami-build-tools webpack config and we
 	// overwrite the `output` option.
-	webpack: Object.assign(
-		require('origami-build-tools/config/webpack.config'),
-		{ output: {} }
-	),
+	webpack: {
+		resolve: {
+			plugins: [new BowerResolvePlugin()],
+			modules: ['bower_components', 'node_modules']
+		}
+	},
 	reporters: ['progress'],
 	preprocessors: {
 		'main.js': ['webpack'],
@@ -76,25 +81,25 @@ const coverageChecks = {
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.reporters.push('coverage');
+	options.reporters.push('coverage-istanbul');
 	options.coverageIstanbulReporter = {
-		reports: [ 'text-summary' ],
+		reports: [ 'text' ],
 		fixWebpackSourcePaths: true
 	};
-
-	options.coverageReporter = {
-		dir: 'reports/coverage/',
-		reporters: [
+	options.webpack.module = {
+		rules: [
+			// instrument only testing sources with Istanbul
 			{
-				type: 'html',
-				check: coverageChecks,
-				subdir: function(browser) {
-					return browser.toLowerCase().split(/[ /-]/)[0];
-				}
-			},
-			{ type: 'text' },
-			{ type: 'json', subdir: '.', file: 'summary.json' }
+				test: /\.js$/,
+				use: { loader: 'istanbul-instrumenter-loader' },
+				include: path.resolve('src/js/')
+			}
 		]
+	};
+	options.coverageIstanbulReporter = {
+		reports: [ 'text' ],
+		fixWebpackSourcePaths: true,
+		dir: 'reports/coverage/'
 	};
 }
 
