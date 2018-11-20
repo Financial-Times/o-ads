@@ -108,8 +108,6 @@ oAds.init({
 });
 ```
 
-If `o-ads` is initialised declaratively, all
-
 ## 4. Slots
 
 Ad slots can be easily defined declaratively as explained in [Display Ads](display). In that case, each ad slot is initialised automatically after the browser has finished loading the content.
