@@ -44,8 +44,6 @@ let options = {
 	},
 	reporters: ['progress'],
 	preprocessors: {
-		'main.js': ['webpack'],
-		'src/**/*.js': ['webpack'],
 		'test/qunit/setup.js': ['webpack'],
 		'test/qunit/main.test.js': ['webpack'],
 		'test/qunit/api.test.js': ['webpack'],
@@ -63,27 +61,28 @@ if (process.env.CI === 'true') {
 	//options for local go here
 }
 
-const coverageChecks = {
-	global: {
-		statements: 100,
-		branches: 100,
-		functions: 100,
-		lines: 100
-	},
-	each: {
-		statements: 100,
-		branches: 100,
-		functions: 100,
-		lines: 100
-	}
-};
-
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
 	options.reporters.push('coverage-istanbul');
 	options.coverageIstanbulReporter = {
-		reports: [ 'text' ],
+		dir: 'reports/coverage/',
+		reports: ['html', 'text', 'json'],
+		thresholds: {
+			emitWarning: false,
+			global: {
+				statements: 99,
+				branches: 97,
+				functions: 98,
+				lines: 99
+			},
+			each: {
+				statements: 95,
+				branches: 95,
+				functions: 95,
+				lines: 95
+			}
+		},
 		fixWebpackSourcePaths: true
 	};
 	options.webpack.module = {
@@ -95,11 +94,6 @@ if (process.env.COVERAGE) {
 				include: path.resolve('src/js/')
 			}
 		]
-	};
-	options.coverageIstanbulReporter = {
-		reports: [ 'text' ],
-		fixWebpackSourcePaths: true,
-		dir: 'reports/coverage/'
 	};
 }
 
