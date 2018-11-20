@@ -23,7 +23,8 @@
   },
   "author": "",
   "devDependencies": {
-    "@financial-times/secret-squirrel": "^2.10.3",
+	"@financial-times/secret-squirrel": "^2.10.3",
+	"browserstack-local": "^1.3.4",
     "dotenv": "^6.0.0",
     "fetch-mock": "^5.1.1",
     "genversion": "^2.1.0",
