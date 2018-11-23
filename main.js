@@ -11,7 +11,10 @@ Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
 Ads.prototype.krux = require('./src/js/data-providers/krux');
 Ads.prototype.api = require('./src/js/data-providers/api');
 Ads.prototype.moat = require('./src/js/data-providers/moat');
-Ads.prototype.targeting = require('./src/js/targeting');
+
+const targeting = require('./src/js/targeting');
+Ads.prototype.targeting = targeting;
+
 Ads.prototype.utils = require('./src/js/utils');
 
 
@@ -89,7 +92,7 @@ Ads.prototype.initLibrary = function() {
 		this.targeting.add({"cc" : "y"});
 	}
 	this.gpt.init();
-	this.krux.init();
+	this.krux.init(targeting);
 	if (this.consents.behavioral) {
 		// set krux config option to opt-in /consented
 		this.config({'krux': {'consentState' : true}});
