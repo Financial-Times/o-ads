@@ -61,7 +61,7 @@ jobs:
           command: npm run test-browser
       - run:
           name: Check bundle sizes
-          command: npm run obt-build && ls && npm run test-size
+          command: npm run checksizes
       - store_test_results:
           path: test-results
       - store_artifacts:

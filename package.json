@@ -6,7 +6,7 @@
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/browser/config/nightwatch-local.js -c ./test/browser/config/nightwatch.conf.js",
-    "test": "npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp && npm run test-size",
+    "test": "npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
     "test-size": "bundlesize",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-browser": "npm run test-browser-basic && npm run test-browser-extended",
@@ -19,7 +19,8 @@
     "lint-complexity": "eslint . -c .eslintrc-complexity.js",
     "release": "release-it",
     "version": "genversion --semi src/js/version.js",
-    "obt-build": "obt install && obt build"
+    "obt-build": "obt install && obt build",
+    "checksizes": "npm run obt-build && bundlesize"
   },
   "repository": {
     "type": "git",
@@ -82,7 +83,7 @@
   "bundlesize": [
     {
       "path": "./build/main.js",
-      "maxSize": "107 kB"
+      "maxSize": "110 kB"
     }
   ]
 }
