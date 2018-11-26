@@ -46,6 +46,9 @@ jobs:
           name: Run unit tests
           command: npm run test-unit
       - run:
+          name: Run integration tests
+          command: npm run test-cypress:run
+      - run:
           name: Run demo server
           command: npm run demo-server
           background: true
