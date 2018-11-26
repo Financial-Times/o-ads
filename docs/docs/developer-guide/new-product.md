@@ -13,7 +13,7 @@ Alternately, you may use the [Origami Build Tools](http://origami.ft.com/docs/de
 Since GDPR came into effect in May 2018, o-ads library now requires consent for custom targeting. By default, the o-ads library will check for consent in a cookie with the name `FTConsent`. It will look for 2 types of consent:
 
 - demographic (or programmatic) - it will check for `programmaticadsOnsite:on` inside the cookie.
-- behavioural - it will check for `behaviouraladsOnsite:on` inside the cookie. 
+- behavioural - it will check for `behaviouraladsOnsite:on` inside the cookie.
 
 If these are present, then extra targeting information (see section 4 below) can be added to the ad requests.
 
@@ -52,27 +52,74 @@ For FT.com, the 'zone' can be retrieved from the Ads API (see [Targeting]({{site
 For new products, you will need to liaise with AdOps to decide on the site and zone hierarchy.
 
 ## 3. Initialise o-ads
-* Declaratively:  
+### 3.1. Declaratively:
+
+The bare minimum `o-ads` configuration will contain the `gpt` object:
 
 ```html
-	<script data-o-ads-config="" type="application/json">
-		{
-			"gpt": {
-				"network": 5887,
-				"site": "test.5887.origami"
-			}
+<script data-o-ads-config="" type="application/json">
+	{
+		"gpt": {
+			"network": 5887,
+			"site": "test.5887.origami"
 		}
-	</script>
+	}
+</script>
 ```
 
-* Imperatively   
+But it will usually contain several more parameters, that are explained in subsequent sections :
+
+```html
+<script data-o-ads-config="" type="application/json">
+	{
+		"gpt": {
+			"network": 5887,
+			"site": "test.5887.origami"
+		},
+		"formats": {
+			"PaidPost": {
+				"sizes": "fluid"
+			}
+		},
+		"responsive": {
+			"extra": [1025, 0],
+			"large": [980, 0],
+			"medium": [760, 0],
+			"small": [0, 0]
+		}
+
+		...
+		
+	}
+</script>
+```
+
+### 3.2. Imperatively
+
+Similarly, the initialisation with Javascript code would look something like this:
 
 ```js
 const oAds = require('o-ads');
-oAds.init({...});
+oAds.init({
+		gpt: {
+			network: 5887,
+			site: "test.5887.origami"
+		}
+});
 ```
 
-## 4. Targeting
+## 4. Slots
+
+Ad slots can be easily defined declaratively as explained in [Display Ads](display). In that case, each ad slot is initialised automatically after the browser has finished loading the content.
+
+However, when defining ad slots with javascript, it is necessary to invoke the `initSlot` method on them, like this:
+
+```js
+const slots = Array.from(document.querySelectorAll('.o-ads, [data-o-ads-name]'));
+slots.forEach(ads.slots.initSlot.bind(ads.slots));
+```
+
+## 5. Targeting
 
 Products should provide as much targeting as possible to allow the full range of adverts to be served. They generally are sent to the ad server in the form of key/value pairs.
 
@@ -82,11 +129,7 @@ We can target ads in the following ways:
 Geographic targeting is provided by DFP based on the IP address that the ad request was made from. We don't need to do anything to enable this.
 
 * **Demographic**
-Demographic data is provided by the [Ads API](https://github.com/Financial-Times/ads-api).
-
-`https://ads-api.ft.com/v1/user`
-
-This endpoint provides a list of key-values including industry/job positions provided by users when registering, demographic/behavioural models from HUI/Data Warehouse, user IDs etc.
+Demographic data is provided by the [Ads API](https://github.com/Financial-Times/ads-api). The `https://ads-api.ft.com/v1/user` endpoint provides a list of key-values including industry/job positions provided by users when registering, demographic/behavioural models from HUI/Data Warehouse, user IDs etc.
 
 * **Behavioural**
 Behavioural targeting at the FT is provided by a third party called [Krux](http://www.krux.com/). To enable Krux for your product, you need a Krux ID, which can be provided by AdOps.
@@ -108,7 +151,6 @@ oAds.init({
 		}
 	}
 })
-
 ```
 
 * **Contextual**
@@ -155,7 +197,7 @@ If you need to know when oAds has been initialised with all the API calls, this 
 * We fire an event `oAds.initialised` on the document
 * We set a boolean property on the oAds instance: `oAds.isInitialised`
 
-## Single Page Apps
+## 6. Single Page Apps
 
 Single page apps are likely to want to update the targeting throughout the lifecycle of the page (for example, if a user logs out, or a new article is loaded but without loading a new page).
 
@@ -169,38 +211,37 @@ For this use case, a method is provided, which will:
 
 e.g.
 
-```
-	oAds.init({ 
-		gpt: { 
-			network:'5887', 
-			site: 'ft.com', 
-			zone: 'world'
+```js
+oAds.init({
+	gpt: {
+		network:'5887',
+		site: 'ft.com',
+		zone: 'world'
+	},
+	targetingApi: {
+		user: 'https://ads-api.ft.com/v1/user',
+		page: 'https://ads-api.ft.com/v1/content/abc'
+	}
+});
+
+function onSomeUserActionThatChangesThePage() {
+	//change the zone and reget contextual targeting
+	oAds.updateContext({
+		gpt: {
+			zone: 'uk'
 		},
 		targetingApi: {
-			user: 'https://ads-api.ft.com/v1/user',
-			page: 'https://ads-api.ft.com/v1/content/abc'
+			page: 'https://ads-api.ft.com/v1/content/def'
+		}
+	}, true);
+}
+
+function onUserLogout() {
+	//update the user targeting details
+	oAds.updateContext({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user'
 		}
 	});
-
-	function onSomeUserActionThatChangesThePage() {
-		//change the zone and reget contextual targeting
-		oAds.updateContext({
-			gpt: {
-				zone: 'uk'
-			},
-			targetingApi: {
-				page: 'https://ads-api.ft.com/v1/content/def'
-			}
-		}, true);
-	}
-
-	function onUserLogout() {
-		//update the user targeting details
-		oAds.updateContext({
-			targetingApi: {
-				user: 'https://ads-api.ft.com/v1/user'
-			}
-		});
-	}
-
+}
 ```

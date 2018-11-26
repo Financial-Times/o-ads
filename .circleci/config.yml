@@ -26,12 +26,12 @@ jobs:
              - bower_components
       - persist_to_workspace:
           root: ~/project
-          paths: 
+          paths:
             - build
       - store_artifacts:
           path: build-state
           destination: build-state
-  
+
   test:
     docker:
       - image: circleci/node:8-browsers
@@ -59,6 +59,9 @@ jobs:
       - run:
           name: Run browser tests in browserstack
           command: npm run test-browser
+      - run:
+          name: Check bundle sizes
+          command: npm run checksizes
       - store_test_results:
           path: test-results
       - store_artifacts:
