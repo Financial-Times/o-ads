@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const config = require('./config');
+const isPlainObject = require('lodash/isPlainObject');
 
 const VALID_SIZE_STRINGS = ['fluid'];
 const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];
@@ -53,7 +54,7 @@ const attributeParsers = {
 	responsiveSizes: function(name, value, sizes) {
 		const screenName = name.replace(/^sizes/, '').toLowerCase();
 		/* istanbul ignore else	*/
-		if (!utils.isPlainObject(sizes)) {
+		if (!isPlainObject(sizes)) {
 			sizes = {};
 		}
 
@@ -64,7 +65,7 @@ const attributeParsers = {
 	responsiveFormats: function(name, value, sizes) {
 		const screenName = name.replace(/^formats/, '').toLowerCase();
 		/* istanbul ignore else	*/
-		if (!utils.isPlainObject(sizes)) {
+		if (!isPlainObject(sizes)) {
 			sizes = {};
 		}
 
@@ -172,7 +173,7 @@ function Slot(container, screensize, initLazyLoading) {
 	/* istanbul ignore else */
 	if (utils.isArray(slotConfig.formats)) {
 		attributeParsers.formats(slotConfig.formats, this.sizes);
-	} else if (utils.isPlainObject(slotConfig.formats)) {
+	} else if (isPlainObject(slotConfig.formats)) {
 		this.sizes = {};
 		Object.keys(slotConfig.formats).forEach(screenName => {
 			this.sizes[screenName] = attributeParsers.formats(slotConfig.formats[screenName], []);
@@ -196,7 +197,7 @@ function Slot(container, screensize, initLazyLoading) {
 	// extend with imperative configuration options
 	this.parseAttributeConfig();
 	/* istanbul ignore else	*/
-	if (!this.sizes.length && !utils.isPlainObject(this.sizes)) {
+	if (!this.sizes.length && !isPlainObject(this.sizes)) {
 		utils.log.error('slot %s has no configured sizes!', this.name);
 		return false;
 	}
@@ -285,7 +286,7 @@ Slot.prototype.render = function() {
  */
 Slot.prototype.initResponsive = function() {
 	/* istanbul ignore else */
-	if (utils.isPlainObject(this.sizes)) {
+	if (isPlainObject(this.sizes)) {
 		/* istanbul ignore else */
 		if (!this.hasValidSize()) {
 			this.collapse();
@@ -400,7 +401,7 @@ Slot.prototype.fire = function(name, data) {
 		slot: this
 	};
 
-	if (utils.isPlainObject(data)) {
+	if (isPlainObject(data)) {
 		utils.extend(details, data);
 	}
 
@@ -427,7 +428,7 @@ Slot.prototype.addContainer = function(node, attrs) {
 
 Slot.prototype.hasValidSize = function(screensize) {
 	screensize = screensize || this.screensize;
-	if (screensize && utils.isPlainObject(this.sizes)) {
+	if (screensize && isPlainObject(this.sizes)) {
 		return this.sizes[screensize] !== false;
 	}
 

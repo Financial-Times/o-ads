@@ -22,6 +22,7 @@
  * @function
 */
 const utils = require('./utils');
+const isPlainObject = require('lodash/isPlainObject');
 /**
 * Default configuration set in the constructor.
 */
@@ -89,7 +90,7 @@ function Config() {
 
 Config.prototype.access = function(k, v) {
 	let result;
-	if (utils.isPlainObject(k)) {
+	if (isPlainObject(k)) {
 		utils.extend(true, this.store, k);
 		result = this.store;
 	} else if (typeof v === 'undefined') {

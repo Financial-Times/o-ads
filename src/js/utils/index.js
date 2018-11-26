@@ -4,6 +4,7 @@
  * @module utils
  */
 const hop = Object.prototype.hasOwnProperty;
+const isPlainObject = require('lodash/isPlainObject');
 
 const utils = module.exports;
 /**
@@ -71,42 +72,6 @@ function curryIsMethods(obj, classNames) {
  */
 module.exports.isWindow = function(obj) {
 	return obj && obj !== null && obj === window;
-};
-
-/**
- * Test if an object inherits from any other objects, used in extend
- * to protect against deep copies running out of memory and constructors
- * losing there prototypes when cloned
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is plain false otherwise
- */
-module.exports.isPlainObject = function(obj) {
-	const hop = Object.prototype.hasOwnProperty;
-
-	// Must be an Object.
-	// Because of IE, we also have to check the presence of the constructor property.
-	// Make sure that DOM nodes and window objects don't pass through, as well
-	if (!obj || !utils.isObject(obj) || obj.nodeType || utils.isWindow(obj)) {
-		return false;
-	}
-
-	try {
-		// Not own constructor property must be Object
-		if (obj.constructor && !hop.call(obj, 'constructor') && !hop.call(obj.constructor.prototype, 'isPrototypeOf')) {
-			return false;
-		}
-	} catch (e) {
-		/* istanbul ignore next  */
-		// IE8,9 Will throw exceptions on certain host objects
-		return false;
-	}
-
-	// Own properties are enumerated firstly, so to speed up,
-	// if last one is own, then all properties are own.
-	let key;
-	for (key in obj) {} //eslint-disable-line no-empty
-
-	return key === undefined || hop.call(obj, key);
 };
 
 /**
@@ -182,7 +147,7 @@ function extend() {
 					}
 
 					// Recurse if we're merging arrays
-					if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
+					if (deep && copy && (isPlainObject(copy) || utils.isArray(copy))) {
 						copyIsArray = utils.isArray(copy);
 						if (copyIsArray) {
 							copyIsArray = false;

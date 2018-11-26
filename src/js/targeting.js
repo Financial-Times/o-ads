@@ -1,6 +1,7 @@
 
 const config = require('./config');
 const utils = require('./utils');
+const isPlainObject = require('lodash/isPlainObject');
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 
@@ -28,7 +29,7 @@ Targeting.prototype.get = function() {
 
 Targeting.prototype.add = function(obj) {
 	/* istanbul ignore else  */
-	if (utils.isPlainObject(obj)) {
+	if (isPlainObject(obj)) {
 		utils.extend(parameters, obj);
 	}
 };
@@ -50,7 +51,7 @@ Targeting.prototype.clear = function() {
 */
 Targeting.prototype.getFromConfig = function() {
 	let targeting = config('dfp_targeting') || {};
-	if (!utils.isPlainObject(targeting)) {
+	if (!isPlainObject(targeting)) {
 		/* istanbul ignore else  */
 		if (utils.isString(targeting)) {
 			targeting = utils.hash(targeting, ';', '=');

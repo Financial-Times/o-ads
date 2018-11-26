@@ -2,6 +2,7 @@
 const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
+const isPlainObject = require('lodash/isPlainObject');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -175,7 +176,7 @@ Krux.prototype.events = {
 Krux.prototype.events.fire = function(id, attrs) {
 	/* istanbul ignore else  */
 	if (id) {
-		attrs = utils.isPlainObject(attrs) ? attrs : {};
+		attrs = isPlainObject(attrs) ? attrs : {};
 		return window.Krux('admEvent', id, attrs); // eslint-disable-line new-cap
 	}
 
@@ -186,7 +187,7 @@ Krux.prototype.events.init = function() {
 	let event;
 	const configured = config('krux') && config('krux').events;
 	/* istanbul ignore else  */
-	if (utils.isPlainObject(configured)) {
+	if (isPlainObject(configured)) {
 		for (event in configured) {
 			/* istanbul ignore else  */
 			if (utils.isFunction(this[event])) {

@@ -10,6 +10,8 @@
 const config = require('../config');
 const utils = require('../utils');
 const targeting = require('../targeting');
+const isPlainObject = require('lodash/isPlainObject');
+
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
@@ -98,7 +100,7 @@ function setRenderingMode(gptConfig) {
 * @lends GPT
 */
 function setPageTargeting(targetingData) {
-	if (utils.isPlainObject(targetingData)) {
+	if (isPlainObject(targetingData)) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
 			Object.keys(targetingData).forEach(key => {
@@ -207,7 +209,7 @@ function onRender(event) {
 function onRefresh(event) {
 	window.googletag.cmd.push(() => {
 		const targeting = event.detail.targeting;
-		if (utils.isPlainObject(targeting)) {
+		if (isPlainObject(targeting)) {
 			Object.keys(targeting).forEach(name => {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
 			});
@@ -447,7 +449,7 @@ const slotMethods = {
 		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			/* istanbul ignore else  */
-			if (utils.isPlainObject(this.targeting)) {
+			if (isPlainObject(this.targeting)) {
 				Object.keys(this.targeting).forEach(param => {
 					gptSlot.setTargeting(param, this.targeting[param]);
 				});
@@ -476,7 +478,7 @@ function updateCorrelator() {
 
 function updatePageTargeting(override) {
 	if (window.googletag) {
-		const params = utils.isPlainObject(override) ? override : targeting.get();
+		const params = isPlainObject(override) ? override : targeting.get();
 		if (!override) {
 			googletag.cmd.push(() => {
 				googletag.pubads().clearTargeting();
