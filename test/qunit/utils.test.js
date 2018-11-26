@@ -99,56 +99,6 @@ QUnit.test('isNonEmptyString method', function(assert) {
 	assert.ok(!this.ads.utils.isNonEmptyString(function() {}), 'function');
 });
 
-QUnit.test('isPlainObject method', function(assert) {
-	assert.ok($.type(this.ads.utils.isPlainObject) === 'function', 'The function exists');
-
-	// The use case that we want to match
-	assert.ok(this.ads.utils.isPlainObject({}), '{}');
-
-	// Not objects shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject(''), 'string');
-	assert.ok(!this.ads.utils.isPlainObject(0) && !this.ads.utils.isPlainObject(1), 'number');
-	assert.ok(!this.ads.utils.isPlainObject(true) && !this.ads.utils.isPlainObject(false), 'boolean');
-	assert.ok(!this.ads.utils.isPlainObject(null), 'null');
-	assert.ok(!this.ads.utils.isPlainObject(undefined), 'undefined');
-
-	// Arrays shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject([]), 'array');
-
-	// Instantiated objects shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject(new Date()), 'new Date');
-
-	const fnplain = function() {};
-
-	// Functions shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject(fnplain), 'fn');
-
-	/** @constructor */
-	const Fn = function() {};
-
-	// Again, instantiated objects shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject(new Fn()), 'new fn (no methods)');
-
-	// Makes the function a little more realistic
-	Fn.prototype.someMethod = function() {};
-
-	// Again, instantiated objects shouldn't be matched
-	assert.ok(!this.ads.utils.isPlainObject(new Fn()), 'new fn');
-
-	// DOM Element
-	assert.ok(!this.ads.utils.isPlainObject(document.createElement('div')), 'DOM Element');
-
-	// Window
-	assert.ok(!this.ads.utils.isPlainObject(window), 'window');
-
-	try {
-		this.ads.utils.isPlainObject(window.location);
-		assert.ok(true, 'Does not throw exceptions on host objects');
-	} catch (e) {
-		assert.ok(false, 'Does not throw exceptions on host objects -- FAIL');
-	}
-});
-
 QUnit.module('utils.extend');
 QUnit.test('extend method', function(assert) {
 
