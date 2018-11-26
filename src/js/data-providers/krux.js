@@ -2,7 +2,6 @@
 const utils = require('../utils');
 const config = require('../config');
 const Delegate = require('ftdomdelegate');
-const targeting = require('../targeting');
 const isPlainObject = require('lodash/isPlainObject');
 
 /**
@@ -32,7 +31,7 @@ Krux.prototype.sendNewPixel = function(pageLoad) {
 	}
 };
 
-Krux.prototype.init = function() {
+Krux.prototype.init = function(targeting) {
 	this.config = config('krux');
 
 	if (this.config && this.config.id) {
