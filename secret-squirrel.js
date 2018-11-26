@@ -13,6 +13,7 @@ module.exports = {
 			'demos/src/responsive-positions.mustache',
 			'demos/src/test-ad.mustache',
 			'demos/src/test-ad-responsive.mustache',
+			'demos/src/google-test.mustache',
 			'docs/Gemfile',
 			'docs/Gemfile.lock',
 			'docs/_posts/2016-08-19-welcome-to-jekyll.markdown',
