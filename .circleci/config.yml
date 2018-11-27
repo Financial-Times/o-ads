@@ -54,6 +54,9 @@ jobs:
           command: npm run demo-server
           background: true
       - run:
+          name: Install cypress
+          command: npx cypress install
+      - run:
           name: Run integration tests
           command: npm run test-cypress:run
       - run:
