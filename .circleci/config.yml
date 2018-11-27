@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
-      - run: npm run cy:verify
+      - run: npm run test-cy:verify
       - run:
           name: Download Browserstack tunnel
           command: |
