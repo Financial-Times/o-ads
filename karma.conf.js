@@ -38,7 +38,8 @@ let options = {
 		resolve: {
 			plugins: [new BowerResolvePlugin()],
 			modules: ['bower_components', 'node_modules']
-		}
+		},
+		mode: 'development'
 	},
 	reporters: ['progress'],
 	preprocessors: {
