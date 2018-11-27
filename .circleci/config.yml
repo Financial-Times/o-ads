@@ -30,7 +30,7 @@ jobs:
              - ~/.npm
              - ~/.cache
       - persist_to_workspace:
-          root: ~/project
+          root: ~
           paths:
             - build
       - store_artifacts:
@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/project/build
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~
       - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
