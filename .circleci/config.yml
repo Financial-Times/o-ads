@@ -14,6 +14,7 @@ jobs:
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
+      - run: npm run cy:verify
       - run:
           name: Download Browserstack tunnel
           command: |
@@ -24,6 +25,7 @@ jobs:
           paths:
              - node_modules
              - bower_components
+             - ~/.npm
              - ~/.cache
       - persist_to_workspace:
           root: ~/project
@@ -50,9 +52,6 @@ jobs:
           name: Run demo server
           command: npm run demo-server
           background: true
-      - run:
-          name: Install cypress
-          command: npx cypress install
       - run:
           name: Run integration tests
           command: npm run test-cypress:run
