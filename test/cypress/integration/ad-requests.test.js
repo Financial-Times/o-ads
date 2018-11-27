@@ -12,13 +12,13 @@ function getQueryParams(url) {
 // We can spy on the ad calls and assert on the underlying xhr
 // object, including query parameters and response headers.
 describe('Integration tests', () => {
-	it.skip('Ad call contains correct size, targeting and custom parameters specified by dfp_targeting config option', () => {
+	it('Ad call contains correct size, targeting and custom parameters specified by dfp_targeting config option', () => {
 		// Spy on the ad call with cy.server() and cy.route()
 		// see https://docs.cypress.io/guides/guides/network-requests.html for more details
 		// Note: this only works with xhr not fetch at the mo - there are workarounds for fetch
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-		cy.visit("/demos/local/test-ad.html");
+		cy.visit("/demos/local/Test-Ad.html");
 
 		// Wait for the ad call to be made, then assert on the query string
 		cy.wait('@AdLoaded').then(xhr => {
@@ -44,7 +44,7 @@ describe('Integration tests', () => {
 	it.skip('Responsive ad renders correctly', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-		cy.visit("/demos/local/test-ad-responsive.html");
+		cy.visit("/demos/local/Test-Ad-Responsive.html");
 		cy.viewport(780, 500);	// w, h. W above 760px = Medium breakpoint;
 
 		cy.wait('@AdLoaded').then(xhr => {
@@ -58,7 +58,7 @@ describe('Integration tests', () => {
 	it.skip('Google Test', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-		cy.visit("/demos/local/google-test.html");
+		cy.visit("/demos/local/Google-Test.html");
 		cy.viewport(780, 500);	// w, h. W above 760px = Medium breakpoint;
 
 		cy.wait('@AdLoaded').then(xhr => {
