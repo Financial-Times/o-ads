@@ -47,8 +47,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - restore-cache:
-          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
       - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
