@@ -10,7 +10,9 @@ jobs:
           name: Ensure package.json exists for caching
           command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
       - restore-cache:
-          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
+            - dependency-cache-
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
