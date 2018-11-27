@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cypress/base:10
+      - image: circleci/node:8-browsers
     working_directory: ~/project/build
     steps:
       - checkout
@@ -14,7 +14,9 @@ jobs:
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
-      - run: npm run test-cy:verify
+      - run:
+          name: Install cypress
+          command: npm run test-cy:install
       - run:
           name: Download Browserstack tunnel
           command: |
