@@ -15,9 +15,6 @@ jobs:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
       - run:
-          name: Install cypress
-          command: npm run test-cy:install
-      - run:
           name: Download Browserstack tunnel
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
