@@ -2,10 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
+      - image: circleci/node:8-browsers
     working_directory: ~/project/build
     steps:
       - checkout
@@ -38,10 +35,7 @@ jobs:
 
   test:
     docker:
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
+      - image: circleci/node:8-browsers
     working_directory: ~/project/build
     steps:
       - attach_workspace:
