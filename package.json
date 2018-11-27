@@ -10,7 +10,6 @@
     "test-size": "bundlesize",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec",
-    "test-cy:install": "cypress install",
     "test-cy:open": "cypress open",
     "test-browser": "npm run test-browser-basic && npm run test-browser-extended",
     "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8,firefox,safari",
