@@ -2,7 +2,10 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8-browsers
+      - image: cypress/base:8
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
     working_directory: ~/project/build
     steps:
       - checkout
@@ -10,9 +13,7 @@ jobs:
           name: Ensure package.json exists for caching
           command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
       - restore-cache:
-          keys: 
-            - dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-            - dependency-cache-
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
       - run:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
@@ -27,7 +28,6 @@ jobs:
              - node_modules
              - bower_components
              - ~/.cache
-             - ~/.npm
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -38,7 +38,10 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:8-browsers
+      - image: cypress/base:8
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
     working_directory: ~/project/build
     steps:
       - attach_workspace:
