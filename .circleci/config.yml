@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8-browsers
-    working_directory: ~/project/build
+    working_directory: ~/app
     steps:
       - checkout
       - run:
@@ -32,7 +32,9 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - build
+            - .cache
+            - .npm
+            - app
       - store_artifacts:
           path: build-state
           destination: build-state
@@ -40,10 +42,13 @@ jobs:
   test:
     docker:
       - image: circleci/node:8-browsers
-    working_directory: ~/project/build
+    working_directory: ~/app
+    
     steps:
       - attach_workspace:
           at: ~/
+      - restore-cache:
+          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
       - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
