@@ -16,7 +16,7 @@ jobs:
       #     command: npx origami-build-tools@^7 install
       - run: 
           name: Install npm
-          command: npm ci
+          command: npm install
       - run: 
           name: Install bower
           command: bower install
