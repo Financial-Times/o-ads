@@ -10,6 +10,24 @@ QUnit.module('Main', {
 	}
 });
 
+QUnit.only('oAds is exposed on the window object', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');
+
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
+	const done = assert.async();
+
+	document.body.addEventListener('oAds.ready', function() {
+		document.body.addEventListener('oAds.initialised', function() {
+			assert.deepEqual(window.oAds, ads);
+			done();
+		});
+
+		ads.init();
+	});
+
+	this.trigger(document, 'o.DOMContentLoaded');
+});
+
 QUnit.test('init All', function(assert) {
 	const done = assert.async();
 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');

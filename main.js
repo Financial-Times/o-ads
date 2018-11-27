@@ -2,6 +2,10 @@
 
 function Ads() {
 	addDOMEventListener();
+
+	if (window && !window.oAds) {
+		window.oAds = this;
+	}
 }
 
 // bung all our modules on the protoype
