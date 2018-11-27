@@ -11,9 +11,15 @@ jobs:
           command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
       - restore-cache:
           key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-      - run:
-          name: Install dependencies
-          command: npx origami-build-tools@^7 install
+      # - run:
+      #     name: Install dependencies
+      #     command: npx origami-build-tools@^7 install
+      - run: 
+          name: Install npm
+          command: npm ci
+      - run: 
+          name: Install bower
+          command: bower install
       - run: npm run test-cy:verify
       - run:
           name: Download Browserstack tunnel
