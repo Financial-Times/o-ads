@@ -10,7 +10,7 @@ QUnit.module('Main', {
 	}
 });
 
-QUnit.only('oAds is exposed on the window object', function(assert) {
+QUnit.test('oAds is exposed on the window object', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');
 
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
