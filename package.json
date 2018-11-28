@@ -85,5 +85,6 @@
       "path": "./build/main.js",
       "maxSize": "110 kB"
     }
-  ]
+  ],
+  "snyk": true
 }
