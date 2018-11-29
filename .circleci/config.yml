@@ -70,6 +70,9 @@ jobs:
       - run:
           name: Check bundle sizes
           command: npm run checksizes
+      - run:
+          name: Check vulnerabilities
+          command: npm run snyk-test
       - store_test_results:
           path: test-results
       - store_artifacts:
