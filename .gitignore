@@ -3,6 +3,7 @@
 build/
 reports/
 demos/local/
+demos/non-origami/demos/node_modules
 .editorconfig
 test-results.xml
 .haikro-cache/
