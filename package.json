@@ -21,7 +21,8 @@
     "version": "genversion --semi src/js/version.js",
     "obt-build": "obt install && obt build",
     "checksizes": "npm run obt-build && bundlesize",
-    "snyk-test": "snyk test"
+    "snyk-test": "snyk test",
+    "start-new-demos": "DEBUG=demos node demos/non-origami/demos/bin/www"
   },
   "repository": {
     "type": "git",
