@@ -51,7 +51,6 @@
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
     "release-it": "^7.6.1",
-    "snyk": "^1.110.2",
     "watchify": "^3.11.0"
   },
   "browserify-swap": {
@@ -84,6 +83,5 @@
       "path": "./build/main.js",
       "maxSize": "110 kB"
     }
-  ],
-  "snyk": true
+  ]
 }
