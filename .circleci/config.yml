@@ -76,9 +76,9 @@ jobs:
           path: test-results
           destination: test-results
       - store-artifacts:
-          paths: 
-            - test/cypress/videos
-            - test/cypress/screenshots
+          path: test/cypress/videos
+      - store-artifacts:
+          path: test/cypress/screenshots
       
 workflows:
   version: 2
