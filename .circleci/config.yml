@@ -75,6 +75,9 @@ jobs:
       - store_artifacts:
           path: test-results
           destination: test-results
+      - store-artifacts:
+          path: test/cypress/videos
+      
 workflows:
   version: 2
   build-test:
