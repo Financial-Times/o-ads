@@ -6,7 +6,7 @@
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/browser/config/nightwatch-local.js -c ./test/browser/config/nightwatch.conf.js",
-    "test": "snyk test && npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
+    "test": "npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
     "test-size": "bundlesize",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec",
@@ -22,8 +22,7 @@
     "release": "release-it",
     "version": "genversion --semi src/js/version.js",
     "obt-build": "obt install && obt build",
-    "checksizes": "npm run obt-build && bundlesize",
-    "snyk-test": "snyk test"
+    "checksizes": "npm run obt-build && bundlesize"
   },
   "repository": {
     "type": "git",
@@ -90,6 +89,5 @@
       "path": "./build/main.js",
       "maxSize": "110 kB"
     }
-  ],
-  "snyk": true
+  ]
 }
