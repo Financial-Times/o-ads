@@ -70,11 +70,6 @@ jobs:
       - run:
           name: Check bundle sizes
           command: npm run checksizes
-      - store_test_results:
-          path: test-results
-      - store_artifacts:
-          path: test-results
-          destination: test-results
       - store-artifacts:
           path: test/cypress/videos
       - store-artifacts:
