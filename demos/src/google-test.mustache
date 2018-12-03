@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Responsive Test Page</title>
+<script async src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+<script>
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+
+ // GPT slots
+ var gptAdSlots = [];
+ googletag.cmd.push(function() {
+
+   // Define a size mapping object. The first parameter to addSize is
+   // a viewport size, while the second is a list of allowed ad sizes.
+   var mapping = googletag.sizeMapping().
+
+   // Small ad
+   addSize([100, 100], [88, 31]). 
+
+   // Accepts both common mobile banner formats
+   addSize([320, 400], [[320, 50], [300, 50]]). 
+		
+   // Same width as mapping above, more available height
+   addSize([320, 700], [300, 250]).
+
+   // Landscape tablet 
+   addSize([750, 200], [728, 90]). 
+
+   // Desktop
+   addSize([1050, 200], [1024, 120]).build();
+
+   // Define the GPT slot
+   gptAdSlots[0] = googletag.defineSlot('/6355419/travel', [320, 50], 'ad-slot').
+       defineSizeMapping(mapping).
+       addService(googletag.pubads());
+   googletag.pubads().setTargeting("test","responsive");
+
+   // Start ad fetching
+   googletag.enableServices();
+ });
+</script>
+</head>
+
+<body>
+<h1>Responsive Test Page</h1>
+
+<div id="ad-slot"> 
+   <script>
+     googletag.cmd.push(function() {
+       googletag.display('ad-slot');
+     });
+   </script> 
+</div>
+
+<p><span>GPT responsive ads do not resize on change in the size of the browser.
+  You can add your own custom code to refresh the ad slots on resize.
+  To demonstrate responsive capabilities, re-size your window and refresh the page.</span></p>
+
+</body>
+</html>

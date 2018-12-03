@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8-browsers
-    working_directory: ~/project/build
+    working_directory: ~/app
     steps:
       - checkout
       - run:
@@ -24,10 +24,14 @@ jobs:
           paths:
              - node_modules
              - bower_components
+             - ~/.npm
+             - ~/.cache
       - persist_to_workspace:
-          root: ~/project
+          root: ~/
           paths:
-            - build
+            - .cache
+            - .npm
+            - app
       - store_artifacts:
           path: build-state
           destination: build-state
@@ -35,10 +39,11 @@ jobs:
   test:
     docker:
       - image: circleci/node:8-browsers
-    working_directory: ~/project/build
+    working_directory: ~/app
+    
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
@@ -49,6 +54,9 @@ jobs:
           name: Run demo server
           command: npm run demo-server
           background: true
+      - run:
+          name: Run integration tests
+          command: npm run test-cy:run
       - run:
           name: Connect browserstack tunnel
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
