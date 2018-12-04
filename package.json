@@ -1,13 +1,16 @@
 {
   "name": "o-ads",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/browser/config/nightwatch-local.js -c ./test/browser/config/nightwatch.conf.js",
     "test": "npm run test-unit && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
+    "test-size": "bundlesize",
     "test-unit": "karma start karma.conf.js --single-run",
+    "test-cy:run": "cypress run -r spec",
+    "test-cy:open": "cypress open",
     "test-browser": "npm run test-browser-basic && npm run test-browser-extended",
     "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8,firefox,safari",
     "test-browser-extended": "npm run nightwatch-bs -- --group extended --env chrome",
@@ -15,7 +18,11 @@
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
     "verify": "obt verify",
     "lint": "eslint .",
-    "lint-complexity": "eslint . -c .eslintrc-complexity.js"
+    "lint-complexity": "eslint . -c .eslintrc-complexity.js",
+    "release": "release-it",
+    "version": "genversion --semi src/js/version.js",
+    "obt-build": "obt install && obt build",
+    "checksizes": "npm run obt-build && bundlesize"
   },
   "repository": {
     "type": "git",
@@ -23,30 +30,34 @@
   },
   "author": "",
   "devDependencies": {
-    "@financial-times/secret-squirrel": "^2.10.3",
-    "babel-core": "^6.26.0",
-    "babelify": "^6.0.3",
-    "bower": "^1.7.1",
-    "browserify": "^13.0.0",
-    "browserify-istanbul": "^2.0.0",
-    "browserify-swap": "^0.2.2",
-    "browserstack-local": "^1.3.4",
-    "debowerify": "^1.3.1",
-    "dotenv": "^6.0.0",
+    "@cypress/webpack-preprocessor": "^2.0.0",
+    "cypress": "^3.1.0",
+    "@financial-times/secret-squirrel": "^2.11.0",
+    "bower-resolve-webpack-plugin": "^1.0.5",
+    "browserstack-local": "^1.3.5",
+    "bundlesize": "^0.17.0",
+    "dotenv": "^6.1.0",
+    "eslint": "^5.9.0",
     "fetch-mock": "^5.1.1",
     "genversion": "^2.1.0",
     "isomorphic-fetch": "^2.0.0",
     "istanbul": "^0.4.2",
+    "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^3.0.0",
-    "karma-browserify": "^5.3.0",
     "karma-chrome-launcher": "^0.2.2",
     "karma-cli": "^0.1.1",
     "karma-coverage": "^1.1.2",
+    "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-qunit": "^0.1.8",
+    "karma-webpack": "^3.0.5",
     "nightwatch": "^0.9.21",
-    "origami-build-tools": "^7.9.0",
+    "origami-build-tools": "^7.10.0",
     "pre-git": "^3.17.1",
-    "qunitjs": "^1.20.0"
+    "qunitjs": "^1.20.0",
+    "release-it": "^7.6.1",
+    "watchify": "^3.11.0",
+    "webpack": "^4.26.1",
+    "snyk": "^1.110.2"
   },
   "browserify-swap": {
     "@packages": [
@@ -73,8 +84,10 @@
   "release": {
     "analyzeCommits": "simple-commit-message"
   },
-  "dependencies": {
-    "eslint": "^5.5.0",
-    "watchify": "^3.11.0"
-  }
+  "bundlesize": [
+    {
+      "path": "./build/main.js",
+      "maxSize": "110 kB"
+    }
+  ]
 }

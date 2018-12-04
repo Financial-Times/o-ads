@@ -11,18 +11,15 @@
 // 	return options;
 // }
 
-process.env['BROWSERIFYSWAP_ENV'] = 'karma';
+const path = require('path');
+const BowerResolvePlugin = require('bower-resolve-webpack-plugin');
 
 let options = {
 	basePath: '',
 	autoWatch: true,
 	singleRun: false,
-	frameworks: ['browserify', 'qunit'],
+	frameworks: ['qunit'],
 	files: [
-		'test/qunit/styles.css',
-		'build/main.css',
-		'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from,Array.prototype.find,IntersectionObserver',
-		'node_modules/qunitjs/qunit/qunit.css',
 		'bower_components/jquery-1.7.2.min/index.js',
 		'bower_components/sinon-1.10.3/index.js',
 		'bower_components/sinon.ie.timers-1.10.3/index.js',
@@ -37,15 +34,19 @@ let options = {
 		}
 	},
 	browsers: ['Chrome_with_flags'],
-	browserify: { transform: ['babelify', 'debowerify', 'browserify-swap'] },
+	webpack: {
+		resolve: {
+			plugins: [new BowerResolvePlugin()],
+			modules: ['bower_components', 'node_modules']
+		},
+		mode: 'development'
+	},
 	reporters: ['progress'],
 	preprocessors: {
-		'main.js': ['browserify'],
-		'src/**/*.js': ['browserify'],
-		'test/qunit/setup.js': ['browserify'],
-		'test/qunit/main.test.js': ['browserify'],
-		'test/qunit/api.test.js': ['browserify'],
-		'test/qunit/krux.test.js': ['browserify']
+		'test/qunit/setup.js': ['webpack'],
+		'test/qunit/main.test.js': ['webpack'],
+		'test/qunit/api.test.js': ['webpack'],
+		'test/qunit/krux.test.js': ['webpack']
 	}
 };
 
@@ -57,52 +58,45 @@ if (process.env.CI === 'true') {
 	options.autoWatch = false;
 } else {
 	//options for local go here
-	options.browserify.debug = true;
 }
-
-const coverageChecks = {
-	global: {
-		statements: 100,
-		branches: 100,
-		functions: 100,
-		lines: 100
-	},
-	each: {
-		statements: 100,
-		branches: 100,
-		functions: 100,
-		lines: 100
-	}
-};
 
 if (process.env.COVERAGE) {
 	console.log('running coverage report');
 	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.browserify.transform.unshift(['browserify-istanbul', { ignore: '**/node_modules/**,**/bower_components/**,**/test/**'}]);
-	options.reporters.push('coverage');
-	options.coverageReporter = {
+	options.reporters.push('coverage-istanbul');
+	options.coverageIstanbulReporter = {
 		dir: 'reports/coverage/',
-		reporters: [
-			{
-				type: 'html',
-				check: coverageChecks,
-				subdir: function(browser) {
-					return browser.toLowerCase().split(/[ /-]/)[0];
-				}
+		reports: ['html', 'text', 'json'],
+		thresholds: {
+			emitWarning: false,
+			global: {
+				statements: 99,
+				branches: 97,
+				functions: 98,
+				lines: 99
 			},
-			{ type: 'text' },
-			{ type: 'json', subdir: '.', file: 'summary.json' }
+			each: {
+				statements: 97,
+				branches: 94,
+				functions: 96,
+				lines: 97
+			}
+		},
+		fixWebpackSourcePaths: true
+	};
+	options.webpack.module = {
+		rules: [
+			// instrument only testing sources with Istanbul
+			{
+				test: /\.js$/,
+				use: { loader: 'istanbul-instrumenter-loader' },
+				include: path.resolve('src/js/')
+			}
 		]
 	};
 }
 
 if (process.env.CIRCLECI) { } // eslint-disable-line no-empty
-
-if (process.env.JENKINS_URL) {
-	// Jenkins options go here
-	options.reporters.push('junit');
-	options.junitReporter = {outputFile: './reports/test-results.xml' };
-}
 
 try {
 	options = require('./karma.local.js')(options);

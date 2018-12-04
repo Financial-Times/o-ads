@@ -136,6 +136,32 @@
 				"network": 5887,
 				"site" : "test.5887.origami"
 			}
+		},
+		{
+			"name": "Test-Ad",
+			"template": "/demos/src/test-ad.mustache",
+			"expanded": true,
+			"description": "",
+			"data": {
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
+			"name": "Test-Ad-Responsive",
+			"template": "/demos/src/test-ad-responsive.mustache",
+			"expanded": true,
+			"description": "",
+			"data": {
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
+			"name": "Google-Test",
+			"template": "/demos/src/google-test.mustache",
+			"expanded": true,
+			"description": ""
 		}
 	]
 }
