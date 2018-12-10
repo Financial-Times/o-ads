@@ -55,19 +55,6 @@ describe('Integration tests', () => {
 		});
 	});
 
-	// it.skip('Google Test', () => {
-	// 	cy.server();
-	// 	cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-	// 	cy.visit("/demos/local/Google-Test.html");
-	// 	cy.viewport(780, 500);	// w, h. W above 760px = Medium breakpoint;
-
-	// 	cy.wait('@AdLoaded').then(xhr => {
-	// 		const url = xhr.xhr.responseURL;
-	// 		const qsp = getQueryParams(url);
-	// 		console.log("Loaded");
-	// 	});
-	// });
-
 	it('Targeting API ads the correct values to the ad call', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
