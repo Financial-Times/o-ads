@@ -22,15 +22,9 @@ Includes detailed installation and set-up instructions, along with details about
 
 ### Tests
 
-The testing setup is unlike other origami components. There are unit tests which we run with karma, and these can be run with `npm run test-unit`
+See the [test documentation](https://github.com/Financial-Times/o-ads/blob/master/test/README.md)
 
-*Browser tests*
-We also use Nightwatch and Browserstack to run cross browser tests. To run these:
-
-1. `npm run demo-server` in your terminal. This will compile and launch the demos on http://localhost:3002. *This is needed for the next step to work*
-2. `npm run test-browser` will run a local browserstack tunnel and run the tests
-
-  ### Releasing
+### Releasing
 
 You will need a `GITHUB_TOKEN` environment variable with access to the repository in your .env file
 [Get a github token](https://github.com/settings/tokens) with "repo" access and make it accessible as an environment variable.
