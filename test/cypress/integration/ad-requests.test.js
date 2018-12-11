@@ -55,19 +55,6 @@ describe('Integration tests', () => {
 		});
 	});
 
-	// it.skip('Google Test', () => {
-	// 	cy.server();
-	// 	cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
-	// 	cy.visit("/demos/local/Google-Test.html");
-	// 	cy.viewport(780, 500);	// w, h. W above 760px = Medium breakpoint;
-
-	// 	cy.wait('@AdLoaded').then(xhr => {
-	// 		const url = xhr.xhr.responseURL;
-	// 		const qsp = getQueryParams(url);
-	// 		console.log("Loaded");
-	// 	});
-	// });
-
 	it('Targeting API ads the correct values to the ad call', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
@@ -88,7 +75,7 @@ describe('Integration tests', () => {
 			// Content props
 			expect(cust_params).to.have.property('auuid', '047b1294-75a9-11e6-b60a-de4532d5ea35');
 			expect(cust_params).to.have.property('ad', 'bs06,bs07,bs11,e2,ft02,ft04,ft05,ft11,ft18,ft35,ft38,ft41,g1,s03,sm06');
-			expect(cust_params).to.have.property('ca', '');
+			expect(cust_params).to.have.property('ca', 'business,finance,smartphone');
 
 			const expectedTopics = ['Retail','US & Canadian companies',
 				'Technology sector', 'Retail & Consumer', 'Companies',
