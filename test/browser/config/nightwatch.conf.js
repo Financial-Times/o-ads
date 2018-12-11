@@ -32,6 +32,7 @@ const config = {
 		chrome: {
 			desiredCapabilities: {
 				browser: 'chrome',
+				browser_version: '70',
 				os: 'Windows',
 				os_version: '7',
 				acceptSslCerts: true
