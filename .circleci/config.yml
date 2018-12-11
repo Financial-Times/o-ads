@@ -15,6 +15,9 @@ jobs:
           name: Install dependencies
           command: npx origami-build-tools@^7 install
       - run:
+          name: Check bundle sizes
+          command: npm run checksizes
+      - run:
           name: Download Browserstack tunnel
           command: |
             wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
@@ -67,9 +70,6 @@ jobs:
       - run:
           name: Run browser tests in browserstack
           command: npm run test-browser
-      - run:
-          name: Check bundle sizes
-          command: npm run checksizes
       - store-artifacts:
           path: test/cypress/videos
       - store-artifacts:
