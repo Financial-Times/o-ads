@@ -1,13 +1,23 @@
 {
 	"env": {
-		"qunit": true
+	  "qunit": true
 	},
 	"rules": {
-		"no-console": 0,
-		"no-empty-function": 0,
-		"no-prototype-builtins": 0
+	  "no-console": 0,
+	  "no-unused-expressions": 0,
+	  "no-empty-function": 0,
+	  "no-prototype-builtins": 0
 	},
 	"globals": {
-		"sinon": true
+	  "sinon": true,
+	  "describe": false,
+	  "it": false,
+	  "context": false,
+	  "expect": false,
+	  "cy": false,
+	  "beforeEach": false,
+	  "before": false,
+	  "afterEach": false,
+	  "after": false
 	}
-}
+  }

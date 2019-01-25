@@ -1,7 +1,6 @@
 module.exports = {
 	files: {
 		allow: [
-			'demos/src/BucksBunnyShort.mp4',
 			'demos/src/individual.mustache',
 			'demos/src/individualcustomtargeting.mustache',
 			'demos/src/individuallazyload.mustache',
@@ -11,6 +10,9 @@ module.exports = {
 			'demos/src/validatetraffic.mustache',
 			'demos/src/responsive-ad.mustache',
 			'demos/src/responsive-positions.mustache',
+			'demos/src/test-ad.mustache',
+			'demos/src/test-ad-responsive.mustache',
+			'demos/src/google-test.mustache',
 			'docs/Gemfile',
 			'docs/Gemfile.lock',
 			'docs/_posts/2016-08-19-welcome-to-jekyll.markdown',
