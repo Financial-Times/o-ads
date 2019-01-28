@@ -156,12 +156,6 @@
 				"network": 5887,
 				"site" : "test.5887.origami"
 			}
-		},
-		{
-			"name": "Google-Test",
-			"template": "/demos/src/google-test.mustache",
-			"expanded": true,
-			"description": ""
 		}
 	]
 }
