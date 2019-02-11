@@ -1,7 +1,7 @@
 import { on, off, once, broadcast } from './events';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
-import log from './log';
+import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
 import version from '../version';
 
 /**
@@ -12,6 +12,14 @@ import version from '../version';
 const hop = Object.prototype.hasOwnProperty;
 
 responsive.getCurrent = getCurrent;
+log.start = start;
+log.end = end;
+log.isOn = isOn;
+log.info = info;
+log.warn = warn;
+log.error = error;
+log.table = table;
+log.attributeTable = attributeTable;
 
 export {
 	on,
