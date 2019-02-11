@@ -31,10 +31,10 @@ const config = {
 		},
 		chrome: {
 			desiredCapabilities: {
-				browser: 'chrome',
-				browser_version: '70',
 				os: 'Windows',
 				os_version: '7',
+				browser: 'chrome',
+				browser_version: '70',
 				acceptSslCerts: true
 			}
 		},
@@ -43,49 +43,51 @@ const config = {
 				os: 'Windows',
   				os_version: '7',
 				browser: 'Firefox',
+				browser_version: '70',
 				acceptSslCerts: true
 			}
 		},
 		safari: {
 			desiredCapabilities: {
-				'os': 'OS X',
-  				'os_version': 'High Sierra',
-  				'browser': 'Safari',
+				os: 'OS X',
+  				os_version: 'High Sierra',
+				browser: 'Safari',
+				browser_version: '11.0',
 				acceptSslCerts: true
 			}
 		},
 		ie10: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '7',
-				'browser': 'IE',
-				'browser_version': '10.0',
+				os: 'Windows',
+				os_version: '7',
+				browser: 'IE',
+				browser_version: '10.0',
 				acceptSslCerts: true
 			}
 		},
 		ie11: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '8.1',
-				'browser': 'IE',
-				'browser_version': '11.0',
+				os: 'Windows',
+				os_version: '8.1',
+				browser: 'IE',
+				browser_version: '11.0',
 				acceptSslCerts: true
 			}
 		},
 		edge: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '10',
-				'browser': 'Edge',
-				'browser_version': '16.0',
+				os: 'Windows',
+				os_version: '10',
+				browser: 'Edge',
+				browser_version: '16.0',
 				acceptSslCerts: true
 			}
 		},
 		iphone_7: {
 			desiredCapabilities: {
-				'device': 'iPhone 7',
-				'realMobile': 'true',
-				'os_version': '10.3',
+				device: 'iPhone 7',
+				realMobile: 'true',
+				os_version: '10.3',
 				deviceOrientation: 'portrait',
 				autoAcceptAlerts: true,
 				acceptSslCerts: true
@@ -93,9 +95,9 @@ const config = {
 		},
 		galaxy_s8: {
 			desiredCapabilities: {
-				'device': 'Samsung Galaxy S8',
-				'realMobile': 'true',
-				'os_version': '7.0',
+				device: 'Samsung Galaxy S8',
+				realMobile: 'true',
+				os_version: '7.0',
 				acceptSslCerts: true
 			}
 		}
