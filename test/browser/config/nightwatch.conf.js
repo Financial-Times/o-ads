@@ -43,7 +43,7 @@ const config = {
 				os: 'Windows',
   				os_version: '7',
 				browser: 'Firefox',
-				browser_version: '70',
+				browser_version: '64.0',
 				acceptSslCerts: true
 			}
 		},
