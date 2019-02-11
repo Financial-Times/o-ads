@@ -1,8 +1,8 @@
 let callback;
 let breakpoints;
 let current;
-const utils = require('./index.js');
-const oViewport = require('o-viewport');
+import * as utils from './index';
+import oViewport from 'o-viewport';
 
 function getNearestBreakpoint() {
 	let winner;
@@ -34,11 +34,11 @@ function setCurrent(name) {
 	current = name;
 }
 
-function getCurrent() {
+export function getCurrent() {
 	return current;
 }
 
-function init(brps, cb) {
+export default function init(brps, cb) {
 
 	if (!utils.isFunction(cb)) {
 		// must have a call back function
@@ -57,6 +57,4 @@ function init(brps, cb) {
 	return getCurrent();
 }
 
-module.exports = init;
-module.exports.getCurrent = getCurrent;
-module.exports.setThrottleInterval = oViewport.setThrottleInterval;
+export const setThrottleInterval = oViewport.setThrottleInterval;

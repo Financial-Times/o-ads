@@ -82,4 +82,4 @@ Api.prototype.reset = function() {
 	});
 };
 
-module.exports = new Api();
+export default new Api();

@@ -7,9 +7,9 @@
 *
 * @author Robin Marr, robin.marr@ft.com
 */
-const config = require('../config');
-const utils = require('../utils');
-const targeting = require('../targeting');
+import config from '../config';
+import * as utils from '../utils';
+import targeting from '../targeting';
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
@@ -489,12 +489,9 @@ function updatePageTargeting(override) {
 	}
 }
 
-module.exports.init = init;
-module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = updatePageTargeting;
-module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
+export { init, updateCorrelator, updatePageTargeting, clearPageTargetingForKey };
 
-module.exports.debug = () => {
+export const debug = () => {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){

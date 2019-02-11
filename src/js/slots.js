@@ -1,7 +1,7 @@
 /* eslint no-inner-declarations: 1 */
-const utils = require('./utils');
-const config = require('./config');
-const Slot = require('./slot');
+import * as utils from './utils';
+import config from './config';
+import Slot from './slot';
 
 let screensize = null;
 
@@ -409,4 +409,4 @@ Slots.prototype.debug = function (){
 	log.end();
 };
 
-module.exports = new Slots();
+export default new Slots();
