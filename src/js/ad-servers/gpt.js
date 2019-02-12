@@ -243,8 +243,9 @@ function onRenderEnded(event) {
 	detail.creativeId = event.creativeId;
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
-	if (document.getElementById(iframeId)) {
-		detail.iframe = document.getElementById(iframeId);
+	let iFrameEl = document.getElementById(iframeId);
+	if (iFrameEl) {
+		detail.iframe = iFrameEl;
 		detail.iframe.setAttribute('tabindex', '-1');
 		detail.iframe.setAttribute('aria-hidden', 'true');
 		detail.iframe.setAttribute('role', 'presentation');
