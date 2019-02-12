@@ -243,7 +243,7 @@ function onRenderEnded(event) {
 	detail.creativeId = event.creativeId;
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
-	let iFrameEl = document.getElementById(iframeId);
+	const iFrameEl = document.getElementById(iframeId);
 	if (iFrameEl) {
 		detail.iframe = iFrameEl;
 		detail.iframe.setAttribute('tabindex', '-1');
