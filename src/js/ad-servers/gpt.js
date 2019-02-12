@@ -243,11 +243,15 @@ function onRenderEnded(event) {
 	detail.creativeId = event.creativeId;
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
-	detail.iframe = document.getElementById(iframeId);
-	detail.iframe.setAttribute('tabindex', '-1');
-	detail.iframe.setAttribute('aria-hidden', 'true');
-	detail.iframe.setAttribute('role', 'presentation');
-	detail.iframe.setAttribute('title', 'Advertisement');
+	if (document.getElementById(iframeId)) {
+		detail.iframe = document.getElementById(iframeId);
+		detail.iframe.setAttribute('tabindex', '-1');
+		detail.iframe.setAttribute('aria-hidden', 'true');
+		detail.iframe.setAttribute('role', 'presentation');
+		detail.iframe.setAttribute('title', 'Advertisement');
+	} else {
+		utils.log.warn('iFrame was not found.');
+	}
 	utils.broadcast('rendered', data);
 }
 
