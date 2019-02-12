@@ -2,6 +2,11 @@
 
 'use strict'; //eslint-disable-line
 
+import ads from '../../main.js';
+import * as utils from '../../src/js/utils';
+
+const Ads = ads.constructor;
+
 QUnit.config.testTimeout = 5000;
 QUnit.config.urlConfig.push({
 	id: 'DEBUG',
@@ -21,16 +26,13 @@ if (window.top === window) {
 
 // div for attaching HTML fixtures, will be emptied after each test
 document.body.insertAdjacentHTML('afterbegin', '<div id="qunit-fixtures"></div>');
-
+const helpers = require('./helpers.js');
 decorateModule();
 
 // Because Ads is a singleton using require('main.js') in each
 // test will always return the same instance of the object, using the
 // constructor gives each test access to a unique instance
 // this is added to the test context via the module decorator
-const Ads = require('../../main.js').constructor;
-const utils = require('../../src/js/utils');
-const helpers = require('./helpers.js');
 
 // Curry helper methods
 function addHelpers(obj) {

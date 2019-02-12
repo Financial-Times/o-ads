@@ -161,9 +161,7 @@ export const isElement = function(element) {
 	return element && element.nodeType === 1 && element.tagName || false;
 };
 
-export { extend };
-
-function extend() {
+export function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
 	let options;
