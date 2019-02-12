@@ -245,13 +245,13 @@ function onRenderEnded(event) {
 	detail.serviceName = event.serviceName;
 	const iFrameEl = document.getElementById(iframeId);
 	if (iFrameEl) {
+		iFrameEl.setAttribute('tabindex', '-1');
+		iFrameEl.setAttribute('aria-hidden', 'true');
+		iFrameEl.setAttribute('role', 'presentation');
+		iFrameEl.setAttribute('title', 'Advertisement');
 		detail.iframe = iFrameEl;
-		detail.iframe.setAttribute('tabindex', '-1');
-		detail.iframe.setAttribute('aria-hidden', 'true');
-		detail.iframe.setAttribute('role', 'presentation');
-		detail.iframe.setAttribute('title', 'Advertisement');
 	} else {
-		utils.log.warn('iFrame was not found.');
+		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
 	utils.broadcast('rendered', data);
 }
