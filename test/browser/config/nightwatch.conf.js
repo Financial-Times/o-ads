@@ -49,7 +49,7 @@ const config = {
 		safari: {
 			desiredCapabilities: {
 				'os': 'OS X',
-				'os_version': 'OS X Sierra',
+				'os_version': 'Sierra',
 				'browser': 'Safari',
 				acceptSslCerts: true
 			}
