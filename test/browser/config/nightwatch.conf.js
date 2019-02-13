@@ -38,19 +38,19 @@ const config = {
 				acceptSslCerts: true
 			}
 		},
-		// firefox: {
-		// 	desiredCapabilities: {
-		// 		os: 'Windows',
-		// 			os_version: '7',
-		// 		browser: 'Firefox',
-		// 		acceptSslCerts: true
-		// 	}
-		// },
+		firefox: {
+			desiredCapabilities: {
+				os: 'Windows',
+  				os_version: '7',
+				browser: 'Firefox',
+				acceptSslCerts: true
+			}
+		},
 		safari: {
 			desiredCapabilities: {
 				'os': 'OS X',
-				'os_version': 'Sierra',
-				'browser': 'Safari',
+  				'os_version': 'High Sierra',
+  				'browser': 'Safari',
 				acceptSslCerts: true
 			}
 		},
