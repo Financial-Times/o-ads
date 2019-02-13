@@ -44,7 +44,8 @@ const config = {
 				os_version: '10',
 				browser: 'Firefox',
 				acceptSslCerts: true,
-				version: '64'
+				version: '64',
+				host: 'bs-local.com'
 			}
 		},
 		safari: {
