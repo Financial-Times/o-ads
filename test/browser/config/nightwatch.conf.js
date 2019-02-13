@@ -41,7 +41,7 @@ const config = {
 		// firefox: {
 		// 	desiredCapabilities: {
 		// 		os: 'Windows',
-  	// 			os_version: '7',
+		// 			os_version: '7',
 		// 		browser: 'Firefox',
 		// 		acceptSslCerts: true
 		// 	}
@@ -49,8 +49,8 @@ const config = {
 		safari: {
 			desiredCapabilities: {
 				'os': 'OS X',
-  				'os_version': 'High Sierra',
-  				'browser': 'Safari',
+				'os_version': 'OS X Sierra',
+				'browser': 'Safari',
 				acceptSslCerts: true
 			}
 		},
