@@ -41,16 +41,17 @@ const config = {
 		firefox: {
 			desiredCapabilities: {
 				os: 'Windows',
-  				os_version: '7',
+				os_version: '7',
 				browser: 'Firefox',
-				acceptSslCerts: true
+				acceptSslCerts: true,
+				version: '64'
 			}
 		},
 		safari: {
 			desiredCapabilities: {
 				'os': 'OS X',
-  				'os_version': 'High Sierra',
-  				'browser': 'Safari',
+				'os_version': 'High Sierra',
+				'browser': 'Safari',
 				acceptSslCerts: true
 			}
 		},
