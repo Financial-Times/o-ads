@@ -38,14 +38,14 @@ const config = {
 				acceptSslCerts: true
 			}
 		},
-		firefox: {
-			desiredCapabilities: {
-				os: 'Windows',
-  				os_version: '7',
-				browser: 'Firefox',
-				acceptSslCerts: true
-			}
-		},
+		// firefox: {
+		// 	desiredCapabilities: {
+		// 		os: 'Windows',
+  	// 			os_version: '7',
+		// 		browser: 'Firefox',
+		// 		acceptSslCerts: true
+		// 	}
+		// },
 		safari: {
 			desiredCapabilities: {
 				'os': 'OS X',
