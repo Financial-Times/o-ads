@@ -41,7 +41,7 @@ const config = {
 		firefox: {
 			desiredCapabilities: {
 				os: 'Windows',
-				os_version: '7',
+				os_version: '10',
 				browser: 'Firefox',
 				acceptSslCerts: true,
 				version: '64'
