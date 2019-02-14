@@ -8,7 +8,7 @@
 * @author Robin Marr, robin.marr@ft.com
 */
 import config from '../config';
-import * as utils from '../utils';
+import utils from '../utils';
 import targeting from '../targeting';
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
@@ -29,6 +29,7 @@ function init() {
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
+	console.log('in gpt.init(), cmd is ', window.googletag.cmd);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
@@ -489,9 +490,7 @@ function updatePageTargeting(override) {
 	}
 }
 
-export { init, updateCorrelator, updatePageTargeting, clearPageTargetingForKey };
-
-export const debug = () => {
+function debug() {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){
@@ -501,4 +500,5 @@ export const debug = () => {
 	log.start('gpt');
 	log.attributeTable(conf);
 	log.end();
-};
+}
+export default { init, updateCorrelator, updatePageTargeting, clearPageTargetingForKey, debug };

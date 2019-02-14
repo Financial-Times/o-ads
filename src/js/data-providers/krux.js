@@ -1,5 +1,5 @@
 /* eslint new-cap: 0 */
-import * as utils from '../utils';
+import utils from '../utils';
 import config from '../config';
 import { Delegate } from 'ftdomdelegate';
 

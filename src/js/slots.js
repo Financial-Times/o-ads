@@ -1,5 +1,5 @@
 /* eslint no-inner-declarations: 1 */
-import * as utils from './utils';
+import utils from './utils';
 import config from './config';
 import Slot from './slot';
 

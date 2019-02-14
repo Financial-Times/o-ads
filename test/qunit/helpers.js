@@ -3,7 +3,7 @@
 'use strict'; //eslint-disable-line
 
 import oViewport from 'o-viewport';
-import * as utils from '../../src/js/utils';
+import utils from '../../src/js/utils';
 
 /* a URL that can be used in tests without causing 404 errors */
 export const nullUrl = 'base/test/qunit/mocks/null.js';
@@ -209,6 +209,18 @@ export const meta = function(data) {
 	return data;
 };
 
+// /* Mock global vars */
+// export const window = function(data) {
+// 	if ($.isPlainObject(data)) {
+// 		sandbox._globals = data;
+// 		Object.keys(data).forEach(function(name) {
+// 			window[name] = data[name];
+// 		});
+// 	} else {
+// 		throw new GlobalsException('Invalid data for globals.');
+// 	}
+// };
+
 /* Mock localStorage */
 export const localStorage = function(data) {
 	let canMock = Boolean(window.localStorage);
@@ -315,4 +327,10 @@ function MetaException(message) {
 function LocalStorageException(message) {
 	this.message = message;
 	this.name = 'LocalStorageException';
+}
+
+/* exception to be thrown for globals if invalid data is supplied */
+function GlobalsException(message) {
+	this.message = message;
+	this.name = 'GlobalsException';
 }

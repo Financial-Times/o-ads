@@ -1,4 +1,4 @@
-import * as utils from './utils';
+import utils from './utils';
 import config from './config';
 
 const VALID_SIZE_STRINGS = ['fluid'];

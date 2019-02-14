@@ -1,7 +1,7 @@
 let callback;
 let breakpoints;
 let current;
-import * as utils from './index';
+import utils from './index';
 import oViewport from 'o-viewport';
 
 function getNearestBreakpoint() {

@@ -1,12 +1,12 @@
 /* eslint valid-jsdoc: 0 */
 import config, { init } from './src/js/config';
 import slots from './src/js/slots';
-import * as gpt from './src/js/ad-servers/gpt';
+import gpt from './src/js/ad-servers/gpt';
 import krux from './src/js/data-providers/krux';
 import api from './src/js/data-providers/api';
 import moat from './src/js/data-providers/moat';
 import targeting from './src/js/targeting';
-import * as utils from './src/js/utils';
+import utils from './src/js/utils';
 
 function Ads() {
 	addDOMEventListener();
@@ -35,11 +35,13 @@ Ads.prototype.utils = utils;
 * @param options {object} a JSON object containing configuration for the current page
 */
 Ads.prototype.init = function(options) {
+	console.log('window in init()', window.googletag);
 	options = options || {};
 	this.config.init();
-	this.config(Object.assign(options, {
+	const configOptions = Object.assign(options, {
 		nonPersonalized : !options.disableConsentCookie,
-	}));
+	});
+	this.config(configOptions);
 
 	if (options.disableConsentCookie) {
 		this.consents = {
@@ -98,6 +100,7 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 };
 
 Ads.prototype.initLibrary = function() {
+	console.log('in initLibrary');
 	this.slots.init();
 	if (this.consents.programmatic) {
 		this.config({'nonPersonalized' : false });
