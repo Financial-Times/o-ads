@@ -328,9 +328,3 @@ function LocalStorageException(message) {
 	this.message = message;
 	this.name = 'LocalStorageException';
 }
-
-/* exception to be thrown for globals if invalid data is supplied */
-function GlobalsException(message) {
-	this.message = message;
-	this.name = 'GlobalsException';
-}
