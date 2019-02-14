@@ -35,7 +35,6 @@ Ads.prototype.utils = utils;
 * @param options {object} a JSON object containing configuration for the current page
 */
 Ads.prototype.init = function(options) {
-	console.log('window in init()', window.googletag);
 	options = options || {};
 	this.config.init();
 	const configOptions = Object.assign(options, {

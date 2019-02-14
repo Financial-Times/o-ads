@@ -29,7 +29,6 @@ function init() {
 	utils.on('render', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
-	console.log('in gpt.init(), cmd is ', window.googletag.cmd);
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
