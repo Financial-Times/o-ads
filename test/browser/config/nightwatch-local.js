@@ -18,7 +18,6 @@ if(process.env.CI) {
 			console.log("Finished running single nightwatch test.");
 		});
 	});
-	return;
 }
 
 require('dotenv').load();

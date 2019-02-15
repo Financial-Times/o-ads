@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   build:
     docker:
@@ -39,11 +40,10 @@ jobs:
           path: build-state
           destination: build-state
 
-  test:
+  test_bower:
     docker:
       - image: circleci/node:8-browsers
     working_directory: ~/app
-    
     steps:
       - attach_workspace:
           at: ~/
@@ -74,12 +74,48 @@ jobs:
           path: test/cypress/videos
       - store-artifacts:
           path: test/cypress/screenshots
+  
+  test_npm:
+    docker:
+      - image: circleci/node:8-browsers
+    working_directory: ~/app
+
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: rm -rf bower_components && npx occ 0.0.0 && rm -rf bower.json
+      - run:
+          # Running OBT test doesn't work because we need to pass a custom Karma
+          # config to OBT which OBT doesn't support yet
+          # command: npx origami-build-tools@^7 test
+          name: Run unit tests
+          command: npm run test-unit
+      - run:
+          name: Run demo server
+          command: npm run demo-server
+          background: true
+      - run:
+          name: Run integration tests
+          command: npm run test-cy:run
+      - run:
+          name: Connect browserstack tunnel
+          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          background: true
+      - run:
+          name: Waiting for the app to be ready
+          command: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      - run:
+          name: Run browser tests in browserstack
+          command: npm run test-browser
       
 workflows:
   version: 2
   build-test:
     jobs:
       - build
-      - test:
+      - test_bower:
           requires:
             - build
+      - test_npm:
+          requires:
+            - test_bower
