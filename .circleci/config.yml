@@ -83,7 +83,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: rm -rf bower_components && npx occ 0.0.0 && rm -rf bower.json
+      - run: npx occ 0.0.0
+      - run: rm -rf bower_components && rm -rf bower.json
       - run:
           # Running OBT test doesn't work because we need to pass a custom Karma
           # config to OBT which OBT doesn't support yet
