@@ -89,7 +89,7 @@ if (process.env.COVERAGE) {
 			// instrument only testing sources with Istanbul
 			{
 				test: /\.js$/,
-				use: { loader: 'istanbul-instrumenter-loader' },
+				use: { loader: 'istanbul-instrumenter-loader'},
 				include: path.resolve('src/js/')
 			}
 		]

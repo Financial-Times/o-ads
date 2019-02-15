@@ -39,7 +39,7 @@ function log() {
  * Determine if debug logging is on and if the type if supported
  * @param {string} type
  */
-log.isOn = function(type) {
+module.exports.isOn = function(type) {
 	/* istanbul ignore else  */
 	const debug = localStorage && localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
@@ -48,7 +48,7 @@ log.isOn = function(type) {
 /**
  * Log a warning message
  */
-log.warn = function() {
+module.exports.warn = function() {
 	const args = ['warn'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -56,7 +56,7 @@ log.warn = function() {
 /**
  * Log an error message
  */
-log.error = function() {
+module.exports.error = function() {
 	const args = ['error'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -64,7 +64,7 @@ log.error = function() {
 /**
  * Log an info message
  */
-log.info = function() {
+module.exports.info = function() {
 	const args = ['info'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -73,7 +73,7 @@ log.info = function() {
  * Start a collapsed group
  * @param {string} group the name of the group, defaults to o-ads
  */
-log.start = function(group) {
+module.exports.start = function(group) {
 	if (!log.isOn('groupCollapsed')) {
 		return;
 	}
@@ -84,7 +84,7 @@ log.start = function(group) {
 /**
  * End a collapsed group
  */
-log.end = function() {
+module.exports.end = function() {
 	if (!log.isOn('groupEnd')) {
 		return;
 	}
@@ -92,7 +92,7 @@ log.end = function() {
 	window.console.groupEnd();
 };
 
-log.table = function(data, columns) {
+module.exports.table = function(data, columns) {
 	if (log.isOn('log') && window.console) {
 		if(console.table) {
 			console.table(data, columns);
@@ -102,7 +102,7 @@ log.table = function(data, columns) {
 	}
 };
 
-log.attributeTable = function(object, columns) {
+module.exports.attributeTable = function(object, columns) {
 	const utils = require('../utils');
 	if (log.isOn('log') && window.console) {
 		if (object && console.table) {

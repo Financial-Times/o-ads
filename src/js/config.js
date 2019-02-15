@@ -121,7 +121,6 @@ Config.prototype.init = function() {
 };
 
 const config = new Config();
-const access = config.access.bind(config);
-access.init = config.init.bind(config);
-access.clear = config.clear.bind(config);
-module.exports = access;
+module.exports = config.access.bind(config);
+module.exports.init = config.init.bind(config);
+module.exports.clear = config.clear.bind(config);

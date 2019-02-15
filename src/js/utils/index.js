@@ -5,7 +5,7 @@
  */
 const hop = Object.prototype.hasOwnProperty;
 
-const utils = {};
+const utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
  * IE returns [object Object] for null and undefined so we need to filter those
@@ -69,7 +69,7 @@ function curryIsMethods(obj, classNames) {
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is the window obj, otherwise false
  */
-utils.isWindow = function(obj) {
+module.exports.isWindow = function(obj) {
 	return obj && obj !== null && obj === window;
 };
 
@@ -80,7 +80,7 @@ utils.isWindow = function(obj) {
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is plain false otherwise
  */
-utils.isPlainObject = function(obj) {
+module.exports.isPlainObject = function(obj) {
 	const hop = Object.prototype.hasOwnProperty;
 
 	// Must be an Object.
@@ -114,11 +114,11 @@ utils.isPlainObject = function(obj) {
  * @param {object} str The object to be tested
  * @returns {boolean} true if the object is a string with a length greater than 0
  */
-utils.isNonEmptyString = function(str) {
+module.exports.isNonEmptyString = function(str) {
 	return utils.isString(str) && Boolean(str.length);
 };
 
-utils.isElement = function(element) {
+module.exports.isElement = function(element) {
 	return element && element.nodeType === 1 && element.tagName || false;
 };
 
@@ -130,7 +130,7 @@ utils.isElement = function(element) {
  * @param {object} objects All other params are objects to be merged into the target
  * @returns {object} The target object extended with the other params
  */
-utils.extend = extend;
+module.exports.extend = extend;
 
 function extend() {
 	/* jshint forin: false */
@@ -216,7 +216,7 @@ function extend() {
  * @return {object}
  *
  */
-utils.hash = function(str, delimiter, pairing) {
+module.exports.hash = function(str, delimiter, pairing) {
 	let pair;
 	let value;
 	const hash = {};
@@ -245,7 +245,7 @@ utils.hash = function(str, delimiter, pairing) {
  * @param {function} errorcb A function to run if the script fails to load
  * @returns {HTMLElement} the created script tag
  */
-utils.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
+module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
 	let hasRun = false;
@@ -301,7 +301,7 @@ utils.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
  * @returns {string} document.referrer
  */
 /* istanbul ignore next - cannot reliably test value of referer */
-utils.getReferrer = function() {
+module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
 
@@ -310,7 +310,7 @@ utils.getReferrer = function() {
  * @param {string} string the string to parse
  * @returns {string}
  */
-utils.dehyphenise = function(string) {
+module.exports.dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
 	});
@@ -321,7 +321,7 @@ utils.dehyphenise = function(string) {
  * @param {string|} name the name of the attribute to parse
  * @returns {string}
  */
-utils.parseAttributeName = function(attribute) {
+module.exports.parseAttributeName = function(attribute) {
 	const name = utils.isString(attribute) ? attribute : attribute.name;
 	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
@@ -332,7 +332,7 @@ utils.parseAttributeName = function(attribute) {
  * @returns {string}
  */
 /* istanbul ignore next - cannot reliably test value of location */
-utils.getLocation = function() {
+module.exports.getLocation = function() {
 	return document.location.href || '';
 };
 
@@ -342,7 +342,7 @@ utils.getLocation = function() {
  * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
  * @returns {string}
  */
-utils.getQueryString = function() {
+module.exports.getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
 
@@ -353,7 +353,7 @@ utils.getQueryString = function() {
  * @param url
  * @returns {string | null}
  */
-utils.getQueryParamByName = function(name, url) {
+module.exports.getQueryParamByName = function(name, url) {
 	url = url || window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
 	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -367,7 +367,7 @@ utils.getQueryParamByName = function(name, url) {
  * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
  * @returns {string}
  */
-utils.getTimestamp = function() {
+module.exports.getTimestamp = function() {
 	const now = new Date();
 	return [
 		now.getFullYear(),
@@ -386,7 +386,7 @@ utils.getTimestamp = function() {
  * @param {window}  a window object
  * @returns {String|Boolean}
  */
-utils.iframeToSlotName = function(iframeWindow) {
+module.exports.iframeToSlotName = function(iframeWindow) {
 	// capture all iframes in the page in a live node list
 	const iframes = document.getElementsByTagName('iframe');
 	let slotName;
@@ -418,23 +418,22 @@ utils.iframeToSlotName = function(iframeWindow) {
 	return false;
 };
 
-utils.buildObjectFromArray = function buildObjectFromArray(targetObject) {
+module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject) {
 	return targetObject.reduce((prev, data) => {
 		prev[data.key] = data.value;
 		return prev;
 	}, {});
 };
 
-utils.cookie = function(name) {
+module.exports.cookie = function(name) {
 	const val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return val ? val.pop() : null;
 };
 
-utils.getVersion = () => require('../version.js') || 'UNKNOWN';
+module.exports.getVersion = () => require('../version.js') || 'UNKNOWN';
 
-extend(utils, require('./events.js'));
-extend(utils, require('./messenger.js'));
-utils.responsive = require('./responsive.js');
-utils.log = require('./log');
-curryIsMethods(utils);
-module.exports = utils;
+extend(module.exports, require('./events.js'));
+extend(module.exports, require('./messenger.js'));
+module.exports.responsive = require('./responsive.js');
+module.exports.log = require('./log');
+curryIsMethods(module.exports);

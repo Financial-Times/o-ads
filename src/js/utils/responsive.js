@@ -58,5 +58,5 @@ function init(brps, cb) {
 }
 
 module.exports = init;
-init.getCurrent = getCurrent;
-init.setThrottleInterval = oViewport.setThrottleInterval;
+module.exports.getCurrent = getCurrent;
+module.exports.setThrottleInterval = oViewport.setThrottleInterval;

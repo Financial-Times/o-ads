@@ -5,14 +5,13 @@
  * @see utils
  */
 
-const events = {};
 /**
 * Broadscasts an o-ads event
 * @param {string} name The name of the event
 * @param {object} data The data to send as event detail
 * @param {HTMLElement} target The element to attach the event listener to
 */
-events.broadcast = broadcast;
+module.exports.broadcast = broadcast;
 function broadcast(name, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
@@ -32,7 +31,7 @@ function broadcast(name, data, target) {
 * @param {HTMLElement} target The element to attach the event listener to
 */
 
-events.on = on;
+module.exports.on = on;
 function on(name, callback, target) {
 	name = `oAds.${name}`;
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
@@ -46,7 +45,7 @@ function on(name, callback, target) {
 * @param {function} callback The function on the event to be removed
 * @param {HTMLElement} target The element the event listener is attached to
 */
-events.off = off;
+module.exports.off = off;
 function off(name, callback, target) {
 	name = `oAds.${name}`;
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
@@ -60,7 +59,7 @@ function off(name, callback, target) {
 * @param {function} callback The function to execute on the event
 * @param {HTMLElement} target The element to attach the event listener to
 */
-events.once = once;
+module.exports.once = once;
 function once(name, callback, target) {
 	const handler = function(event) {
 		/* istanbul ignore next: ignore the final fallback as hard trigger */
@@ -75,4 +74,3 @@ function once(name, callback, target) {
 	};
 	on(name, handler, target);
 }
-module.exports = events;
