@@ -493,13 +493,13 @@ function updatePageTargeting(override) {
 		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
 	}
 }
+const gpt = {}
+gpt.init = init;
+gpt.updateCorrelator = updateCorrelator;
+gpt.updatePageTargeting = updatePageTargeting;
+gpt.clearPageTargetingForKey = clearPageTargetingForKey;
 
-module.exports.init = init;
-module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = updatePageTargeting;
-module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
-
-module.exports.debug = () => {
+gpt.debug = () => {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){
@@ -510,3 +510,5 @@ module.exports.debug = () => {
 	log.attributeTable(conf);
 	log.end();
 };
+
+module.exports = gpt;

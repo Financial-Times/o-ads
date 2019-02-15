@@ -39,7 +39,7 @@ function log() {
  * Determine if debug logging is on and if the type if supported
  * @param {string} type
  */
-module.exports.isOn = function(type) {
+log.isOn = function(type) {
 	/* istanbul ignore else  */
 	const debug = localStorage && localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
@@ -48,7 +48,7 @@ module.exports.isOn = function(type) {
 /**
  * Log a warning message
  */
-module.exports.warn = function() {
+log.warn = function() {
 	const args = ['warn'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -56,7 +56,7 @@ module.exports.warn = function() {
 /**
  * Log an error message
  */
-module.exports.error = function() {
+log.error = function() {
 	const args = ['error'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -64,7 +64,7 @@ module.exports.error = function() {
 /**
  * Log an info message
  */
-module.exports.info = function() {
+log.info = function() {
 	const args = ['info'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -73,7 +73,7 @@ module.exports.info = function() {
  * Start a collapsed group
  * @param {string} group the name of the group, defaults to o-ads
  */
-module.exports.start = function(group) {
+log.start = function(group) {
 	if (!log.isOn('groupCollapsed')) {
 		return;
 	}
@@ -84,7 +84,7 @@ module.exports.start = function(group) {
 /**
  * End a collapsed group
  */
-module.exports.end = function() {
+log.end = function() {
 	if (!log.isOn('groupEnd')) {
 		return;
 	}
@@ -92,7 +92,7 @@ module.exports.end = function() {
 	window.console.groupEnd();
 };
 
-module.exports.table = function(data, columns) {
+log.table = function(data, columns) {
 	if (log.isOn('log') && window.console) {
 		if(console.table) {
 			console.table(data, columns);
@@ -102,7 +102,7 @@ module.exports.table = function(data, columns) {
 	}
 };
 
-module.exports.attributeTable = function(object, columns) {
+log.attributeTable = function(object, columns) {
 	const utils = require('../utils');
 	if (log.isOn('log') && window.console) {
 		if (object && console.table) {
