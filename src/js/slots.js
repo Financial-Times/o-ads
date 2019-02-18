@@ -326,25 +326,25 @@ Slots.prototype.initLazyLoading = function(slotConfig) {
 		return lazyLoadingConfig.root == observer.root; // eslint-disable-line eqeqeq
 	});
 
+	function onChange(changes) {
+		//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
+		/* istanbul ignore next */
+		changes
+			.filter(a => a.intersectionRect.height || a.intersectionRect.width || a.intersectionRect.top || a.intersectionRect.left)
+			.sort((a,b) => a.intersectionRect.top - b.intersectionRect.top)
+			.forEach((change) => {
+				const slotName = change.target.getAttribute('data-o-ads-name');
+				/* istanbul ignore else */
+				if(slotName) {
+					invokeMethodOnSlots.call(this, slotName, 'render');
+				}
+			});
+	}
 	// If we don't already have an instance of the observer, and it is enabled globally or on a slot (force), then create one.
 	/* istanbul ignore else	*/
 	if('IntersectionObserver' in window && !lazyLoadingObserver && Boolean(lazyLoadingConfig)) {
 		const options = {};
 
-		function onChange(changes) {
-			//Execute the changes in the order they appear on the page. This is because the top slot often determines what the lower slots display.
-			/* istanbul ignore next */
-			changes
-				.filter(a => a.intersectionRect.height || a.intersectionRect.width || a.intersectionRect.top || a.intersectionRect.left)
-				.sort((a,b) => a.intersectionRect.top - b.intersectionRect.top)
-				.forEach((change) => {
-					const slotName = change.target.getAttribute('data-o-ads-name');
-					/* istanbul ignore else */
-					if(slotName) {
-						invokeMethodOnSlots.call(this, slotName, 'render');
-					}
-				});
-		}
 		/* istanbul ignore else	*/
 		if(typeof lazyLoadingConfig === 'object') {
 			/* istanbul ignore else	*/
