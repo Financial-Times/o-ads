@@ -5,9 +5,9 @@ jobs:
       - image: circleci/node:10-browsers
     steps:
       - checkout
-      - run: npm config set prefix "$HOME/.local"
-      - run: npm i -g origami-build-tools@^7
-      - run: $HOME/.local/bin/obt install
+      - run: npm i
+      - run: npm run obt -- install
+      - run: npm run obt -- build
       - run: npm run checksizes
       - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
       # Running OBT test doesn't work because we need to pass a custom Karma
@@ -33,14 +33,14 @@ jobs:
     steps:
       - checkout
       - run: npx occ 0.0.0
-      - run: npm config set prefix "$HOME/.local"
-      - run: npm i -g origami-build-tools@^7
-      - run: $HOME/.local/bin/obt install --ignore-bower
+      - run: npm run occ
+      - run: npm i
+      - run: npm run obt -- install --ignore-bower
+      - run: npm run obt -- build --ignore-bower
       - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
       # Running OBT test doesn't work because we need to pass a custom Karma
       # config to OBT which OBT doesn't support yet
       # command: npx origami-build-tools@^7 test
-      - run: mv bower.json _bower.json
       - run: npm run test-unit
       - run:
           command: npm run demo-server -- --ignore-bower
@@ -56,7 +56,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - test_bower
-      - test_npm:
+      - test_npm
+      - test_bower:
           requires:
-            - test_bower
+            - test_npm
