@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       - run: npx occ 0.0.0
-      - run: npm run occ
+      - run: rm -f bower.json
       - run: npm i
       - run: npm run obt -- install --ignore-bower
       - run: npm run obt -- build --ignore-bower
