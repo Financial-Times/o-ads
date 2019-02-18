@@ -94,7 +94,7 @@ jobs:
           command: npm run test-unit
       - run:
           name: Run demo server
-          command: npm run demo-server
+          command: npm run demo-server -- --ignore-bower
           background: true
       - run:
           name: Run integration tests
