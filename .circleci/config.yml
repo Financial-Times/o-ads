@@ -40,6 +40,7 @@ jobs:
       # Running OBT test doesn't work because we need to pass a custom Karma
       # config to OBT which OBT doesn't support yet
       # command: npx origami-build-tools@^7 test
+      - run: mv bower.json _bower.json
       - run: npm run test-unit
       - run:
           command: npm run demo-server -- --ignore-bower
@@ -50,7 +51,7 @@ jobs:
           background: true
       - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
       - run: npm run test-browser
-      
+
 workflows:
   version: 2
   test:
