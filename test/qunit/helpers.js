@@ -4,6 +4,9 @@
 
 import oViewport from 'o-viewport';
 import utils from '../../src/js/utils';
+import gptMock from './mocks/gpt-mock';
+
+export const gpt = gptMock.googletag;
 
 /* a URL that can be used in tests without causing 404 errors */
 export const nullUrl = 'base/test/qunit/mocks/null.js';
@@ -38,9 +41,6 @@ export const fixtures = {
 	anotherContent: require('../fixtures/another-content-api-response.json'),
 	concept: require('../fixtures/concept-api-response.json')
 };
-
-/* the google library mock*/
-export const gpt = require('./mocks/gpt-mock');
 
 /* A method for logging warnings about tests that didn't run for some reason */
 /* such as tests that mock read only properties in a browser that doesn't allow this */
@@ -309,7 +309,7 @@ export const clear = function() {
 	});
 	sandbox._windowEventListeners = [];
 	// restore stubs & mocks
-	gpt.restore();
+	gptMock.restore();
 	sandbox.restore();
 };
 

@@ -1,5 +1,5 @@
 /* eslint valid-jsdoc: 0 */
-import config, { init } from './src/js/config';
+import config, { init, clear } from './src/js/config';
 import slots from './src/js/slots';
 import gpt from './src/js/ad-servers/gpt';
 import krux from './src/js/data-providers/krux';
@@ -17,6 +17,7 @@ function Ads() {
 }
 
 config.init = init;
+config.clear = clear;
 
 // bung all our modules on the protoype
 Ads.prototype.config = config;
@@ -99,7 +100,6 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 };
 
 Ads.prototype.initLibrary = function() {
-	console.log('in initLibrary');
 	this.slots.init();
 	if (this.consents.programmatic) {
 		this.config({'nonPersonalized' : false });
