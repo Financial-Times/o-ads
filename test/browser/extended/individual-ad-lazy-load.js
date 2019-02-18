@@ -8,8 +8,7 @@ module.exports = {
 
 	'Step 1: go to lazy load demo page': function (browser) {
 		browser
-			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Individual-Ad-Lazy-Load demo', 'Page title is correct');
+			.waitForElementVisible('body', wait);
 	},
 	'Step 2: verify the leaderboard advert is not displayed and scroll down': function (browser) {
 		browser
