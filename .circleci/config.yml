@@ -50,7 +50,7 @@ jobs:
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run: npm run test-browser
+      - run: npm run test-browser-extended
 
 workflows:
   version: 2
