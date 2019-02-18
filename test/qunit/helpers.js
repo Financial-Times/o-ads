@@ -5,6 +5,11 @@
 import oViewport from 'o-viewport';
 import utils from '../../src/js/utils';
 import gptMock from './mocks/gpt-mock';
+import userFixtures from '../fixtures/user-api-response.json';
+import userAnonymousFixtures from '../fixtures/user-api-anonymous-response.json';
+import contentFixtures from '../fixtures/content-api-response.json';
+import anotherContentFixtures from '../fixtures/another-content-api-response.json';
+import conceptFixtures from '../fixtures/concept-api-response.json';
 
 export const gpt = gptMock.googletag;
 
@@ -35,11 +40,11 @@ export const createDummyFrame = function (content, target) {
 };
 
 export const fixtures = {
-	user: require('../fixtures/user-api-response.json'),
-	userAnonymous: require('../fixtures/user-api-anonymous-response.json'),
-	content: require('../fixtures/content-api-response.json'),
-	anotherContent: require('../fixtures/another-content-api-response.json'),
-	concept: require('../fixtures/concept-api-response.json')
+	user: userFixtures,
+	userAnonymous: userAnonymousFixtures,
+	content: contentFixtures,
+	anotherContent: anotherContentFixtures,
+	concept: conceptFixtures
 };
 
 /* A method for logging warnings about tests that didn't run for some reason */
