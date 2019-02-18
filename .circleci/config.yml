@@ -36,6 +36,7 @@ jobs:
       - run: npm config set prefix "$HOME/.local"
       - run: npm i -g origami-build-tools@^7
       - run: $HOME/.local/bin/obt install --ignore-bower
+      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
       # Running OBT test doesn't work because we need to pass a custom Karma
       # config to OBT which OBT doesn't support yet
       # command: npx origami-build-tools@^7 test
