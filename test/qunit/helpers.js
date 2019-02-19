@@ -5,6 +5,7 @@
 import oViewport from 'o-viewport';
 import utils from '../../src/js/utils';
 import gptMock from './mocks/gpt-mock';
+
 import userFixtures from '../fixtures/user-api-response.json';
 import userAnonymousFixtures from '../fixtures/user-api-anonymous-response.json';
 import contentFixtures from '../fixtures/content-api-response.json';
@@ -17,11 +18,14 @@ export const gpt = gptMock.googletag;
 export const nullUrl = 'base/test/qunit/mocks/null.js';
 
 /* container for fixtures */
-export const fixturesContainer = document.getElementById('qunit-fixtures');
-fixturesContainer.add = function(html) {
-	this.insertAdjacentHTML('beforeend', html);
-	return this.lastChild;
+export const fixturesContainer = {
+	get: () => document.getElementById('qunit-fixtures'),
+	add: (html) => {
+		fixturesContainer.get().insertAdjacentHTML('beforeend', html);
+		return fixturesContainer.get().lastChild;
+	}
 };
+
 
 /* create an iframe and return it's context for testing post message */
 export const createDummyFrame = function (content, target) {
@@ -214,18 +218,6 @@ export const meta = function(data) {
 	return data;
 };
 
-// /* Mock global vars */
-// export const window = function(data) {
-// 	if ($.isPlainObject(data)) {
-// 		sandbox._globals = data;
-// 		Object.keys(data).forEach(function(name) {
-// 			window[name] = data[name];
-// 		});
-// 	} else {
-// 		throw new GlobalsException('Invalid data for globals.');
-// 	}
-// };
-
 /* Mock localStorage */
 export const localStorage = function(data) {
 	let canMock = Boolean(window.localStorage);
@@ -333,3 +325,24 @@ function LocalStorageException(message) {
 	this.message = message;
 	this.name = 'LocalStorageException';
 }
+
+export default {
+	gpt,
+	nullUrl,
+	fixturesContainer,
+	createDummyFrame,
+	fixtures,
+	warn,
+	trigger,
+	sandbox,
+	spy,
+	stub,
+	mock,
+	date,
+	server,
+	viewport,
+	meta,
+	localStorage,
+	clear,
+	deleteCookie
+};

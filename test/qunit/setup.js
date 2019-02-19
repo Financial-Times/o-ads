@@ -4,6 +4,7 @@
 
 import ads from '../../main.js';
 import utils from '../../src/js/utils';
+import helpers from './helpers';
 
 const Ads = ads.constructor;
 
@@ -26,7 +27,6 @@ if (window.top === window) {
 
 // div for attaching HTML fixtures, will be emptied after each test
 document.body.insertAdjacentHTML('afterbegin', '<div id="qunit-fixtures"></div>');
-const helpers = require('./helpers.js');
 decorateModule();
 
 // Because Ads is a singleton using require('main.js') in each
