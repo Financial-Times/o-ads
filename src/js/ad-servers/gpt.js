@@ -1,3 +1,5 @@
+'use strict'; //eslint-disable-line
+
 /*globals googletag: true */
 /* eslint no-inner-declarations: 1 */
 
