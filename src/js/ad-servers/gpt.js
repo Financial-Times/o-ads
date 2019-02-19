@@ -243,11 +243,16 @@ function onRenderEnded(event) {
 	detail.creativeId = event.creativeId;
 	detail.lineItemId = event.lineItemId;
 	detail.serviceName = event.serviceName;
-	detail.iframe = document.getElementById(iframeId);
-	detail.iframe.setAttribute('tabindex', '-1');
-	detail.iframe.setAttribute('aria-hidden', 'true');
-	detail.iframe.setAttribute('role', 'presentation');
-	detail.iframe.setAttribute('title', 'Advertisement');
+	const iFrameEl = document.getElementById(iframeId);
+	if (iFrameEl) {
+		iFrameEl.setAttribute('tabindex', '-1');
+		iFrameEl.setAttribute('aria-hidden', 'true');
+		iFrameEl.setAttribute('role', 'presentation');
+		iFrameEl.setAttribute('title', 'Advertisement');
+		detail.iframe = iFrameEl;
+	} else {
+		utils.log.warn('No iFrame found matching GPT SlotID');
+	}
 	utils.broadcast('rendered', data);
 }
 
