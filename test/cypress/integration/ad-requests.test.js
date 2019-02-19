@@ -27,8 +27,6 @@ describe('Integration tests', () => {
 			const url = xhr.xhr.responseURL;
 			const qsp = getQueryParams(url);
 			const cust_params = getQueryParams(qsp.cust_params);
-			console.log('qsp', qsp);
-			console.log('cust_params', cust_params);
 
 			// Check sizes are converted and set
 			expect(qsp.sz).to.equal('300x250|180x50|160x600|728x90|970x90|970x66|300x600|970x250|300x1050|320x50|88x31|120x60|2x2');

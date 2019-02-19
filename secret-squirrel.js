@@ -1,7 +1,6 @@
 module.exports = {
 	files: {
 		allow: [
-			'demos/src/BucksBunnyShort.mp4',
 			'demos/src/individual.mustache',
 			'demos/src/individualcustomtargeting.mustache',
 			'demos/src/individuallazyload.mustache',
