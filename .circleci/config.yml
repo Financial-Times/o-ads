@@ -51,6 +51,14 @@ jobs:
           background: true
       - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
       - run: npm run test-browser-extended
+  publish_to_npm:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npx occ ${CIRCLE_TAG##v}
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
+      - run: npm publish --access public
 
 workflows:
   version: 2
@@ -60,3 +68,9 @@ workflows:
       - test_bower:
           requires:
             - test_npm
+      - publish_to_npm:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
