@@ -11,7 +11,7 @@
 // 	return options;
 // }
 
-// const path = require('path');
+const path = require('path');
 const BowerResolvePlugin = require('bower-resolve-webpack-plugin');
 
 let options = {
@@ -84,16 +84,20 @@ if (process.env.COVERAGE) {
 		},
 		fixWebpackSourcePaths: true
 	};
-	// options.webpack.module = {
-	// 	rules: [
-	// 		// instrument only testing sources with Istanbul
-	// 		{
-	// 			test: /\.js$/,
-	// 			use: { loader: 'istanbul-instrumenter-loader' },
-	// 			include: path.resolve('src/js/')
-	// 		}
-	// 	]
-	// };
+	options.webpack.module = {
+		rules: [
+			// instrument only testing sources with Istanbul
+			{
+				test: /\.js$/,
+				use: {
+					loader: 'istanbul-instrumenter-loader',
+					options: { esModules: true }
+				},
+				enforce: 'post',
+				include: path.resolve('src/js/'),
+			}
+		]
+	};
 }
 
 if (process.env.CIRCLECI) { } // eslint-disable-line no-empty
