@@ -1,5 +1,3 @@
-'use strict'; //eslint-disable-line
-
 /* eslint new-cap: 0 */
 import utils from '../utils';
 import config from '../config';

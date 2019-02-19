@@ -1,4 +1,3 @@
-'use strict'; //eslint-disable-line
 
 function Api() {
 	this.data = [];

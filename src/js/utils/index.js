@@ -1,5 +1,3 @@
-'use strict'; //eslint-disable-line
-
 import { on, off, once, broadcast } from './events';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';

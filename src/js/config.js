@@ -1,5 +1,3 @@
-'use strict'; //eslint-disable-line
-
 //TODO remove all ft.com specific stuff so we can remove this as a global
 // currently all FT specific stuff is wrapped in an if window.FT
 
