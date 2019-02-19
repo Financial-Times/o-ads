@@ -68,6 +68,11 @@ QUnit.test('OADS_VERSION is not set if not provided in config', function(assert)
 	assert.equal(result.OADS_VERSION, undefined , 'OADS_VERSION parameter should not be present when passOAdsVersion is not set');
 });
 
+QUnit.test('socialflow parameter', function(assert) {
+	this.stub(this.ads.utils, 'getQueryParamByName').returns("ohheey");
+	assert.deepEqual(this.ads.targeting.socialFlow(), { socialflow: 'ohheey'});
+});
+
 QUnit.test("social referrer", function(assert) {
 	let result;
 	const referrer = this.stub(this.ads.utils, 'getReferrer');

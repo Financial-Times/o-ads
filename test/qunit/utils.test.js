@@ -65,6 +65,11 @@ QUnit.test('isObject method', function(assert) {
 	assert.ok(!this.ads.utils.isObject(true), 'Boolean returns false');
 });
 
+QUnit.test('isStorage method', function(assert) {
+	assert.ok($.type(this.ads.utils.isStorage) === 'function', 'The function exists');
+	assert.ok(this.ads.utils.isStorage(window.localStorage), 'Storage');
+});
+
 QUnit.test('isWindow method', function(assert) {
 	assert.ok($.type(this.ads.utils.isWindow) === 'function', 'The function exists');
 	assert.ok(this.ads.utils.isWindow(window), 'window');

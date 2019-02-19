@@ -236,7 +236,7 @@ export function extend() {
  * @return {object}
  *
  */
-const hash = function(str, delimiter, pairing) {
+export const hash = function(str, delimiter, pairing) {
 	let pair;
 	let value;
 	const hash = {};
@@ -265,7 +265,7 @@ const hash = function(str, delimiter, pairing) {
  * @param {function} errorcb A function to run if the script fails to load
  * @returns {HTMLElement} the created script tag
  */
-const attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
+export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
 	let hasRun = false;
@@ -321,7 +321,7 @@ const attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
  * @returns {string} document.referrer
  */
 /* istanbul ignore next - cannot reliably test value of referer */
-const getReferrer = function() {
+export const getReferrer = function() {
 	return document.referrer || '';
 };
 
@@ -330,7 +330,7 @@ const getReferrer = function() {
  * @param {string} string the string to parse
  * @returns {string}
  */
-const dehyphenise = function(string) {
+export const dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
 	});
@@ -341,7 +341,7 @@ const dehyphenise = function(string) {
  * @param {string|} name the name of the attribute to parse
  * @returns {string}
  */
-const parseAttributeName = function(attribute) {
+export const parseAttributeName = function(attribute) {
 	const name = isString(attribute) ? attribute : attribute.name;
 	return dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
@@ -352,7 +352,7 @@ const parseAttributeName = function(attribute) {
  * @returns {string}
  */
 /* istanbul ignore next - cannot reliably test value of location */
-const getLocation = function() {
+export const getLocation = function() {
 	return document.location.href || '';
 };
 
@@ -362,7 +362,7 @@ const getLocation = function() {
  * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
  * @returns {string}
  */
-const getQueryString = function() {
+export const getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
 
@@ -372,7 +372,7 @@ const getQueryString = function() {
  * @param url
  * @returns {string | null}
  */
-const getQueryParamByName = function(name, url) {
+export const getQueryParamByName = function(name, url) {
 	url = url || window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
 	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -386,7 +386,7 @@ const getQueryParamByName = function(name, url) {
  * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
  * @returns {string}
  */
-const getTimestamp = function() {
+export const getTimestamp = function() {
 	const now = new Date();
 	return [
 		now.getFullYear(),
@@ -405,7 +405,7 @@ const getTimestamp = function() {
  * @param {window}  a window object
  * @returns {String|Boolean}
  */
-const iframeToSlotName = function(iframeWindow) {
+export const iframeToSlotName = function(iframeWindow) {
 	// capture all iframes in the page in a live node list
 	const iframes = document.getElementsByTagName('iframe');
 	let slotName;
@@ -437,19 +437,19 @@ const iframeToSlotName = function(iframeWindow) {
 	return false;
 };
 
-const buildObjectFromArray = function buildObjectFromArray(targetObject) {
+export const buildObjectFromArray = function buildObjectFromArray(targetObject) {
 	return targetObject.reduce((prev, data) => {
 		prev[data.key] = data.value;
 		return prev;
 	}, {});
 };
 
-const cookie = function(name) {
+export const cookie = function(name) {
 	const val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return val ? val.pop() : null;
 };
 
-const getVersion = () => version || 'UNKNOWN';
+export const getVersion = () => version || 'UNKNOWN';
 
 export default {
 	on,

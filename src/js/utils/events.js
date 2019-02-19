@@ -23,6 +23,12 @@ export function broadcast(name, data, target) {
 	target.dispatchEvent(new CustomEvent(name, opts));
 }
 
+/**
+* Sets an event listener for an oAds event
+* @param {string} name The name of the event
+* @param {function} callback The function to execute on the event
+* @param {HTMLElement} target The element to attach the event listener to
+*/
 export function on(name, callback, target) {
 	name = `oAds.${name}`;
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
@@ -30,6 +36,12 @@ export function on(name, callback, target) {
 	target.addEventListener(name, callback);
 }
 
+/**
+* Removes an event listener for an oAds event
+* @param {string} name The name of the event
+* @param {function} callback The function on the event to be removed
+* @param {HTMLElement} target The element the event listener is attached to
+*/
 export function off(name, callback, target) {
 	name = `oAds.${name}`;
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
@@ -37,6 +49,12 @@ export function off(name, callback, target) {
 	target.removeEventListener(name, callback);
 }
 
+/**
+* Sets a one time event listener for an oAds event
+* @param {string} name The name of the event
+* @param {function} callback The function to execute on the event
+* @param {HTMLElement} target The element to attach the event listener to
+*/
 export function once(name, callback, target) {
 	const handler = function(event) {
 		/* istanbul ignore next: ignore the final fallback as hard trigger */

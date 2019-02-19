@@ -3,7 +3,7 @@
 
 /**
 * @fileOverview
-* ad server modukes for o-ads implementing Google publisher tags ad requests.
+* ad server modules for o-ads implementing Google publisher tags ad requests.
 *
 * @author Robin Marr, robin.marr@ft.com
 */
@@ -505,4 +505,10 @@ function debug() {
 	log.attributeTable(conf);
 	log.end();
 }
-export default { init, updateCorrelator, updatePageTargeting, clearPageTargetingForKey, debug };
+export default {
+	init,
+	updateCorrelator,
+	updatePageTargeting,
+	clearPageTargetingForKey,
+	debug
+};
