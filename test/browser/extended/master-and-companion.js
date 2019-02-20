@@ -8,8 +8,7 @@ module.exports = {
 
 	'Step 1: go to master and companion demo page': function (browser) {
 		browser
-			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Master-and-Companion demo', 'Page title is correct');
+			.waitForElementVisible('body', wait);
 	},
 	'Step 2: verify the master advert is displayed': function (browser) {
 		browser

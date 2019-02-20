@@ -6,7 +6,7 @@
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/browser/config/nightwatch-local.js -c ./test/browser/config/nightwatch.conf.js",
-    "test": "npm run test-unit && && npm run test-cy:run && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
+    "test": "npm run test-unit && npm run test-cy:run && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec --record",
     "test-cy:open": "cypress open",
@@ -20,8 +20,8 @@
     "lint-complexity": "eslint . -c .eslintrc-complexity.js",
     "release": "release-it",
     "version": "genversion --semi src/js/version.js",
-    "obt-build": "obt install && obt build",
-    "checksizes": "npm run obt-build && bundlesize"
+    "obt": "obt",
+    "checksizes": "bundlesize"
   },
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
     "nightwatch": "^0.9.21",
-    "origami-build-tools": "^7.12.2",
+    "origami-build-tools": "^7.13.3",
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
     "release-it": "^7.6.1",
