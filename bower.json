@@ -11,10 +11,5 @@
     "o-grid": "^4.0.0",
     "o-visual-effects": "^2.0.0",
     "o-colors": "^4.0.0"
-  },
-  "devDependencies": {
-    "jquery-1.7.2.min": "https://code.jquery.com/jquery-1.7.2.min.js",
-    "sinon-1.10.3": "http://sinonjs.org/releases/sinon-1.10.3.js",
-    "sinon.ie.timers-1.10.3": "http://sinonjs.org/releases/sinon-timers-ie-1.10.3.js"
   }
 }
