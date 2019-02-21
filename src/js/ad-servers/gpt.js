@@ -46,9 +46,10 @@ function initGoogleTag() {
 		window.googletag.cmd = [];
 	}
 
-	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true, null, function(err) {
-		utils.broadcast('adServerLoadError', err);
-	});
+	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true,
+		() => { utils.broadcast('adServerLoadSuccess'); },
+		(err) => { utils.broadcast('adServerLoadError', err); }
+	);
 }
 
 /*

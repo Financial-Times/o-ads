@@ -6,10 +6,12 @@
  * and if the validateAdsTraffic option is enabled, we need to wait for it to
  * be available before making any ad calls.
  */
+const utils = require('../utils');
+
 const Moat = function() {}; // eslint-disable-line no-empty-function
 
 Moat.prototype.init = function() {
-	return new Promise((resolve, reject) => {
+	const promise = new Promise((resolve, reject) => {
 		const intervalId = setInterval(() => {
 			if(window.moatPrebidApi) {
 				clearInterval(intervalId);
@@ -22,6 +24,12 @@ Moat.prototype.init = function() {
 			reject(new Error('Timeout while fetching moat invalid traffic script'));
 		}, 1000);
 	});
+
+	promise.then( () => {
+		utils.broadcast('moatIVTcomplete');
+	});
+
+	return promise;
 };
 
 module.exports = new Moat();
