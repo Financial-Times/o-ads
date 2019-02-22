@@ -13,7 +13,7 @@ QUnit.test('init', function(assert) {
 	delete window.googletag;
 
 	this.ads.init();
-	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true, null, sinon.match.typeOf('function')), 'google publisher tag library is attached to the page');
+	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true, sinon.match.typeOf('function'), sinon.match.typeOf('function')), 'google publisher tag library is attached to the page');
 	assert.ok(window.googletag, 'placeholder googletag object is created');
 	assert.ok(window.googletag.cmd.length, 'library setup is added to the command queue');
 
@@ -561,7 +561,7 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
-	this.ads.slots.fullpage; // eslint-disable-line no-unused-expressions
+	this.ads.slots.fullpage;
 });
 
 QUnit.test('debug returns early if no config is set', function(assert) {
