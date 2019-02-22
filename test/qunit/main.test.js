@@ -251,6 +251,32 @@ QUnit.test("moat script loading check is eventually cleared if moat is not loade
 	}, 1000);
 });
 
+QUnit.test("A 'moatIVTcomplete' event is fired if moat IVT cannnot be checked", function(assert) {
+	this.spy(this.utils, 'broadcast');
+	window.moatPrebidApi = null;
+	this.ads.moat.init();
+
+	const done = assert.async();
+
+	setTimeout( () => {
+		assert.ok(this.ads.utils.broadcast.calledWith('moatIVTcomplete'));
+		done();
+	}, 1000);
+});
+
+QUnit.test("A 'moatIVTcomplete' event is fired if moat IVT can be checked", function(assert) {
+	this.spy(this.utils, 'broadcast');
+	window.moatPrebidApi = {};
+	this.ads.moat.init();
+
+	const done = assert.async();
+
+	setTimeout( () => {
+		assert.ok(this.ads.utils.broadcast.calledWith('moatIVTcomplete'));
+		done();
+	}, 1000);
+});
+
 QUnit.test(".version logs the right format", function(assert) {
 	const consoleSpy = this.spy(this.utils, 'log');
 	this.ads.init({ validateAdsTraffic: true });

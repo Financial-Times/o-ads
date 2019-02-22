@@ -21,6 +21,17 @@ QUnit.test('init', function(assert) {
 	window.googletag = this.gpt;
 });
 
+QUnit.test('broadcast an event when GPT loads', function(assert) {
+	this.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, fn) {
+		fn('some response');
+	});
+
+	this.spy(this.utils, 'broadcast');
+	this.ads.init();
+	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadSuccess'));
+});
+
 QUnit.test('broadcast an event when GPT fails to load', function(assert) {
 	this.utils.attach.restore();
 	this.stub(this.utils, 'attach', function(url, async, fn, errorFn) {
@@ -561,7 +572,7 @@ QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(ass
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init({});
 	this.ads.slots.initSlot(node);
-	this.ads.slots.fullpage;
+	this.ads.slots.fullpage; // eslint-disable-line no-unused-expressions
 });
 
 QUnit.test('debug returns early if no config is set', function(assert) {
