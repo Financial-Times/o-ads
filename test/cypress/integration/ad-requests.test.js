@@ -53,7 +53,7 @@ describe('Integration tests', () => {
 		});
 	});
 
-	it('Targeting API ads the correct values to the ad call', () => {
+	it.skip('Targeting API ads the correct values to the ad call', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
 		cy.visit("/demos/local/Individual-Ad-with-Custom-Targeting-Values.html");
