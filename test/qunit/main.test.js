@@ -40,6 +40,16 @@ QUnit.test('init All', function(assert) {
 	this.trigger(document, 'o.DOMContentLoaded');
 });
 
+QUnit.test("init fires an event when it's called", function(assert) {
+	const done = assert.async();
+	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
+	document.body.addEventListener('oAds.startInitialisation', function() {
+		assert.ok(true);
+		done();
+	});
+	ads.init();
+});
+
 QUnit.test('init fires an event once done', function(assert) {
 
 	const done = assert.async();
