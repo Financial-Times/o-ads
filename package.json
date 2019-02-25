@@ -73,6 +73,7 @@
         "node_modules/.bin/secret-squirrel"
       ],
       "pre-push": [
+        "npm run test-unit",
         "node_modules/.bin/eslint . --color"
       ]
     }
