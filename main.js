@@ -55,15 +55,15 @@ Ads.prototype.init = function(options) {
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
-	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTraffic ? this.moat.init() : Promise.resolve();
-
 	this.utils.broadcast('startInitialisation');
 
 	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
 	if(!targetingApi && !validateAdsTraffic) {
 		return Promise.resolve(this.initLibrary());
 	}
+
+	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
+	const validateAdsTrafficPromise = validateAdsTraffic ? this.moat.init() : Promise.resolve();
 
 	/**
 	Need to wait for the moat script to load to validate ads
