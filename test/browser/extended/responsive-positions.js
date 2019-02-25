@@ -8,8 +8,7 @@ module.exports = {
 
 	'Step 1: go toresponsive positions demo page': function (browser) {
 		browser
-			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Responsive-Positions demo', 'Page title is correct');
+			.waitForElementVisible('body', wait);
 	},
 
 	'Step 2: Resize browser window to fit desktop break point': function (browser) {

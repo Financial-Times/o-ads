@@ -1,85 +1,76 @@
 version: 2
 jobs:
-  build:
+  test_bower:
     docker:
-      - image: circleci/node:8-browsers
-    working_directory: ~/app
+      - image: circleci/node:10-browsers
     steps:
       - checkout
+      - run: npm i
+      - run: npm run obt -- install
+      - run: npm run obt -- build
+      - run: npm run checksizes
+      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
+      # Running OBT test doesn't work because we need to pass a custom Karma
+      # config to OBT which OBT doesn't support yet
+      # command: npx origami-build-tools@^7 test
+      - run: npm run test-unit
       - run:
-          name: Ensure package.json exists for caching
-          command: if [[ ! -f package.json ]]; then echo "{}" > package.json; fi
-      - restore-cache:
-          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-      - run:
-          name: Install dependencies
-          command: npx origami-build-tools@^7 install
-      - run:
-          name: Check bundle sizes
-          command: npm run checksizes
-      - run:
-          name: Download Browserstack tunnel
-          command: |
-            wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-            unzip ./BrowserStackLocal-linux-x64.zip
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}-{{ checksum "bower.json" }}
-          paths:
-             - node_modules
-             - bower_components
-             - ~/.npm
-             - ~/.cache
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - .cache
-            - .npm
-            - app
-      - store_artifacts:
-          path: build-state
-          destination: build-state
-
-  test:
-    docker:
-      - image: circleci/node:8-browsers
-    working_directory: ~/app
-    
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          # Running OBT test doesn't work because we need to pass a custom Karma
-          # config to OBT which OBT doesn't support yet
-          # command: npx origami-build-tools@^7 test
-          name: Run unit tests
-          command: npm run test-unit
-      - run:
-          name: Run demo server
           command: npm run demo-server
           background: true
+      - run: npm run test-cy:run
       - run:
-          name: Run integration tests
-          command: npm run test-cy:run
-      - run:
-          name: Connect browserstack tunnel
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
-      - run:
-          name: Waiting for the app to be ready
-          command: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run:
-          name: Run browser tests in browserstack
-          command: npm run test-browser
+      - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      - run: npm run test-browser
       - store-artifacts:
           path: test/cypress/videos
       - store-artifacts:
           path: test/cypress/screenshots
-      
+  test_npm:
+    docker:
+      - image: circleci/node:10-browsers
+    steps:
+      - checkout
+      - run: npx occ 0.0.0
+      - run: rm -f bower.json
+      - run: npm i
+      - run: npm run obt -- install --ignore-bower
+      - run: npm run obt -- build --ignore-bower
+      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
+      # Running OBT test doesn't work because we need to pass a custom Karma
+      # config to OBT which OBT doesn't support yet
+      # command: npx origami-build-tools@^7 test
+      - run: npm run test-unit
+      - run:
+          command: npm run demo-server -- --ignore-bower
+          background: true
+      - run: npm run test-cy:run
+      - run:
+          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+          background: true
+      - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      - run: npm run test-browser-extended
+  publish_to_npm:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npx occ ${CIRCLE_TAG##v}
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
+      - run: npm publish --access public
+
 workflows:
   version: 2
-  build-test:
+  test:
     jobs:
-      - build
-      - test:
+      - test_npm
+      - test_bower:
           requires:
-            - build
+            - test_npm
+      - publish_to_npm:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

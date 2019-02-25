@@ -6,8 +6,7 @@ module.exports = {
 
 	'Step 1: go to Billboard with custom targeting demo page': function (browser) {
 		browser
-			.waitForElementVisible('body', 8000)
-			.assert.title('o-ads: Individual-Ad-with-Custom-Targeting-Values demo', 'Page title is correct');
+			.waitForElementVisible('body', 8000);
 	},
 	'Step 2: verify the Billboard advert is displayed': function (browser) {
 		browser

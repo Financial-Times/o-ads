@@ -20,9 +20,9 @@ let options = {
 	singleRun: false,
 	frameworks: ['qunit'],
 	files: [
-		'bower_components/jquery-1.7.2.min/index.js',
-		'bower_components/sinon-1.10.3/index.js',
-		'bower_components/sinon.ie.timers-1.10.3/index.js',
+		'https://code.jquery.com/jquery-1.7.2.min.js',
+		'http://sinonjs.org/releases/sinon-1.10.3.js',
+		'http://sinonjs.org/releases/sinon-timers-ie-1.10.3.js',
 		'test/qunit/setup.js',
 		{ pattern: 'test/qunit/mocks/*', included: false },
 		'test/qunit/*.test.js',

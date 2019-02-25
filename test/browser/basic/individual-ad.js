@@ -8,8 +8,7 @@ module.exports = {
 
 	'Step 1: go to leaderboard demo page': function (browser) {
 		browser
-			.waitForElementVisible('body', wait)
-			.assert.title('o-ads: Individual-Ad demo', 'Page title is correct');
+			.waitForElementVisible('body', wait);
 	},
 	'Step 2: verify the leaderboard advert is displayed': function (browser) {
 		browser
