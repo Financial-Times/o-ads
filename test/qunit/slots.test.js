@@ -292,7 +292,7 @@ QUnit.test('Slots.collapse will collapse a single slot', function(assert) {
 	this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
 	assert.ok($(node).hasClass('o-ads--empty'), 'slot is collapsed');
-	assert.equal(this.fixturesContainer.getAttribute('data-o-ads-loaded', false));
+	assert.equal(this.fixturesContainer.get().getAttribute('data-o-ads-loaded', false));
 });
 
 QUnit.test('Slots.collapse will collapse mulitple slots', function(assert) {
@@ -323,7 +323,7 @@ QUnit.test('Slots.collapse will emit an event', function(assert) {
 	const initedSlot = this.ads.slots.initSlot(node);
 	this.ads.slots.collapse('collapse-test');
 	assert.ok($(node).hasClass('o-ads--empty'), 'slot is collapsed');
-	assert.equal(this.fixturesContainer.getAttribute('data-o-ads-loaded', false));
+	assert.equal(this.fixturesContainer.get().getAttribute('data-o-ads-loaded', false));
 	assert.ok(this.utils.broadcast.calledWith('collapsed', initedSlot), 'event broadcast has been called with correct event');
 });
 

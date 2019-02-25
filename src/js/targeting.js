@@ -1,6 +1,5 @@
-
-const config = require('./config');
-const utils = require('./utils');
+import config from './config';
+import utils from './utils';
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 
@@ -139,4 +138,4 @@ Targeting.prototype.debug = function () {
 };
 
 
-module.exports = new Targeting();
+export default new Targeting();
