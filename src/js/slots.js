@@ -284,7 +284,6 @@ Slots.prototype.initPostMessage = function() {
 					utils.messenger.post(messageToSend, event.source);
 				} else {
 					utils.log.error('Message received from unidentified slot');
-					utils.messenger.post(messageToSend, event.source);
 				}
 			} else {
 				if (!slot) {
