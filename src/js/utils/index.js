@@ -239,7 +239,7 @@ export function extend() {
 export const hash = function(str, delimiter, pairing) {
 	let pair;
 	let value;
-	const hash = {};
+	const hashObj = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
@@ -247,12 +247,12 @@ export const hash = function(str, delimiter, pairing) {
 			value = str[idx];
 			pair = value.split(pairing);
 			if (pair.length > 1) {
-				hash[pair[0].trim()] = pair.slice(1).join(pairing);
+				hashObj[pair[0].trim()] = pair.slice(1).join(pairing);
 			}
 		}
 	}
 
-	return hash;
+	return hashObj;
 };
 
 /**
