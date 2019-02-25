@@ -1,4 +1,12 @@
 /* eslint valid-jsdoc: 0 */
+import config, { init, clear } from './src/js/config';
+import slots from './src/js/slots';
+import gpt from './src/js/ad-servers/gpt';
+import krux from './src/js/data-providers/krux';
+import api from './src/js/data-providers/api';
+import moat from './src/js/data-providers/moat';
+import targeting from './src/js/targeting';
+import utils from './src/js/utils';
 
 function Ads() {
 	addDOMEventListener();
@@ -8,18 +16,19 @@ function Ads() {
 	}
 }
 
-// bung all our modules on the protoype
-Ads.prototype.config = require('./src/js/config');
-Ads.prototype.slots = require('./src/js/slots');
-Ads.prototype.gpt = require('./src/js/ad-servers/gpt');
-Ads.prototype.krux = require('./src/js/data-providers/krux');
-Ads.prototype.api = require('./src/js/data-providers/api');
-Ads.prototype.moat = require('./src/js/data-providers/moat');
+config.init = init;
+config.clear = clear;
 
-const targeting = require('./src/js/targeting');
+// bung all our modules on the protoype
+Ads.prototype.config = config;
+Ads.prototype.slots = slots;
+Ads.prototype.gpt = gpt;
+Ads.prototype.krux = krux;
+Ads.prototype.api = api;
+Ads.prototype.moat = moat;
 Ads.prototype.targeting = targeting;
 
-Ads.prototype.utils = require('./src/js/utils');
+Ads.prototype.utils = utils;
 
 
 /**
@@ -29,9 +38,10 @@ Ads.prototype.utils = require('./src/js/utils');
 Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
-	this.config(Object.assign(options, {
+	const configOptions = Object.assign(options, {
 		nonPersonalized : !options.disableConsentCookie,
-	}));
+	});
+	this.config(configOptions);
 
 	if (options.disableConsentCookie) {
 		this.consents = {
@@ -170,4 +180,4 @@ function removeDOMEventListener() {
 }
 
 const ads = new Ads();
-module.exports = ads;
+export default ads;

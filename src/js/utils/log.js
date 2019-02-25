@@ -1,4 +1,5 @@
 /* eslint no-console: 0 */
+import { isArray, isObject } from './index';
 
 /**
  * Utility methods for logging.
@@ -9,15 +10,13 @@
 
 /* jshint devel: true */
 
-module.exports = log;
-
 /**
  * Safe logger for the browser
  * @exports utils/log
  * @param {string} type Sets the type of log message log, warn, error or info, if not set to one of these values log will be used
  * @param {any} args the arguments to be passed to console[type]
  */
-function log() {
+export default function log() {
 	let type;
 	let argsIndex;
 	if ('log warn error info'.indexOf(arguments[0]) === -1) {
@@ -39,7 +38,7 @@ function log() {
  * Determine if debug logging is on and if the type if supported
  * @param {string} type
  */
-module.exports.isOn = function(type) {
+export const isOn = function(type) {
 	/* istanbul ignore else  */
 	const debug = localStorage && localStorage.getItem('oAds') || location.search.indexOf('DEBUG=OADS') !== -1;
 	return debug && window.console && window.console[type];
@@ -48,7 +47,7 @@ module.exports.isOn = function(type) {
 /**
  * Log a warning message
  */
-module.exports.warn = function() {
+export const warn = function() {
 	const args = ['warn'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -56,7 +55,7 @@ module.exports.warn = function() {
 /**
  * Log an error message
  */
-module.exports.error = function() {
+export const error = function() {
 	const args = ['error'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -64,7 +63,7 @@ module.exports.error = function() {
 /**
  * Log an info message
  */
-module.exports.info = function() {
+export const info = function() {
 	const args = ['info'].concat([].slice.call(arguments, 0));
 	log.apply(null, args);
 };
@@ -73,7 +72,7 @@ module.exports.info = function() {
  * Start a collapsed group
  * @param {string} group the name of the group, defaults to o-ads
  */
-module.exports.start = function(group) {
+export const start = function(group) {
 	if (!log.isOn('groupCollapsed')) {
 		return;
 	}
@@ -84,7 +83,7 @@ module.exports.start = function(group) {
 /**
  * End a collapsed group
  */
-module.exports.end = function() {
+export const end = function() {
 	if (!log.isOn('groupEnd')) {
 		return;
 	}
@@ -92,7 +91,7 @@ module.exports.end = function() {
 	window.console.groupEnd();
 };
 
-module.exports.table = function(data, columns) {
+export const table = function(data, columns) {
 	if (log.isOn('log') && window.console) {
 		if(console.table) {
 			console.table(data, columns);
@@ -102,13 +101,12 @@ module.exports.table = function(data, columns) {
 	}
 };
 
-module.exports.attributeTable = function(object, columns) {
-	const utils = require('../utils');
+export const attributeTable = function(object, columns) {
 	if (log.isOn('log') && window.console) {
 		if (object && console.table) {
 			const data = Object.keys(object).map((item) => {
 				let val;
-				if (utils.isArray(object[item]) || utils.isObject(object[item])) {
+				if (isArray(object[item]) || isObject(object[item])) {
 					val = JSON.stringify(object[item]);
 				} else {
 					val = object[item];

@@ -190,11 +190,14 @@ googletag.cmd.push = function(fn) {
 	}
 };
 
-window.googletag = module.exports.mock = googletag;
-module.exports.restore = function() {
-	(stubs.fakes || []).forEach(function(fake) {
-		if (typeof fake.reset === 'function') {
-			fake.reset();
-		}
-	});
+window.googletag = googletag;
+export default {
+	googletag,
+	restore: function() {
+		(stubs.fakes || []).forEach(function(fake) {
+			if (typeof fake.reset === 'function') {
+				fake.reset();
+			}
+		});
+	}
 };
