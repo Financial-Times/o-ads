@@ -50,6 +50,11 @@ Ads.prototype.init = function(options) {
 
 	this.utils.broadcast('startInitialisation');
 
+	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
+	if(!targetingApi && !validateAdsTraffic) {
+		return Promise.resolve(this.initLibrary());
+	}
+
 	/**
 	Need to wait for the moat script to load to validate ads
 	and the targeting API to return before we initialise the library.
