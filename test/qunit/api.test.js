@@ -53,7 +53,7 @@ QUnit.test("fires an 'apiRequestsComplete' event when all API requests succeed",
 	});
 });
 
-QUnit.test("when the user api request fails", function(assert) {
+QUnit.test("fires an 'apiRequestsComplete' event when the user api request fails", function(assert) {
 	const done = assert.async();
 	const broadcast = this.stub(this.utils, 'broadcast');
 
@@ -81,7 +81,7 @@ QUnit.test("when the user api request fails", function(assert) {
 	});
 });
 
-QUnit.test("when the page api request fails", function(assert) {
+QUnit.test("fires an 'apiRequestsComplete' event when the page api request fails", function(assert) {
 	const done = assert.async();
 	const broadcast = this.stub(this.utils, 'broadcast');
 
