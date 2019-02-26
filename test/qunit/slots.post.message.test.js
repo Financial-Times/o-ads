@@ -118,16 +118,14 @@ QUnit.test('Post message from unknown slot logs an error and sends a repsonse', 
 		return 'unknown-slot';
 	});
 
-
-	this.stub(this.utils.messenger, 'post', function (message, source) {
-		assert.ok(errorStub.calledWith('Message received from unidentified slot'), 'the error is logged');
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, undefined, 'the name is undefined');
-		assert.deepEqual(message.sizes, undefined, 'no sizes are supplied');
-		assert.notOk(slot.collapse.called, 'the collapse method is not called');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
+	window.addEventListener('message', 	function () {
+		// Make sure this executes AFTER the other 'message' event listener
+		// defined in slots.js
+		setTimeout(() => {
+			assert.ok(errorStub.calledWith('Message received from unidentified slot'), 'the error is logged');
+			done();
+		}, 0);
+	 });
 
 	document.body.addEventListener('oAds.ready', 	function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
