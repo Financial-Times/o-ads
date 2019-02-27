@@ -1,3 +1,4 @@
+import utils from '../utils';
 
 function Api() {
 	this.data = [];
@@ -29,6 +30,7 @@ Api.prototype.getPageData = function(target, timeout) {
 };
 
 Api.prototype.handleResponse = function(response) {
+	utils.broadcast('apiRequestsComplete');
 	this.data = response;
 
 	for(let i = 0; i < response.length; i++) {

@@ -55,6 +55,8 @@ Ads.prototype.init = function(options) {
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
+	this.utils.broadcast('startInitialisation');
+
 	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
 	if(!targetingApi && !validateAdsTraffic) {
 		return Promise.resolve(this.initLibrary());

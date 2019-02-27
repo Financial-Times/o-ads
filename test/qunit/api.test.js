@@ -20,6 +20,95 @@ QUnit.test('resolves with an empty promise if called without any urls', function
 		});
 
 });
+
+QUnit.test("fires an 'apiRequestsComplete' event when all API requests succeed", function(assert) {
+	const done = assert.async();
+	const broadcast = this.stub(this.utils, 'broadcast');
+
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/page', pageJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/page',
+			user: 'https://ads-api.ft.com/v1/user'
+		},
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'unclassified'
+		}
+	});
+
+	ads.then((ads) => {
+		ads.targeting.get();
+		// TO-DO: We should be using 'calledOnceWith' instead of 'calledWith' here
+		// However browserstack-local forces us to pull in an old version of sinon
+		// that doesn't have 'calledOnceWith'
+		assert.ok(broadcast.calledWith('apiRequestsComplete'), 'with apiRequestsComplete');
+		done();
+	});
+});
+
+QUnit.test("fires an 'apiRequestsComplete' event when the user api request fails", function(assert) {
+	const done = assert.async();
+	const broadcast = this.stub(this.utils, 'broadcast');
+
+	const pageJSON = JSON.stringify(this.fixtures.content);
+
+	fetchMock.get('https://ads-api.ft.com/v1/page', pageJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/user/error', 500);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/page',
+			user: 'https://ads-api.ft.com/v1/user/error'
+		},
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'unclassified'
+		}
+	});
+
+	ads.then((ads) => {
+		ads.targeting.get();
+		assert.ok(broadcast.calledWith('apiRequestsComplete'));
+		done();
+	});
+});
+
+QUnit.test("fires an 'apiRequestsComplete' event when the page api request fails", function(assert) {
+	const done = assert.async();
+	const broadcast = this.stub(this.utils, 'broadcast');
+
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/page/error', 500);
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			page: 'https://ads-api.ft.com/v1/page/error',
+			user: 'https://ads-api.ft.com/v1/user'
+		},
+		gpt: {
+			network: '5887',
+			site: 'ft.com',
+			zone: 'unclassified'
+		}
+	});
+
+	ads.then((ads) => {
+		ads.targeting.get();
+		assert.ok(broadcast.calledWith('apiRequestsComplete'));
+		done();
+	});
+});
+
 QUnit.test('can handle errors in the api response', function(assert) {
 	const done = assert.async();
 
