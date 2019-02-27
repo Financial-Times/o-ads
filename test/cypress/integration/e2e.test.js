@@ -38,6 +38,21 @@ describe('E2E tests', () => {
 		});
 	});
 
+	// GET THIS SHOT WORKING!!!
+	it.only('Ad with wiewport margin is loaded correctly ', () => {
+		cy.visit("/demos/local/Individual-Ad-Lazy-Load-Margin.html").as('LazyLoadedMarginAd');
+		// cy.scrollTo(0, 1000);
+
+		// cy.get('#leaderboard-gpt').should('be.visible');
+
+		cy.get('iframe[data-load-complete]').then($iframe => {
+			const $body = $iframe.contents().find('body');
+			cy.wrap($body).find('img')
+				.should('be.visible')
+				.should('have.attr', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097');
+		});
+	});
+
 
 	it('Master and companion creatives are loaded correctly', () => {
 		cy.visit("/demos/local/Master-and-Companion.html").as('MasterCompanionAd');
