@@ -13,12 +13,23 @@ QUnit.test('init', function(assert) {
 	delete window.googletag;
 
 	this.ads.init();
-	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true, null, sinon.match.typeOf('function')), 'google publisher tag library is attached to the page');
+	assert.ok(this.ads.utils.attach.calledWith('//www.googletagservices.com/tag/js/gpt.js', true, sinon.match.typeOf('function'), sinon.match.typeOf('function')), 'google publisher tag library is attached to the page');
 	assert.ok(window.googletag, 'placeholder googletag object is created');
 	assert.ok(window.googletag.cmd.length, 'library setup is added to the command queue');
 
 	// reinstate mock
 	window.googletag = this.gpt;
+});
+
+QUnit.test('broadcast an event when GPT loads', function(assert) {
+	this.utils.attach.restore();
+	this.stub(this.utils, 'attach', function(url, async, fn) {
+		fn('some response');
+	});
+
+	this.spy(this.utils, 'broadcast');
+	this.ads.init();
+	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadSuccess'));
 });
 
 QUnit.test('broadcast an event when GPT fails to load', function(assert) {
