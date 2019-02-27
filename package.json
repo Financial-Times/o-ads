@@ -11,7 +11,7 @@
     "test-cy:run": "cypress run -r spec --record false",
     "test-cy:open": "cypress open",
     "test-browser": "npm run test-browser-basic && npm run test-browser-extended",
-    "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8 --suiteRetries 3",
+    "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,ie10,ie11,edge,galaxy_s8",
     "test-browser-extended": "npm run nightwatch-bs -- --group extended --env chrome",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
