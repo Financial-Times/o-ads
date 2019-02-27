@@ -38,6 +38,29 @@ describe('E2E tests', () => {
 		});
 	});
 
+	/*
+		This doesn't work in cypress.
+		The intersection observer that is created to lazy load the ad has the
+		root element as the browser window. Because the test is loaded in an
+		iframe, this doesn’t work, as it’s the iframe window that we need to
+		have the IntersectionObserver use as its root. It’s a known issue and
+		the spec was intentionally designed this way to allow for easy cross
+		frame observing. Unfortunately this means we can’t test lazy loading
+		margins in cypress.
+	*/
+	it.skip('Ad with wiewport margin is loaded correctly ', () => {
+		cy.visit("/demos/local/Individual-Ad-Lazy-Load-Margin.html").as('LazyLoadedMarginAd');
+
+		cy.get('#leaderboard-gpt').should('be.visible');
+
+		cy.get('iframe[data-load-complete]').then($iframe => {
+			const $body = $iframe.contents().find('body');
+			cy.wrap($body).find('img')
+				.should('be.visible')
+				.should('have.attr', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097');
+		});
+	});
+
 
 	it('Master and companion creatives are loaded correctly', () => {
 		cy.visit("/demos/local/Master-and-Companion.html").as('MasterCompanionAd');

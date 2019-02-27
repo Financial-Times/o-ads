@@ -1,8 +1,8 @@
 const config = {
-	src_folders: ['./test/browser'],
-	output_folder: './test/browser/reports',
-	globals_path: './test/browser/config/nightwatch-globals.js',
-	page_objects_path: './test/browser/page_objects',
+	src_folders: ['./test/nightwatch'],
+	output_folder: './test/nightwatch/reports',
+	globals_path: './test/nightwatch/config/nightwatch-globals.js',
+	page_objects_path: './test/nightwatch/page_objects',
 	selenium : {
 		start_process : false,
 		host : 'hub-cloud.browserstack.com',

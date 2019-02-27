@@ -53,7 +53,7 @@ describe('Integration tests', () => {
 		});
 	});
 
-	it.skip('Targeting API ads the correct values to the ad call', () => {
+	it('Targeting API ads the correct values to the ad call', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
 		cy.visit("/demos/local/Individual-Ad-with-Custom-Targeting-Values.html");
@@ -72,7 +72,7 @@ describe('Integration tests', () => {
 
 			// Content props
 			expect(cust_params).to.have.property('auuid', '047b1294-75a9-11e6-b60a-de4532d5ea35');
-			expect(cust_params).to.have.property('ad', 'bs06,bs07,bs11,e2,ft02,ft04,ft05,ft11,ft18,ft35,ft38,ft41,g1,s03,sm06');
+			expect(cust_params).to.have.property('ad', 'bs06,bs07,bs11,e2,ft02,ft04,ft05,ft11,ft18,ft35,ft38,ft41,ft59,g1,s03,sm06');
 			expect(cust_params).to.have.property('ca', 'business,finance,smartphone');
 
 			const expectedTopics = ['Retail','US & Canadian companies',
