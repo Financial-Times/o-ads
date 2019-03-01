@@ -1,7 +1,7 @@
 /* eslint new-cap: 0 */
-import utils from '../utils';
-import config from '../config';
-import { Delegate } from 'ftdomdelegate';
+const utils = require('../utils');
+const config = require('../config');
+const Delegate = require('ftdomdelegate');
 
 /**
  * The Krux class defines an FT.ads.krux instance
@@ -300,4 +300,4 @@ Krux.prototype.debug = function() {
 	log.end();
 };
 
-export default new Krux();
+module.exports = new Krux();

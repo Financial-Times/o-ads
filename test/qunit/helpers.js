@@ -2,33 +2,20 @@
 
 'use strict'; //eslint-disable-line
 
-import oViewport from 'o-viewport';
-import utils from '../../src/js/utils';
-import gptMock from './mocks/gpt-mock';
-
-import userFixtures from '../fixtures/user-api-response.json';
-import userAnonymousFixtures from '../fixtures/user-api-anonymous-response.json';
-import contentFixtures from '../fixtures/content-api-response.json';
-import anotherContentFixtures from '../fixtures/another-content-api-response.json';
-import conceptFixtures from '../fixtures/concept-api-response.json';
-
-export const gpt = gptMock.googletag;
+const oViewport = require('o-viewport');
 
 /* a URL that can be used in tests without causing 404 errors */
-export const nullUrl = 'base/test/qunit/mocks/null.js';
+module.exports.nullUrl = 'base/test/qunit/mocks/null.js';
 
 /* container for fixtures */
-export const fixturesContainer = {
-	get: () => document.getElementById('qunit-fixtures'),
-	add: (html) => {
-		fixturesContainer.get().insertAdjacentHTML('beforeend', html);
-		return fixturesContainer.get().lastChild;
-	}
+module.exports.fixturesContainer = document.getElementById('qunit-fixtures');
+module.exports.fixturesContainer.add = function(html) {
+	this.insertAdjacentHTML('beforeend', html);
+	return this.lastChild;
 };
 
-
 /* create an iframe and return it's context for testing post message */
-export const createDummyFrame = function (content, target) {
+module.exports.createDummyFrame = function (content, target) {
 	target = target || document.getElementById('qunit-fixtures');
 	const iframe = document.createElement('iframe');
 	iframe.id = 'postMessage';
@@ -43,17 +30,22 @@ export const createDummyFrame = function (content, target) {
 	};
 };
 
-export const fixtures = {
-	user: userFixtures,
-	userAnonymous: userAnonymousFixtures,
-	content: contentFixtures,
-	anotherContent: anotherContentFixtures,
-	concept: conceptFixtures
+module.exports.fixtures = {
+	user: require('../fixtures/user-api-response.json'),
+	userAnonymous: require('../fixtures/user-api-anonymous-response.json'),
+	content: require('../fixtures/content-api-response.json'),
+	anotherContent: require('../fixtures/another-content-api-response.json'),
+	concept: require('../fixtures/concept-api-response.json')
 };
+
+/* the google library mock*/
+const gpt = require('./mocks/gpt-mock');
+
+module.exports.gpt = gpt.mock;
 
 /* A method for logging warnings about tests that didn't run for some reason */
 /* such as tests that mock read only properties in a browser that doesn't allow this */
-export const warn = function(message) {
+module.exports.warn = function(message) {
 	/* jshint devel: true */
 	if (console) {
 		const log = console.warn || console.log;
@@ -62,8 +54,9 @@ export const warn = function(message) {
 };
 
 /* trigger a dom event */
-export const trigger = function(element, eventType, bubble, cancelable, data) {
+module.exports.trigger = function(element, eventType, bubble, cancelable, data) {
 	let event;
+	const utils = require('../../src/js/utils');
 	element = element || document.body;
 	element = $.type(element) === 'string' ? document.querySelector(element) : element;
 	if (document.createEvent) {
@@ -86,17 +79,17 @@ export const trigger = function(element, eventType, bubble, cancelable, data) {
 };
 
 /* Setup a sinon sandbox to easily clear mocks */
-export const sandbox = QUnit.sandbox = sinon.sandbox.create();
+const sandbox = QUnit.sandbox = module.exports.sandbox = sinon.sandbox.create();
 /* Shortcuts to Sinon sandbox methods */
-export const spy = function() {
+module.exports.spy = function() {
 	return sandbox.spy.apply(sandbox, [].slice.call(arguments));
 };
 
-export const stub = function() {
+module.exports.stub = function() {
 	return sandbox.stub.apply(sandbox, [].slice.call(arguments));
 };
 
-export const mock = function() {
+module.exports.mock = function() {
 	return sandbox.mock.apply(sandbox, [].slice.call(arguments));
 };
 
@@ -148,7 +141,7 @@ window.removeEventListener = function(type, listener) {
 };
 
 /* mock dates */
-export const date = function(time) {
+module.exports.date = function(time) {
 	let clock;
 	if (isNaN(time)) {
 		clock = sandbox.useFakeTimers();
@@ -160,7 +153,7 @@ export const date = function(time) {
 };
 
 /* mock xml http requests */
-export const server = function(clock) {
+module.exports.server = function(clock) {
 	if (clock) {
 		return sandbox.useFakeServerWithClock();
 	} else {
@@ -173,7 +166,7 @@ export const server = function(clock) {
 // In order to mock the results from oViewport.getSize we stub Math.max
 // and return the mocked width or height when the actual width and height are provided as arguments
 // this could go bad if your code is using Math.max and happens to provide the window width/height as an argument
-export const viewport = function(width, height) {
+module.exports.viewport = function(width, height) {
 
 	if (oViewport.getSize.restore) {
 		oViewport.getSize.restore();
@@ -189,7 +182,7 @@ export const viewport = function(width, height) {
 };
 
 /* Add meta data to the page */
-export const meta = function(data) {
+module.exports.meta = function(data) {
 	let name;
 	let attr;
 	let metatag;
@@ -218,8 +211,20 @@ export const meta = function(data) {
 	return data;
 };
 
+/* Mock global vars */
+module.exports.window = function(data) {
+	if ($.isPlainObject(data)) {
+		sandbox._globals = data;
+		Object.keys(data).forEach(function(name) {
+			window[name] = data[name];
+		});
+	} else {
+		throw new GlobalsException('Invalid data for globals.');
+	}
+};
+
 /* Mock localStorage */
-export const localStorage = function(data) {
+module.exports.localStorage = function(data) {
 	let canMock = Boolean(window.localStorage);
 	let fake;
 	if (canMock) {
@@ -272,7 +277,7 @@ export const localStorage = function(data) {
 
 /* clear out anyting added to the page by tests */
 /* and reset all the sinon mocks in the sandbox */
-export const clear = function() {
+module.exports.clear = function() {
 	// remove any tags added during testing
 	$('[remove],[o-ads]').remove();
 
@@ -306,11 +311,11 @@ export const clear = function() {
 	});
 	sandbox._windowEventListeners = [];
 	// restore stubs & mocks
-	gptMock.restore();
+	gpt.restore();
 	sandbox.restore();
 };
 
-export const deleteCookie = function(name) {
+module.exports.deleteCookie = function(name) {
 	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 };
 
@@ -326,23 +331,8 @@ function LocalStorageException(message) {
 	this.name = 'LocalStorageException';
 }
 
-export default {
-	gpt,
-	nullUrl,
-	fixturesContainer,
-	createDummyFrame,
-	fixtures,
-	warn,
-	trigger,
-	sandbox,
-	spy,
-	stub,
-	mock,
-	date,
-	server,
-	viewport,
-	meta,
-	localStorage,
-	clear,
-	deleteCookie
-};
+/* exception to be thrown for globals if invalid data is supplied */
+function GlobalsException(message) {
+	this.message = message;
+	this.name = 'GlobalsException';
+}

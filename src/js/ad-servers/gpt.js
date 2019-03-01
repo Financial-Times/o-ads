@@ -3,13 +3,13 @@
 
 /**
 * @fileOverview
-* ad server modules for o-ads implementing Google publisher tags ad requests.
+* ad server modukes for o-ads implementing Google publisher tags ad requests.
 *
 * @author Robin Marr, robin.marr@ft.com
 */
-import config from '../config';
-import utils from '../utils';
-import targeting from '../targeting';
+const config = require('../config');
+const utils = require('../utils');
+const targeting = require('../targeting');
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
@@ -404,16 +404,16 @@ const slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
-		function getImpressionURL(iframe) {
-			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
-			if (trackingUrlElement) {
-				return trackingUrlElement.dataset.oAdsImpressionUrl;
-			} else {
-				utils.log.warn('Impression URL not found, this is set via a creative template.');
-				return false;
-			}
-		}
 		if (this.outOfPage && this.gpt.iframe) {
+			function getImpressionURL(iframe) {
+				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+				if (trackingUrlElement) {
+					return trackingUrlElement.dataset.oAdsImpressionUrl;
+				} else {
+					utils.log.warn('Impression URL not found, this is set via a creative template.');
+					return false;
+				}
+			}
 			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
@@ -494,7 +494,12 @@ function updatePageTargeting(override) {
 	}
 }
 
-function debug() {
+module.exports.init = init;
+module.exports.updateCorrelator = updateCorrelator;
+module.exports.updatePageTargeting = updatePageTargeting;
+module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
+
+module.exports.debug = () => {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){
@@ -504,11 +509,4 @@ function debug() {
 	log.start('gpt');
 	log.attributeTable(conf);
 	log.end();
-}
-export default {
-	init,
-	updateCorrelator,
-	updatePageTargeting,
-	clearPageTargetingForKey,
-	debug
 };
