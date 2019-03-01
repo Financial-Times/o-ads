@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "test": "npm run test-unit && npm run test-cy:run && npm run test-browser-basic && npm run test-browser-extended && npm run test-browser-gecko-temp",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec --record false",
-	"test-cy:open": "cypress open",
-	"test-browser": "npm run test-browser-basic && npm run test-browser-extended",
+    "test-cy:open": "cypress open",
+    "test-browser": "npm run test-browser-basic && npm run test-browser-extended",
     "test-browser-basic": "npm run nightwatch-bs -- --group basic --env chrome,edge,galaxy_s8",
     "test-browser-extended": "npm run nightwatch-bs -- --group extended --env chrome",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
