@@ -76,7 +76,7 @@ QUnit.test('Config defaults', function(assert) {
 
 QUnit.test('Config fetchDeclaritive', function(assert) {
 	const save = window.JSON;
-	this.fixturesContainer.get().insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"dfpsite" : "site.site","dfpzone" : "zone.zone"}</script>');
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"dfpsite" : "site.site","dfpzone" : "zone.zone"}</script>');
 	this.ads.init();
 	let result = this.ads.config();
 	assert.ok(result.dfpzone, 'Config has been fetched from the inline declarative script');
@@ -91,8 +91,8 @@ QUnit.test('Config fetchDeclaritive', function(assert) {
 });
 
 QUnit.test('Config fetchDeclaritive, multiple script tags', function(assert) {
-	this.fixturesContainer.get().insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"athing" : "thing", "anotherthing" : "another"}</script>');
-	this.fixturesContainer.get().insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"more" : "evenmore"}</script>');
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"athing" : "thing", "anotherthing" : "another"}</script>');
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<script data-o-ads-config type="application/json">{"more" : "evenmore"}</script>');
 	this.ads.init();
 	const result = this.ads.config();
 	assert.equal(result.athing, 'thing', 'data-o-ads-size attribute');

@@ -19,7 +19,7 @@ QUnit.test('Tests are atomic', function(assert) {
 });
 
 QUnit.test('The fixtures container is available and we can append HTML', function(assert) {
-	this.fixturesContainer.get().insertAdjacentHTML('beforeend', '<div id="something-something"></div>');
+	this.fixturesContainer.insertAdjacentHTML('beforeend', '<div id="something-something"></div>');
 	assert.ok($('#something-something').size(), 'the element was attached to the container');
 });
 

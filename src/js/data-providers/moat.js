@@ -31,4 +31,4 @@ Moat.prototype.init = function() {
 	return promise;
 };
 
-export default new Moat();
+module.exports = new Moat();

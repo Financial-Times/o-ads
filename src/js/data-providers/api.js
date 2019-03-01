@@ -84,4 +84,4 @@ Api.prototype.reset = function() {
 	});
 };
 
-export default new Api();
+module.exports = new Api();
