@@ -1,9 +1,3 @@
-import { on, off, once, broadcast } from './events';
-import messenger from './messenger';
-import responsive, { getCurrent } from './responsive';
-import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
-import version from '../version';
-
 /**
  * Utility methods for the advertising library.
  * @author Origami Advertising, origami.advertising@ft.com
@@ -11,18 +5,7 @@ import version from '../version';
  */
 const hop = Object.prototype.hasOwnProperty;
 
-responsive.getCurrent = getCurrent;
-log.start = start;
-log.end = end;
-log.isOn = isOn;
-log.info = info;
-log.warn = warn;
-log.error = error;
-log.table = table;
-log.attributeTable = attributeTable;
-
-
-
+const utils = module.exports;
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
  * IE returns [object Object] for null and undefined so we need to filter those
@@ -44,62 +27,49 @@ function is(object) {
 	}
 }
 
+/**
+ * Creates a method for testing the type of an Object
+ * @private
+ * @param {string} The name of the object type to be tested e.g. Array
+ * @returns a method that takes any javascript object and tests if it is of
+ * the supplied className
+ */
+function createIsTest(className) {
+	return function(obj) {
+		return is(obj) === className;
+	};
+}
 
 /**
- * Test if an object is an Array
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is of type Array, otherwise false
+ * Curries some useful is{ClassName} methods into the supplied Object
+ * @private
+ * @param {object} The object to add the methods too
+ * @param {array} A list of types to create methods for defaults to "Array", "Object", "String", "Function"
+ * @returns The object supplied in the first param with is{ClassName} Methods Added
  */
-export const isArray = function(obj) {
-	return is(obj) === "Array";
-};
+function curryIsMethods(obj, classNames) {
+	classNames = classNames || [
+		'Array',
+		'Object',
+		'String',
+		'Function',
+		'Storage'
+	];
 
+	while (classNames.length) {
+		const className = classNames.pop();
+		obj[`is${className}`] = createIsTest(className);
+	}
 
-/**
- * Test if an object is a String
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is of type String, otherwise false
- */
-export const isString = function(obj) {
-	return is(obj) === "String";
-};
-
-
-/**
- * Test if an object is a Function
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is of type Function, otherwise false
- */
-export const isFunction = function(obj) {
-	return is(obj) === "Function";
-};
-
-
-/**
- * Test if an object is a Storage object
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is of type Storage, otherwise false
- */
-export const isStorage = function(obj) {
-	return is(obj) === "Storage";
-};
-
-
-/**
- * Test if an object is an Object
- * @param {object} obj The object to be tested
- * @returns {boolean} true if the object is of type Object, otherwise false
- */
-export const isObject = function(obj) {
-	return is(obj) === "Object";
-};
+	return obj;
+}
 
 /**
  * Test if an object is the global window object
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is the window obj, otherwise false
  */
-export const isWindow = function(obj) {
+module.exports.isWindow = function(obj) {
 	return obj && obj !== null && obj === window;
 };
 
@@ -110,13 +80,13 @@ export const isWindow = function(obj) {
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is plain false otherwise
  */
-export const isPlainObject = function(obj) {
+module.exports.isPlainObject = function(obj) {
 	const hop = Object.prototype.hasOwnProperty;
 
 	// Must be an Object.
 	// Because of IE, we also have to check the presence of the constructor property.
 	// Make sure that DOM nodes and window objects don't pass through, as well
-	if (!obj || !isObject(obj) || obj.nodeType || isWindow(obj)) {
+	if (!obj || !utils.isObject(obj) || obj.nodeType || utils.isWindow(obj)) {
 		return false;
 	}
 
@@ -144,15 +114,25 @@ export const isPlainObject = function(obj) {
  * @param {object} str The object to be tested
  * @returns {boolean} true if the object is a string with a length greater than 0
  */
-export const isNonEmptyString = function(str) {
-	return isString(str) && Boolean(str.length);
+module.exports.isNonEmptyString = function(str) {
+	return utils.isString(str) && Boolean(str.length);
 };
 
-export const isElement = function(element) {
+module.exports.isElement = function(element) {
 	return element && element.nodeType === 1 && element.tagName || false;
 };
 
-export function extend() {
+/**
+ * Merge or clone objects
+ * @function
+ * @param {boolean/object} deep/target If boolean specifies if this should be a deep copy or not, otherwise is the target object for the copy
+ * @param {object} target If deep copy is true will be the target object of the copy
+ * @param {object} objects All other params are objects to be merged into the target
+ * @returns {object} The target object extended with the other params
+ */
+module.exports.extend = extend;
+
+function extend() {
 	/* jshint forin: false */
 	/* when doing a deep copy we want to copy prototype properties */
 	let options;
@@ -176,7 +156,7 @@ export function extend() {
 
 	// Handle case when target is a string or something (possible in deep copy)
 	/* istanbul ignore else  */
-	if (typeof target !== "object" && !isFunction(target)) {
+	if (typeof target !== "object" && !utils.isFunction(target)) {
 		target = {};
 	}
 
@@ -202,13 +182,13 @@ export function extend() {
 					}
 
 					// Recurse if we're merging arrays
-					if (deep && copy && (isPlainObject(copy) || isArray(copy))) {
-						copyIsArray = isArray(copy);
+					if (deep && copy && (utils.isPlainObject(copy) || utils.isArray(copy))) {
+						copyIsArray = utils.isArray(copy);
 						if (copyIsArray) {
 							copyIsArray = false;
-							clone = src && isArray(src) ? src : [];
+							clone = src && utils.isArray(src) ? src : [];
 						} else {
-							clone = src && isObject(src) ? src : {};
+							clone = src && utils.isObject(src) ? src : {};
 						}
 
 						// Never move original objects, clone them
@@ -236,10 +216,10 @@ export function extend() {
  * @return {object}
  *
  */
-export const hash = function(str, delimiter, pairing) {
+module.exports.hash = function(str, delimiter, pairing) {
 	let pair;
 	let value;
-	const hashObj = {};
+	const hash = {};
 	if (str && str.split) {
 		str = str.split(delimiter);
 
@@ -247,12 +227,12 @@ export const hash = function(str, delimiter, pairing) {
 			value = str[idx];
 			pair = value.split(pairing);
 			if (pair.length > 1) {
-				hashObj[pair[0].trim()] = pair.slice(1).join(pairing);
+				hash[pair[0].trim()] = pair.slice(1).join(pairing);
 			}
 		}
 	}
 
-	return hashObj;
+	return hash;
 };
 
 /**
@@ -265,7 +245,7 @@ export const hash = function(str, delimiter, pairing) {
  * @param {function} errorcb A function to run if the script fails to load
  * @returns {HTMLElement} the created script tag
  */
-export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
+module.exports.attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
 	let hasRun = false;
@@ -289,7 +269,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
 		tag.async = 'true';
 	}
 	/* istanbul ignore else  */
-	if (isFunction(callback)) {
+	if (utils.isFunction(callback)) {
 		/* istanbul ignore if - legacy IE code, won't test */
 		if (hop.call(tag, 'onreadystatechange')) {
 			tag.onreadystatechange = function() {
@@ -305,7 +285,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
 	}
 
 	/* istanbul ignore else  */
-	if (isFunction(errorcb)) {
+	if (utils.isFunction(errorcb)) {
 		tag.onerror = function() {
 			processCallback(errorcb);
 		};
@@ -321,7 +301,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
  * @returns {string} document.referrer
  */
 /* istanbul ignore next - cannot reliably test value of referer */
-export const getReferrer = function() {
+module.exports.getReferrer = function() {
 	return document.referrer || '';
 };
 
@@ -330,7 +310,7 @@ export const getReferrer = function() {
  * @param {string} string the string to parse
  * @returns {string}
  */
-export const dehyphenise = function(string) {
+module.exports.dehyphenise = function(string) {
 	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
 		return letter.toUpperCase();
 	});
@@ -341,9 +321,9 @@ export const dehyphenise = function(string) {
  * @param {string|} name the name of the attribute to parse
  * @returns {string}
  */
-export const parseAttributeName = function(attribute) {
-	const name = isString(attribute) ? attribute : attribute.name;
-	return dehyphenise(name.replace(/(data-)?o-ads-/, ''));
+module.exports.parseAttributeName = function(attribute) {
+	const name = utils.isString(attribute) ? attribute : attribute.name;
+	return utils.dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
 
 /**
@@ -352,7 +332,7 @@ export const parseAttributeName = function(attribute) {
  * @returns {string}
  */
 /* istanbul ignore next - cannot reliably test value of location */
-export const getLocation = function() {
+module.exports.getLocation = function() {
 	return document.location.href || '';
 };
 
@@ -362,9 +342,10 @@ export const getLocation = function() {
  * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
  * @returns {string}
  */
-export const getQueryString = function() {
+module.exports.getQueryString = function() {
 	return document.location.search.substring(1) || '';
 };
+
 
 /**
  * Get a query string parameter by name from a url
@@ -372,7 +353,7 @@ export const getQueryString = function() {
  * @param url
  * @returns {string | null}
  */
-export const getQueryParamByName = function(name, url) {
+module.exports.getQueryParamByName = function(name, url) {
 	url = url || window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
 	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -386,7 +367,7 @@ export const getQueryParamByName = function(name, url) {
  * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
  * @returns {string}
  */
-export const getTimestamp = function() {
+module.exports.getTimestamp = function() {
 	const now = new Date();
 	return [
 		now.getFullYear(),
@@ -405,7 +386,7 @@ export const getTimestamp = function() {
  * @param {window}  a window object
  * @returns {String|Boolean}
  */
-export const iframeToSlotName = function(iframeWindow) {
+module.exports.iframeToSlotName = function(iframeWindow) {
 	// capture all iframes in the page in a live node list
 	const iframes = document.getElementsByTagName('iframe');
 	let slotName;
@@ -437,49 +418,22 @@ export const iframeToSlotName = function(iframeWindow) {
 	return false;
 };
 
-export const buildObjectFromArray = function buildObjectFromArray(targetObject) {
+module.exports.buildObjectFromArray = function buildObjectFromArray(targetObject) {
 	return targetObject.reduce((prev, data) => {
 		prev[data.key] = data.value;
 		return prev;
 	}, {});
 };
 
-export const cookie = function(name) {
+module.exports.cookie = function(name) {
 	const val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return val ? val.pop() : null;
 };
 
-export const getVersion = () => version || 'UNKNOWN';
+module.exports.getVersion = () => require('../version.js') || 'UNKNOWN';
 
-export default {
-	on,
-	off,
-	once,
-	broadcast,
-	messenger,
-	responsive,
-	log,
-	isArray,
-	isString,
-	isFunction,
-	isStorage,
-	isObject,
-	isWindow,
-	isPlainObject,
-	isNonEmptyString,
-	isElement,
-	extend,
-	hash,
-	attach,
-	getReferrer,
-	dehyphenise,
-	parseAttributeName,
-	getLocation,
-	getQueryString,
-	getQueryParamByName,
-	getTimestamp,
-	iframeToSlotName,
-	buildObjectFromArray,
-	cookie,
-	getVersion
-};
+extend(module.exports, require('./events.js'));
+extend(module.exports, require('./messenger.js'));
+module.exports.responsive = require('./responsive.js');
+module.exports.log = require('./log');
+curryIsMethods(module.exports);

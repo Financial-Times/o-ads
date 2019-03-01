@@ -1,4 +1,4 @@
-import utils from '../utils';
+const utils = require('../utils');
 
 function Api() {
 	this.data = [];
@@ -84,4 +84,4 @@ Api.prototype.reset = function() {
 	});
 };
 
-export default new Api();
+module.exports = new Api();
