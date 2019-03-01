@@ -6,7 +6,7 @@
  * and if the validateAdsTraffic option is enabled, we need to wait for it to
  * be available before making any ad calls.
  */
-import utils from '../utils';
+const utils = require('../utils');
 
 const Moat = function() {}; // eslint-disable-line no-empty-function
 
