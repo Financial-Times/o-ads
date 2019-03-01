@@ -21,8 +21,7 @@
  * @memberof FT.ads
  * @function
 */
-import utils from './utils';
-
+const utils = require('./utils');
 /**
 * Default configuration set in the constructor.
 */
@@ -122,6 +121,6 @@ Config.prototype.init = function() {
 };
 
 const config = new Config();
-export default config.access.bind(config);
-export const init = config.init.bind(config);
-export const clear = config.clear.bind(config);
+module.exports = config.access.bind(config);
+module.exports.init = config.init.bind(config);
+module.exports.clear = config.clear.bind(config);

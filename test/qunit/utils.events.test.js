@@ -25,7 +25,7 @@ QUnit.test('We can broadcast an from an element', function(assert) {
 	const done = assert.async();
 
 	const element = document.createElement('div');
-	this.fixturesContainer.get().appendChild(element);
+	this.fixturesContainer.appendChild(element);
 	element.addEventListener('oAds.ahoy', function(ev) {
 		assert.strictEqual(ev.type, 'oAds.ahoy', 'the event type is set');
 		assert.strictEqual(ev.detail.ahoy, 'hoy', 'details are added to the event object');
@@ -44,7 +44,7 @@ QUnit.test('We can broadcast from an element and it bubbles to the body', functi
 	const element = document.createElement('div');
 	function testFunc() {}
 
-	this.fixturesContainer.get().appendChild(element);
+	this.fixturesContainer.appendChild(element);
 	document.body.addEventListener('oAds.ahoy', function(ev) {
 		assert.strictEqual(ev.type, 'oAds.ahoy', 'the event type is set');
 		assert.strictEqual(ev.detail.there, 'matey', 'details are added to the event object');

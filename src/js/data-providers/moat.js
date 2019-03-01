@@ -24,4 +24,4 @@ Moat.prototype.init = function() {
 	});
 };
 
-export default new Moat();
+module.exports = new Moat();
