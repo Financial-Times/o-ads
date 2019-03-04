@@ -1,24 +1,22 @@
-const config = {
+const commonCapabilities = {
+	'browserstack.user': process.env.BROWSERSTACK_USER,
+	'browserstack.key': process.env.BROWSERSTACK_KEY,
+	'browserstack.local': process.env.BROWSERSTACK_LOCAL,
+	acceptSslCerts: true
+};
+
+module.exports = {
 	src_folders: ['./test/nightwatch'],
 	output_folder: './test/nightwatch/reports',
 	globals_path: './nightwatch-globals.js',
 	page_objects_path: './test/nightwatch/page_objects',
-	selenium : {
+	selenium: {
 		start_process : false,
 		host : 'hub-cloud.browserstack.com',
 		port : 80
 	},
 	live_output: true,
 	detailed_output: false,
-	test_workers: {
-		enabled: true,
-		workers: 2
-	},
-	common_capabilities: {
-		'browserstack.user': process.env.BROWSERSTACK_USER,
-		'browserstack.key': process.env.BROWSERSTACK_KEY,
-		'browserstack.local': process.env.BROWSERSTACK_LOCAL
-	},
 	test_settings: {
 		default: {
 			end_session_on_fail: false,
@@ -27,89 +25,86 @@ const config = {
 			screenshots: {
 				enabled: false
 			},
-			desiredCapabilities: {}
 		},
 		chrome: {
 			desiredCapabilities: {
-				browser: 'chrome',
-				browser_version: '70',
+				// browserName: 'chrome',
+				browser: 'Chrome',
+				// version: '70',
 				os: 'Windows',
 				os_version: '7',
-				acceptSslCerts: true
+				// If unfamiliar with destructuring syntax, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+				...commonCapabilities
 			}
 		},
 		firefox: {
 			desiredCapabilities: {
+				browserName: 'firefox',
+				browser: 'Firefox',
 				os: 'Windows',
   				os_version: '7',
-				browser: 'Firefox',
-				acceptSslCerts: true
+				...commonCapabilities
 			}
 		},
 		safari: {
 			desiredCapabilities: {
-				'os': 'OS X',
-  				'os_version': 'High Sierra',
-  				'browser': 'Safari',
-				acceptSslCerts: true
+				browserName: 'safari',
+				browser: 'Safari',
+				os: 'OS X',
+  				os_version: 'High Sierra',
+				...commonCapabilities
 			}
 		},
 		ie10: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '7',
-				'browser': 'IE',
-				'browser_version': '10.0',
-				acceptSslCerts: true
+				// browserName: 'internet explorer',
+				browser: 'IE',
+				browser_version: '10.0',
+				// version: '10',
+				os: 'Windows',
+				os_version: '7',
+				...commonCapabilities
 			}
 		},
 		ie11: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '8.1',
-				'browser': 'IE',
-				'browser_version': '11.0',
-				acceptSslCerts: true
+				// browserName: 'internet explorer',
+				browser: 'IE',
+				browser_version: '11.0',
+				// version: '11',
+				os: 'Windows',
+				os_version: '8.1',
+				...commonCapabilities
 			}
 		},
 		edge: {
 			desiredCapabilities: {
-				'os': 'Windows',
-				'os_version': '10',
-				'browser': 'Edge',
-				'browser_version': '16.0',
-				acceptSslCerts: true
+				// browserName: 'edge',
+				browser: 'Edge',
+				os: 'Windows',
+				os_version: '10',
+				...commonCapabilities
 			}
 		},
 		iphone_7: {
 			desiredCapabilities: {
-				'device': 'iPhone 7',
-				'realMobile': 'true',
-				'os_version': '10.3',
+				browserName: 'ANY',
+				device: 'iPhone 7',
+				realMobile: 'true',
+				os_version: '10.3',
 				deviceOrientation: 'portrait',
 				autoAcceptAlerts: true,
-				acceptSslCerts: true
+				...commonCapabilities
 			}
 		},
 		galaxy_s8: {
 			desiredCapabilities: {
-				'device': 'Samsung Galaxy S8',
-				'realMobile': 'true',
-				'os_version': '7.0',
-				acceptSslCerts: true
+				// browserName: 'ANY',
+				device: 'Samsung Galaxy S8',
+				real_mobile: 'true',
+				os_version: '7.0',
+				...commonCapabilities
 			}
 		}
 	}
 };
-
-// Code to support common capabilites
-Object.values(config.test_settings).forEach(conf => {
-	conf['selenium_host'] = config.selenium.host;
-	conf['selenium_port'] = config.selenium.port;
-	conf['desiredCapabilities'] = conf['desiredCapabilities'] || {};
-	Object.keys(config.common_capabilities).forEach(commonKey => {
-		conf['desiredCapabilities'][commonKey] = conf['desiredCapabilities'][commonKey] || config.common_capabilities[commonKey];
-	});
-});
-
-module.exports = config;
