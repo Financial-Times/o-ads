@@ -25,12 +25,14 @@ module.exports = {
 			screenshots: {
 				enabled: false
 			},
+			desiredCapabilities: {}
 		},
 		chrome: {
 			desiredCapabilities: {
-				// browserName: 'chrome',
-				browser: 'Chrome',
-				// version: '70',
+				browserName: 'chrome',
+				version: '70',
+				browser: 'chrome',
+				browser_version: '70',
 				os: 'Windows',
 				os_version: '7',
 				// If unfamiliar with destructuring syntax, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
@@ -40,7 +42,7 @@ module.exports = {
 		firefox: {
 			desiredCapabilities: {
 				browserName: 'firefox',
-				browser: 'Firefox',
+				browser: 'firefox',
 				os: 'Windows',
   				os_version: '7',
 				...commonCapabilities
@@ -49,7 +51,7 @@ module.exports = {
 		safari: {
 			desiredCapabilities: {
 				browserName: 'safari',
-				browser: 'Safari',
+				browser: 'safari',
 				os: 'OS X',
   				os_version: 'High Sierra',
 				...commonCapabilities
@@ -57,10 +59,10 @@ module.exports = {
 		},
 		ie10: {
 			desiredCapabilities: {
-				// browserName: 'internet explorer',
+				browserName: 'internet explorer',
+				version: '10',
 				browser: 'IE',
 				browser_version: '10.0',
-				// version: '10',
 				os: 'Windows',
 				os_version: '7',
 				...commonCapabilities
@@ -68,10 +70,10 @@ module.exports = {
 		},
 		ie11: {
 			desiredCapabilities: {
-				// browserName: 'internet explorer',
+				browserName: 'internet explorer',
+				version: '11',
 				browser: 'IE',
 				browser_version: '11.0',
-				// version: '11',
 				os: 'Windows',
 				os_version: '8.1',
 				...commonCapabilities
@@ -79,7 +81,7 @@ module.exports = {
 		},
 		edge: {
 			desiredCapabilities: {
-				// browserName: 'edge',
+				browserName: 'edge',
 				browser: 'Edge',
 				os: 'Windows',
 				os_version: '10',
@@ -99,7 +101,7 @@ module.exports = {
 		},
 		galaxy_s8: {
 			desiredCapabilities: {
-				// browserName: 'ANY',
+				browserName: 'ANY',
 				device: 'Samsung Galaxy S8',
 				real_mobile: 'true',
 				os_version: '7.0',
