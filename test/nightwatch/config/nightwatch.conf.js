@@ -29,8 +29,6 @@ module.exports = {
 		},
 		chrome: {
 			desiredCapabilities: {
-				browserName: 'chrome',
-				version: '70',
 				browser: 'chrome',
 				browser_version: '70',
 				os: 'Windows',
@@ -41,7 +39,6 @@ module.exports = {
 		},
 		firefox: {
 			desiredCapabilities: {
-				browserName: 'firefox',
 				browser: 'firefox',
 				os: 'Windows',
   				os_version: '7',
@@ -50,7 +47,6 @@ module.exports = {
 		},
 		safari: {
 			desiredCapabilities: {
-				browserName: 'safari',
 				browser: 'safari',
 				os: 'OS X',
   				os_version: 'High Sierra',
@@ -59,8 +55,6 @@ module.exports = {
 		},
 		ie10: {
 			desiredCapabilities: {
-				browserName: 'internet explorer',
-				version: '10',
 				browser: 'IE',
 				browser_version: '10.0',
 				os: 'Windows',
@@ -70,8 +64,6 @@ module.exports = {
 		},
 		ie11: {
 			desiredCapabilities: {
-				browserName: 'internet explorer',
-				version: '11',
 				browser: 'IE',
 				browser_version: '11.0',
 				os: 'Windows',
@@ -81,7 +73,6 @@ module.exports = {
 		},
 		edge: {
 			desiredCapabilities: {
-				browserName: 'edge',
 				browser: 'Edge',
 				os: 'Windows',
 				os_version: '10',
@@ -90,7 +81,6 @@ module.exports = {
 		},
 		iphone_7: {
 			desiredCapabilities: {
-				browserName: 'ANY',
 				device: 'iPhone 7',
 				realMobile: 'true',
 				os_version: '10.3',
@@ -101,7 +91,6 @@ module.exports = {
 		},
 		galaxy_s8: {
 			desiredCapabilities: {
-				browserName: 'ANY',
 				device: 'Samsung Galaxy S8',
 				real_mobile: 'true',
 				os_version: '7.0',

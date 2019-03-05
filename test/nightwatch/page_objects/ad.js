@@ -9,8 +9,8 @@ const commands = {
 	},
 
 	cleverFrameParent: function() {
-		const browserName = this.client.options.desiredCapabilities.browserName;
-		if(browserName === 'internet explorer') {
+		const browser = this.client.options.desiredCapabilities.browser;
+		if(browser === 'IE') {
 			return this.api.frame();
 		}
 
