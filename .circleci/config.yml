@@ -22,7 +22,7 @@ jobs:
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run: npm run test-browser
+      - run: npm run test-nightwatch
       - store-artifacts:
           path: test/cypress/videos
       - store-artifacts:
@@ -50,7 +50,7 @@ jobs:
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
       - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run: npm run test-browser
+      - run: npm run test-nightwatch
   publish_to_npm:
     docker:
       - image: circleci/node:10

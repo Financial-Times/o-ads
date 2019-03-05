@@ -16,7 +16,7 @@ module.exports = {
 			// switch focus to first iframe
 			.page.ad().cleverFrame('google_ads_iframe_/5887/test.5887.origami_0')
 			// wait for 1 second for advert to appear
-			.waitForElementPresent('img', wait, 'Advert image is visible')
+			.waitForElementPresent('.img_ad', wait, 'Advert image is visible')
 			// make sure we can see the correct URL
 			.assert.attributeContains('img', 'src', 'https://tpc.googlesyndication.com/simgad/12593654562240684097', 'Correct image is displayed for leaderboard')
 			// switch focus back to main page

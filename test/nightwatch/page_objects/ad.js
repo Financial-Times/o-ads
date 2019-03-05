@@ -11,7 +11,7 @@ const commands = {
 	cleverFrameParent: function() {
 		const browserName = this.client.options.desiredCapabilities.browserName;
 		if(browserName === 'internet explorer') {
-			return this.api.frame(null);
+			return this.api.frame();
 		}
 
 		return this.api.frameParent();

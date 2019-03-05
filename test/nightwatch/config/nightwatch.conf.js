@@ -15,7 +15,7 @@ module.exports = {
 		host : 'hub-cloud.browserstack.com',
 		port : 80
 	},
-	live_output: true,
+	live_output: false,
 	detailed_output: false,
 	test_settings: {
 		default: {
