@@ -183,4 +183,3 @@ function removeDOMEventListener() {
 
 const ads = new Ads();
 export default ads;
-export { ads };
