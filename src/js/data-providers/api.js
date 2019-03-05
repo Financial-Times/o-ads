@@ -1,4 +1,4 @@
-const utils = require('../utils');
+import utils from '../utils';
 
 function Api() {
 	this.data = [];

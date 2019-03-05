@@ -6,7 +6,7 @@ describe('Main', () => {
 		cy.clearCookie('FTConsent');
 	});
 
-	it('oAds.ready event fires after o.DOMContentLoaded', () => {
+	it.only('oAds.ready event fires after o.DOMContentLoaded', () => {
 		document.body.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');
 		new Ads();
 		const oAdsReadySpy = cy.spy();
