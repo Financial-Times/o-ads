@@ -30,7 +30,6 @@ module.exports = {
 		chrome: {
 			desiredCapabilities: {
 				browser: 'chrome',
-				browser_version: '70',
 				os: 'Windows',
 				os_version: '7',
 				// If unfamiliar with destructuring syntax, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
@@ -40,8 +39,8 @@ module.exports = {
 		firefox: {
 			desiredCapabilities: {
 				browser: 'firefox',
-				os: 'Windows',
-  				os_version: '7',
+				os: 'OS X',
+  				os_version: 'High Sierra',
 				...commonCapabilities
 			}
 		},
