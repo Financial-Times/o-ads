@@ -166,8 +166,22 @@ Via component
 
 ## Events
 
+#### `oAds.startInitialisation`
+Triggered when the library starts the initialisation process. At this point in time, if `targetingApi` has been defined in the configuration, two separate calls are made to the targeting api in order to get 'user' and 'page' targeting parameters.
+
+Also at this point, if `validateAdsTraffic` is set to `true`, `o-ads` will check if the traffic validation script (currently `moat.js`) is available and use it to check if the traffic source is a valid one.
+
+#### `oAds.apiRequestsComplete`
+If targeting has been configured, this event is triggered when both requests to the targeting api ('user' and 'page') have been fullfilled (whether successfully or not).
+
+#### `oAds.moatIVTcomplete`
+If `validateAdsTraffic` is set to `true`, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can't been found, when the associated timeout period expires.
+
 #### `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
+
+#### `oAds.adServerLoadSuccess`
+Triggered when both the GPT library is loaded and `oAds.initialised` has happened. This marks the completion of the page-level tasks required to enable requests to the ad server.
 
 #### `oAds.adServerLoadError`
 Triggered if the library fails to load the external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
