@@ -475,6 +475,8 @@ const slotMethods = {
 * Updating is used to tell the ad server to treat subsequent ad calls as being on a new page
 */
 function updateCorrelator() {
+	utils.log.warn('[DEPRECATED]: Updatecorrelator is being phased out by google and removed from o-ads in future releases.');
+
 	googletag.cmd.push(() => {
 		googletag.pubads().updateCorrelator();
 	});
