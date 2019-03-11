@@ -152,6 +152,7 @@ Via component
 ```
 
 ## Passing version number
+
 	To pass o-ads library version number along with ads call. (off by default)
 
 	``` javascript
@@ -206,3 +207,10 @@ If the oAds is configured to use responsive adverts with set breakpoints, it wil
 
 #### `oAds.collapse`
 Event is emitted when the slot is collapsed. The event detail contains oAds slot instance.
+
+## Ads loading process
+
+The following graph shows the main events that constitute the process of loading an ad.
+
+![]({{ site.url }}/assets/loading_process_main.png)
+
