@@ -212,5 +212,5 @@ Event is emitted when the slot is collapsed. The event detail contains oAds slot
 
 The following graph shows the main events that constitute the process of loading an ad.
 
-![]({{ site.url }}/assets/loading_process_main.png)
+![]({{ site.url }}assets/loading_process_main.png)
 
