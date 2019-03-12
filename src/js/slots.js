@@ -255,8 +255,20 @@ Slots.prototype.initPostMessage = function() {
 				return;
 			}
 
+			// For backwards compatibility with o-ads-embed v2.
+			if (type === 'whoami' && event.source) {
+				if (data.collapse) {
+					slot.collapse();
+				}
+				const messageToSend = {
+					type: 'oAds.youare',
+					name: slotName
+				};
+				utils.messenger.post(messageToSend, event.source);
+			}
+
 			// Received message to Collapse ad slot.
-			if (type === 'collapse' && data.collapse) {
+			else if (type === 'collapse' && data.collapse) {
 				slot.collapse();
 			}
 
