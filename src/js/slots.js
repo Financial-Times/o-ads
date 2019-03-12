@@ -247,14 +247,13 @@ Slots.prototype.initPostMessage = function() {
 		/* istanbul ignore else	don't process messages with a non oAds type*/
 		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
 			const type = data.type.replace('oAds\.', '');
+			// Make sure the message is coming from an identified ad slot
 			const slotName = utils.iframeToSlotName(event.source.window);
 			const slot = slots[slotName] || false;
-
 			if (!slot) {
 				utils.log.error('Message received from unidentified slot');
 				return;
 			}
-
 			// For backwards compatibility with o-ads-embed v2.
 			if (type === 'whoami' && event.source) {
 				if (data.collapse) {
