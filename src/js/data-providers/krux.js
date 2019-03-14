@@ -231,7 +231,7 @@ Krux.prototype.resetAttributes = function() {
 Krux.prototype.consents = function() {
 	const kruxConfig = config('krux');
 	if (kruxConfig && kruxConfig.consentState) {
-		utils.broadcast('kruxConsentGiven');
+		utils.broadcast('kruxConsentOptinOK');
 		const kuid = localStorage && localStorage.getItem('kxkuid');
 		if (kuid) {
 			const consentApi = `https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=${kuid}`;
@@ -241,13 +241,13 @@ Krux.prototype.consents = function() {
 			})
 				.then( (data) => {
 					if (data.ok) {
-						utils.broadcast('kruxConsentAck');
+						utils.broadcast('kruxKuidAck');
 						return data.json();
 					}
-					Promise.reject(data.status);
+					throw new Error('error confirming kuid consent by krux');
 				})
 				.catch(() => {
-					utils.broadcast('kruxConsentError');
+					utils.broadcast('kruxKuidError');
 					Promise.resolve(utils.log.warn('Fetch request failed to GET krux consent api'));
 				});
 		}
@@ -255,7 +255,7 @@ Krux.prototype.consents = function() {
 			window.setTimeout(Krux.prototype.consents.bind(Krux), 1000);
 		}
 	} else {
-		utils.broadcast('kruxConsentWithdrawn');
+		utils.broadcast('kruxConsentOptinFailed');
 	}
 };
 
