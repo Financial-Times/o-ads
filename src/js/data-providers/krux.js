@@ -229,8 +229,7 @@ Krux.prototype.resetAttributes = function() {
 };
 
 Krux.prototype.consents = function() {
-	const kruxConfig = config('krux');
-	if (kruxConfig && kruxConfig.consentState) {
+	if (config('krux') && config('krux').consentState) {
 		utils.broadcast('kruxConsentOptinOK');
 		const kuid = localStorage && localStorage.getItem('kxkuid');
 		if (kuid) {
@@ -242,7 +241,7 @@ Krux.prototype.consents = function() {
 				.then( (data) => {
 					if (data.ok) {
 						utils.broadcast('kruxKuidAck');
-						return data.json();
+						return;
 					}
 					throw new Error('error confirming kuid consent by krux');
 				})
