@@ -152,7 +152,6 @@ function Slot(container, screensize, initLazyLoading) {
 
 	// make sure the slot has a name
 	this.setName();
-	this.setResponsiveCreative(false);
 	slotConfig = slotConfig[this.name] || {};
 
 	// default configuration properties
@@ -316,14 +315,6 @@ Slot.prototype.setName = function() {
 		this.name = `o-ads-slot-${(Math.floor(Math.random() * 10000))}`;
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
-	return this;
-};
-
-/**
- *	If the slot doesn't have a name give it one
- */
-Slot.prototype.setResponsiveCreative = function(value) {
-	this.responsiveCreative = value;
 	return this;
 };
 

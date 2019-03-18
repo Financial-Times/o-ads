@@ -302,7 +302,7 @@ const slotMethods = {
 
 				updatePageTargeting({ res: screensize });
 
-				if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
+				if (slot.hasValidSize(screensize)) {
 					/* istanbul ignore else  */
 					if (slot.gpt.iframe) {
 						slot.fire('refresh');
