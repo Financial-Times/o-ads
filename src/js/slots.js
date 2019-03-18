@@ -267,7 +267,7 @@ Slots.prototype.initPostMessage = function() {
 			}
 
 			// Received message to Collapse ad slot.
-			else if (type === 'collapse' && data.collapse) {
+			else if (type === 'collapse') {
 				slot.collapse();
 			}
 
