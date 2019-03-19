@@ -416,7 +416,7 @@ const slotMethods = {
 					return false;
 				}
 			}
-			
+
 			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
