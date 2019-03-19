@@ -405,6 +405,7 @@ const slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
+		/* istanbul ignore next  */
 		if (this.outOfPage && this.gpt.iframe) {
 			function getImpressionURL(iframe) {
 				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
@@ -415,6 +416,7 @@ const slotMethods = {
 					return false;
 				}
 			}
+
 			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
 			if(impressionURL){
