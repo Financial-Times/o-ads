@@ -247,61 +247,43 @@ Slots.prototype.initPostMessage = function() {
 		/* istanbul ignore else	don't process messages with a non oAds type*/
 		if (data.type && (/^oAds\./.test(data.type) || /^touch/.test(data.type))) {
 			const type = data.type.replace('oAds\.', '');
-			let slot = data.name ? slots[data.name] : false;
+			// Make sure the message is coming from an identified ad slot
+			const slotName = utils.iframeToSlotName(event.source.window);
+			const slot = slots[slotName] || false;
+			if (!slot) {
+				utils.log.error('Message received from unidentified slot');
+				return;
+			}
+			// For backwards compatibility with o-ads-embed v2
 			if (type === 'whoami' && event.source) {
+				if (data.collapse) {
+					slot.collapse();
+				}
+				const messageToSend = {
+					type: 'oAds.youare',
+					name: slotName
+				};
+				utils.messenger.post(messageToSend, event.source);
+			}
 
+			// TODO: Remove adIframeLoaded once we can tag onto GPTs `slotRenderEnded` event
+			else if(type === 'adIframeLoaded') {
 				document.body.dispatchEvent( new CustomEvent('oAds.adIframeLoaded'));
+			}
 
-				const messageToSend = { type: 'oAds.youare' };
-				const slotName = utils.iframeToSlotName(event.source.window);
-				slot = slots[slotName] || false;
+			// Received message to Collapse ad slot.
+			else if (type === 'collapse') {
+				slot.collapse();
+			}
 
-				if (slot) {
-					if (data.collapse) {
-						slot.collapse();
-					}
+			// Received touch events from ad slot iframe
+			/* istanbul ignore else*/
+			else if (/^touch/.test(data.type)) {
+				slot.fire('touch', data);
+			}
 
-					if (data.mastercompanion) {
-						const size = slot.gpt.size;
-						const format = findFormatBySize(size);
-						slots.forEach(function(s) {
-							if(s.companion && s.name !== slot.name) {
-								s.fire('masterLoaded', slot);
-								s.container.setAttribute('data-o-ads-master-loaded', format);
-							}
-						});
-					}
-					if (data.customMessages && typeof data.customMessages === "object") {
-						slot.fire('customMessages', data.customMessages);
-					}
-					if(slot.disableSwipeDefault) {
-						messageToSend.disableDefaultSwipeHandler = true;
-					}
-
-					messageToSend.name = slotName;
-					messageToSend.sizes = slot.sizes;
-
-					utils.messenger.post(messageToSend, event.source);
-				} else {
-					utils.log.error('Message received from unidentified slot');
-				}
-			} else {
-				if (!slot) {
-					utils.log.error('Message received from unidentified slot');
-					return;
-				}
-
-				if(type === 'responsive') {
-					slot.setResponsiveCreative(true);
-				} else if (utils.isFunction(slot[type])) {
-					slot[type]();
-				} else if (/^touch/.test(data.type)) {
-					slot.fire('touch', data);
-				} else {
-					delete data.type;
-					delete data.name;
-					slot.fire(type, data);
-				}
+			else {
+				utils.log.error('Unknown message received from o-ads-embed');
 			}
 		}
 	}
