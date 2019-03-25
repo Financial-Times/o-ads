@@ -406,16 +406,16 @@ const slotMethods = {
 	},
 	submitGptImpression : function() {
 		/* istanbul ignore next  */
-		if (this.outOfPage && this.gpt.iframe) {
-			function getImpressionURL(iframe) {
-				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
-				if (trackingUrlElement) {
-					return trackingUrlElement.dataset.oAdsImpressionUrl;
-				} else {
-					utils.log.warn('Impression URL not found, this is set via a creative template.');
-					return false;
-				}
+		function getImpressionURL(iframe) {
+			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+			if (trackingUrlElement) {
+				return trackingUrlElement.dataset.oAdsImpressionUrl;
+			} else {
+				utils.log.warn('Impression URL not found, this is set via a creative template.');
+				return false;
 			}
+		}
+		if (this.outOfPage && this.gpt.iframe) {
 
 			const impressionURL = getImpressionURL(this.gpt.iframe);
 			/* istanbul ignore else  */
