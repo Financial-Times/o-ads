@@ -50,7 +50,7 @@
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
     "nightwatch": "^0.9.21",
-    "origami-build-tools": "^7.13.3",
+    "origami-build-tools": "^8.0.0",
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
     "release-it": "^7.6.1",
