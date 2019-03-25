@@ -3,13 +3,13 @@
 
 /**
 * @fileOverview
-* ad server modukes for o-ads implementing Google publisher tags ad requests.
+* ad server modules for o-ads implementing Google publisher tags ad requests.
 *
 * @author Robin Marr, robin.marr@ft.com
 */
-const config = require('../config');
-const utils = require('../utils');
-const targeting = require('../targeting');
+import config from '../config';
+import utils from '../utils';
+import targeting from '../targeting';
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
@@ -406,19 +406,19 @@ const slotMethods = {
 	},
 	submitGptImpression : function() {
 		/* istanbul ignore next  */
-		if (this.outOfPage && this.gpt.iframe) {
-			function getImpressionURL(iframe) {
-				const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
-				if (trackingUrlElement) {
-					return trackingUrlElement.dataset.oAdsImpressionUrl;
-				} else {
-					utils.log.warn('Impression URL not found, this is set via a creative template.');
-					return false;
-				}
+		function getImpressionURL(iframe) {
+			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
+			if (trackingUrlElement) {
+				return trackingUrlElement.dataset.oAdsImpressionUrl;
+			} else {
+				utils.log.warn('Impression URL not found, this is set via a creative template.');
+				return false;
 			}
+		}
+		if (this.outOfPage && this.gpt.iframe) {
 
 			const impressionURL = getImpressionURL(this.gpt.iframe);
-			/* istanbul ignore else  */
+			/* istanbul ignore next  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
 					() => {
@@ -499,12 +499,7 @@ function updatePageTargeting(override) {
 	}
 }
 
-module.exports.init = init;
-module.exports.updateCorrelator = updateCorrelator;
-module.exports.updatePageTargeting = updatePageTargeting;
-module.exports.clearPageTargetingForKey = clearPageTargetingForKey;
-
-module.exports.debug = () => {
+function debug() {
 	const log = utils.log;
 	const conf = config('gpt');
 	if(!conf){
@@ -514,4 +509,11 @@ module.exports.debug = () => {
 	log.start('gpt');
 	log.attributeTable(conf);
 	log.end();
+}
+export default {
+	init,
+	updateCorrelator,
+	updatePageTargeting,
+	clearPageTargetingForKey,
+	debug
 };

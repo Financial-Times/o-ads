@@ -1,5 +1,5 @@
-const utils = require('./utils');
-const config = require('./config');
+import utils from './utils';
+import config from './config';
 
 const VALID_SIZE_STRINGS = ['fluid'];
 const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];
@@ -456,4 +456,4 @@ Slot.prototype.labelContainer = function() {
 	return this;
 };
 
-module.exports = Slot;
+export default Slot;

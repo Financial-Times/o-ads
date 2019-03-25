@@ -121,7 +121,7 @@ QUnit.test('events on DOM elements ', function(assert) {
 				events: {
 					delegated: {
 						shareTwitter: {
-							selector: '#' + this.fixturesContainer.id,
+							selector: '#' + this.fixturesContainer.get().id,
 							eType: 'click',
 							id: 'xyz'
 						}
@@ -132,7 +132,7 @@ QUnit.test('events on DOM elements ', function(assert) {
 
 		this.ads.krux.events.init();
 		this.trigger(window, 'load');
-		this.trigger(this.fixturesContainer, 'click');
+		this.trigger(this.fixturesContainer.get(), 'click');
 		assert.ok(window.Krux.calledWith('admEvent', 'xyz'), 'dom delegated event fired');
 	} else {
 		assert.ok(true, 'Browser does not support standard event listeners');

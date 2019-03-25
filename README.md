@@ -54,3 +54,8 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 - Breaking change: collapsing ads for a specific slot on the markup now uses  `'before'`, `'after`', `'never'` instead of `true` and `false` previously
 - Breaking change: Global collapse empty behavior is set in `config.collapseEmpty` instead of `config.gpt.collapseEmpty` previously
 
+### Upgrading to v11
+
+As of version 11, o-ads has been updated to use ES modules. Unfortunately, this means it is not backwards compatible with CJS modules and clients cannot `require('o-ads')` anymore.
+- Breaking change: if importing o-ads in your build, you must now do it as follows: `import oAds from 'o-ads'`
+

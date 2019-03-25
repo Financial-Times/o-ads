@@ -4,7 +4,7 @@
  * @module utils
  */
 
-module.exports.messenger = {
+export default {
 	post: function(message, source) {
 		message = typeof message === 'string' ? message : JSON.stringify(message);
 		source = arguments[1] || window.top;
