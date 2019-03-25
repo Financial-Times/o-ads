@@ -418,7 +418,7 @@ const slotMethods = {
 		if (this.outOfPage && this.gpt.iframe) {
 
 			const impressionURL = getImpressionURL(this.gpt.iframe);
-			/* istanbul ignore else  */
+			/* istanbul ignore next  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
 					() => {
