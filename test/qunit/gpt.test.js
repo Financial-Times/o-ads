@@ -427,7 +427,7 @@ QUnit.test('collapse empty', function(assert) {
 	assert.ok(googletag.pubads().collapseEmptyDivs.notCalled, 'never mode is set in gpt');
 });
 
-QUnit.test('submit impression', function(assert) {
+QUnit.skip('submit impression', function(assert) {
 	const infoLog = this.spy(this.utils.log, 'info');
 	const warnLog = this.spy(this.utils.log, 'warn');
 	const html = '<div data-o-ads-name="delayedimpression" data-o-ads-out-of-page="true" data-o-ads-formats="MediumRectangle"></div>';
@@ -441,7 +441,7 @@ QUnit.test('submit impression', function(assert) {
 	assert.notOk(warnLog.calledOnce, 'no info notifications have been logged');
 });
 
-QUnit.test('catches a failure to submit an impression', function(assert) {
+QUnit.skip('catches a failure to submit an impression', function(assert) {
 	this.ads.utils.attach.restore();
 	const attachSpy = this.stub(this.ads.utils, 'attach', function(url, async, successCallback, failureCallback) {
 		failureCallback.call();
