@@ -255,6 +255,7 @@ Slots.prototype.initPostMessage = function() {
 				return;
 			}
 			// For backwards compatibility with o-ads-embed v2
+			// TODO: remove once creative wrapper updated with o-ads-embed v3
 			if (type === 'whoami' && event.source) {
 				if (data.collapse) {
 					slot.collapse();
