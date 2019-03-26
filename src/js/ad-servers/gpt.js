@@ -340,7 +340,8 @@ const slotMethods = {
 	*/
 	display: function() {
 	  window.googletag.cmd.push(() => {
-	    utils.broadcast('gptDisplay');
+			const slotData = this.getEventPayload();
+	    utils.broadcast('gptDisplay', { slotData: slotData });
 	    googletag.display(this.gpt.id);
 	  });
 	  return this;

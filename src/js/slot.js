@@ -228,14 +228,14 @@ Slot.prototype.parseAttributeConfig = function() {
 		} else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
 			this.lazyLoad.viewportMargin = attributeParsers.base(value);} else if (attributeParsers[name]) {
-			this[name] = attributeParsers[name](value, this[name]);
-		} else if (/^formats\w*/.test(name)) {
-			this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
-		} else if (/^sizes\w*/.test(name)) {
-			this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
-		} else if (this.hasOwnProperty(name)) {
-			this[name] = attributeParsers.base(value);
-		}
+				this[name] = attributeParsers[name](value, this[name]);
+			} else if (/^formats\w*/.test(name)) {
+				this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
+			} else if (/^sizes\w*/.test(name)) {
+				this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
+			} else if (this.hasOwnProperty(name)) {
+				this[name] = attributeParsers.base(value);
+			}
 	});
 };
 
@@ -454,6 +454,19 @@ Slot.prototype.labelContainer = function() {
 		this.container.classList.add(`o-ads--${className}`);
 	}
 	return this;
+};
+
+// Returns object with basic data useful when consuming the event
+Slot.prototype.getEventPayload = function() {
+	const gpt = this.gpt || {};
+
+	const slotData = {
+		pos: (this.targeting && this.targeting.pos) || '',
+		size: (gpt.size && gpt.size.toString()) || '',
+		id: gpt.id || ''
+	};
+
+	return slotData;
 };
 
 export default Slot;
