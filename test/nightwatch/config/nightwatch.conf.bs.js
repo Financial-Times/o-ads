@@ -78,13 +78,11 @@ module.exports = {
 				...commonCapabilities
 			}
 		},
-		iphone_7: {
+		iphone_8: {
 			desiredCapabilities: {
-				device: 'iPhone 7',
-				realMobile: 'true',
-				os_version: '10.3',
-				deviceOrientation: 'portrait',
-				autoAcceptAlerts: true,
+				device: 'iPhone 8',
+				real_mobile: 'true',
+				os_version: '12',
 				...commonCapabilities
 			}
 		},
