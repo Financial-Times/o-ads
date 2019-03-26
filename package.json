@@ -12,7 +12,7 @@
     "test-cy:open": "cypress open",
     "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
     "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
-    "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,edge,ie11,ie10,galaxy_s8",
+    "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,edge,galaxy_s8",
     "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
