@@ -26,57 +26,6 @@ QUnit.module('Slots - post message', {
 	}
 });
 
-QUnit.test('Post message whoami message reply is sent', function (assert) {
-	const done = assert.async();
-	const slotName = 'whoami-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return slotName;
-	});
-
-	this.stub(this.utils.messenger, 'post', function(message, source) {
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.notOk(slot.collapse.called, 'the collapse method is not called');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', 	function () {
-		window.postMessage('{ "type": "oAds.whoami"}', '*');
- 	});
-
-	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-QUnit.test('Post message "whoami" message with collapse option will call slot.collapse()', function (assert) {
-	const done = assert.async();
-	const slotName = 'whoami-collapse-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return slotName;
-	});
-
-	this.stub(this.utils.messenger, 'post', function(message, source) {
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.ok(slot.collapse.called, 'the collapse method is called');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.whoami", "collapse": true}', '*');
-	});
-
-	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
 	const done = assert.async();
 	const slotName = 'whoami-ad';
