@@ -37,7 +37,6 @@ QUnit.test('Post message whoami message reply is sent', function (assert) {
 	this.stub(this.utils.messenger, 'post', function(message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.deepEqual(message.sizes, [[300, 250]], 'the correct sizes are supplied');
 		assert.notOk(slot.collapse.called, 'the collapse method is not called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
@@ -52,7 +51,7 @@ QUnit.test('Post message whoami message reply is sent', function (assert) {
 	this.spy(slot, 'collapse');
 });
 
-QUnit.test('Post message whoami message with collapse will call slot collapse', function (assert) {
+QUnit.test('Post message "whoami" message with collapse option will call slot.collapse()', function (assert) {
 	const done = assert.async();
 	const slotName = 'whoami-collapse-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
@@ -63,7 +62,6 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 	this.stub(this.utils.messenger, 'post', function(message, source) {
 		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
 		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.deepEqual(message.sizes, [[300, 250]], 'the sizes are returned');
 		assert.ok(slot.collapse.called, 'the collapse method is called');
 		assert.strictEqual(window, source, ' the source is the as expected');
 		done();
@@ -78,37 +76,6 @@ QUnit.test('Post message whoami message with collapse will call slot collapse', 
 	this.spy(slot, 'collapse');
 });
 
-QUnit.test('Post message whoami message with isMaster will fire event on companion slots', function (assert) {
-	const done = assert.async();
-	const master = this.fixturesContainer.add('<div data-o-ads-name="master" data-o-ads-formats="Leaderboard"></div>');
-	const companion = this.fixturesContainer.add('<div data-o-ads-name="companion" data-o-ads-companion="true" data-o-ads-formats="MediumRectangle"></div>');
-	const notCompanion = this.fixturesContainer.add('<div data-o-ads-name="not-companion" data-o-ads-formats="MediumRectangle" data-o-ads-companion="false"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return 'master';
-	});
-
-	this.stub(this.utils.messenger, 'post', function () {
-		assert.ok(companionSlot.fire.called, 'the event is is called on the companion');
-		assert.equal(companionSlot.container.getAttribute('data-o-ads-master-loaded'), 'Leaderboard');
-		assert.notOk(masterSlot.fire.called, 'the event method is not called on the master');
-		assert.notOk(notCompanionSlot.fire.called, 'the collapse method is not called on a non companion');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', function (slot) {
-		if(slot.detail.name === 'master') {
-			window.postMessage('{ "type": "oAds.whoami", "mastercompanion": true}', '*');
-		}
-	});
-
-	this.ads.init();
-	const masterSlot = this.ads.slots.initSlot(master);
-	const companionSlot = this.ads.slots.initSlot(companion);
-	const notCompanionSlot = this.ads.slots.initSlot(notCompanion);
-	this.spy(masterSlot, 'fire');
-	this.spy(companionSlot, 'fire');
-	this.spy(notCompanionSlot, 'fire');
-});
 
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
 	const done = assert.async();
@@ -132,68 +99,17 @@ QUnit.test('Post message from unknown slot logs an error and sends a repsonse', 
  	});
 
 	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
-	const done = assert.async();
-	const slotName = 'collapse-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
-	document.body.addEventListener('oAds.complete', function () {
-		window.postMessage('{ "type": "oAds.collapse", "name": "' + slotName + '"}', '*');
-	});
-
-	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.stub(slot, 'collapse', function () {
-		assert.ok(slot.collapse.called, 'the collapse method is called');
-		done();
-	});
-});
-
-QUnit.test('Post message responsive tells the slot a responsive creative is loaded', function (assert) {
-	const done = assert.async();
-	const slotName = 'responsive-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.responsive", "name": "' + slotName + '"}', '*');
-	});
-
-	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.stub(slot, 'setResponsiveCreative', function () {
-		assert.ok(slot.setResponsiveCreative.calledWith(true), 'the setResponsiveCreative method is called');
-		done();
-	});
-});
-
-
-QUnit.test('Post message resize message fire the resize event', function (assert) {
-	const done = assert.async();
-	const slotName = 'resize-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.resize", "name": "' + slotName + '", "size": [300, 250]}', '*');
-	});
-
-	document.body.addEventListener('oAds.resize', function () {
-		assert.ok(event.detail.slot, 'The resize event is fired ');
-		assert.equal(event.detail.name, slotName, 'the name is ' + slotName);
-		assert.deepEqual(event.detail.size, [300, 250], 'the correct size is passed');
-		done();
-	});
-
-	this.ads.init();
 	this.ads.slots.initSlot(container);
 });
+
 
 QUnit.test('Passed touch fires an event', function (assert) {
 	const done = assert.async();
 	const slotName = 'touch-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
 
 	document.body.addEventListener('oAds.ready', function () {
 		window.postMessage('{ "type": "touchstart", "name": "' + slotName + '"}', '*');
@@ -211,80 +127,7 @@ QUnit.test('Passed touch fires an event', function (assert) {
 });
 
 
-QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present on attribute', function (assert) {
-	const done = assert.async();
-	const slotName = 'whoami-collapse-ad';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle" data-o-ads-disable-swipe-default="true"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return slotName;
-	});
-
-	this.stub(this.utils.messenger, 'post', function (message, source) {
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.whoami"}', '*');
-	});
-
-	this.ads.init();
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in slot config', function (assert) {
-	const done = assert.async();
-	const slotName = 'test';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return slotName;
-	});
-	this.stub(this.utils.messenger, 'post', function (message, source) {
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.whoami"}', '*');
-	});
-	this.ads.init({slots: {test: {disableSwipeDefault: true}}});
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-
-QUnit.test('Post message replies with correct disable default swipe handler parameter if config is present in global config', function (assert) {
-	const done = assert.async();
-	const slotName = 'test';
-	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
-	this.stub(this.utils, 'iframeToSlotName', function () {
-		return slotName;
-	});
-	this.stub(this.utils.messenger, 'post', function (message, source) {
-		assert.equal(message.type, 'oAds.youare', 'the event type is oAds.youare');
-		assert.equal(message.name, slotName, 'the name is ' + slotName);
-		assert.equal(message.disableDefaultSwipeHandler, true, 'the default handler disable flag is present');
-		assert.strictEqual(window, source, ' the source is the as expected');
-		done();
-	});
-
-	document.body.addEventListener('oAds.ready', function () {
-		window.postMessage('{ "type": "oAds.whoami"}', '*');
-	});
-	this.ads.init({disableSwipeDefault: true});
-	const slot = this.ads.slots.initSlot(container);
-	this.spy(slot, 'collapse');
-});
-
-
-QUnit.test('Post message catches the event when the message comes not from a slot that is does not exist', function (assert) {
+QUnit.test('Post message catches the event when the message comes from an unidentified slot', function (assert) {
 	const done = assert.async();
 	const slotName = 'responsive-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
@@ -300,21 +143,53 @@ QUnit.test('Post message catches the event when the message comes not from a slo
 	this.ads.slots.initSlot(container);
 });
 
-QUnit.test('Post message collapse calls the collapse method on the slot', function (assert) {
+QUnit.test('Post message "collapse" message will call slot.collapse()', function (assert) {
 	const done = assert.async();
-	const slotName = 'custom-message';
+	const slotName = 'collapse-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
-	document.body.addEventListener('oAds.complete', function () {
-		window.postMessage('{"collapse":false,"mastercompanion":false,"customMessages":{"arrow-buttons-disabled":"true"},"type":"oAds.whoami","name":"custom-message"}', '*');
 
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.collapse", "collapse": true}', '*');
 	});
-	document.body.addEventListener("oAds.customMessages", function() {
-	 assert.equal(event.detail.name, 'custom-message', 'test slot fired the customMessages event');
-	 	done();
+
+	window.addEventListener('message', function () {
+		// Make sure this executes AFTER the other 'message' event listener
+		// defined in slots.js
+		setTimeout(() => {
+			assert.ok(slot.collapse.called, 'the collapse method is called');
+			done();
+		}, 0);
 	});
+
+	this.ads.init();
+	const slot = this.ads.slots.initSlot(container);
+	this.spy(slot, 'collapse');
+});
+
+QUnit.test('Unknown postMessage will log an error', function (assert) {
+	const done = assert.async();
+	const slotName = 'test-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+
+	window.addEventListener('message', function () {
+		// Make sure this executes AFTER the other 'message' event listener
+		// defined in slots.js
+		setTimeout(() => {
+			assert.ok(errorStub.calledWith('Unknown message received from o-ads-embed'), 'the error is logged');
+			done();
+		}, 0);
+	});
+
+	document.body.addEventListener('oAds.ready', function () {
+		window.postMessage('{ "type": "oAds.unknown" }', '*');
+	});
+
 	this.ads.init();
 	this.ads.slots.initSlot(container);
 });

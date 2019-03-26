@@ -1,4 +1,4 @@
-/* global QUnit: false, require: false */
+/* global QUnit: false */
 
 'use strict'; //eslint-disable-line
 

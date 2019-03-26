@@ -156,6 +156,12 @@
 				"network": 5887,
 				"site" : "test.5887.origami"
 			}
+		},
+		{
+			"name": "o-ads-embed",
+			"template": "/demos/src/o-ads-embed.mustache",
+			"expanded": true,
+			"description": "Test o-ads-embed"
 		}
 	]
 }

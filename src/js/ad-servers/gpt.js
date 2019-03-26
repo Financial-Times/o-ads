@@ -302,7 +302,7 @@ const slotMethods = {
 
 				updatePageTargeting({ res: screensize });
 
-				if (slot.hasValidSize(screensize) && !slot.responsiveCreative) {
+				if (slot.hasValidSize(screensize)) {
 					/* istanbul ignore else  */
 					if (slot.gpt.iframe) {
 						slot.fire('refresh');
@@ -405,6 +405,7 @@ const slotMethods = {
 		return this;
 	},
 	submitGptImpression : function() {
+		/* istanbul ignore next  */
 		function getImpressionURL(iframe) {
 			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
 			if (trackingUrlElement) {
@@ -415,8 +416,9 @@ const slotMethods = {
 			}
 		}
 		if (this.outOfPage && this.gpt.iframe) {
+
 			const impressionURL = getImpressionURL(this.gpt.iframe);
-			/* istanbul ignore else  */
+			/* istanbul ignore next  */
 			if(impressionURL){
 				utils.attach(impressionURL, true,
 					() => {
@@ -475,6 +477,8 @@ const slotMethods = {
 * Updating is used to tell the ad server to treat subsequent ad calls as being on a new page
 */
 function updateCorrelator() {
+	utils.log.warn('[DEPRECATED]: Updatecorrelator is being phased out by google and removed from o-ads in future releases.');
+
 	googletag.cmd.push(() => {
 		googletag.pubads().updateCorrelator();
 	});

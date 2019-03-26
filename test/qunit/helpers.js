@@ -1,4 +1,4 @@
-/* global sinon: false, $: false, module: true, QUnit: false, require: true */
+/* global sinon: false, $: false, QUnit: false */
 
 'use strict'; //eslint-disable-line
 

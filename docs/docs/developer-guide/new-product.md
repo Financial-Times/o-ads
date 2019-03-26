@@ -5,9 +5,10 @@ section: building
 ---
 
 ## 1. Include o-ads on your site
-Include the latest version of o-ads via `bower` or the [Origami Build Service](http://build.origami.ft.com/v2/) — which we recommend for use on the websites. This way you can get updates automatically and you do not have to build the module manually from source (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
 
-Alternately, you may use the [Origami Build Tools](http://origami.ft.com/docs/developer-guide/modules/building-modules/) to include the library as a part of your codebase and build it manually. This option involves a certain level of setup.
+The fastest way to include o-ads is through the [Origami Build Service](http://build.origami.ft.com/v2/) — which we recommend for most use cases. You'll get a fast, up to date version of the library. All you need to include is a script tag and a link tag on your page (see the [Origami quick start instructions](http://registry.origami.ft.com/components/o-ads#section-usage) for more).
+
+If you need to add o-ads as part of your build system, you can install with `npm install o-ads` or `bower install o-ads`.
 
 **IMPORTANT NOTE ABOUT CONSENT**
 Since GDPR came into effect in May 2018, o-ads library now requires consent for custom targeting. By default, the o-ads library will check for consent in a cookie with the name `FTConsent`. It will look for 2 types of consent:
@@ -54,7 +55,7 @@ For new products, you will need to liaise with AdOps to decide on the site and z
 ## 3. Initialise o-ads
 ### 3.1. Declaratively:
 
-The bare minimum `o-ads` configuration will contain the `gpt` object:
+If you've included o-ads from the origami registry by inserting a `<script>` and `<link>` tag in your html page, this is how you initialise o-ads. This is the bare minimum `o-ads` configuration
 
 ```html
 <script data-o-ads-config="" type="application/json">
@@ -67,39 +68,19 @@ The bare minimum `o-ads` configuration will contain the `gpt` object:
 </script>
 ```
 
-But it will usually contain several more parameters, that are explained in subsequent sections :
+Where network and site are settings from Google's DFP service which help it locate which ads to server for your specific site.
 
-```html
-<script data-o-ads-config="" type="application/json">
-	{
-		"gpt": {
-			"network": 5887,
-			"site": "test.5887.origami"
-		},
-		"formats": {
-			"PaidPost": {
-				"sizes": "fluid"
-			}
-		},
-		"responsive": {
-			"extra": [1025, 0],
-			"large": [980, 0],
-			"medium": [760, 0],
-			"small": [0, 0]
-		}
+This will configure and initialise oAds globally. You can access the oAds library in `window.oAds`.
 
-		...
-		
-	}
-</script>
-```
+Note: There are more configuration options which are explained in subsequent sections.
 
-### 3.2. Imperatively
+### 3.2. Programmatically
 
-Similarly, the initialisation with Javascript code would look something like this:
+If you've used bower or npm to load in o-ads, you can import and initialise it as follows, in one of your files.
 
 ```js
-const oAds = require('o-ads');
+// your/app/ads.js
+import oAds from 'o-ads';
 oAds.init({
 		gpt: {
 			network: 5887,
@@ -107,6 +88,8 @@ oAds.init({
 		}
 });
 ```
+
+Note: As of version 11, you cannot `require('o-ads')` anymore. You must use the import syntax above.
 
 ## 4. Slots
 
@@ -134,10 +117,11 @@ Demographic data is provided by the [Ads API](https://github.com/Financial-Times
 * **Behavioural**
 Behavioural targeting at the FT is provided by a third party called [Krux](http://www.krux.com/). To enable Krux for your product, you need a Krux ID, which can be provided by AdOps.
 
-This can then be initialised by o-ads:
+This can then be passed as an option when initialising o-ads:
 
 ```js
-oAds.init({
+const config = {
+	...otherConfigSettings
 	krux: {
 		id: '1234',
 		attributes: {
@@ -147,10 +131,10 @@ oAds.init({
 			user: {
 				key: 'value'
 			}
-
 		}
 	}
-})
+}
+oAds.init(config);
 ```
 
 * **Contextual**

@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec --record false",
     "test-cy:open": "cypress open",
-	"test-nightwatch": "npm run test-nw-basic && npm run test-nw-extended",
+	"test-nw": "npm run test-nw-basic && npm run test-nw-extended",
 	"test-nw-local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
     "test-nw-basic": "npm run nightwatch-bs -- --group basic --env chrome,edge,ie11,ie10,galaxy_s8",
     "test-nw-extended": "npm run nightwatch-bs -- --group extended --env chrome",
@@ -52,7 +52,7 @@
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
     "nightwatch": "^1.0.19",
-    "origami-build-tools": "^7.13.3",
+    "origami-build-tools": "^8.0.0",
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
     "release-it": "^7.6.1",
