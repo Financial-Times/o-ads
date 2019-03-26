@@ -254,21 +254,9 @@ Slots.prototype.initPostMessage = function() {
 				utils.log.error('Message received from unidentified slot');
 				return;
 			}
-			// For backwards compatibility with o-ads-embed v2
-			// TODO: remove once creative wrapper updated with o-ads-embed v3
-			if (type === 'whoami' && event.source) {
-				if (data.collapse) {
-					slot.collapse();
-				}
-				const messageToSend = {
-					type: 'oAds.youare',
-					name: slotName
-				};
-				utils.messenger.post(messageToSend, event.source);
-			}
 
 			// TODO: Remove adIframeLoaded once we can tag onto GPTs `slotRenderEnded` event
-			else if(type === 'adIframeLoaded') {
+			if(type === 'adIframeLoaded') {
 				document.body.dispatchEvent( new CustomEvent('oAds.adIframeLoaded'));
 			}
 
