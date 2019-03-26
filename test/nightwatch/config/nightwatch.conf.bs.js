@@ -2,6 +2,7 @@ const commonCapabilities = {
 	'browserstack.user': process.env.BROWSERSTACK_USER,
 	'browserstack.key': process.env.BROWSERSTACK_KEY,
 	'browserstack.local': process.env.BROWSERSTACK_LOCAL,
+	launch_url: "http://localhost:3002/demos/local",
 	acceptSslCerts: true
 };
 
