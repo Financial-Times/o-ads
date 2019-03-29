@@ -5,6 +5,15 @@
  * @see utils
  */
 
+// Creates a timestamp in the browser's performance entry buffer
+// for later use
+export const perfMark = name => {
+	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
+	if (performance && performance.mark) {
+		performance.mark(name);
+	}
+};
+
 /**
 * Broadscasts an o-ads event
 * @param {string} name The name of the event
@@ -20,6 +29,9 @@ export function broadcast(name, data, target) {
 		cancelable: true,
 		detail: data
 	};
+
+	const markName = data ? [name, data.name, data.pos, data.size].join('__') : name;
+	perfMark(markName);
 	target.dispatchEvent(new CustomEvent(name, opts));
 }
 

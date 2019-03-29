@@ -387,12 +387,18 @@ Slot.prototype.submitImpression = function() {
  */
 Slot.prototype.fire = function(name, data) {
 	const details = {
-		name: this.name,
+		name: this.name || '',
+		pos: (this.targeting && this.targeting.pos) || '',
+		size: (this.gpt && this.gpt.size && this.gpt.size.toString()) || '',
 		slot: this
 	};
 
 	if (utils.isPlainObject(data)) {
+		data.pMarkDetails = details;
 		utils.extend(details, data);
+		console.log('-----------------------------------');
+		console.log('details', details);
+		console.log('data', data);
 	}
 
 	utils.broadcast(name, details, this.container);
@@ -454,19 +460,6 @@ Slot.prototype.labelContainer = function() {
 		this.container.classList.add(`o-ads--${className}`);
 	}
 	return this;
-};
-
-// Returns object with basic data useful when consuming the event
-Slot.prototype.getEventPayload = function() {
-	const gpt = this.gpt || {};
-
-	const slotData = {
-		pos: (this.targeting && this.targeting.pos) || '',
-		size: (gpt.size && gpt.size.toString()) || '',
-		id: gpt.id || ''
-	};
-
-	return slotData;
 };
 
 export default Slot;

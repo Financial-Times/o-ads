@@ -257,8 +257,7 @@ Slots.prototype.initPostMessage = function() {
 
 			// TODO: Remove adIframeLoaded once we can tag onto GPTs `slotRenderEnded` event
 			if(type === 'adIframeLoaded') {
-				const slotData = slot.getEventPayload();
-				document.body.dispatchEvent( new CustomEvent('oAds.adIframeLoaded', {slotData: slotData}));
+				utils.broadcast('adIframeLoaded');
 			}
 
 			// Received message to Collapse ad slot.
