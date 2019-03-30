@@ -228,14 +228,14 @@ Slot.prototype.parseAttributeConfig = function() {
 		} else if (name === 'lazyLoadViewportMargin' && this.lazyLoad) {
 			convertLazyLoadBooleanToObject(this);
 			this.lazyLoad.viewportMargin = attributeParsers.base(value);} else if (attributeParsers[name]) {
-				this[name] = attributeParsers[name](value, this[name]);
-			} else if (/^formats\w*/.test(name)) {
-				this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
-			} else if (/^sizes\w*/.test(name)) {
-				this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
-			} else if (this.hasOwnProperty(name)) {
-				this[name] = attributeParsers.base(value);
-			}
+			this[name] = attributeParsers[name](value, this[name]);
+		} else if (/^formats\w*/.test(name)) {
+			this.sizes = attributeParsers.responsiveFormats(name, value, this.sizes);
+		} else if (/^sizes\w*/.test(name)) {
+			this.sizes = attributeParsers.responsiveSizes(name, value, this.sizes);
+		} else if (this.hasOwnProperty(name)) {
+			this[name] = attributeParsers.base(value);
+		}
 	});
 };
 
@@ -388,17 +388,14 @@ Slot.prototype.submitImpression = function() {
 Slot.prototype.fire = function(name, data) {
 	const details = {
 		name: this.name || '',
-		pos: (this.targeting && this.targeting.pos) || '',
-		size: (this.gpt && this.gpt.size && this.gpt.size.toString()) || '',
+		pos: this.targeting && this.targeting.pos || '',
+		size: this.gpt && this.gpt.size && this.gpt.size.toString() || '',
 		slot: this
 	};
 
 	if (utils.isPlainObject(data)) {
 		data.pMarkDetails = details;
 		utils.extend(details, data);
-		console.log('-----------------------------------');
-		console.log('details', details);
-		console.log('data', data);
 	}
 
 	utils.broadcast(name, details, this.container);

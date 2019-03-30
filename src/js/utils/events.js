@@ -30,7 +30,7 @@ export function broadcast(name, data, target) {
 		detail: data
 	};
 
-	const markName = data ? [name, data.name, data.pos, data.size].join('__') : name;
+	const markName = data && data.pos ? [name, data.name, data.pos, data.size].join('__') : name;
 	perfMark(markName);
 	target.dispatchEvent(new CustomEvent(name, opts));
 }
