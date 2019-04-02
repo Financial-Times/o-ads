@@ -1,4 +1,5 @@
 import { on, off, once, broadcast } from './events';
+import { setupMetrics } from './metrics';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
 import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
@@ -481,5 +482,6 @@ export default {
 	iframeToSlotName,
 	buildObjectFromArray,
 	cookie,
-	getVersion
+	getVersion,
+	setupMetrics
 };
