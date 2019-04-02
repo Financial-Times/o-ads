@@ -1,3 +1,11 @@
+// Same as n-ui-foundations's perfMark, but we don't want to have
+// n-ui foundations as a dependency
+export const perfMark = name => {
+	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
+	if (performance && performance.mark) {
+		performance.mark(name);
+	}
+};
 
 export const getPerfMarks = (markNames) => {
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;

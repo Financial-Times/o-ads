@@ -66,6 +66,7 @@ function initGoogleTag() {
 function setup(gptConfig) {
 	const nonPersonalized = config('nonPersonalized') ? 1 : 0;
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
+	console.log('this', this);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
@@ -238,6 +239,13 @@ function onRenderEnded(event) {
 	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
+	data.size = (event.size && event.size.length) ? event.size.toString() : '';
+
+	const targeting = event.slot.getTargetingMap();
+	if (targeting && targeting.pos) {
+		data.pos = targeting.pos.length ? targeting.pos.join('') : '';
+	}
+
 	const detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
