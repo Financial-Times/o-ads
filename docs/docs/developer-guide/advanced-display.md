@@ -167,36 +167,36 @@ Via component
 
 ## Events
 
-#### `oAds.startInitialisation`
+#### `oAds.initialising`
 Triggered when the library starts the initialisation process. At this point in time, if `targetingApi` has been defined in the configuration, two separate calls are made to the targeting api in order to get 'user' and 'page' targeting parameters.
 
 Also at this point, if `validateAdsTraffic` is set to `true`, `o-ads` will check if the traffic validation script (currently `moat.js`) is available and use it to check if the traffic source is a valid one.
 
-#### `oAds.apiRequestsComplete`
+#### `oAds.adsAPIComplete`
 If targeting has been configured, this event is triggered when both requests to the targeting api ('user' and 'page') have been fullfilled (whether successfully or not).
 
-#### `oAds.moatIVTcomplete`
+#### `oAds.adsIVTComplete`
 If `validateAdsTraffic` is set to `true`, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can't been found, when the associated timeout period expires.
 
 #### `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
 
-#### `oAds.adServerLoadSuccess`
+#### `oAds.serverScriptLoaded`
 Triggered when both the GPT library is loaded and `oAds.initialised` has happened. This marks the completion of the page-level tasks required to enable requests to the ad server.
 
 #### `oAds.adServerLoadError`
 Triggered if the library fails to load the external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
 
-#### `oAds.ready`
+#### `oAds.slotReady`
 Slot has been inited in the oAds library and is about to be requested from the ad server (deferred if lazy loading is on).
 
-#### `oAds.rendered`
+#### `oAds.slotRenderStart`
 Triggered once the ad has been rendered on the page.
 
-#### `oAds.complete`
-If and when a creative has been returned, this event announces it has now been initialised in oAds, requested from the ad server and displayed. Triggered after `oAds.rendered`.
+#### `oAds.slotExpand`
+If and when a creative has been returned, this event announces it has now been initialised in oAds, requested from the ad server and displayed. Triggered after `oAds.slotRenderStart`.
 
-#### `oAds.render`
+#### `oAds.slotCanRender`
 Lazy loaded advert has been requested.
 
 #### `oAds.refresh`

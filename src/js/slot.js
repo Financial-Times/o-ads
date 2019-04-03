@@ -271,7 +271,7 @@ Slot.prototype.initLazyLoad = function() {
 };
 
 Slot.prototype.render = function() {
-	this.fire('render');
+	this.fire('slotCanRender');
 	/* istanbul ignore else  */
 	if(this.lazyLoadObserver) {
 		this.lazyLoadObserver.unobserve(this.container);

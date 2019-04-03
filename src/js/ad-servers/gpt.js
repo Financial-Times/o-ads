@@ -25,8 +25,8 @@ function init() {
 	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	initGoogleTag();
-	utils.on('ready', onReady.bind(null, slotMethods));
-	utils.on('render', onRender);
+	utils.on('slotReady', onReady.bind(null, slotMethods));
+	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
 	googletag.cmd.push(setup.bind(null, gptConfig));
@@ -47,7 +47,7 @@ function initGoogleTag() {
 	}
 
 	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true,
-		() => { utils.broadcast('adServerLoadSuccess'); },
+		() => { utils.broadcast('serverScriptLoaded'); },
 		(err) => { utils.broadcast('adServerLoadError', err); }
 	);
 }
@@ -66,7 +66,6 @@ function initGoogleTag() {
 function setup(gptConfig) {
 	const nonPersonalized = config('nonPersonalized') ? 1 : 0;
 	googletag.pubads().addEventListener('slotRenderEnded', onRenderEnded);
-	console.log('this', this);
 	enableCompanions(gptConfig);
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
@@ -262,7 +261,7 @@ function onRenderEnded(event) {
 	} else {
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
-	utils.broadcast('rendered', data);
+	utils.broadcast('slotRenderStart', data);
 }
 
 /*
@@ -348,7 +347,7 @@ const slotMethods = {
 	*/
 	display: function() {
 	  window.googletag.cmd.push(() => {
-			this.fire('gptDisplay');
+			this.fire('slotGoRender');
 	    googletag.display(this.gpt.id);
 	  });
 	  return this;

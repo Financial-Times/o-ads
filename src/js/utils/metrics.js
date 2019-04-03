@@ -1,18 +1,5 @@
-function getMarksForEventMarkMap(eventMarkMap, suffix) {
-	const markNames = [];
-	let eventName;
-
-	for (const key in eventMarkMap) {
-		if (eventMarkMap.hasOwnProperty(key)) {
-			eventName = 'oAds.' + key + suffix;
-			markNames.push(eventName);
-		}
-	}
-
-	return getPerfMarks(markNames, suffix);
-}
-
-function getPerfMarks(markNames, suffix) {
+function getMarksForEvents(events, suffix) {
+	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 	if (!performance || !performance.getEntriesByName) {
 		return {};
@@ -50,7 +37,7 @@ function sendMetricsOnEvent(eventName, eMarkMap, callback) {
 
 function sendMetrics(eMarkMap, eventDetails, callback) {
 	const suffix = (eventDetails && 'pos' in eventDetails) ? '__' + eventDetails.pos + '__' + eventDetails.size : '';
-	const marks = getMarksForEventMarkMap(eMarkMap.marks, suffix);
+	const marks = getMarksForEvents(eMarkMap.marks, suffix);
 
 	const eventPayload = {
 		category: 'ads',
@@ -60,8 +47,8 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 
 	if (eventDetails && 'pos' in eventDetails) {
 		eventPayload.creative = {
-			ad_pos: eventDetails.pos,
-			ad_size: eventDetails.size && eventDetails.size.toString()
+			pos: eventDetails.pos,
+			size: eventDetails.size && eventDetails.size.toString()
 		};
 	}
 

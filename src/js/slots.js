@@ -152,7 +152,7 @@ Slots.prototype.initSlot = function(container) {
 	/* istanbul ignore else	*/
 	if (slot && !this[slot.name]) {
 		this[slot.name] = slot;
-		slot.fire('ready');
+		slot.fire('slotReady');
 	} else if (this[slot.name]) {
 		utils.log.error('slot %s is already defined!', slot.name);
 	}
@@ -182,11 +182,11 @@ Slots.prototype.initRefresh = function() {
 };
 
 /*
-*	listens for the rendered event from a slot and fires the complete event,
+*	listens for the rendered event from a slot and fires the slotExpand event,
 * after extending the slot with information from the server.
 */
 Slots.prototype.initRendered = function() {
-	utils.on('rendered', function(slots, event) {
+	utils.on('slotRenderStart', function(slots, event) {
 		const slot = slots[event.detail.name];
 		/* istanbul ignore else	*/
 		if (slot) {
@@ -195,7 +195,7 @@ Slots.prototype.initRendered = function() {
 			const format = findFormatBySize(size);
 			slot.setFormatLoaded(format);
 			slot.maximise(size);
-			slot.fire('complete', event.detail);
+			slot.fire('slotExpand', event.detail);
 		}
 	}.bind(null, this));
 	return this;
@@ -257,7 +257,7 @@ Slots.prototype.initPostMessage = function() {
 
 			// TODO: Remove adIframeLoaded once we can tag onto GPTs `slotRenderEnded` event
 			if(type === 'adIframeLoaded') {
-				slot.fire('adIframeLoaded');
+				slot.fire('slotRenderEnded');
 			}
 
 			// Received message to Collapse ad slot.

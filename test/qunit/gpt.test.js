@@ -29,7 +29,7 @@ QUnit.test('broadcast an event when GPT loads', function(assert) {
 
 	this.spy(this.utils, 'broadcast');
 	this.ads.init();
-	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadSuccess'));
+	assert.ok(this.ads.utils.broadcast.calledWith('serverScriptLoaded'));
 });
 
 QUnit.test('broadcast an event when GPT fails to load', function(assert) {
@@ -203,7 +203,7 @@ QUnit.test('catches slot in view render event and display it if method is ready'
 	this.ads.init();
 	const slot = this.ads.slots.initSlot(node);
 	const displaySpy = this.spy(slot, 'display');
-	slot.fire('render');
+	slot.fire('slotCanRender');
 	assert.ok(displaySpy.calledOnce, 'slot dislpay method has been triggered');
 });
 
@@ -285,7 +285,7 @@ QUnit.test('set unit name', function(assert) {
 	const done = assert.async();
 	const expected = '/5887/some-dfp-site/some-dfp-zone';
 	this.fixturesContainer.add(htmlstart + 'unit-name-full' + htmlend);
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-full') {
@@ -309,7 +309,7 @@ QUnit.test('set unit name site only', function(assert) {
 	const expected = '/5887/some-dfp-site';
 	this.fixturesContainer.add(htmlstart + 'unit-name-site-only' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-site-only') {
@@ -331,7 +331,7 @@ QUnit.test('set unit names network only', function(assert) {
 	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-network-only' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-network-only') {
@@ -354,7 +354,7 @@ QUnit.test('unit names with empty strings', function(assert) {
 	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-empty-string' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-empty-string') {
@@ -378,7 +378,7 @@ QUnit.test('set unit name with override', function(assert) {
 	const expected = '/hello-there/stranger';
 	this.fixturesContainer.add(htmlstart + 'unit-name-custom' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-custom') {
@@ -400,7 +400,7 @@ QUnit.test('set unit name with attribute', function(assert) {
 	const expected = '/this-works';
 	const container = this.fixturesContainer.add(htmlstart + 'unit-name-attr" data-o-ads-gpt-unit-name="' + expected + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-attr') {
@@ -515,8 +515,8 @@ QUnit.test('rendered event fires on slot', function(assert) {
 	this.fixturesContainer.add(html);
 	this.ads.init();
 
-	document.body.addEventListener('oAds.rendered', function(event) {
-		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the rendered event');
+	document.body.addEventListener('oAds.slotRenderStart', function(event) {
+		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the slotRenderStart event');
 		done();
 	});
 
@@ -561,7 +561,7 @@ QUnit.test('pick up the slot URL from page address if config or canonical not av
 
 QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
 	const done = assert.async();
-	document.body.addEventListener('oAds.complete', function(event) {
+	document.body.addEventListener('oAds.slotExpand', function(event) {
 		const iframe = event.detail.slot.gpt.iframe;
 		const iframeSize = [iframe.width, iframe.height];
 		assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');
