@@ -240,9 +240,9 @@ function onRenderEnded(event) {
 	data.name = domId.join('-');
 	data.size = event.size && event.size.length ? event.size.toString() : '';
 
-	const targeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
-	if (targeting && targeting.pos) {
-		data.pos = targeting.pos.length ? targeting.pos.join('') : '';
+	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
+	if (slotTargeting && slotTargeting.pos) {
+		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join('') : '';
 	}
 
 	const detail = data.gpt;
@@ -261,6 +261,7 @@ function onRenderEnded(event) {
 	} else {
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
+	utils.broadcast('slotRenderStart', data);
 }
 
 /*

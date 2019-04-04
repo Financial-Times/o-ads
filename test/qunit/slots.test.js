@@ -983,7 +983,7 @@ QUnit.test('companion slots which are configured as false for a specific screens
 	const node = this.fixturesContainer.add(slotHTML);
 	this.ads.init();
 	const slot = this.ads.slots.initSlot(node);
-	const renderSpy = this.spy(slot, 'slotCanRender');
+	const renderSpy = this.spy(slot, 'render');
 	this.utils.broadcast('masterLoaded', {}, node);
 	assert.notOk(renderSpy.calledOnce, 'slot fire method is not called');
 	renderSpy.restore();

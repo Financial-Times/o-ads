@@ -128,7 +128,7 @@ const onChangeBreakpoint = (event) => {
  * @constructor
  */
 function Slot(container, screensize, initLazyLoading) {
-	const renderEvent = 'rendered';
+	const renderEvent = 'slotRenderStart';
 	const cfg = config();
 	let slotConfig = config('slots') || {};
 	const disableSwipeDefault = config('disableSwipeDefault') || false;

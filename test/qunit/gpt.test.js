@@ -509,7 +509,7 @@ QUnit.test('define responsive slot', function(assert) {
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
-QUnit.test('rendered event fires on slot', function(assert) {
+QUnit.test('slotRenderStart event fires on slot', function(assert) {
 	const done = assert.async();
 	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
 	this.fixturesContainer.add(html);
