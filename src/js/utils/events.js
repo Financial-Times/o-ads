@@ -30,7 +30,7 @@ export function broadcast(eventName, data, target) {
 		detail: data
 	};
 
-	const markName = data && 'pos' in data && 'name' in data ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
+	const markName = typeof data === 'object' && 'pos' in data && 'name' in data ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
 	perfMark(markName);
 	target.dispatchEvent(new CustomEvent(eventName, opts));
 }

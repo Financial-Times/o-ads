@@ -240,7 +240,7 @@ function onRenderEnded(event) {
 	data.name = domId.join('-');
 	data.size = event.size && event.size.length ? event.size.toString() : '';
 
-	const targeting = event.slot.getTargetingMap();
+	const targeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
 	if (targeting && targeting.pos) {
 		data.pos = targeting.pos.length ? targeting.pos.join('') : '';
 	}
