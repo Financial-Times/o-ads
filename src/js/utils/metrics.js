@@ -36,7 +36,11 @@ function sendMetricsOnEvent(eventName, eMarkMap, callback) {
 }
 
 function sendMetrics(eMarkMap, eventDetails, callback) {
-	const suffix = (eventDetails && 'pos' in eventDetails) ? '__' + eventDetails.pos + '__' + eventDetails.size : '';
+	let suffix = '';
+	if (eventDetails && 'pos' in eventDetails && 'name' in eventDetails) {
+		suffix = '__' + [eventDetails.pos, eventDetails.name, eventDetails.size].join('__');
+	}
+
 	const marks = getMarksForEvents(eMarkMap.marks, suffix);
 
 	const eventPayload = {
@@ -47,6 +51,7 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 
 	if (eventDetails && 'pos' in eventDetails) {
 		eventPayload.creative = {
+			name: eventDetails.name,
 			pos: eventDetails.pos,
 			size: eventDetails.size && eventDetails.size.toString()
 		};

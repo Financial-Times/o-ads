@@ -229,6 +229,7 @@ function onResize(event) {
 * function passed to the gpt library that is run when an ad completes rendering
 */
 function onRenderEnded(event) {
+	console.log('onRenderEnded');
 	const data = {
 		gpt: {}
 	};
@@ -261,7 +262,6 @@ function onRenderEnded(event) {
 	} else {
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
-	utils.broadcast('slotRenderStart', data);
 }
 
 /*

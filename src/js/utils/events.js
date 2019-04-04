@@ -20,19 +20,20 @@ export const perfMark = name => {
 * @param {object} data The data to send as event detail
 * @param {HTMLElement} target The element to attach the event listener to
 */
-export function broadcast(name, data, target) {
+export function broadcast(eventName, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
-	name = `oAds.${name}`;
+	eventName = `oAds.${eventName}`;
 	const opts = {
 		bubbles: true,
 		cancelable: true,
 		detail: data
 	};
 
-	const markName = data && data.pos ? [name, data.pos, data.size.length ? data.size.toString() : ''].join('__') : name;
+	const markName = data && ('pos' in data) && ('name' in data) ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
 	perfMark(markName);
-	target.dispatchEvent(new CustomEvent(name, opts));
+	console.log('eventName', eventName);
+	target.dispatchEvent(new CustomEvent(eventName, opts));
 }
 
 /**
