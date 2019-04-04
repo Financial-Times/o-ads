@@ -30,9 +30,8 @@ export function broadcast(eventName, data, target) {
 		detail: data
 	};
 
-	const markName = data && ('pos' in data) && ('name' in data) ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
+	const markName = data && 'pos' in data && 'name' in data ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
 	perfMark(markName);
-	console.log('eventName', eventName);
 	target.dispatchEvent(new CustomEvent(eventName, opts));
 }
 

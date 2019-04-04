@@ -229,7 +229,6 @@ function onResize(event) {
 * function passed to the gpt library that is run when an ad completes rendering
 */
 function onRenderEnded(event) {
-	console.log('onRenderEnded');
 	const data = {
 		gpt: {}
 	};
@@ -239,7 +238,7 @@ function onRenderEnded(event) {
 	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
-	data.size = (event.size && event.size.length) ? event.size.toString() : '';
+	data.size = event.size && event.size.length ? event.size.toString() : '';
 
 	const targeting = event.slot.getTargetingMap();
 	if (targeting && targeting.pos) {
