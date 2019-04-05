@@ -1,4 +1,4 @@
-function getMarksForEvents(events, suffix) {
+export function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 	if (!performance || !performance.getEntriesByName) {
@@ -26,7 +26,7 @@ export function setupMetrics(definitions, callback) {
 	});
 }
 
-function sendMetricsOnEvent(eventName, eMarkMap, callback) {
+export function sendMetricsOnEvent(eventName, eMarkMap, callback) {
 	document.addEventListener(eventName, function listenOnInitialised(event) {
 		sendMetrics(eMarkMap, event.detail, callback);
 		if (!eMarkMap.multiple) {
@@ -35,7 +35,7 @@ function sendMetricsOnEvent(eventName, eMarkMap, callback) {
 	});
 }
 
-function sendMetrics(eMarkMap, eventDetails, callback) {
+export function sendMetrics(eMarkMap, eventDetails, callback) {
 	let suffix = '';
 	if (eventDetails && 'pos' in eventDetails && 'name' in eventDetails) {
 		suffix = '__' + [eventDetails.pos, eventDetails.name, eventDetails.size].join('__');
