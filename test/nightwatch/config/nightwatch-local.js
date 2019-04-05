@@ -47,7 +47,7 @@ if (process.env.CI) {
 			'key': process.env.BROWSERSTACK_KEY
 		}, function (error) {
 			if (error) throw error;
-			console.log('Connected to Browserstack. Now testing...');
+			console.log('Connected to Browserstack. Running tests remotely...\nNB: If multiple tests running at once, output is buffered until all tests have finished running for clarity. Meanwhile, why don\'t you watch 1000 rockets being launched at 1000 rockets: https://www.youtube.com/watch?v=Jtols_QhuWw');
 			Nightwatch.cli(function (argv) {
 				Nightwatch.CliRunner(argv)
 					.setup(null, function () {

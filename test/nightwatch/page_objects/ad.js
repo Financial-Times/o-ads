@@ -1,18 +1,23 @@
 const commands = {
 	cleverFrame: function(selector) {
-		const browserName = this.client.options.desiredCapabilities.browser;
-
-		if (browserName === 'Firefox' || browserName === 'Safari') {
+		const browser = this.client.options.desiredCapabilities.browser;
+		if (browser === 'firefox' || browser === 'safari') {
 			return this.api.frame(1);
 		}
 
 		return this.api.frame(selector);
+	},
+
+	cleverFrameParent: function() {
+		const browser = this.client.options.desiredCapabilities.browser;
+		if(browser === 'IE') {
+			return this.api.frame();
+		}
+
+		return this.api.frameParent();
 	}
 };
 
 module.exports = {
-	// The 'elements' property is required, even if it's empty,
-	// as per this comment (https://github.com/nightwatchjs/nightwatch/issues/570#issuecomment-123085090)
-	elements: {},
 	commands: [commands]
 };
