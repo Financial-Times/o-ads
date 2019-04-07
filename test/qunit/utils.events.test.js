@@ -1,10 +1,15 @@
-/* globals QUnit: false */
+/* globals QUnit: false, savePerformance: false */
 
 'use strict'; //eslint-disable-line
 
 const sandbox = sinon.sandbox.create();
 
-QUnit.module('utils.events');
+QUnit.module('utils.events', {
+	beforeEach: function () {
+		window.performance = savePerformance;
+	}
+});
+
 
 QUnit.test('We can broadcast an event to the body', function(assert) {
 	const utils = this.ads.utils;
