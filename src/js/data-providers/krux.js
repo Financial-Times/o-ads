@@ -1,7 +1,7 @@
 /* eslint new-cap: 0 */
 import utils from '../utils';
 import config from '../config';
-import { Delegate } from 'ftdomdelegate';
+import Delegate from 'ftdomdelegate';
 
 /**
  * The Krux class defines an FT.ads.krux instance
