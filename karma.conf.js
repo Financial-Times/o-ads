@@ -37,7 +37,11 @@ let options = {
 	webpack: {
 		resolve: {
 			plugins: [new BowerResolvePlugin()],
-			modules: ['bower_components', 'node_modules']
+			modules: ['bower_components', 'node_modules'],
+			descriptionFiles: ['bower.json', 'package.json'],
+			mainFields: ['browser', 'main'],
+			mainFiles: ['index', 'main'],
+			extensions: ['.js', '.json']
 		},
 		mode: 'development'
 	},
