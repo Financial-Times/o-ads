@@ -327,7 +327,6 @@ QUnit.test('Slots.collapse will emit an event', function(assert) {
 	assert.ok(this.utils.broadcast.calledWith('collapsed', initedSlot), 'event broadcast has been called with correct event');
 });
 
-
 QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
 
@@ -704,9 +703,6 @@ QUnit.test('lazy loading slot config takes precedence over global config', funct
 	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false);
 });
 
-
-
-
 QUnit.test('lazy loading triggers event if the advert is in view', function(assert) {
 	const done = assert.async();
 	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
@@ -978,6 +974,25 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	this.utils.broadcast('masterLoaded', {}, node);
 });
 
+QUnit.test('displayLabelWithBorders config prop adds class to outerEl if data-o-ads-label is defined', function(assert) {
+	const done = assert.async();
+	const slot2HTML = `<div data-o-ads-name="lazy-test-top" data-o-ads-label="left" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="width: 100%;"></div>`;
+	const node = this.fixturesContainer.add(slot2HTML);
+
+	const config = {
+		displayLabelWithBorders: true
+	};
+	this.ads.init(config);
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+
+	document.body.addEventListener('oAds.slotCanRender', function() {
+		const outerEl = node.querySelector('.o-ads__outer');
+		assert.ok($(outerEl).hasClass('o-ads--label-with-borders'), 'class is added');
+		done();
+	});
+});
+
 QUnit.test('companion slots which are configured as false for a specific screensize should not render at that screensize', function(assert) {
 	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats-default="false" data-o-ads-formats-large="false" data-o-ads-formats-small="false" data-o-ads-formats-medium="false" data-o-ads-formats-extra="false" style="position: absolute; left: -1000px; top: -1000px"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
@@ -1069,24 +1084,24 @@ QUnit.test('debug logs creatives', function(assert) {
 		"sizes":"300×250",
 		"targeting":"monkey=see, monkeys=do"
 	},
-	{
-		"name":"second",
-		"unit name":"/undefined",
-		"creative id":"N/A",
-		"line item id":"N/A",
-		"size":"empty",
-		"sizes":"300×600, 300×250",
-		"targeting":""
-	},
-	{
-		"name":"third",
-		"unit name":"/undefined",
-		"creative id":"N/A",
-		"line item id":"N/A",
-		"size":"N/A",
-		"sizes":"responsive slot",
-		"targeting":""
-	}];
+		{
+			"name":"second",
+			"unit name":"/undefined",
+			"creative id":"N/A",
+			"line item id":"N/A",
+			"size":"empty",
+			"sizes":"300×600, 300×250",
+			"targeting":""
+		},
+		{
+			"name":"third",
+			"unit name":"/undefined",
+			"creative id":"N/A",
+			"line item id":"N/A",
+			"size":"N/A",
+			"sizes":"responsive slot",
+			"targeting":""
+		}];
 	const start = this.spy(this.utils.log, 'start');
 	const table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();

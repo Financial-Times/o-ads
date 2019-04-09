@@ -7,9 +7,9 @@ const sandbox = sinon.sandbox.create();
 QUnit.module('utils.events', {
 	beforeEach: function () {
 		window.performance = savePerformance;
+		window.LUX = null;
 	}
 });
-
 
 QUnit.test('We can broadcast an event to the body', function(assert) {
 	const utils = this.ads.utils;

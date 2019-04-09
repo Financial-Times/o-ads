@@ -65,6 +65,12 @@ QUnit.test('override page targeting', function(assert) {
 
 });
 
+QUnit.test('empty override page targeting clears targeting', function(assert) {
+	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
+	this.ads.gpt.updatePageTargeting();
+	assert.ok(googletag.pubads().clearTargeting.called);
+});
+
 QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
 	const errorSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
@@ -524,9 +530,11 @@ QUnit.test('slotRenderStart event fires on slot', function(assert) {
 });
 
 QUnit.test('update correlator', function(assert) {
+	const errorSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
 	this.ads.gpt.updateCorrelator();
 	assert.ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
+	assert.ok(errorSpy.calledWith('[DEPRECATED]: Updatecorrelator is being phased out by google and removed from o-ads in future releases.'), 'warns that update correlator is being deprecated');
 });
 
 QUnit.test('fixed url for ad requests', function(assert) {
