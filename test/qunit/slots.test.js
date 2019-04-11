@@ -1084,24 +1084,24 @@ QUnit.test('debug logs creatives', function(assert) {
 		"sizes":"300×250",
 		"targeting":"monkey=see, monkeys=do"
 	},
-		{
-			"name":"second",
-			"unit name":"/undefined",
-			"creative id":"N/A",
-			"line item id":"N/A",
-			"size":"empty",
-			"sizes":"300×600, 300×250",
-			"targeting":""
-		},
-		{
-			"name":"third",
-			"unit name":"/undefined",
-			"creative id":"N/A",
-			"line item id":"N/A",
-			"size":"N/A",
-			"sizes":"responsive slot",
-			"targeting":""
-		}];
+	{
+		"name":"second",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"empty",
+		"sizes":"300×600, 300×250",
+		"targeting":""
+	},
+	{
+		"name":"third",
+		"unit name":"/undefined",
+		"creative id":"N/A",
+		"line item id":"N/A",
+		"size":"N/A",
+		"sizes":"responsive slot",
+		"targeting":""
+	}];
 	const start = this.spy(this.utils.log, 'start');
 	const table = this.spy(this.utils.log, 'table');
 	this.ads.slots.debug();
