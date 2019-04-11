@@ -259,6 +259,7 @@ function onRenderEnded(event) {
 		iFrameEl.setAttribute('title', 'Advertisement');
 		detail.iframe = iFrameEl;
 	} else {
+		/* istanbul ignore next */
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
 	utils.broadcast('slotRenderStart', data);
