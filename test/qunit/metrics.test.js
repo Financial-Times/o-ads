@@ -59,6 +59,7 @@ QUnit.test('any trigger invokes the callback with the right payload', function (
 });
 
 QUnit.test('the callback is not called if eventDefinitions is not an array', function (assert) {
+	const errorSpy = this.spy(this.utils.log, 'warn');
 	const done = assert.async();
 	this.ads.init();
 
@@ -75,7 +76,9 @@ QUnit.test('the callback is not called if eventDefinitions is not an array', fun
 
 	setTimeout( function() {
 		window.performance = savePerformance;
-		assert.ok(!cb.called);
+		assert.ok(!cb.called, 'the callback is not called');
+		assert.ok(errorSpy.calledWith('Metrics definitions should be an array. o-Ads will not record any metrics.'), 'an error message is shown');
+		errorSpy.restore();
 		done();
 	}, 0);
 });
