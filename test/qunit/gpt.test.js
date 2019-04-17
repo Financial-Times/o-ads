@@ -111,7 +111,6 @@ QUnit.test('set sync rendering', function(assert) {
 	assert.ok(googletag.pubads().enableSyncRendering.calledOnce, 'sync rendering has been enabled');
 });
 
-
 QUnit.test('enabled single request', function(assert) {
 	this.ads.init({ gpt: {rendering: 'sra'}});
 	assert.ok(googletag.pubads().enableSingleRequest.calledOnce, 'single request has been enabled');
@@ -233,6 +232,19 @@ QUnit.test('provides api to destroy the slot', function(assert) {
 	assert.equal(slot.destroySlot(), true, 'a call to destroy slot returns a boolean');
 	assert.ok(googletag.destroySlots.calledOnce, 'destroy api has been called');
 	assert.ok(googletag.destroySlots.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
+});
+
+QUnit.test('destroying slots fails gracefully if pubadsReady is not available', function(assert) {
+	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(slotHTML);
+	const savedGTagPubAdsReady = window.googletag.pubadsReady;
+	window.googletag.pubadsReady = null;
+
+	this.ads.init();
+	const slot = this.ads.slots.initSlot('test1');
+	assert.equal(slot.destroySlot(), false, 'a call to destroy slot returns false');
+	assert.ok(!googletag.destroySlots.called, 'destroy api has not been called');
+	window.googletag.pubadsReady = savedGTagPubAdsReady;
 });
 
 QUnit.test('provides api to clear the slot', function(assert) {
@@ -515,14 +527,18 @@ QUnit.test('define responsive slot', function(assert) {
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
-QUnit.test('slotRenderStart event fires on slot', function(assert) {
+QUnit.test('slotRenderStart event fires on slot with the pos, size and name', function(assert) {
 	const done = assert.async();
-	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
+	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle" data-o-ads-targeting="pos=mid"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
 
 	document.body.addEventListener('oAds.slotRenderStart', function(event) {
 		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the slotRenderStart event');
+		assert.equal(event.detail.pMarkDetails.name, 'rendered-test', 'the name attribute is set correctly in the performance mark details');
+		assert.equal(event.detail.pMarkDetails.pos, 'mid', 'the pos attribute is set correctly in the performance mark details');
+		assert.equal(event.detail.pMarkDetails.size, '300,250', 'the size attribute is set correctly in the performance mark details');
+		assert.ok(event.detail.pMarkDetails.slot, 'the slot object is available in the performance mark details');
 		done();
 	});
 

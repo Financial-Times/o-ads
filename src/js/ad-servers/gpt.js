@@ -107,6 +107,7 @@ function setPageTargeting(targetingData) {
 			});
 		});
 	} else {
+		/* istanbul ignore next  */
 		utils.log.warn('invalid targeting object passed', targetingData);
 	}
 

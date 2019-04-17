@@ -34,6 +34,7 @@ QUnit.test('Post message oAds.adIframeLoaded from the iframe dispatches oAds.slo
 		return slotName;
 	});
 	const utils = this.ads.utils;
+	const performanceStub = sinon.stub(window.performance, 'mark');
 	this.spy(this.ads.utils, 'broadcast');
 
 	window.addEventListener('message', 	function () {
@@ -41,6 +42,8 @@ QUnit.test('Post message oAds.adIframeLoaded from the iframe dispatches oAds.slo
 		// defined in slots.js
 		setTimeout(function() {
 			assert.ok(utils.broadcast.calledWith('slotRenderEnded'));
+			assert.ok(performanceStub.called);
+			performanceStub.restore();
 			done();
 		}, 0);
 	 });

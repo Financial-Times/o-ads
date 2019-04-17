@@ -1,4 +1,4 @@
-import { on, off, once, broadcast } from './events';
+import { on, off, once, broadcast, perfMark } from './events';
 import { setupMetrics } from './metrics';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
@@ -483,5 +483,6 @@ export default {
 	buildObjectFromArray,
 	cookie,
 	getVersion,
-	setupMetrics
+	setupMetrics,
+	perfMark
 };

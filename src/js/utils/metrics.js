@@ -19,6 +19,11 @@ function getMarksForEvents(events, suffix) {
 }
 
 export function setupMetrics(definitions, callback) {
+	if (!Array.isArray(definitions)) {
+		this.log.warn('Metrics definitions should be an array. o-Ads will not record any metrics.');
+		return;
+	}
+
 	definitions.forEach( function(eDef) {
 		const triggers = Array.isArray(eDef.triggers) ? eDef.triggers : [];
 		triggers.forEach(function(trigger) {

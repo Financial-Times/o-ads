@@ -8,6 +8,7 @@
 // Creates a timestamp in the browser's performance entry buffer
 // for later use
 export const perfMark = name => {
+	/* istanbul ignore next */
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 	if (performance && performance.mark) {
 		performance.mark(name);

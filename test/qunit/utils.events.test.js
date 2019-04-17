@@ -6,6 +6,7 @@ const sandbox = sinon.sandbox.create();
 
 QUnit.module('utils.events', {
 	beforeEach: function () {
+		sandbox.restore();
 		window.performance = savePerformance;
 		window.LUX = null;
 	}
@@ -29,7 +30,7 @@ QUnit.test('We can broadcast an event to the body', function(assert) {
 QUnit.test('An event creates a performance mark', function(assert) {
 	const utils = this.ads.utils;
 	const done = assert.async();
-	const performanceStub = sandbox.stub(window.performance, 'mark');
+	const performanceStub = sandbox.spy(window.performance, 'mark');
 
 	document.body.addEventListener('oAds.ahoy', function() {
 		assert.ok(performanceStub.calledWith('oAds.ahoy'));
@@ -58,6 +59,15 @@ QUnit.test('An event creates a perfMark using "name, size and pos" from event de
 		name: 'thename',
 		size: 'thesize'
 	});
+});
+
+QUnit.test('An call to  perfMark calls performance.mark with the same params', function(assert) {
+	const utils = this.ads.utils;
+	const performanceStub = sandbox.stub(window.performance, 'mark');
+
+	utils.perfMark('oAds.ahoy__thepos__thename__thesize');
+	assert.ok(performanceStub.calledWith('oAds.ahoy__thepos__thename__thesize'));
+	performanceStub.restore();
 });
 
 QUnit.test('We can broadcast an from an element', function(assert) {

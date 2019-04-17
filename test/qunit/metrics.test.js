@@ -5,11 +5,11 @@
 const savePerformance = window.performance;
 
 QUnit.module('Metrics', {
-	beforeEach: function () {
+	before: function () {
 		sandbox.restore();
 		window.performance = savePerformance;
 	},
-	after: function () {
+	afterEach: function () {
 		sandbox.restore();
 		window.performance = savePerformance;
 	}
@@ -48,6 +48,65 @@ QUnit.test('any trigger invokes the callback with the right payload', function (
 				mark2: 500,
 				mark3: 601
 			}
+		}
+	};
+
+	setTimeout( function() {
+		assert.ok(cb.called);
+		assert.ok(cb.calledWith(sinon.match(expectedCbPayload)));
+		done();
+	}, 0);
+});
+
+QUnit.test('the callback is not called if eventDefinitions is not an array', function (assert) {
+	const done = assert.async();
+	this.ads.init();
+
+	const eventDefinitions = {
+		spoorAction: 'aaa',
+		triggers: ['bbb', 'ccc'],
+		marks: ['mark1', 'mark2', 'mark3']
+	};
+
+	const cb = sandbox.stub();
+
+	this.utils.setupMetrics(eventDefinitions, cb);
+	document.dispatchEvent(new CustomEvent('oAds.ccc'));
+
+	setTimeout( function() {
+		window.performance = savePerformance;
+		assert.ok(!cb.called);
+		done();
+	}, 0);
+});
+
+QUnit.test('any trigger invokes the callback with no timing in the payload', function (assert) {
+	const done = assert.async();
+	this.ads.init();
+
+	const eventDefinitions = [{
+		spoorAction: 'aaa',
+		triggers: ['bbb', 'ccc'],
+		marks: ['mark1', 'mark2', 'mark3']
+	}];
+
+	const cb = sandbox.stub();
+
+	const getEntriesByNameStub = sandbox.stub();
+	getEntriesByNameStub.withArgs('oAds.mark1').returns([{ name: 'oAds.mark1', startTime: 400 }]);
+	getEntriesByNameStub.withArgs('oAds.mark2').returns([{ name: 'oAds.mark2', startTime: 500.22 }]);
+	getEntriesByNameStub.withArgs('oAds.mark3').returns([{ name: 'oAds.mark3', startTime: 600.64 }]);
+
+	window.performance = null;
+
+	this.utils.setupMetrics(eventDefinitions, cb);
+	document.dispatchEvent(new CustomEvent('oAds.ccc'));
+
+	const expectedCbPayload = {
+		category: 'ads',
+		action: 'aaa',
+		timings: {
+			marks: { }
 		}
 	};
 
