@@ -73,7 +73,7 @@ describe('Integration tests', () => {
 			// Content props
 			expect(cust_params).to.have.property('auuid', '047b1294-75a9-11e6-b60a-de4532d5ea35');
 			expect(cust_params).to.have.property('ad');
-			expect(cust_params).to.have.property('ca', 'business,finance,smartphone');
+			expect(cust_params).to.have.property('ca');
 
 			const expectedTopics = ['Retail','US & Canadian companies',
 				'Technology sector', 'Retail & Consumer', 'Companies',
