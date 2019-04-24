@@ -239,11 +239,11 @@ function onRenderEnded(event) {
 	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
-	data.size = event.size && event.size.length ? event.size.toString() : '';
+	data.size = event.size && event.size.length ? event.size.join() : '';
 
 	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
 	if (slotTargeting && slotTargeting.pos) {
-		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join('') : '';
+		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join() : '';
 	}
 
 	const detail = data.gpt;
@@ -348,11 +348,11 @@ const slotMethods = {
 	*	Tell gpt to request an ad
 	*/
 	display: function() {
-	  window.googletag.cmd.push(() => {
+		window.googletag.cmd.push(() => {
 			this.fire('slotGoRender');
-	    googletag.display(this.gpt.id);
-	  });
-	  return this;
+			googletag.display(this.gpt.id);
+		});
+		return this;
 	},
 	/**
 	* Set the DFP unit name for the slot.
