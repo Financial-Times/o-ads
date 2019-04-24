@@ -243,7 +243,7 @@ function onRenderEnded(event) {
 
 	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
 	if (slotTargeting && slotTargeting.pos) {
-		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join('') : '';
+		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join() : '';
 	}
 
 	const detail = data.gpt;
