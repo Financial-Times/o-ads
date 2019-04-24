@@ -231,7 +231,7 @@ During the slot rendering phase the following steps take place:
 
 - The slot is considered ready to start loading ads.
 - The slot is instructed to load ads. This can be deferred by the lazy loading configuration if the slot is not in view.
-- A request is made to the ad server to load an ad for the slot. This can delayed relative to the previous step if GPT is not loaded earlier.
+- A request is made to the ad server to load an ad for the slot. This can be delayed relative to the previous step if GPT is not loaded earlier.
 - The content sent by the ad server is received.
 - If configured, the slot is expanded to full view.
 - The slot content is fully rendered.
