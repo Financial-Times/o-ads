@@ -327,7 +327,6 @@ QUnit.test('Slots.collapse will emit an event', function(assert) {
 	assert.ok(this.utils.broadcast.calledWith('collapsed', initedSlot), 'event broadcast has been called with correct event');
 });
 
-
 QUnit.test('Slots.uncollapse will uncollapse a single slot', function(assert) {
 	const node = this.fixturesContainer.add('<div data-o-ads-name="collapse-test" data-o-ads-formats="MediumRectangle"></div>');
 
@@ -661,9 +660,9 @@ QUnit.test('lazy loading', function(assert) {
 	const node = this.fixturesContainer.add(slotHTML);
 
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -679,9 +678,9 @@ QUnit.test('lazy loading global config', function(assert) {
 	const slotHTML = '<div data-o-ads-name="lazy-test" data-o-ads-formats="MediumRectangle"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -704,17 +703,14 @@ QUnit.test('lazy loading slot config takes precedence over global config', funct
 	assert.equal(this.ads.slots['lazy-test'].lazyLoad, false);
 });
 
-
-
-
 QUnit.test('lazy loading triggers event if the advert is in view', function(assert) {
 	const done = assert.async();
 	const slotHTML = `<div data-o-ads-name="lazy-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle"></div>`;
 	const node = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -732,10 +728,10 @@ QUnit.test('lazy loading triggers in top-down order if multiple ads in view', fu
 	const node1 = this.fixturesContainer.add(slot1HTML);
 	const node2 = this.fixturesContainer.add(slot2HTML);
 	let count=0;
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		count++;
 		if(event.detail.name === 'lazy-test-bottom') {
-			assert.equal(event.detail.name, 'lazy-test-bottom', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test-bottom', 'our test slot fired the slotCanRender event');
 			assert.equal(count, 2, 'bottom slot is the last to fire');
 			done();
 		}
@@ -763,9 +759,9 @@ QUnit.test('lazy loading supports in view threshold', function(assert) {
 	element.style.height = '90px';
 
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -891,9 +887,9 @@ QUnit.test('lazy loading triggers event at the correct point with no intersectio
 	element.style.top = advertTopPosition + 'px';
 
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -923,9 +919,9 @@ QUnit.test('lazy loading triggers event at the correct point with intersection o
 	element.style.height = '90px';
 
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-test') {
-			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -948,9 +944,9 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-companion-test') {
-			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -966,9 +962,9 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	const slotHTML = '<div data-o-ads-name="lazy-companion-test" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="position: absolute; left: -1000px; top: -1000px"></div>';
 	const node = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.render', function(event) {
+	document.body.addEventListener('oAds.slotCanRender', function(event) {
 		if(event.detail.name === 'lazy-companion-test') {
-			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the render event');
+			assert.equal(event.detail.name, 'lazy-companion-test', 'our test slot fired the slotCanRender event');
 			done();
 		}
 	});
@@ -976,6 +972,25 @@ QUnit.test('lazy loading a companion slot', function(assert) {
 	this.ads.init();
 	this.ads.slots.initSlot(node);
 	this.utils.broadcast('masterLoaded', {}, node);
+});
+
+QUnit.test('displayLabelWithBorders config prop adds class to outerEl if data-o-ads-label is defined', function(assert) {
+	const done = assert.async();
+	const slot2HTML = `<div data-o-ads-name="lazy-test-top" data-o-ads-label="left" data-o-ads-lazy-load="true" data-o-ads-formats="MediumRectangle" style="width: 100%;"></div>`;
+	const node = this.fixturesContainer.add(slot2HTML);
+
+	const config = {
+		displayLabelWithBorders: true
+	};
+	this.ads.init(config);
+	this.trigger(window, 'load');
+	this.ads.slots.initSlot(node);
+
+	document.body.addEventListener('oAds.slotCanRender', function() {
+		const outerEl = node.querySelector('.o-ads__outer');
+		assert.ok($(outerEl).hasClass('o-ads--label-with-borders'), 'class is added');
+		done();
+	});
 });
 
 QUnit.test('companion slots which are configured as false for a specific screensize should not render at that screensize', function(assert) {
@@ -1006,7 +1021,7 @@ QUnit.test('lazy loading loads the ad normal way if IntersectionObserver is not 
 });
 
 
-QUnit.test('complete events fire', function(assert) {
+QUnit.test('slotExpand events fire', function(assert) {
 	const done = assert.async();
 	const done2 = assert.async();
 
@@ -1016,7 +1031,7 @@ QUnit.test('complete events fire', function(assert) {
 	slotHTML = '<div data-o-ads-name="second" data-o-ads-formats="MediumRectangle"></div>';
 	const second = this.fixturesContainer.add(slotHTML);
 
-	document.body.addEventListener('oAds.complete', function(event) {
+	document.body.addEventListener('oAds.slotExpand', function(event) {
 		assert.ok(event.detail.name, event.detail.name + ' completed.');
 		if (event.detail.name === 'first') {
 			done();

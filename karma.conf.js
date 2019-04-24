@@ -81,7 +81,7 @@ if (process.env.COVERAGE) {
 			},
 			each: {
 				statements: 97,
-				branches: 94,
+				branches: 92,
 				functions: 96,
 				lines: 97
 			}

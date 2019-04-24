@@ -21,7 +21,7 @@ QUnit.test('resolves with an empty promise if called without any urls', function
 
 });
 
-QUnit.test("fires an 'apiRequestsComplete' event when all API requests succeed", function(assert) {
+QUnit.test("fires an 'adsAPIComplete' event when all API requests succeed", function(assert) {
 	const done = assert.async();
 	const broadcast = this.stub(this.utils, 'broadcast');
 
@@ -48,12 +48,12 @@ QUnit.test("fires an 'apiRequestsComplete' event when all API requests succeed",
 		// TO-DO: We should be using 'calledOnceWith' instead of 'calledWith' here
 		// However browserstack-local forces us to pull in an old version of sinon
 		// that doesn't have 'calledOnceWith'
-		assert.ok(broadcast.calledWith('apiRequestsComplete'), 'with apiRequestsComplete');
+		assert.ok(broadcast.calledWith('adsAPIComplete'), 'with adsAPIComplete');
 		done();
 	});
 });
 
-QUnit.test("fires an 'apiRequestsComplete' event when the user api request fails", function(assert) {
+QUnit.test("fires an 'adsAPIComplete' event when the user api request fails", function(assert) {
 	const done = assert.async();
 	const broadcast = this.stub(this.utils, 'broadcast');
 
@@ -76,12 +76,12 @@ QUnit.test("fires an 'apiRequestsComplete' event when the user api request fails
 
 	ads.then((ads) => {
 		ads.targeting.get();
-		assert.ok(broadcast.calledWith('apiRequestsComplete'));
+		assert.ok(broadcast.calledWith('adsAPIComplete'));
 		done();
 	});
 });
 
-QUnit.test("fires an 'apiRequestsComplete' event when the page api request fails", function(assert) {
+QUnit.test("fires an 'adsAPIComplete' event when the page api request fails", function(assert) {
 	const done = assert.async();
 	const broadcast = this.stub(this.utils, 'broadcast');
 
@@ -104,7 +104,7 @@ QUnit.test("fires an 'apiRequestsComplete' event when the page api request fails
 
 	ads.then((ads) => {
 		ads.targeting.get();
-		assert.ok(broadcast.calledWith('apiRequestsComplete'));
+		assert.ok(broadcast.calledWith('adsAPIComplete'));
 		done();
 	});
 });

@@ -26,6 +26,37 @@ QUnit.module('Slots - post message', {
 	}
 });
 
+QUnit.test('Post message oAds.adIframeLoaded from the iframe dispatches oAds.slotRenderEnded', function (assert) {
+	const done = assert.async();
+	const slotName = 'whoami-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+	const utils = this.ads.utils;
+	const performanceStub = sinon.stub(window.performance, 'mark');
+	this.spy(this.ads.utils, 'broadcast');
+
+	window.addEventListener('message', 	function () {
+		// Make sure this executes AFTER the other 'message' event listener
+		// defined in slots.js
+		setTimeout(function() {
+			assert.ok(utils.broadcast.calledWith('slotRenderEnded'));
+			assert.ok(performanceStub.called);
+			performanceStub.restore();
+			done();
+		}, 0);
+	 });
+
+	document.body.addEventListener('oAds.slotReady', 	function () {
+		window.postMessage('{ "type": "oAds.adIframeLoaded", "name": "' + slotName + '"}', '*');
+ 	});
+
+	this.ads.init();
+	this.ads.slots.initSlot(container);
+});
+
+
 QUnit.test('Post message from unknown slot logs an error and sends a repsonse', function (assert) {
 	const done = assert.async();
 	const slotName = 'whoami-ad';
@@ -43,7 +74,7 @@ QUnit.test('Post message from unknown slot logs an error and sends a repsonse', 
 		}, 0);
 	 });
 
-	document.body.addEventListener('oAds.ready', 	function () {
+	document.body.addEventListener('oAds.slotReady', 	function () {
 		window.postMessage('{ "type": "oAds.whoami"}', '*');
  	});
 
@@ -60,7 +91,7 @@ QUnit.test('Passed touch fires an event', function (assert) {
 		return slotName;
 	});
 
-	document.body.addEventListener('oAds.ready', function () {
+	document.body.addEventListener('oAds.slotReady', function () {
 		window.postMessage('{ "type": "touchstart", "name": "' + slotName + '"}', '*');
 	});
 
@@ -80,7 +111,7 @@ QUnit.test('Post message catches the event when the message comes from an uniden
 	const done = assert.async();
 	const slotName = 'responsive-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="HalfPage,MediumRectangle"></div>');
-	document.body.addEventListener('oAds.ready', function () {
+	document.body.addEventListener('oAds.slotReady', function () {
 		window.postMessage('{ "type": "oAds.responsive", "name": "unknown"}', '*');
 		// as there is no event fired when no slot available, we use timeout to let the error call execute
 		setTimeout(function() {
@@ -100,7 +131,7 @@ QUnit.test('Post message "collapse" message will call slot.collapse()', function
 		return slotName;
 	});
 
-	document.body.addEventListener('oAds.ready', function () {
+	document.body.addEventListener('oAds.slotReady', function () {
 		window.postMessage('{ "type": "oAds.collapse", "collapse": true}', '*');
 	});
 
@@ -135,7 +166,7 @@ QUnit.test('Unknown postMessage will log an error', function (assert) {
 		}, 0);
 	});
 
-	document.body.addEventListener('oAds.ready', function () {
+	document.body.addEventListener('oAds.slotReady', function () {
 		window.postMessage('{ "type": "oAds.unknown" }', '*');
 	});
 

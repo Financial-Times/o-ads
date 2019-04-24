@@ -5,22 +5,35 @@
  * @see utils
  */
 
+// Creates a timestamp in the browser's performance entry buffer
+// for later use
+export const perfMark = name => {
+	/* istanbul ignore next */
+	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
+	if (performance && performance.mark) {
+		performance.mark(name);
+	}
+};
+
 /**
 * Broadscasts an o-ads event
 * @param {string} name The name of the event
 * @param {object} data The data to send as event detail
 * @param {HTMLElement} target The element to attach the event listener to
 */
-export function broadcast(name, data, target) {
+export function broadcast(eventName, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
 	target = target || document.body || document.documentElement;
-	name = `oAds.${name}`;
+	eventName = `oAds.${eventName}`;
 	const opts = {
 		bubbles: true,
 		cancelable: true,
 		detail: data
 	};
-	target.dispatchEvent(new CustomEvent(name, opts));
+
+	const markName = typeof data === 'object' && 'pos' in data && 'name' in data ? [eventName, data.pos, data.name, data.size.length ? data.size.toString() : ''].join('__') : eventName;
+	perfMark(markName);
+	target.dispatchEvent(new CustomEvent(eventName, opts));
 }
 
 /**

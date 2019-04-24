@@ -29,7 +29,7 @@ QUnit.test('broadcast an event when GPT loads', function(assert) {
 
 	this.spy(this.utils, 'broadcast');
 	this.ads.init();
-	assert.ok(this.ads.utils.broadcast.calledWith('adServerLoadSuccess'));
+	assert.ok(this.ads.utils.broadcast.calledWith('serverScriptLoaded'));
 });
 
 QUnit.test('broadcast an event when GPT fails to load', function(assert) {
@@ -63,6 +63,12 @@ QUnit.test('override page targeting', function(assert) {
 	this.ads.gpt.updatePageTargeting('anotherOverrideKey=anotherOverrideValue');
 	assert.ok(googletag.pubads().setTargeting.neverCalledWith('anotherOverrideKey', 'anotherOverrideValue'), 'overreide paramerters passed as a string are not queued with GPT');
 
+});
+
+QUnit.test('empty override page targeting clears targeting', function(assert) {
+	this.ads.init({ dfp_targeting: ';some=test;targeting=params'});
+	this.ads.gpt.updatePageTargeting();
+	assert.ok(googletag.pubads().clearTargeting.called);
 });
 
 QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
@@ -104,7 +110,6 @@ QUnit.test('set sync rendering', function(assert) {
 	this.ads.init({ gpt: {rendering: 'sync'}});
 	assert.ok(googletag.pubads().enableSyncRendering.calledOnce, 'sync rendering has been enabled');
 });
-
 
 QUnit.test('enabled single request', function(assert) {
 	this.ads.init({ gpt: {rendering: 'sra'}});
@@ -203,7 +208,7 @@ QUnit.test('catches slot in view render event and display it if method is ready'
 	this.ads.init();
 	const slot = this.ads.slots.initSlot(node);
 	const displaySpy = this.spy(slot, 'display');
-	slot.fire('render');
+	slot.fire('slotCanRender');
 	assert.ok(displaySpy.calledOnce, 'slot dislpay method has been triggered');
 });
 
@@ -227,6 +232,19 @@ QUnit.test('provides api to destroy the slot', function(assert) {
 	assert.equal(slot.destroySlot(), true, 'a call to destroy slot returns a boolean');
 	assert.ok(googletag.destroySlots.calledOnce, 'destroy api has been called');
 	assert.ok(googletag.destroySlots.calledWith([slot.gpt.slot]), 'defaults to slot that the method has been invoked on');
+});
+
+QUnit.test('destroying slots fails gracefully if pubadsReady is not available', function(assert) {
+	const slotHTML = '<div data-o-ads-name="test1" data-o-ads-formats="MediumRectangle"></div>';
+	this.fixturesContainer.add(slotHTML);
+	const savedGTagPubAdsReady = window.googletag.pubadsReady;
+	window.googletag.pubadsReady = null;
+
+	this.ads.init();
+	const slot = this.ads.slots.initSlot('test1');
+	assert.equal(slot.destroySlot(), false, 'a call to destroy slot returns false');
+	assert.ok(!googletag.destroySlots.called, 'destroy api has not been called');
+	window.googletag.pubadsReady = savedGTagPubAdsReady;
 });
 
 QUnit.test('provides api to clear the slot', function(assert) {
@@ -285,7 +303,7 @@ QUnit.test('set unit name', function(assert) {
 	const done = assert.async();
 	const expected = '/5887/some-dfp-site/some-dfp-zone';
 	this.fixturesContainer.add(htmlstart + 'unit-name-full' + htmlend);
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-full') {
@@ -309,7 +327,7 @@ QUnit.test('set unit name site only', function(assert) {
 	const expected = '/5887/some-dfp-site';
 	this.fixturesContainer.add(htmlstart + 'unit-name-site-only' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-site-only') {
@@ -331,7 +349,7 @@ QUnit.test('set unit names network only', function(assert) {
 	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-network-only' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-network-only') {
@@ -354,7 +372,7 @@ QUnit.test('unit names with empty strings', function(assert) {
 	const expected = '/5887';
 	this.fixturesContainer.add(htmlstart + 'unit-name-empty-string' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-empty-string') {
@@ -378,7 +396,7 @@ QUnit.test('set unit name with override', function(assert) {
 	const expected = '/hello-there/stranger';
 	this.fixturesContainer.add(htmlstart + 'unit-name-custom' + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-custom') {
@@ -400,7 +418,7 @@ QUnit.test('set unit name with attribute', function(assert) {
 	const expected = '/this-works';
 	const container = this.fixturesContainer.add(htmlstart + 'unit-name-attr" data-o-ads-gpt-unit-name="' + expected + htmlend);
 
-	document.addEventListener('oAds.complete', function(event) {
+	document.addEventListener('oAds.slotExpand', function(event) {
 		const name = event.detail.name;
 		const slot = event.detail.slot;
 		if (name === 'unit-name-attr') {
@@ -509,14 +527,18 @@ QUnit.test('define responsive slot', function(assert) {
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
-QUnit.test('rendered event fires on slot', function(assert) {
+QUnit.test('slotRenderStart event fires on slot with the pos, size and name', function(assert) {
 	const done = assert.async();
-	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle"></div>';
+	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle" data-o-ads-targeting="pos=mid"></div>';
 	this.fixturesContainer.add(html);
 	this.ads.init();
 
-	document.body.addEventListener('oAds.rendered', function(event) {
-		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the rendered event');
+	document.body.addEventListener('oAds.slotRenderStart', function(event) {
+		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the slotRenderStart event');
+		assert.equal(event.detail.pMarkDetails.name, 'rendered-test', 'the name attribute is set correctly in the performance mark details');
+		assert.equal(event.detail.pMarkDetails.pos, 'mid', 'the pos attribute is set correctly in the performance mark details');
+		assert.equal(event.detail.pMarkDetails.size, '300,250', 'the size attribute is set correctly in the performance mark details');
+		assert.ok(event.detail.pMarkDetails.slot, 'the slot object is available in the performance mark details');
 		done();
 	});
 
@@ -524,9 +546,11 @@ QUnit.test('rendered event fires on slot', function(assert) {
 });
 
 QUnit.test('update correlator', function(assert) {
+	const errorSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
 	this.ads.gpt.updateCorrelator();
 	assert.ok(googletag.pubads().updateCorrelator.calledOnce, 'the pub ads update correlator method is called when our method is called.');
+	assert.ok(errorSpy.calledWith('[DEPRECATED]: Updatecorrelator is being phased out by google and removed from o-ads in future releases.'), 'warns that update correlator is being deprecated');
 });
 
 QUnit.test('fixed url for ad requests', function(assert) {
@@ -561,7 +585,7 @@ QUnit.test('pick up the slot URL from page address if config or canonical not av
 
 QUnit.test('creatives with size 100x100 expand the iframe to 100%', function(assert) {
 	const done = assert.async();
-	document.body.addEventListener('oAds.complete', function(event) {
+	document.body.addEventListener('oAds.slotExpand', function(event) {
 		const iframe = event.detail.slot.gpt.iframe;
 		const iframeSize = [iframe.width, iframe.height];
 		assert.deepEqual(iframeSize, ['100%', '100%'], 'size of iframe is 100% by 100%.');

@@ -25,7 +25,7 @@ Moat.prototype.init = function() {
 		}, 1000);
 	});
 
-	const fireCompleteEvent = () => { utils.broadcast('moatIVTcomplete'); };
+	const fireCompleteEvent = () => { utils.broadcast('adsIVTComplete'); };
 	promise.then( fireCompleteEvent, fireCompleteEvent );
 
 	return promise;

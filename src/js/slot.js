@@ -128,7 +128,7 @@ const onChangeBreakpoint = (event) => {
  * @constructor
  */
 function Slot(container, screensize, initLazyLoading) {
-	const renderEvent = 'rendered';
+	const renderEvent = 'slotRenderStart';
 	const cfg = config();
 	let slotConfig = config('slots') || {};
 	const disableSwipeDefault = config('disableSwipeDefault') || false;
@@ -271,7 +271,7 @@ Slot.prototype.initLazyLoad = function() {
 };
 
 Slot.prototype.render = function() {
-	this.fire('render');
+	this.fire('slotCanRender');
 	/* istanbul ignore else  */
 	if(this.lazyLoadObserver) {
 		this.lazyLoadObserver.unobserve(this.container);
@@ -387,11 +387,14 @@ Slot.prototype.submitImpression = function() {
  */
 Slot.prototype.fire = function(name, data) {
 	const details = {
-		name: this.name,
+		name: this.name || '',
+		pos: this.targeting && this.targeting.pos || '',
+		size: this.gpt && this.gpt.size || '',
 		slot: this
 	};
 
 	if (utils.isPlainObject(data)) {
+		data.pMarkDetails = details;
 		utils.extend(details, data);
 	}
 

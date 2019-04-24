@@ -25,8 +25,8 @@ function init() {
 	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	initGoogleTag();
-	utils.on('ready', onReady.bind(null, slotMethods));
-	utils.on('render', onRender);
+	utils.on('slotReady', onReady.bind(null, slotMethods));
+	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
 	googletag.cmd.push(setup.bind(null, gptConfig));
@@ -47,7 +47,7 @@ function initGoogleTag() {
 	}
 
 	utils.attach('//www.googletagservices.com/tag/js/gpt.js', true,
-		() => { utils.broadcast('adServerLoadSuccess'); },
+		() => { utils.broadcast('serverScriptLoaded'); },
 		(err) => { utils.broadcast('adServerLoadError', err); }
 	);
 }
@@ -107,6 +107,7 @@ function setPageTargeting(targetingData) {
 			});
 		});
 	} else {
+		/* istanbul ignore next  */
 		utils.log.warn('invalid targeting object passed', targetingData);
 	}
 
@@ -238,6 +239,13 @@ function onRenderEnded(event) {
 	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
+	data.size = event.size && event.size.length ? event.size.join() : '';
+
+	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
+	if (slotTargeting && slotTargeting.pos) {
+		data.pos = slotTargeting.pos.length ? slotTargeting.pos.join() : '';
+	}
+
 	const detail = data.gpt;
 	detail.isEmpty = event.isEmpty;
 	detail.size = event.size;
@@ -252,9 +260,10 @@ function onRenderEnded(event) {
 		iFrameEl.setAttribute('title', 'Advertisement');
 		detail.iframe = iFrameEl;
 	} else {
+		/* istanbul ignore next */
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
-	utils.broadcast('rendered', data);
+	utils.broadcast('slotRenderStart', data);
 }
 
 /*
@@ -340,9 +349,9 @@ const slotMethods = {
 	*/
 	display: function() {
 	  window.googletag.cmd.push(() => {
-	    utils.broadcast('gptDisplay');
-	    googletag.display(this.gpt.id);
-	  });
+			this.fire('slotGoRender');
+			googletag.display(this.gpt.id);
+		});
 	  return this;
 	},
 	/**
