@@ -175,7 +175,7 @@ Also at this point, if `validateAdsTraffic` is set to `true`, `o-ads` will check
 #### `oAds.adsAPIComplete`
 If targeting has been configured, this event is triggered when both requests to the targeting api ('user' and 'page') have been fullfilled (whether successfully or not).
 
-#### `oAds.adsIVTComplete`
+#### `oAds.IVTComplete`
 If `validateAdsTraffic` is set to `true`, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can't been found, when the associated timeout period expires.
 
 #### `oAds.initialised`
@@ -210,7 +210,33 @@ Event is emitted when the slot is collapsed. The event detail contains oAds slot
 
 ## Ads loading process
 
-The following graph shows the main events that constitute the process of loading an ad.
+The ads loading process can be divided in two phases: the page initialisation phase and the slot rendering phase.
 
-![]({{ site.url }}/o-ads/assets/loading_process_main.png)
+### Page initialisation phase
+
+During the page initialisation phase the following steps take place:
+
+- If configured, two separate requests are made to the targeting API to obtain targeting parameters that will be used to configure the ad slots
+- If configured, an attempt to validate if the traffic to the page comes from a valid (human) source is made.
+- The Google Publisher Tag (GPT) script, which allows o-ads to interact with the ad server, is requested.
+- If configured, the process of obtaining consent for behaviourial targeting is triggered.
+
+The following graph shows the flow of events during the page initialisation phase alongside the name of the events triggered by o-ads.
+
+![]({{ site.url }}/o-ads/assets/oads_page_init.png)
+
+### Slot rendering phase
+
+During the slot rendering phase the following steps take place:
+
+- The slot is considered ready to start loading ads.
+- The slot is instructed to load ads. This can be deferred by the lazy loading configuration if the slot is not in view.
+- A request is made to the ad server to load an ad for the slot. This can be delayed relative to the previous step if GPT is not loaded earlier.
+- The content sent by the ad server is received.
+- If configured, the slot is expanded to full view.
+- The slot content is fully rendered.
+
+The following graph shows the flow of events during the slot rendering phase alongside the name of the events triggered by o-ads.
+
+![]({{ site.url }}/o-ads/assets/oads_slot_rendering.png)
 
