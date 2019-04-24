@@ -239,7 +239,7 @@ function onRenderEnded(event) {
 	const iframeId = `google_ads_iframe_${gptSlotId.getId()}`;
 	data.type = domId.pop();
 	data.name = domId.join('-');
-	data.size = event.size && event.size.length ? event.size.toString() : '';
+	data.size = event.size && event.size.length ? event.size.join() : '';
 
 	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
 	if (slotTargeting && slotTargeting.pos) {
