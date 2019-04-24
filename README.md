@@ -59,3 +59,33 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 As of version 11, o-ads has been updated to use ES modules. Unfortunately, this means it is not backwards compatible with CJS modules and clients cannot `require('o-ads')` anymore.
 - Breaking change: if importing o-ads in your build, you must now do it as follows: `import oAds from 'o-ads'`
 
+### Upgrading to v12
+
+This release introduces the following changes:
+
+  1. **`o-ads` is now recording a performance mark for every event that it dispatches.** The performance mark will have the same name as the event that originated it plus, in some cases, a suffix that helps determine the circumstances that triggered the event. This is all being used internally by `o-ads` to provide new metrics functionality.  
+
+2. **`o-Ads` exposes a new `setupMetrics` method that simplifies obtaining performance metrics.** `setupMetrics` accepts two parameters:
+ - An array of objects containing the configuration of the different metrics that need to be tracked.
+ - A callback function to be called whenever any of the trigger events of any of those configuration objects is dispatched.
+
+
+3. **Several custom events fired by o-ads have been renamed for different reasons.** This is the list of events whose name has changed:
+
+Old event name | new event name
+:--:|:--:
+			startInitialisation| initialising
+moatIVTcomplete| IVTComplete
+apiRequestsComplete |  adsAPIComplete
+			adServerLoadSuccess |  serverScriptLoaded
+ready | slotReady
+render |slotCanRender 
+gptDisplay |slotGoRender
+rendered | slotRenderStart
+complete | slotExpand
+adIframeLoaded | slotRenderEnded
+
+A guide can to the new names can also be found in this two diagrams:
+
+- [event renaming 1](https://github.com/Financial-Times/o-ads/blob/master/docs/assets/v12_event_renaming_1.png)
+- [event renaming 2](https://github.com/Financial-Times/o-ads/blob/master/docs/assets/v12_event_renaming_2.png)
