@@ -175,7 +175,7 @@ Also at this point, if `validateAdsTraffic` is set to `true`, `o-ads` will check
 #### `oAds.adsAPIComplete`
 If targeting has been configured, this event is triggered when both requests to the targeting api ('user' and 'page') have been fullfilled (whether successfully or not).
 
-#### `oAds.adsIVTComplete`
+#### `oAds.IVTComplete`
 If `validateAdsTraffic` is set to `true`, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can't been found, when the associated timeout period expires.
 
 #### `oAds.initialised`

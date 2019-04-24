@@ -261,7 +261,7 @@ QUnit.test("moat script loading check is eventually cleared if moat is not loade
 	}, 1000);
 });
 
-QUnit.test("A 'adsIVTComplete' event is fired if moat IVT cannnot be checked", function(assert) {
+QUnit.test("A 'IVTComplete' event is fired if moat IVT cannnot be checked", function(assert) {
 	this.spy(this.utils, 'broadcast');
 	window.moatPrebidApi = null;
 	this.ads.moat.init();
@@ -269,12 +269,12 @@ QUnit.test("A 'adsIVTComplete' event is fired if moat IVT cannnot be checked", f
 	const done = assert.async();
 
 	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('adsIVTComplete'));
+		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
 		done();
 	}, 1000);
 });
 
-QUnit.test("A 'adsIVTComplete' event is fired if moat IVT can be checked", function(assert) {
+QUnit.test("A 'IVTComplete' event is fired if moat IVT can be checked", function(assert) {
 	this.spy(this.utils, 'broadcast');
 	window.moatPrebidApi = {};
 	this.ads.moat.init();
@@ -282,7 +282,7 @@ QUnit.test("A 'adsIVTComplete' event is fired if moat IVT can be checked", funct
 	const done = assert.async();
 
 	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('adsIVTComplete'));
+		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
 		done();
 	}, 1000);
 });
