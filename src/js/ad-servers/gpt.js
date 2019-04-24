@@ -349,9 +349,9 @@ const slotMethods = {
 	*/
 	display: function() {
 	  window.googletag.cmd.push(() => {
-		this.fire('slotGoRender');
-	    googletag.display(this.gpt.id);
-	  });
+			this.fire('slotGoRender');
+			googletag.display(this.gpt.id);
+		});
 	  return this;
 	},
 	/**
