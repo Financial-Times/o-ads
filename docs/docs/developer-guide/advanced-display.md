@@ -243,18 +243,18 @@ The following graph shows the flow of events during the slot rendering phase alo
 ## Monitoring ads loading
 
 ### `o-ads` approach to monitoring
-As of version 12 `o-Ads` includes some built-in functionality to help monitor the ads loading flow.
+As of version 12 `o-ads` includes some built-in functionality to help monitor the ads loading flow.
 
 Firstly, `o-ads` saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. The [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance) used for this is native browser functionality that provides high resolution time measurements.
 
-On top of that `o-Ads` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
+On top of that `o--ds` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
 
 ### `setupMetrics`
 
 `setupMetrics` accepts two parameters:
 
 - An array of configuration objects, each of which corresponds to one group of `o-ads` events.
-  - A callback that will, potentially, be invoked one or more times for each of those groups. When invoked, the callback will receive an object with information about the timings associated to the events in the groups.
+- A callback that will, potentially, be invoked one or more times for each of those groups. When invoked, the callback will receive an object with information about the timings associated to the events in the groups.
 
 Each of the configuration objects must include the following fields:
 

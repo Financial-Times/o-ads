@@ -65,7 +65,7 @@ This release introduces the following changes:
 
   1. **`o-ads` is now recording a performance mark for every event that it dispatches.** The performance mark will have the same name as the event that originated it plus, in some cases, a suffix that helps determine the circumstances that triggered the event. This is all being used internally by `o-ads` to provide new metrics functionality.  
 
-2. **`o-Ads` exposes a new `setupMetrics` method that simplifies obtaining performance metrics.** `setupMetrics` accepts two parameters:
+2. **`o-ads` exposes a new `setupMetrics` method that simplifies obtaining performance metrics.** `setupMetrics` accepts two parameters:
  - An array of objects containing the configuration of the different metrics that need to be tracked.
  - A callback function to be called whenever any of the trigger events of any of those configuration objects is dispatched.
 
