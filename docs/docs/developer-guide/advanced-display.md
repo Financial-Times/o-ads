@@ -249,22 +249,23 @@ Firstly, `o-ads` saves a [performance mark](https://developer.mozilla.org/en-US/
 
 On top of that `o-Ads` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
 
-### Configuring `setupMetrics`
+### `setupMetrics`
 
 `setupMetrics` accepts two parameters:
 
-	- An array of configuration objects, each of which corresponds to one group of `o-ads` events.
+- An array of configuration objects, each of which corresponds to one group of `o-ads` events.
   - A callback that will, potentially, be invoked one or more times for each of those groups. When invoked, the callback will receive an object with information about the timings associated to the events in the groups.
 
 Each of the configuration objects must include the following fields:
 
-	- `spoorAction`: a string indicating the name of the group.
-	- `marks`: an array of strings indicating the name of the `o-ads` [events](#events) whose metrics we want to include in the group. Notice that the `oAds.` preffix must be omitted.
-  - `triggers`: an array of strings including all the `o-ads` events that cause the callback to be invoked.
+- `spoorAction`: a string indicating the name of the group.
+- `marks`: an array of strings indicating the name of the `o-ads` [events](#events) whose metrics we want to include in the group. Notice that the `oAds.` preffix must be omitted.
+ - `triggers`: an array of strings including all the `o-ads` events that cause the callback to be invoked.
 
 Additionally, it can include:
-	- `multiple`: a boolean indicating if the callback can be called multiple times for thegroup. It's `false` by default.
+- `multiple`: a boolean indicating if the callback can be called multiple times for thegroup. It's `false` by default.
 
+### Metrics configuration example
 This is an example of how to use `setupMetrics`:
 
 ```js

@@ -74,10 +74,10 @@ This release introduces the following changes:
 
 Old event name | new event name
 :--:|:--:
-			startInitialisation| initialising
+startInitialisation | initialising
 moatIVTcomplete| IVTComplete
 apiRequestsComplete |  adsAPIComplete
-			adServerLoadSuccess |  serverScriptLoaded
+adServerLoadSuccess |  serverScriptLoaded
 ready | slotReady
 render |slotCanRender 
 gptDisplay |slotGoRender
