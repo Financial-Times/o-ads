@@ -20,9 +20,9 @@
 	// Create and add fake content
 	const addFakeContent = (text) => (parent) => {
 		const h2 = document.createElement("H2")
-		const textNode = document.createTextNode(text);
-		h2.appendChild(textNode);
-		parent.appendChild(h2);
+		const textNode = document.createTextNode(text)
+		h2.appendChild(textNode)
+		parent.appendChild(h2)
 	}
 
 	// Create and add an Ad Slot
@@ -37,10 +37,8 @@
 	const findAdSlotsByName = (slotName) => (parent) =>
 		Array.from(parent.querySelectorAll(`div[data-o-ads-name=${slotName}]`)) 
 
-	const initAdSlots = (slots, oAds) => {
-		slots.forEach(sl => console.log('=> sl', sl) )
+	const initAdSlots = (slots, oAds) =>
 		slots.forEach(oAds.slots.initSlot.bind(oAds.slots))
-	}
 
 	const createAdSlot = (slotName, formats) => (parentDoc) => {
 		addAdSlot(slotName, formats)(parentDoc.body)
@@ -48,14 +46,14 @@
 		initAdSlots(slots, oAds)
 	}
 
-    const moreContent = () => {
+	const moreContent = () => {
 		// Generate next slot name
-		const slotName = generateNextSlotName();
+		const slotName = generateNextSlotName()
 
 		// Create a div for the slot
-		const slotDiv = document.createElement('div');
-		slotDiv.id = slotName; // Id must be the same as slotName
-		document.body.appendChild(slotDiv);
+		const slotDiv = document.createElement('div')
+		slotDiv.id = slotName // Id must be the same as slotName
+		document.body.appendChild(slotDiv)
 
 		// Add some dynamic fake content
 		addFakeContent('Dynamic Fake Content 1')(document.body)
