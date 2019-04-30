@@ -72,20 +72,20 @@ This release introduces the following changes:
 
 3. **Several custom events fired by o-ads have been renamed for different reasons.** This is the list of events whose name has changed:
 
-Old event name | new event name
+Old event name | New event name
 :--:|:--:
-			startInitialisation| initialising
-moatIVTcomplete| IVTComplete
-apiRequestsComplete |  adsAPIComplete
-			adServerLoadSuccess |  serverScriptLoaded
-ready | slotReady
-render |slotCanRender 
-gptDisplay |slotGoRender
-rendered | slotRenderStart
-complete | slotExpand
-adIframeLoaded | slotRenderEnded
+startInitialisation|initialising
+moatIVTcomplete|IVTComplete
+apiRequestsComplete|adsAPIComplete
+adServerLoadSuccess|serverScriptLoaded
+ready|slotReady
+render|slotCanRender 
+gptDisplay|slotGoRender
+rendered|slotRenderStart
+complete|slotExpand
+adIframeLoaded|slotRenderEnded
 
-A guide can to the new names can also be found in this two diagrams:
+A guide to the new names can also be found in this two diagrams:
 
 - [event renaming 1](https://github.com/Financial-Times/o-ads/blob/master/docs/assets/v12_event_renaming_1.png)
 - [event renaming 2](https://github.com/Financial-Times/o-ads/blob/master/docs/assets/v12_event_renaming_2.png)
