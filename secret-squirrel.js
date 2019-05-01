@@ -4,6 +4,7 @@ module.exports = {
 			'demos/src/individual.mustache',
 			'demos/src/individualcustomtargeting.mustache',
 			'demos/src/individuallazyload.mustache',
+			'demos/src/infinitescrolling.mustache',
 			'demos/src/masterandcompanion.mustache',
 			'demos/src/multiplenextstyles.mustache',
 			'demos/src/native.mustache',

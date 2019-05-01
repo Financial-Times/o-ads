@@ -72,10 +72,10 @@ This release introduces the following changes:
 
 3. **Several custom events fired by o-ads have been renamed for different reasons.** This is the list of events whose name has changed:
 
-Old event name | new event name
+Old event name | New event name
 :--:|:--:
 startInitialisation | initialising
-moatIVTcomplete| IVTComplete
+moatIVTcomplete | IVTComplete
 apiRequestsComplete |  adsAPIComplete
 adServerLoadSuccess |  serverScriptLoaded
 ready | slotReady
