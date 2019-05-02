@@ -266,7 +266,7 @@ Additionally, it can include:
 - `multiple`: a boolean indicating if the callback can be called multiple times for thegroup. It's `false` by default.
 
 ### Metrics configuration example
-This is an example of how to use `setupMetrics`:
+This is an example of how to use `setupMetrics`. See explanation below.
 
 ```js
 const metricsDefinitions = [
@@ -325,3 +325,9 @@ const metricsDefinitions = [
 	oAdsUtils.setupMetrics(metricsDefinitions, sendMetrics);
 }
 ```
+
+In this example there are four different metrics groups. The first one will invoke the callback whenever the trigger (`oAds.serverScripLoaded`) is dispatched. The callback will receive an object including any available information about 5 potential time marks ('initialising', 'IVTComplete', 'adsAPIComplete', 'initialised', 'serverScriptLoaded'). If there is no information about any of those marks, the callback will still be called without it. Since the `multiple` parameter is missing, it's default value of `false` is assumed, which means that once called, the callback will not be called again for the same pageview even, somehow, `oAds.serverScriptLoaded` was dispatched again.
+
+In the case of the `krux` group, the callback will be called whenever the first of 3 different events (`oAds.kruxKuidAck`, `oAds.kruxKuidError` or `kruxConsentOptinFailed`) is fired. That helps covering different potential scenarios around the same functionality. Again, since `multiple` is not set, once the callback is called for this group, it won't be called again for the same page view.
+
+The other two groups `slot-rendered` and `slot-requested` work similarly to `page-initialised`. However, unlike that one, they will be fired as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since expect a page to contain, potentially, multiple ad slots.
