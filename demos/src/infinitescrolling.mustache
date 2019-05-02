@@ -11,63 +11,45 @@
 	}
 </script>
 <script>
-	let nextSlotId = 0
-
-	// Generate next slot name
-	const generateNextSlotName = () =>
-		"{{basename}}" + ++nextSlotId
+	const initSlot = (oAds) => oAds.slots.initSlot.bind(oAds.slots)
 
 	// Create and add fake content
 	const addFakeContent = (text) => (parent) => {
-		const h2 = document.createElement("H2")
+		const h2 = document.createElement("h2")
 		const textNode = document.createTextNode(text)
 		h2.appendChild(textNode)
 		parent.appendChild(h2)
 	}
 
 	// Create and add an Ad Slot
-	const addAdSlot = (slotName, formats) => (parent) => {
+	const createAdSlotContainer = (formats) => {
 		const adSlot = document.createElement('div')
-		adSlot.setAttribute('data-o-ads-name', slotName)
 		adSlot.setAttribute('data-o-ads-formats', formats)
-
-		parent.appendChild(adSlot)
+		return adSlot
 	}
 
-	const findAdSlotsByName = (slotName) => (parent) =>
-		Array.from(parent.querySelectorAll(`div[data-o-ads-name=${slotName}]`)) 
-
-	const initAdSlots = (slots, oAds) =>
-		slots.forEach(oAds.slots.initSlot.bind(oAds.slots))
-
-	const createAdSlot = (slotName, formats) => (parentDoc) => {
-		addAdSlot(slotName, formats)(parentDoc.body)
-		const slots = findAdSlotsByName(slotName)(parentDoc)
-		initAdSlots(slots, oAds)
+	const addAdSlot = (formats) => (parentDoc) => {
+		const adSlot = createAdSlotContainer(formats)
+		parentDoc.appendChild(adSlot)
+		initSlot(oAds)(adSlot)
+		return adSlot
 	}
 
 	const moreContent = () => {
-		// Generate next slot name
-		const slotName = generateNextSlotName()
-
-		// Create a div for the slot
-		const slotDiv = document.createElement('div')
-		slotDiv.id = slotName // Id must be the same as slotName
-		document.body.appendChild(slotDiv)
+		const parentNode = document.querySelector(`div[id=contentArea]`)
 
 		// Add some dynamic fake content
-		addFakeContent('Dynamic Fake Content 1')(document.body)
-		addFakeContent('Dynamic Fake Content 2')(document.body)
+		addFakeContent('Dynamic Fake Content 1')(parentNode)
+		addFakeContent('Dynamic Fake Content 2')(parentNode)
 
 		// Create and add the Ad Slot itself
-		createAdSlot(slotName, '{{formats}}')(document)
+		addAdSlot('{{formats}}')(parentNode)
 	}
 </script>
 
-<div
-	data-o-ads-name="{{basename}}"
-	data-o-ads-formats="{{formats}}"
-></div>
+<body style='height: 100%'>
+	<div id='contentArea' style='height: 100%' />
 
-<!-- Button to load more content dynamically. -->
-<button onclick="moreContent()">More Content</button>
+	<!-- Button to load more content dynamically. -->
+	<button onclick="moreContent()">More Content</button>
+</body>
