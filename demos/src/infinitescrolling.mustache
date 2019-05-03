@@ -11,10 +11,34 @@
 	}
 </script>
 <script>
-	const initSlot = (oAds) => oAds.slots.initSlot.bind(oAds.slots)
+	const moreObserverCallback = (entries, observer) => {
+		entries.forEach((entry) => {
+			const slotName = entry.target.getAttribute('id')
+			
+			if (entry.isIntersecting) {
+				const adSlot = moreContent()
+				const slotName = adSlot.getAttribute('data-o-ads-name')
+				console.debug(`moreObserverCallback(): Initialized ad slot ${slotName}`)
+			}
+		})
+	}
+
+	const moreObserver = new IntersectionObserver(
+		moreObserverCallback,
+		{ root: null, rootMargin: '0px', threshold: 0.1 }
+	)
+</script>
+<script>
+	let count = 0
+
+	const initSlot = (oAds) => {
+		console.debug('initSlot()')
+		return oAds.slots.initSlot.bind(oAds.slots)
+	}
 
 	// Create and add fake content
 	const addFakeContent = (text) => (parent) => {
+		console.debug(`addFakeContent(): text ${text}`)
 		const h2 = document.createElement("h2")
 		const textNode = document.createTextNode(text)
 		h2.appendChild(textNode)
@@ -23,12 +47,14 @@
 
 	// Create and add an Ad Slot
 	const createAdSlotContainer = (formats) => {
+		console.debug(`createAdSlotContainer(): formats ${formats}`)
 		const adSlot = document.createElement('div')
 		adSlot.setAttribute('data-o-ads-formats', formats)
 		return adSlot
 	}
 
 	const addAdSlot = (formats) => (parentDoc) => {
+		console.debug(`addAdSlot(): formats ${formats}`)
 		const adSlot = createAdSlotContainer(formats)
 		parentDoc.appendChild(adSlot)
 		initSlot(oAds)(adSlot)
@@ -36,20 +62,26 @@
 	}
 
 	const moreContent = () => {
+		console.debug(`moreContent()`)
 		const parentNode = document.querySelector(`div[id=contentArea]`)
 
 		// Add some dynamic fake content
-		addFakeContent('Dynamic Fake Content 1')(parentNode)
-		addFakeContent('Dynamic Fake Content 2')(parentNode)
+		addFakeContent(`Dynamic Fake Content #${count++}`)(parentNode)
 
 		// Create and add the Ad Slot itself
-		addAdSlot('{{formats}}')(parentNode)
+		return addAdSlot('{{formats}}')(parentNode)
 	}
 </script>
 
 <body style='height: 100%'>
-	<div id='contentArea' style='height: 100%' />
+	<div id='contentArea' style='height: 100%'></div>
 
 	<!-- Button to load more content dynamically. -->
 	<button onclick="moreContent()">More Content</button>
+
+	<div id='more'>...more content</div>
 </body>
+
+<script>
+	moreObserver.observe(document.getElementById('more'))
+</script>

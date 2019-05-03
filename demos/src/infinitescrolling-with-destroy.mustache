@@ -11,30 +11,65 @@
 	}
 </script>
 <script>
+	const moreObserverCallback = (entries, observer) => {
+		entries.forEach((entry) => {
+			const slotName = entry.target.getAttribute('id')
+			
+			if (entry.isIntersecting) {
+				const adSlot = moreContent()
+				const slotName = adSlot.getAttribute('data-o-ads-name')
+				console.debug(`moreObserverCallback(): Initialized ad slot ${slotName}`)
+			}
+		})
+	}
+
+	const moreObserver = new IntersectionObserver(
+		moreObserverCallback,
+		{ root: null, rootMargin: '0px', threshold: 0.1 }
+	)
+</script>
+<script>
 	const adObserver = new IntersectionObserver(
 		(entries, observer) => {
-			console.log('entries size', entries.length)
-
 			entries.forEach((entry) => {
 				const slotName = entry.target.getAttribute('data-o-ads-name')
 				
 				if (entry.isIntersecting) {
-					console.log('entering', slotName)
-					initSlot(oAds)(entry.target)
+					console.debug(`adObserverCallback(): Initialized ad slot ${slotName}`)
+					initSlot(oAds)(entry.target, entry.intersectionRatio)
 				} else {
-					console.log('leaving', slotName)
+					console.debug(`adObserverCallback(): Clear and Destroy ad slot ${slotName}`)
+					oAds.slots.clear(slotName)
 					oAds.slots.destroy(slotName)
+					//adObserver.unobserve(entry.target)
 				}
 			})
 		},
-		{ root: null, rootMargin: '0px', threshold: 0 }
+		{ root: null, rootMargin: '0px', threshold: [0.1, 0.9] }
 	)
 </script>
+
+<body style='height: 100%'>
+	<div id='contentArea' style='height: 100%'>
+
+		<!-- Button to load more content dynamically. -->
+		<button onclick="moreContent()">More Content</button>
+	</div>
+
+	<div id='more'>...more content</div>
+</body>
+
 <script>
-	const initSlot = (oAds) => oAds.slots.initSlot.bind(oAds.slots)
+	let count = 0
+
+	const initSlot = (oAds) => {
+		console.debug('initSlot()')
+		return oAds.slots.initSlot.bind(oAds.slots)
+	}
 
 	// Create and add fake content
 	const addFakeContent = (text) => (parent) => {
+		console.debug(`addFakeContent(): text ${text}`)
 		const h2 = document.createElement("h2")
 		const textNode = document.createTextNode(text)
 		h2.appendChild(textNode)
@@ -43,12 +78,14 @@
 
 	// Create and add an Ad Slot
 	const createAdSlotContainer = (formats) => {
+		console.debug(`createAdSlotContainer(): formats ${formats}`)
 		const adSlot = document.createElement('div')
 		adSlot.setAttribute('data-o-ads-formats', formats)
 		return adSlot
 	}
 
 	const addAdSlot = (formats) => (parentDoc) => {
+		console.debug(`addAdSlot(): formats ${formats}`)
 		const adSlot = createAdSlotContainer(formats)
 		parentDoc.appendChild(adSlot)
 		initSlot(oAds)(adSlot)
@@ -56,21 +93,20 @@
 	}
 
 	const moreContent = () => {
+		console.debug(`moreContent()`)
 		const parentNode = document.querySelector(`div[id=contentArea]`)
 
 		// Add some dynamic fake content
-		addFakeContent('Dynamic Fake Content 1')(parentNode)
-		addFakeContent('Dynamic Fake Content 2')(parentNode)
+		addFakeContent(`Dynamic Fake Content #${count++}`)(parentNode)
 
 		// Create and add the Ad Slot itself
 		const adSlot = addAdSlot('{{formats}}')(parentNode)
 		adObserver.observe(adSlot)
+
+		return adSlot
 	}
 </script>
 
-<body style='height: 100%'>
-	<div id='contentArea' style='height: 100%' />
-
-	<!-- Button to load more content dynamically. -->
-	<button onclick="moreContent()">More Content</button>
-</body>
+<script>
+	moreObserver.observe(document.getElementById('more'))
+</script>
