@@ -5,6 +5,7 @@ module.exports = {
 			'demos/src/individualcustomtargeting.mustache',
 			'demos/src/individuallazyload.mustache',
 			'demos/src/infinitescrolling.mustache',
+			"demos/src/infinitescrolling-update-url.mustache",
 			'demos/src/infinitescrolling-with-destroy.mustache',
 			'demos/src/masterandcompanion.mustache',
 			'demos/src/multiplenextstyles.mustache',

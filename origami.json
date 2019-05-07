@@ -177,6 +177,19 @@
 			}
 		},
 		{
+			"name": "InfiniteScrolling-With-Update-URL-Ad",
+			"template": "/demos/src/infinitescrolling-update-url.mustache",
+			"expanded": true,
+			"description": "Infinite Scrolling with Update URL",
+			"data": {
+				"basename":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami",
+				"viewportMargin": "3000px 0px"
+			}
+		},
+		{
 			"name": "InfiniteScrolling-With-Destroy-Ad",
 			"template": "/demos/src/infinitescrolling-with-destroy.mustache",
 			"expanded": true,
