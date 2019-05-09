@@ -52,6 +52,14 @@ Ads.prototype.init = function(options) {
 		this.consents = getConsents();
 	}
 
+	if (this.consents.behavioral) {
+		this.utils.broadcast('consentBehavioral');
+	}
+
+	if (this.consents.programmatic) {
+		this.utils.broadcast('consentProgrammatic');
+	}
+
 	const targetingApi = this.config().targetingApi;
 	const validateAdsTraffic = this.config().validateAdsTraffic;
 
