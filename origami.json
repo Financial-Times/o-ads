@@ -1,5 +1,5 @@
 {
-	"description": "Advertising",
+	"description": "This is an component enables display advertising from Googles DFP Ad server, and provides customised demographic, behavioural (via Krux), and contextual (via Admantx) targeting.",
 	"origamiType": "module",
 	"origamiCategory": "components",
 	"origamiVersion": 1,
