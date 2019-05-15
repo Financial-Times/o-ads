@@ -315,36 +315,6 @@ QUnit.test("Krux is initialised when behaviouralAds consent is present", functio
 	fetchMock.restore();
 });
 
-QUnit.test("oAds.kruxConsentOptinOK is dispatched when behaviouralAds consent is present", function(assert) {
-	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-
-	const consents = this.spy(this.ads.krux, "consents");
-	const broadcast = this.spy(this.utils, "broadcast");
-	const clock = this.date();
-	this.ads.init({krux: {id: '112233'}});
-	clock.tick(1001);
-	assert.ok(consents.called);
-	assert.ok(broadcast.calledWith('kruxConsentOptinOK'));
-
-	document.cookie = ' ';
-	fetchMock.restore();
-});
-
-QUnit.test("oAds.kruxConsentOptinOK is dispatched when behaviouralAds consent is not present", function(assert) {
-	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff;';
-
-	const consents = this.spy(this.ads.krux, "consents");
-	const broadcast = this.spy(this.utils, "broadcast");
-	const clock = this.date();
-	this.ads.init({krux: {id: '112233'}});
-	clock.tick(1001);
-	assert.ok(consents.called);
-	assert.ok(broadcast.calledWith('kruxConsentOptinFailed'));
-
-	document.cookie = ' ';
-	fetchMock.restore();
-});
-
 QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", function(assert) {
 	const done = assert.async();
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aoff;';
@@ -356,62 +326,4 @@ QUnit.test("Krux is NOT initialised if behaviouralAds consent is missing", funct
 
 	document.cookie = ' ';
 	fetchMock.restore();
-});
-
-QUnit.test("oAds.kruxKuidAck is dispatched when kuid confirmation is received from krux", function(assert) {
-	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-	const done = assert.async();
-
-	const consentUrl = 'https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=xxx2';
-	const consentResponse = JSON.stringify({ a: 'a' });
-	fetchMock.get(consentUrl, consentResponse);
-
-	const kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser', kxkuid: 'xxx2'};
-	const localstorageMock = this.localStorage(kruxData);
-	if (localstorageMock) {
-		const broadcast = this.spy(this.utils, "broadcast");
-		this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
-		setTimeout( () => {
-			assert.ok(broadcast.calledWith('kruxKuidAck'));
-			document.cookie = ' ';
-			fetchMock.restore();
-			broadcast.restore();
-			done();
-		}, 2000);
-	} else {
-		assert.ok(true, 'localStorage unavailable or unmockable in this browser');
-		this.warn('Test skipped due to lack of localStorage support!');
-		document.cookie = ' ';
-		fetchMock.restore();
-	}
-
-});
-
-QUnit.test("oAds.kruxKuidError is dispatched when confirmation is NOT received from krux", function(assert) {
-	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-	const done = assert.async();
-
-	const consentUrl = 'https://consumer.krxd.net/consent/set/bcbe1a6d-fa90-4db5-b4dc-424c69802310?idt=device&dt=kxcookie&dc=1&al=1&tg=1&cd=1&sh=1&re=1&idv=xxxx';
-	const consentResponse = 500;
-	fetchMock.get(consentUrl, consentResponse);
-
-	const kruxData = { kxsegs: 'seg1,seg2,seg3,seg4', kxuser: 'kxuser', kxkuid: 'xxxx'};
-	const localstorageMock = this.localStorage(kruxData);
-	if (localstorageMock) {
-		const broadcast = this.spy(this.utils, "broadcast");
-		this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
-		setTimeout( () => {
-			assert.ok(broadcast.calledWith('kruxKuidError'));
-			document.cookie = ' ';
-			fetchMock.restore();
-			broadcast.restore();
-			done();
-		}, 2000);
-	} else {
-		assert.ok(true, 'localStorage unavailable or unmockable in this browser');
-		this.warn('Test skipped due to lack of localStorage support!');
-		document.cookie = ' ';
-		fetchMock.restore();
-	}
-
 });
