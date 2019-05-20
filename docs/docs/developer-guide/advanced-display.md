@@ -240,3 +240,94 @@ The following graph shows the flow of events during the slot rendering phase alo
 
 ![]({{ site.url }}/o-ads/assets/oads_slot_rendering.png)
 
+## Monitoring ads loading
+
+### `o-ads` approach to monitoring
+As of version 12 `o-ads` includes some built-in functionality to help monitor the ads loading flow.
+
+Firstly, `o-ads` saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. The [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance) used for this is native browser functionality that provides high resolution time measurements.
+
+On top of that `o--ds` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
+
+### `setupMetrics`
+
+`setupMetrics` accepts two parameters:
+
+- An array of configuration objects, each of which corresponds to one group of `o-ads` events.
+- A callback that will, potentially, be invoked one or more times for each of those groups. When invoked, the callback will receive an object with information about the timings associated to the events in the groups.
+
+Each of the configuration objects must include the following fields:
+
+- `spoorAction`: a string indicating the name of the group.
+- `marks`: an array of strings indicating the name of the `o-ads` [events](#events) whose metrics we want to include in the group. Notice that the `oAds.` preffix must be omitted.
+ - `triggers`: an array of strings including all the `o-ads` events that cause the callback to be invoked.
+
+Additionally, it can include:
+- `multiple`: a boolean indicating if the callback can be called multiple times for thegroup. It's `false` by default.
+
+### Metrics configuration example
+This is an example of how to use `setupMetrics`. See explanation below.
+
+```js
+const metricsDefinitions = [
+
+	{
+		spoorAction: 'page-initialised',
+		triggers: ['serverScriptLoaded'],
+		marks: [
+			'initialising',
+			'IVTComplete',
+			'adsAPIComplete',
+			'initialised',
+			'serverScriptLoaded',
+		]
+	},
+	{
+		spoorAction: 'krux',
+		triggers: ['kruxKuidAck', 'kruxKuidError', 'kruxConsentOptinFailed'],
+		marks: [
+			'kruxScriptLoaded',
+			'kruxConsentOptinOK',
+			'kruxConsentOptinFailed',
+			'kruxKuidAck',
+			'kruxKuidError',
+		]
+	},
+	{
+		spoorAction: 'slot-requested',
+		triggers: ['slotGoRender'],
+		marks: [
+			'slotReady',
+			'slotCanRender',
+			'slotGoRender',
+		],
+		multiple: true
+	},
+	{
+		spoorAction: 'slot-rendered',
+		triggers: ['slotRenderEnded'],
+		marks: [
+			'slotRenderStart',
+			'slotExpand',
+			'slotRenderEnded',
+		],
+		multiple: true
+	}
+];
+
+ function sendMetrics (eventPayload) {
+	if (inAdsMetricsSample()) {
+		nUIFoundations.broadcast('oTracking.event', eventPayload);
+	}
+}
+
+ function setupAdsMetrics () {
+	oAdsUtils.setupMetrics(metricsDefinitions, sendMetrics);
+}
+```
+
+In this example there are four different metrics groups. The first one will invoke the callback whenever the trigger (`oAds.serverScripLoaded`) is dispatched. The callback will receive an object including any available information about 5 potential time marks (`initialising`, `IVTComplete`, `adsAPIComplete`, `initialised`, `serverScriptLoaded`). If there is no information about any of those marks, the callback will still be called without it. Since the `multiple` parameter is missing, its default value of `false` is assumed which means that, once called, the callback will not be called again for the same page view even if, somehow, `oAds.serverScriptLoaded` was dispatched again.
+
+In the case of the `krux` group, the callback will be called whenever any of the first of 3 different events (`oAds.kruxKuidAck`, `oAds.kruxKuidError` or `kruxConsentOptinFailed`) is fired. That helps covering different potential scenarios around the same functionality. Again, since `multiple` is not set, once the callback is called for this group, it won't be called again for the same page view.
+
+The other two groups `slot-rendered` and `slot-requested` work similarly to `page-initialised`. However, unlike that one, the callback will be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.

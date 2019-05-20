@@ -1,6 +1,6 @@
 # oAds [![CircleCI Status](https://circleci.com/gh/Financial-Times/o-ads.svg?style=shield&circle-token=36a37c6ca27a08408c2575c7834f5f6f5c5c9d21)](https://circleci.com/gh/Financial-Times/o-ads/tree/master)
 
-This is an Origami module that enables display advertising from [Googles DFP Ad server](http://www.google.com/dfp), and provides customised demographic, behavioural (via [Krux](http://www.krux.com/)), and contextual (via [Admantx](http://admantx.com/)) targeting.
+This is an Origami module that enables advertising from [Google's DFP Ad server](http://www.google.com/dfp), and provides customised demographic, behavioural (via [Krux](http://www.krux.com/)), and contextual (via [Admantx](http://admantx.com/)) targeting.
 
 ## Requirements
 For basic use, a DFP account with Google is required.
@@ -65,7 +65,7 @@ This release introduces the following changes:
 
   1. **`o-ads` is now recording a performance mark for every event that it dispatches.** The performance mark will have the same name as the event that originated it plus, in some cases, a suffix that helps determine the circumstances that triggered the event. This is all being used internally by `o-ads` to provide new metrics functionality.  
 
-2. **`o-Ads` exposes a new `setupMetrics` method that simplifies obtaining performance metrics.** `setupMetrics` accepts two parameters:
+2. **`o-ads` exposes a new `setupMetrics` method that simplifies obtaining performance metrics.** `setupMetrics` accepts two parameters:
  - An array of objects containing the configuration of the different metrics that need to be tracked.
  - A callback function to be called whenever any of the trigger events of any of those configuration objects is dispatched.
 
@@ -74,18 +74,18 @@ This release introduces the following changes:
 
 Old event name | New event name
 :--:|:--:
-startInitialisation|initialising
-moatIVTcomplete|IVTComplete
-apiRequestsComplete|adsAPIComplete
-adServerLoadSuccess|serverScriptLoaded
-ready|slotReady
-render|slotCanRender 
-gptDisplay|slotGoRender
-rendered|slotRenderStart
-complete|slotExpand
-adIframeLoaded|slotRenderEnded
+startInitialisation | initialising
+moatIVTcomplete | IVTComplete
+apiRequestsComplete |  adsAPIComplete
+adServerLoadSuccess |  serverScriptLoaded
+ready | slotReady
+render |slotCanRender 
+gptDisplay |slotGoRender
+rendered | slotRenderStart
+complete | slotExpand
+adIframeLoaded | slotRenderEnded
 
-A guide to the new names can also be found in this two diagrams:
+A guide can to the new names can also be found in this two diagrams:
 
 #### Event renaming pt. 1
 ![event renaming 1](https://github.com/Financial-Times/o-ads/blob/master/docs/assets/v12_event_renaming_1.png)
