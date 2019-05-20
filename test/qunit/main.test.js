@@ -250,12 +250,14 @@ QUnit.test("moat script loading check is eventually cleared if moat is loaded", 
 });
 
 QUnit.test("moat script loading check is eventually cleared if moat is not loaded", function(assert) {
+	this.spy(this.utils, 'broadcast');
 	const clearIntSpy = this.spy(window, 'clearInterval');
 	window.moatPrebidApi = null;
 	this.ads.moat.init();
 	const done = assert.async();
 
 	setTimeout( () => {
+		assert.ok(this.ads.utils.broadcast.calledWith('moatTimeout'));
 		assert.ok(clearIntSpy.called);
 		done();
 	}, 1000);

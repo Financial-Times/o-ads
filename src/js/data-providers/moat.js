@@ -21,6 +21,7 @@ Moat.prototype.init = function() {
 		}, 50);
 		const timeoutId = setTimeout(() => {
 			clearInterval(intervalId);
+			utils.broadcast('moatTimeout');
 			reject(new Error('Timeout while fetching moat invalid traffic script'));
 		}, 1000);
 	});
