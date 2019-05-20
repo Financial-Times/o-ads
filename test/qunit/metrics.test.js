@@ -83,6 +83,7 @@ QUnit.test('the callback is not called if eventDefinitions is not an array', fun
 	}, 0);
 });
 
+
 QUnit.test('any trigger invokes the callback with no timing in the payload', function (assert) {
 	const done = assert.async();
 	this.ads.init();
@@ -116,6 +117,30 @@ QUnit.test('any trigger invokes the callback with no timing in the payload', fun
 	setTimeout( function() {
 		assert.ok(cb.called);
 		assert.ok(cb.calledWith(sinon.match(expectedCbPayload)));
+		done();
+	}, 0);
+});
+
+QUnit.test('a trigger does not call the callback if user not in sample', function (assert) {
+	this.stub(this.utils, 'inSample').returns(false);
+	const done = assert.async();
+	this.ads.init();
+
+	const eventDefinitions = [{
+		spoorAction: 'aaa',
+		triggers: ['bbb', 'ccc'],
+		marks: ['mark1', 'mark2', 'mark3']
+	}];
+
+	const cb = sandbox.stub();
+
+	window.performance = null;
+
+	this.utils.setupMetrics(eventDefinitions, cb);
+	document.dispatchEvent(new CustomEvent('oAds.ccc'));
+
+	setTimeout( function() {
+		assert.notOk(cb.called);
 		done();
 	}, 0);
 });

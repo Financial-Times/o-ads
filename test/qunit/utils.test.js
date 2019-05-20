@@ -402,3 +402,19 @@ QUnit.test("getQueryParamByName", function(assert) {
 	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com'), null);
 	assert.equal(this.ads.utils.getQueryParamByName('socialflow', 'http://test.com?socialflow='), '');
 });
+
+QUnit.test("getVersion returns the version number", function(assert) {
+	assert.equal(typeof this.ads.utils.getVersion(), 'string');
+});
+
+QUnit.test("inSample returns true if called with undefined", function(assert) {
+	assert.ok(this.ads.utils.inSample());
+});
+
+QUnit.test("inSample returns the same result when called multiple times with the same sample Size", function(assert) {
+	const sampleSize = 0.5;
+	const firstResult = this.ads.utils.inSample(sampleSize);
+	for (let i = 0; i < 10; i++) {
+		assert.equal(this.ads.utils.inSample(sampleSize), firstResult);
+	}
+});

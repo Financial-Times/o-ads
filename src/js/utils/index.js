@@ -452,6 +452,12 @@ export const cookie = function(name) {
 
 export const getVersion = () => version || 'UNKNOWN';
 
+const metricsSampleThreshold = Math.random();
+
+export function inSample(sampleSize) {
+	return typeof sampleSize === 'undefined' || sampleSize < metricsSampleThreshold;
+}
+
 export default {
 	on,
 	off,
@@ -484,5 +490,6 @@ export default {
 	cookie,
 	getVersion,
 	setupMetrics,
+	inSample,
 	perfMark
 };
