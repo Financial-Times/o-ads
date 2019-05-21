@@ -455,7 +455,7 @@ export const getVersion = () => version || 'UNKNOWN';
 const metricsSampleThreshold = Math.random();
 
 export function inSample(sampleSize) {
-	return typeof sampleSize === 'undefined' || sampleSize < metricsSampleThreshold;
+	return typeof sampleSize === 'undefined' || sampleSize > metricsSampleThreshold;
 }
 
 export default {
