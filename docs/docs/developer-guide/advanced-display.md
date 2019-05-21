@@ -262,11 +262,12 @@ Each of the configuration objects must include the following fields:
 - `marks`: an array of strings indicating the name of the `o-ads` [events](#events) whose metrics we want to include in the group. Notice that the `oAds.` preffix must be omitted.
  - `triggers`: an array of strings including all the `o-ads` events that cause the callback to be invoked.
 
-Additionally, it can include:
+It can optionally include:
 - `multiple`: a boolean indicating if the callback can be called multiple times for thegroup. It's `false` by default.
+- `sampleSize`: a number between 0 and 1 indicating the probability the callback is actually called. If it's omitted, the callback will be called every time one of the triggering events is dispatched.
 
 ### Metrics configuration example
-This is an example of how to use `setupMetrics`. See explanation below.
+It's easier to understand how to configure `o-ads` with an example:
 
 ```js
 const metricsDefinitions = [
@@ -280,6 +281,8 @@ const metricsDefinitions = [
 			'adsAPIComplete',
 			'initialised',
 			'serverScriptLoaded',
+      'consentBehavioral',
+      'consentProgrammatic',
 		]
 	},
 	{
@@ -304,6 +307,7 @@ const metricsDefinitions = [
 		multiple: true
 	},
 	{
+    sampleSize: 0.1,
 		spoorAction: 'slot-rendered',
 		triggers: ['slotRenderEnded'],
 		marks: [
@@ -316,9 +320,7 @@ const metricsDefinitions = [
 ];
 
  function sendMetrics (eventPayload) {
-	if (inAdsMetricsSample()) {
-		nUIFoundations.broadcast('oTracking.event', eventPayload);
-	}
+	nUIFoundations.broadcast('oTracking.event', eventPayload);
 }
 
  function setupAdsMetrics () {
@@ -326,8 +328,10 @@ const metricsDefinitions = [
 }
 ```
 
-In this example there are four different metrics groups. The first one will invoke the callback whenever the trigger (`oAds.serverScripLoaded`) is dispatched. The callback will receive an object including any available information about 5 potential time marks (`initialising`, `IVTComplete`, `adsAPIComplete`, `initialised`, `serverScriptLoaded`). If there is no information about any of those marks, the callback will still be called without it. Since the `multiple` parameter is missing, its default value of `false` is assumed which means that, once called, the callback will not be called again for the same page view even if, somehow, `oAds.serverScriptLoaded` was dispatched again.
+In this example there are four different metrics groups. The first one will invoke the callback whenever the trigger (`oAds.serverScripLoaded`) is dispatched. The callback will receive an object including any available information about several potential time marks (`initialising`, `IVTComplete`, `adsAPIComplete`, `initialised`, `serverScriptLoaded`, ...). If there is no information about any of those marks, the callback will still be called without it. Since the `multiple` parameter is missing, its default value of `false` is assumed which means that, once called, the callback will not be called again for the same page view even if, somehow, `oAds.serverScriptLoaded` was dispatched again.
 
 In the case of the `krux` group, the callback will be called whenever any of the first of 3 different events (`oAds.kruxKuidAck`, `oAds.kruxKuidError` or `kruxConsentOptinFailed`) is fired. That helps covering different potential scenarios around the same functionality. Again, since `multiple` is not set, once the callback is called for this group, it won't be called again for the same page view.
 
-The other two groups `slot-rendered` and `slot-requested` work similarly to `page-initialised`. However, unlike that one, the callback will be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.
+`slot-rendered` and `slot-requested` config is similar to `page-initialised`. However, the `multiple: true` parameter allows the callback to be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.
+
+Finally, the `sampleSize: 0.1` parameter on the `slot-rendered` group randomizes the possibility that the callback is actually called when the `oAds.slotRenderEnded` event is called, giving it only a 10% chance. This can be used to reduce the number of total "monitoring" events that get fired across the user base.
