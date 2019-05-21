@@ -247,7 +247,7 @@ As of version 12 `o-ads` includes some built-in functionality to help monitor th
 
 Firstly, `o-ads` saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. The [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance) used for this is native browser functionality that provides high resolution time measurements.
 
-On top of that `o--ds` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
+On top of that `o-ads` is now exposing a new method in the `utils` module called `setupMetrics` which enables setting up all ads-related metrics in one step.
 
 ### `setupMetrics`
 
@@ -334,4 +334,4 @@ In the case of the `krux` group, the callback will be called whenever any of the
 
 `slot-rendered` and `slot-requested` config is similar to `page-initialised`. However, the `multiple: true` parameter allows the callback to be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.
 
-Finally, the `sampleSize: 0.1` parameter on the `slot-rendered` group randomizes the possibility that the callback is actually called when the `oAds.slotRenderEnded` event is called, giving it only a 10% chance. This can be used to reduce the number of total "monitoring" events that get fired across the user base.
+Finally, the `sampleSize: 0.1` parameter on the `slot-rendered` group randomizes the possibility that the callback is actually called when the `oAds.slotRenderEnded` event is dispatched, giving it only a 10% chance. This can be used to reduce the number of total "monitoring" events that get fired across the user base.
