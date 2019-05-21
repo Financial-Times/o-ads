@@ -1,3 +1,5 @@
+import utils from './index';
+
 function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
@@ -25,10 +27,12 @@ export function setupMetrics(definitions, callback) {
 	}
 
 	definitions.forEach( function(eDef) {
-		const triggers = Array.isArray(eDef.triggers) ? eDef.triggers : [];
-		triggers.forEach(function(trigger) {
-			sendMetricsOnEvent('oAds.' + trigger, eDef, callback);
-		});
+		if (utils.inSample(eDef.sampleSize)) {
+			const triggers = Array.isArray(eDef.triggers) ? eDef.triggers : [];
+			triggers.forEach(function(trigger) {
+				sendMetricsOnEvent('oAds.' + trigger, eDef, callback);
+			});
+		}
 	});
 }
 
