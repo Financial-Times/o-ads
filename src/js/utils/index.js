@@ -4,6 +4,7 @@ import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
 import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
 import version from '../version';
+import inSample from './metrics-sampling';
 
 /**
  * Utility methods for the advertising library.
@@ -451,12 +452,6 @@ export const cookie = function(name) {
 };
 
 export const getVersion = () => version || 'UNKNOWN';
-
-const metricsSampleThreshold = Math.random();
-
-export function inSample(sampleSize) {
-	return typeof sampleSize === 'undefined' || sampleSize > metricsSampleThreshold;
-}
 
 export default {
 	on,
