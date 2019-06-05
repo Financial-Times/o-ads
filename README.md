@@ -12,6 +12,15 @@ Demos for all ads currently served across ft.com are available in the [Origami R
 ## [Documentation](https://financial-times.github.io/o-ads)
 Includes detailed installation and set-up instructions, along with details about the module.
 
+To build the documentation locally, from the `docs` directory, run:
+
+```bash
+bundle install
+jekyll build
+```
+
+It will generate a `_site` directory where generated site will be compiled
+ 
 ## Developing
 
 ### Install & Demos
