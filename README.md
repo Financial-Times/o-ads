@@ -20,7 +20,7 @@ jekyll build
 ```
 
 It will generate a `_site` directory where generated site will be compiled
- 
+You can then run the jekyll local server by executing `jekyll serve`.
 ## Developing
 
 ### Install & Demos
