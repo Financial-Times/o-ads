@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run: npx occ ${CIRCLE_TAG##v}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
-      - run: npx snyk monitor --org=customer-products --project-name=Financial-Times/o-ads
+      # - run: npx snyk monitor --org=customer-products --project-name=Financial-Times/o-ads
       - run: npm publish --access public
 
 workflows:
