@@ -20,14 +20,14 @@ function getMarksForEvents(events, suffix) {
 	return marks;
 }
 
-export function setupMetrics(definitions, callback) {
+export function setupMetrics(definitions, callback, disableSampling) {
 	if (!Array.isArray(definitions)) {
 		this.log.warn('Metrics definitions should be an array. o-Ads will not record any metrics.');
 		return;
 	}
 
 	definitions.forEach( function(eDef) {
-		if (utils.inSample(eDef.sampleSize)) {
+		if (disableSampling || utils.inSample(eDef.sampleSize)) {
 			const triggers = Array.isArray(eDef.triggers) ? eDef.triggers : [];
 			triggers.forEach(function(trigger) {
 				sendMetricsOnEvent('oAds.' + trigger, eDef, callback);
