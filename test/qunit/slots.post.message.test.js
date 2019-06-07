@@ -130,6 +130,8 @@ QUnit.test('Post message "collapse" message will call slot.collapse()', function
 	this.stub(this.utils, 'iframeToSlotName', function () {
 		return slotName;
 	});
+	const utils = this.ads.utils;
+	this.spy(utils, 'broadcast');
 
 	document.body.addEventListener('oAds.slotReady', function () {
 		window.postMessage('{ "type": "oAds.collapse", "collapse": true}', '*');
@@ -140,6 +142,7 @@ QUnit.test('Post message "collapse" message will call slot.collapse()', function
 		// defined in slots.js
 		setTimeout(() => {
 			assert.ok(slot.collapse.called, 'the collapse method is called');
+			assert.ok(utils.broadcast.calledWith('slotCollapsed'), 'broadcast is called with "slotCollapsed" as parameter');
 			done();
 		}, 0);
 	});

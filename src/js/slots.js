@@ -262,6 +262,7 @@ Slots.prototype.initPostMessage = function() {
 
 			// Received message to Collapse ad slot.
 			else if (type === 'collapse') {
+				slot.fire('slotCollapsed');
 				slot.collapse();
 			}
 
