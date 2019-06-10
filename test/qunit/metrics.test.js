@@ -229,7 +229,7 @@ QUnit.test('collects performance marks using the properties in the event payload
 			name: 'entry',
 			pos: 'top',
 			size: '300,250',
-			creativeId: '91174576849'
+			creativeId: 91174576849
 		},
 		timings: {
 			marks: {
