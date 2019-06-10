@@ -11,18 +11,15 @@ const {
 if (process.env.CI) {
 	Nightwatch.cli(function (argv) {
 		Nightwatch.CliRunner(argv)
-			.setup(null, function () {
-				// Runs after parallel tests
-				console.log("Finished running nightwatch tests.");
-			})
+			.setup()
 			.runTests(function () {
-				// Runs after single test
-				console.log("Finished running single nightwatch test.");
+				// Runs after tests complete
+				console.log("Finished running nightwatch tests");
 			});
 	});
 } else {
 
-	require('dotenv').load();
+	require('dotenv').config();
 	let bs_local;
 
 	try {
@@ -50,15 +47,11 @@ if (process.env.CI) {
 			console.log('Connected to Browserstack. Running tests remotely...\nNB: If multiple tests running at once, output is buffered until all tests have finished running for clarity. Meanwhile, why don\'t you watch 1000 rockets being launched at 1000 rockets: https://www.youtube.com/watch?v=Jtols_QhuWw');
 			Nightwatch.cli(function (argv) {
 				Nightwatch.CliRunner(argv)
-					.setup(null, function () {
-						// Runs after parallel tests
-						bs_local.stop(function () {});
-						console.log("Finished running nightwatch tests.");
-					})
+					.setup()
 					.runTests(function () {
-						// Runs after single test
+						// Runs after tests complete
 						bs_local.stop(function () {});
-						console.log("Finished running single nightwatch test.");
+						console.log("Finished running nightwatch tests");
 					});
 			});
 		});
