@@ -64,7 +64,7 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 			name: eventDetails.name,
 			pos: eventDetails.pos,
 			size: eventDetails.size && eventDetails.size.toString(),
-			creativeId: (eventDetails.creativeId && eventDetails.creativeId) || 0
+			creativeId: eventDetails.creativeId && eventDetails.creativeId || 0
 		};
 	}
 
