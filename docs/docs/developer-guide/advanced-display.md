@@ -251,10 +251,11 @@ On top of that `o-ads` is now exposing a new method in the `utils` module called
 
 ### `setupMetrics`
 
-`setupMetrics` accepts two parameters:
+`setupMetrics(eventDefArray, callback, disableSampling)`:
 
-- An array of configuration objects, each of which corresponds to one group of `o-ads` events.
-- A callback that will, potentially, be invoked one or more times for each of those groups. When invoked, the callback will receive an object with information about the timings associated to the events in the groups.
+- `eventDefArray`: An array of configuration objects, each of which corresponds to one group of `o-ads` events.
+- `callback`: A function that will be invoked for each of those groups, possibly multiple times for each. When invoked, the callback will receive an object with information about the timings associated to the events in the group.
+- `disableSampling`: (optional) A boolean indicating if the sampling specified in the `eventDefArray` should be ignored. That is, when set to `true`, no sampling will be applied. It's default value is `false`.
 
 Each of the configuration objects must include the following fields:
 

@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "12.3.2",
+  "version": "12.4.1",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
@@ -22,7 +22,8 @@
     "release": "release-it",
     "version": "genversion --semi src/js/version.js",
     "obt": "obt",
-    "checksizes": "bundlesize"
+    "checksizes": "bundlesize",
+    "prepare": "npx snyk protect || npx snyk protect -d || true"
   },
   "repository": {
     "type": "git",
@@ -56,7 +57,7 @@
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
     "release-it": "^7.6.1",
-    "snyk": "^1.149.0",
+    "snyk": "^1.169.1",
     "watchify": "^3.11.0",
     "webpack": "^4.26.1"
   },
