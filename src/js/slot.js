@@ -390,6 +390,7 @@ Slot.prototype.fire = function(name, data) {
 		name: this.name || '',
 		pos: this.targeting && this.targeting.pos || '',
 		size: this.gpt && this.gpt.size || '',
+		creativeId: this.gpt && this.gpt.creativeId || '',
 		slot: this
 	};
 

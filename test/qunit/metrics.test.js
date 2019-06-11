@@ -205,9 +205,9 @@ QUnit.test('collects performance marks using the properties in the event payload
 	const cb = sandbox.stub();
 
 	const getEntriesByNameStub = sandbox.stub();
-	getEntriesByNameStub.withArgs('oAds.mark1__top__entry__300,250').returns([{ name: 'oAds.mark1__top__entry__300,250', startTime: 400 }]);
-	getEntriesByNameStub.withArgs('oAds.mark2__top__entry__300,250').returns([{ name: 'oAds.mark2__top__entry__300,250', startTime: 500.22 }]);
-	getEntriesByNameStub.withArgs('oAds.mark3__top__entry__300,250').returns([{ name: 'oAds.mark3__top__entry__300,25', startTime: 600.64 }]);
+	getEntriesByNameStub.withArgs('oAds.mark1__top__entry__300,250__91174576849').returns([{ name: 'oAds.mark1__top__entry__300,250__91174576849', startTime: 400 }]);
+	getEntriesByNameStub.withArgs('oAds.mark2__top__entry__300,250__91174576849').returns([{ name: 'oAds.mark2__top__entry__300,250__91174576849', startTime: 500.22 }]);
+	getEntriesByNameStub.withArgs('oAds.mark3__top__entry__300,250__91174576849').returns([{ name: 'oAds.mark3__top__entry__300,250__91174576849', startTime: 600.64 }]);
 
 	window.performance = {
 		getEntriesByName: getEntriesByNameStub
@@ -217,7 +217,8 @@ QUnit.test('collects performance marks using the properties in the event payload
 	const eventDetails = {
 		name: 'entry',
 		pos: 'top',
-		size: [300,250]
+		size: [300,250],
+		creativeId: 91174576849
 	};
 	this.ads.utils.broadcast('ccc', eventDetails);
 
@@ -227,7 +228,8 @@ QUnit.test('collects performance marks using the properties in the event payload
 		creative: {
 			name: 'entry',
 			pos: 'top',
-			size: '300,250'
+			size: '300,250',
+			creativeId: 91174576849
 		},
 		timings: {
 			marks: {
