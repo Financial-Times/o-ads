@@ -43,13 +43,13 @@ QUnit.test('An event creates a performance mark', function(assert) {
 	});
 });
 
-QUnit.test('An event creates a perfMark using "name, size and pos" from event details', function(assert) {
+QUnit.test('An event creates a perfMark using "name, size and pos and creativeId" from event details', function(assert) {
 	const utils = this.ads.utils;
 	const done = assert.async();
 	const performanceStub = sandbox.stub(window.performance, 'mark');
 
 	document.body.addEventListener('oAds.ahoy', function() {
-		assert.ok(performanceStub.calledWith('oAds.ahoy__thepos__thename__thesize'));
+		assert.ok(performanceStub.calledWith('oAds.ahoy__thepos__thename__thesize__123987'));
 		performanceStub.restore();
 		done();
 	});
@@ -57,7 +57,8 @@ QUnit.test('An event creates a perfMark using "name, size and pos" from event de
 	utils.broadcast('ahoy', {
 		pos: 'thepos',
 		name: 'thename',
-		size: 'thesize'
+		size: 'thesize',
+		creativeId: 123987
 	});
 });
 
