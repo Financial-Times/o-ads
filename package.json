@@ -52,7 +52,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
-    "nightwatch": "^1.1.11",
+    "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
     "origami-build-tools": "^8.0.0",
     "pre-git": "^3.17.1",
     "qunitjs": "^1.20.0",
