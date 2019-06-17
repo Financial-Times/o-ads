@@ -1,4 +1,15 @@
 version: 2
+references:
+
+  #
+  # Workspace
+  #
+  workspace_root: &workspace_root
+    ~/project
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
 jobs:
   test_bower:
     docker:
@@ -27,6 +38,10 @@ jobs:
           path: test/cypress/videos
       - store-artifacts:
           path: test/cypress/screenshots
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - node_modules
   test_npm:
     docker:
       - image: circleci/node:10-browsers
@@ -55,10 +70,11 @@ jobs:
     docker:
       - image: circleci/node:10
     steps:
+      - *attach_workspace
       - checkout
       - run: npx occ ${CIRCLE_TAG##v}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
-      # - run: npx snyk monitor --org=customer-products --project-name=Financial-Times/o-ads
+      - run: npx snyk monitor --org=customer-products --project-name=Financial-Times/o-ads
       - run: npm publish --access public
 
 workflows:
@@ -70,8 +86,11 @@ workflows:
           requires:
             - test_npm
       - publish_to_npm:
+          requires:
+            - test_bower
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
+
