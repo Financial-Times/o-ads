@@ -18,7 +18,7 @@ module.exports = {
 
 	'Step 3: verify the top slot is displaying a leaderboard': function (browser) {
 		browser
-			.assert.visible('#responsive-1-gpt', 'First adaptive advert is visible')
+			.waitForElementVisible('#responsive-1-gpt', wait, 'First adaptive advert is visible')
 			// switch focus to first iframe
 			.page.ad().cleverFrame('google_ads_iframe_/5887/test.5887.origami_0')
 			// wait for 1 second for advert to appear
