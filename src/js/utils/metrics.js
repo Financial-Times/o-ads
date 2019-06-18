@@ -1,4 +1,5 @@
 import utils from './index';
+import objectAssign from 'object-assign';
 
 function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
@@ -15,6 +16,25 @@ function getMarksForEvents(events, suffix) {
 		if (pMarks && pMarks.length) {
 			// We don't need sub-millisecond precision
 			marks[markName] = Math.round(pMarks[0].startTime);
+		}
+	});
+	return marks;
+}
+
+function getNavigationPerfMarks(desiredMarks) {
+	if (!performance || !performance.getEntriesByType || !utils.isArray(desiredMarks)) {
+		/* istanbul ignore next  */
+		return {};
+	}
+
+	const navigations = performance.getEntriesByType('navigation');
+	const nav = utils.isArray(navigations) && navigations[0] || {};
+	const marks = {};
+	desiredMarks.forEach(function(markName) {
+		// if the navigation mark is zero, it means we tried to capture it too early
+		// i.e. before the event happened, so it's useless
+		if (nav[markName]) {
+			marks[markName] = nav[markName];
 		}
 	});
 	return marks;
@@ -52,6 +72,11 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 	}
 
 	const marks = getMarksForEvents(eMarkMap.marks, suffix);
+
+	if (eMarkMap.navigation) {
+		const navMarks = getNavigationPerfMarks(eMarkMap.navigation);
+		objectAssign(marks, navMarks);
+	}
 
 	const eventPayload = {
 		category: 'ads',
