@@ -5,13 +5,11 @@ $o-ads-is-silent: true !default;
 @import "o-colors/main";
 
 @if($o-ads-is-silent == false) {
-
-	@media print{
+	@media print {
 		.o-ads {
-			display: none !important;
+			display: none !important; // sass-lint:disable-line no-important
 		}
 	}
-
 	.o-ads,
 	[data-o-ads-name] {
 		@include oAds();

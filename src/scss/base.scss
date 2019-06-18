@@ -70,7 +70,7 @@ $ad-max-responsive-width: 1440px;
 		}
 	}
 
-	@at-root :root[data-perf-janky="calm-middle"] {
+	@at-root:root[data-perf-janky="calm-middle"] {
 		[data-o-ads-loaded="Leaderboard"],
 		[data-o-ads-loaded="SuperLeaderboard"] {
 			&#{$baseSelector}[data-o-ads-targeting="pos=top;"] .o-ads__outer {

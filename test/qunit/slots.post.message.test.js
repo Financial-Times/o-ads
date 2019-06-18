@@ -1,4 +1,4 @@
-/* globals QUnit: false */
+/* globals QUnit, sinon: false */
 
 'use strict'; //eslint-disable-line
 let errorStub;

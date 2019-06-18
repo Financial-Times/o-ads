@@ -1,3 +1,5 @@
+/* globals describe, it, cy, expect */
+
 function getQueryParams(url) {
 	const o = {};
 	url.slice(url.indexOf('?')+1).split('&').forEach(p => {

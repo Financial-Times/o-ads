@@ -6,17 +6,14 @@ jobs:
     steps:
       - checkout
       - run: npm config set prefix "$HOME/.local"
-      - run: npm i -g origami-build-tools@^7
+      - run: npm i -g origami-build-tools@^8
       - run: $HOME/.local/bin/obt install
       - run: $HOME/.local/bin/obt build
-      - run: $HOME/.local/bin/obt demo
-      # - run: $HOME/.local/bin/obt verify
+      - run: $HOME/.local/bin/obt verify
       - run: npm run checksizes
-      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
-      # Running OBT test doesn't work because we need to pass a custom Karma
-      # config to OBT which OBT doesn't support yet
-      # command: npx origami-build-tools@^7 test
+      # `obt test` doesn't work because of custom karma config, so we run:
       - run: npm run test-unit
+      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
       - run:
           command: npm run demo-server
           background: true
@@ -30,6 +27,7 @@ jobs:
           path: test/cypress/videos
       - store_artifacts:
           path: test/cypress/screenshots
+      
       # We need to delete bower stuff and check that the package works on npm only
       - run: git clean -fxd
       - run: npx occ 0.0.0

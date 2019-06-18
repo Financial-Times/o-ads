@@ -1,4 +1,4 @@
-/* globals QUnit: false, savePerformance: false */
+/* globals QUnit: false, sinon, savePerformance: false */
 
 'use strict'; //eslint-disable-line
 
