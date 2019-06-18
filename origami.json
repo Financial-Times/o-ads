@@ -25,7 +25,7 @@
 	},
 	"demos": [
 		{
-			"title": "Individual-Ad",
+			"name": "Individual-Ad",
 			"template": "/demos/src/individual.mustache",
 			"description": "",
 			"data": {
@@ -36,7 +36,7 @@
 			}
 		},
 		{
-			"title": "Individual-Ad-Lazy-Load",
+			"name": "Individual-Ad-Lazy-Load",
 			"template": "/demos/src/individuallazyload.mustache",
 			"description": "",
 			"data": {
@@ -49,7 +49,7 @@
 			}
 		},
 		{
-			"title": "Individual-Ad-Lazy-Load-Margin",
+			"name": "Individual-Ad-Lazy-Load-Margin",
 			"template": "/demos/src/individuallazyload.mustache",
 			"description": "",
 			"data": {
@@ -62,7 +62,7 @@
 			}
 		},
 		{
-			"title": "Individual-Ad-with-Custom-Targeting-Values",
+			"name": "Individual-Ad-with-Custom-Targeting-Values",
 			"template": "/demos/src/individualcustomtargeting.mustache",
 			"description": "",
 			"data": {
@@ -76,7 +76,7 @@
 			}
 		},
 		{
-			"title": "Master-and-Companion",
+			"name": "Master-and-Companion",
 			"template": "/demos/src/masterandcompanion.mustache",
 			"description": "",
 			"data": {
@@ -86,7 +86,7 @@
 			}
 		},
 		{
-			"title": "Responsive-Positions",
+			"name": "Responsive-Positions",
 			"template": "/demos/src/responsive-positions.mustache",
 			"description": "",
 			"data": {
@@ -95,7 +95,7 @@
 			}
 		},
 		{
-			"title": "Native-Ads",
+			"name": "Native-Ads",
 			"template": "/demos/src/native.mustache",
 			"description": "",
 			"data": {
@@ -104,7 +104,7 @@
 			}
 		},
 		{
-			"title": "Multiple-Next-Styles",
+			"name": "Multiple-Next-Styles",
 			"template": "/demos/src/multiplenextstyles.mustache",
 			"description": "",
 			"data": {
@@ -116,7 +116,7 @@
 			}
 		},
 		{
-			"title": "Validate-Traffic-Ad",
+			"name": "Validate-Traffic-Ad",
 			"template": "/demos/src/validatetraffic.mustache",
 			"hidden": true,
 			"description": "",
@@ -131,7 +131,7 @@
 			}
 		},
 		{
-			"title": "Test-Ad",
+			"name": "Test-Ad",
 			"template": "/demos/src/test-ad.mustache",
 			"hidden": true,
 			"description": "",
@@ -141,7 +141,7 @@
 			}
 		},
 		{
-			"title": "Test-Ad-Responsive",
+			"name": "Test-Ad-Responsive",
 			"template": "/demos/src/test-ad-responsive.mustache",
 			"hidden": true,
 			"description": "",
@@ -151,13 +151,13 @@
 			}
 		},
 		{
-			"title": "o-ads-embed",
+			"name": "o-ads-embed",
 			"template": "/demos/src/o-ads-embed.mustache",
 			"hidden": true,
 			"description": "Test o-ads-embed"
 		},
 		{
-			"title": "InfiniteScrolling-Ad",
+			"name": "InfiniteScrolling-Ad",
 			"template": "/demos/src/infinitescrolling.mustache",
 			"hidden": true,
 			"description": "Infinite Scrolling",
