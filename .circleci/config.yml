@@ -47,10 +47,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - test_npm
-      - test_bower:
-          requires:
-            - test_npm
+      - test
       - publish_to_npm:
           filters:
             tags:
