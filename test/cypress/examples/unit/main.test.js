@@ -1,3 +1,4 @@
+/* globals describe, it, cy, expect: false: false */
 const Ads = require('../../../main.js').constructor;
 const utils = require('../../../src/js/utils');
 
@@ -6,7 +7,7 @@ describe('Main', () => {
 		cy.clearCookie('FTConsent');
 	});
 
-	it.only('oAds.slotReady event fires after o.DOMContentLoaded', () => {
+	it('oAds.slotReady event fires after o.DOMContentLoaded', () => {
 		document.body.insertAdjacentHTML('beforeend', '<div data-o-ads-name="banlb2" data-o-ads-formats="MediumRectangle"></div>');
 		new Ads();
 		const oAdsReadySpy = cy.spy();

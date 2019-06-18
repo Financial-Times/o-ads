@@ -1,9 +1,9 @@
 {
 	"description": "Enables advertising from Google's DFP Ad server, and provides customised demographic, behavioural (via Krux), and contextual (via Admantx) targeting.",
-	"keywords": [ "adverts" ],
 	"origamiType": "module",
 	"origamiCategory": "components",
 	"origamiVersion": 1,
+	"keywords": [ "adverts" ],
 	"support": "origami.advertising.technology@ft.com",
 	"supportContact": {
 		"email": "origami.advertising.technology@ft.com",
@@ -27,7 +27,6 @@
 		{
 			"name": "Individual-Ad",
 			"template": "/demos/src/individual.mustache",
-			"expanded": true,
 			"description": "",
 			"data": {
 				"name":"leaderboard",
@@ -39,7 +38,6 @@
 		{
 			"name": "Individual-Ad-Lazy-Load",
 			"template": "/demos/src/individuallazyload.mustache",
-			"expanded": true,
 			"description": "",
 			"data": {
 				"name":"leaderboard",
@@ -53,7 +51,6 @@
 		{
 			"name": "Individual-Ad-Lazy-Load-Margin",
 			"template": "/demos/src/individuallazyload.mustache",
-			"expanded": true,
 			"description": "",
 			"data": {
 				"name":"leaderboard",
@@ -67,7 +64,6 @@
 		{
 			"name": "Individual-Ad-with-Custom-Targeting-Values",
 			"template": "/demos/src/individualcustomtargeting.mustache",
-			"expanded": false,
 			"description": "",
 			"data": {
 				"user": "https://ads-api.ft.com/v1/user",
@@ -82,7 +78,6 @@
 		{
 			"name": "Master-and-Companion",
 			"template": "/demos/src/masterandcompanion.mustache",
-			"expanded": false,
 			"description": "",
 			"data": {
 				"network": 5887,
@@ -93,7 +88,6 @@
 		{
 			"name": "Responsive-Positions",
 			"template": "/demos/src/responsive-positions.mustache",
-			"expanded": false,
 			"description": "",
 			"data": {
 				"network": 5887,
@@ -103,7 +97,6 @@
 		{
 			"name": "Native-Ads",
 			"template": "/demos/src/native.mustache",
-			"expanded": false,
 			"description": "",
 			"data": {
 				"network": 5887,
@@ -113,7 +106,6 @@
 		{
 			"name": "Multiple-Next-Styles",
 			"template": "/demos/src/multiplenextstyles.mustache",
-			"expanded": false,
 			"description": "",
 			"data": {
 				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
@@ -126,7 +118,7 @@
 		{
 			"name": "Validate-Traffic-Ad",
 			"template": "/demos/src/validatetraffic.mustache",
-			"expanded": true,
+			"hidden": true,
 			"description": "",
 			"data": {
 				"user": "https://ads-api.ft.com/v1/user",
@@ -141,7 +133,7 @@
 		{
 			"name": "Test-Ad",
 			"template": "/demos/src/test-ad.mustache",
-			"expanded": true,
+			"hidden": true,
 			"description": "",
 			"data": {
 				"network": 5887,
@@ -151,7 +143,7 @@
 		{
 			"name": "Test-Ad-Responsive",
 			"template": "/demos/src/test-ad-responsive.mustache",
-			"expanded": true,
+			"hidden": true,
 			"description": "",
 			"data": {
 				"network": 5887,
@@ -161,13 +153,13 @@
 		{
 			"name": "o-ads-embed",
 			"template": "/demos/src/o-ads-embed.mustache",
-			"expanded": true,
+			"hidden": true,
 			"description": "Test o-ads-embed"
 		},
 		{
 			"name": "InfiniteScrolling-Ad",
 			"template": "/demos/src/infinitescrolling.mustache",
-			"expanded": true,
+			"hidden": true,
 			"description": "Infinite Scrolling",
 			"data": {
 				"basename":"leaderboard",

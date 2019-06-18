@@ -1,3 +1,5 @@
+/* globals describe, it, cy */
+
 /**
  * E2E Tests check the responses from DFP are correct under
  * specific o-ads config options. If these tests fail, check
