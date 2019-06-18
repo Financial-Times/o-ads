@@ -34,7 +34,7 @@ jobs:
       - run: git clean -fxd
       - run: npx occ 0.0.0
       - run: $HOME/.local/bin/obt install --ignore-bower
-      - run: $HOME/.local/bin/obt test --ignore-bower
+      - run: npm run test-unit
   publish_to_npm:
     docker:
       - image: circleci/node:10
