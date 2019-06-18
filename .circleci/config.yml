@@ -8,25 +8,25 @@ jobs:
       - run: npm i
       - run: npm run obt -- install
       - run: npm run obt -- build
-      - run: npm run checksizes
-      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
-      # Running OBT test doesn't work because we need to pass a custom Karma
-      # config to OBT which OBT doesn't support yet
-      # command: npx origami-build-tools@^7 test
-      - run: npm run test-unit
-      - run:
-          command: npm run demo-server
-          background: true
-      - run: npm run test-cy:run
-      - run:
-          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
-          background: true
-      - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run: npm run test-nw
-      - store_artifacts:
-          path: test/cypress/videos
-      - store_artifacts:
-          path: test/cypress/screenshots
+      # - run: npm run checksizes
+      # - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
+      # # Running OBT test doesn't work because we need to pass a custom Karma
+      # # config to OBT which OBT doesn't support yet
+      # # command: npx origami-build-tools@^7 test
+      # - run: npm run test-unit
+      # - run:
+      #     command: npm run demo-server
+      #     background: true
+      # - run: npm run test-cy:run
+      # - run:
+      #     command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+      #     background: true
+      # - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      # - run: npm run test-nw
+      # - store_artifacts:
+      #     path: test/cypress/videos
+      # - store_artifacts:
+      #     path: test/cypress/screenshots
       # We need to delete bower stuff and check that the package works on npm only
       - run: git clean -fxd
       - run: npx occ 0.0.0
