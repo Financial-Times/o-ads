@@ -240,6 +240,7 @@ function onRenderEnded(event) {
 	data.type = domId.pop();
 	data.name = domId.join('-');
 	data.size = event.size && event.size.length ? event.size.join() : '';
+	data.creativeId = event.creativeId;
 
 	const slotTargeting = event.slot.getTargetingMap && event.slot.getTargetingMap();
 	if (slotTargeting && slotTargeting.pos) {
@@ -263,6 +264,7 @@ function onRenderEnded(event) {
 		/* istanbul ignore next */
 		utils.log.warn('No iFrame found matching GPT SlotID');
 	}
+
 	utils.broadcast('slotRenderStart', data);
 }
 
