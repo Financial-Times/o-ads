@@ -6,7 +6,7 @@
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
-    "test": "npm run test-unit && npm run test-cy:run && npm run test-nightwatch",
+    "test": "npm run test-unit",
     "test-unit": "karma start karma.conf.js --single-run",
     "test-cy:run": "cypress run -r spec --record false",
     "test-cy:open": "cypress open",
