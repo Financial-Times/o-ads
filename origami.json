@@ -26,6 +26,7 @@
 	"demos": [
 		{
 			"name": "Individual-Ad",
+			"title": "Simple ad",
 			"template": "/demos/src/individual.mustache",
 			"description": "",
 			"data": {
@@ -37,6 +38,7 @@
 		},
 		{
 			"name": "Individual-Ad-Lazy-Load",
+			"title": "Lazy loaded ad",
 			"template": "/demos/src/individuallazyload.mustache",
 			"description": "",
 			"data": {
@@ -50,6 +52,7 @@
 		},
 		{
 			"name": "Individual-Ad-Lazy-Load-Margin",
+			"title": "Lazy loaded ad with a margin",
 			"template": "/demos/src/individuallazyload.mustache",
 			"description": "",
 			"data": {
@@ -63,6 +66,7 @@
 		},
 		{
 			"name": "Individual-Ad-with-Custom-Targeting-Values",
+			"title": "Ad with custom targeting",
 			"template": "/demos/src/individualcustomtargeting.mustache",
 			"description": "",
 			"data": {
@@ -77,6 +81,7 @@
 		},
 		{
 			"name": "Master-and-Companion",
+			"title": "Master and Companion Ad",
 			"template": "/demos/src/masterandcompanion.mustache",
 			"description": "",
 			"data": {
@@ -87,6 +92,7 @@
 		},
 		{
 			"name": "Responsive-Positions",
+			"title": "Ad with responsive positions",
 			"template": "/demos/src/responsive-positions.mustache",
 			"description": "",
 			"data": {
@@ -96,6 +102,7 @@
 		},
 		{
 			"name": "Native-Ads",
+			"title": "Native ad",
 			"template": "/demos/src/native.mustache",
 			"description": "",
 			"data": {
@@ -105,6 +112,7 @@
 		},
 		{
 			"name": "Multiple-Next-Styles",
+			"title": "Ad with multiple style for ft.com (next)",
 			"template": "/demos/src/multiplenextstyles.mustache",
 			"description": "",
 			"data": {
@@ -117,6 +125,7 @@
 		},
 		{
 			"name": "Validate-Traffic-Ad",
+			"title": "Ad that only displays if traffic is valid",
 			"template": "/demos/src/validatetraffic.mustache",
 			"hidden": true,
 			"description": "",
@@ -132,6 +141,7 @@
 		},
 		{
 			"name": "Test-Ad",
+			"title": "Demo ad used for cypress tests - DO NOT DELETE",
 			"template": "/demos/src/test-ad.mustache",
 			"hidden": true,
 			"description": "",
@@ -142,6 +152,7 @@
 		},
 		{
 			"name": "Test-Ad-Responsive",
+			"title": "Demo ad used for cypress tests - DO NOT DELETE",
 			"template": "/demos/src/test-ad-responsive.mustache",
 			"hidden": true,
 			"description": "",
@@ -151,13 +162,8 @@
 			}
 		},
 		{
-			"name": "o-ads-embed",
-			"template": "/demos/src/o-ads-embed.mustache",
-			"hidden": true,
-			"description": "Test o-ads-embed"
-		},
-		{
 			"name": "InfiniteScrolling-Ad",
+			"title": "Ad used to demostrate infinite scrolling",
 			"template": "/demos/src/infinitescrolling.mustache",
 			"hidden": true,
 			"description": "Infinite Scrolling",

@@ -9,7 +9,7 @@ jobs:
       - run: npm i -g origami-build-tools@^8
       - run: $HOME/.local/bin/obt install
       - run: $HOME/.local/bin/obt build
-      # - run: $HOME/.local/bin/obt verify
+      - run: $HOME/.local/bin/obt verify
       - run: npm run checksizes
       # `obt test` doesn't work because of custom karma config, so we run:
       - run: npm run test-unit
