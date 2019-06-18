@@ -5,9 +5,12 @@ jobs:
       - image: circleci/node:10-browsers
     steps:
       - checkout
-      - run: npm i
-      - run: npm run obt -- install
-      - run: npm run obt -- build
+      - run: npm config set prefix "$HOME/.local"
+      - run: npm i -g origami-build-tools@^7
+      - run: $HOME/.local/bin/obt install
+      - run: $HOME/.local/bin/obt build
+      - run: $HOME/.local/bin/obt demo
+      # - run: $HOME/.local/bin/obt verify
       # - run: npm run checksizes
       # - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
       # # Running OBT test doesn't work because we need to pass a custom Karma
@@ -30,8 +33,8 @@ jobs:
       # We need to delete bower stuff and check that the package works on npm only
       - run: git clean -fxd
       - run: npx occ 0.0.0
-      - run: npm run obt -- install --ignore-bower
-      - run: npm run obt -- build --ignore-bower
+      - run: $HOME/.local/bin/obt install --ignore-bower
+      - run: $HOME/.local/bin/obt test --ignore-bower
       - run: npm run test-unit
   publish_to_npm:
     docker:
