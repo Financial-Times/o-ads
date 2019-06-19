@@ -15,7 +15,7 @@ QUnit.module('Metrics', {
 	}
 });
 
-QUnit.test('any trigger invokes the callback with the right payload', function (assert) {
+QUnit.test('any trigger invokes the metrics callback with the right payload', function (assert) {
 	const done = assert.async();
 	this.ads.init();
 
@@ -58,7 +58,7 @@ QUnit.test('any trigger invokes the callback with the right payload', function (
 	}, 0);
 });
 
-QUnit.test('the callback is not called if eventDefinitions is not an array', function (assert) {
+QUnit.test('the metrics callback is not called if eventDefinitions is not an array', function (assert) {
 	const errorSpy = this.spy(this.utils.log, 'warn');
 	const done = assert.async();
 	this.ads.init();
@@ -84,7 +84,7 @@ QUnit.test('the callback is not called if eventDefinitions is not an array', fun
 });
 
 
-QUnit.test('any trigger invokes the callback with no timing in the payload', function (assert) {
+QUnit.test('any trigger invokes the metrics callback with no timing in the payload', function (assert) {
 	const done = assert.async();
 	this.ads.init();
 
@@ -121,7 +121,7 @@ QUnit.test('any trigger invokes the callback with no timing in the payload', fun
 	}, 0);
 });
 
-QUnit.test('a trigger does not call the callback if user not in sample', function (assert) {
+QUnit.test('a trigger does not call the metrics callback if user not in sample', function (assert) {
 	this.stub(this.utils, 'inSample').returns(false);
 	const done = assert.async();
 	this.ads.init();
@@ -145,7 +145,7 @@ QUnit.test('a trigger does not call the callback if user not in sample', functio
 	}, 0);
 });
 
-QUnit.test('a trigger invokes the callback only once if there is no multiple config', function (assert) {
+QUnit.test('a trigger invokes the metrics callback only once if there is no multiple config', function (assert) {
 	const done = assert.async();
 	this.ads.init();
 
@@ -168,7 +168,7 @@ QUnit.test('a trigger invokes the callback only once if there is no multiple con
 	}, 0);
 });
 
-QUnit.test('a trigger invokes the callback multiple times if multiple=true', function (assert) {
+QUnit.test('a trigger invokes the metrics callback multiple times if multiple=true', function (assert) {
 	const done = assert.async();
 	this.ads.init();
 
