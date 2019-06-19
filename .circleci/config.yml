@@ -27,7 +27,7 @@ jobs:
           path: test/cypress/videos
       - store_artifacts:
           path: test/cypress/screenshots
-      
+
       # We need to delete bower stuff and check that the package works on npm only
       - run: git clean -fxd
       - run: npx occ 0.0.0
@@ -40,7 +40,7 @@ jobs:
       - checkout
       - run: npx occ ${CIRCLE_TAG##v}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
-      # - run: npx snyk monitor --org=customer-products --project-name=Financial-Times/o-ads
+      - run: npx snyk monitor --org=financial-times --project-name=Financial-Times/o-ads
       - run: npm publish --access public
 
 workflows:
@@ -49,6 +49,8 @@ workflows:
     jobs:
       - test
       - publish_to_npm:
+          requires:
+            - test
           filters:
             tags:
               only: /^v.*/
