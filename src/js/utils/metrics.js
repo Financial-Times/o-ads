@@ -1,7 +1,5 @@
 import utils from './index';
 
-const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
-
 function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
 	if (!performance || !performance.getEntriesByName) {
@@ -27,14 +25,14 @@ function getNavigationPerfMarks(desiredMarks) {
 		return {};
 	}
 
-	const navigations = performance.getEntriesByType('navigation');
-	const nav = utils.isArray(navigations) && navigations[0] || {};
+	const navMarksArray = performance.getEntriesByType('navigation');
+	const navMarks = utils.isArray(navMarksArray) && navMarksArray[0] || {};
 	const marks = {};
 	desiredMarks.forEach(function(markName) {
 		// if the navigation mark is zero, it means we tried to capture it too early
 		// i.e. before the event happened, so it's useless
-		if (nav[markName]) {
-			marks[markName] = nav[markName];
+		if (navMarks[markName]) {
+			marks[markName] = navMarks[markName];
 		}
 	});
 	return marks;
