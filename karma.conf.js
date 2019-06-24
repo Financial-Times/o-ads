@@ -80,10 +80,10 @@ if (process.env.COVERAGE) {
 				lines: 99
 			},
 			each: {
-				statements: 97,
-				branches: 92,
+				statements: 75,
+				branches: 70,
 				functions: 96,
-				lines: 97
+				lines: 75
 			}
 		},
 		fixWebpackSourcePaths: true
