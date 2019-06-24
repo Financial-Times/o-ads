@@ -74,10 +74,10 @@ if (process.env.COVERAGE) {
 		thresholds: {
 			emitWarning: false,
 			global: {
-				statements: 99,
-				branches: 97,
-				functions: 98,
-				lines: 99
+				statements: 98,
+				branches: 95,
+				functions: 81,
+				lines: 98
 			},
 			each: {
 				statements: 75,
