@@ -1,9 +1,9 @@
 import utils from './index';
-import objectAssign from 'object-assign';
+
+const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 
 function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );
-	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 	if (!performance || !performance.getEntriesByName) {
 		/* istanbul ignore next  */
 		return {};
@@ -75,7 +75,7 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 
 	if (eMarkMap.navigation) {
 		const navMarks = getNavigationPerfMarks(eMarkMap.navigation);
-		objectAssign(marks, navMarks);
+		Object.assign(marks, navMarks);
 	}
 
 	const eventPayload = {
