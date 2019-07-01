@@ -29,11 +29,7 @@ function getNavigationPerfMarks(desiredMarks) {
 	const navMarks = utils.isArray(navMarksArray) && navMarksArray[0] || {};
 	const marks = {};
 	desiredMarks.forEach(function(markName) {
-		// if the navigation mark is zero, it means we tried to capture it too early
-		// i.e. before the event happened, so it's useless
-		if (navMarks[markName]) {
-			marks[markName] = navMarks[markName];
-		}
+		marks[markName] = typeof navMarks[markName] === 'number' ? Math.round(navMarks[markName]) : 0;
 	});
 	return marks;
 }
