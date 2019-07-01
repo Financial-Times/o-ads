@@ -527,7 +527,7 @@ QUnit.test('define responsive slot', function(assert) {
 	assert.ok(gptSlot.defineSizeMapping.calledOnce, 'the GPT defineSizeMapping slot is called');
 });
 
-QUnit.test('slotRenderStart event fires on slot with the pos, size and name', function(assert) {
+QUnit.test('slotRenderStart event is fired with the correct slot name', function(assert) {
 	const done = assert.async();
 	const html = '<div data-o-ads-name="rendered-test" data-o-ads-formats="MediumRectangle" data-o-ads-targeting="pos=mid"></div>';
 	this.fixturesContainer.add(html);
@@ -535,10 +535,6 @@ QUnit.test('slotRenderStart event fires on slot with the pos, size and name', fu
 
 	document.body.addEventListener('oAds.slotRenderStart', function(event) {
 		assert.equal(event.detail.name, 'rendered-test', 'our test slot fired the slotRenderStart event');
-		assert.equal(event.detail.pMarkDetails.name, 'rendered-test', 'the name attribute is set correctly in the performance mark details');
-		assert.equal(event.detail.pMarkDetails.pos, 'mid', 'the pos attribute is set correctly in the performance mark details');
-		assert.equal(event.detail.pMarkDetails.size, '300,250', 'the size attribute is set correctly in the performance mark details');
-		assert.ok(event.detail.pMarkDetails.slot, 'the slot object is available in the performance mark details');
 		done();
 	});
 

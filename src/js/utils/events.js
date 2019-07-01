@@ -41,12 +41,13 @@ export function broadcast(eventName, data, target) {
 		detail: data
 	};
 
-	const evDetails = !data ? {} : {
+	const isSlotEvent = typeof data === 'object' && 'pos' in data;
+	const evDetails = isSlotEvent ? {
 		pos: data.pos,
 		name: data.name,
 		size: data.size && data.size.length ? data.size.toString() : '',
 		creativeId: data.creativeId
-	};
+	} : {};
 
 	const suffix = buildPerfmarkSuffix(evDetails);
 	const markName = eventName + suffix;
