@@ -15,6 +15,16 @@ export const perfMark = name => {
 	}
 };
 
+// Creates a suffix for an event's performance mark based on some of the attributes on
+// the event payload which help identify unequivocally the slot that originated the event
+export function buildPerfmarkSuffix(eventDetailsObj) {
+	let suffix = '';
+	if (eventDetailsObj && 'pos' in eventDetailsObj && 'name' in eventDetailsObj) {
+		suffix = '__' + [eventDetailsObj.pos, eventDetailsObj.name, eventDetailsObj.size, eventDetailsObj.creativeId].join('__');
+	}
+	return suffix;
+}
+
 /**
 * Broadscasts an o-ads event
 * @param {string} name The name of the event
@@ -31,10 +41,15 @@ export function broadcast(eventName, data, target) {
 		detail: data
 	};
 
-	const hasDetails = typeof data === 'object' && 'pos' in data && 'name' in data;
-	const size = data && data.size && data.size.length ? data.size.toString() : '';
-	const creativeId = data && data.creativeId;
-	const markName = hasDetails ? [eventName, data.pos, data.name, size, creativeId].join('__') : eventName;
+	const evDetails = !data ? {} : {
+		pos: data.pos,
+		name: data.name,
+		size: data.size && data.size.length ? data.size.toString() : '',
+		creativeId: data.creativeId
+	};
+
+	const suffix = buildPerfmarkSuffix(evDetails);
+	const markName = eventName + suffix;
 	perfMark(markName);
 	target.dispatchEvent(new CustomEvent(eventName, opts));
 }
