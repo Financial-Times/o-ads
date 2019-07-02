@@ -19,6 +19,7 @@ function getMarksForEvents(events, suffix) {
 	return marks;
 }
 
+/* istanbul ignore next */
 function getNavigationPerfMarks(desiredMarks) {
 	if (!performance || !performance.getEntriesByType || !utils.isArray(desiredMarks)) {
 		/* istanbul ignore next  */

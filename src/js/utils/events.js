@@ -19,7 +19,7 @@ export const perfMark = name => {
 // the event payload which help identify unequivocally the slot that originated the event
 export function buildPerfmarkSuffix(eventDetailsObj) {
 	let suffix = '';
-	if (eventDetailsObj && 'pos' in eventDetailsObj && 'name' in eventDetailsObj) {
+	if (eventDetailsObj && typeof eventDetailsObj === 'object' && 'pos' in eventDetailsObj && 'name' in eventDetailsObj) {
 		suffix = '__' + [eventDetailsObj.pos, eventDetailsObj.name, eventDetailsObj.size, eventDetailsObj.creativeId].join('__');
 	}
 	return suffix;
