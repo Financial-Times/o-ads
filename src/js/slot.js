@@ -392,7 +392,7 @@ Slot.prototype.fire = function(name, data) {
 		pos: this.targeting && this.targeting.pos || '',
 		size: gpt.size || '',
 		creativeId: gpt.creativeId || '',
-		isEmpty: typeof gpt.isEmpty === 'undefined' ? 'n/a' : `${gpt.isEmpty}`,
+		isEmpty: typeof gpt.isEmpty === 'undefined' ? '' : `${gpt.isEmpty}`,
 		slot: this
 	};
 

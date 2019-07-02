@@ -442,12 +442,3 @@ QUnit.test("buildPerfmarkSuffix returns a suffix containing pos, name, size and 
 	};
 	assert.equal(this.ads.utils.buildPerfmarkSuffix(incompleteEvDetails), '__pos__name____');
 });
-
-
-
-
-
-
-
-
-
