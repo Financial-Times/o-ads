@@ -386,16 +386,17 @@ Slot.prototype.submitImpression = function() {
  *	fire an event on the slot
  */
 Slot.prototype.fire = function(name, data) {
+	const gpt = this.gpt || {};
 	const details = {
 		name: this.name || '',
 		pos: this.targeting && this.targeting.pos || '',
-		size: this.gpt && this.gpt.size || '',
-		creativeId: this.gpt && this.gpt.creativeId || '',
+		size: gpt.size || '',
+		creativeId: gpt.creativeId || '',
+		isEmpty: typeof gpt.isEmpty === 'undefined' ? '' : `${gpt.isEmpty}`,
 		slot: this
 	};
 
 	if (utils.isPlainObject(data)) {
-		data.pMarkDetails = details;
 		utils.extend(details, data);
 	}
 

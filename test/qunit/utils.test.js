@@ -418,3 +418,27 @@ QUnit.test("inSample returns the same result when called multiple times with the
 		assert.equal(this.ads.utils.inSample(sampleSize), firstResult);
 	}
 });
+
+QUnit.test("buildPerfmarkSuffix returns an empty string if the argument is not an object with a 'pos' and 'name' property", function(assert) {
+	assert.equal(this.ads.utils.buildPerfmarkSuffix(), '');
+	assert.equal(this.ads.utils.buildPerfmarkSuffix({a: 'b'}), '');
+	assert.equal(this.ads.utils.buildPerfmarkSuffix({pos: 'pos'}), '');
+	assert.equal(this.ads.utils.buildPerfmarkSuffix({name: 'name'}), '');
+	assert.equal(this.ads.utils.buildPerfmarkSuffix('something'), '');
+});
+
+QUnit.test("buildPerfmarkSuffix returns a suffix containing pos, name, size and creativeId", function(assert) {
+	const eventDetails = {
+		pos: 'pos',
+		name: 'name',
+		size: '300x250',
+		creativeId: '12312301283'
+	};
+	assert.equal(this.ads.utils.buildPerfmarkSuffix(eventDetails), '__pos__name__300x250__12312301283');
+
+	const incompleteEvDetails = {
+		pos: 'pos',
+		name: 'name'
+	};
+	assert.equal(this.ads.utils.buildPerfmarkSuffix(incompleteEvDetails), '__pos__name____');
+});

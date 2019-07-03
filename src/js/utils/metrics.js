@@ -19,6 +19,7 @@ function getMarksForEvents(events, suffix) {
 	return marks;
 }
 
+/* istanbul ignore next */
 function getNavigationPerfMarks(desiredMarks) {
 	if (!performance || !performance.getEntriesByType || !utils.isArray(desiredMarks)) {
 		/* istanbul ignore next  */
@@ -29,11 +30,7 @@ function getNavigationPerfMarks(desiredMarks) {
 	const navMarks = utils.isArray(navMarksArray) && navMarksArray[0] || {};
 	const marks = {};
 	desiredMarks.forEach(function(markName) {
-		// if the navigation mark is zero, it means we tried to capture it too early
-		// i.e. before the event happened, so it's useless
-		if (navMarks[markName]) {
-			marks[markName] = navMarks[markName];
-		}
+		marks[markName] = typeof navMarks[markName] === 'number' ? Math.round(navMarks[markName]) : 0;
 	});
 	return marks;
 }
@@ -64,11 +61,7 @@ function sendMetricsOnEvent(eventName, eMarkMap, callback) {
 }
 
 function sendMetrics(eMarkMap, eventDetails, callback) {
-	let suffix = '';
-	if (eventDetails && 'pos' in eventDetails && 'name' in eventDetails) {
-		suffix = '__' + [eventDetails.pos, eventDetails.name, eventDetails.size, eventDetails.creativeId].join('__');
-	}
-
+	const suffix = utils.buildPerfmarkSuffix(eventDetails);
 	const marks = getMarksForEvents(eMarkMap.marks, suffix);
 
 	if (eMarkMap.navigation) {
@@ -87,7 +80,8 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 			name: eventDetails.name,
 			pos: eventDetails.pos,
 			size: eventDetails.size && eventDetails.size.toString(),
-			creativeId: eventDetails.creativeId && eventDetails.creativeId || 0
+			creativeId: eventDetails.creativeId || 0,
+			isEmpty: `${eventDetails.isEmpty}` || ''
 		};
 	}
 
