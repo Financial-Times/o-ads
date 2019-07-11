@@ -49,8 +49,6 @@ workflows:
     jobs:
       - test
       - publish_to_npm:
-          requires:
-            - test
           filters:
             tags:
               only: /^v.*/
