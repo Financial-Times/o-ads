@@ -84,9 +84,6 @@
     "node": "^8.6.0"
   },
   "release": {
-    "github": {
-      "release": true
-    },
     "analyzeCommits": "simple-commit-message"
   },
   "bundlesize": [
