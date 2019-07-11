@@ -77,8 +77,8 @@ describe('Integration tests', () => {
 			expect(cust_params).to.have.property('ad');
 			expect(cust_params).to.have.property('ca');
 
-			const expectedTopics = ['Retail','US & Canadian companies',
-				'Technology sector', 'Retail & Consumer', 'Companies',
+			const expectedTopics = ['Retail sector','US & Canadian companies',
+				'Technology sector', 'Retail & Consumer industry', 'Companies',
 				'Mobile devices', 'Brexit'];
 
 			const actualTopics = (cust_params.topic || '').split(',');
