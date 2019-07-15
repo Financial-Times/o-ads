@@ -19,6 +19,31 @@ function getMarksForEvents(events, suffix) {
 	return marks;
 }
 
+export function clearPerfMarks(metricsDefinitions, groupsToClear) {
+	if (!performance || !performance.getEntriesByType) {
+		return;
+	}
+
+	const eventsToClear = groupsToClear.reduce(
+		(prevList, groupName) => {
+			const group = metricsDefinitions.find(g => g.spoorAction === groupName);
+			if (!group) {
+				return prevList;
+			}
+			return prevList.concat(group.marks);
+		}, []);
+
+	const perfMarks = performance.getEntriesByType('mark');
+
+	perfMarks.forEach( ({name}) => {
+		eventsToClear.forEach( eventName => {
+			if (name.match(`oAds.${eventName}`)) {
+				performance.clearMarks(name);
+			}
+		});
+	});
+}
+
 /* istanbul ignore next */
 function getNavigationPerfMarks(desiredMarks) {
 	if (!performance || !performance.getEntriesByType || !utils.isArray(desiredMarks)) {
