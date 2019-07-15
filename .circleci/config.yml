@@ -40,6 +40,7 @@ jobs:
       - checkout
       - run: npx occ ${CIRCLE_TAG##v}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
+      - run: npm install
       - run: npx snyk monitor --org=financial-times --project-name=Financial-Times/o-ads
       - run: npm publish --access public
 
@@ -49,8 +50,6 @@ workflows:
     jobs:
       - test
       - publish_to_npm:
-          requires:
-            - test
           filters:
             tags:
               only: /^v.*/

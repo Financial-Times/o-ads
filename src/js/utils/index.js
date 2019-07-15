@@ -1,4 +1,4 @@
-import { on, off, once, broadcast, perfMark } from './events';
+import { on, off, once, broadcast, perfMark, buildPerfmarkSuffix } from './events';
 import { setupMetrics } from './metrics';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
@@ -491,5 +491,6 @@ export default {
 	getVersion,
 	setupMetrics,
 	inSample,
-	perfMark
+	perfMark,
+	buildPerfmarkSuffix
 };
