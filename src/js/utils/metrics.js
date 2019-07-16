@@ -24,14 +24,12 @@ export function clearPerfMarks(metricsDefinitions, groupsToClear) {
 		return;
 	}
 
-	const eventsToClear = groupsToClear.reduce(
-		(prevList, groupName) => {
-			const group = metricsDefinitions.find(g => g.spoorAction === groupName);
-			if (!group) {
-				return prevList;
-			}
-			return prevList.concat(group.marks);
-		}, []);
+	const relevantGroups = metricsDefinitions.filter( group =>
+		groupsToClear.includes(group.spoorAction)
+	);
+	const relevantGroupsMarks = relevantGroups.map( group => group.marks );
+	// Because relevantGroupsMarks is a 2D array ...
+	const eventsToClear = [].concat(...relevantGroupsMarks);
 
 	const perfMarks = performance.getEntriesByType('mark');
 
