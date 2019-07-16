@@ -247,3 +247,47 @@ QUnit.test('collects performance marks using the properties in the event payload
 	}, 0);
 });
 
+QUnit.only('utils.clearPerfMarks clears the expected events', function(assert) {
+	const metricsDefinitions = [
+		{
+			spoorAction: 'group1',
+			marks: ['first', 'second', 'third']
+		},
+		{
+			spoorAction: 'group2',
+			marks: ['fourth', 'fifth', 'sixth']
+		},
+		{
+			spoorAction: 'group3',
+			marks: ['seventh', 'eighth', 'ninth']
+		}
+	];
+
+	const groupsToClear = ['group1', 'group3'];
+
+	const perfMarksBefore = ['oAds.first', 'oAds.second', 'oAds.third', 'oAds.second-blah',
+		'oAds.fourth', 'oAds.fifth', 'oAds.fifthblabla', 'oAds.seventh',
+		'oAds.eighth', 'oAds.eighthbla', 'aa'];
+
+	perfMarksBefore.forEach( (markName) => {
+		performance.mark(markName);
+	});
+
+	const expectedMarksAfter = [ 'oAds.fourth', 'oAds.fifth', 'oAds.fifthblabla'];
+	const notExpectedMarksAfter = ['oAds.first', 'oAds.second', 'oAds.third', 'oAds.second-blah',
+		'oAds.seventh', 'oAds.eighth', 'oAds.eighthbla'];
+
+	this.utils.clearPerfMarks(metricsDefinitions, groupsToClear);
+	const afterMarks = performance.getEntriesByType('mark').map( m => m.name );
+
+	console.log('-----------------------------------');
+	console.log('afterMarks', afterMarks);
+
+	expectedMarksAfter.forEach( markName => {
+		assert.ok(afterMarks.includes(markName));
+	});
+
+	notExpectedMarksAfter.forEach( markName => {
+		assert.notOk(afterMarks.includes(markName));
+	});
+});
