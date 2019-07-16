@@ -247,7 +247,7 @@ QUnit.test('collects performance marks using the properties in the event payload
 	}, 0);
 });
 
-QUnit.only('utils.clearPerfMarks clears the expected events', function(assert) {
+QUnit.test('utils.clearPerfMarks clears the expected events', function(assert) {
 	const metricsDefinitions = [
 		{
 			spoorAction: 'group1',
@@ -267,7 +267,7 @@ QUnit.only('utils.clearPerfMarks clears the expected events', function(assert) {
 
 	const perfMarksBefore = ['oAds.first', 'oAds.second', 'oAds.third', 'oAds.second-blah',
 		'oAds.fourth', 'oAds.fifth', 'oAds.fifthblabla', 'oAds.seventh',
-		'oAds.eighth', 'oAds.eighthbla', 'aa'];
+		'oAds.eighth', 'oAds.eighthbla'];
 
 	perfMarksBefore.forEach( (markName) => {
 		performance.mark(markName);
@@ -279,9 +279,6 @@ QUnit.only('utils.clearPerfMarks clears the expected events', function(assert) {
 
 	this.utils.clearPerfMarks(metricsDefinitions, groupsToClear);
 	const afterMarks = performance.getEntriesByType('mark').map( m => m.name );
-
-	console.log('-----------------------------------');
-	console.log('afterMarks', afterMarks);
 
 	expectedMarksAfter.forEach( markName => {
 		assert.ok(afterMarks.includes(markName));
