@@ -336,3 +336,26 @@ In the case of the `krux` group, the callback will be called whenever any of the
 `slot-rendered` and `slot-requested` config is similar to `page-initialised`. However, the `multiple: true` parameter allows the callback to be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.
 
 Finally, the `sampleSize: 0.1` parameter on the `slot-rendered` group randomizes the possibility that the callback is actually called when the `oAds.slotRenderEnded` event is dispatched, giving it only a 10% chance. This can be used to reduce the number of total "monitoring" events that get fired across the user base.
+
+### `clearPerfMarks`
+
+
+`oAds.utils.clearPerfMarks` can clear entire groups of performance marks created during previous ad loading cycles by some `setupAdsMetrics` configuration. This is specially useful in websites that behave like single-page applications and don't automatically clear the browser's performance entry buffer very often.
+
+`oAds.utils.clearPerfMarks(eventDefArray, groupsToClear)`
+
+ * `eventDefArray` is an array of metrics groups expected to have the same structure as defined in [setupMetrics](#setupmetrics).
+* `groupsToClear` is an array of metrics groups whose associated performance marks we want to remove.
+
+Example:
+
+```js
+const metricsDefinitions = ... // as per the 'setupMetrics' example
+
+// Clear all existing performance marks defined in the 'slot-rendered' and 'slot-rendered' groups
+oAds.utils.clearPerfMarks(metricsDefinitions, ['slot-requested', 'slot-rendered']);
+
+// With the previously defined `metricsDefinitions` array, this code will remove all 
+// `slotReady`, `slotCanRender`, `slotGoRender`, `slotRenderStart`, `slotExpand` 
+// and `slotRenderEnded` existing marks
+```
