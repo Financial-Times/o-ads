@@ -1,5 +1,5 @@
 import { on, off, once, broadcast, perfMark, buildPerfmarkSuffix } from './events';
-import { setupMetrics } from './metrics';
+import { setupMetrics, clearPerfMarks } from './metrics';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
 import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
@@ -490,6 +490,7 @@ export default {
 	cookie,
 	getVersion,
 	setupMetrics,
+	clearPerfMarks,
 	inSample,
 	perfMark,
 	buildPerfmarkSuffix
