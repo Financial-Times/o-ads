@@ -81,8 +81,11 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 			pos: eventDetails.pos,
 			size: eventDetails.size && eventDetails.size.toString(),
 			creativeId: eventDetails.creativeId || 0,
-			isEmpty: `${eventDetails.isEmpty}` || ''
 		};
+
+		if (typeof eventDetails.isEmpty === 'boolean') {
+			eventPayload.creative.isEmpty = eventDetails.isEmpty;
+		}
 	}
 
 	callback(eventPayload);
