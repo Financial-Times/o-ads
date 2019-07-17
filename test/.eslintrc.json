@@ -1,11 +1,6 @@
 {
-  "env": {
-    "qunit": true
-  },
   "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "ecmaVersion": 6
   },
   "rules": {
     "no-console": 0,
@@ -14,12 +9,7 @@
     "no-prototype-builtins": 0
   },
   "globals": {
-    "sinon": true,
-    "describe": false,
-    "it": false,
     "context": false,
-    "expect": false,
-    "cy": false,
     "beforeEach": false,
     "before": false,
     "afterEach": false,
