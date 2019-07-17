@@ -1,5 +1,4 @@
 /* eslint no-console: 0 */
-/* globals process: true */
 
 'use strict'; //eslint-disable-line
 

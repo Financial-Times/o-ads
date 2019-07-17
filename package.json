@@ -42,7 +42,7 @@
     "bundlesize": "^0.18.0",
     "cypress": "^3.4.0",
     "dotenv": "^8.0.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.0.1",
     "eslint-plugin-jest": "^22.7.1",
     "fetch-mock": "^5.1.1",
     "geckodriver": "^1.16.1",
