@@ -19,6 +19,29 @@ function getMarksForEvents(events, suffix) {
 	return marks;
 }
 
+export function clearPerfMarks(metricsDefinitions, groupsToClear) {
+	if (!performance || !performance.getEntriesByType) {
+		return;
+	}
+
+	const relevantGroups = metricsDefinitions.filter( group =>
+		groupsToClear.includes(group.spoorAction)
+	);
+	const relevantGroupsMarks = relevantGroups.map( group => group.marks );
+	// Because relevantGroupsMarks is a 2D array ...
+	const eventsToClear = [].concat(...relevantGroupsMarks);
+
+	const perfMarks = performance.getEntriesByType('mark');
+
+	perfMarks.forEach( ({name}) => {
+		eventsToClear.forEach( eventName => {
+			if (name.match(`oAds.${eventName}`)) {
+				performance.clearMarks(name);
+			}
+		});
+	});
+}
+
 /* istanbul ignore next */
 function getNavigationPerfMarks(desiredMarks) {
 	if (!performance || !performance.getEntriesByType || !utils.isArray(desiredMarks)) {
