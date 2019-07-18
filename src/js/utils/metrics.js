@@ -114,3 +114,7 @@ function sendMetrics(eMarkMap, eventDetails, callback) {
 	callback(eventPayload);
 }
 
+export function markPageChange(definitions, groupsToClear) {
+	clearPerfMarks(definitions, groupsToClear);
+	utils.perfMark('oAds.pageChange');
+}

@@ -11,6 +11,7 @@ export const perfMark = name => {
 	/* istanbul ignore next */
 	const performance = window.LUX || window.performance || window.msPerformance || window.webkitPerformance || window.mozPerformance;
 	if (performance && performance.mark) {
+		performance.clearMarks(name);
 		performance.mark(name);
 	}
 };
