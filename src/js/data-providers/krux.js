@@ -51,29 +51,7 @@ Krux.prototype.init = function(targeting) {
 
 		this.setAllAttributes();
 
-		let src;
-		const m = utils.getLocation().match(/\bkxsrc=([^&]+)/);
-		if (m) {
-			src = decodeURIComponent(m[1]);
-		}
-
-		const finalSrc = /^https?:\/\/([^\/]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" : `//cdn.krxd.net/controltag/${this.config.id}.js`;
-
-		const loadKruxScript = () => {
-			this.kruxScript = utils.attach(finalSrc, true, () => {
-				utils.broadcast('kruxScriptLoaded');
-			});
-			this.events.init();
-		};
-
-/* ADSDEV-84: Update o-ads to exclude Krux script */
-//		setTimeout(() => {
-//			if('requestIdleCallback' in window) {
-//				requestIdleCallback(loadKruxScript);
-//			} else {
-//				loadKruxScript();
-//			}
-//		}, 1000);
+		/* ADSDEV-84 Update o-ads to exclude Krux script */
 
 		targeting.add(this.targeting());
 		utils.on('kruxScriptLoaded', this.consents);
