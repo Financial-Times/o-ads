@@ -65,13 +65,15 @@ Krux.prototype.init = function(targeting) {
 			});
 			this.events.init();
 		};
-		setTimeout(() => {
-			if('requestIdleCallback' in window) {
-				requestIdleCallback(loadKruxScript);
-			} else {
-				loadKruxScript();
-			}
-		}, 1000);
+
+/* ADSDEV-84: Update o-ads to exclude Krux script */
+//		setTimeout(() => {
+//			if('requestIdleCallback' in window) {
+//				requestIdleCallback(loadKruxScript);
+//			} else {
+//				loadKruxScript();
+//			}
+//		}, 1000);
 
 		targeting.add(this.targeting());
 		utils.on('kruxScriptLoaded', this.consents);

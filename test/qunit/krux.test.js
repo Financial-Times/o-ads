@@ -32,25 +32,25 @@ QUnit.test('sets global Krux if one is not available yet', function(assert) {
 	assert.ok(window.Krux, 'Krux is set in the init');
 });
 
-QUnit.test('adds a script from url when location contains krux src', function(assert) {
+QUnit.test('does not add a script from url when location contains krux src', function(assert) {
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=http%3A%2F%2Fcdn.krxd.net%3A123%2F');
 	this.stub(this.utils, 'broadcast');
 	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 	clock.tick(1001);
-	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
-	assert.ok(this.utils.broadcast.calledWith('kruxScriptLoaded'));
+	assert.notOk(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
+	assert.notOk(this.utils.broadcast.calledWith('kruxScriptLoaded'));
 });
 
-QUnit.test('adds Krux script after a timeout if requestIdleCallback doesn\'t exist', function(assert) {
+QUnit.test('doest not add Krux script after a timeout if requestIdleCallback doesn\'t exist', function(assert) {
 	this.stub(this.utils, 'getLocation').returns('http://domain/?kxsrc=http%3A%2F%2Fcdn.krxd.net%3A123%2F');
 	this.stub(this.utils, 'broadcast');
 	delete window.requestIdleCallback;
 	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 	clock.tick(1001);
-	assert.ok(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
-	assert.ok(this.utils.broadcast.calledWith('kruxScriptLoaded'));
+	assert.notOk(this.attach.calledWith('http://cdn.krxd.net:123/', true), 'the krux script has been added to the page');
+	assert.notOk(this.utils.broadcast.calledWith('kruxScriptLoaded'));
 });
 
 QUnit.test('does not add a script from url when location contains krux src that is set to disable', function(assert) {
@@ -58,7 +58,7 @@ QUnit.test('does not add a script from url when location contains krux src that 
 	const clock = this.date();
 	this.ads.init({ krux: {id: '112233', attributes: {page: {uuid: '123'}} }});
 	clock.tick(1001);
-	assert.ok(this.attach.calledWith('', true), 'the url passed to attach is empty');
+	assert.notOk(this.attach.calledWith('', true), 'the url passed to attach is empty');
 });
 
 QUnit.test('targeting data is generated correctly from localStorage', function(assert) {
