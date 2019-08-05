@@ -14,17 +14,16 @@ function getMarksForEvents(events, suffix) {
 		if (pMarks && pMarks.length) {
 			// We don't need sub-millisecond precision
 			marks[markName] = Math.round(pMarks[0].startTime);
-		} else if (suffix) {
-			// Even if the suffix parameter is not null, the mark name we care about
-			// can be a generic one, in which case we need to look for the
-			// bare mark name
-			const findMarkNameNoSuffix = markName.match(`(.*)${suffix}$`);
-			const markNameWithoutSuffix = findMarkNameNoSuffix && findMarkNameNoSuffix[1];
-			if (markNameWithoutSuffix) {
-				const pMarks2 = performance.getEntriesByName(markNameWithoutSuffix);
-				if (pMarks2 && pMarks2.length) {
-					marks[markName] = Math.round(pMarks2[0].startTime);
-				}
+			return;
+		}
+
+		// If no mark has been found, we might be looking for a page-level
+		// mark name, i.e. one without a suffix
+		if (suffix) {
+			const mNameNoSuffix = mName.replace(suffix, '');
+			const pMarks2 = performance.getEntriesByName(mNameNoSuffix);
+			if (pMarks2 && pMarks2.length) {
+				marks[markName] = Math.round(pMarks2[0].startTime);
 			}
 		}
 	});
