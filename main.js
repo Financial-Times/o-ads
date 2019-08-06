@@ -85,7 +85,7 @@ Ads.prototype.init = function(options) {
 		});
 };
 
-Ads.prototype.updateContext = function(options, isNewPage) {
+Ads.prototype.updateContext = function(options) {
 	this.config(options);
 
 	if(options.targetingApi) {
