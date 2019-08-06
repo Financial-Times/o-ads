@@ -35,13 +35,6 @@ Api.prototype.handleResponse = function(response) {
 
 	for(let i = 0; i < response.length; i++) {
 		const responseObj = response[i];
-		const keys = ['user', 'page'];
-		const kruxObj = {};
-
-		if(responseObj.krux && responseObj.krux.attributes) {
-			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes);
-			this.instance.krux.add(kruxObj);
-		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
 			this.instance.targeting.add(this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting));
@@ -73,7 +66,6 @@ Api.prototype.init = function(config, oAds) {
 };
 
 Api.prototype.reset = function() {
-	this.instance.krux.resetAttributes();
 	this.data.forEach(responseObj => {
 		if(responseObj.dfp && responseObj.dfp.targeting) {
 			responseObj.dfp.targeting.forEach(kv => {
