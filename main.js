@@ -25,9 +25,7 @@ Ads.prototype.gpt = gpt;
 Ads.prototype.api = api;
 Ads.prototype.moat = moat;
 Ads.prototype.targeting = targeting;
-
 Ads.prototype.utils = utils;
-
 
 /**
 * Initialises the ads library and all sub modules

@@ -18,7 +18,6 @@ QUnit.test('resolves with an empty promise if called without any urls', function
 			assert.equal(res, undefined);
 			done();
 		});
-
 });
 
 QUnit.test("fires an 'adsAPIComplete' event when all API requests succeed", function(assert) {
@@ -136,7 +135,6 @@ QUnit.test('can handle errors in the api response', function(assert) {
 		assert.equal(config.gpt.zone, 'unclassified');
 		done();
 	});
-
 });
 
 
@@ -188,14 +186,6 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 			user: 'https://ads-api.ft.com/v1/user',
 		},
 		dfp_targeting: "custom_key=custom_value",
-		krux: {
-			id: '1234',
-			attributes: {
-				user: {
-					custom_key: 'custom value'
-				}
-			}
-		}
 	});
 
 	ads.then((ads) => {
@@ -226,9 +216,6 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 		targetingApi: {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
-		krux: {
-			id: '1234'
-		}
 	});
 
 
@@ -252,8 +239,6 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 
 		done();
 	});
-
-
 });
 
 QUnit.test("makes use of custom set timeout when calling getPageData directly", function(assert) {
@@ -289,14 +274,6 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
 		dfp_targeting: "custom_key=custom_value",
-		krux: {
-			id: '1234',
-			attributes: {
-				page: {
-					custom_key: 'custom_value'
-				}
-			}
-		},
 		gpt: {
 
 		}
@@ -401,7 +378,6 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 		assert.equal(config.gpt.zone, undefined);
 		done();
 	});
-
 });
 
 QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
@@ -442,10 +418,9 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
 
-
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
-		// CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE KRUX AND USER TARGETING  //
+		// CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE USER TARGETING           //
 		////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// mock the API response with a new user data (or anonymous)
@@ -474,13 +449,8 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 
 			done();
 		});
-
-
 	});
-
 });
-
-
 
 QUnit.test("Single Page app can update page context data", function(assert) {
 	const done = assert.async();
@@ -494,9 +464,6 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 		targetingApi: {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
-		krux: {
-			id: '1234'
-		}
 	});
 
 
@@ -541,10 +508,7 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 
 			done();
 		});
-
 	});
-
-
 });
 
 
@@ -586,7 +550,5 @@ QUnit.skip("allows single page app to update the concept targeting from API on t
 			assert.equal(config_updated.gpt.zone, 'work.and.career');
 			done();
 		});
-
 	});
-
 });
