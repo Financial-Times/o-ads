@@ -11,6 +11,6 @@
   },
   "plugins": ["jest"],
   "globals": {
-    "expect": true
+    "expect": false
   }
 }
