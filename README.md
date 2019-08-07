@@ -78,7 +78,6 @@ This release introduces the following changes:
  - An array of objects containing the configuration of the different metrics that need to be tracked.
  - A callback function to be called whenever any of the trigger events of any of those configuration objects is dispatched.
 
-
 3. **Several custom events fired by o-ads have been renamed for different reasons.** This is the list of events whose name has changed:
 
 Old event name | New event name
@@ -101,3 +100,8 @@ A guide can to the new names can also be found in this two diagrams:
 
 #### Event renaming pt. 2
 ![event renaming 2](https://raw.githubusercontent.com/Financial-Times/o-ads/master/docs/assets/v12_event_renaming_2.png)
+
+### Upgrading to v13
+
+This release removes integration with Krux for behavioural targeting.
+The origami component [o-permutive](https://registry.origami.ft.com/components/o-permutive) can be used for behavioural tracking instead.
