@@ -46,27 +46,10 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 
 ## Migration Guide
 
-### Upgrading to v8
-- Breaking change: If you use the destroy method on a slots instance, this will now properly destroy the given slots rather than just clear them
-- New feature: util event 'off' - remove an event listener
+### Upgrading to v13
 
-### Upgrading to v9
-- Breaking change: o-ads now requires consent before loading Krux or adding custom targeting to the ad calls. Consent can be provided in two ways:
-
-1. Provide a cookie with the name `FTConsent` and specify which consent the user has given as part of the value like this: `behaviouraladsOnsite:on,programmaticadsOnsite:on`
-2. Initialise o-ads with the `disableConsentCookie` option.
-
-### Upgrading to v10
-
-- Breaking change: o-ads now defaults to never collapsing empty ads slots following google gpt behavior.
-- Breaking change: collapsing config oAds takes 3 possible options for the `collapseEmpty` attribute: `'before'`, `'after`', `'never'` and defaults to `'never'`
-- Breaking change: collapsing ads for a specific slot on the markup now uses  `'before'`, `'after`', `'never'` instead of `true` and `false` previously
-- Breaking change: Global collapse empty behavior is set in `config.collapseEmpty` instead of `config.gpt.collapseEmpty` previously
-
-### Upgrading to v11
-
-As of version 11, o-ads has been updated to use ES modules. Unfortunately, this means it is not backwards compatible with CJS modules and clients cannot `require('o-ads')` anymore.
-- Breaking change: if importing o-ads in your build, you must now do it as follows: `import oAds from 'o-ads'`
+This release removes integration with Krux for behavioural targeting.
+The origami component [o-permutive](https://registry.origami.ft.com/components/o-permutive) can be used for behavioural tracking instead.
 
 ### Upgrading to v12
 
@@ -101,7 +84,24 @@ A guide can to the new names can also be found in this two diagrams:
 #### Event renaming pt. 2
 ![event renaming 2](https://raw.githubusercontent.com/Financial-Times/o-ads/master/docs/assets/v12_event_renaming_2.png)
 
-### Upgrading to v13
+### Upgrading to v11
 
-This release removes integration with Krux for behavioural targeting.
-The origami component [o-permutive](https://registry.origami.ft.com/components/o-permutive) can be used for behavioural tracking instead.
+As of version 11, o-ads has been updated to use ES modules. Unfortunately, this means it is not backwards compatible with CJS modules and clients cannot `require('o-ads')` anymore.
+- Breaking change: if importing o-ads in your build, you must now do it as follows: `import oAds from 'o-ads'`
+
+### Upgrading to v10
+
+- Breaking change: o-ads now defaults to never collapsing empty ads slots following google gpt behavior.
+- Breaking change: collapsing config oAds takes 3 possible options for the `collapseEmpty` attribute: `'before'`, `'after`', `'never'` and defaults to `'never'`
+- Breaking change: collapsing ads for a specific slot on the markup now uses  `'before'`, `'after`', `'never'` instead of `true` and `false` previously
+- Breaking change: Global collapse empty behavior is set in `config.collapseEmpty` instead of `config.gpt.collapseEmpty` previously
+
+### Upgrading to v9
+- Breaking change: o-ads now requires consent before loading Krux or adding custom targeting to the ad calls. Consent can be provided in two ways:
+
+1. Provide a cookie with the name `FTConsent` and specify which consent the user has given as part of the value like this: `behaviouraladsOnsite:on,programmaticadsOnsite:on`
+2. Initialise o-ads with the `disableConsentCookie` option.
+
+### Upgrading to v8
+- Breaking change: If you use the destroy method on a slots instance, this will now properly destroy the given slots rather than just clear them
+- New feature: util event 'off' - remove an event listener
