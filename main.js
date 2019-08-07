@@ -2,7 +2,6 @@
 import config, { init, clear } from './src/js/config';
 import slots from './src/js/slots';
 import gpt from './src/js/ad-servers/gpt';
-import krux from './src/js/data-providers/krux';
 import api from './src/js/data-providers/api';
 import moat from './src/js/data-providers/moat';
 import targeting from './src/js/targeting';
@@ -23,13 +22,10 @@ config.clear = clear;
 Ads.prototype.config = config;
 Ads.prototype.slots = slots;
 Ads.prototype.gpt = gpt;
-Ads.prototype.krux = krux;
 Ads.prototype.api = api;
 Ads.prototype.moat = moat;
 Ads.prototype.targeting = targeting;
-
 Ads.prototype.utils = utils;
-
 
 /**
 * Initialises the ads library and all sub modules
@@ -89,7 +85,7 @@ Ads.prototype.init = function(options) {
 		});
 };
 
-Ads.prototype.updateContext = function(options, isNewPage) {
+Ads.prototype.updateContext = function(options) {
 	this.config(options);
 
 	if(options.targetingApi) {
@@ -97,11 +93,6 @@ Ads.prototype.updateContext = function(options, isNewPage) {
 		return this.api.init(options.targetingApi, this)
 			.then(() => {
 				this.gpt.updatePageTargeting(this.targeting.get());
-				/* istanbul ignore else */
-				if(this.config('krux') && this.consents.behavioral) {
-					this.krux.setAllAttributes();
-					this.krux.sendNewPixel(isNewPage);
-				}
 			});
 	} else {
 		return Promise.resolve();
@@ -116,11 +107,6 @@ Ads.prototype.initLibrary = function() {
 		this.targeting.add({"cc" : "y"});
 	}
 	this.gpt.init();
-	this.krux.init(targeting);
-	if (this.consents.behavioral) {
-		// set krux config option to opt-in /consented
-		this.config({'krux': {'consentState' : true}});
-	}
 
 	this.utils.on('debug', this.debug.bind(this));
 	this.isInitialised = true;
@@ -137,7 +123,6 @@ Ads.prototype.debug = function (){
 		localStorage.setItem('oAds', true);
 	}
 	this.gpt.debug();
-	this.krux.debug();
 	this.slots.debug();
 	this.targeting.debug();
 

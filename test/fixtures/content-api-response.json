@@ -15,28 +15,5 @@
             "value": "finance,company,business"
         }],
         "adUnit": ["companies", "technology"]
-    },
-    "krux": {
-        "attributes": [{
-            "name": "authors",
-            "key": "authors",
-            "value": ["Jung-a Song"]
-        }, {
-            "name": "genre",
-            "key": "genre",
-            "value": ["News"]
-        }, {
-            "name": "primarySection",
-            "key": "primarySection",
-            "value": ["Technology"]
-        }, {
-            "name": "specialReports",
-            "key": "specialReports",
-            "value": []
-        }, {
-            "name": "topics",
-            "key": "topics",
-            "value": ["Mobile devices", "Batteries"]
-        }]
     }
 }

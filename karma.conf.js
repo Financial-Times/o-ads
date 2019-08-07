@@ -48,8 +48,7 @@ let options = {
 	preprocessors: {
 		'test/qunit/setup.js': ['webpack'],
 		'test/qunit/main.test.js': ['webpack'],
-		'test/qunit/api.test.js': ['webpack'],
-		'test/qunit/krux.test.js': ['webpack']
+		'test/qunit/api.test.js': ['webpack']
 	}
 };
 

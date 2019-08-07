@@ -15,28 +15,5 @@
             "value": "random,answers,here"
         }],
         "adUnit": ["something", "else"]
-    },
-    "krux": {
-        "attributes": [{
-            "name": "authors",
-            "key": "authors",
-            "value": ["Jung-a Song1"]
-        }, {
-            "name": "genre",
-            "key": "genre",
-            "value": ["News2"]
-        }, {
-            "name": "primarySection",
-            "key": "primarySection",
-            "value": ["Technology3"]
-        }, {
-            "name": "specialReports",
-            "key": "specialReports",
-            "value": []
-        }, {
-            "name": "topics",
-            "key": "topics",
-            "value": ["Mobile devices4", "Batteries5"]
-        }]
     }
 }

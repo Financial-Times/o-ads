@@ -110,14 +110,12 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
 	this.spy(this.ads.gpt, 'init');
 	const userDataStub = this.stub(this.ads.api, 'getUserData');
-	const kruxPixelStub = this.stub(this.ads.krux, 'sendNewPixel');
-	const kruxAttributesStub = this.stub(this.ads.krux, 'setAllAttributes');
 	const updatePageTargetingStub = this.stub(this.ads.gpt, 'updatePageTargeting');
 
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
 	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}, krux: { id: 'hello' }})
+	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'} })
 		.then(function() {
 			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
 			assert.equal(ads.targeting.get().a, '1');
@@ -125,12 +123,9 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 
 			//change the user
 			userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'b', value: '1'}, { key: 'c', value: '2'}]}}));
-			kruxAttributesStub.reset();
 
 			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
 				.then(function() {
-					assert.ok(kruxPixelStub.calledOnce, 'krux pixel send for new page view');
-					assert.ok(kruxAttributesStub.calledOnce, 'resets the krux attributes');
 					assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
 					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
 					assert.equal(ads.targeting.get().a, undefined);
@@ -146,14 +141,12 @@ QUnit.test('updateContext updates the config and redoes the API calls', function
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
 	const gptDebug = this.spy(this.ads.gpt, 'debug');
-	const kruxDebug = this.spy(this.ads.krux, 'debug');
 	const slotsDebug = this.spy(this.ads.slots, 'debug');
 	const targetingDebug = this.spy(this.ads.targeting, 'debug');
 
 	this.ads.debug();
 
 	assert.ok(gptDebug.called, 'gpt debug function is called');
-	assert.ok(kruxDebug.called, 'Krux debug function is called');
 	assert.ok(slotsDebug.called, 'Slots debug function is called');
 	assert.ok(targetingDebug.called, 'Targeting debug function is called');
 
