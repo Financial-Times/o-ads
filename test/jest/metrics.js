@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import {setupMetrics, __RewireAPI__ } from '../../src/js/utils/metrics.js';
 import { mark, getEntriesByName } from './testUtils/pMark.js';
 
