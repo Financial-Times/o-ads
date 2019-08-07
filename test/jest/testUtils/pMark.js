@@ -13,5 +13,7 @@ export const getEntriesByType = type => {
 	return marks;
 };
 
-
-
+export const getEntriesByName = name => {
+	const marks = perfmarks.filter( m => m.name === name );
+	return marks;
+};
