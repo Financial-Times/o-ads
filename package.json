@@ -38,6 +38,7 @@
     "@cypress/webpack-preprocessor": "^2.0.0",
     "@financial-times/secret-squirrel": "^2.12.4",
     "babel-jest": "^24.8.0",
+    "babel-plugin-rewire": "^1.2.0",
     "bower-resolve-webpack-plugin": "^1.0.5",
     "browserstack-local": "^1.3.5",
     "bundlesize": "^0.18.0",
@@ -96,7 +97,7 @@
   "bundlesize": [
     {
       "path": "./build/main.js",
-      "maxSize": "117 kB"
+      "maxSize": "118 kB"
     }
   ]
 }

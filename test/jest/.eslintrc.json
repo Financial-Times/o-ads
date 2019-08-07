@@ -1,4 +1,8 @@
 {
+  "env": {
+    "jest": true,
+    "jest/globals": true
+  },
   "rules": {
     "jest/no-disabled-tests": "error",
     "jest/no-focused-tests": "error",
@@ -6,8 +10,5 @@
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error"
   },
-  "plugins": ["jest"],
-  "globals": {
-    "expect": true
-  }
+  "plugins": ["jest"]
 }
