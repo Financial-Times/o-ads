@@ -18,7 +18,6 @@ QUnit.test('resolves with an empty promise if called without any urls', function
 			assert.equal(res, undefined);
 			done();
 		});
-
 });
 
 QUnit.test("fires an 'adsAPIComplete' event when all API requests succeed", function(assert) {
@@ -136,7 +135,6 @@ QUnit.test('can handle errors in the api response', function(assert) {
 		assert.equal(config.gpt.zone, 'unclassified');
 		done();
 	});
-
 });
 
 
@@ -149,9 +147,6 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 	const ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
-		},
-		krux: {
-			id: '1234'
 		}
 	});
 
@@ -165,15 +160,6 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 			"loggedIn": true,
 			"gender": "F"
 		};
-		const krux_targeting = {
-			"user": {
-				"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-				"guid": "11111111-2222-3333-4444-555555555555",
-				"subscription_level": "int",
-				"loggedIn": true,
-				"gender": "F"
-			}
-		};
 		const lastCallOpts = apiCallMock.lastCall()[1];
 		assert.equal(lastCallOpts.credentials, "include");
 		assert.equal(lastCallOpts.timeout, 2000);
@@ -182,7 +168,6 @@ QUnit.test("makes api call to correct user url and adds correct data to targetin
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-		assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
 		done();
 	});
 
@@ -201,14 +186,6 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 			user: 'https://ads-api.ft.com/v1/user',
 		},
 		dfp_targeting: "custom_key=custom_value",
-		krux: {
-			id: '1234',
-			attributes: {
-				user: {
-					custom_key: 'custom value'
-				}
-			}
-		}
 	});
 
 	ads.then((ads) => {
@@ -222,18 +199,9 @@ QUnit.test("does not overwrite existing data in user config", function(assert) {
 			"loggedIn": true,
 			"gender": "F"
 		};
-		const krux_targeting = {
-			"custom_key": "custom value",
-			"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-			"guid": "11111111-2222-3333-4444-555555555555",
-			"subscription_level": "int",
-			"loggedIn": true,
-			"gender": "F"
-		};
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-		assert.deepEqual(ads.krux.customAttributes.user, krux_targeting, 'the krux attributes are correct');
 		done();
 	});
 });
@@ -248,9 +216,6 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 		targetingApi: {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
-		krux: {
-			id: '1234'
-		}
 	});
 
 
@@ -267,23 +232,13 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 			"ad": "ft11,s03,sm01,s05,s04,ft13",
 			"ca": "finance,company,business"
 		};
-		const krux_targeting = {
-			"authors": ["Jung-a Song"],
-			"genre": ["News"],
-			"primarySection": ["Technology"],
-			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"]
-		};
 
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
 
-		assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
 		done();
 	});
-
-
 });
 
 QUnit.test("makes use of custom set timeout when calling getPageData directly", function(assert) {
@@ -319,14 +274,6 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
 		dfp_targeting: "custom_key=custom_value",
-		krux: {
-			id: '1234',
-			attributes: {
-				page: {
-					custom_key: 'custom_value'
-				}
-			}
-		},
 		gpt: {
 
 		}
@@ -342,20 +289,11 @@ QUnit.test("does not overwrite existing data in page config", function(assert) {
 			"ad": "ft11,s03,sm01,s05,s04,ft13",
 			"ca": "finance,company,business"
 		};
-		const krux_targeting = {
-			"custom_key": "custom_value",
-			"authors": ["Jung-a Song"],
-			"genre": ["News"],
-			"primarySection": ["Technology"],
-			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"]
-		};
 
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
 
-		assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
 		done();
 	});
 });
@@ -440,7 +378,6 @@ QUnit.test('does not overwrite the config gpt zone if using adUnit instead of si
 		assert.equal(config.gpt.zone, undefined);
 		done();
 	});
-
 });
 
 QUnit.test("allows single page app to update the user targeting from API on the fly", function(assert) {
@@ -455,9 +392,6 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 	const ads = this.ads.init({
 		targetingApi: {
 			user: 'https://ads-api.ft.com/v1/user',
-		},
-		krux: {
-			id: '1234'
 		}
 	});
 
@@ -474,15 +408,6 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 			"loggedIn": true,
 			"gender": "F"
 		};
-		const krux_targeting = {
-			"user": {
-				"device_spoor_id": "cis61kpxo00003k59j4xnd8kx",
-				"guid": "11111111-2222-3333-4444-555555555555",
-				"subscription_level": "int",
-				"loggedIn": true,
-				"gender": "F"
-			}
-		};
 		const lastCallOpts = apiCallMock.lastCall()[1];
 		assert.equal(lastCallOpts.credentials, "include");
 		assert.equal(lastCallOpts.timeout, 2000);
@@ -492,13 +417,10 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-		assert.deepEqual(ads.krux.customAttributes.user, krux_targeting.user, 'the krux attributes are correct');
-
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
-		// CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE KRUX AND USER TARGETING  //
+		// CODE BELOW THIS LINE WILL EXPECT A CALL TO API IN ORDER TO UPDATE USER TARGETING           //
 		////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// mock the API response with a new user data (or anonymous)
@@ -518,10 +440,6 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 				"loggedIn": false
 			};
 
-			const krux_targeting_anon = {
-				"user": {
-				}
-			};
 			// run the assertions
 			Object.keys(dfp_targeting_anon).forEach((key) => {
 				assert.equal(dfp_targeting_anon[key], targeting[key], 'the dfp is added as targeting');
@@ -529,19 +447,10 @@ QUnit.test("allows single page app to update the user targeting from API on the 
 			// make sure we have removed old keys (thats where anonymous user helps)
 			assert.notOk(targeting['device_spoor_id'], 'previous user dfp keys have been removed');
 
-			assert.deepEqual(ads.krux.customAttributes.user, krux_targeting_anon.user, 'the krux attributes are correct');
-			// make sure we have removed old keys (thats where anonymous user helps)
-			assert.notOk(ads.krux.customAttributes.user['device_spoor_id'], 'previous user krux keys have been removed');
-
 			done();
 		});
-
-
 	});
-
 });
-
-
 
 QUnit.test("Single Page app can update page context data", function(assert) {
 	const done = assert.async();
@@ -555,9 +464,6 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 		targetingApi: {
 			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
 		},
-		krux: {
-			id: '1234'
-		}
 	});
 
 
@@ -574,20 +480,10 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 			"ad": "ft11,s03,sm01,s05,s04,ft13",
 			"ca": "finance,company,business"
 		};
-		const krux_targeting = {
-			"authors": ["Jung-a Song"],
-			"genre": ["News"],
-			"primarySection": ["Technology"],
-			"specialReports": [],
-			"topics": ["Mobile devices", "Batteries"]
-		};
 
 		Object.keys(dfp_targeting).forEach((key) => {
 			assert.equal(dfp_targeting[key], targeting[key], 'the dfp is added as targeting');
 		});
-
-		assert.deepEqual(ads.krux.customAttributes.page, krux_targeting, 'the krux attributes are correct');
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// ABOVE IS COPIED FROM PREVIOUS TEST AND JUST A NORMAL EXPECTED BEHAVIOUR                    //
@@ -605,25 +501,14 @@ QUnit.test("Single Page app can update page context data", function(assert) {
 				"ad": "s03,sm01",
 				"ca": "random,answers,here"
 			};
-			const krux_targeting_updated = {
-				"authors": ["Jung-a Song1"],
-				"genre": ["News2"],
-				"primarySection": ["Technology3"],
-				"specialReports": [],
-				"topics": ["Mobile devices4", "Batteries5"]
-			};
 
 			Object.keys(dfp_targeting_updated).forEach((key) => {
 				assert.equal(dfp_targeting_updated[key], targeting[key], 'the dfp is added as targeting');
 			});
 
-			assert.deepEqual(ads.krux.customAttributes.page, krux_targeting_updated, 'the krux attributes are correct');
 			done();
 		});
-
 	});
-
-
 });
 
 
@@ -665,7 +550,5 @@ QUnit.skip("allows single page app to update the concept targeting from API on t
 			assert.equal(config_updated.gpt.zone, 'work.and.career');
 			done();
 		});
-
 	});
-
 });

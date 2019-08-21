@@ -12,11 +12,5 @@
             "name": "Spoor ID of Browser/Device",
             "key": "device_spoor_id"
         }]
-    },
-    "krux": {
-        "attributes": [{
-            "name": "Spoor ID of Browser/Device",
-            "key": "device_spoor_id"
-        }]
     }
 }
