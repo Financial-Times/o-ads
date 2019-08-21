@@ -18,6 +18,7 @@ jobs:
           command: npm run demo-server
           background: true
       - run: npm run test-cy:run
+      - run: npm run test-e2e
       - run:
           command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
           background: true
