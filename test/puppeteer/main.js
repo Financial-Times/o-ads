@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const parseUrl = require('parse-url');
+const { checkRequestWithParams } = require('./testUtils/network-utils');
 
 const getConfig = () => {
 	const debugging_mode = {
@@ -13,6 +13,8 @@ const getConfig = () => {
 	return debugging_mode;
 };
 
+
+
 describe('Individual Ad', () => {
 	let browser;
 	let page;
@@ -25,27 +27,9 @@ describe('Individual Ad', () => {
 	}, 6000);
 
 	test('makes a network request to DFP', async () => {
-		const promise = new Promise((resolve, reject) => {
-			page.on('requestfinished', (request) => {
-				const requestedUrl = request.url();
-				// We don't look at other requests made by the same page
-				if (requestedUrl.match(/securepubads.g.doubleclick.net\/gampad/)) {
-					const urlObj = parseUrl(requestedUrl);
-					const { query } = urlObj;
-					const expectedParams = ['cust_params'];
-					expectedParams.forEach( param => {
-						// expect(true).toBe(true);
-						try {
-							expect(query).toHaveProperty(param);
-						} catch(err) {
-							reject(err);
-						}
-					});
-					resolve(true);
-				}
-			});
-		}, 10000);
-		await promise;
+		const urlRegEx = /securepubads.g.doubleclick.net\/gampad/;
+		const expectedParams = ['cust_params'];
+		await checkRequestWithParams(page, urlRegEx, expectedParams);
 	});
 
 	test('loads correctly an ad correctly', async () => {
