@@ -260,6 +260,10 @@ Slots.prototype.initPostMessage = function() {
 				slot.fire('slotRenderEnded');
 			}
 
+			else if(type === 'slotClass' && data.slotClass) {
+				slot.addClass(data.slotClass);
+			}
+
 			// Received message to Collapse ad slot.
 			else if (type === 'collapse') {
 				slot.fire('slotCollapsed');
