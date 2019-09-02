@@ -152,6 +152,35 @@ QUnit.test('Post message "collapse" message will call slot.collapse()', function
 	this.spy(slot, 'collapse');
 });
 
+QUnit.only('Post message "slotClass" message will call slot.addClass()', function (assert) {
+	const done = assert.async();
+	const slotName = 'class-added-ad';
+	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
+	this.stub(this.utils, 'iframeToSlotName', function () {
+		return slotName;
+	});
+	const utils = this.ads.utils;
+	this.spy(utils, 'broadcast');
+
+	document.body.addEventListener('oAds.slotReady', function () {
+		window.postMessage('{ "type": "oAds.slotClass", "slotClass": "sticky"}', '*');
+	});
+
+	window.addEventListener('message', function () {
+		// Make sure this executes AFTER the other 'message' event listener
+		// defined in slots.js
+		setTimeout(() => {
+			assert.ok(slot.addClass.called, 'the addClass method is called');
+			assert.ok(utils.broadcast.calledWith('slotClassAdded'), 'broadcast is called with "slotClassAdded" as parameter');
+			done();
+		}, 0);
+	});
+
+	this.ads.init();
+	const slot = this.ads.slots.initSlot(container);
+	this.spy(slot, 'addClass');
+});
+
 QUnit.test('Unknown postMessage will log an error', function (assert) {
 	const done = assert.async();
 	const slotName = 'test-ad';

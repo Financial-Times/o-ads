@@ -335,7 +335,7 @@ Slot.prototype.collapse = function() {
  */
 Slot.prototype.addClass = function(className) {
 	this.container.classList.add(`o-ads-${className}`);
-	// utils.broadcast('slotClassAdded', this);
+	utils.broadcast('slotClassAdded', this);
 	return this;
 };
 
