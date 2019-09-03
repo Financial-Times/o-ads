@@ -152,7 +152,7 @@ QUnit.test('Post message "collapse" message will call slot.collapse()', function
 	this.spy(slot, 'collapse');
 });
 
-QUnit.only('Post message "slotClass" message will call slot.addClass()', function (assert) {
+QUnit.test('Post message "slotClass" message will call slot.addClass()', function (assert) {
 	const done = assert.async();
 	const slotName = 'class-added-ad';
 	const container = this.fixturesContainer.add('<div data-o-ads-name="' + slotName + '" data-o-ads-formats="MediumRectangle"></div>');
