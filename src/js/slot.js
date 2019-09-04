@@ -331,7 +331,7 @@ Slot.prototype.collapse = function() {
 };
 
 /**
- * add the additional class to th slot
+ * add the additional class to the slot
  */
 Slot.prototype.addClass = function(className) {
 	this.container.classList.add(`o-ads-${className}`);
