@@ -331,6 +331,15 @@ Slot.prototype.collapse = function() {
 };
 
 /**
+ * add the additional class to the slot
+ */
+Slot.prototype.addClass = function(className) {
+	this.container.classList.add(`o-ads-${className}`);
+	utils.broadcast('slotClassAdded', this);
+	return this;
+};
+
+/**
  * sets a classname of the format
  */
 Slot.prototype.setFormatLoaded = function(format) {
