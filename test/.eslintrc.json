@@ -1,18 +1,22 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 6
-  },
-  "rules": {
-    "no-console": 0,
-    "no-unused-expressions": 0,
-    "no-empty-function": 0,
-    "no-prototype-builtins": 0
-  },
-  "globals": {
-    "context": false,
-    "beforeEach": false,
-    "before": false,
-    "afterEach": false,
-    "after": false
-  }
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"plugins": [
+		"qunit"
+	],
+	"rules": {
+		"qunit/no-only": "error",
+		"no-console": 0,
+		"no-unused-expressions": 0,
+		"no-empty-function": 0,
+		"no-prototype-builtins": 0
+	},
+	"globals": {
+		"context": false,
+		"beforeEach": false,
+		"before": false,
+		"afterEach": false,
+		"after": false
+	}
 }
