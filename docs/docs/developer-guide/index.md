@@ -7,7 +7,7 @@ section: building
 The delivery of FT Adverts is facilitated by a range of libraries, APIs and third party products:
 
 ### DFP
-[DFP](https://www.google.com/dfp) (DoubleClick for Publishers) is our primary ad server. It is used to traffic and orchestrate which ads get served where and to whom. It is primarily managed by the AdOps team. Within DFP, adverts are referred to as 'creatives' or 'line items' and have respective ids, which are useful for debugging.
+[DFP (part of Google Ad Manager)](https://support.google.com/admanager/answer/6022000?hl=en) (DoubleClick for Publishers) is our primary ad server. It is used to traffic and orchestrate which ads get served where and to whom. It is primarily managed by the AdOps team. Within DFP, adverts are referred to as 'creatives' or 'line items' and have respective ids, which are useful for debugging.
 
 ### o-ads & GPT
 
