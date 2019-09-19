@@ -31,7 +31,7 @@ jobs:
 
       # We need to delete bower stuff and check that the package works on npm only
       - run: rm -rf bower_components
-      - run: npx occ@0.14.3 --name="${CIRCLE_PROJECT_REPONAME}" 0.0.0
+      - run: npx occ --name="${CIRCLE_PROJECT_REPONAME}" --name="${CIRCLE_PROJECT_REPONAME}" 0.0.0
       - run: $HOME/.local/bin/obt install --ignore-bower
       - run: npm run test-unit
   publish_to_npm:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npx occ@0.14.3 --name="${CIRCLE_PROJECT_REPONAME}" ${CIRCLE_TAG##v}
+      - run: npx occ --name="${CIRCLE_PROJECT_REPONAME}" --name="${CIRCLE_PROJECT_REPONAME}" ${CIRCLE_TAG##v}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
       - run: npx snyk monitor --org=financial-times --project-name=Financial-Times/o-ads
       - run: npm publish --access public
