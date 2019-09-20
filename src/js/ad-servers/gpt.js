@@ -103,7 +103,8 @@ function setPageTargeting(targetingData) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
 			Object.keys(targetingData).forEach(key => {
-				pubads.setTargeting(key, targetingData[key]);
+				// Convert to string as boolean values are invalid arguments for GPT setTargeting()
+				pubads.setTargeting(key, String(targetingData[key]));
 			});
 		});
 	} else {
