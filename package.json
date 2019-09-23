@@ -1,6 +1,6 @@
 {
   "name": "o-ads",
-  "version": "12.11.3",
+  "version": "12.11.4",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
