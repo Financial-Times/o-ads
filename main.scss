@@ -66,8 +66,8 @@ $o-ads-is-silent: true !default;
 
   // HACK: This is necessary to overcome an issue introducedy by GPT that misplaces ads
   // See: https://ads.google.com/status#hl=en&v=issue&sid=24&iid=6790def915d959f61f56fb7005cba2cc
-  // sass-lint:disable-next-line no-qualifying-elements
-  div[id^='google_ads_iframe_'] {
+
+  div[id^='google_ads_iframe_'] { // sass-lint:disable-line no-qualifying-elements
     margin: 0 auto;
   }
 
