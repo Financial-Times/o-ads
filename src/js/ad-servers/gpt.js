@@ -24,7 +24,7 @@ let breakpoints = false;
 function init() {
 	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
-	initGoogleTag();
+	loadGPT();
 	utils.on('slotReady', onReady.bind(null, slotMethods));
 	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
@@ -35,7 +35,7 @@ function init() {
 /*
 * initalise the googletag global namespace and add the google publish tags library to the page
 */
-function initGoogleTag() {
+function loadGPT() {
 	if (!window.googletag) {
 		// set up a place holder for the gpt code downloaded from google
 		window.googletag = {};
@@ -527,5 +527,6 @@ export default {
 	updateCorrelator,
 	updatePageTargeting,
 	clearPageTargetingForKey,
-	debug
+	debug,
+	loadGPT
 };
