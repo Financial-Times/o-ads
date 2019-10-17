@@ -6,7 +6,7 @@ const googletag = {};
 let handler;
 const slots = {};
 const stubs = sinon.sandbox.create();
-const oViewport = require('o-viewport');
+const oViewport = require('@financial-times/o-viewport');
 
 function getResponsiveSizes(mapping) {
 	let winner;

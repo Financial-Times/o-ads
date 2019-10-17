@@ -106,5 +106,8 @@
       "path": "./build/main.js",
       "maxSize": "118 kB"
     }
-  ]
+  ],
+  "dependencies": {
+    "@financial-times/o-viewport": "^3.3.3"
+  }
 }

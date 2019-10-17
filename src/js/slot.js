@@ -375,7 +375,11 @@ Slot.prototype.destroy = function() {
 	if (utils.isFunction(this['destroySlot'])) {
 		utils.off('breakpoint', onChangeBreakpoint, this.container);
 		this.destroySlot();
-		this.container.removeChild(this.outer);
+		try {
+			this.container.removeChild(this.outer);
+		} catch(err) {
+			console.error(err);
+		}
 	}
 	return this;
 };
