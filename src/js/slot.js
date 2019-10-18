@@ -378,7 +378,7 @@ Slot.prototype.destroy = function() {
 		if (this.outer.parentElement === this.container) {
 			this.container.removeChild(this.outer);
 		} else {
-			console.error('Error destroying ad slot'); // eslint-disable-line no-console
+			console.error('Error destroying ad slot. The parent node has already been removed.'); // eslint-disable-line no-console
 		}
 	}
 	return this;
