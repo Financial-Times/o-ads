@@ -510,6 +510,10 @@ function updatePageTargeting(override) {
 		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
 	}
 }
+//https://developers.google.com/doubleclick-gpt/common_implementation_mistakes#scenario-2:-checking-the-googletag-object-to-know-whether-gpt-is-ready
+function hasGPTLoaded () {
+	return window.googletag && window.googletag.apiReady;
+}
 
 function debug() {
 	const log = utils.log;
@@ -527,6 +531,7 @@ export default {
 	updateCorrelator,
 	updatePageTargeting,
 	clearPageTargetingForKey,
-	debug,
-	loadGPT
+	hasGPTLoaded,
+	loadGPT,
+	debug
 };
