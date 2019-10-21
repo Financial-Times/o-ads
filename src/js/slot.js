@@ -375,7 +375,11 @@ Slot.prototype.destroy = function() {
 	if (utils.isFunction(this['destroySlot'])) {
 		utils.off('breakpoint', onChangeBreakpoint, this.container);
 		this.destroySlot();
-		this.container.removeChild(this.outer);
+		if (this.outer.parentElement === this.container) {
+			this.container.removeChild(this.outer);
+		} else {
+			console.error('Error destroying ad slot. The parent node has already been removed.'); // eslint-disable-line no-console
+		}
 	}
 	return this;
 };
