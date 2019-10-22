@@ -512,7 +512,11 @@ function updatePageTargeting(override) {
 }
 //https://developers.google.com/doubleclick-gpt/common_implementation_mistakes#scenario-2:-checking-the-googletag-object-to-know-whether-gpt-is-ready
 function hasGPTLoaded () {
-	return window.googletag && window.googletag.apiReady;
+	if (window.googletag && window.googletag.apiReady) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function debug() {
