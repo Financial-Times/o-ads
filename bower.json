@@ -6,9 +6,9 @@
   ],
   "ignore": [],
   "dependencies": {
-    "ftdomdelegate": ">=2.2.0 <4.0.0",
-    "o-viewport": ">=1.5.0 < 4",
-    "o-grid": "^4.0.0",
+    "ftdomdelegate": "^4.0.0",
+    "o-viewport": "^4.0.0",
+    "o-grid": "^5.0.0",
     "o-visual-effects": "^3.0.0",
     "o-colors": "^5.0.2"
   }
