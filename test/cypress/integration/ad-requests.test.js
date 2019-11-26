@@ -12,7 +12,7 @@ function getQueryParams(url) {
 
 // PageVisibility
 (function () {
-	var prefix = document.webkitVisibilityState ? 'webkit' : document.mozVisibilityState ? 'moz' : null;
+	const prefix = document.webkitVisibilityState ? 'webkit' : document.mozVisibilityState ? 'moz' : null;
 
 	function normalizeState () {
 		document.hidden = document[prefix + 'Hidden'];
