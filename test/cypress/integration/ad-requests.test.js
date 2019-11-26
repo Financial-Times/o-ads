@@ -10,6 +10,28 @@ function getQueryParams(url) {
 	return o;
 }
 
+// PageVisibility
+(function () {
+	var prefix = document.webkitVisibilityState ? 'webkit' : document.mozVisibilityState ? 'moz' : null;
+
+	function normalizeState () {
+		document.hidden = document[prefix + 'Hidden'];
+		document.visibilityState = document[prefix + 'VisibilityState'];
+	}
+
+	if (!prefix) {
+		return;
+	}
+
+	normalizeState();
+
+	document.addEventListener(prefix + 'visibilitychange', function () {
+		normalizeState();
+		document.dispatchEvent(new CustomEvent('visibilitychange'));
+	});
+
+}());
+
 // Integration tests check the ad requests are made properly
 // We can spy on the ad calls and assert on the underlying xhr
 // object, including query parameters and response headers.
