@@ -31,9 +31,9 @@ describe('Integration tests', () => {
 			const cust_params = getQueryParams(qsp.cust_params);
 
 			// Check sizes are converted and set
-			expect(qsp.sz).to.equal('300x250|180x50|160x600|728x90|970x90|970x66|300x600|970x250|300x1050|320x50|88x31|120x60|2x2');
+			expect(qsp.prev_iu_szs).to.equal('300x250|180x50|160x600|728x90|970x90|970x66|300x600|970x250|300x1050|320x50|88x31|120x60|2x2');
 			// Check targeting is set
-			expect(qsp.scp).to.equal('pos=top');
+			expect(qsp.prev_scp).to.equal('pos=top');
 			// Check custom parameters are set
 			expect(cust_params).to.have.property('testparam', 'hello');
 			//

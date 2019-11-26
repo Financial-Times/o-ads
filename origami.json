@@ -20,7 +20,8 @@
 			"Array.from",
 			"Array.prototype.find",
 			"IntersectionObserver",
-			"fetch"
+			"fetch",
+			"document.visibilityState"
 		]
 	},
 	"demos": [

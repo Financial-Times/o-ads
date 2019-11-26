@@ -40,11 +40,11 @@ $o-ads-is-silent: true !default;
 	}
 
 	.o-ads--background {
-		background-color: oColorsGetPaletteColor('black-20');
+		background-color: oColorsByName('black-20');
 	}
 
 	.o-ads--slate-background {
-		background-color: oColorsGetPaletteColor('slate');
+		background-color: oColorsByName('slate');
 	}
 
 	.o-ads--placeholder {
