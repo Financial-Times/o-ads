@@ -46,6 +46,17 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 
 ## Migration Guide
 
+### Upgrading to v14
+
+This release does not change any o-ads behaviour however it now uses the latest major versions of all Origami sub-dependencies.
+
+The following origami dependencies were updated: o-colors,o-visual-effects, o-viewport, o-grid, ftdomdelegate
+
+Some CSS properties needed to be updated in order to work with the updated down-stream dependancies.
+
+We have also added document.visibilityState to the Origami Required [BrowserFeatures](https://origami.ft.com/spec/v1/manifest/#browserfeatures) list as the polyfill for this feature was removed from the latest version of o-viewport.
+
+
 ### Upgrading to v13
 
 This release removes integration with Krux for behavioural targeting.
