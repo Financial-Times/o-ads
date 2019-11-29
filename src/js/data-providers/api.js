@@ -36,6 +36,13 @@ Api.prototype.handleResponse = function(response) {
 	for(let i = 0; i < response.length; i++) {
 		const responseObj = response[i];
 
+		const keys = ['user', 'page'];	
+		const kruxObj = {};	
+
+		if(responseObj.krux && responseObj.krux.attributes) {	
+			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes);		
+		}
+
 		if(responseObj.dfp && responseObj.dfp.targeting) {
 			this.instance.targeting.add(this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting));
 		}
