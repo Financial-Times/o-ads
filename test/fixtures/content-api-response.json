@@ -15,5 +15,82 @@
             "value": "finance,company,business"
         }],
         "adUnit": ["companies", "technology"]
+    },
+    "krux": {
+        "attributes": [
+            {
+                "name": "topics",
+                "key": "topics",
+                "value": [
+                    "Brexit",
+                    "UK business & economy",
+                    "World",
+                    "Economy",
+                    "UK politics & policy",
+                    "Politics"
+                ]
+            },
+            {
+                "name": "people",
+                "key": "people",
+                "value": [
+                    "Boris Johnson",
+                    "Leo Varadkar",
+                    "Arthur Beesley",
+                    "George Parker"
+                ]
+            },
+            {
+                "name": "genre",
+                "key": "genre",
+                "value": [
+                    "News"
+                ]
+            },
+            {
+                "name": "authors",
+                "key": "authors",
+                "value": [
+                    "Arthur Beesley",
+                    "George Parker"
+                ]
+            },
+            {
+                "name": "admants",
+                "key": "ad",
+                "value": [
+                    "bs03",
+                    "bs06",
+                    "bs11",
+                    "bs14",
+                    "bs20",
+                    "bs24",
+                    "bs27",
+                    "bs28",
+                    "e2",
+                    "ft02",
+                    "ft16",
+                    "ft18",
+                    "ft27",
+                    "ft36",
+                    "ft63",
+                    "g1",
+                    "n1",
+                    "s01",
+                    "sm06",
+                    "sr05"
+                ]
+            },
+            {
+                "name": "categories",
+                "key": "ca",
+                "value": [
+                    "government",
+                    "politics",
+                    "referendums",
+                    "search"
+                ]
+            }
+        ]
     }
 }
