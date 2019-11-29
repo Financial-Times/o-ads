@@ -241,6 +241,32 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 	});
 });
 
+
+QUnit.test("makes api call to correct page/content url and adds correct data to behavioral meta", function(assert) {
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM='
+		}
+	});
+
+	ads.then((ads) => {
+		const behavioralConf = ads.config('behavioralMeta');
+		//console.log(behavioralConf);
+		assert.ok(behavioralConf.page);
+		assert.ok(behavioralConf.user);
+
+		done();
+	});
+});
+
 QUnit.test("makes use of custom set timeout when calling getPageData directly", function(assert) {
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);

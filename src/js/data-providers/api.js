@@ -35,6 +35,13 @@ Api.prototype.handleResponse = function(response) {
 
 	for(let i = 0; i < response.length; i++) {
 		const responseObj = response[i];
+		const keys = ['user', 'page'];
+		const behavioralMetaObj = {};
+		const apiResponseBehavioral = responseObj.krux && responseObj.krux.attributes;
+		if(apiResponseBehavioral) {
+			behavioralMetaObj[keys[i]] = this.instance.utils.buildObjectFromArray(apiResponseBehavioral);
+			this.instance.config({'behavioralMeta' : behavioralMetaObj});
+		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
 			this.instance.targeting.add(this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting));
