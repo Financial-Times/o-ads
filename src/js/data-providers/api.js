@@ -39,6 +39,7 @@ Api.prototype.handleResponse = function(response) {
 		const kruxObj = {};
 		if(responseObj.krux && responseObj.krux.attributes) {
 			kruxObj[keys[i]] = this.instance.utils.buildObjectFromArray(responseObj.krux.attributes);
+			this.instance.config({'permutiveMeta' : kruxObj});
 		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
