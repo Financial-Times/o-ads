@@ -1,26 +1,79 @@
 {
     "uuid": "11111111-2222-3333-4444-555555555555",
     "dfp": {
-        "targeting": [{
-            "name": "subscription",
-            "key": "slv",
-            "value": "int"
-        }, {
-            "name": "loggedInStatus",
-            "key": "loggedIn",
-            "value": true
-        }, {
-            "name": "Spoor ID of Browser/Device",
-            "key": "device_spoor_id",
-            "value": "cis61kpxo00003k59j4xnd8kx"
-        }, {
-            "name": "User UUID",
-            "key": "guid",
-            "value": "11111111-2222-3333-4444-555555555555"
-        }, {
-            "name": "Derived gender from redshift",
-            "key": "gender",
-            "value": "F"
-        }]
+        "targeting": [
+            {
+                "name": "subscription",
+                "key": "slv",
+                "value": "int"
+            },
+            {
+                "name": "loggedInStatus",
+                "key": "loggedIn",
+                "value": true
+            },
+            {
+                "name": "Spoor ID of Browser/Device",
+                "key": "device_spoor_id",
+                "value": "cis61kpxo00003k59j4xnd8kx"
+            },
+            {
+                "name": "User UUID",
+                "key": "guid",
+                "value": "11111111-2222-3333-4444-555555555555"
+            },
+            {
+                "name": "Derived gender from redshift",
+                "key": "gender",
+                "value": "F"
+            }
+        ]
+    },
+    "krux": {
+        "attributes": [
+            {
+                "name": "Spoor ID of Browser/Device",
+                "key": "device_spoor_id",
+                "value": "abc"
+            },
+            {
+                "name": "User UUID",
+                "key": "guid",
+                "value": "abc"
+            },
+            {
+                "name": "subscription",
+                "key": "subscription_level",
+                "value": "int"
+            },
+            {
+                "name": "loggedInStatus",
+                "key": "loggedIn",
+                "value": true
+            },
+            {
+                "name": "industry",
+                "key": "industry",
+                "value": "map"
+            },
+            {
+                "name": "responsibility",
+                "key": "job_responsibility",
+                "value": "tec"
+            },
+            {
+                "name": "position",
+                "key": "job_position",
+                "value": "ts"
+            },
+            {
+                "name": "Derived gender from redshift",
+                "key": "gender"
+            },
+            {
+                "name": "Derived industry",
+                "key": "indb2b"
+            }
+        ]
     }
 }

@@ -37,9 +37,9 @@ Api.prototype.handleResponse = function(response) {
 		const responseObj = response[i];
 		const keys = ['user', 'page'];
 		const behavioralMetaObj = {};
-		const behavioralResponseApi = responseObj.krux && responseObj.krux.attributes;
-		if(behavioralResponseApi ) {
-			behavioralMetaObj[keys[i]] = this.instance.utils.buildObjectFromArray(behavioralResponseApi);
+		const apiResponseBehavioral = responseObj.krux && responseObj.krux.attributes;
+		if(apiResponseBehavioral) {
+			behavioralMetaObj[keys[i]] = this.instance.utils.buildObjectFromArray(apiResponseBehavioral);
 			this.instance.config({'behavioralMeta' : behavioralMetaObj});
 		}
 

@@ -242,7 +242,7 @@ QUnit.test("makes api call to correct page/content url and adds correct data to 
 });
 
 
-QUnit.only("makes api call to correct page/content url and adds correct data to behavioral meta", function(assert) {
+QUnit.test("makes api call to correct page/content url and adds correct data to behavioral meta", function(assert) {
 	const done = assert.async();
 	const pageJSON = JSON.stringify(this.fixtures.content);
 	const userJSON = JSON.stringify(this.fixtures.user);
@@ -258,9 +258,8 @@ QUnit.only("makes api call to correct page/content url and adds correct data to 
 	});
 
 	ads.then((ads) => {
-		
 		const behavioralConf = ads.config('behavioralMeta');
-		console.log(behavioralConf);
+		//console.log(behavioralConf);
 		assert.ok(behavioralConf.page);
 		assert.ok(behavioralConf.user);
 
