@@ -8,20 +8,17 @@ Display advertising consists of the traditional "banner" or square advertising s
 
 These come in a variety of sizes, some of which are standard [IAB](https://iabuk.net)(Internet Advertising Bureau) formats, and some which are bespoke to the FT.
 
-An ad slot can be added to your page by including a `div` with some attributes. o-ads will then request an advert for that slot, which will be displayed within an iframe container. Below is a simple example that will display a horizontal billboard/leaderboard sized ad at certain breakpoints:
+An ad slot can be added to your page by including a `div` with some attributes. o-ads will then request an advert for that slot, which will be displayed within an iframe container. Below are two examples.is a simple example that will display a horizontal billboard/leaderboard sized ad at certain breakpoints:
+
+**Simplest ad:**
 
 ```html
 <div
-  class="o-ads o-ads--center"
-  data-o-ads-name="mpu"
-  data-o-ads-targeting="pos=top;"
-  data-o-ads-formats-default="false"
-  data-o-ads-formats-small="false"
-  data-o-ads-formats-medium="Leaderboard,Responsive"
-  data-o-ads-formats-large="SuperLeaderboard,Leaderboard,Responsive"
-  data-o-ads-formats-extra="Billboard,SuperLeaderboard,Leaderboard,Responsive"
+  class="o-ads"
+  data-o-ads-formats="Leaderboard,Responsive"
   aria-hidden="true">
 ```
+
 
 ## Name
 The `data-o-ads-name` attribute is optional and `o-ads` will automatically create a unique one and inject it into each element for which it is missing.
@@ -61,6 +58,33 @@ oAds.init({
 ## Breakpoints
 
 Slots can be configured to react to the viewport size by either hiding the ad or requesting an ad of a different size.
+
+```html
+<div
+  class="o-ads"
+  data-o-ads-name="mpu"
+  data-o-ads-formats-default="false"
+  data-o-ads-formats-small="MediumRectangle"
+  data-o-ads-formats-medium="Leaderboard,Responsive"
+  data-o-ads-formats-large="SuperLeaderboard,Leaderboard,Responsive"
+  data-o-ads-formats-extra="Billboard,SuperLeaderboard,Leaderboard,Responsive"
+  aria-hidden="true">
+```
+
+### Omitting breakpoints
+
+If any of the breakpoints are not specified, not ad will be loaded for that breakpoint. You can also pass _false_ to that breakpoint. For example, the following example, will only load ads for large and extra large breakpoints. The small breakpoint is set to _false_ and the medium breakpoint is ommited:
+
+```html
+<div
+  class="o-ads"
+  data-o-ads-name="mpu"
+  data-o-ads-formats-default="false"
+  data-o-ads-formats-small="false"
+  data-o-ads-formats-large="SuperLeaderboard,Leaderboard,Responsive"
+  data-o-ads-formats-extra="Billboard,SuperLeaderboard,Leaderboard,Responsive"
+  aria-hidden="true">
+```
 
 The default "breakpoints" for ads (e.g. data-o-ads-formats-medium) differ slightly from the o-grid breakpoints, in that they are decided based on the widths of non-responsive ad formats such as leaderboards (which don't fit nicely into the current o-grid viewports). However, they can be overridden/added to if needed.
 
