@@ -1,0 +1,31 @@
+_extends: github-apps-config-next
+
+branches:
+  - name: master
+    protection:
+      required_pull_request_reviews: null
+      required_status_checks:
+        strict: true
+        contexts:
+          - "license/snyk - docs/Gemfile.lock (financial times)"
+          - "license/snyk - package.json (financial times)"
+          - "security/snyk - docs/Gemfile.lock (financial times)"
+          - "security/snyk - package.json (financial times)"
+      enforce_admins: false
+      restrictions:
+        users: []
+        teams: []
+  - name: version-*
+    protection:
+      required_pull_request_reviews: null
+      required_status_checks:
+        strict: true
+        contexts:
+          - "license/snyk - docs/Gemfile.lock (financial times)"
+          - "license/snyk - package.json (financial times)"
+          - "security/snyk - docs/Gemfile.lock (financial times)"
+          - "security/snyk - package.json (financial times)"
+      enforce_admins: false
+      restrictions:
+        users: []
+        teams: []
