@@ -71,7 +71,7 @@ function setup(gptConfig) {
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
 	googletag.enableServices();
-	googletag.pubads().setTargeting('url', window.location.href);
+	googletag.pubads().setTargeting('url', window.location.host + window.location.pathname);
 	googletag.pubads().setRequestNonPersonalizedAds(nonPersonalized);
 	return true;
 }
