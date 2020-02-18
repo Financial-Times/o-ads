@@ -1,5 +1,5 @@
 import config from './config';
-import utils from './utils';
+import utils from './utils/url';
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 
@@ -12,7 +12,6 @@ Targeting.prototype.get = function() {
 	utils.extend(
 		parameters,
 		this.getFromConfig(),
-		this.searchTerm(),
 		this.socialFlow(),
 		this.getVersion()
 	);
@@ -101,21 +100,6 @@ Targeting.prototype.getSocialReferrer = function() {
 		}
 	});
 	return codedValue && { socref: codedValue } || {};
-};
-
-Targeting.prototype.searchTerm = function() {
-	const qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
-	let keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
-
-	/* istanbul ignore else	*/
-	if (keywords && keywords !== '') {
-		keywords = unescape(keywords).toLowerCase()
-			.replace(/[';\^\+]/g, ' ')
-			.replace(/\s+/g, ' ')
-			.trim();
-	}
-
-	return {kw: keywords};
 };
 
 Targeting.prototype.timestamp = function() {

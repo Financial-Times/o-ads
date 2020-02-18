@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "env": {
     "jest": true,
     "jest/globals": true

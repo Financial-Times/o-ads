@@ -1,110 +1,111 @@
 {
-  "name": "o-ads",
-  "version": "14.1.0",
-  "description": "Origami Advertising Client-side Library",
-  "main": "main.js",
-  "scripts": {
-    "demo-server": "obt demo --runServer --port=3002",
-    "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
-    "test": "npm run test-unit",
-    "test-unit": "karma start karma.conf.js --single-run && jest",
-    "test-cy:run": "cypress run -r spec --record false",
-    "test-cy:open": "cypress open",
-    "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
-    "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
-    "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
-    "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
-    "test-e2e": "jest -c jest.config.puppeteer.js",
-    "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
-    "jest": "jest",
-    "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
-    "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
-    "verify": "obt verify",
-    "lint": "eslint .",
-    "lint-complexity": "eslint . -c .eslintrc-complexity.js",
-    "release": "release-it",
-    "version": "genversion --semi src/js/version.js",
-    "obt": "obt",
-    "checksizes": "bundlesize",
-    "prepare": "npx snyk protect || npx snyk protect -d || true"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Financial-Times/o-ads.git"
-  },
-  "homepage": "https://financial-times.github.io/o-ads",
-  "author": "",
-  "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "@cypress/webpack-preprocessor": "^2.0.0",
-    "@financial-times/secret-squirrel": "^2.12.4",
-    "@testing-library/jest-dom": "^4.1.0",
-    "babel-jest": "^24.8.0",
-    "babel-plugin-rewire": "^1.2.0",
-    "bower-resolve-webpack-plugin": "^1.0.5",
-    "browserstack-local": "^1.3.5",
-    "bundlesize": "^0.18.0",
-    "cypress": "^3.4.0",
-    "dotenv": "^8.0.0",
-    "eslint": "^6.0.1",
-    "eslint-plugin-jest": "^22.7.1",
-    "eslint-plugin-qunit": "^4.0.0",
-    "fetch-mock": "^5.1.1",
-    "geckodriver": "^1.16.1",
-    "genversion": "^2.1.0",
-    "isomorphic-fetch": "^2.0.0",
-    "istanbul": "^0.4.2",
-    "istanbul-instrumenter-loader": "^3.0.1",
-    "jest": "^24.8.0",
-    "jest-puppeteer": "^4.3.0",
-    "karma": "^4.1.0",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-cli": "^0.1.1",
-    "karma-coverage": "^1.1.2",
-    "karma-coverage-istanbul-reporter": "^2.0.4",
-    "karma-qunit": "^0.1.8",
-    "karma-webpack": "^3.0.5",
-    "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
-    "origami-build-tools": "^8.0.0",
-    "pre-git": "^3.17.1",
-    "puppeteer": "^1.19.0",
-    "qunitjs": "^1.20.0",
-    "release-it": "^12.3.3",
-    "snyk": "^1.169.1",
-    "start-server-and-test": "^1.10.0",
-    "watchify": "^3.11.0",
-    "webpack": "^4.36.0"
-  },
-  "browserify-swap": {
-    "@packages": [
-      "lodash/date/now"
-    ],
-    "karma": {
-      ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
-    }
-  },
-  "license": "MIT",
-  "config": {
-    "pre-git": {
-      "pre-commit": [
-        "node_modules/.bin/secret-squirrel"
-      ],
-      "pre-push": [
-        "node_modules/.bin/eslint . --color"
-      ]
-    }
-  },
-  "engines": {
-    "node": "^8.6.0"
-  },
-  "release": {
-    "analyzeCommits": "simple-commit-message"
-  },
-  "bundlesize": [
-    {
-      "path": "./build/main.js",
-      "maxSize": "118 kB"
-    }
-  ]
+	"name": "o-ads",
+	"version": "14.1.0",
+	"description": "Origami Advertising Client-side Library",
+	"main": "main.js",
+	"scripts": {
+		"demo-server": "obt demo --runServer --port=3002",
+		"nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
+		"test": "npm run test-unit",
+		"test-unit": "karma start karma.conf.js --single-run && jest",
+		"test-cy:run": "cypress run -r spec --record false",
+		"test-cy:open": "cypress open",
+		"test-nw": "npm run test-nw:basic && npm run test-nw:extended",
+		"test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
+		"test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
+		"test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
+		"test-e2e": "jest -c jest.config.puppeteer.js",
+		"test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
+		"jest": "jest",
+		"coverage": "export COVERAGE=true && karma start && unset COVERAGE",
+		"ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
+		"verify": "obt verify",
+		"lint": "eslint .",
+		"lint-complexity": "eslint . -c .eslintrc-complexity.js",
+		"release": "release-it",
+		"version": "genversion --semi src/js/version.js",
+		"obt": "obt",
+		"checksizes": "bundlesize",
+		"prepare": "npx snyk protect || npx snyk protect -d || true"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Financial-Times/o-ads.git"
+	},
+	"homepage": "https://financial-times.github.io/o-ads",
+	"author": "",
+	"devDependencies": {
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"@cypress/webpack-preprocessor": "^2.0.0",
+		"@financial-times/secret-squirrel": "^2.12.4",
+		"@testing-library/jest-dom": "^4.1.0",
+		"babel-jest": "^24.8.0",
+		"babel-plugin-rewire": "^1.2.0",
+		"bower-resolve-webpack-plugin": "^1.0.5",
+		"browserstack-local": "^1.3.5",
+		"bundlesize": "^0.18.0",
+		"cypress": "^3.4.0",
+		"dotenv": "^8.0.0",
+		"eslint": "6.8.0",
+		"eslint-plugin-jest": "^22.7.1",
+		"eslint-plugin-qunit": "^4.0.0",
+		"fetch-mock": "^5.1.1",
+		"geckodriver": "^1.16.1",
+		"genversion": "^2.1.0",
+		"isomorphic-fetch": "^2.0.0",
+		"istanbul": "^0.4.2",
+		"istanbul-instrumenter-loader": "^3.0.1",
+		"jest": "^24.8.0",
+		"jest-puppeteer": "^4.3.0",
+		"karma": "^4.1.0",
+		"karma-chrome-launcher": "^0.2.2",
+		"karma-cli": "^0.1.1",
+		"karma-coverage": "^1.1.2",
+		"karma-coverage-istanbul-reporter": "^2.0.4",
+		"karma-qunit": "^0.1.8",
+		"karma-webpack": "^3.0.5",
+		"nightwatch": "git@github.com:Financial-Times/nightwatch.git",
+		"origami-build-tools": "^8.0.0",
+		"pre-git": "^3.17.1",
+		"puppeteer": "^1.19.0",
+		"qunitjs": "^1.20.0",
+		"release-it": "^12.3.3",
+		"snyk": "^1.169.1",
+		"start-server-and-test": "^1.10.0",
+		"watchify": "^3.11.0",
+		"webpack": "^4.36.0"
+	},
+	"browserify-swap": {
+		"@packages": [
+			"lodash/date/now"
+		],
+		"karma": {
+			".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
+		}
+	},
+	"license": "MIT",
+	"config": {
+		"pre-git": {
+			"pre-commit": [
+				"npx obt verify",
+				"node_modules/.bin/secret-squirrel"
+			],
+			"pre-push": [
+				"node_modules/.bin/eslint . --color"
+			]
+		}
+	},
+	"engines": {
+		"node": "^8.6.0"
+	},
+	"release": {
+		"analyzeCommits": "simple-commit-message"
+	},
+	"bundlesize": [
+		{
+			"path": "./build/main.js",
+			"maxSize": "118 kB"
+		}
+	]
 }
