@@ -18,7 +18,7 @@
     "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
     "jest": "jest",
     "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
-    "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
+    "ci": "export CI=true && karma start && unset unset CI",
     "verify": "obt verify",
     "lint": "eslint .",
     "lint-complexity": "eslint . -c .eslintrc-complexity.js",
