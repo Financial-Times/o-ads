@@ -12,7 +12,11 @@ export const SEARCH_PARAMS = ['q', 'kw'];
  *
  * @return  {string}               [return description]
  */
-function filterNestedParams(nestedParams, keysToStrip) {
+export function filterNestedParams(nestedParams, keysToStrip) {
+	if (!keysToStrip || keysToStrip.length < 1) {
+		return nestedParams;
+	}
+
 	const childParams = new URLSearchParams(nestedParams);
 
 	for (const key of keysToStrip) {

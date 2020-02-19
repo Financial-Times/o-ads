@@ -1,5 +1,5 @@
 import config from './config';
-import utils from './utils/url';
+import utils from './utils';
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 

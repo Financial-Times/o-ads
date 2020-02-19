@@ -1,6 +1,26 @@
 /* eslint-env jest */
 
-import { stripUrlParams, SEARCH_PARAMS } from '../../../src/js/utils/url';
+import {
+	stripUrlParams,
+	filterNestedParams,
+	SEARCH_PARAMS
+} from '../../../src/js/utils/url';
+
+describe('filterNestedParams', () => {
+	describe.each([
+		[['', SEARCH_PARAMS], ''],
+		[['q=goog', SEARCH_PARAMS], ''],
+		[['q=goog&a=1&b=2&c=3', SEARCH_PARAMS], 'a=1&b=2&c=3'],
+		[['q=goog&a=1&b=2&c=3', ["a", "b", "x"]], 'q=goog&c=3'],
+		[['q=goog&a=1&b=2&c=3', null], 'q=goog&a=1&b=2&c=3'],
+		[['q=goog&a=1&b=2&c=3', undefined], 'q=goog&a=1&b=2&c=3'],
+		[['q=goog&a=1&b=2&c=3', []], 'q=goog&a=1&b=2&c=3'],
+	])('filterNestedParams(%s)', (input, expected) => {
+		test(`returns ${expected}`, () => {
+			expect(filterNestedParams(...input)).toBe(expected);
+		});
+	});
+});
 
 describe('it can consume an instance of window.location', () => {
 	const location = {

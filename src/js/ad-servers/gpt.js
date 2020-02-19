@@ -8,8 +8,8 @@
  * @author Robin Marr, robin.marr@ft.com
  */
 import config from '../config';
-import utils from '../utils';
 import targeting from '../targeting';
+import utils from '../utils';
 import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
 
 const DEFAULT_COLLAPSE_MODE = 'never';
