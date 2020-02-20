@@ -24,7 +24,7 @@ module.exports = {
 	// collectCoverageFrom: null,
 
 	// The directory where Jest should output its coverage files
-	coverageDirectory: "coverage",
+	coverageDirectory: 'coverage',
 
 	// An array of regexp pattern strings used to skip coverage collection
 	// coveragePathIgnorePatterns: [
@@ -61,10 +61,7 @@ module.exports = {
 	// globals: {},
 
 	// An array of directory names to be searched recursively up from the requiring module's location
-	moduleDirectories: [
-		"node_modules",
-		"bower_components"
-	],
+	moduleDirectories: ['node_modules', 'bower_components'],
 
 	// An array of file extensions your modules use
 	// moduleFileExtensions: [
@@ -130,7 +127,7 @@ module.exports = {
 	// snapshotSerializers: [],
 
 	// The test environment that will be used for testing
-	// testEnvironment: "node",
+	testEnvironment: 'jest-environment-jsdom-global',
 
 	// Options that will be passed to the testEnvironment
 	// testEnvironmentOptions: {},
@@ -145,14 +142,10 @@ module.exports = {
 	// ],
 
 	// The glob patterns Jest uses to detect test files
-	testMatch: [
-		"**/test/jest/**/*.[jt]s?(x)",
-	],
+	testMatch: ['**/test/jest/**/*.[jt]s?(x)'],
 
 	// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-	testPathIgnorePatterns: [
-		"/node_modules/", "/jest/testUtils"
-	],
+	testPathIgnorePatterns: ['/node_modules/', '/jest/testUtils'],
 
 	// The regexp pattern or array of patterns that Jest uses to detect test files
 	// testRegex: [],
@@ -171,9 +164,9 @@ module.exports = {
 
 	// A map from regular expressions to paths to transformers
 	// transform: null,
-	"transform": {
-		"^.+\\.jsx?$": "babel-jest"
-	},
+	transform: {
+		'^.+\\.jsx?$': 'babel-jest'
+	}
 
 	// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 	// transformIgnorePatterns: [

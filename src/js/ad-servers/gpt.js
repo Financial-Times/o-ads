@@ -553,6 +553,7 @@ function debug() {
 
 export default {
 	init,
+	setup,
 	updateCorrelator,
 	updatePageTargeting,
 	clearPageTargetingForKey,
