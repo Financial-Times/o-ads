@@ -1,0 +1,33 @@
+---
+layout: default
+title: Managing Consent
+section: Managing Consent
+---
+
+# Managing User Consent Options within the FT.com Advertising Stack
+
+## Overview
+On FT.com Users are able to opt-in/out of different types of advertising.
+Note that currently there is no option to allow users to opt-out of *all* advertising on FT.com. 
+
+There are currently two options available to FT.com users to tailor the types of advertising they will see on FT.com; these are:
+  * Demographically Targeted Ads (toggle on/off)
+  * Behaviorally Targeted Ads (toggle on/off)
+
+This documentation will detail: 
+  * What is meant Demographically targeted ads
+  * What is meant by Behaviourally targeted ads
+  * How does a user toggle these options on/off
+  * What happens within the ft.com tech-stack when these options are toggled on/off
+
+
+## What is meant by demographically / behaviorally targeted ads?
+See the glossary for a general overview of what is meant by 'targeted' advertising. When a page on FT.com makes an ad-request (see glossary, a network request to the ad-server to return an ad-creative). Requests to the ad-server contain key/value pairs in the ad
+
+The advertising stack has been integrated with the `next-control-center` and `next-consent-proxy` 
+
+### H3
+#### H4
+##### H5
+###### H6
+
