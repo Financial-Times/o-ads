@@ -36,7 +36,7 @@ The FT data processing pipeline, which analyses in-app events and feeds real-tim
 
 **TARGETING**  
 Criteria to make ad rendering more tailored and precise.  
-- (#_DEMOGRAPHIC_) 
+- _DEMOGRAPHIC_ 
 References gender, age, income, etc, of a user.   
 - _GEOGRAPHIC_  
 Shows adverts based on a users physical location (usually determined by the IP address)  
