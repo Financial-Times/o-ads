@@ -65,7 +65,7 @@ The Ad-operations team use the AdManager ad-server UI to set-up different sets o
 On FT.com we use a client-side library `o-ads` to abstract away the complexity of making different types of ad-requests on different pages.
 The `o-ads` library contains a module specifically used to handle key/value targeting for ad-requests: [o-ads targeting module](https://github.com/Financial-Times/o-ads/blob/master/src/js/targeting.js)
 
-The targeting module implements simple public methods for setting/getting targeting key/values that go into ad-requests. Note that on FT.com all `o-ads` public functions are exposed on the `window.oAds` object, therefore we are able to run the following commands such as `oAds.targeting.get()` in the dev-tools console and this will output the set of targeting key/values that has been set for ads on the page.
+The targeting module implements simple public methods for setting/getting targeting key/values that go into ad-requests. Note that on FT.com all `o-ads` public functions are exposed on the `window.oAds` object, therefore we are able to run the following command `oAds.targeting.get()` in the dev-tools console and this will output the set of targeting key/values that has been set for ads on the page.
 
 #### Where is targeting data derived from
 
@@ -79,8 +79,19 @@ In general there are two sources used to derive targeting key/value data on FT.c
 1. [Ads-api](https://github.com/Financial-Times/next-ads-api) - used for contextual page meta-data and user demographic data
 2. [Permutive](https://github.com/Financial-Times/n-permutive) - used for user behavior based data
 
-
-
+##### Ads-api derived targeting:
+See the ads-api repo for full documentation
+This API is an attempt to centralise the data used for targeting adverts for the FT, and allow for a consistent, extensible and performant solution that can work across multiple products.
+The API returns a list of key/values which can be passed to the ad server (via o-ads or amp pages)
+For the purposes of Managing Consent, a key area of concern within the ads-api is the `user-endpoint`: https://ads-api.ft.com/v1/user
+The User end-point does the following:
+ * Authenticates the session via the logged-in user's cookie (or returns a default response for non-logged-in users)
+ * Makes a request to the Consent-Proxy, [see code](https://github.com/Financial-Times/next-ads-api/blob/2466fa58a1b487734fd60d56d9a6b2e0f1179a54/server/lib/User.js#L1)
+ * Retrieves the user's consent options for 'demographicadsOnsite' (see FT Consent Cookie section below for more details)
+ * If the we have consent from the user for demographic ads, the ads api makes a request to the membership to retrieve sign-up data (job title, etc) and "derived gender", "derived job position" from the HUI api.
+ * This data is returned as json on the user-end-point
+ * o-ads (which initiates the fetch request to the user-endpoint) will marshal the end-point data into targeting key/values that are sent in the ad-requests on the page.
+The ads-api is a 
 
 The advertising stack has been integrated with the `next-control-center` and `next-consent-proxy` 
 
