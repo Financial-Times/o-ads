@@ -46,4 +46,4 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 
 ## Migration Guide
 
-[Available here](https://github.com/financial-times/o-ads/MIGRATION.md)
+[Available here](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)
