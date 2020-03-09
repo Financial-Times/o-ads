@@ -7,10 +7,10 @@ branches:
       required_status_checks:
         strict: true
         contexts:
-          - "license/snyk - docs/Gemfile.lock (financial times)"
-          - "license/snyk - package.json (financial times)"
-          - "security/snyk - docs/Gemfile.lock (financial times)"
-          - "security/snyk - package.json (financial times)"
+          - "license/snyk (Customer Products)"
+          - "license/snyk (financial times)"
+          - "security/snyk (Customer Products)"
+          - "security/snyk (financial times)"
       enforce_admins: false
       restrictions:
         users: []
@@ -21,10 +21,10 @@ branches:
       required_status_checks:
         strict: true
         contexts:
-          - "license/snyk - docs/Gemfile.lock (financial times)"
-          - "license/snyk - package.json (financial times)"
-          - "security/snyk - docs/Gemfile.lock (financial times)"
-          - "security/snyk - package.json (financial times)"
+          - "license/snyk (Customer Products)"
+          - "license/snyk (financial times)"
+          - "security/snyk (Customer Products)"
+          - "security/snyk (financial times)"
       enforce_admins: false
       restrictions:
         users: []
