@@ -81,12 +81,17 @@ These are all the valid configuration options
 
 
 gpt
+behavioralMeta - set by the ads-api response
+canonical
 collapseEmpty
 dfp_targeting
 disableConsentCookie
+flags - unused
 formats
 lazyLoad
 passOAdsVersion
 responsive
+refresh - unused
+slots - unused recently
 targetingApi
 validateAdsTraffic
