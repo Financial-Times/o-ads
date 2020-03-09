@@ -517,14 +517,20 @@ function updateCorrelator() {
 	});
 }
 
+function clearPageTargeting() {
+	if (window.googletag) {
+		googletag.cmd.push(() => {
+			googletag.pubads().clearTargeting();
+		});
+	}
+	else {
+		utils.log.warn('Attempting to clear page targeting before the GPT library has initialized');
+	}
+}
+
 function updatePageTargeting(override) {
 	if (window.googletag) {
 		const params = utils.isPlainObject(override) ? override : targeting.get();
-		if (!override) {
-			googletag.cmd.push(() => {
-				googletag.pubads().clearTargeting();
-			});
-		}
 		setPageTargeting(params);
 	} else {
 		utils.log.warn('Attempting to set page targeting before the GPT library has initialized');
@@ -556,6 +562,7 @@ export default {
 	setup,
 	updateCorrelator,
 	updatePageTargeting,
+	clearPageTargeting,
 	clearPageTargetingForKey,
 	hasGPTLoaded,
 	loadGPT,
