@@ -272,6 +272,12 @@ oAds.init({
 });
 ```
 
+# Changing behaviour based on which ad loads
+
+All ads get an attribute added called data-o-ads-loaded, which contains the format of the ad that loaded. For example, data-o-ads-loaded="Billboard".
+
+A product can use this to change the styles based on which ad has loaded (for example, to increase the height of a reserved slot if a larger ad loads).
+
 # Styling
 
 o-ads provides some classes to add some basic branded styling to the ad slot.
