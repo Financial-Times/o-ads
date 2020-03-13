@@ -20,6 +20,7 @@ This documentation will detail:
   * How does a user toggle these types of advertising options on/off
   * What happens within the ft.com tech-stack when these options are toggled on/off
 
+Note that general documention on how Consent is managed across the FT tech stack can be found on the [Next consent wiki](https://github.com/Financial-Times/next-gdpr/wiki). This page will focus on how consent is managed within the advertising stack.
 
 ## General definitions of key terms
 ### Ad Targeting
@@ -79,10 +80,12 @@ In general there are two sources used to derive targeting key/value data on FT.c
 1. [Ads-api](https://github.com/Financial-Times/next-ads-api) - used for contextual page meta-data and user demographic data
 2. [Permutive](https://github.com/Financial-Times/n-permutive) - used for user behavior based data
 
-##### Ads-api derived targeting:
-See the ads-api repo for full documentation
+##### Ads-api derived targeting
+See the [ads-api repo for full documentation](https://github.com/Financial-Times/next-ads-api/blob/master/README.md): 
 This API is an attempt to centralise the data used for targeting adverts for the FT, and allow for a consistent, extensible and performant solution that can work across multiple products.
-The API returns a list of key/values which can be passed to the ad server (via o-ads or amp pages)
+
+The API returns a list of key/values which can be passed to the ad server (via o-ads or amp pages).
+
 For the purposes of Managing Consent, a key area of concern within the ads-api is the `user-endpoint`: https://ads-api.ft.com/v1/user
 The User end-point does the following:
  * Authenticates the session via the logged-in user's cookie (or returns a default response for non-logged-in users)
@@ -91,12 +94,24 @@ The User end-point does the following:
  * If the we have consent from the user for demographic ads, the ads api makes a request to the membership to retrieve sign-up data (job title, etc) and "derived gender", "derived job position" from the HUI api.
  * This data is returned as json on the user-end-point
  * o-ads (which initiates the fetch request to the user-endpoint) will marshal the end-point data into targeting key/values that are sent in the ad-requests on the page.
-The ads-api is a 
+
+#### How does a user toggle the different consent options on/off
+Currently the User Journeys for managing consent options are as follows:
+
+##### Annonymous (not logged in) first visit to FT.com page
+ 
 
 The advertising stack has been integrated with the `next-control-center` and `next-consent-proxy` 
 
 ### H3
-#### H4
+
 ##### H5
-###### H6
+###### Useful Repos
+Next GDPR Wiki:
+https://github.com/Financial-Times/next-gdpr/wiki
+
+Cypress test for checking manage-cookies page functionality:
+https://github.com/Financial-Times/next-gdpr-tests
+
+
 
