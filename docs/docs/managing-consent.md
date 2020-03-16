@@ -125,9 +125,26 @@ These settings are held in the Consent Store (part of the `next-control-center`)
 ##### behavioraladsOnsite 
 The `behavioraladsOnsite` consent setting can be toggled to `on`/`off`.
 
-When 'on'; our Permutive integration will run in the users browser - see: [n-permutive FTconsent cookie integration code](https://github.com/Financial-Times/n-permutive/blob/master/src/client/index.js#L56). Before running any Permutive related code we check that `behavioraladsOnsite` is `on` in the FTConsent cookie - i.e. User has accepted the cookie banner and/or toggled the Behavioral Ads toggle (on manage cookies or privacy center) to `on`.
-When `off`; no Permutive related code will run in the users browser - 
+When `on`; our Permutive integration will run in the users browser - see: [n-permutive FTconsent cookie integration code](https://github.com/Financial-Times/n-permutive/blob/master/src/client/index.js#L56). 
+
+Before running any Permutive related code we check that `behavioraladsOnsite` is `on` in the FTConsent cookie - i.e. User has accepted the cookie banner and/or toggled the Behavioral Ads toggle (on manage cookies or privacy center) to `on`.
+
+
+When `off`; no Permutive related code will run in the users browser - So:
+ * Permutive's `<script>` tag will not be written to the page.
+ * We will not pass a `permutive` key/value in segments [see the n-permutive readme for full details of how Permutive has been integrated](https://github.com/Financial-Times/n-permutive/blob/master/README.md)
+
  
+##### demographicadsOnsite 
+The `demographicadsOnsite` consent setting can be toggled to `on`/`off` via the Privacy Settings page as detailed in sections above.
+
+We retrieve a user's Demographic data via the Ads-API; see above [ads-api targeting](https://github.com/Financial-Times/o-ads/blob/wip-managing-consents/docs/docs/managing-consent.md#ads-api-derived-targeting)
+
+The `user-endpoint` on the ads-api has been integrated with the Single Consent store via the `consent-proxy`; see [the code where consent proxy is integrated into the ads-api](https://github.com/Financial-Times/next-ads-api/blob/c3f280f8ed722662ef646c0420cc4488648a2b7b/server/lib/User.js#L1)
+
+Essentially, before the ads-api retrieves any User-demographic-data, the api makes a fetch request to the consent api via the consent-proxy and retrieves the Users record for `demographicadsOnsite`. If there is no record found (i.e. user has not opted in to Demographic ads); the API will not make a request to Membership Api's to retrieve demographic data - the user-end-point will return default, non-demographic based data.
+As no demographic data is retrieved for a user, there will be no demographic data passed into ad-requests.
+
 
 ## Useful Repos
 Next GDPR Wiki:
