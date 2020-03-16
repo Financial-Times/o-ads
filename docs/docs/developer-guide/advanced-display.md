@@ -287,17 +287,6 @@ const metricsDefinitions = [
 		]
 	},
 	{
-		spoorAction: 'krux',
-		triggers: ['kruxKuidAck', 'kruxKuidError', 'kruxConsentOptinFailed'],
-		marks: [
-			'kruxScriptLoaded',
-			'kruxConsentOptinOK',
-			'kruxConsentOptinFailed',
-			'kruxKuidAck',
-			'kruxKuidError',
-		]
-	},
-	{
 		spoorAction: 'slot-requested',
 		triggers: ['slotGoRender'],
 		marks: [
@@ -330,8 +319,6 @@ const metricsDefinitions = [
 ```
 
 In this example there are four different metrics groups. The first one will invoke the callback whenever the trigger (`oAds.serverScripLoaded`) is dispatched. The callback will receive an object including any available information about several potential time marks (`initialising`, `IVTComplete`, `adsAPIComplete`, `initialised`, `serverScriptLoaded`, ...). If there is no information about any of those marks, the callback will still be called without it. Since the `multiple` parameter is missing, its default value of `false` is assumed which means that, once called, the callback will not be called again for the same page view even if, somehow, `oAds.serverScriptLoaded` was dispatched again.
-
-In the case of the `krux` group, the callback will be called whenever any of the first of 3 different events (`oAds.kruxKuidAck`, `oAds.kruxKuidError` or `kruxConsentOptinFailed`) is fired. That helps covering different potential scenarios around the same functionality. Again, since `multiple` is not set, once the callback is called for this group, it won't be called again for the same page view.
 
 `slot-rendered` and `slot-requested` config is similar to `page-initialised`. However, the `multiple: true` parameter allows the callback to be called as many times as their respective triggering events are dispatched during the same page view. Which, in this case, is the right thing to do since we expect a page to contain, potentially, multiple ad slots.
 
