@@ -17,28 +17,28 @@ There are currently two options available to FT.com users to tailor the types of
 Note that general documention on how Consent is managed across the FT tech stack can be found on the [Next consent wiki](https://github.com/Financial-Times/next-gdpr/wiki). This page will focus on how consent is managed within the advertising stack.
 
 This documentation will detail: 
-  * What is meant by the terms "ad targeting", "demographicaly targeted ads", "behaviourally targeted ads"
-  * How are these types of ad targeting achieved within the FT.com tech-stack
-  * How does a user toggle these types of advertising options on/off
-  * What happens within the ft.com ad-tech-stack when these options are toggled on/off
+  * What is meant by the terms "ad targeting", "demographicaly targeted ads", "behaviourally targeted ads" [General definition of key terms](https://github.com/Financial-Times/o-ads/blob/wip-managing-consents/docs/docs/managing-consent.md#general-definitions-of-key-terms)
+  * How are these types of ad targeting achieved within the FT.com tech-stack [How is ad-targeting acheived](https://github.com/Financial-Times/o-ads/blob/wip-managing-consents/docs/docs/managing-consent.md#how-is-ad-targeting-achieved-in-the-ftcom-ad-stack)
+  * [How does a user toggle these types of advertising options on/off](https://github.com/Financial-Times/o-ads/blob/wip-managing-consents/docs/docs/managing-consent.md#how-does-a-user-toggle-the-different-consent-options-onoff)
+  * What happens within the ft.com ad-tech-stack when these options are toggled on/off [What do the toggles do in the ad-tech-stack](https://github.com/Financial-Times/o-ads/blob/wip-managing-consents/docs/docs/managing-consent.md#how-are-the-toggles-integrated-into-the-ad-tech-stack)
 
 
 ## General definitions of key terms
-### Ad Targeting
+##### Ad Targeting
 The term "targeted advertising" is used within the advertising industry to refer to any advertising which is directed to a specific audience. 
 An example of targeted advertising would be adverts that are only shown to users in a specific geo-location. 
 
-### Demographic targeting
+##### Demographic targeting
 This term refers to adverts targeted to specific User demographic groups; for example, adverts that are only shown to users who are in a specific age-range or users who are of a specific gender. 
 
 
-### Behavioral targeting
+##### Behavioral targeting
 "A form of online marketing that uses advertising technology to target web users based on their previous behaviour. Advertising creative and content can be tailored to be of more relevance to a particular user by capturing their previous decision making behaviour, for example, filling out preferences or visiting certain areas of a site frequently."
 
 
 
 
-### How is ad targeting achieved in the FT.com ad-stack
+## How is ad targeting achieved in the FT.com ad-stack
 
 Google's Ad-Manager platform is used as the ad-server for all advertising displayed on FT.com. 
 When a user visits FT.com, client-side JS code runs in the user's browser, this code makes "ad-requests" (client-side network requests) to the ad-server to request ad-creative code to fill the advertising slots on the page.
@@ -63,7 +63,7 @@ The ad-server will read in these key/values from the ad-request and only ads tha
 
 The Ad-operations team use the AdManager ad-server UI to set-up different sets of adverts which are targeted to different key/values.
  
-#### How are targeting key/values set in ad-requests?
+### How are targeting key/values set in ad-requests?
 
 ##### o-ads is used to set targeting key/values:
 On FT.com we use a client-side library `o-ads` to abstract away the complexity of making different types of ad-requests on different pages.
@@ -71,7 +71,7 @@ The `o-ads` library contains a module specifically used to handle key/value targ
 
 The targeting module implements simple public methods for setting/getting targeting key/values that go into ad-requests. Note that on FT.com all `o-ads` public functions are exposed on the `window.oAds` object, therefore we are able to run the following command `oAds.targeting.get()` in the dev-tools console and this will output the set of targeting key/values that has been set for ads on the page.
 
-#### Where is targeting data derived from
+### Where is targeting data derived from
 
 On FT.com there are various types of data that get passed as key/values in ad-targeting; these include:
  * Contextual meta-data about the page; e.g. Page-type (article page / front-page / stream-page)
@@ -98,7 +98,7 @@ The User end-point does the following:
  * This data is returned as json on the user-end-point
  * o-ads (which initiates the fetch request to the user-endpoint) will marshal the end-point data into targeting key/values that are sent in the ad-requests on the page.
 
-#### How does a user toggle the different consent options on/off
+## How does a user toggle the different consent options on/off
 Currently the User Journeys for managing consent options are as follows:
 
 ##### Toggle on/off Behavioral Ads Targeting from Manage Cookies page
@@ -111,13 +111,11 @@ See [List of cookies set by next-gdpr-apps](https://github.com/Financial-Times/n
 Logged-in users may visit the privacy settings page at: [https://www.ft.com/preferences/privac](https://www.ft.com/preferences/privacy) to toggle on/off behavioral targeted adverts and Demographic-based (based on the sign-up data that users provided when they subscribed) ads
 
  
- ### How are the toggles integrated into the ad-tech-stack
+ ## How are the toggles integrated into the ad-tech-stack
 
 The advertising stack has been integrated with the [Single Consent Store] via the `next-consent-proxy` 
 
 
-
-##### H5
 ###### Useful Repos
 Next GDPR Wiki:
 https://github.com/Financial-Times/next-gdpr/wiki
