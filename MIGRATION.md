@@ -4,7 +4,8 @@
 BREAKING CHANGE: When using oAds.gpt.updatePageTargeting(), with no parameters, it will no longer clear the existing targeting parameters set on the global GPT object. Instead, you need to explicitly call oAds.gpt.clearPageTargeting() before any call to `oAds.gpt.updatePageTargeting()`.
 
 ## Upgrading to v15
-TODO
+ * Allows for the removal of key/values from URL parameters.
+ * Removes 'q=' parameter from the URL that is passed as the `url` custom-targeting parameter
 
 ## Upgrading to v14
 
