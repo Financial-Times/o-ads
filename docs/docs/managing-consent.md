@@ -113,10 +113,23 @@ Logged-in users may visit the privacy settings page at: [https://www.ft.com/pref
  
  ## How are the toggles integrated into the ad-tech-stack
 
-The advertising stack has been integrated with the [Single Consent Store] via the `next-consent-proxy` 
+As detailed in the sections above, a User's consent settings (for both annoymous and logged-in users) are handled by various services: [Consent Proxy](https://github.com/Financial-Times/next-consent-proxy), [Form of Words API](https://github.com/Financial-Times/next-fow-api) with a centralised Single Source of Truth for registered/subscribed/logged-in users held with in the Concent API which is part of the [next-control-center]https://github.com/Financial-Times/next-control-centre
 
 
-###### Useful Repos
+Essentially there are two Consent Record options that have implications for ad-tech-stack functionality; these are:
+ * behavioraladsOnsite
+ * demographicadsOnsite
+
+These settings are held in the Consent Store (part of the `next-control-center`) for Logged-in users. These settings are also stored locally in the `FTConsent` cookie for both Logged-in and Annoymous users.
+
+##### behavioraladsOnsite 
+The `behavioraladsOnsite` consent setting can be toggled to `on`/`off`.
+
+When 'on'; our Permutive integration will run in the users browser - see: [n-permutive FTconsent cookie integration code](https://github.com/Financial-Times/n-permutive/blob/master/src/client/index.js#L56). Before running any Permutive related code we check that `behavioraladsOnsite` is `on` in the FTConsent cookie - i.e. User has accepted the cookie banner and/or toggled the Behavioral Ads toggle (on manage cookies or privacy center) to `on`.
+When `off`; no Permutive related code will run in the users browser - 
+ 
+
+## Useful Repos
 Next GDPR Wiki:
 https://github.com/Financial-Times/next-gdpr/wiki
 
