@@ -14,13 +14,14 @@ There are currently two options available to FT.com users to tailor the types of
   * Demographically Targeted Ads (toggle on/off)
   * Behaviorally Targeted Ads (toggle on/off)
 
+Note that general documention on how Consent is managed across the FT tech stack can be found on the [Next consent wiki](https://github.com/Financial-Times/next-gdpr/wiki). This page will focus on how consent is managed within the advertising stack.
+
 This documentation will detail: 
   * What is meant by the terms "ad targeting", "demographicaly targeted ads", "behaviourally targeted ads"
   * How are these types of ad targeting achieved within the FT.com tech-stack
   * How does a user toggle these types of advertising options on/off
-  * What happens within the ft.com tech-stack when these options are toggled on/off
+  * What happens within the ft.com ad-tech-stack when these options are toggled on/off
 
-Note that general documention on how Consent is managed across the FT tech stack can be found on the [Next consent wiki](https://github.com/Financial-Times/next-gdpr/wiki). This page will focus on how consent is managed within the advertising stack.
 
 ## General definitions of key terms
 ### Ad Targeting
@@ -33,6 +34,8 @@ This term refers to adverts targeted to specific User demographic groups; for ex
 
 ### Behavioral targeting
 "A form of online marketing that uses advertising technology to target web users based on their previous behaviour. Advertising creative and content can be tailored to be of more relevance to a particular user by capturing their previous decision making behaviour, for example, filling out preferences or visiting certain areas of a site frequently."
+
+
 
 
 ### How is ad targeting achieved in the FT.com ad-stack
@@ -98,12 +101,21 @@ The User end-point does the following:
 #### How does a user toggle the different consent options on/off
 Currently the User Journeys for managing consent options are as follows:
 
-##### Annonymous (not logged in) first visit to FT.com page
+##### Toggle on/off Behavioral Ads Targeting from Manage Cookies page
+Users may visit the Manage Cookies page at: [https://www.ft.com/preferences/manage-cookies](https://www.ft.com/preferences/manage-cookies) to toggle on/off behavioral targeted adverts.
+
+See [An overview of how an ft.com user accepts cookies, and how that preference is stored.](https://github.com/Financial-Times/next-gdpr/wiki/User-acceptance-of-cookies#ii-by-clicking-manage-on-cookie-banner-then-accept--continue-on-manage-cookies-page)
+
+See [List of cookies set by next-gdpr-apps](https://github.com/Financial-Times/next-gdpr/wiki/Cookies-used-by-next-GDPR-apps)
+##### Toggle on/off Behavioral Ads Targeting and Demographic-based ads targeting from Privacy Settings page
+Logged-in users may visit the privacy settings page at: [https://www.ft.com/preferences/privac](https://www.ft.com/preferences/privacy) to toggle on/off behavioral targeted adverts and Demographic-based (based on the sign-up data that users provided when they subscribed) ads
+
  
+ ### How are the toggles integrated into the ad-tech-stack
 
-The advertising stack has been integrated with the `next-control-center` and `next-consent-proxy` 
+The advertising stack has been integrated with the [Single Consent Store] via the `next-consent-proxy` 
 
-### H3
+
 
 ##### H5
 ###### Useful Repos
