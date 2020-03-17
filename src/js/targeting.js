@@ -12,7 +12,6 @@ Targeting.prototype.get = function() {
 	utils.extend(
 		parameters,
 		this.getFromConfig(),
-		this.searchTerm(),
 		this.socialFlow(),
 		this.getVersion()
 	);
