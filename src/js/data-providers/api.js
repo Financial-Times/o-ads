@@ -33,6 +33,8 @@ Api.prototype.handleResponse = function(response) {
 	utils.broadcast('adsAPIComplete');
 	this.data = response;
 
+	window.smartmatch = { creative: { matches: {} } };
+
 	for(let i = 0; i < response.length; i++) {
 		const responseObj = response[i];
 		const keys = ['user', 'page'];
@@ -44,7 +46,19 @@ Api.prototype.handleResponse = function(response) {
 		}
 
 		if(responseObj.dfp && responseObj.dfp.targeting) {
-			this.instance.targeting.add(this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting));
+			const dfpTargetingObj = this.instance.utils.buildObjectFromArray(responseObj.dfp.targeting);
+			this.instance.targeting.add(dfpTargetingObj);
+		}
+
+		if (responseObj.content && responseObj.content.smartmatch) {
+			const { targeting, matches } = responseObj.content.smartmatch;
+			if (targeting && matches) {
+				const { key, value } = targeting;
+				if (key === 'smid' && typeof value !== 'undefined') {
+					this.instance.targeting.add({[key]: value});
+					window.smartmatch.creative.matches = matches;
+				}
+			}
 		}
 
 		if(this.config.usePageZone && responseObj.dfp && responseObj.dfp.adUnit) {
