@@ -57,7 +57,7 @@ Api.prototype.handleResponse = function(response) {
 		}
 	}
 
-	// TO-DO: This enables setting additional `cust_params` outside `o-ads` based on
+	// This enables setting additional `cust_params` outside `o-ads` based on
 	// the same API responses. That basically empowers the consuming app to
 	// use it's own complex serialising logic without needing to touch `o-ads`.
 	if (typeof this.config.apiResponseHandler === 'function') {
