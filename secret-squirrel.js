@@ -18,7 +18,8 @@ module.exports = {
 			'docs/Gemfile.lock',
 			'docs/_posts/2016-08-19-welcome-to-jekyll.markdown',
 			'main.mustache',
-			'package-lock.json'
+			'package-lock.json',
+			'.github/CODEOWNERS'
 		],
 		allowOverrides: []
 	},
