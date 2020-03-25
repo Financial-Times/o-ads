@@ -1,16 +1,11 @@
 const commands = {
-  	cleverFrame: function(selector) {
-		let instance;
-
-		// Some browsers (e.g. firefox) don't support a string as the iframe selector
-		// See: https://nightwatchjs.org/api/commands/#frame
-		try {
-			instance = this.api.frame(selector);
-		} catch (err) {
-			instance = this.api.frame(1);
+	cleverFrame: function(selector) {
+		const browser = this.client.options.desiredCapabilities.browser;
+		if (browser === 'firefox' || browser === 'edge') {
+			return this.api.frame(1);
 		}
 
-		return instance;
+		return this.api.frame(selector);
 	},
 
 	cleverFrameParent: function() {
