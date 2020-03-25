@@ -1,4 +1,4 @@
-/* globals QUnit: false: false */
+/* globals QUnit: false, sinon: false */
 
 'use strict'; //eslint-disable-line
 
@@ -576,5 +576,139 @@ QUnit.skip("allows single page app to update the concept targeting from API on t
 			assert.equal(config_updated.gpt.zone, 'work.and.career');
 			done();
 		});
+	});
+});
+
+QUnit.test("calls targetingApi.apiResponsaHandler with the right arguments", function(assert) {
+	const apiResponseHandler = sinon.stub();
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			apiResponseHandler
+		}
+	});
+
+	const expectedHandlerArg = [this.fixtures.user, this.fixtures.content];
+
+	ads.then(() => {
+		assert.ok(apiResponseHandler.calledOnce);
+		const receivedArgs = apiResponseHandler.lastCall.args[0];
+		assert.deepEqual(expectedHandlerArg, receivedArgs);
+		done();
+	});
+});
+
+QUnit.test("doesn't call targetingAPi.apiResponseHandler if it's not a function", function(assert) {
+	const apiResponseHandler = "something";
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			apiResponseHandler
+		}
+	});
+
+	ads.then(() => {
+		assert.notOk(apiResponseHandler.called);
+		done();
+	});
+});
+
+QUnit.test("calls this.instance.targeting.add if apiResponseHandler returns an object", function(assert) {
+	const customTargetingParams = { a: 'b' };
+
+	const apiResponseHandler = sinon.stub();
+	apiResponseHandler.returns(customTargetingParams);
+	sinon.spy(this.ads.targeting, 'add');
+
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			apiResponseHandler
+		}
+	});
+
+	ads.then(() => {
+		assert.equal(this.ads.targeting.add.callCount, 3);
+		assert.ok(this.ads.targeting.add.calledWith(sinon.match(customTargetingParams)));
+		this.ads.targeting.add.restore();
+		done();
+	});
+});
+
+QUnit.test("doesn't call this.instance.targeting.add ADDITIONALLY if apiResponseHandler returns null", function(assert) {
+	const apiResponseHandler = sinon.stub();
+	apiResponseHandler.returns(null);
+	sinon.spy(this.ads.targeting, 'add');
+
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			apiResponseHandler
+		}
+	});
+
+	ads.then(() => {
+		assert.equal(this.ads.targeting.add.callCount, 2);
+		this.ads.targeting.add.restore();
+		done();
+	});
+});
+
+QUnit.test("doesn't calls this.instance.targeting.add ADDITIONALLY if apiResponseHandler returns undefined", function(assert) {
+	const apiResponseHandler = sinon.stub();
+	apiResponseHandler.returns(undefined);
+	sinon.spy(this.ads.targeting, 'add');
+
+	const done = assert.async();
+	const pageJSON = JSON.stringify(this.fixtures.content);
+	const userJSON = JSON.stringify(this.fixtures.user);
+
+	fetchMock.get('https://ads-api.ft.com/v1/user', userJSON);
+	fetchMock.get('https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=', pageJSON);
+
+	const ads = this.ads.init({
+		targetingApi: {
+			user: 'https://ads-api.ft.com/v1/user',
+			page: 'https://ads-api.ft.com/v1/concept/MTI1-U2VjdGlvbnM=',
+			apiResponseHandler
+		}
+	});
+
+	ads.then(() => {
+		assert.equal(this.ads.targeting.add.callCount, 2);
+		this.ads.targeting.add.restore();
+		done();
 	});
 });
