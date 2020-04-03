@@ -258,6 +258,7 @@ Slots.prototype.initPostMessage = function() {
 			// TODO: Remove adIframeLoaded once we can tag onto GPTs `slotRenderEnded` event
 			if(type === 'adIframeLoaded') {
 				slot.fire('slotRenderEnded');
+				// slot.sendMessageToIframe();
 			}
 
 			else if(type === 'slotClass' && data.slotClass) {
@@ -349,6 +350,21 @@ Slots.prototype.forEach = function(fn) {
 		}
 	});
 	return this;
+};
+
+Slots.prototype.sendMessage = function(payload) {
+
+	const message = {
+		messageType: 'oAdsEmbed',
+		body: payload
+	};
+
+	this.forEach( slot => {
+		const iframe = slot.getIFrame();
+		if (iframe) {
+			utils.messenger.post(slot, message);
+		}
+	});
 };
 
 /*

@@ -477,4 +477,17 @@ Slot.prototype.labelContainer = function() {
 	return this;
 };
 
+Slot.prototype.getIFrame = function () {
+	return this.container.querySelector('iframe');
+};
+
+Slot.prototype.sendMessageToIframe = function (body) {
+	const message = { messageType: 'oAdsEmbed', body };
+
+	const iframe = this.getIFrame();
+	if (iframe) {
+		utils.messenger.post(iframe, message);
+	}
+};
+
 export default Slot;
