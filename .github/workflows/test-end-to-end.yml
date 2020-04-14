@@ -8,6 +8,7 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
+    - run: npm config set prefix "$HOME/.local"
     - run: npm i -g origami-build-tools@^8
     - run: $HOME/.local/bin/obt install
     - run: $HOME/.local/bin/obt build --production
