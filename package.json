@@ -71,7 +71,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
-    "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
+    "nightwatch": "github:Financial-Times/nightwatch",
     "origami-build-tools": "^8.0.0",
     "pre-git": "^3.17.1",
     "puppeteer": "^1.19.0",
