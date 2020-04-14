@@ -10,14 +10,14 @@ jobs:
         node-version: 12.x
     - run: npm config set prefix "$HOME/.local"
     - run: npm i -g origami-build-tools@^8
-    - run: npx obt install
-    - run: npx obt build --production
-    - run: npx obt verify
+    - run: $HOME/.local/bin/obt install
+    - run: $HOME/.local/bin/obt build --production
+    - run: $HOME/.local/bin/obt verify
     - run: npm run checksizes
     # `obt test` doesn't work because of custom karma config, so we run:
     - run: npm run test-unit
     # We need to delete bower stuff and check that the package works on npm only
     - run: rm -rf bower_components
     - run: npx occ 0.0.0
-    - run: npx obt install --ignore-bower
+    - run: $HOME/.local/bin/obt install --ignore-bower
     - run: npm run test-unit
