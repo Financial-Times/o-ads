@@ -9,8 +9,8 @@ jobs:
       with:
         node-version: 12.x
     - run: npm i -g origami-build-tools@^8
-    - run: npx obt install
-    - run: npx obt build --production
+    - run: $HOME/.local/bin/obt install
+    - run: $HOME/.local/bin/obt build --production
     - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
     - run: npm run demo-server & echo 'Running demo server in the background'
     - run: npm run test-cy:run
