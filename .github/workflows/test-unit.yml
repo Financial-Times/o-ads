@@ -16,3 +16,8 @@ jobs:
     - run: npm run checksizes
     # `obt test` doesn't work because of custom karma config, so we run:
     - run: npm run test-unit
+    # We need to delete bower stuff and check that the package works on npm only
+    - run: rm -rf bower_components
+    - run: npx occ 0.0.0
+    - run: npx obt install --ignore-bower
+    - run: npm run test-unit
