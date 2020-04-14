@@ -1,0 +1,30 @@
+name: End to end test
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: npm i -g origami-build-tools@^8
+    - run: npx obt install
+    - run: npx obt build --production
+    - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
+    - run: npm run demo-server & echo 'Running demo server in the background'
+    - run: npm run test-cy:run
+    - run: npm run test-e2e
+    - run: ./BrowserStackLocal --key=$BROWSERSTACK_KEY & echo 'Running BrowserStackLocal in the background'
+    - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+    - run: npm run test-nw
+    - name: Upload videos
+      uses: actions/upload-artifact@v1
+      with:
+        name: videos
+        path: test/cypress/videos
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v1
+      with:
+        name: screenshots
+        path: test/cypress/screenshots
