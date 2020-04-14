@@ -11,19 +11,16 @@ jobs:
       with:
         node-version: '12.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm install --only=dev
+    - run: npm install
     - name: Repository name
       id: repo_name
       run: echo ::set-output name=REPO_NAME::$(echo $GITHUB_REPOSITORY | cut -d / -f 2)
-    - name: Echo
-      run: echo ${{ steps.repo_name.outputs.REPO_NAME }}
     - name: Get the version
       id: version
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - run: npx origami-ci release
+    - run: npx occ ${{ steps.version.outputs.VERSION }} --name ${{ steps.repo_name.outputs.REPO_NAME }} --repository ${{ steps.repo_name.outputs.REPO_NAME }}
+    - run: npx occ ${{ steps.version.outputs.VERSION }}
+    - run: npx snyk monitor --org=financial-times --project-name=Financial-Times/o-ads
+    - run: npm publish
       env:
-        NPM_CONFIG_USERCONFIG: ~/.npmrc
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        ORIGAMI_CI_NAME: ${{ steps.repo_name.outputs.REPO_NAME }}
-        ORIGAMI_CI_VERSION: ${{ steps.version.outputs.VERSION }}
-        GITHUB_TOKEN: ${{ secrets.ORIGAMI_GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
