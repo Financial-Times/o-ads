@@ -15,7 +15,7 @@ jobs:
     - run: npm run demo-server & echo 'Running demo server in the background'
     - run: npm run test-cy:run
     - run: npm run test-e2e
-    - run: ./BrowserStackLocal --key=$BROWSERSTACK_KEY & echo 'Running BrowserStackLocal in the background'
+    - run: ./BrowserStackLocal --key=${{ secrets.BROWSERSTACK_KEY }} & echo 'Running BrowserStackLocal in the background'
     - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
     - run: npm run test-nw
     - name: Upload videos
