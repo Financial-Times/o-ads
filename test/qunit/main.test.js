@@ -105,38 +105,38 @@ QUnit.test('ads.init().then will receive an object even if moat fails to load', 
 	});
 });
 
-QUnit.test('updateContext updates the config and redoes the API calls', function(assert) {
+QUnit.test('updateTargeting()', function(assert) {
 	const done = assert.async();
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
-	this.spy(this.ads.gpt, 'init');
-	const userDataStub = this.stub(this.ads.api, 'getUserData');
 	const updatePageTargetingStub = this.stub(this.ads.gpt, 'updatePageTargeting');
+	const options = {
+		gpt: {
+			network: '1234',
+			site: 'abc',
+			zone: '123'
+		},
+		targeting: {
+			key1: 'value1',
+			key2: 'value2'
+		}
+	};
 
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
-	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'} })
-		.then(function() {
-			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
-			assert.equal(ads.targeting.get().a, '1');
-			assert.equal(ads.targeting.get().b, '2');
+	ads.init(options).then(() => {
+		assert.equal(ads.targeting.get().key1, 'value1');
+		assert.equal(ads.targeting.get().key2, 'value2');
 
-			//change the user
-			userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'b', value: '1'}, { key: 'c', value: '2'}]}}));
-
-			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
-				.then(function() {
-					assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
-					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
-					assert.equal(ads.targeting.get().a, undefined);
-					assert.equal(ads.targeting.get().b, '1');
-					assert.equal(ads.targeting.get().c, '2');
-					done();
-				});
-
+		ads.updateTargeting({
+			key1: 'updated-value',
+			key3: 'new-value'
 		});
 
-
+		assert.equal(ads.targeting.get().key1, 'updated-value');
+		assert.equal(ads.targeting.get().key3, 'new-value');
+		assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
+		done();
+	});
 });
 
 QUnit.test("debug calls modules' debug functions", function(assert) {

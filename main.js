@@ -56,35 +56,25 @@ Ads.prototype.init = function(options) {
 		this.utils.broadcast('consentProgrammatic');
 	}
 
-	// Targeting
-	const targetingParams = this.config().targeting;
-	if(this.utils.isPlainObject(targetingParams)) {
-		this.targeting.add(targetingParams);
-	}
-
-	console.log('targeting', this.targeting.get());
-
-	const validateAdsTraffic = this.config().validateAdsTraffic;
-
 	this.utils.broadcast('initialising');
-
-	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
-	if(!validateAdsTraffic) {
-		return Promise.resolve(this.initLibrary());
-	}
+	this.targeting.add(this.config().targeting);
 
 	/**
 		Need to wait for the moat script to load to validate the source of the ad
 		traffic is legit before we initialise the library.
 	*/
-	return this.moat.init()
-		.then(() => this.initLibrary())
-		.catch((e) => {
-			// If anything fails, default to load ads without targeting
-			this.utils.log.error(e);
-			this.utils.log.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
-			return this.initLibrary();
-		});
+	if(this.config().validateAdsTraffic) {
+		return this.moat.init()
+			.then(() => this.initLibrary())
+			.catch((e) => {
+				// If anything fails, default to load ads without targeting
+				this.utils.log.error(e);
+				this.utils.log.warn('There was an error checking for invalid traffic via MOAT script. Loading the o-ads library anyway, but the ads may not work as expected...');
+				return this.initLibrary();
+			});
+	}
+
+	return Promise.resolve(this.initLibrary());
 };
 
 
@@ -92,7 +82,7 @@ Ads.prototype.init = function(options) {
  * Update page level targeting data in o-ads and GPT
  */
 Ads.prototype.updateTargeting = function(data) {
-	this.config('targeting', data);
+	this.targeting.add(data);
 	this.gpt.updatePageTargeting(this.targeting.get());
 };
 
