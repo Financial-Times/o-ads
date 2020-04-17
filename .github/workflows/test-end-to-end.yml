@@ -2,7 +2,7 @@ name: End to end test
 on: [push]
 jobs:
   build:
-    runs-on: 'ubuntu-16.04'
+    runs-on: 'ubuntu-18.04'
     # Cypress Docker image with Chrome v80
     # and Firefox v73 pre-installed
     container:
