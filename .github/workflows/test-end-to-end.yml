@@ -5,9 +5,9 @@ jobs:
     runs-on: 'ubuntu-18.04'
     # Cypress Docker image with Chrome v80
     # and Firefox v73 pre-installed
-    container:
-      image: cypress/browsers:node12.16.1-chrome80-ff73
-      options: --user 1001
+#     container:
+#       image: cypress/browsers:node12.16.1-chrome80-ff73
+#       options: --user 1001
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
