@@ -8,7 +8,7 @@
     "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
     "test": "npm run test-unit",
     "test-coverage": "karma start karma.conf.js --single-run",
-    "test-unit": "jest",
+    "test-unit": "jest && npm run test-coverage",
     "test-cy:run": "cypress run -r spec --record false",
     "test-cy:open": "cypress open",
     "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
