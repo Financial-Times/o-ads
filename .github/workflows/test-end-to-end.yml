@@ -19,7 +19,7 @@ jobs:
     - run: $HOME/.local/bin/obt build --production
     - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
     - run: npm run demo-server & echo 'Running demo server in the background'
-    - run: npm run test-cy:run
+    - run: sleep 10 && npm run test-cy:run
     - run: npm run test-e2e
     - run: ./BrowserStackLocal --key=${{ secrets.BROWSERSTACK_KEY }} & echo 'Running BrowserStackLocal in the background'
     - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
