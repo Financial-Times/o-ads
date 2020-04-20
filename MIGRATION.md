@@ -1,5 +1,21 @@
 # Migration Guide
 
+## Upgrading to v18
+
+BREAKING CHANGE: o-ads is no longer responsible for calling the ads-api to retrieve targeting information for ad requests. All targeting information is now passed when configuring oAds, through the `targeting` property. This contains an object of key => value pairs that will be appended to every ad request on the page. **Note: THE `dfp_targeting` AND `targetingApi` CONFIG OPTIONS ARE NO LONGER BEING USED. INSTEAD, USE `targeting`:
+
+```javascript
+import oAds from '@financial-times/o-ads'
+oAds.init({
+  ...
+  targeting: {
+    loggedIn: false,
+    slv: "anon",
+    otherKeys: "and values
+  }
+})
+```
+
 ## Upgrading to v16
 BREAKING CHANGE: When using oAds.gpt.updatePageTargeting(), with no parameters, it will no longer clear the existing targeting parameters set on the global GPT object. Instead, you need to explicitly call oAds.gpt.clearPageTargeting() before any call to `oAds.gpt.updatePageTargeting()`.
 
