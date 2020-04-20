@@ -57,6 +57,7 @@ Ads.prototype.init = function(options) {
 	}
 
 	this.utils.broadcast('initialising');
+
 	this.targeting.add(this.config().targeting);
 
 	/**
