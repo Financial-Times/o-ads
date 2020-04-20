@@ -103,7 +103,6 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `gpt.network` **(required)** `<Number>`
   - `gpt.site` **(required)** `<String>`
   - `gpt.zone` *(optional)* `<String>`
-- `behavioralMeta` *(deprecated)* `<Object>` - Behavioural data set by the ads-api. **DO NOT USE**
 - `canonical` *(deprecated)* `<String>` - Overwrite the GPT *page_url* parameter **DO NOT USE**
 - `collapseEmpty` *(optional)* `<String> "before" | "after" | "never"` - How should the slot be collapsed if there is no ad to be shown
   - `"before"` - The ad slot will be collapsed before the ad request until an ad is found.
@@ -117,7 +116,6 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `lazyload.threshold` **(required)** `<Array>` - How much of the ad space should be in view before it's loaded. Number between 0 - 1. E.g. `[0.5]`
 - `passOAdsVersion` *(optional)* `<Boolean>` - Include the version of o-ads in the ad calls
 - `responsive` *(optional)* `<Object>` - Overwrite the default breakpoints. See [breakpoints](#breakpoints)
-- `refresh` *(deprecated)* `<Boolean>` - **DO NOT USE**. This is an old flag that is not used any more.
 - `slots` *(deprecated)* `<Object>` - Old way of defining slots. See [Defining an Ad Slots]()
 - `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
 - `validateAdsTraffic` *(optional)* `<Boolean>` - Validate the user is not a bot before making ad calls. This uses the [Moat](https://moat.com/) service.

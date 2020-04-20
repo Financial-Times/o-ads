@@ -127,7 +127,12 @@ QUnit.test('Responsive targeting on non-responsive page', function(assert) {
 });
 
 QUnit.test('debug starts logging data', function(assert) {
-	this.ads.init({ dfp_targeting: { data: { allOfThe: 'targeting data' } } });
+	const options = {
+		targeting: {
+			some: 'test',
+		}
+	};
+	this.ads.init(options);
 	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.targeting.debug();

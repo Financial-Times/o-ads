@@ -14,7 +14,7 @@ function getQueryParams(url) {
 // We can spy on the ad calls and assert on the underlying xhr
 // object, including query parameters and response headers.
 describe('Integration tests', () => {
-	it('Ad call contains correct size, targeting and custom parameters specified by dfp_targeting config option', () => {
+	it('Ad call contains correct size, targeting and custom parameters specified by targeting config option', () => {
 		// Spy on the ad call with cy.server() and cy.route()
 		// see https://docs.cypress.io/guides/guides/network-requests.html for more details
 		// Note: this only works with xhr not fetch at the mo - there are workarounds for fetch

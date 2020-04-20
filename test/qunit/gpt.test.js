@@ -53,13 +53,25 @@ QUnit.test('broadcast an event when GPT fails to load', function(assert) {
 });
 
 QUnit.test('set page targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
+	const options = {
+		targeting: {
+			some: 'test',
+			targeting: 'params'
+		}
+	};
+	this.ads.init(options);
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
 QUnit.test('override page targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
+	const options = {
+		targeting: {
+			some: 'test',
+			targeting: 'params'
+		}
+	};
+	this.ads.init(options);
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 
