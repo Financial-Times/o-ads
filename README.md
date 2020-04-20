@@ -7,18 +7,29 @@ This doc is specific to the o-ads library. For more information about the ads ec
 ***Note**: This package is over 5 years old and will soon be deprecated in favour of more modern tools. Please speak to the advertising team (Slack #advertising-dev) if you are thinking of using this.*
 
 # Table of Contents
-**1. [Install](#install)**
-**2. [Setup & Configuration](#setup-config)**
-**3. [Define Ad Slots](#define-ad-slots)**
-**4. [Targeting](#targeting)**
-**5. [Lazy Loading](#lazy-loading)**
-**6. [Invalid Traffic](#invalid-traffic)**
-**7. [Styling](#styling)**
-**8. [Events](#events)**
-**9. [Metrics & Monitoring](#metrics--monitoring)**
-**10. [Misc](#misc)**
-**11. [Developing](#developing)**
-**12. [Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
+**[1. Install](#install)**
+
+**[2. Setup & Configuration](#setup-config)**
+
+**[3. Define Ad Slots](#define-ad-slots)**
+
+**[4. Targeting](#targeting)**
+
+**[5. Lazy Loading](#lazy-loading)**
+
+**[6. Invalid Traffic](#invalid-traffic)**
+
+**[7. Styling](#styling)**
+
+**[8. Events](#events)**
+
+**[9. Metrics & Monitoring](#metrics--monitoring)**
+
+**[10. Misc](#misc)**
+
+**[11. Developing](#developing)**
+
+**[12. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
 
 
 # Install
@@ -98,7 +109,6 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `"before"` - The ad slot will be collapsed before the ad request until an ad is found.
   - `"after"` - The ad slot will be collapsed if no ad is found after the ad request.
   - `"never"` - The ad slot never collapses, even if no ad is found.
-- `dfp_targeting` *(optional)* `<String>` - Set targeting parameters for google ad manager
 - `disableConsentCookie` *(optional)* `<Boolean>` - o-ads looks for consent in the FTConsent cookie. Set to false to disable this.
 - `flags` *(deprecated)* `<Object>` - Flags object. **DO NOT USE**
 - `formats` *(optional)* `<Object>` - Define custom  formats for ad slots
@@ -109,10 +119,7 @@ These are all the valid configuration options that can be used to set up o-ads:
 - `responsive` *(optional)* `<Object>` - Overwrite the default breakpoints. See [breakpoints](#breakpoints)
 - `refresh` *(deprecated)* `<Boolean>` - **DO NOT USE**. This is an old flag that is not used any more.
 - `slots` *(deprecated)* `<Object>` - Old way of defining slots. See [Defining an Ad Slots]()
-- `targetingApi` *(optional)* `<Object>` - API to call for targeting information
-  - `targetingApi.user` *(optional)* `<String>` - API endpoint for user related data
-  - `targetingApi.page` *(optional)* `<String>` - API endpoint for page related data
-  - `targetingApi.usePageZone` *(optional)* `<Boolean>` - Overwrite the `gpt.zone` config setting with a response from the targeting API
+- `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
 - `validateAdsTraffic` *(optional)* `<Boolean>` - Validate the user is not a bot before making ad calls. This uses the [Moat](https://moat.com/) service.
 
 
@@ -225,31 +232,23 @@ oAds.init({
 
 Ads can contain extra information about a user, page, or any other useful info that could be used in Google Ad Manager. There are three ways of adding targeting information to an ad request.
 
-## Ads-api (global)
+## Page level targeting
 
-The [ads-api](https://github.com/financial-times/ads-api) is an api that aggregates information from various sources and returns it in a format that o-ads can use and append to every ad call. This can be configured when initialising o-ads like so:
+You can specify an object of key => value pairs when initialising o-ads. Each key => value pair will be appended to every ad request on the page
+
 ```javascript
 oAds.init({
   ...
-  targetingApi: {
-    user: "https://ads-api.ft.com/v1/user",
-    page: "https://ads-api.ft.com/v1/content/<content-id>"
+  targeting: {
+    key: "value",
+    key2: "value2",
+    ...
   },
   ...
 });
 ```
 
-## dfp_targeting (global)
-
-When configuring o-ads, you can specificy a string of targeting parameters seperated by a semicolon. These will be added to every ad call.
-```javascript
-oAds.init({
-  ...
-  dfp_targeting: "pos=top;version=1;test=yes"
-  ...
-});
-```
-## Ad slot targeting (ad slot specific)
+## Ad slot level targeting
 
 You can also specify targeting parameters for any particular ad slot, by using the `data-o-ads-targeting` attribute when defining the ad slot:
 
@@ -332,12 +331,9 @@ o-ads provides some classes to add some basic branded styling to the ad slot.
 # Events
 
 ## `oAds.initialising`
-Triggered when the library starts the initialisation process. At this point in time, if targetingApi has been defined in the configuration, two separate calls are made to the targeting api in order to get ‘user’ and ‘page’ targeting parameters.
+Triggered when the library starts the initialisation process.
 
 Also at this point, if validateAdsTraffic is set to true, o-ads will check if the traffic validation script (currently moat.js) is available and use it to check if the traffic source is a valid one.
-
-## `oAds.adsAPIComplete`
-If targeting has been configured, this event is triggered when both requests to the targeting api (‘user’ and ‘page’) have been fullfilled (whether successfully or not).
 
 ## `oAds.IVTComplete`
 If validateAdsTraffic is set to true, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can’t been found, when the associated timeout period expires.
