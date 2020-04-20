@@ -55,7 +55,7 @@ describe('Integration tests', () => {
 		});
 	});
 
-	it('Targeting API ads the correct values to the ad call', () => {
+	it('Targeting options are appended to the ad call', () => {
 		cy.server();
 		cy.route('https://securepubads.g.doubleclick.net/gampad/**').as('AdLoaded');
 		cy.visit("/demos/local/Individual-Ad-with-Custom-Targeting-Values.html");
@@ -64,26 +64,10 @@ describe('Integration tests', () => {
 			const url = xhr.xhr.responseURL;
 			const qsp = getQueryParams(url);
 			const cust_params = getQueryParams(qsp.cust_params);
-			console.log('cust_params', cust_params);
-			// user props
-			// TODO: Work out how to sign in a user before this ad call
 			expect(cust_params).to.have.property('slv', 'anon');
-			// This SHOULD be there, but I think is stripped out by GPT.
-			// To investigate on this card: https://trello.com/c/IbpPFURi/314-the-loggedin-parameter-never-actually-makes-it-into-the-ad-call-because-its-a-boolean
-			// expect(cust_params).to.have.property('loggedIn', 'false');
-
-			// Content props
-			expect(cust_params).to.have.property('auuid', '047b1294-75a9-11e6-b60a-de4532d5ea35');
-			expect(cust_params).to.have.property('ad');
-			expect(cust_params).to.have.property('ca');
-
-			const expectedTopics = ['Retail sector','US & Canadian companies',
-				'Technology sector', 'Retail & Consumer industry', 'Companies',
-				'Mobile devices', 'Brexit'];
-
-			const actualTopics = (cust_params.topic || '').split(',');
-
-			expect(actualTopics).to.have.members(expectedTopics);
+			expect(cust_params).to.have.property('auuid', 'sample-id');
+			expect(cust_params).to.have.property('pos', 'top');
+			expect(cust_params).to.have.property('title', 'hello world & goodbye!');
 		});
 	});
 });
