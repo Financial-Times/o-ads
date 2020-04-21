@@ -1,8 +1,8 @@
 $o-ads-is-silent: true !default;
 
 @import "src/scss/base";
-@import "o-visual-effects/main";
-@import "o-colors/main";
+@import "@financial-times/o-visual-effects/main";
+@import "@financial-times/o-colors/main";
 
 @if($o-ads-is-silent == false) {
 	@media print {

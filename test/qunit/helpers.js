@@ -2,7 +2,7 @@
 
 'use strict'; //eslint-disable-line
 
-import oViewport from 'o-viewport';
+import oViewport from '@financial-times/o-viewport';
 import utils from '../../src/js/utils';
 import gptMock from './mocks/gpt-mock';
 
