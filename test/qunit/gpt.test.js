@@ -88,12 +88,6 @@ QUnit.test('override page targeting', function(assert) {
 	);
 });
 
-QUnit.test('empty override page targeting clears targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
-	this.ads.gpt.updatePageTargeting();
-	assert.ok(googletag.pubads().clearTargeting.called);
-});
-
 QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
 	const errorSpy = this.spy(this.utils.log, 'warn');
 	this.ads.init();
