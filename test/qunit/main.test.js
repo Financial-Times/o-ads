@@ -105,6 +105,19 @@ QUnit.test('ads.init().then will receive an object even if moat fails to load', 
 	});
 });
 
+
+QUnit.test('ads.init() ads the targeting options to itself', function(assert) {
+	const targetingSpy = this.spy(this.ads.targeting, 'add');
+	const options = {
+		targeting: {
+			key: "value",
+			anotherKey: "anotherValue"
+		}
+	};
+	this.ads.init(options);
+	assert.ok(targetingSpy.calledWith(options.targeting), 'targeting options added using targeting.add()');
+});
+
 QUnit.test('updateTargeting()', function(assert) {
 	const done = assert.async();
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
@@ -170,7 +183,7 @@ QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", funct
 });
 
 
-QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", function(assert) {
+QUnit.test("init() calls initLibrary()", function(assert) {
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	this.ads.init();
 	assert.ok(initLibrarySpy.called, 'initLibrary() function is called');
