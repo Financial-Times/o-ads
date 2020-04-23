@@ -1,0 +1,7 @@
+{
+  "name": "o-ads",
+  "main": [
+    "main.scss",
+    "main.js"
+  ]
+}
