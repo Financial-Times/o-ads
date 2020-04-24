@@ -1,10 +1,10 @@
 {
-  "name": "@financial-times/o-ads",
+  "name": "o-ads",
   "version": "17.1.0",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
-    "demo-server": "obt demo --ignore-bower --runServer --port=3002",
+    "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
     "test": "npm run test-unit",
     "test-coverage": "karma start karma.conf.js --single-run",
@@ -35,12 +35,6 @@
   },
   "homepage": "https://financial-times.github.io/o-ads",
   "author": "",
-  "dependencies": {
-    "@financial-times/o-colors": "^5.0.2",
-    "@financial-times/o-grid": "^5.0.0",
-    "@financial-times/o-viewport": "^4.0.0",
-    "@financial-times/o-visual-effects": "^3.0.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",

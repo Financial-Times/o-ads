@@ -2,7 +2,7 @@ let callback;
 let breakpoints;
 let current;
 import utils from './index';
-import oViewport from '@financial-times/o-viewport';
+import oViewport from 'o-viewport';
 
 function getNearestBreakpoint() {
 	let winner;
