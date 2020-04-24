@@ -36,10 +36,10 @@
   "homepage": "https://financial-times.github.io/o-ads",
   "author": "",
   "dependencies": {
-    "@financial-times/o-viewport": "^4.0.0",
+    "@financial-times/o-colors": "^5.0.2",
     "@financial-times/o-grid": "^5.0.0",
-    "@financial-times/o-visual-effects": "^3.0.0",
-    "@financial-times/o-colors": "^5.0.2"
+    "@financial-times/o-viewport": "^4.0.0",
+    "@financial-times/o-visual-effects": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
