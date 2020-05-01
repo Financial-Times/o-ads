@@ -4,7 +4,6 @@
 import config, { init, clear } from './src/js/config';
 import slots from './src/js/slots';
 import gpt from './src/js/ad-servers/gpt';
-import moat from './src/js/data-providers/moat';
 import targeting from './src/js/targeting';
 import utils from './src/js/utils';
 
@@ -23,7 +22,6 @@ config.clear = clear;
 Ads.prototype.config = config;
 Ads.prototype.slots = slots;
 Ads.prototype.gpt = gpt;
-Ads.prototype.moat = moat;
 Ads.prototype.targeting = targeting;
 Ads.prototype.utils = utils;
 
