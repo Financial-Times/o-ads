@@ -93,18 +93,6 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');
 });
 
-QUnit.test('ads.init().then will receive an object even if moat fails to load', function(assert) {
-	const done = assert.async();
-	const initSpy = this.spy(this.ads, 'init');
-	this.ads.init({ validateAdsTraffic: true });
-	this.trigger(document, 'o.DOMContentLoaded');
-	const promise = initSpy.returnValues[0];
-	promise.then( res => {
-		assert.equal(typeof res, 'object');
-		done();
-	});
-});
-
 
 QUnit.test('ads.init() ads the targeting options to itself', function(assert) {
 	const targetingSpy = this.spy(this.ads.targeting, 'add');
@@ -212,67 +200,9 @@ QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present a
 	fetchMock.restore();
 });
 
-QUnit.test("If validateAdsTraffic option is true, moat script runs before o-ads library initialises", function(assert) {
-	const moatInitSpy = this.spy(this.ads.moat, 'init');
-	this.ads.init({ validateAdsTraffic: true });
-	assert.ok(moatInitSpy.called, 'moat.init() function is called');
-});
-
-QUnit.test("moat script loading check is eventually cleared if moat is loaded", function(assert) {
-	const clearIntSpy = this.spy(window, 'clearInterval');
-	window.moatPrebidApi = {};
-	this.ads.moat.init();
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(clearIntSpy.called);
-		done();
-	}, 1000);
-});
-
-QUnit.test("moat script loading check is eventually cleared if moat is not loaded", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	const clearIntSpy = this.spy(window, 'clearInterval');
-	window.moatPrebidApi = null;
-	this.ads.moat.init();
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('moatTimeout'));
-		assert.ok(clearIntSpy.called);
-		done();
-	}, 1000);
-});
-
-QUnit.test("A 'IVTComplete' event is fired if moat IVT cannnot be checked", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	window.moatPrebidApi = null;
-	this.ads.moat.init();
-
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
-		done();
-	}, 1000);
-});
-
-QUnit.test("A 'IVTComplete' event is fired if moat IVT can be checked", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	window.moatPrebidApi = {};
-	this.ads.moat.init();
-
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
-		done();
-	}, 1000);
-});
-
 QUnit.test(".version logs the right format", function(assert) {
 	const consoleSpy = this.spy(this.utils, 'log');
-	this.ads.init({ validateAdsTraffic: true });
+	this.ads.init({});
 	this.ads.version();
 	const loggedMessage = consoleSpy.args[0][0];
 	assert.ok(/o-ads version: \d\d?\.\d\d?\.\d\d?/.test(loggedMessage));

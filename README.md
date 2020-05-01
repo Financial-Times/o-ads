@@ -118,8 +118,6 @@ These are all the valid configuration options that can be used to set up o-ads:
 - `responsive` *(optional)* `<Object>` - Overwrite the default breakpoints. See [breakpoints](#breakpoints)
 - `slots` *(deprecated)* `<Object>` - Old way of defining slots. See [Defining an Ad Slots]()
 - `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
-- `validateAdsTraffic` *(optional)* `<Boolean>` - Validate the user is not a bot before making ad calls. This uses the [Moat](https://moat.com/) service.
-
 
 # Define Ad Slots
 
@@ -287,25 +285,6 @@ oAds.config({
 
 There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which overrides lazy loading.
 
-
-# Invalid Traffic
-
-The library provide the option to check for invalid traffic before serving an ad. This relies on a third party script from Moat which you must include on your page, preferrably in the <head> section on your page
-```javascript
-<script async id="moat-ivt" src="https://sejs.moatads.com/financialtimesprebidheader859796398452/yi.js"></script>
-```
-
-This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide whether to serve an ad or not.
-
-To enable this feature make sure you have the script above on your page and enable the following config setting when initialising o-ads:
-```javascript
-oAds.init({
-  ...
-  validateAdsTraffic: true,
-  ...
-});
-```
-
 # Styling
 
 o-ads provides some classes to add some basic branded styling to the ad slot.
@@ -330,11 +309,6 @@ o-ads provides some classes to add some basic branded styling to the ad slot.
 
 ## `oAds.initialising`
 Triggered when the library starts the initialisation process.
-
-Also at this point, if validateAdsTraffic is set to true, o-ads will check if the traffic validation script (currently moat.js) is available and use it to check if the traffic source is a valid one.
-
-## `oAds.IVTComplete`
-If validateAdsTraffic is set to true, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can’t been found, when the associated timeout period expires.
 
 ## `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
@@ -369,7 +343,7 @@ Event is emitted when the slot is collapsed. The event detail contains oAds slot
 # Metrics & Monitoring
 As of version 12, o-ads includes some built-in functionality to help monitor the ads loading flow.
 
-Firstly, o-ads saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. The [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance) used for this is native browser functionality that provides high resolution time measurements.
+Firstly, o-ads saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. If used from [n-ads](https://github.com/Financial-Times/n-ads), extra performance marks might be added. See the [n-ads docs](https://github.com/Financial-Times/n-ads#monitoring)
 
 ## `oAds.utils.setupMetrics()`
 o-ads is now exposing a new method, `oAds.utils.setupMetrics()` which enables setting up all ads-related metrics in one step.

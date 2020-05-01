@@ -60,24 +60,8 @@ Ads.prototype.init = function(options) {
 
 	this.targeting.add(this.config().targeting);
 
-	/**
-		Need to wait for the moat script to load to validate the source of the ad
-		traffic is legit before we initialise the library.
-	*/
-	if(this.config().validateAdsTraffic) {
-		return this.moat.init()
-			.then(() => this.initLibrary())
-			.catch((e) => {
-				// If anything fails, default to load ads without targeting
-				this.utils.log.error(e);
-				this.utils.log.warn('There was an error checking for invalid traffic via MOAT script. Loading the o-ads library anyway, but the ads may not work as expected...');
-				return this.initLibrary();
-			});
-	}
-
 	return Promise.resolve(this.initLibrary());
 };
-
 
 /**
  * Update page level targeting data in o-ads and GPT
