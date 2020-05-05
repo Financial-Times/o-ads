@@ -1,4 +1,4 @@
-/* globals describe, it, cy */
+/* globals  cy */
 
 /**
  * E2E Tests check the responses from DFP are correct under

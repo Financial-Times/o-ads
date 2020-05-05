@@ -1,4 +1,4 @@
-/* globals describe, it, cy, expect: false: false */
+/* globals cy, expect: false: false */
 const Ads = require('../../../main.js').constructor;
 const utils = require('../../../src/js/utils');
 

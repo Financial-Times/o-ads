@@ -82,35 +82,33 @@ $ad-max-responsive-width: 1440px;
 }
 
 @mixin oAdsResponsiveReserve {
-		&[data-o-ads-loaded="Responsive"] {
-			box-sizing: content-box;
-			height: 250px;
-			min-height: 250px;
-			padding: 10px 0;
-			@include oGridRespondTo($until: $ad-max-responsive-width) {
-				height: auto;
-				min-height: calc(100vw * 0.1734);
-				padding: 0;
-			}
-			@include oGridRespondTo($until: S) {
-				height: auto;
-				min-height: calc(100vw * 0.481);
-			}
+	&[data-o-ads-loaded="Responsive"] {
+		@include oGridRespondTo($until: $ad-max-responsive-width) {
+			height: auto;
+			min-height: calc(100vw * 0.1734);
+			padding: 0;
 		}
+		@include oGridRespondTo($until: S) {
+			height: auto;
+			min-height: calc(100vw * 0.481);
+		}
+		box-sizing: content-box;
+		height: 250px;
+		min-height: 250px;
+		padding: 10px 0;
+	}
 }
 
 @mixin oAdsTransition {
 	will-change: min-height, padding, height;
 	transform: translate3d(0, 0, 0);
-	transition: height 0.35s $o-visual-effects-timing-expand,
-	min-height 0.35s $o-visual-effects-timing-expand,
-	padding 0.35s $o-visual-effects-timing-expand;
+	transition: height 0.35s $o-visual-effects-timing-expand, min-height 0.35s $o-visual-effects-timing-expand, padding 0.35s $o-visual-effects-timing-expand;
 }
 
 @mixin oAdsLabelWithBorders($pos: 'left') {
-	$padding: 25px;
 
 	font-size: 14px;
+	$padding: 25px;
 
 	&:before,
 	&:after {
