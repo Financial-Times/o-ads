@@ -7,18 +7,29 @@ This doc is specific to the o-ads library. For more information about the ads ec
 ***Note**: This package is over 5 years old and will soon be deprecated in favour of more modern tools. Please speak to the advertising team (Slack #advertising-dev) if you are thinking of using this.*
 
 # Table of Contents
-**1. [Install](#install)**
-**2. [Setup & Configuration](#setup-config)**
-**3. [Define Ad Slots](#define-ad-slots)**
-**4. [Targeting](#targeting)**
-**5. [Lazy Loading](#lazy-loading)**
-**6. [Invalid Traffic](#invalid-traffic)**
-**7. [Styling](#styling)**
-**8. [Events](#events)**
-**9. [Metrics & Monitoring](#metrics--monitoring)**
-**10. [Misc](#misc)**
-**11. [Developing](#developing)**
-**12. [Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
+**[1. Install](#install)**
+
+**[2. Setup & Configuration](#setup-config)**
+
+**[3. Define Ad Slots](#define-ad-slots)**
+
+**[4. Targeting](#targeting)**
+
+**[5. Lazy Loading](#lazy-loading)**
+
+**[6. Invalid Traffic](#invalid-traffic)**
+
+**[7. Styling](#styling)**
+
+**[8. Events](#events)**
+
+**[9. Metrics & Monitoring](#metrics--monitoring)**
+
+**[10. Misc](#misc)**
+
+**[11. Developing](#developing)**
+
+**[12. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
 
 
 # Install
@@ -92,13 +103,11 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `gpt.network` **(required)** `<Number>`
   - `gpt.site` **(required)** `<String>`
   - `gpt.zone` *(optional)* `<String>`
-- `behavioralMeta` *(deprecated)* `<Object>` - Behavioural data set by the ads-api. **DO NOT USE**
 - `canonical` *(deprecated)* `<String>` - Overwrite the GPT *page_url* parameter **DO NOT USE**
 - `collapseEmpty` *(optional)* `<String> "before" | "after" | "never"` - How should the slot be collapsed if there is no ad to be shown
   - `"before"` - The ad slot will be collapsed before the ad request until an ad is found.
   - `"after"` - The ad slot will be collapsed if no ad is found after the ad request.
   - `"never"` - The ad slot never collapses, even if no ad is found.
-- `dfp_targeting` *(optional)* `<String>` - Set targeting parameters for google ad manager
 - `disableConsentCookie` *(optional)* `<Boolean>` - o-ads looks for consent in the FTConsent cookie. Set to false to disable this.
 - `flags` *(deprecated)* `<Object>` - Flags object. **DO NOT USE**
 - `formats` *(optional)* `<Object>` - Define custom  formats for ad slots
@@ -107,14 +116,8 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `lazyload.threshold` **(required)** `<Array>` - How much of the ad space should be in view before it's loaded. Number between 0 - 1. E.g. `[0.5]`
 - `passOAdsVersion` *(optional)* `<Boolean>` - Include the version of o-ads in the ad calls
 - `responsive` *(optional)* `<Object>` - Overwrite the default breakpoints. See [breakpoints](#breakpoints)
-- `refresh` *(deprecated)* `<Boolean>` - **DO NOT USE**. This is an old flag that is not used any more.
 - `slots` *(deprecated)* `<Object>` - Old way of defining slots. See [Defining an Ad Slots]()
-- `targetingApi` *(optional)* `<Object>` - API to call for targeting information
-  - `targetingApi.user` *(optional)* `<String>` - API endpoint for user related data
-  - `targetingApi.page` *(optional)* `<String>` - API endpoint for page related data
-  - `targetingApi.usePageZone` *(optional)* `<Boolean>` - Overwrite the `gpt.zone` config setting with a response from the targeting API
-- `validateAdsTraffic` *(optional)* `<Boolean>` - Validate the user is not a bot before making ad calls. This uses the [Moat](https://moat.com/) service.
-
+- `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
 
 # Define Ad Slots
 
@@ -225,31 +228,23 @@ oAds.init({
 
 Ads can contain extra information about a user, page, or any other useful info that could be used in Google Ad Manager. There are three ways of adding targeting information to an ad request.
 
-## Ads-api (global)
+## Page level targeting
 
-The [ads-api](https://github.com/financial-times/ads-api) is an api that aggregates information from various sources and returns it in a format that o-ads can use and append to every ad call. This can be configured when initialising o-ads like so:
+You can specify an object of key => value pairs when initialising o-ads. Each key => value pair will be appended to every ad request on the page
+
 ```javascript
 oAds.init({
   ...
-  targetingApi: {
-    user: "https://ads-api.ft.com/v1/user",
-    page: "https://ads-api.ft.com/v1/content/<content-id>"
+  targeting: {
+    key: "value",
+    key2: "value2",
+    ...
   },
   ...
 });
 ```
 
-## dfp_targeting (global)
-
-When configuring o-ads, you can specificy a string of targeting parameters seperated by a semicolon. These will be added to every ad call.
-```javascript
-oAds.init({
-  ...
-  dfp_targeting: "pos=top;version=1;test=yes"
-  ...
-});
-```
-## Ad slot targeting (ad slot specific)
+## Ad slot level targeting
 
 You can also specify targeting parameters for any particular ad slot, by using the `data-o-ads-targeting` attribute when defining the ad slot:
 
@@ -290,25 +285,6 @@ oAds.config({
 
 There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which overrides lazy loading.
 
-
-# Invalid Traffic
-
-The library provide the option to check for invalid traffic before serving an ad. This relies on a third party script from Moat which you must include on your page, preferrably in the <head> section on your page
-```javascript
-<script async id="moat-ivt" src="https://sejs.moatads.com/financialtimesprebidheader859796398452/yi.js"></script>
-```
-
-This script will append the `m_data` parameter to the ad call, with a value of 0 or 1. DFP will then use this parameter to decide whether to serve an ad or not.
-
-To enable this feature make sure you have the script above on your page and enable the following config setting when initialising o-ads:
-```javascript
-oAds.init({
-  ...
-  validateAdsTraffic: true,
-  ...
-});
-```
-
 # Styling
 
 o-ads provides some classes to add some basic branded styling to the ad slot.
@@ -332,15 +308,7 @@ o-ads provides some classes to add some basic branded styling to the ad slot.
 # Events
 
 ## `oAds.initialising`
-Triggered when the library starts the initialisation process. At this point in time, if targetingApi has been defined in the configuration, two separate calls are made to the targeting api in order to get ‘user’ and ‘page’ targeting parameters.
-
-Also at this point, if validateAdsTraffic is set to true, o-ads will check if the traffic validation script (currently moat.js) is available and use it to check if the traffic source is a valid one.
-
-## `oAds.adsAPIComplete`
-If targeting has been configured, this event is triggered when both requests to the targeting api (‘user’ and ‘page’) have been fullfilled (whether successfully or not).
-
-## `oAds.IVTComplete`
-If validateAdsTraffic is set to true, this event is triggered as soon as the traffic has been validated or, if the traffic validation script can’t been found, when the associated timeout period expires.
+Triggered when the library starts the initialisation process.
 
 ## `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
@@ -375,7 +343,7 @@ Event is emitted when the slot is collapsed. The event detail contains oAds slot
 # Metrics & Monitoring
 As of version 12, o-ads includes some built-in functionality to help monitor the ads loading flow.
 
-Firstly, o-ads saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. The [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance) used for this is native browser functionality that provides high resolution time measurements.
+Firstly, o-ads saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. If used from [n-ads](https://github.com/Financial-Times/n-ads), extra performance marks might be added. See the [n-ads docs](https://github.com/Financial-Times/n-ads#monitoring)
 
 ## `oAds.utils.setupMetrics()`
 o-ads is now exposing a new method, `oAds.utils.setupMetrics()` which enables setting up all ads-related metrics in one step.

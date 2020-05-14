@@ -11,7 +11,6 @@ Targeting.prototype.get = function() {
 	};
 	utils.extend(
 		parameters,
-		this.getFromConfig(),
 		this.socialFlow(),
 		this.getVersion()
 	);
@@ -42,21 +41,6 @@ Targeting.prototype.clear = function() {
 	parameters = {};
 };
 
-/**
-* getFromConfig returns an object containing all the key values pairs specified in the dfp_targeting
-* config.
-*/
-Targeting.prototype.getFromConfig = function() {
-	let targeting = config('dfp_targeting') || {};
-	if (!utils.isPlainObject(targeting)) {
-		/* istanbul ignore else  */
-		if (utils.isString(targeting)) {
-			targeting = utils.hash(targeting, ';', '=');
-		}
-	}
-
-	return targeting;
-};
 
 Targeting.prototype.getVersion = function() {
 	if (config('passOAdsVersion')) {

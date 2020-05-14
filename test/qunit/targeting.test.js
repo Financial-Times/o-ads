@@ -4,36 +4,6 @@
 
 QUnit.module('Targeting', {});
 
-QUnit.test('getFromConfig', function(assert) {
-	this.ads.init({});
-	let result = this.ads.targeting.get();
-	assert.ok(result.ts, 'timestamp exists');
-	assert.ok(result.res, 'responsive breakpoint exists');
-	this.ads.targeting.clear();
-	this.ads.config('dfp_targeting', '');
-	result = this.ads.targeting.get();
-	assert.deepEqual(Object.keys(result).length, 2, 'Empty string dfp_targeting returns only default params');
-
-	this.ads.targeting.clear();
-	this.ads.config('dfp_targeting', 'some=test;targeting=params');
-	result = this.ads.targeting.get();
-	assert.deepEqual(result.some, 'test', 'Simple params are parsed correctly');
-	assert.deepEqual(result.targeting, 'params', 'Simple params are parsed correctly');
-
-	this.ads.targeting.clear();
-	this.ads.config('dfp_targeting', 'some=test;;targeting=params');
-	result = this.ads.targeting.get();
-	assert.deepEqual(result.some, 'test', 'Double ; are handled');
-	assert.deepEqual(result.targeting, 'params', 'Double ; are handled');
-
-	this.ads.targeting.clear();
-	this.ads.config('dfp_targeting', "s@me=test;targeting=par@ms$'");
-	result = this.ads.targeting.get();
-
-	assert.deepEqual(result['s@me'], 'test', 'Special characters in targeting key handled');
-	assert.deepEqual(result.targeting, "par@ms$'", 'Special characters in targeting value handled');
-});
-
 QUnit.test('OADS_VERSION is set to value set in config', function(assert) {
 	const getVersion = this.stub(this.ads.utils, 'getVersion');
 	getVersion.returns('x.y.z');
@@ -157,7 +127,12 @@ QUnit.test('Responsive targeting on non-responsive page', function(assert) {
 });
 
 QUnit.test('debug starts logging data', function(assert) {
-	this.ads.init({ dfp_targeting: { data: { allOfThe: 'targeting data' } } });
+	const options = {
+		targeting: {
+			some: 'test',
+		}
+	};
+	this.ads.init(options);
 	const start = this.spy(this.utils.log, 'start');
 
 	this.ads.targeting.debug();

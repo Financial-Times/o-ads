@@ -4,8 +4,6 @@
 import config, { init, clear } from './src/js/config';
 import slots from './src/js/slots';
 import gpt from './src/js/ad-servers/gpt';
-import api from './src/js/data-providers/api';
-import moat from './src/js/data-providers/moat';
 import targeting from './src/js/targeting';
 import utils from './src/js/utils';
 
@@ -24,8 +22,6 @@ config.clear = clear;
 Ads.prototype.config = config;
 Ads.prototype.slots = slots;
 Ads.prototype.gpt = gpt;
-Ads.prototype.api = api;
-Ads.prototype.moat = moat;
 Ads.prototype.targeting = targeting;
 Ads.prototype.utils = utils;
 
@@ -58,48 +54,19 @@ Ads.prototype.init = function(options) {
 		this.utils.broadcast('consentProgrammatic');
 	}
 
-	const targetingApi = this.config().targetingApi;
-	const validateAdsTraffic = this.config().validateAdsTraffic;
-
 	this.utils.broadcast('initialising');
 
-	// Don't need to fetch anything if no targeting or validateAdsTraffic configured.
-	if(!targetingApi && !validateAdsTraffic) {
-		return Promise.resolve(this.initLibrary());
-	}
+	this.targeting.add(this.config().targeting);
 
-	const targetingPromise = targetingApi ? this.api.init(targetingApi, this) : Promise.resolve();
-	const validateAdsTrafficPromise = validateAdsTraffic ? this.moat.init() : Promise.resolve();
-
-	/**
-	Need to wait for the moat script to load to validate ads
-	and the targeting API to return before we initialise the library.
-	The targeting values are set on the instance of this.api, therefore
-	response is irrelevant
-	*/
-	return Promise.all([targetingPromise, validateAdsTrafficPromise])
-		.then(() => this.initLibrary())
-		.catch((e) => {
-			// If anything fails, default to load ads without targeting
-			this.utils.log.error(e);
-			this.utils.log.warn('There was an error with the targeting API or the Moat invalid traffic script. Loading the o-ads library anyway, but the ads may not work as expected...');
-			return this.initLibrary();
-		});
+	return Promise.resolve(this.initLibrary());
 };
 
-Ads.prototype.updateContext = function(options) {
-	this.config(options);
-
-	if(options.targetingApi) {
-		this.api.reset();
-		return this.api.init(options.targetingApi, this)
-			.then(() => {
-				this.gpt.updatePageTargeting(this.targeting.get());
-			});
-	} else {
-		return Promise.resolve();
-	}
-
+/**
+ * Update page level targeting data in o-ads and GPT
+ */
+Ads.prototype.updateTargeting = function(data) {
+	this.targeting.add(data);
+	this.gpt.updatePageTargeting(this.targeting.get());
 };
 
 Ads.prototype.initLibrary = function() {
