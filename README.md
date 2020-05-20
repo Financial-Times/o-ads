@@ -118,6 +118,7 @@ These are all the valid configuration options that can be used to set up o-ads:
 - `responsive` *(optional)* `<Object>` - Overwrite the default breakpoints. See [breakpoints](#breakpoints)
 - `slots` *(deprecated)* `<Object>` - Old way of defining slots. See [Defining an Ad Slots]()
 - `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
+- `displayLabelWithBorders` *(optional)* `<Boolean>` - Display ad slots with borders on the top and bottom
 
 # Define Ad Slots
 
