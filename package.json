@@ -1,13 +1,14 @@
 {
   "name": "o-ads",
-  "version": "14.1.0",
+  "version": "18.0.0",
   "description": "Origami Advertising Client-side Library",
   "main": "main.js",
   "scripts": {
     "demo-server": "obt demo --runServer --port=3002",
     "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
     "test": "npm run test-unit",
-    "test-unit": "karma start karma.conf.js --single-run && jest",
+    "test-coverage": "karma start karma.conf.js --single-run",
+    "test-unit": "jest && npm run test-coverage",
     "test-cy:run": "cypress run -r spec --record false",
     "test-cy:open": "cypress open",
     "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
@@ -40,6 +41,9 @@
     "@cypress/webpack-preprocessor": "^2.0.0",
     "@financial-times/secret-squirrel": "^2.12.4",
     "@testing-library/jest-dom": "^4.1.0",
+    "@types/doubleclick-gpt": "2019041801.0.2",
+    "@types/jest": "25.2.3",
+    "@types/jsdom": "16.2.3",
     "babel-jest": "^24.8.0",
     "babel-plugin-rewire": "^1.2.0",
     "bower-resolve-webpack-plugin": "^1.0.5",
@@ -57,6 +61,8 @@
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jest": "^24.8.0",
+    "jest-environment-jsdom": "25.1.0",
+    "jest-environment-jsdom-global": "1.2.1",
     "jest-puppeteer": "^4.3.0",
     "karma": "^4.1.0",
     "karma-chrome-launcher": "^0.2.2",
@@ -66,7 +72,7 @@
     "karma-qunit": "^0.1.8",
     "karma-webpack": "^3.0.5",
     "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
-    "origami-build-tools": "^8.0.0",
+    "origami-build-tools": "^9.0.13",
     "pre-git": "^3.17.1",
     "puppeteer": "^1.19.0",
     "qunitjs": "^1.20.0",
@@ -88,6 +94,7 @@
   "config": {
     "pre-git": {
       "pre-commit": [
+        "npx obt verify",
         "node_modules/.bin/secret-squirrel"
       ],
       "pre-push": [

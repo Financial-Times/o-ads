@@ -114,29 +114,6 @@ Geographic targeting is provided by DFP based on the IP address that the ad requ
 * **Demographic**
 Demographic data is provided by the [Ads API](https://github.com/Financial-Times/ads-api). The `https://ads-api.ft.com/v1/user` endpoint provides a list of key-values including industry/job positions provided by users when registering, demographic/behavioural models from HUI/Data Warehouse, user IDs etc.
 
-* **Behavioural**
-Behavioural targeting at the FT is provided by a third party called [Krux](http://www.krux.com/). To enable Krux for your product, you need a Krux ID, which can be provided by AdOps.
-
-This can then be passed as an option when initialising o-ads:
-
-```js
-const config = {
-	...otherConfigSettings
-	krux: {
-		id: '1234',
-		attributes: {
-			page: {
-				key: 'value' // these are used by Krux to collect behavioural data about the user and their context. Some of these can be provided by the two ads-api responses, showcased below.
-			},
-			user: {
-				key: 'value'
-			}
-		}
-	}
-}
-oAds.init(config);
-```
-
 * **Contextual**
 The [Ads API](https://github.com/Financial-Times/ads-api) also has endpoints that give targeting information relevant to the context the user is on. This context can be a content UUID, or the UUID of a concept/thing recognised by the content API. It's powered by both metadata from the Content API and a third party called [AdmantX](http://www.admantx.com/).
 
@@ -163,9 +140,6 @@ const apiUrlRoot = ('withCredentials' in new XMLHttpRequest()) ? 'https://ads-ap
 			usePageZone: true //overwrites the gpt zone - this option is false by default
 		},
 		dfp_targeting: 'some_other_key=value' // TODO: pass an object here
-		krux: {
-			id: '1234', //get this from AdOps
-		},
 		gpt: {
 			network: 5887,
 			site: 'ft.com',
@@ -189,7 +163,6 @@ For this use case, a method is provided, which will:
 
 * update the configuration with any new configuration
 * Re-make any API calls (if new URLs are passed) and reset any leftover targeting from old API calls (NOTE: this will unset ALL targeting, even if you're not passing a URL for one of them).
-* Trigger a new Krux pixel
 
 `oAds.updateContext(config, isNewPageView)`
 

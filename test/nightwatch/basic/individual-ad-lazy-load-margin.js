@@ -1,4 +1,4 @@
-const wait = 8000;
+const wait = 18000;
 
 module.exports = {
 
