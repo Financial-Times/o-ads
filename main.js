@@ -32,10 +32,8 @@ Ads.prototype.utils = utils;
 Ads.prototype.init = function(options) {
 	options = options || {};
 	this.config.init();
-	const configOptions = Object.assign(options, {
-		nonPersonalized : !options.disableConsentCookie,
-	});
-	this.config(configOptions);
+
+	this.config(options);
 
 	if (options.disableConsentCookie) {
 		this.consents = {
