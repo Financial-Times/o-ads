@@ -12,6 +12,11 @@ import utils from '../utils';
 import targeting from '../targeting';
 import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
 
+const DEFAULT_LAZY_LOAD = {
+	fetchMarginPercent: 500,
+	renderMarginPercent: 200,
+	mobileScaling: 2.0
+};
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
 /*
@@ -78,6 +83,8 @@ function setup(gptConfig) {
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
+	enableLazyLoad(gptConfig);
+	enableSingleRequest(gptConfig);
 
 	const url = stripUrlParams({
 		href: window.location.href,
@@ -89,6 +96,28 @@ function setup(gptConfig) {
 	googletag.pubads().setRequestNonPersonalizedAds(nonPersonalized);
 
 	return true;
+}
+
+/**
+ * Enables GPT's Single Request Mode (SRA) for requesting multiple ads at the same time.
+ */
+function enableSingleRequest(gptConfig) {
+	if (gptConfig.enableSingleRequest) {
+		window.googletag.pubads().enableSingleRequest();
+	}
+}
+
+/**
+ * Enables GPT's Lazy Loading for serving ads only when it's necessary.
+ */
+function enableLazyLoad(gptConfig) {
+	const lazyLoadConf = gptConfig.enableLazyLoad;
+
+	if (lazyLoadConf) {
+		window.googletag.pubads().enableLazyLoad(
+			Object.assign({}, lazyLoadConf, DEFAULT_LAZY_LOAD)
+		);
+	}
 }
 
 /*
