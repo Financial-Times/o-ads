@@ -1,0 +1,36 @@
+<script data-o-ads-config type="application/json">
+	{
+		"gpt": {
+			"network": {{network}},
+			"site": "{{site}}",
+      "enableLazyLoad": {
+				"fetchMarginPercent": 600,
+				"renderMarginPercent": 300
+			},
+			"enableSingleRequest": true
+		}
+	}
+</script>
+
+<div id="div-1">
+  <div data-o-ads-name="{{name}}" data-o-ads-formats="{{formats}}" style="position:absolute; top: {{top}}px;"></div>
+</div>
+
+<!-- 3 viewport tall div to place next slot 3 viewports away. -->
+<div style="height:300vh"></div>
+<div id="div-2">
+	<div id="example-ad" data-o-ads-name="mid" data-o-ads-targeting="pos=mid" data-o-ads-formats="MediumRectangle"></div>
+</div>
+
+<!-- 3 viewport tall div to place next slot 6 viewports away. -->
+<div style="height:300vh"></div>
+<div id="div-2">
+	<div id="example-ad" data-o-ads-name="mid2" data-o-ads-targeting="pos=mid" data-o-ads-formats="MediumRectangle"></div>
+</div>
+
+<!-- 6 viewport tall div to place next slot 12 viewports away. -->
+<div style="height:600vh"></div>
+<div id="div-3">
+	<div id="example-ad" data-o-ads-name="bill" data-o-ads-targeting="pos=mid" data-o-ads-formats="Billboard"></div>
+</div>
+
