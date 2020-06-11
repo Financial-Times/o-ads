@@ -12,7 +12,7 @@ import utils from '../utils';
 import targeting from '../targeting';
 import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
 
-const DEFAULT_LAZY_LOAD = {
+export const DEFAULT_LAZY_LOAD = {
 	fetchMarginPercent: 500,
 	renderMarginPercent: 200,
 	mobileScaling: 2.0
