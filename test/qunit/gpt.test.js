@@ -150,6 +150,39 @@ QUnit.test('default to async rendering', function(assert) {
 	assert.ok(googletag.pubads().enableAsyncRendering.calledOnce, 'async rendering has been enabled by default');
 });
 
+QUnit.test('enable gpt lazy loading with default params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: true } });
+	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
+	assert.ok(
+		googletag.pubads().enableLazyLoad.calledWithExactly({
+			fetchMarginPercent: 500,
+			renderMarginPercent: 200,
+			mobileScaling: 2.0
+		}),
+		'call gpt lazy load with default parameters'
+	);
+});
+
+QUnit.test('enable gpt lazy loading with custom params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: {
+		fetchMarginPercent: 300
+	} } });
+	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
+	assert.ok(
+		googletag.pubads().enableLazyLoad.calledWithExactly({
+			fetchMarginPercent: 300,
+			renderMarginPercent: 200,
+			mobileScaling: 2.0
+		}),
+		'call gpt lazy load with custom parameters'
+	);
+});
+
+QUnit.test('disable gpt lazy load explicitly', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: false } });
+	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
+});
+
 QUnit.test('enables companion ads', function(assert) {
 	this.ads.init({ gpt: { companions: true } });
 	assert.ok(googletag.pubads().disableInitialLoad.calledOnce, 'disabled the initial load');
