@@ -83,8 +83,8 @@ function setup(gptConfig) {
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
-	enableLazyLoad(gptConfig);
 	enableSingleRequest(gptConfig);
+	enableLazyLoad(gptConfig);
 
 	const url = stripUrlParams({
 		href: window.location.href,
@@ -114,9 +114,8 @@ function enableLazyLoad(gptConfig) {
 	const lazyLoadConf = gptConfig.enableLazyLoad;
 
 	if (lazyLoadConf) {
-		window.googletag.pubads().enableLazyLoad(
-			Object.assign({}, lazyLoadConf, DEFAULT_LAZY_LOAD)
-		);
+		const opts = Object.assign({}, DEFAULT_LAZY_LOAD, lazyLoadConf);
+		window.googletag.pubads().enableLazyLoad(opts);
 	}
 }
 
