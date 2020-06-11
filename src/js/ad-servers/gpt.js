@@ -83,7 +83,6 @@ function setup(gptConfig) {
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
-	enableSingleRequest(gptConfig);
 	enableLazyLoad(gptConfig);
 
 	const url = stripUrlParams({
@@ -96,15 +95,6 @@ function setup(gptConfig) {
 	googletag.pubads().setRequestNonPersonalizedAds(nonPersonalized);
 
 	return true;
-}
-
-/**
- * Enables GPT's Single Request Mode (SRA) for requesting multiple ads at the same time.
- */
-function enableSingleRequest(gptConfig) {
-	if (gptConfig.enableSingleRequest) {
-		window.googletag.pubads().enableSingleRequest();
-	}
 }
 
 /**
