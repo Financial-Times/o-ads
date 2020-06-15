@@ -92,6 +92,15 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `gpt.network` **(required)** `<Number>`
   - `gpt.site` **(required)** `<String>`
   - `gpt.zone` *(optional)* `<String>`
+  - `gpt.rendering` *(optional)* `<String> "sync" | "sra" | "async" (default)` - GPT Rendering Mode Sync, SRA or Async 
+  - `gpt.enableLazyLoad` *(optional)* `<Object>` - GPT Lazy Load, where configuration parameters allow customization of lazy loading behaviour.
+
+    Default settings are
+      ```
+        fetchMarginPercent: 500, // minimum distance from the current viewport a slot must be before we fetch the ad as a percentage of viewport size. 0 means "when the slot enters the viewport", 100 means "when the ad is 1 viewport away"
+        renderMarginPercent: 200, // minimum distance from the current viewport a slot must be before we render an ad. This allows for prefetching the ad, but waiting to render and download other subresources. The value works just like fetchMarginPercent as a percentage of viewport.
+        mobileScaling: 2.0 // a multiplier applied to margins on mobile devices. This allows varying margins on mobile vs. desktop. For example, a mobileScaling of 2.0 will multiply all margins by 2 on mobile devices, increasing the minimum distance a slot can be before fetching and rendering.
+      ```
 - `behavioralMeta` *(deprecated)* `<Object>` - Behavioural data set by the ads-api. **DO NOT USE**
 - `canonical` *(deprecated)* `<String>` - Overwrite the GPT *page_url* parameter **DO NOT USE**
 - `collapseEmpty` *(optional)* `<String> "before" | "after" | "never"` - How should the slot be collapsed if there is no ad to be shown
