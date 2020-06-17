@@ -2,6 +2,7 @@
 /* global jsdom */
 
 import gpt, { DEFAULT_LAZY_LOAD } from '../../src/js/ad-servers/gpt';
+import log from '../../src/js/utils/log';
 import GoogleTagMock from './testUtils/GoogleTagMock';
 
 jest.mock('./testUtils/GoogleTagMock');
@@ -38,7 +39,7 @@ describe('setup', () => {
 				.not.toBeCalled();
 		});
 
-		test('should enable lazy load with default parameters', () => {
+		test('should enable lazy load with default parameters, if lazy loadLoadConf is true', () => {
 			gpt.setup({
 				enableLazyLoad: true,
 			});
@@ -47,7 +48,7 @@ describe('setup', () => {
 				.toBeCalledWith(DEFAULT_LAZY_LOAD);
 		});
 
-		test('should enable lazy load with custom parameters', () => {
+		test('should enable lazy load with custom parameters, if lazyLoadConf is a config object', () => {
 			const gptConfig = {
 				enableLazyLoad: {
 					fetchMarginPercent: 300,
@@ -60,6 +61,19 @@ describe('setup', () => {
 				.toBeCalledWith(
 					Object.assign({}, DEFAULT_LAZY_LOAD, gptConfig.enableLazyLoad)
 				);
+		});
+
+		test('should not enable lazy load, if lazyLoadCong is not a boolean or an object', () => {
+			const enableLazyLoad = 'what';
+			const spyConsoleWarn = jest.spyOn(log, 'warn');
+
+			gpt.setup({ enableLazyLoad });
+
+			expect(spyConsoleWarn).toBeCalledWith('lazyLoadConf must be either an object or a boolean', enableLazyLoad);
+			expect(global.googletag.pubads().enableLazyLoad)
+				.not.toBeCalled();
+
+			spyConsoleWarn.mockReset();
 		});
 
 	});
