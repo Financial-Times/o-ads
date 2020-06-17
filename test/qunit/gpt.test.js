@@ -177,6 +177,11 @@ QUnit.test('disable gpt lazy load explicitly', function(assert) {
 	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
 });
 
+QUnit.test('not enabled gpt lazy load with invalid custom params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: 'hello' } });
+	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
+});
+
 QUnit.test('enables companion ads', function(assert) {
 	this.ads.init({ gpt: { companions: true } });
 	assert.ok(googletag.pubads().disableInitialLoad.calledOnce, 'disabled the initial load');

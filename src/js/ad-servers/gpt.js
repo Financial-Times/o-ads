@@ -83,7 +83,7 @@ function setup(gptConfig) {
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
-	enableLazyLoad(gptConfig);
+	enableLazyLoad(gptConfig.enableLazyLoad);
 
 	const url = stripUrlParams({
 		href: window.location.href,
@@ -99,13 +99,34 @@ function setup(gptConfig) {
 
 /**
  * Enables GPT's Lazy Loading for serving ads only when it's necessary.
+ * 		The lazy load config ooptions are:
+ *
+ * 			- fetchMarginPercent,		minimum distance from the current viewport a slot
+ * 					must be before we fetch the ad as a percentage of viewport size.
+ * 					0 means "when the slot enters the viewport",
+ * 					100 means "when the ad is 1 viewport away"
+ *
+ * 			- renderMarginPercent,	minimum distance from the current viewport a slot
+ * 					must be before we render an ad.
+ * 					This allows for prefetching the ad, but waiting to render and
+ * 					download other subresources. The value works just like
+ * 					fetchMarginPercent as a percentage of viewport.
+ *
+ * 			- mobileScaling,				a multiplier applied to margins on mobile devices.
+ * 					This allows varying margins on mobile vs. desktop. For example,
+ * 					a mobileScaling of 2.0 will multiply all margins by 2 on mobile
+ * 					devices, increasing the minimum distance a slot can be before
+ * 					fetching and rendering.
+ *
+ * @param {object|boolean} lazyLoadConf The lazy load config object or a boolean.
+ * @returns {boolean} true if the object is of type Array, otherwise false
  */
-function enableLazyLoad(gptConfig) {
-	const lazyLoadConf = gptConfig.enableLazyLoad;
-
-	if (lazyLoadConf) {
-		const opts = Object.assign({}, DEFAULT_LAZY_LOAD, lazyLoadConf);
+function enableLazyLoad(lazyLoadConf) {
+	if (lazyLoadConf && (typeof lazyLoadConf === 'object' || typeof lazyLoadConf === 'boolean')) {
+		const opts = Object.assign({}, DEFAULT_LAZY_LOAD, typeof lazyLoadConf === 'object' ? lazyLoadConf : {});
 		window.googletag.pubads().enableLazyLoad(opts);
+	} else {
+		utils.log.warn('lazyLoadConf must be either an object or a boolean', lazyLoadConf);
 	}
 }
 
