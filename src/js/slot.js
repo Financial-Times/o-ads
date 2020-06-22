@@ -144,7 +144,9 @@ function Slot(container, screensize, initLazyLoading) {
 
 	// init slot dom structure
 	this.outer = this.addContainer(container, {
-		'class': 'o-ads__outer'
+		'class': 'o-ads__outer',
+		'aria-hidden': 'true',
+		'tabindex': '-1'
 	});
 	this.inner = this.addContainer(this.outer, {
 		'class': 'o-ads__inner'
