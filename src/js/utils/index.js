@@ -2,7 +2,7 @@ import { on, off, once, broadcast, perfMark, buildPerfmarkSuffix } from './event
 import { setupMetrics, clearPerfMarks, markPageChange } from './metrics';
 import messenger from './messenger';
 import responsive, { getCurrent } from './responsive';
-import log, { isOn, start, end, info, warn, error, table, attributeTable} from './log';
+import log, { isOn, start, end, info, warn, error, table, attributeTable } from './log';
 import version from '../version';
 
 /**
@@ -22,8 +22,6 @@ log.error = error;
 log.table = table;
 log.attributeTable = attributeTable;
 
-
-
 /**
  * Uses object prototype toString method to get at the type of object we are dealing,
  * IE returns [object Object] for null and undefined so we need to filter those
@@ -33,66 +31,60 @@ log.attributeTable = attributeTable;
  * @returns The type of the object e.g Array, String, Object
  */
 function is(object) {
-	const type = Object.prototype.toString.call(object)
-		.match(/^\[object\s(.*)\]$/)[1];
+	const type = Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
 
 	if (object === null) {
-		return "Null";
+		return 'Null';
 	} else if (object === undefined) {
-		return "Undefined";
+		return 'Undefined';
 	} else {
 		return type;
 	}
 }
-
 
 /**
  * Test if an object is an Array
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is of type Array, otherwise false
  */
-export const isArray = function(obj) {
-	return is(obj) === "Array";
+export const isArray = function (obj) {
+	return is(obj) === 'Array';
 };
-
 
 /**
  * Test if an object is a String
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is of type String, otherwise false
  */
-export const isString = function(obj) {
-	return is(obj) === "String";
+export const isString = function (obj) {
+	return is(obj) === 'String';
 };
-
 
 /**
  * Test if an object is a Function
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is of type Function, otherwise false
  */
-export const isFunction = function(obj) {
-	return is(obj) === "Function";
+export const isFunction = function (obj) {
+	return is(obj) === 'Function';
 };
-
 
 /**
  * Test if an object is a Storage object
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is of type Storage, otherwise false
  */
-export const isStorage = function(obj) {
-	return is(obj) === "Storage";
+export const isStorage = function (obj) {
+	return is(obj) === 'Storage';
 };
-
 
 /**
  * Test if an object is an Object
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is of type Object, otherwise false
  */
-export const isObject = function(obj) {
-	return is(obj) === "Object";
+export const isObject = function (obj) {
+	return is(obj) === 'Object';
 };
 
 /**
@@ -100,7 +92,7 @@ export const isObject = function(obj) {
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is the window obj, otherwise false
  */
-export const isWindow = function(obj) {
+export const isWindow = function (obj) {
 	return obj && obj !== null && obj === window;
 };
 
@@ -111,7 +103,7 @@ export const isWindow = function(obj) {
  * @param {object} obj The object to be tested
  * @returns {boolean} true if the object is plain false otherwise
  */
-export const isPlainObject = function(obj) {
+export const isPlainObject = function (obj) {
 	const hop = Object.prototype.hasOwnProperty;
 
 	// Must be an Object.
@@ -135,7 +127,8 @@ export const isPlainObject = function(obj) {
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
 	let key;
-	for (key in obj) {} //eslint-disable-line no-empty
+	for (key in obj) {
+	} //eslint-disable-line no-empty
 
 	return key === undefined || hop.call(obj, key);
 };
@@ -145,11 +138,11 @@ export const isPlainObject = function(obj) {
  * @param {object} str The object to be tested
  * @returns {boolean} true if the object is a string with a length greater than 0
  */
-export const isNonEmptyString = function(str) {
+export const isNonEmptyString = function (str) {
 	return isString(str) && Boolean(str.length);
 };
 
-export const isElement = function(element) {
+export const isElement = function (element) {
 	return element && element.nodeType === 1 && element.tagName || false;
 };
 
@@ -177,7 +170,7 @@ export function extend() {
 
 	// Handle case when target is a string or something (possible in deep copy)
 	/* istanbul ignore else  */
-	if (typeof target !== "object" && !isFunction(target)) {
+	if (typeof target !== 'object' && !isFunction(target)) {
 		target = {};
 	}
 
@@ -193,7 +186,7 @@ export function extend() {
 			// Extend the base object
 			for (const name in options) {
 				/* istanbul ignore next */
-				if(options.hasOwnProperty(name)) {
+				if (options.hasOwnProperty(name)) {
 					src = target[name];
 					copy = options[name];
 
@@ -237,7 +230,7 @@ export function extend() {
  * @return {object}
  *
  */
-export const hash = function(str, delimiter, pairing) {
+export const hash = function (str, delimiter, pairing) {
 	let pair;
 	let value;
 	const hashObj = {};
@@ -266,7 +259,7 @@ export const hash = function(str, delimiter, pairing) {
  * @param {function} errorcb A function to run if the script fails to load
  * @returns {HTMLElement} the created script tag
  */
-export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) {
+export const attach = function (scriptUrl, async, callback, errorcb, autoRemove) {
 	const tag = document.createElement('script');
 	const node = document.getElementsByTagName('script')[0];
 	let hasRun = false;
@@ -277,7 +270,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
 			callback.call();
 			hasRun = true;
 			/* istanbul ignore else  */
-			if(autoRemove) {
+			if (autoRemove) {
 				tag.parentElement.removeChild(tag);
 			}
 		}
@@ -293,13 +286,13 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
 	if (isFunction(callback)) {
 		/* istanbul ignore if - legacy IE code, won't test */
 		if (hop.call(tag, 'onreadystatechange')) {
-			tag.onreadystatechange = function() {
-				if (tag.readyState === "loaded") {
+			tag.onreadystatechange = function () {
+				if (tag.readyState === 'loaded') {
 					processCallback(callback);
 				}
 			};
 		} else {
-			tag.onload = function() {
+			tag.onload = function () {
 				processCallback(callback);
 			};
 		}
@@ -307,7 +300,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
 
 	/* istanbul ignore else  */
 	if (isFunction(errorcb)) {
-		tag.onerror = function() {
+		tag.onerror = function () {
 			processCallback(errorcb);
 		};
 	}
@@ -322,7 +315,7 @@ export const attach = function(scriptUrl, async, callback, errorcb, autoRemove) 
  * @returns {string} document.referrer
  */
 /* istanbul ignore next - cannot reliably test value of referer */
-export const getReferrer = function() {
+export const getReferrer = function () {
 	return document.referrer || '';
 };
 
@@ -331,8 +324,8 @@ export const getReferrer = function() {
  * @param {string} string the string to parse
  * @returns {string}
  */
-export const dehyphenise = function(string) {
-	return string.replace(/(-)([a-z])/g, function(match, hyphen, letter) {
+export const dehyphenise = function (string) {
+	return string.replace(/(-)([a-z])/g, function (match, hyphen, letter) {
 		return letter.toUpperCase();
 	});
 };
@@ -342,7 +335,7 @@ export const dehyphenise = function(string) {
  * @param {string|} name the name of the attribute to parse
  * @returns {string}
  */
-export const parseAttributeName = function(attribute) {
+export const parseAttributeName = function (attribute) {
 	const name = isString(attribute) ? attribute : attribute.name;
 	return dehyphenise(name.replace(/(data-)?o-ads-/, ''));
 };
@@ -353,7 +346,7 @@ export const parseAttributeName = function(attribute) {
  * @returns {string}
  */
 /* istanbul ignore next - cannot reliably test value of location */
-export const getLocation = function() {
+export const getLocation = function () {
 	return document.location.href || '';
 };
 
@@ -363,7 +356,7 @@ export const getLocation = function() {
  * This method enables us to mock the search string in our tests reliably and doesn't really serve any other purpose
  * @returns {string}
  */
-export const getQueryString = function() {
+export const getQueryString = function () {
 	return document.location.search.substring(1) || '';
 };
 
@@ -373,30 +366,34 @@ export const getQueryString = function() {
  * @param url
  * @returns {string | null}
  */
-export const getQueryParamByName = function(name, url) {
+export const getQueryParamByName = function (name, url) {
 	url = url || window.location.href;
-	name = name.replace(/[\[\]]/g, "\\$&");
-	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+	name = name.replace(/[\[\]]/g, '\\$&');
+	const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
 	const results = regex.exec(url);
-	if (!results) {return null;}
-	if (!results[2]) {return '';}
-	return decodeURIComponent(results[2].replace(/\+/g, " "));
+	if (!results) {
+		return null;
+	}
+	if (!results[2]) {
+		return '';
+	}
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
 
 /**
  * returns a timestamp of the current date/time in the format YYYYMMDDHHMMSS
  * @returns {string}
  */
-export const getTimestamp = function() {
+export const getTimestamp = function () {
 	const now = new Date();
 	return [
 		now.getFullYear(),
-		`0${(now.getMonth() + 1)}`.slice(-2),
+		`0${now.getMonth() + 1}`.slice(-2),
 		`0${now.getDate()}`.slice(-2),
 		`0${now.getHours()}`.slice(-2),
 		`0${now.getMinutes()}`.slice(-2),
-		`0${now.getSeconds()}`.slice(-2)
-	].join("");
+		`0${now.getSeconds()}`.slice(-2),
+	].join('');
 };
 
 /**
@@ -406,7 +403,7 @@ export const getTimestamp = function() {
  * @param {window}  a window object
  * @returns {String|Boolean}
  */
-export const iframeToSlotName = function(iframeWindow) {
+export const iframeToSlotName = function (iframeWindow) {
 	// capture all iframes in the page in a live node list
 	const iframes = document.getElementsByTagName('iframe');
 	let slotName;
@@ -445,7 +442,7 @@ export const buildObjectFromArray = function buildObjectFromArray(targetObject) 
 	}, {});
 };
 
-export const cookie = function(name) {
+export const cookie = function (name) {
 	const val = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return val ? val.pop() : null;
 };
@@ -494,5 +491,5 @@ export default {
 	markPageChange,
 	inSample,
 	perfMark,
-	buildPerfmarkSuffix
+	buildPerfmarkSuffix,
 };
