@@ -3,19 +3,15 @@ import utils from './utils';
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 
-Targeting.prototype.get = function() {
+Targeting.prototype.get = function () {
 	const methods = {
 		socialReferrer: this.getSocialReferrer,
 		timestamp: this.timestamp,
-		responsive: this.responsive
+		responsive: this.responsive,
 	};
-	utils.extend(
-		parameters,
-		this.socialFlow(),
-		this.getVersion()
-	);
+	utils.extend(parameters, this.socialFlow(), this.getVersion());
 	for (const item in methods) {
-	/* istanbul ignore else  */
+		/* istanbul ignore else  */
 		if (methods.hasOwnProperty(item)) {
 			utils.extend(parameters, methods[item]());
 		}
@@ -23,26 +19,25 @@ Targeting.prototype.get = function() {
 	return parameters;
 };
 
-Targeting.prototype.add = function(obj) {
+Targeting.prototype.add = function (obj) {
 	/* istanbul ignore else  */
 	if (utils.isPlainObject(obj)) {
 		utils.extend(parameters, obj);
 	}
 };
 
-Targeting.prototype.remove = function(key) {
+Targeting.prototype.remove = function (key) {
 	/* istanbul ignore else */
-	if(parameters[key]) {
+	if (parameters[key]) {
 		delete parameters[key];
 	}
 };
 
-Targeting.prototype.clear = function() {
+Targeting.prototype.clear = function () {
 	parameters = {};
 };
 
-
-Targeting.prototype.getVersion = function() {
+Targeting.prototype.getVersion = function () {
 	if (config('passOAdsVersion')) {
 		return {
 			OADS_VERSION: utils.getVersion(),
@@ -54,16 +49,16 @@ Targeting.prototype.getVersion = function() {
  * If there is a query parameter called socialflow=xxx, we need to add it
  * as a tag
  */
-Targeting.prototype.socialFlow = function() {
+Targeting.prototype.socialFlow = function () {
 	const sf = utils.getQueryParamByName('socialflow');
-	if(sf) {
+	if (sf) {
 		return {
-			socialflow: sf
+			socialflow: sf,
 		};
 	}
 };
 
-Targeting.prototype.getSocialReferrer = function() {
+Targeting.prototype.getSocialReferrer = function () {
 	let codedValue;
 	const referrer = utils.getReferrer();
 	// TODO: add on.ft.com
@@ -73,7 +68,7 @@ Targeting.prototype.getSocialReferrer = function() {
 		'linkedin.com': 'lin',
 		'drudgereport.com': 'dru',
 		'dianomi.com': 'dia',
-		'google': 'goo'
+		google: 'goo',
 	};
 
 	Object.keys(lookup).forEach((url) => {
@@ -86,26 +81,27 @@ Targeting.prototype.getSocialReferrer = function() {
 	return codedValue && { socref: codedValue } || {};
 };
 
-Targeting.prototype.searchTerm = function() {
+Targeting.prototype.searchTerm = function () {
 	const qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
 	let keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
 	/* istanbul ignore else	*/
 	if (keywords && keywords !== '') {
-		keywords = unescape(keywords).toLowerCase()
+		keywords = unescape(keywords)
+			.toLowerCase()
 			.replace(/[';\^\+]/g, ' ')
 			.replace(/\s+/g, ' ')
 			.trim();
 	}
 
-	return {kw: keywords};
+	return { kw: keywords };
 };
 
-Targeting.prototype.timestamp = function() {
+Targeting.prototype.timestamp = function () {
 	return { ts: utils.getTimestamp() };
 };
 
-Targeting.prototype.responsive = function() {
+Targeting.prototype.responsive = function () {
 	return config('responsive') ? { res: utils.responsive.getCurrent() } : {};
 };
 
@@ -119,6 +115,5 @@ Targeting.prototype.debug = function () {
 		log.end();
 	}
 };
-
 
 export default new Targeting();

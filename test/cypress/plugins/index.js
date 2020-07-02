@@ -16,7 +16,7 @@ const webpack = require('@cypress/webpack-preprocessor');
 module.exports = (on) => {
 	const options = {
 		webpackOptions: require('origami-build-tools/config/webpack.config.dev'),
-		watchOptions: {}
+		watchOptions: {},
 	};
-  	on('file:preprocessor', webpack(options));
+	on('file:preprocessor', webpack(options));
 };
