@@ -9,9 +9,9 @@ const pubadsMock = {
 };
 
 const googleTagMock = jest.fn().mockImplementation(() => ({
- 	cmd: { push: jest.fn() },
- 	enableServices: jest.fn(),
- 	pubads: () => pubadsMock,
+	cmd: { push: jest.fn() },
+	enableServices: jest.fn(),
+	pubads: () => pubadsMock,
 }));
 
 export default googleTagMock;
