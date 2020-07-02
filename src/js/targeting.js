@@ -72,7 +72,7 @@ Targeting.prototype.getSocialReferrer = function () {
 	};
 
 	Object.keys(lookup).forEach((url) => {
-		const refererRegex = new RegExp(`^http(|s):\/\/(www.)*(${url})`);
+		const refererRegex = new RegExp(`^http(|s)://(www.)*(${url})`);
 		/* istanbul ignore else  */
 		if (refererRegex.test(referrer)) {
 			codedValue = lookup[url];
@@ -82,14 +82,14 @@ Targeting.prototype.getSocialReferrer = function () {
 };
 
 Targeting.prototype.searchTerm = function () {
-	const qs = utils.hash(utils.getQueryString(), /\&|\;/, '=');
+	const qs = utils.hash(utils.getQueryString(), /&|;/, '=');
 	let keywords = qs.q || qs.s || qs.query || qs.queryText || qs.searchField || undefined;
 
 	/* istanbul ignore else	*/
 	if (keywords && keywords !== '') {
 		keywords = unescape(keywords)
 			.toLowerCase()
-			.replace(/[';\^\+]/g, ' ')
+			.replace(/[';^+]/g, ' ')
 			.replace(/\s+/g, ' ')
 			.trim();
 	}
