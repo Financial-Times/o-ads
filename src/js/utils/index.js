@@ -368,7 +368,7 @@ export const getQueryString = function () {
  */
 export const getQueryParamByName = function (name, url) {
 	url = url || window.location.href;
-	name = name.replace(/[\[\]]/g, '\\$&');
+	name = name.replace(/[[\]]/g, '\\$&');
 	const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
 	const results = regex.exec(url);
 	if (!results) {
