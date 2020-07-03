@@ -10,7 +10,6 @@
 // 	return options;
 // }
 
-const path = require('path');
 const BowerResolvePlugin = require('bower-resolve-webpack-plugin');
 
 let options = {
@@ -60,46 +59,6 @@ if (process.env.CI === 'true') {
 	options.autoWatch = false;
 } else {
 	//options for local go here
-}
-
-if (process.env.COVERAGE) {
-	console.log('running coverage report');
-	options.files.push({ pattern: 'reports/**', included: false, watched: false });
-	options.reporters.push('coverage-istanbul');
-	options.coverageIstanbulReporter = {
-		dir: 'reports/coverage/',
-		reports: ['html', 'text', 'json'],
-		thresholds: {
-			emitWarning: false,
-			global: {
-				statements: 98,
-				branches: 95,
-				functions: 81,
-				lines: 98
-			},
-			each: {
-				statements: 75,
-				branches: 70,
-				functions: 81,
-				lines: 75
-			}
-		},
-		fixWebpackSourcePaths: true
-	};
-	options.webpack.module = {
-		rules: [
-			// instrument only testing sources with Istanbul
-			{
-				test: /\.js$/,
-				use: {
-					loader: 'istanbul-instrumenter-loader',
-					options: { esModules: true }
-				},
-				enforce: 'post',
-				include: path.resolve('src/js/'),
-			}
-		]
-	};
 }
 
 if (process.env.CIRCLECI) { } // eslint-disable-line no-empty

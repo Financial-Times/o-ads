@@ -5,10 +5,12 @@ jobs:
       - image: circleci/node:10-browsers
     steps:
       - checkout
+      # Install dependencies for cypress -- https://docs.cypress.io/guides/guides/continuous-integration.html#Ubuntu-Debian
+      - run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       - run: npm config set prefix "$HOME/.local"
-      - run: npm i -g origami-build-tools@^8
+      - run: npm i -g origami-build-tools@^9
       - run: $HOME/.local/bin/obt install
-      - run: $HOME/.local/bin/obt build --production
+      - run: $HOME/.local/bin/obt build
       - run: $HOME/.local/bin/obt verify
       - run: npm run checksizes
       # `obt test` doesn't work because of custom karma config, so we run:
