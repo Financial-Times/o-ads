@@ -160,7 +160,8 @@ const pubads = {
 	clearTargeting: stubs.stub(),
 	addEventListener: function() {},
 	updateCorrelator: stubs.stub(),
-	setRequestNonPersonalizedAds : stubs.stub()
+	setRequestNonPersonalizedAds: stubs.stub(),
+	enableLazyLoad: stubs.stub()
 };
 
 stubs.stub(pubads, 'addEventListener', function(eventName, fn) {
