@@ -74,7 +74,7 @@
     "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
     "origami-build-tools": "^9.0.13",
     "pre-git": "^3.17.1",
-    "puppeteer": "^1.19.0",
+    "puppeteer": "^1.20.0",
     "qunitjs": "^1.20.0",
     "release-it": "^12.3.3",
     "snyk": "^1.169.1",
