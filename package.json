@@ -51,7 +51,7 @@
     "bundlesize": "^0.18.0",
     "cypress": "^3.4.0",
     "dotenv": "^8.2.0",
-    "eslint": "^6.0.1",
+    "eslint": "^7.4.0",
     "eslint-plugin-jest": "^23.18.0",
     "eslint-plugin-qunit": "^4.2.0",
     "fetch-mock": "^5.1.1",
