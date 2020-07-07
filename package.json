@@ -49,7 +49,7 @@
     "bower-resolve-webpack-plugin": "^1.0.5",
     "browserstack-local": "^1.4.5",
     "bundlesize": "^0.18.0",
-    "cypress": "^4.9.0",
+    "cypress": "^4.10.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.4.0",
     "eslint-plugin-jest": "^23.18.0",
