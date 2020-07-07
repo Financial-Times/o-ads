@@ -56,7 +56,7 @@
     "eslint-plugin-qunit": "^4.2.0",
     "fetch-mock": "^5.1.1",
     "geckodriver": "^1.19.1",
-    "genversion": "^2.1.0",
+    "genversion": "^2.2.1",
     "isomorphic-fetch": "^2.0.0",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^3.0.1",
