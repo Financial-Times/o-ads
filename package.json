@@ -78,7 +78,7 @@
     "qunitjs": "^2.4.1",
     "release-it": "^12.3.3",
     "snyk": "^1.169.1",
-    "start-server-and-test": "^1.11.1",
+    "start-server-and-test": "^1.11.2",
     "watchify": "^3.11.0",
     "webpack": "^4.43.0"
   },
