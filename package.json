@@ -72,7 +72,7 @@
     "karma-qunit": "^1.2.1",
     "karma-webpack": "^3.0.5",
     "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
-    "origami-build-tools": "^9.0.13",
+    "origami-build-tools": "^10.5.9",
     "pre-git": "^3.17.1",
     "puppeteer": "^2.1.1",
     "qunitjs": "^2.4.1",
