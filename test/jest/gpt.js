@@ -30,7 +30,7 @@ describe('setup', () => {
 
 	describe('enableLazyLoad()', () => {
 
-		test('should implicitly disable lazy load, if option not provided', () => {
+		test('should disable lazy loading, if the "enableLazyLoad" option is not provided', () => {
 			gpt.setup({});
 
 			expect(global.googletag.pubads().enableLazyLoad)
