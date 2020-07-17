@@ -68,7 +68,7 @@
     "karma-cli": "^2.0.0",
     "karma-coverage": "^2.0.0",
     "karma-coverage-istanbul-reporter": "^3.0.0",
-    "karma-qunit": "^1.2.1",
+    "karma-qunit": "^4.0.0",
     "karma-webpack": "^4.0.0",
     "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
     "origami-build-tools": "^9.0.13",
