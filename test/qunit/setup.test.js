@@ -35,9 +35,9 @@ QUnit.test('Basic Sinon methods are available via this', function(assert) {
 
 QUnit.test('Sinon fake timers are available', function(assert) {
 	const clock = this.date(1);
-	assert.equal((new Date()).valueOf(), 1, 'the date object is now mocked');
+	assert.equal(new Date().valueOf(), 1, 'the date object is now mocked');
 	clock.tick(1);
-	assert.equal((new Date()).valueOf(), 2, 'a tick of the clock now pushes the date forward');
+	assert.equal(new Date().valueOf(), 2, 'a tick of the clock now pushes the date forward');
 });
 
 const _XMLHttpRequest = window.XMLHttpRequest;

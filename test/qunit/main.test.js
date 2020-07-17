@@ -2,8 +2,6 @@
 
 'use strict'; //eslint-disable-line
 
-const fetchMock = require('fetch-mock');
-
 QUnit.module('Main', {
 	beforeEach: function() {
 		this.deleteCookie('FTConsent');
@@ -184,7 +182,6 @@ QUnit.test("No cc targeting parameter is set if the library is initialised with 
 		assert.equal(this.ads.targeting.get().cc, undefined);
 		done();
 	});
-	fetchMock.restore();
 });
 
 
@@ -197,7 +194,6 @@ QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present a
 		done();
 	});
 	document.cookie = ' ';
-	fetchMock.restore();
 });
 
 QUnit.test(".version logs the right format", function(assert) {

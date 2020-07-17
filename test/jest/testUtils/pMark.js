@@ -4,7 +4,7 @@ export const mark = markName => {
 	perfmarks.push({
 		type: 'mark',
 		name: markName,
-		startTime: (new Date()).getMilliseconds()
+		startTime: new Date().getMilliseconds()
 	});
 };
 

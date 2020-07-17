@@ -83,7 +83,10 @@ function setup(gptConfig) {
 	setRenderingMode(gptConfig);
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
-	enableLazyLoad(gptConfig.enableLazyLoad);
+
+	if (gptConfig.hasOwnProperty('enableLazyLoad')) {
+		enableLazyLoad(gptConfig.enableLazyLoad);
+	}
 
 	const url = stripUrlParams({
 		href: window.location.href,
