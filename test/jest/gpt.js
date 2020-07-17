@@ -30,7 +30,14 @@ describe('setup', () => {
 
 	describe('enableLazyLoad()', () => {
 
-		test('should explicitly disable lazy load', () => {
+		test('should implicitly disable lazy load, if option not provided', () => {
+			gpt.setup({});
+
+			expect(global.googletag.pubads().enableLazyLoad)
+				.not.toBeCalled();
+		});
+
+		test('should explicitly disable lazy load, if false', () => {
 			gpt.setup({
 				enableLazyLoad: false,
 			});
@@ -63,8 +70,21 @@ describe('setup', () => {
 				);
 		});
 
-		test('should not enable lazy load, if lazyLoadCong is not a boolean or an object', () => {
+		test('should not enable lazy load, if lazyLoadConf is not a boolean or an object', () => {
 			const enableLazyLoad = 'what';
+			const spyConsoleWarn = jest.spyOn(log, 'warn');
+
+			gpt.setup({ enableLazyLoad });
+
+			expect(spyConsoleWarn).toBeCalledWith('lazyLoadConf must be either an object or a boolean', enableLazyLoad);
+			expect(global.googletag.pubads().enableLazyLoad)
+				.not.toBeCalled();
+
+			spyConsoleWarn.mockReset();
+		});
+
+		test('should not enable lazy load, if lazyLoadConf is null', () => {
+			const enableLazyLoad = null;
 			const spyConsoleWarn = jest.spyOn(log, 'warn');
 
 			gpt.setup({ enableLazyLoad });
