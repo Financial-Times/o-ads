@@ -70,7 +70,7 @@ describe('setup', () => {
 				);
 		});
 
-		test('should not enable lazy load, if lazyLoadConf is not a boolean or an object', () => {
+		test('should not enable lazy load, if "enableLazyLoad" is not a boolean or an object', () => {
 			const enableLazyLoad = 'what';
 			const spyConsoleWarn = jest.spyOn(log, 'warn');
 
