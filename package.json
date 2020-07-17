@@ -54,7 +54,7 @@
     "eslint": "^7.4.0",
     "eslint-plugin-jest": "^23.18.0",
     "eslint-plugin-qunit": "^4.2.0",
-    "fetch-mock": "^5.1.1",
+    "fetch-mock": "^9.0.0",
     "geckodriver": "^1.19.1",
     "genversion": "^2.2.1",
     "isomorphic-fetch": "^2.0.0",
