@@ -1,4 +1,4 @@
-/* globals describe, it, cy, expect */
+/* globals cy, expect */
 
 function getQueryParams(url) {
 	const o = {};

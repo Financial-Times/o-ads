@@ -15,7 +15,7 @@ import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
 export const DEFAULT_LAZY_LOAD = {
 	fetchMarginPercent: 500,
 	renderMarginPercent: 200,
-	mobileScaling: 2.0
+	mobileScaling: 2.0,
 };
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
@@ -39,8 +39,10 @@ function init() {
 	googletag.cmd.push(setup.bind(null, gptConfig));
 }
 
-/*
- * initalise the googletag global namespace and add the google publish tags library to the page
+/**
+ * Initalise the googletag global namespace and add the google publish tags library to the page
+ *
+ * @return  {void}  [return description]
  */
 function loadGPT() {
 	if (!window.googletag) {
@@ -59,7 +61,7 @@ function loadGPT() {
 		() => {
 			utils.broadcast('serverScriptLoaded');
 		},
-		err => {
+		(err) => {
 			utils.broadcast('adServerLoadError', err);
 		}
 	);
@@ -71,10 +73,12 @@ function loadGPT() {
 //#################################
 */
 
-/*
+/**
  * Configure the GPT library for the current page
  * this method is pushed onto the googletag command queue and run
  * when the library is available
+ * @param {object} gptConfig
+ * @returns {true}
  */
 function setup(gptConfig) {
 	const nonPersonalized = config('nonPersonalized') ? 1 : 0;
@@ -84,13 +88,13 @@ function setup(gptConfig) {
 	setPageTargeting(targeting.get());
 	setPageCollapseEmpty();
 
-	if (gptConfig.hasOwnProperty('enableLazyLoad')) {
+	if (gptConfig.enableLazyLoad) {
 		enableLazyLoad(gptConfig.enableLazyLoad);
 	}
 
 	const url = stripUrlParams({
 		href: window.location.href,
-		filters: { root: SEARCH_PARAMS }
+		filters: { root: SEARCH_PARAMS },
 	});
 
 	googletag.enableServices();
@@ -122,7 +126,7 @@ function setup(gptConfig) {
  * 					fetching and rendering.
  *
  * @param {object|boolean} lazyLoadConf The lazy load config object or a boolean.
- * @returns {boolean} true if the object is of type Array, otherwise false
+ * @returns {void}
  */
 function enableLazyLoad(lazyLoadConf) {
 	if (lazyLoadConf && (typeof lazyLoadConf === 'object' || typeof lazyLoadConf === 'boolean')) {
@@ -133,11 +137,11 @@ function enableLazyLoad(lazyLoadConf) {
 	}
 }
 
-/*
+/**
  * set the gpt rendering mode to either sync or async
  * default is async
+ * @returns {void}
  */
-
 function setRenderingMode(gptConfig) {
 	const rendering = gptConfig.rendering;
 	if (rendering === 'sync') {
@@ -154,12 +158,15 @@ function setRenderingMode(gptConfig) {
  * @name setPageTargeting
  * @memberof GPT
  * @lends GPT
+ *
+ * @param {object} targetingData
+ * @returns {object}
  */
 function setPageTargeting(targetingData) {
 	if (utils.isPlainObject(targetingData)) {
 		googletag.cmd.push(() => {
 			const pubads = googletag.pubads();
-			Object.keys(targetingData).forEach(key => {
+			Object.keys(targetingData).forEach((key) => {
 				// Convert to string as boolean values are invalid arguments for GPT setTargeting()
 				pubads.setTargeting(key, String(targetingData[key]));
 			});
@@ -174,6 +181,9 @@ function setPageTargeting(targetingData) {
 
 /**
  * Removes page targeting for a specified key from GPT ad calls
+ *
+ * @param {string} key
+ * @returns {void}
  */
 function clearPageTargetingForKey(key) {
 	if (!window.googletag) {
@@ -194,6 +204,7 @@ function clearPageTargetingForKey(key) {
  * * 'after' collapse slots that return an empty ad
  * * 'before' collapses all slots and only displays them when an ad is found
  * * 'never' does not collapse any empty slot, the collapseEmptyDivs method is not called in that case
+ * @returns {void}
  */
 function setPageCollapseEmpty() {
 	const mode = config('collapseEmpty');
@@ -210,6 +221,7 @@ function setPageCollapseEmpty() {
 /**
  * When companions are enabled we delay the rendering of ad slots until
  * either a master is returned or all slots are returned without a master
+ * @returns {void}
  */
 function enableCompanions(gptConfig) {
 	if (gptConfig.companions) {
@@ -218,14 +230,14 @@ function enableCompanions(gptConfig) {
 	}
 }
 
-/*
-//##################
-// Event handlers ##
-//##################
-*/
-
-/*
+// Event handlers
+// -----------------------------------------------------------------------------
+/**
  * Event handler for when a slot is ready for an ad to rendered
+ *
+ * @param {any} slotMethods
+ * @param {object} event
+ * @returns {void}
  */
 function onReady(slotMethods, event) {
 	const slot = event.detail.slot;
@@ -238,12 +250,7 @@ function onReady(slotMethods, event) {
 
 		// setup the gpt configuration the ad
 		googletag.cmd.push(() => {
-			slot
-				.defineSlot()
-				.addServices()
-				.setCollapseEmpty()
-				.setTargeting()
-				.setURL();
+			slot.defineSlot().addServices().setCollapseEmpty().setTargeting().setURL();
 
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
@@ -251,8 +258,10 @@ function onReady(slotMethods, event) {
 		});
 	}
 }
-/*
+/**
  * Render is called when a slot is not rendered when the ready event fires
+ * @param {object} event
+ * @returns {void}
  */
 function onRender(event) {
 	const slot = event.detail.slot;
@@ -269,7 +278,7 @@ function onRefresh(event) {
 	window.googletag.cmd.push(() => {
 		const targeting = event.detail.targeting;
 		if (utils.isPlainObject(targeting)) {
-			Object.keys(targeting).forEach(name => {
+			Object.keys(targeting).forEach((name) => {
 				event.detail.slot.gpt.slot.setTargeting(name, targeting[name]);
 			});
 		}
@@ -290,7 +299,7 @@ function onResize(event) {
  */
 function onRenderEnded(event) {
 	const data = {
-		gpt: {}
+		gpt: {},
 	};
 
 	const gptSlotId = event.slot.getSlotId();
@@ -337,7 +346,7 @@ const slotMethods = {
 	/**
 	 * define a GPT slot
 	 */
-	defineSlot: function() {
+	defineSlot: function () {
 		window.googletag.cmd.push(() => {
 			this.gpt.id = `${this.name}-gpt`;
 			this.inner.setAttribute('id', this.gpt.id);
@@ -355,7 +364,7 @@ const slotMethods = {
 		});
 		return this;
 	},
-	clearSlot: function(gptSlot) {
+	clearSlot: function (gptSlot) {
 		if (window.googletag.pubadsReady && window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
 			return googletag.pubads().clear([gptSlot]);
@@ -363,11 +372,11 @@ const slotMethods = {
 			return false;
 		}
 	},
-	initResponsive: function() {
+	initResponsive: function () {
 		window.googletag.cmd.push(() => {
 			utils.on(
 				'breakpoint',
-				event => {
+				(event) => {
 					const slot = event.detail.slot;
 					const screensize = event.detail.screensize;
 
@@ -386,7 +395,7 @@ const slotMethods = {
 			);
 
 			const mapping = googletag.sizeMapping();
-			Object.keys(breakpoints).forEach(breakpoint => {
+			Object.keys(breakpoints).forEach((breakpoint) => {
 				if (this.sizes[breakpoint]) {
 					mapping.addSize(breakpoints[breakpoint], this.sizes[breakpoint]);
 				}
@@ -400,7 +409,7 @@ const slotMethods = {
 	/**
 	 * Tell gpt to destroy the slot and its metadata
 	 */
-	destroySlot: function(gptSlot) {
+	destroySlot: function (gptSlot) {
 		if (window.googletag.pubadsReady && window.googletag.pubads) {
 			gptSlot = gptSlot || this.gpt.slot;
 			return googletag.destroySlots([gptSlot]);
@@ -411,7 +420,7 @@ const slotMethods = {
 	/*
 	 *	Tell gpt to request an ad
 	 */
-	display: function() {
+	display: function () {
 		window.googletag.cmd.push(() => {
 			this.fire('slotGoRender');
 			googletag.display(this.gpt.id);
@@ -421,7 +430,7 @@ const slotMethods = {
 	/**
 	 * Set the DFP unit name for the slot.
 	 */
-	setUnitName: function() {
+	setUnitName: function () {
 		window.googletag.cmd.push(() => {
 			let unitName;
 			const gpt = config('gpt') || {};
@@ -446,7 +455,7 @@ const slotMethods = {
 	/**
 	 * Add the slot to the pub ads service and add a companion service if configured
 	 */
-	addServices: function(gptSlot) {
+	addServices: function (gptSlot) {
 		window.googletag.cmd.push(() => {
 			const gpt = config('gpt') || {};
 			gptSlot = gptSlot || this.gpt.slot;
@@ -462,7 +471,7 @@ const slotMethods = {
 	 * Sets the GPT collapse empty mode for a given slot
 	 * values can be 'after', 'before', 'never'
 	 */
-	setCollapseEmpty: function() {
+	setCollapseEmpty: function () {
 		window.googletag.cmd.push(() => {
 			const mode = this.collapseEmpty || config('collapseEmpty') || DEFAULT_COLLAPSE_MODE;
 
@@ -477,7 +486,7 @@ const slotMethods = {
 
 		return this;
 	},
-	submitGptImpression: function() {
+	submitGptImpression: function () {
 		/* istanbul ignore next  */
 		function getImpressionURL(iframe) {
 			const trackingUrlElement = iframe.contentWindow.document.querySelector('[data-o-ads-impression-url]');
@@ -512,7 +521,7 @@ const slotMethods = {
 	 * Sets page url to be sent to google
 	 * prevents later url changes via javascript from breaking the ads
 	 */
-	setURL: function(gptSlot) {
+	setURL: function (gptSlot) {
 		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			const canonical = config('canonical');
@@ -524,18 +533,18 @@ const slotMethods = {
 	/**
 	 * Adds key values from a given object to the slot targeting
 	 */
-	setTargeting: function(gptSlot) {
+	setTargeting: function (gptSlot) {
 		window.googletag.cmd.push(() => {
 			gptSlot = gptSlot || this.gpt.slot;
 			/* istanbul ignore else  */
 			if (utils.isPlainObject(this.targeting)) {
-				Object.keys(this.targeting).forEach(param => {
+				Object.keys(this.targeting).forEach((param) => {
 					gptSlot.setTargeting(param, this.targeting[param]);
 				});
 			}
 		});
 		return this;
-	}
+	},
 };
 
 /*
@@ -564,8 +573,7 @@ function clearPageTargeting() {
 		googletag.cmd.push(() => {
 			googletag.pubads().clearTargeting();
 		});
-	}
-	else {
+	} else {
 		utils.log.warn('Attempting to clear page targeting before the GPT library has initialized');
 	}
 }
@@ -608,5 +616,5 @@ export default {
 	clearPageTargetingForKey,
 	hasGPTLoaded,
 	loadGPT,
-	debug
+	debug,
 };

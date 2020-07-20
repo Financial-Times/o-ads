@@ -143,7 +143,7 @@ export const isNonEmptyString = function (str) {
 };
 
 export const isElement = function (element) {
-	return element && element.nodeType === 1 && element.tagName || false;
+	return (element && element.nodeType === 1 && element.tagName) || false;
 };
 
 export function extend() {
@@ -257,6 +257,7 @@ export const hash = function (str, delimiter, pairing) {
  * @param {boolean} async Set the async attribute on the script tag
  * @param {function} callback A function to run when the script loads
  * @param {function} errorcb A function to run if the script fails to load
+ * @param {boolean} [autoRemove] Whether to remove the script element after
  * @returns {HTMLElement} the created script tag
  */
 export const attach = function (scriptUrl, async, callback, errorcb, autoRemove) {

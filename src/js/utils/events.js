@@ -29,8 +29,8 @@ export function buildPerfmarkSuffix(eventDetailsObj) {
 /**
 * Broadscasts an o-ads event
 * @param {string} name The name of the event
-* @param {object} data The data to send as event detail
-* @param {HTMLElement} target The element to attach the event listener to
+* @param {object} [data] The data to send as event detail
+* @param {HTMLElement} [target] The element to attach the event listener to
 */
 export function broadcast(eventName, data, target) {
 	/* istanbul ignore next: ignore the final fallback as hard trigger */
