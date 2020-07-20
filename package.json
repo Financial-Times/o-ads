@@ -71,7 +71,7 @@
     "karma-qunit": "^4.0.0",
     "karma-webpack": "^4.0.0",
     "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
-    "origami-build-tools": "^10.0.0",
+    "origami-build-tools": "10.5.10",
     "pre-git": "^3.17.1",
     "puppeteer": "^5.0.0",
     "qunit": "^2.10.1",
@@ -93,6 +93,7 @@
   "config": {
     "pre-git": {
       "pre-commit": [
+        "npx obt verify",
         "node_modules/.bin/secret-squirrel"
       ],
       "pre-push": [
@@ -101,7 +102,7 @@
     }
   },
   "engines": {
-    "node": "^8.6.0"
+    "node": ">=12"
   },
   "release": {
     "analyzeCommits": "simple-commit-message"
