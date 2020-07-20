@@ -93,7 +93,6 @@
   "config": {
     "pre-git": {
       "pre-commit": [
-        "npx obt verify",
         "node_modules/.bin/secret-squirrel"
       ],
       "pre-push": [

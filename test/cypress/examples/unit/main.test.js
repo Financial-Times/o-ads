@@ -1,5 +1,4 @@
 /* eslint-disable strict */
-/* globals cy, expect */
 const Ads = require('../../../main.js').constructor;
 const utils = require('../../../src/js/utils');
 

@@ -1,4 +1,4 @@
-/* globals cy */
+/* eslint-disable strict */
 
 /**
  * E2E Tests check the responses from DFP are correct under

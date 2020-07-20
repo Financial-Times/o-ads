@@ -125,5 +125,9 @@ module.exports = {
 		module: false,
 		exports: false,
 		requireText: false,
+		cy: true,
+		describe: true,
+		expect: true,
+		it: true,
 	},
 };
