@@ -47,6 +47,7 @@
     "app-root-path": "3.0.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-rewire": "^1.2.0",
+    "babel-preset-es3": "1.0.1",
     "bower-resolve-webpack-plugin": "^1.0.5",
     "browserstack-local": "^1.4.5",
     "bundlesize": "^0.18.0",
