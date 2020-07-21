@@ -44,6 +44,7 @@
     "@types/doubleclick-gpt": "2019041801.0.2",
     "@types/jest": "26.0.4",
     "@types/jsdom": "16.2.3",
+    "app-root-path": "3.0.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-rewire": "^1.2.0",
     "bower-resolve-webpack-plugin": "^1.0.5",
