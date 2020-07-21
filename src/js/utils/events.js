@@ -28,7 +28,7 @@ export function buildPerfmarkSuffix(eventDetailsObj) {
 
 /**
 * Broadscasts an o-ads event
-* @param {string} name The name of the event
+* @param {string} eventName The name of the event
 * @param {object} [data] The data to send as event detail
 * @param {HTMLElement} [target] The element to attach the event listener to
 */
@@ -59,8 +59,8 @@ export function broadcast(eventName, data, target) {
 /**
 * Sets an event listener for an oAds event
 * @param {string} name The name of the event
-* @param {function} callback The function to execute on the event
-* @param {HTMLElement} target The element to attach the event listener to
+* @param {EventListenerOrEventListenerObject} callback The function to execute on the event
+* @param {HTMLElement} [target] The element to attach the event listener to
 */
 export function on(name, callback, target) {
 	name = `oAds.${name}`;
@@ -72,8 +72,8 @@ export function on(name, callback, target) {
 /**
 * Removes an event listener for an oAds event
 * @param {string} name The name of the event
-* @param {function} callback The function on the event to be removed
-* @param {HTMLElement} target The element the event listener is attached to
+* @param {EventListenerOrEventListenerObject} callback The function on the event to be removed
+* @param {HTMLElement} [target] The element the event listener is attached to
 */
 export function off(name, callback, target) {
 	name = `oAds.${name}`;

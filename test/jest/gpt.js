@@ -84,7 +84,7 @@ describe('setup', () => {
 		});
 
 		// TODO: REMOVE SKIP!!!
-		test.skip('should not enable lazy load, if lazyLoadConf is null', () => {
+		test.skip('should not enable lazy load, if lazyLoadConf is null', () => { // eslint-disable-line
 			const enableLazyLoad = null;
 			const spyConsoleWarn = jest.spyOn(log, 'warn');
 

@@ -19,12 +19,9 @@ export const DEFAULT_LAZY_LOAD = {
 };
 const DEFAULT_COLLAPSE_MODE = 'never';
 let breakpoints = false;
-/*
-//###########################
-// Initialisation handlers ##
-//###########################
-*/
 
+// Initialisation handlers
+// -----------------------------------------------------------------------------
 /*
  * Initialise Google publisher tags functionality
  */
@@ -42,7 +39,7 @@ function init() {
 /**
  * Initalise the googletag global namespace and add the google publish tags library to the page
  *
- * @return  {void}  [return description]
+ * @returns {void}
  */
 function loadGPT() {
 	if (!window.googletag) {
@@ -67,18 +64,14 @@ function loadGPT() {
 	);
 }
 
-/*
-//#################################
-// Global configuration handlers ##
-//#################################
-*/
-
+// Global configuration handlers
+// -----------------------------------------------------------------------------
 /**
  * Configure the GPT library for the current page
- * this method is pushed onto the googletag command queue and run
- * when the library is available
- * @param {object} gptConfig
- * @returns {true}
+ * this method is pushed onto the googletag command queue and run when the library is available
+ *
+ * @param {object} gptConfig TODO: type this more precisely
+ * @returns {true} TODO: understand why
  */
 function setup(gptConfig) {
 	const nonPersonalized = config('nonPersonalized') ? 1 : 0;
@@ -140,6 +133,8 @@ function enableLazyLoad(lazyLoadConf) {
 /**
  * set the gpt rendering mode to either sync or async
  * default is async
+ *
+ * @param {{ rendering: string }} gptConfig TODO: define a GPTConfig type
  * @returns {void}
  */
 function setRenderingMode(gptConfig) {
@@ -155,12 +150,9 @@ function setRenderingMode(gptConfig) {
 
 /**
  * Adds page targeting to GPT ad calls
- * @name setPageTargeting
- * @memberof GPT
- * @lends GPT
  *
- * @param {object} targetingData
- * @returns {object}
+ * @param {object} targetingData TODO: provide proper types
+ * @returns {object} targetingData
  */
 function setPageTargeting(targetingData) {
 	if (utils.isPlainObject(targetingData)) {
@@ -182,7 +174,7 @@ function setPageTargeting(targetingData) {
 /**
  * Removes page targeting for a specified key from GPT ad calls
  *
- * @param {string} key
+ * @param {string} key The targeting id to remove
  * @returns {void}
  */
 function clearPageTargetingForKey(key) {
@@ -204,6 +196,7 @@ function clearPageTargetingForKey(key) {
  * * 'after' collapse slots that return an empty ad
  * * 'before' collapses all slots and only displays them when an ad is found
  * * 'never' does not collapse any empty slot, the collapseEmptyDivs method is not called in that case
+ *
  * @returns {void}
  */
 function setPageCollapseEmpty() {
@@ -221,6 +214,8 @@ function setPageCollapseEmpty() {
 /**
  * When companions are enabled we delay the rendering of ad slots until
  * either a master is returned or all slots are returned without a master
+ *
+ * @param {{companions: unknown}} gptConfig  TODO: define a GPTConfig type
  * @returns {void}
  */
 function enableCompanions(gptConfig) {
@@ -237,6 +232,7 @@ function enableCompanions(gptConfig) {
  *
  * @param {any} slotMethods
  * @param {object} event
+ *
  * @returns {void}
  */
 function onReady(slotMethods, event) {
@@ -271,8 +267,18 @@ function onRender(event) {
 	}
 }
 
-/*
- * refresh is called when a slot requests the ad be flipped
+/**
+ * Refresh is called when a slot requests the ad be flipped
+ *
+ * @param {{
+ * 	detail?:{
+ *   targeting: {},
+ *   slot: {
+ *     gpt: {
+ *       slot: any
+ *     }
+ *   }
+ * }}} event
  */
 function onRefresh(event) {
 	window.googletag.cmd.push(() => {
@@ -294,8 +300,16 @@ function onResize(event) {
 	iframe.height = size[1];
 }
 
-/*
+/**
  * function passed to the gpt library that is run when an ad completes rendering
+ * @param {{
+ *  size: string[]
+ *  isEmpty: boolean
+ *  creativeId: string
+ *  lineItemId: string
+ *  serviceName: string
+ *  slot: any
+ * }} event
  */
 function onRenderEnded(event) {
 	const data = {
@@ -336,12 +350,9 @@ function onRenderEnded(event) {
 	utils.broadcast('slotRenderStart', data);
 }
 
-/*
-//################
-// Slot methods ##
-//################
-* Set of methods extended on to the slot constructor for GPT served slots
-*/
+// Slot methods
+// -----------------------------------------------------------------------------
+// Set of methods extended on to the slot constructor for GPT served slots
 const slotMethods = {
 	/**
 	 * define a GPT slot
@@ -470,6 +481,8 @@ const slotMethods = {
 	/**
 	 * Sets the GPT collapse empty mode for a given slot
 	 * values can be 'after', 'before', 'never'
+	 *
+	 * @returns GPT context
 	 */
 	setCollapseEmpty: function () {
 		window.googletag.cmd.push(() => {
@@ -547,12 +560,8 @@ const slotMethods = {
 	},
 };
 
-/*
-//####################
-// External methods ##
-//####################
-*/
-
+//  External methods
+// -----------------------------------------------------------------------------
 /**
  * The correlator is a random number added to ad calls.
  * It is used by the ad server to determine which impressions where served to the same page
