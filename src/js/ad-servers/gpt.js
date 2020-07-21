@@ -270,15 +270,7 @@ function onRender(event) {
 /**
  * Refresh is called when a slot requests the ad be flipped
  *
- * @param {{
- * 	detail?:{
- *   targeting: {},
- *   slot: {
- *     gpt: {
- *       slot: any
- *     }
- *   }
- * }}} event
+ * @param {GPTEvent} event
  */
 function onRefresh(event) {
 	window.googletag.cmd.push(() => {
@@ -292,7 +284,9 @@ function onRefresh(event) {
 	});
 	return this;
 }
-
+/**
+ * @param {GPTEvent} event
+ */
 function onResize(event) {
 	const iframe = event.detail.slot.gpt.iframe;
 	const size = event.detail.size;
