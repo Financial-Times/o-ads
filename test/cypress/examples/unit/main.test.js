@@ -1,6 +1,6 @@
 /* eslint-disable strict */
-const Ads = require('../../../main.js').constructor;
-const utils = require('../../../src/js/utils');
+const Ads = require('../../../../main.js').constructor;
+const utils = require('../../../../src/js/utils');
 
 describe('Main', () => {
 	beforeEach(() => {

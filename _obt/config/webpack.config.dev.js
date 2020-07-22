@@ -11,4 +11,6 @@ const devConfig = {
 	devtool: 'inline-source-map',
 };
 
-module.exports = merge(require('./webpack.config'), devConfig);
+const config = merge(require('./webpack.config'), devConfig);
+
+module.exports = config;

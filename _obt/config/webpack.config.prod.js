@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 const prodConfig = {
 	plugins: [
@@ -8,7 +8,7 @@ const prodConfig = {
 		// It is important that NODE_ENV is set to production here.
 		// Otherwise libraries such as React will be compiled in development mode.
 		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify('production')
+			'process.env.NODE_ENV': JSON.stringify('production'),
 		}),
 		// Minify code, IE8 is core experience, by setting the screw_ie8 option
 		// we can use some newer minification techniques.
@@ -31,7 +31,7 @@ const prodConfig = {
 		// adding too much to bundle size and NamedModulesPlugin allows for
 		// easier debugging of development builds.
 		new webpack.HashedModuleIdsPlugin(),
-	]
+	],
 };
 
-module.exports = webpackMerge(require('./webpack.config'), prodConfig);
+module.exports = merge(require('./webpack.config'), prodConfig);
