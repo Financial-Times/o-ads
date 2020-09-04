@@ -1,5 +1,5 @@
-import utils from './utils';
-import config from './config';
+import utils from './utils/index.js';
+import config from './config.js';
 
 const VALID_SIZE_STRINGS = ['fluid'];
 const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];

@@ -1,4 +1,4 @@
-import utils from './index';
+import utils from './index.js';
 
 function getMarksForEvents(events, suffix) {
 	const markNames = events.map( eventName => 'oAds.' + eventName + suffix );

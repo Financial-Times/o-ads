@@ -7,10 +7,10 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-import config from '../config';
-import utils from '../utils';
-import targeting from '../targeting';
-import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
+import config from '../config.js';
+import utils from '../utils/index.js';
+import targeting from '../targeting.js';
+import { stripUrlParams, SEARCH_PARAMS } from '../utils/url.js';
 
 export const DEFAULT_LAZY_LOAD = {
 	fetchMarginPercent: 500,
