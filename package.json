@@ -75,7 +75,7 @@
     "pre-git": "^3.17.1",
     "puppeteer": "^5.0.0",
     "qunit": "^2.10.1",
-    "release-it": "^13.0.0",
+    "release-it": "^14.0.2",
     "snyk": "^1.169.1",
     "start-server-and-test": "^1.11.3",
     "watchify": "^3.11.0",
