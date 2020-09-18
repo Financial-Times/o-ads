@@ -74,7 +74,7 @@
     "origami-build-tools": "^9.0.13",
     "pre-git": "^3.17.1",
     "puppeteer": "^5.2.1",
-    "qunit": "^2.11.1",
+    "qunit": "^2.11.2",
     "release-it": "^14.0.2",
     "snyk": "^1.169.1",
     "start-server-and-test": "^1.11.3",
