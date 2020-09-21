@@ -53,13 +53,25 @@ QUnit.test('broadcast an event when GPT fails to load', function(assert) {
 });
 
 QUnit.test('set page targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
+	const options = {
+		targeting: {
+			some: 'test',
+			targeting: 'params'
+		}
+	};
+	this.ads.init(options);
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 });
 
 QUnit.test('override page targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
+	const options = {
+		targeting: {
+			some: 'test',
+			targeting: 'params'
+		}
+	};
+	this.ads.init(options);
 	assert.ok(googletag.pubads().setTargeting.calledWith('some', 'test'), 'the params are queued with GPT');
 	assert.ok(googletag.pubads().setTargeting.calledWith('targeting', 'params'), 'the params are queued with GPT');
 
@@ -74,12 +86,6 @@ QUnit.test('override page targeting', function(assert) {
 		googletag.pubads().setTargeting.neverCalledWith('anotherOverrideKey', 'anotherOverrideValue'),
 		'overreide paramerters passed as a string are not queued with GPT'
 	);
-});
-
-QUnit.test('empty override page targeting clears targeting', function(assert) {
-	this.ads.init({ dfp_targeting: ';some=test;targeting=params' });
-	this.ads.gpt.updatePageTargeting();
-	assert.ok(googletag.pubads().clearTargeting.called);
 });
 
 QUnit.test('override page targetting catches and warns when googletag is not available', function(assert) {
@@ -142,6 +148,49 @@ QUnit.test('enabled single request', function(assert) {
 QUnit.test('default to async rendering', function(assert) {
 	this.ads.init({ gpt: { rendering: 'random' } });
 	assert.ok(googletag.pubads().enableAsyncRendering.calledOnce, 'async rendering has been enabled by default');
+});
+
+QUnit.test('enable gpt lazy loading with default params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: true } });
+	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
+	assert.ok(
+		googletag.pubads().enableLazyLoad.calledWithExactly({
+			fetchMarginPercent: 500,
+			renderMarginPercent: 200,
+			mobileScaling: 2.0
+		}),
+		'call gpt lazy load with default parameters'
+	);
+});
+
+QUnit.test('enable gpt lazy loading with custom params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: {
+		fetchMarginPercent: 300
+	} } });
+	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
+	assert.ok(
+		googletag.pubads().enableLazyLoad.calledWithExactly({
+			fetchMarginPercent: 300,
+			renderMarginPercent: 200,
+			mobileScaling: 2.0
+		}),
+		'call gpt lazy load with custom parameters'
+	);
+});
+
+QUnit.test('disable gpt lazy load explicitly', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: false } });
+	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
+});
+
+QUnit.test('not enabled gpt lazy load with invalid custom params', function(assert) {
+	this.ads.init({ gpt: { enableLazyLoad: 'hello' } });
+	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
+});
+
+QUnit.test('not enabled gpt lazy load if gpt option not provided', function(assert) {
+	this.ads.init({ gpt: {} });
+	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
 });
 
 QUnit.test('enables companion ads', function(assert) {

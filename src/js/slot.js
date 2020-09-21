@@ -143,7 +143,9 @@ function Slot(container, screensize, initLazyLoading) {
 
 	// init slot dom structure
 	this.outer = this.addContainer(container, {
-		'class': 'o-ads__outer'
+		'class': 'o-ads__outer',
+		'aria-hidden': 'true',
+		'tabindex': '-1'
 	});
 	this.inner = this.addContainer(this.outer, {
 		'class': 'o-ads__inner'
@@ -310,7 +312,7 @@ Slot.prototype.maximise = function(size) {
 Slot.prototype.setName = function() {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
 	if (!this.name) {
-		this.name = `o-ads-slot-${(Math.floor(Math.random() * 10000))}`;
+		this.name = `o-ads-slot-${Math.floor(Math.random() * 10000)}`;
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
 	return this;

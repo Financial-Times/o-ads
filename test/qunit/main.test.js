@@ -2,8 +2,6 @@
 
 'use strict'; //eslint-disable-line
 
-const fetchMock = require('fetch-mock');
-
 QUnit.module('Main', {
 	beforeEach: function() {
 		this.deleteCookie('FTConsent');
@@ -93,50 +91,51 @@ QUnit.test('manual inits always trigger but DOM inits do not override', function
 	assert.ok(gptInit.calledTwice, 'manual init call does re-initialise');
 });
 
-QUnit.test('ads.init().then will receive an object even if moat fails to load', function(assert) {
-	const done = assert.async();
-	const initSpy = this.spy(this.ads, 'init');
-	this.ads.init({ validateAdsTraffic: true });
-	this.trigger(document, 'o.DOMContentLoaded');
-	const promise = initSpy.returnValues[0];
-	promise.then( res => {
-		assert.equal(typeof res, 'object');
-		done();
-	});
+
+QUnit.test('ads.init() ads the targeting options to itself', function(assert) {
+	const targetingSpy = this.spy(this.ads.targeting, 'add');
+	const options = {
+		targeting: {
+			key: "value",
+			anotherKey: "anotherValue"
+		}
+	};
+	this.ads.init(options);
+	assert.ok(targetingSpy.calledWith(options.targeting), 'targeting options added using targeting.add()');
 });
 
-QUnit.test('updateContext updates the config and redoes the API calls', function(assert) {
+QUnit.test('updateTargeting()', function(assert) {
 	const done = assert.async();
 	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
-	this.spy(this.ads.gpt, 'init');
-	const userDataStub = this.stub(this.ads.api, 'getUserData');
 	const updatePageTargetingStub = this.stub(this.ads.gpt, 'updatePageTargeting');
+	const options = {
+		gpt: {
+			network: '1234',
+			site: 'abc',
+			zone: '123'
+		},
+		targeting: {
+			key1: 'value1',
+			key2: 'value2'
+		}
+	};
 
 	document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
-	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'} })
-		.then(function() {
-			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
-			assert.equal(ads.targeting.get().a, '1');
-			assert.equal(ads.targeting.get().b, '2');
+	ads.init(options).then(() => {
+		assert.equal(ads.targeting.get().key1, 'value1');
+		assert.equal(ads.targeting.get().key2, 'value2');
 
-			//change the user
-			userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'b', value: '1'}, { key: 'c', value: '2'}]}}));
-
-			ads.updateContext({ gpt: { zone: '456' }, targetingApi: { user: 'https://www.google.com' }}, true)
-				.then(function() {
-					assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
-					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
-					assert.equal(ads.targeting.get().a, undefined);
-					assert.equal(ads.targeting.get().b, '1');
-					assert.equal(ads.targeting.get().c, '2');
-					done();
-				});
-
+		ads.updateTargeting({
+			key1: 'updated-value',
+			key3: 'new-value'
 		});
 
-
+		assert.equal(ads.targeting.get().key1, 'updated-value');
+		assert.equal(ads.targeting.get().key3, 'new-value');
+		assert.ok(updatePageTargetingStub.calledOnce, 'updates the GPT targeting');
+		done();
+	});
 });
 
 QUnit.test("debug calls modules' debug functions", function(assert) {
@@ -152,31 +151,6 @@ QUnit.test("debug calls modules' debug functions", function(assert) {
 
 });
 
-QUnit.test('updateContext updates the config only if no API calls', function(assert) {
-	const done = assert.async();
-	const ads = new this.adsConstructor(); //eslint-disable-line new-cap
-	const userDataStub = this.stub(this.ads.api, 'getUserData');
-	userDataStub.returns(Promise.resolve({ dfp: { targeting: [{key: 'a', value: '1'}, { key: 'b', value: '2'}]}}));
-	ads.init({ gpt: { network: '1234', site: 'abc', zone: '123' }, targetingApi:{ user: 'https://www.google.com'}})
-		.then(function() {
-			assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '123' });
-			assert.equal(this.ads.targeting.get().a, '1');
-			assert.equal(this.ads.targeting.get().b, '2');
-
-			//change the user
-			ads.updateContext({ gpt: { zone: '456' }})
-				.then(function() {
-
-					assert.deepEqual(ads.config('gpt'), { network: '1234', site: 'abc', zone: '456' });
-					assert.equal(this.ads.targeting.get().a, '1');
-					assert.equal(this.ads.targeting.get().b, '2');
-					done();
-				}.bind(this));
-
-		}.bind(this));
-
-
-});
 QUnit.test("debug doesn't unset oAds if it was set", function(assert) {
 
 	const gptDebug = this.spy(this.ads.gpt, 'debug');
@@ -195,7 +169,7 @@ QUnit.test("debug sets and unsets oAds in local storage if it wasn't set", funct
 });
 
 
-QUnit.test("init() calls initLibrary() if no targeting or bot APIs are set", function(assert) {
+QUnit.test("init() calls initLibrary()", function(assert) {
 	const initLibrarySpy = this.spy(this.ads, 'initLibrary');
 	this.ads.init();
 	assert.ok(initLibrarySpy.called, 'initLibrary() function is called');
@@ -208,7 +182,6 @@ QUnit.test("No cc targeting parameter is set if the library is initialised with 
 		assert.equal(this.ads.targeting.get().cc, undefined);
 		done();
 	});
-	fetchMock.restore();
 });
 
 
@@ -221,70 +194,11 @@ QUnit.test("cc targeting parameter is set to 'y' when consentCookie is present a
 		done();
 	});
 	document.cookie = ' ';
-	fetchMock.restore();
-});
-
-QUnit.test("If validateAdsTraffic option is true, moat script runs before o-ads library initialises", function(assert) {
-	const moatInitSpy = this.spy(this.ads.moat, 'init');
-	this.ads.init({ validateAdsTraffic: true });
-	assert.ok(moatInitSpy.called, 'moat.init() function is called');
-});
-
-QUnit.test("moat script loading check is eventually cleared if moat is loaded", function(assert) {
-	const clearIntSpy = this.spy(window, 'clearInterval');
-	window.moatPrebidApi = {};
-	this.ads.moat.init();
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(clearIntSpy.called);
-		done();
-	}, 1000);
-});
-
-QUnit.test("moat script loading check is eventually cleared if moat is not loaded", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	const clearIntSpy = this.spy(window, 'clearInterval');
-	window.moatPrebidApi = null;
-	this.ads.moat.init();
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('moatTimeout'));
-		assert.ok(clearIntSpy.called);
-		done();
-	}, 1000);
-});
-
-QUnit.test("A 'IVTComplete' event is fired if moat IVT cannnot be checked", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	window.moatPrebidApi = null;
-	this.ads.moat.init();
-
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
-		done();
-	}, 1000);
-});
-
-QUnit.test("A 'IVTComplete' event is fired if moat IVT can be checked", function(assert) {
-	this.spy(this.utils, 'broadcast');
-	window.moatPrebidApi = {};
-	this.ads.moat.init();
-
-	const done = assert.async();
-
-	setTimeout( () => {
-		assert.ok(this.ads.utils.broadcast.calledWith('IVTComplete'));
-		done();
-	}, 1000);
 });
 
 QUnit.test(".version logs the right format", function(assert) {
 	const consoleSpy = this.spy(this.utils, 'log');
-	this.ads.init({ validateAdsTraffic: true });
+	this.ads.init({});
 	this.ads.version();
 	const loggedMessage = consoleSpy.args[0][0];
 	assert.ok(/o-ads version: \d\d?\.\d\d?\.\d\d?/.test(loggedMessage));

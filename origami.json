@@ -71,8 +71,6 @@
 			"template": "/demos/src/individualcustomtargeting.mustache",
 			"description": "",
 			"data": {
-				"user": "https://ads-api.ft.com/v1/user",
-				"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
 				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
 				"name": "billboard",
 				"formats": "Billboard",
@@ -112,6 +110,18 @@
 			}
 		},
 		{
+			"name": "Native-Lazy-Loading",
+			"title": "Native Lazy Loading",
+			"template": "/demos/src/nativelazyloading.mustache",
+			"description": "",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
 			"name": "Multiple-Next-Styles",
 			"title": "Ad with multiple style for ft.com (next)",
 			"template": "/demos/src/multiplenextstyles.mustache",
@@ -131,8 +141,6 @@
 			"hidden": true,
 			"description": "",
 			"data": {
-				"user": "https://ads-api.ft.com/v1/user",
-				"page": "https://ads-api.ft.com/v1/content/047b1294-75a9-11e6-b60a-de4532d5ea35",
 				"class": "o--if-nojs o-ads o-ads--background o-ads--center o-ads--reserve-90 o-ads--transition",
 				"name": "leaderboard",
 				"format":"Leaderboard",

@@ -8,6 +8,7 @@ module.exports = {
 			'demos/src/masterandcompanion.mustache',
 			'demos/src/multiplenextstyles.mustache',
 			'demos/src/native.mustache',
+			'demos/src/nativelazyloading.mustache',
 			'demos/src/validatetraffic.mustache',
 			'demos/src/responsive-ad.mustache',
 			'demos/src/responsive-positions.mustache',
@@ -18,7 +19,8 @@ module.exports = {
 			'docs/Gemfile.lock',
 			'docs/_posts/2016-08-19-welcome-to-jekyll.markdown',
 			'main.mustache',
-			'package-lock.json'
+			'package-lock.json',
+			'.github/CODEOWNERS'
 		],
 		allowOverrides: []
 	},

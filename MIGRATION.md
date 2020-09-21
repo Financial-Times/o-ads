@@ -1,10 +1,34 @@
 # Migration Guide
 
+## Upgrading to v18
+
+### Targeting
+BREAKING CHANGE: o-ads is no longer responsible for calling the ads-api to retrieve targeting information for ad requests. All targeting information is now passed when configuring oAds, through the `targeting` property. This contains an object of key => value pairs that will be appended to every ad request on the page. **Note: THE `dfp_targeting` AND `targetingApi` CONFIG OPTIONS ARE NO LONGER BEING USED. INSTEAD, USE `targeting`:
+
+```javascript
+import oAds from '@financial-times/o-ads'
+oAds.init({
+  ...
+  targeting: {
+    loggedIn: false,
+    slv: "anon",
+    otherKeys: "and values
+  }
+})
+```
+
+### Validate Ads Traffic
+BREAKING CHANGE: o-ads is no longer responsible for validating the ads traffic via the moat script. This is now done in n-ads by calling `displayAds.validateTraffic()`. For other use cases, you must now simply include the following script on your page. This will add the extra `m_data` targeting parameter used to verify if traffic is valid.
+```html
+<script id='moat' defer src="https://sejs.moatads.com/financialtimesprebidheader859796398452/yi.js"></script>
+```
+
 ## Upgrading to v16
 BREAKING CHANGE: When using oAds.gpt.updatePageTargeting(), with no parameters, it will no longer clear the existing targeting parameters set on the global GPT object. Instead, you need to explicitly call oAds.gpt.clearPageTargeting() before any call to `oAds.gpt.updatePageTargeting()`.
 
 ## Upgrading to v15
-TODO
+ * Allows for the removal of key/values from URL parameters.
+ * Removes 'q=' parameter from the URL that is passed as the `url` custom-targeting parameter
 
 ## Upgrading to v14
 
