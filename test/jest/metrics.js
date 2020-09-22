@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import {setupMetrics, __RewireAPI__ } from '../../src/js/utils/metrics.js.js';
-import { mark, getEntriesByName } from './testUtils/pMark.js.js';
+import {setupMetrics, __RewireAPI__ } from '../../src/js/utils/metrics.js';
+import { mark, getEntriesByName } from './testUtils/pMark.js';
 
 test('metrics to export a "setupMetrics" function', () => {
 	expect(setupMetrics).toBeDefined();

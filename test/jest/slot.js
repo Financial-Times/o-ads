@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import '@testing-library/jest-dom/extend-expect';
-import Slot from '../../src/js/slot.js.js';
+import Slot from '../../src/js/slot.js';
 
 test('slot to export a "Slot" object', () => {
 	expect(Slot).toBeDefined();
