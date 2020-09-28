@@ -30,6 +30,10 @@ jobs:
           path: test/cypress/videos
       - store_artifacts:
           path: test/cypress/screenshots
+      - store_artifacts:
+          path: node_modules
+      - store_artifacts:
+          path: bower_components
 
       # We need to delete bower stuff and check that the package works on npm only
       - run: rm -rf bower_components

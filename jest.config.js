@@ -101,7 +101,6 @@ module.exports = {
 
 	// A path to a custom resolver
 	// resolver: 'browser-resolve',
-	"resolver": "@financial-times/jest-bower-resolver",
 	// Automatically restore mock state between every test
 	// restoreMocks: false,
 
