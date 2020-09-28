@@ -100,7 +100,7 @@ module.exports = {
 	// resetModules: false,
 
 	// A path to a custom resolver
-	// resolver: 'browser-resolve',
+	resolver: 'browser-resolve',
 	// Automatically restore mock state between every test
 	// restoreMocks: false,
 
