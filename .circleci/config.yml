@@ -9,37 +9,37 @@ jobs:
       - run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       - run: npm config set prefix "$HOME/.local"
       - run: npm i -g origami-build-tools@^9
-      - run: $HOME/.local/bin/obt install
-      - run: $HOME/.local/bin/obt build
-      - run: $HOME/.local/bin/obt verify
-      - run: npm run checksizes
-      # `obt test` doesn't work because of custom karma config, so we run:
-      - run: npm run test-unit
-      - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
-      - run:
-          command: npm run demo-server
-          background: true
-      - run: npm run test-cy:run
-      - run: npm run test-e2e
-      - run:
-          command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
-          background: true
-      - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
-      - run: npm run test-nw
-      - store_artifacts:
-          path: test/cypress/videos
-      - store_artifacts:
-          path: test/cypress/screenshots
-      - store_artifacts:
-          path: node_modules
-      - store_artifacts:
-          path: bower_components
+      # - run: $HOME/.local/bin/obt install
+      # - run: $HOME/.local/bin/obt build
+      # - run: $HOME/.local/bin/obt verify
+      # - run: npm run checksizes
+      # # `obt test` doesn't work because of custom karma config, so we run:
+      # - run: npm run test-unit
+      # - run: wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && unzip ./BrowserStackLocal-linux-x64.zip
+      # - run:
+      #     command: npm run demo-server
+      #     background: true
+      # - run: npm run test-cy:run
+      # - run: npm run test-e2e
+      # - run:
+      #     command: ./BrowserStackLocal --key=$BROWSERSTACK_KEY
+      #     background: true
+      # - run: sleep 5 && wget -qO- --retry-connrefused --no-check-certificate -T 60 http://localhost:3002
+      # - run: npm run test-nw
+      # - store_artifacts:
+      #     path: test/cypress/videos
+      # - store_artifacts:
+      #     path: test/cypress/screenshots
 
       # We need to delete bower stuff and check that the package works on npm only
       - run: rm -rf bower_components
       - run: npx occ 0.0.0
       - run: $HOME/.local/bin/obt install --ignore-bower
       - run: npm run test-unit
+      - store_artifacts:
+          path: node_modules/@financial-times
+      - store_artifacts:
+          path: bower_components
   publish_to_npm:
     docker:
       - image: circleci/node:10
