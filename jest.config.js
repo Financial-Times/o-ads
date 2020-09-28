@@ -100,7 +100,7 @@ module.exports = {
 	// resetModules: false,
 
 	// A path to a custom resolver
-	resolver: 'browser-resolve',
+	// resolver: 'browser-resolve',
 	// Automatically restore mock state between every test
 	// restoreMocks: false,
 
@@ -165,7 +165,6 @@ module.exports = {
 	transform: {
 		'^.+\\.jsx?$': 'babel-jest'
 	}
-
 	// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 	// transformIgnorePatterns: [
 	//   "/node_modules/"
