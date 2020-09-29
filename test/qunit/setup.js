@@ -3,8 +3,8 @@
 'use strict'; //eslint-disable-line
 
 import ads from '../../main.js';
-import utils from '../../src/js/utils';
-import helpers from './helpers';
+import utils from '../../src/js/utils/index.js';
+import helpers from './helpers.js';
 
 const Ads = ads.constructor;
 

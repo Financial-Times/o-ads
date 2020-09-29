@@ -1,9 +1,9 @@
-import { on, off, once, broadcast, perfMark, buildPerfmarkSuffix } from './events';
-import { setupMetrics, clearPerfMarks, markPageChange } from './metrics';
-import messenger from './messenger';
-import responsive, { getCurrent } from './responsive';
-import log, { isOn, start, end, info, warn, error, table, attributeTable } from './log';
-import version from '../version';
+import { on, off, once, broadcast, perfMark, buildPerfmarkSuffix } from './events.js';
+import { setupMetrics, clearPerfMarks, markPageChange } from './metrics.js';
+import messenger from './messenger.js';
+import responsive, { getCurrent } from './responsive.js';
+import log, { isOn, start, end, info, warn, error, table, attributeTable } from './log.js';
+import version from '../version.js';
 
 /**
  * Utility methods for the advertising library.
@@ -128,7 +128,8 @@ export const isPlainObject = function (obj) {
 	// if last one is own, then all properties are own.
 	let key;
 	for (key in obj) {
-	} //eslint-disable-line no-empty
+		// empty
+	}
 
 	return key === undefined || hop.call(obj, key);
 };

@@ -1,7 +1,7 @@
 /* eslint no-inner-declarations: 1 */
-import utils from './utils';
-import config from './config';
-import Slot from './slot';
+import utils from './utils/index.js';
+import config from './config.js';
+import Slot from './slot.js';
 
 let screensize = null;
 

@@ -1,11 +1,11 @@
 
 
 /* eslint valid-jsdoc: 0 */
-import config, { init, clear } from './src/js/config';
-import slots from './src/js/slots';
-import gpt from './src/js/ad-servers/gpt';
-import targeting from './src/js/targeting';
-import utils from './src/js/utils';
+import config, { init, clear } from './src/js/config.js';
+import slots from './src/js/slots.js';
+import gpt from './src/js/ad-servers/gpt.js';
+import targeting from './src/js/targeting.js';
+import utils from './src/js/utils/index.js';
 
 function Ads() {
 	addDOMEventListener();
