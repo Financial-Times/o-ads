@@ -131,7 +131,6 @@ function Slot(container, screensize, initLazyLoading) {
 	const renderEvent = 'slotRenderStart';
 	const cfg = config();
 	let slotConfig = config('slots') || {};
-	const disableSwipeDefault = config('disableSwipeDefault') || false;
 
 	// store the container
 	this.container = container;
@@ -167,7 +166,6 @@ function Slot(container, screensize, initLazyLoading) {
 	this.label = slotConfig.label || false;
 	this.outOfPage = slotConfig.outOfPage || false;
 
-	this.disableSwipeDefault = slotConfig.disableSwipeDefault || disableSwipeDefault;
 	this.companion = slotConfig.companion === false ? false : true;
 	this.collapseEmpty = slotConfig.collapseEmpty;
 	/* istanbul ignore else */
@@ -314,7 +312,7 @@ Slot.prototype.maximise = function(size) {
 Slot.prototype.setName = function() {
 	this.name = this.container.getAttribute('data-o-ads-name') || this.container.getAttribute('o-ads-name');
 	if (!this.name) {
-		this.name = `o-ads-slot-${(Math.floor(Math.random() * 10000))}`;
+		this.name = `o-ads-slot-${Math.floor(Math.random() * 10000)}`;
 		this.container.setAttribute('data-o-ads-name', this.name);
 	}
 	return this;
