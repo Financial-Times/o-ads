@@ -122,6 +122,18 @@
 			}
 		},
 		{
+			"name": "SRA",
+			"title": "SRA - Single Request Architecture",
+			"template": "/demos/src/sra.mustache",
+			"description": "",
+			"data": {
+				"name":"leaderboard",
+				"formats" : "Leaderboard",
+				"network": 5887,
+				"site" : "test.5887.origami"
+			}
+		},
+		{
 			"name": "Multiple-Next-Styles",
 			"title": "Ad with multiple style for ft.com (next)",
 			"template": "/demos/src/multiplenextstyles.mustache",
