@@ -9,6 +9,7 @@ module.exports = {
 			'demos/src/multiplenextstyles.mustache',
 			'demos/src/native.mustache',
 			'demos/src/nativelazyloading.mustache',
+			'demos/src/sra.mustache',
 			'demos/src/validatetraffic.mustache',
 			'demos/src/responsive-ad.mustache',
 			'demos/src/responsive-positions.mustache',
