@@ -1,9 +1,9 @@
 /* eslint-env jest */
 /* global jsdom */
 
-import gpt, { DEFAULT_LAZY_LOAD } from '../../src/js/ad-servers/gpt';
-import log from '../../src/js/utils/log';
-import GoogleTagMock from './testUtils/GoogleTagMock';
+import gpt, { DEFAULT_LAZY_LOAD } from '../../src/js/ad-servers/gpt.js';
+import log from '../../src/js/utils/log.js';
+import GoogleTagMock from './testUtils/GoogleTagMock.js';
 
 jest.mock('./testUtils/GoogleTagMock');
 

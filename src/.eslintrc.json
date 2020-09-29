@@ -1,4 +1,5 @@
 {
+  "extends": "origami-component",
   "parserOptions": {
     "ecmaVersion": 6
   },
