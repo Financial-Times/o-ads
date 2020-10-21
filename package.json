@@ -1,5 +1,5 @@
 {
-    "name": "o-ads",
+    "name": "@financial-times/o-ads",
     "version": "100.0.0-0",
     "description": "Origami Advertising Client-side Library",
     "main": "main.js",
