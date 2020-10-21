@@ -81,10 +81,10 @@
         "webpack": "^4.43.0"
     },
     "peerDependencies": {
-        "@financial-times/o-colors": "^5.0.2",
-        "@financial-times/o-grid": "^5.0.0",
-        "@financial-times/o-viewport": "^4.0.0",
-        "@financial-times/o-visual-effects": "^3.0.0"
+        "@financial-times/o-colors": "^100.0.0-3",
+        "@financial-times/o-grid": "^100.0.0-3",
+        "@financial-times/o-viewport": "^100.0.0-3",
+        "@financial-times/o-visual-effects": "^100.0.0-3"
     },
     "browserify-swap": {
         "@packages": [
