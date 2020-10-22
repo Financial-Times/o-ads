@@ -3,7 +3,6 @@
 	"origamiType": "module",
 	"origamiCategory": "components",
 	"origamiVersion": 2,
-	"main": "./main.js",
 	"keywords": [ "adverts" ],
 	"support": "origami.advertising.technology@ft.com",
 	"supportContact": {
