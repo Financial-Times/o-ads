@@ -1,120 +1,124 @@
 {
-    "name": "@financial-times/o-ads",
-    "version": "100.0.0-8",
-    "description": "Origami Advertising Client-side Library",
-    "homepage": "https://financial-times.github.io/o-ads",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Financial-Times/o-ads.git"
-    },
-    "license": "MIT",
-    "author": "",
-    "type": "module",
-    "exports": {
-        ".": {
-            "browser": "./main.js"
-        }
-    },
-    "browser": "./main.js",
-    "types": "types",
-    "scripts": {
-        "checksizes": "bundlesize",
-        "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
-        "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
-        "demo-server": "obt demo --runServer --port=3002",
-        "jest": "jest",
-        "lint": "eslint .",
-        "lint-complexity": "eslint . -c .eslintrc-complexity.js",
-        "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
-        "obt": "obt",
-        "prepare": "npx snyk protect || npx snyk protect -d || true",
-        "release": "release-it",
-        "test": "npm run test-unit",
-        "test-coverage": "karma start karma.conf.js --single-run",
-        "test-cy:open": "cypress open",
-        "test-cy:run": "cypress run -r spec --record false",
-        "test-e2e": "jest -c jest.config.puppeteer.js",
-        "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
-        "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
-        "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
-        "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
-        "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
-        "test-unit": "jest && npm run test-coverage",
-        "verify": "obt verify",
-        "version": "genversion --semi src/js/version.js"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.10.4",
-        "@babel/preset-env": "^7.10.4",
-        "@cypress/webpack-preprocessor": "^5.4.5",
-        "@financial-times/secret-squirrel": "^2.15.0",
-        "@testing-library/jest-dom": "^5.11.0",
-        "@types/doubleclick-gpt": "2019041801.0.3",
-        "@types/jest": "26.0.14",
-        "@types/jsdom": "16.2.3",
-        "babel-jest": "^26.0.0",
-        "babel-plugin-rewire": "^1.2.0",
-        "bower-resolve-webpack-plugin": "^1.0.5",
-        "browserstack-local": "^1.4.5",
-        "bundlesize": "^0.18.0",
-        "cypress": "^5.1.0",
-        "dotenv": "^8.2.0",
-        "eslint": "^7.9.0",
-        "eslint-plugin-jest": "^24.0.2",
-        "eslint-plugin-qunit": "^5.0.0",
-        "geckodriver": "^1.20.0",
-        "genversion": "^2.2.1",
-        "isomorphic-fetch": "^2.0.0",
-        "istanbul": "^0.4.2",
-        "istanbul-instrumenter-loader": "^3.0.1",
-        "jest": "^26.0.0",
-        "jest-environment-jsdom": "26.3.0",
-        "jest-environment-jsdom-global": "2.0.4",
-        "jest-puppeteer": "^4.4.0",
-        "karma": "^5.2.0",
-        "karma-chrome-launcher": "^3.1.0",
-        "karma-cli": "^2.0.0",
-        "karma-coverage": "^2.0.0",
-        "karma-coverage-istanbul-reporter": "^3.0.0",
-        "karma-qunit": "^4.0.0",
-        "karma-webpack": "^4.0.0",
-        "nightwatch": "git@github.com:Financial-Times/nightwatch.git",
-        "origami-build-tools": "^9.0.13",
-        "puppeteer": "^5.2.1",
-        "qunit": "^2.11.2",
-        "release-it": "^14.0.2",
-        "snyk": "^1.169.1",
-        "start-server-and-test": "^1.11.3",
-        "watchify": "^3.11.0",
-        "webpack": "^4.43.0"
-    },
-    "peerDependencies": {
-        "@financial-times/o-colors": "^100.0.0-9",
-        "@financial-times/o-grid": "^100.0.0-9",
-        "@financial-times/o-viewport": "^100.0.0-9",
-        "@financial-times/o-visual-effects": "^100.0.0-9"
-    },
-    "engines": {
-        "node": "^8.6.0"
-    },
-    "publishConfig": {
-        "registry": "https://origami-npm-registry-prototype.herokuapp.com"
-    },
-    "browserify-swap": {
-        "@packages": [
-            "lodash/date/now"
-        ],
-        "karma": {
-            ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
-        }
-    },
-    "bundlesize": [
-        {
-            "path": "./build/main.js",
-            "maxSize": "118 kB"
-        }
-    ],
-    "release": {
-        "analyzeCommits": "simple-commit-message"
+  "name": "@financial-times/o-ads",
+  "version": "100.0.0-10",
+  "description": "Origami Advertising Client-side Library",
+  "keywords": [],
+  "homepage": "https://financial-times.github.io/o-ads",
+  "bugs": {
+    "url": "https://github.com/Financial-Times/o-ads/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Financial-Times/o-ads.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": {
+      "browser": "./main.js"
     }
+  },
+  "browser": "./main.js",
+  "types": "types",
+  "scripts": {
+    "checksizes": "bundlesize",
+    "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
+    "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
+    "demo-server": "obt demo --runServer --port=3002",
+    "jest": "jest",
+    "lint": "eslint .",
+    "lint-complexity": "eslint . -c .eslintrc-complexity.js",
+    "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
+    "obt": "obt",
+    "prepare": "npx snyk protect || npx snyk protect -d || true",
+    "release": "release-it",
+    "test": "npm run test-unit",
+    "test-coverage": "karma start karma.conf.js --single-run",
+    "test-cy:open": "cypress open",
+    "test-cy:run": "cypress run -r spec --record false",
+    "test-e2e": "jest -c jest.config.puppeteer.js",
+    "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
+    "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
+    "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
+    "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
+    "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
+    "test-unit": "jest && npm run test-coverage",
+    "verify": "obt verify",
+    "version": "genversion --semi src/js/version.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@cypress/webpack-preprocessor": "^5.4.5",
+    "@financial-times/secret-squirrel": "^2.15.0",
+    "@testing-library/jest-dom": "^5.11.0",
+    "@types/doubleclick-gpt": "2019041801.0.3",
+    "@types/jest": "26.0.14",
+    "@types/jsdom": "16.2.3",
+    "babel-jest": "^26.0.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "bower-resolve-webpack-plugin": "^1.0.5",
+    "browserstack-local": "^1.4.5",
+    "bundlesize": "^0.18.0",
+    "cypress": "^5.1.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.9.0",
+    "eslint-plugin-jest": "^24.0.2",
+    "eslint-plugin-qunit": "^5.0.0",
+    "geckodriver": "^1.20.0",
+    "genversion": "^2.2.1",
+    "isomorphic-fetch": "^2.0.0",
+    "istanbul": "^0.4.2",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "jest": "^26.0.0",
+    "jest-environment-jsdom": "26.3.0",
+    "jest-environment-jsdom-global": "2.0.4",
+    "jest-puppeteer": "^4.4.0",
+    "karma": "^5.2.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-cli": "^2.0.0",
+    "karma-coverage": "^2.0.0",
+    "karma-coverage-istanbul-reporter": "^3.0.0",
+    "karma-qunit": "^4.0.0",
+    "karma-webpack": "^4.0.0",
+    "nightwatch": "git+ssh://git@github.com/Financial-Times/nightwatch.git",
+    "origami-build-tools": "^9.0.13",
+    "puppeteer": "^5.2.1",
+    "qunit": "^2.11.2",
+    "release-it": "^14.0.2",
+    "snyk": "^1.169.1",
+    "start-server-and-test": "^1.11.3",
+    "watchify": "^3.11.0",
+    "webpack": "^4.43.0"
+  },
+  "peerDependencies": {
+    "@financial-times/o-colors": "^100.0.0-10",
+    "@financial-times/o-grid": "^100.0.0-10",
+    "@financial-times/o-viewport": "^100.0.0-10",
+    "@financial-times/o-visual-effects": "^100.0.0-10"
+  },
+  "engines": {
+    "node": "^8.6.0"
+  },
+  "publishConfig": {
+    "registry": "https://origami-npm-registry-prototype.herokuapp.com"
+  },
+  "browserify-swap": {
+    "@packages": [
+      "lodash/date/now"
+    ],
+    "karma": {
+      ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
+    }
+  },
+  "bundlesize": [
+    {
+      "path": "./build/main.js",
+      "maxSize": "118 kB"
+    }
+  ],
+  "release": {
+    "analyzeCommits": "simple-commit-message"
+  }
 }
