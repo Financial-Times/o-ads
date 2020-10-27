@@ -1,6 +1,6 @@
 {
     "name": "@financial-times/o-ads",
-    "version": "100.0.0-7",
+    "version": "100.0.0-8",
     "description": "Origami Advertising Client-side Library",
     "homepage": "https://financial-times.github.io/o-ads",
     "repository": {
@@ -89,10 +89,10 @@
         "webpack": "^4.43.0"
     },
     "peerDependencies": {
-        "@financial-times/o-colors": "^100.0.0-7",
-        "@financial-times/o-grid": "^100.0.0-7",
-        "@financial-times/o-viewport": "^100.0.0-7",
-        "@financial-times/o-visual-effects": "^100.0.0-7"
+        "@financial-times/o-colors": "^100.0.0-8",
+        "@financial-times/o-grid": "^100.0.0-8",
+        "@financial-times/o-viewport": "^100.0.0-8",
+        "@financial-times/o-visual-effects": "^100.0.0-8"
     },
     "engines": {
         "node": "^8.6.0"
