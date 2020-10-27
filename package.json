@@ -9,7 +9,14 @@
     },
     "license": "MIT",
     "author": "",
-    "browser": "main.js",
+    "type": "module",
+    "exports": {
+        ".": {
+            "browser": "./main.js"
+        }
+    },
+    "browser": "./main.js",
+    "types": "types",
     "scripts": {
         "checksizes": "bundlesize",
         "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
