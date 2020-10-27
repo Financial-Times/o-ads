@@ -2,39 +2,40 @@
     "name": "@financial-times/o-ads",
     "version": "100.0.0-7",
     "description": "Origami Advertising Client-side Library",
-    "browser": "main.js",
-    "scripts": {
-        "demo-server": "obt demo --runServer --port=3002",
-        "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
-        "test": "npm run test-unit",
-        "test-coverage": "karma start karma.conf.js --single-run",
-        "test-unit": "jest && npm run test-coverage",
-        "test-cy:run": "cypress run -r spec --record false",
-        "test-cy:open": "cypress open",
-        "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
-        "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
-        "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
-        "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
-        "test-e2e": "jest -c jest.config.puppeteer.js",
-        "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
-        "jest": "jest",
-        "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
-        "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
-        "verify": "obt verify",
-        "lint": "eslint .",
-        "lint-complexity": "eslint . -c .eslintrc-complexity.js",
-        "release": "release-it",
-        "version": "genversion --semi src/js/version.js",
-        "obt": "obt",
-        "checksizes": "bundlesize",
-        "prepare": "npx snyk protect || npx snyk protect -d || true"
-    },
+    "homepage": "https://financial-times.github.io/o-ads",
     "repository": {
         "type": "git",
         "url": "https://github.com/Financial-Times/o-ads.git"
     },
-    "homepage": "https://financial-times.github.io/o-ads",
+    "license": "MIT",
     "author": "",
+    "browser": "main.js",
+    "scripts": {
+        "checksizes": "bundlesize",
+        "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
+        "coverage": "export COVERAGE=true && karma start && unset COVERAGE",
+        "demo-server": "obt demo --runServer --port=3002",
+        "jest": "jest",
+        "lint": "eslint .",
+        "lint-complexity": "eslint . -c .eslintrc-complexity.js",
+        "nightwatch-bs": "node ./test/nightwatch/config/nightwatch-local.js -c ./test/nightwatch/config/nightwatch.conf.bs.js",
+        "obt": "obt",
+        "prepare": "npx snyk protect || npx snyk protect -d || true",
+        "release": "release-it",
+        "test": "npm run test-unit",
+        "test-coverage": "karma start karma.conf.js --single-run",
+        "test-cy:open": "cypress open",
+        "test-cy:run": "cypress run -r spec --record false",
+        "test-e2e": "jest -c jest.config.puppeteer.js",
+        "test-e2e-local": "start-server-and-test demo-server http://localhost:3002 test-e2e",
+        "test-nw": "npm run test-nw:basic && npm run test-nw:extended",
+        "test-nw:basic": "npm run nightwatch-bs -- --group basic --env chrome,firefox,safari,edge,galaxy_s8",
+        "test-nw:extended": "npm run nightwatch-bs -- --group extended --env chrome",
+        "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
+        "test-unit": "jest && npm run test-coverage",
+        "verify": "obt verify",
+        "version": "genversion --semi src/js/version.js"
+    },
     "devDependencies": {
         "@babel/core": "^7.10.4",
         "@babel/preset-env": "^7.10.4",
@@ -86,6 +87,12 @@
         "@financial-times/o-viewport": "^100.0.0-7",
         "@financial-times/o-visual-effects": "^100.0.0-7"
     },
+    "engines": {
+        "node": "^8.6.0"
+    },
+    "publishConfig": {
+        "registry": "http://localhost:4873"
+    },
     "browserify-swap": {
         "@packages": [
             "lodash/date/now"
@@ -94,20 +101,13 @@
             ".*lodash/date/now.js$": "./test/qunit/mocks/now.js"
         }
     },
-    "license": "MIT",
-    "engines": {
-        "node": "^8.6.0"
-    },
-    "release": {
-        "analyzeCommits": "simple-commit-message"
-    },
     "bundlesize": [
         {
             "path": "./build/main.js",
             "maxSize": "118 kB"
         }
     ],
-    "publishConfig": {
-        "registry": "http://localhost:4873"
+    "release": {
+        "analyzeCommits": "simple-commit-message"
     }
 }
