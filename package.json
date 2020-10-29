@@ -20,7 +20,7 @@
     }
   },
   "browser": "./main.js",
-  "types": "types",
+  "types": "./types/main.d.ts",
   "scripts": {
     "checksizes": "bundlesize",
     "ci": "export COVERAGE=true && export CI=true && karma start && unset COVERAGE && unset CI",
@@ -45,7 +45,8 @@
     "test-nw:local": "nightwatch -c ./test/nightwatch/config/nightwatch.conf.local.js",
     "test-unit": "jest && npm run test-coverage",
     "verify": "obt verify",
-    "version": "genversion --semi src/js/version.js"
+    "version": "genversion --semi src/js/version.js",
+    "build": "tsc src/**/*.js main.js --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
@@ -89,6 +90,7 @@
     "release-it": "^14.0.2",
     "snyk": "^1.169.1",
     "start-server-and-test": "^1.11.3",
+    "typescript": "^4.0.5",
     "watchify": "^3.11.0",
     "webpack": "^4.43.0"
   },
