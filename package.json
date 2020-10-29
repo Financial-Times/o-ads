@@ -101,7 +101,8 @@
     "@financial-times/o-visual-effects": "^100.0.0-10"
   },
   "engines": {
-    "node": "^8.6.0"
+    "node": "^8.6.0",
+    "npm": "^7"
   },
   "publishConfig": {
     "registry": "https://origami-npm-registry-prototype.herokuapp.com"
