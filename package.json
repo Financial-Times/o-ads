@@ -43,7 +43,7 @@
     "@testing-library/jest-dom": "^5.11.0",
     "@types/doubleclick-gpt": "2019041801.0.3",
     "@types/jest": "26.0.14",
-    "@types/jsdom": "16.2.3",
+    "@types/jsdom": "16.2.5",
     "babel-jest": "^26.0.0",
     "babel-plugin-rewire": "^1.2.0",
     "bower-resolve-webpack-plugin": "^1.0.5",
