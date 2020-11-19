@@ -21,15 +21,17 @@ This doc is specific to the o-ads library. For more information about the ads ec
 
 **[7. Styling](#styling)**
 
-**[8. Events](#events)**
+**[8. Collapsing](#collapsing)**
 
-**[9. Metrics & Monitoring](#metrics--monitoring)**
+**[9. Events](#events)**
 
-**[10. Misc](#misc)**
+**[10. Metrics & Monitoring](#metrics--monitoring)**
 
-**[11. Developing](#developing)**
+**[11. Misc](#misc)**
 
-**[12. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
+**[12. Developing](#developing)**
+
+**[13. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
 
 
 ## Install
@@ -295,6 +297,58 @@ o-ads provides some classes to add some basic branded styling to the ad slot.
 - `.o-ads--center` Horizontally centres the ad.
 
 - `.o-ads--label-left` Adds a label above the ad indicating that it is an advertisement. This is required for when the ad sits in between content (e.g. in the middle of an article).
+
+## Collapsing
+A creative may not be served under one of the following circumstances:
+
+1. **A bug in the creative** - The ad server served an ad correctly, but some bug in the creative causes it not to display anything. A common example of this would be if the ad’s assets were insecure. This needs to be reported to AdOps as soon as possible - ideally with the creative Id or line item Id
+
+2.  **Collapsed ad** - This is when AdOps explicitly send instructions to an ad slot not to show anything, maybe because an advertiser wants exclusivity on the page, but might not have assets with all the correct sizes. This is done via a particular creative that contains some code implemented throught o-ads-embed telling it to collapse itself. It should then append the class o-ads--empty to the ad slot.
+
+3. No ad This is when the ad server fails to return any ad. This could be caused by an ad call that is missing the correct targeting parameters and ad unit. However, it should be rare, as AdOps usually fall back to either programmatic advertising or House Ads
+
+### Collapsing of empty ad slots
+There are three options available for how the ad slot should react to the absence of an ad.
+
+1. **before:** The ad slot will be collapsed before the ad request until an ad is found.
+
+2. **after:** The ad slot will be collapsed if no ad is found after the ad request.
+
+3. **never:** The ad slot never collapses, even if no ad is found.
+
+By default, collapsing of empty ads is disabled (never).
+
+Via config for page level:
+
+```javascript
+oAds.config({
+	collapseEmpty: "before",
+	...
+});
+```
+
+Via config for a specific slot
+```javascript
+oAds.config({
+	slots: {
+		outstream: {
+			collapseEmpty: "before"
+		}
+	},
+	...
+});
+```
+
+```html
+<!-- view.html -->
+<div class="o-ads" data-o-ads-name="outstream"></div>
+```
+
+Via component
+
+```html
+<div class="o-ads" data-o-ads-collapse-empty="before"></div>
+```
 
 ## Events
 
