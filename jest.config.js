@@ -166,7 +166,8 @@ module.exports = {
 	// transform: null,
 	transform: {
 		'^.+\\.jsx?$': 'babel-jest'
-	}
+	},
+	resolver: "@financial-times/jest-bower-resolver"
 
 	// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 	// transformIgnorePatterns: [
