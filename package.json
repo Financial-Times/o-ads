@@ -47,7 +47,7 @@
     "babel-jest": "26.3.0",
     "babel-plugin-rewire": "1.2.0",
     "bower-resolve-webpack-plugin": "1.0.5",
-    "browserstack-local": "1.4.5",
+    "browserstack-local": "1.4.8",
     "bundlesize": "0.18.0",
     "cypress": "5.1.0",
     "dotenv": "8.2.0",
