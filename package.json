@@ -39,7 +39,7 @@
     "@babel/core": "7.12.3",
     "@babel/preset-env": "7.12.1",
     "@cypress/webpack-preprocessor": "5.4.11",
-    "@financial-times/secret-squirrel": "2.15.0",
+    "@financial-times/secret-squirrel": "2.16.1",
     "@testing-library/jest-dom": "5.11.0",
     "@types/doubleclick-gpt": "2019041801.0.4",
     "@types/jest": "26.0.15",
