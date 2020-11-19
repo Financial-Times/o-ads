@@ -42,7 +42,7 @@
     "@financial-times/secret-squirrel": "^2.15.0",
     "@testing-library/jest-dom": "^5.11.0",
     "@types/doubleclick-gpt": "2019041801.0.4",
-    "@types/jest": "26.0.14",
+    "@types/jest": "26.0.15",
     "@types/jsdom": "16.2.5",
     "babel-jest": "^26.0.0",
     "babel-plugin-rewire": "^1.2.0",
