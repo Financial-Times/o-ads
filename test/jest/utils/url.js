@@ -4,7 +4,7 @@ import {
 	stripUrlParams,
 	filterNestedParams,
 	SEARCH_PARAMS
-} from '../../../src/js/utils/url';
+} from '../../../src/js/utils/url.js';
 
 describe('filterNestedParams', () => {
 	describe.each([

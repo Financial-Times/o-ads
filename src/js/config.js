@@ -21,7 +21,7 @@
  * @memberof FT.ads
  * @function
 */
-import utils from './utils';
+import utils from './utils/index.js';
 
 /**
 * Default configuration set in the constructor.

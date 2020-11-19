@@ -6,7 +6,7 @@ This doc is specific to the o-ads library. For more information about the ads ec
 
 ***Note**: This package is over 5 years old and will soon be deprecated in favour of more modern tools. Please speak to the advertising team (Slack #advertising-dev) if you are thinking of using this.*
 
-# Table of Contents
+## Table of Contents
 **[1. Install](#install)**
 
 **[2. Setup & Configuration](#setup-config)**
@@ -32,35 +32,16 @@ This doc is specific to the o-ads library. For more information about the ads ec
 **[12. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
 
 
-# Install
-Step One. You need to include the o-ads library on your site. There are two ways:
-### 1. Include a script on your site
-The simple way. All you need to do is include the following in the `<head>` section of your site.
-```
-<href="https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-ads@^16.0.0" />
-<script src="https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-ads@^16.0.0" async />
-```
+## Install
 
-***Note**: At the time of writing, latest version of o-ads is v16.0.0. Check latest available version and replace in the script and link tags*
+Check out [how to include Origami components in your project](https://origami.ft.com/docs/components/#including-origami-components-in-your-project) to get started with `o-ads`.
 
-### 2. Include o-ads as part of your build
-If you're using a build system, you can include o-ads in your code through npm
+## Setup & Configuration
 
-```
-npm install @financial-times/o-ads --save
-```
-
-And in your file
-```
-import oAds from '@financial-times/o-ads'
-```
-
-# Setup & Configuration
-
-## Intialise the library
+### Intialise the library
 Step two. You'll need to initialise the o-ads library with some confirguration options in order for it to work. There are 2 ways of doing this:
 
-### Declaratively
+#### Declaratively
 
 If you've included o-ads directly on your site using the script provided above, you'll need to initialise it declaratively like so:
 
@@ -77,7 +58,7 @@ If you've included o-ads directly on your site using the script provided above, 
 
  *Note: See below for all config options*
 
- ### Programatically 
+ #### Programatically
 
 If you've include o-ads in you code through npm, you will need to initialise it like so:
 
@@ -95,7 +76,7 @@ oAds.init({
 
  *Note: See below for all config options*
 
-## Configuration Options {#config-options}
+### Configuration Options {#config-options}
 
 These are all the valid configuration options that can be used to set up o-ads:
 
@@ -103,7 +84,7 @@ These are all the valid configuration options that can be used to set up o-ads:
   - `gpt.network` **(required)** `<Number>`
   - `gpt.site` **(required)** `<String>`
   - `gpt.zone` *(optional)* `<String>`
-  - `gpt.rendering` *(optional)* `<String> "sync" | "sra" | "async" (default)` - GPT Rendering Mode Sync, SRA or Async 
+  - `gpt.rendering` *(optional)* `<String> "sync" | "sra" | "async" (default)` - GPT Rendering Mode Sync, SRA or Async
   - `gpt.enableLazyLoad` *(optional)* `<Object>` - GPT Lazy Load, where configuration parameters allow customization of lazy loading behaviour.
 
     Default settings are
@@ -129,18 +110,18 @@ These are all the valid configuration options that can be used to set up o-ads:
 - `targeting` *(optional)* `<Object>` - An object of key => value pairs that will be appended to every ad call on the page
 - `displayLabelWithBorders` *(optional)* `<Boolean>` - Display ad slots with borders on the top and bottom
 
-# Define Ad Slots
+## Define Ad Slots
 
 Step three. Create some ad slots. Once you've included and configured o-ads onto your website, you'll want to create some placeholders for your ads. These are the HTML elements where the ad will render. These can be defined declarately within a HTML page.
 
-## The Simplest Ad
+### The Simplest Ad
 
 This is the minimum required for an ad slot to be defined. We set some options via html attributes on the slot element. We are naming the ad slot *exampleAdSlot* and tell it to only return ads of the format *MediumRectangle*. This will be processed by o-ads and an ad will be rendered inside the `<div>` if the ad request is successful.
 
 ```html
-<div 
-  data-o-ads-name="exampleAdSlot" 
-  data-o-ads-formats-default="MediumRectangle" 
+<div
+  data-o-ads-name="exampleAdSlot"
+  data-o-ads-formats-default="MediumRectangle"
   aria-hidden="true">
 </div>
 ```
@@ -149,7 +130,7 @@ This is the minimum required for an ad slot to be defined. We set some options v
 
 *See [Ad Formats](#formats)* and [Breakpoints](#breakpoints)
 
-## Ad slot options {#ad-slot-options}
+### Ad slot options {#ad-slot-options}
 
 These are all the options that an ad slot can have, declared as attributes on the html element (see example above)
 
@@ -159,15 +140,15 @@ These are all the options that an ad slot can have, declared as attributes on th
 - **`data-o-ads-formats-medium="<Format Name>"`** - The ad format served at the medium breakpoint. See [Formats](#formats) and [Breakpoints](#breakpoints)
 - **`data-o-ads-formats-large="<Format Name>"`** - The ad format served at the large breakpoint. See [Formats](#formats) and [Breakpoints](#breakpoints)
 - **`data-o-ads-formats-extra="<Format Name>"`** - The ad format served at the extra large breakpoint. See [Formats](#formats) and [Breakpoints](#breakpoints)
-- **`data-o-ads-collapse-empty="before|after|never"`** - Set how the ad slot will collapse if there is no ad. (See *collapseEmpty* [configuration option](#config-options)) 
-- **`data-o-ads-collapse-empty="before|after|never"`** - Set how the ad slot will collapse if there is no ad. (See collapseEmpty [configuration option](#config-options)) 
+- **`data-o-ads-collapse-empty="before|after|never"`** - Set how the ad slot will collapse if there is no ad. (See *collapseEmpty* [configuration option](#config-options))
+- **`data-o-ads-collapse-empty="before|after|never"`** - Set how the ad slot will collapse if there is no ad. (See collapseEmpty [configuration option](#config-options))
 - **`data-o-ads-loaded="<Format Name>`** - This is set automatically by o-ads to the format of the ad that was loaded in this ad slot. See [Formats](#formats) and [Changing behaviour based on ads loaded](#ads-loaded)
 - **`data-o-ads-targeting="key=value;key2=value2;"`** - Ad targeting info specific to the ad slot. See [Targeting](#targeting)
 - **`data-o-ads-out-of-page="true"`** - Serve an ad that pops out of its iframe
   - Out-of-page line items make it easier to serve web creatives that do not fit in a traditional banner space or browser window. They may include pop-ups and floating line items and are sometimes called interstitials.
   - To serve pop-up, pop-under, or floating creatives to your website, you’ll need to traffic the creatives using one of Ad Manager’s built-in creative templates, and you’ll need to make sure your tags are set up properly to allow these creative types to serve. For more info, see [Ad Manager traffic and serve out-of-page creatives](https://support.google.com/admanager/answer/6088046?hl=en&visit_id=637199698557735781-1262725011&rd=1)
 
-## Ad Formats
+### Ad Formats
 
 Formats are predetermiend ad sizes that you can request for your ad. You can specify one format as in the above example, or you can specify multiple formats for different breakpoints. The following example loads a MediumRectangle ad at the small breakpoint, a Leaderboard ad at the medium breakpoint a SuperLeader ad at the large breakpoint and no ad at the extra large breakpoint.
 
@@ -183,7 +164,7 @@ Formats are predetermiend ad sizes that you can request for your ad. You can spe
 </div>
 ```
 
-### Default breakpoints {#breakpoints}
+#### Default breakpoints {#breakpoints}
 The default breakpoints provided in o-ads are as follows:
 - **small**: 0px (This is the size where it is appropriate to show a MediumRectangle)
 - **medium**: 760px (This is the size where it is appropriate to show a Leaderboard)
@@ -206,7 +187,7 @@ oAds.init({
 });
 ```
 
-### Default Formats {#formats}
+#### Default Formats {#formats}
 
 Here are all the available ad formats and their corresponding ad sizes:
 
@@ -234,11 +215,11 @@ oAds.init({
 });
 ```
 
-# Targeting
+## Targeting
 
 Ads can contain extra information about a user, page, or any other useful info that could be used in Google Ad Manager. There are three ways of adding targeting information to an ad request.
 
-## Page level targeting
+### Page level targeting
 
 You can specify an object of key => value pairs when initialising o-ads. Each key => value pair will be appended to every ad request on the page
 
@@ -254,7 +235,7 @@ oAds.init({
 });
 ```
 
-## Ad slot level targeting
+### Ad slot level targeting
 
 You can also specify targeting parameters for any particular ad slot, by using the `data-o-ads-targeting` attribute when defining the ad slot:
 
@@ -268,7 +249,7 @@ You can also specify targeting parameters for any particular ad slot, by using t
 </div>
 ```
 
-# Lazy Loading
+## Lazy Loading
 
 o-ads can be configured to lazy-load ads (i.e. only trigger the ad call when the ad is in view, or close to being in view). **It is disabled by default**
 
@@ -295,7 +276,7 @@ oAds.config({
 
 There is one exception to lazy loading, which is Master/Companion. Based on the way that this pair of creatives are related in DFP, the companion is loaded soon after the master, which overrides lazy loading.
 
-# Styling
+## Styling
 
 o-ads provides some classes to add some basic branded styling to the ad slot.
 
@@ -315,50 +296,50 @@ o-ads provides some classes to add some basic branded styling to the ad slot.
 
 - `.o-ads--label-left` Adds a label above the ad indicating that it is an advertisement. This is required for when the ad sits in between content (e.g. in the middle of an article).
 
-# Events
+## Events
 
-## `oAds.initialising`
+### `oAds.initialising`
 Triggered when the library starts the initialisation process.
 
-## `oAds.initialised`
+### `oAds.initialised`
 Triggered when the library has been initialised and the config has been set. (Note: the GPT library may not have been loaded by this point).
 
-## `oAds.serverScriptLoaded`
+### `oAds.serverScriptLoaded`
 Triggered when both the GPT library is loaded and oAds.initialised has happened. This marks the completion of the page-level tasks required to enable requests to the ad server.
 
-## `oAds.adServerLoadError`
+### `oAds.adServerLoadError`
 Triggered if the library fails to load the external JS GPT library, meaning no advertising will work. Can be used if you wish to have a fallback when you know the adverts will not display.
 
-## `oAds.slotReady`
+### `oAds.slotReady`
 Slot has been inited in the oAds library and is about to be requested from the ad server (deferred if lazy loading is on).
 
-## `oAds.slotRenderStart`
+### `oAds.slotRenderStart`
 Triggered once the ad has been rendered on the page.
 
-## `oAds.slotExpand`
+### `oAds.slotExpand`
 If and when a creative has been returned, this event announces it has now been initialised in oAds, requested from the ad server and displayed. Triggered after oAds.slotRenderStart.
 
-## `oAds.slotCanRender`
+### `oAds.slotCanRender`
 Lazy loaded advert has been requested.
 
-## `oAds.refresh`
+### `oAds.refresh`
 A refresh event has been triggered on an advert, prompting a new request to the ad server.
 
-## `oAds.breakpoint`
+### `oAds.breakpoint`
 If the oAds is configured to use responsive adverts with set breakpoints, it will trigger the event on each of the breakpoints that was specified in the config. Note that the breakpoint triggering does not take the scrollbar into consideration. For more information read about DFP - Build responsive ads.
 
-## `oAds.collapse`
+### `oAds.collapse`
 Event is emitted when the slot is collapsed. The event detail contains oAds slot instance.
 
-# Metrics & Monitoring
+## Metrics & Monitoring
 As of version 12, o-ads includes some built-in functionality to help monitor the ads loading flow.
 
 Firstly, o-ads saves a [performance mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) every time it dispatches one of the many [events](#events) that indicate a milestone in the ads loading process. If used from [n-ads](https://github.com/Financial-Times/n-ads), extra performance marks might be added. See the [n-ads docs](https://github.com/Financial-Times/n-ads#monitoring)
 
-## `oAds.utils.setupMetrics()`
+### `oAds.utils.setupMetrics()`
 o-ads is now exposing a new method, `oAds.utils.setupMetrics()` which enables setting up all ads-related metrics in one step.
 
-```javascript 
+```javascript
 setupMetrics(eventDefArray, callback, disableSampling):
 ```
 
@@ -372,7 +353,7 @@ setupMetrics(eventDefArray, callback, disableSampling):
 - `disableSampling` (optional) `<Boolean>` - A boolean indicating if the sampling specified in the `eventDefArray` should be ignored. That is, when set to true, no sampling will be applied. Default: `false`
 
 
-### `setupMetrics()` Example
+#### `setupMetrics()` Example
 It’s easier to understand how to configure o-ads with an example:
 ```javascript
 const metricsDefinitions = [
@@ -426,7 +407,7 @@ In this example there are four different metrics groups. The first one will invo
 
 Finally, the `sampleSize: 0.1` parameter on the `slot-rendered` group randomizes the possibility that the callback is actually called when the `oAds.slotRenderEnded` event is dispatched, giving it only a 10% chance. This can be used to reduce the number of total “monitoring” events that get fired across the user base.
 
-## `oAds.utils.clearPerfMarks()`
+### `oAds.utils.clearPerfMarks()`
 Clear entire groups of performance marks created during previous ad loading cycles by some `setupMetrics()` configuration. This is specially useful in websites that behave like single-page applications and don’t automatically clear the browser’s performance entry buffer very often.
 
 ```javascript
@@ -436,8 +417,8 @@ oAds.utils.clearPerfMarks(eventDefArray, groupsToClear)
 - `eventDefArray` **(required)** `<Array>` - An array of metrics groups expected to have the same structure as defined in [setupMetrics()](#oadsutilssetupmetrics).
 - `groupsToClear` **(required)** `<Array>` - An array of metrics groups whose associated performance marks we want to remove.
 
-### `clearPerMarks()` Example:
-```javascript 
+#### `clearPerMarks()` Example:
+```javascript
 const metricsDefinitions = ... // as per the 'setupMetrics' example
 
 // Clear all existing performance marks defined in the 'slot-rendered' and 'slot-rendered' groups
@@ -445,27 +426,27 @@ oAds.utils.clearPerfMarks(metricsDefinitions, ['slot-requested', 'slot-rendered'
 ```
 With the previously defined `metricsDefinitions` array, this code will remove all `slotReady`, `slotCanRender`, `slotGoRender`, `slotRenderStart`, `slotExpand` and `slotRenderEnded` existing marks
 
-# Misc
+## Misc
 
-## Changing behaviour based on which ad loads {#ads-loaded}
+### Changing behaviour based on which ad loads {#ads-loaded}
 
 All ads get an attribute added called `data-o-ads-loaded`, which contains the format of the ad that loaded. For example, `data-o-ads-loaded="Billboard"`.
 
 A product can use this to change the styles based on which ad has loaded (for example, to increase the height of a reserved slot if a larger ad loads).
 
-# Developing
+## Developing
 
-### Install & Demos
+#### Install & Demos
 
 - To install: `obt install`.
 - To run the demos: `obt demo`.
 - To run a demo server: `npm run demo-server`
 
-### Tests
+#### Tests
 
 See the [test documentation](https://github.com/Financial-Times/o-ads/blob/master/test/README.md)
 
-### Releasing
+#### Releasing
 
 You will need a `GITHUB_TOKEN` environment variable with access to the repository in your .env file
 [Get a github token](https://github.com/settings/tokens) with "repo" access and make it accessible as an environment variable.
@@ -476,6 +457,6 @@ This will bump version numbers in the source and commit them, push to github and
 
 The command uses [release-it](https://github.com/webpro/release-it) under the hood as well as genversion to automatically bump version numbers in the source.
 
-# Migration
+## Migration
 
 See the [migration guide](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)

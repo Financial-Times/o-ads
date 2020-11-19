@@ -3,8 +3,8 @@
 'use strict'; //eslint-disable-line
 
 import oViewport from 'o-viewport';
-import utils from '../../src/js/utils';
-import gptMock from './mocks/gpt-mock';
+import utils from '../../src/js/utils/index.js';
+import gptMock from './mocks/gpt-mock.js';
 
 import userFixtures from '../fixtures/user-api-response.json';
 import userAnonymousFixtures from '../fixtures/user-api-anonymous-response.json';

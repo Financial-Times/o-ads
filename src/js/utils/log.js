@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import { isArray, isObject } from './index';
+import { isArray, isObject } from './index.js';
 
 /**
  * Utility methods for logging.

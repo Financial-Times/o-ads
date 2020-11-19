@@ -7,10 +7,10 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-import config from '../config';
-import utils from '../utils';
-import targeting from '../targeting';
-import { stripUrlParams, SEARCH_PARAMS } from '../utils/url';
+import config from '../config.js';
+import utils from '../utils/index.js';
+import targeting from '../targeting.js';
+import { stripUrlParams, SEARCH_PARAMS } from '../utils/url.js';
 
 export const DEFAULT_LAZY_LOAD = {
 	fetchMarginPercent: 500,
@@ -345,7 +345,7 @@ const slotMethods = {
 			if (!this.outOfPage) {
 				if (breakpoints && utils.isObject(this.sizes)) {
 					this.initResponsive();
-					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [], this.gpt.id).defineSizeMapping(this.gpt.sizes);
+					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, [0, 0], this.gpt.id).defineSizeMapping(this.gpt.sizes);
 				} else {
 					this.gpt.slot = googletag.defineSlot(this.gpt.unitName, this.sizes, this.gpt.id);
 				}
