@@ -79,7 +79,7 @@
     "snyk": "1.193.2",
     "start-server-and-test": "1.11.3",
     "watchify": "3.11.1",
-    "webpack": "4.43.0"
+    "webpack": "4.44.2"
   },
   "browserify-swap": {
     "@packages": [
