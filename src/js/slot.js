@@ -1,5 +1,5 @@
 import utils from './utils/index.js';
-import config from './config.js';
+import config from '@financial-times/ads-config';
 
 const VALID_SIZE_STRINGS = ['fluid'];
 const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];

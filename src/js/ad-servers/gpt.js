@@ -7,7 +7,7 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-import config from '../config.js';
+import config from '@financial-times/ads-config';
 import utils from '../utils/index.js';
 import targeting from '../targeting.js';
 import { stripUrlParams, SEARCH_PARAMS } from '../utils/url.js';

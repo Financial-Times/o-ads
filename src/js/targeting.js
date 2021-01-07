@@ -1,4 +1,4 @@
-import config from './config.js';
+import config from '@financial-times/ads-config';
 import utils from './utils/index.js';
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function

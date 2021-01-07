@@ -1,7 +1,7 @@
 
 
 /* eslint valid-jsdoc: 0 */
-import config, { init, clear } from './src/js/config.js';
+import config, { init, clear } from '@financial-times/ads-config';
 import slots from './src/js/slots.js';
 import gpt from './src/js/ad-servers/gpt.js';
 import targeting from './src/js/targeting.js';
