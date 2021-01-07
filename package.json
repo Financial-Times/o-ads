@@ -36,7 +36,7 @@
   "homepage": "https://financial-times.github.io/o-ads",
   "author": "",
   "dependencies": {
-    "@financial-times/ads-config": "^1.3.0-beta.1"
+    "@financial-times/ads-config": "^1.3.0-beta.3"
   },
   "devDependencies": {
     "@babel/core": "7.12.9",
