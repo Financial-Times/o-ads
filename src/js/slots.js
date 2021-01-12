@@ -1,7 +1,9 @@
 /* eslint no-inner-declarations: 1 */
 import utils from './utils/index.js';
-import config from '@financial-times/ads-config';
+import { config as adsConfig } from 'advertising';
 import Slot from './slot.js';
+
+const config = adsConfig.default;
 
 let screensize = null;
 

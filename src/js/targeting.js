@@ -1,5 +1,7 @@
-import config from '@financial-times/ads-config';
+import { config as adsConfig } from 'advertising';
 import utils from './utils/index.js';
+
+const config = adsConfig.default;
 let parameters = {};
 function Targeting() {} //eslint-disable-line no-empty-function
 

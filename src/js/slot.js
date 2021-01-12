@@ -1,5 +1,6 @@
 import utils from './utils/index.js';
-import config from '@financial-times/ads-config';
+import { config as adsConfig } from 'advertising';
+const config = adsConfig.default;
 
 const VALID_SIZE_STRINGS = ['fluid'];
 const VALID_COLLAPSE_MODES = ['before', 'after', 'never'];

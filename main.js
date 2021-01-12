@@ -1,7 +1,7 @@
 
 
 /* eslint valid-jsdoc: 0 */
-import config, { init, clear } from '@financial-times/ads-config';
+import { config as adsConfig } from 'advertising';
 import slots from './src/js/slots.js';
 import gpt from './src/js/ad-servers/gpt.js';
 import targeting from './src/js/targeting.js';
@@ -15,8 +15,9 @@ function Ads() {
 	}
 }
 
-config.init = init;
-config.clear = clear;
+const config = adsConfig.default;
+config.init = adsConfig.init;
+config.clear = adsConfig.clear;
 
 // bung all our modules on the protoype
 Ads.prototype.config = config;

@@ -7,10 +7,11 @@
  *
  * @author Robin Marr, robin.marr@ft.com
  */
-import config from '@financial-times/ads-config';
+import { config as adsConfig } from 'advertising';
 import utils from '../utils/index.js';
 import targeting from '../targeting.js';
 import { stripUrlParams, SEARCH_PARAMS } from '../utils/url.js';
+const config = adsConfig.default;
 
 export const DEFAULT_LAZY_LOAD = {
 	fetchMarginPercent: 500,
