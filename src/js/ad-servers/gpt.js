@@ -37,6 +37,7 @@ function init() {
 	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
+	if(gptConfig.rendering !== 'sra') { googletag.cmd.push(() => setup(gptConfig)); }
 }
 
 /*
@@ -245,11 +246,15 @@ function onReady(slotMethods, gptConfig, event) {
 				.setCollapseEmpty()
 				.setTargeting()
 				.setURL();
-			if(adCountArray.indexOf(slot) === adCountArray.length-1) { setup(gptConfig); }
+			if(gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+				googletag.cmd.push(() => setup(gptConfig));
+			}
 			if (!slot.defer && slot.hasValidSize()) {
 				slot.display();
 			}
 		});
+	}	else if (gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+		googletag.cmd.push(() => setup(gptConfig));
 	}
 }
 /*
