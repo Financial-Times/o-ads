@@ -19,6 +19,7 @@ export const DEFAULT_LAZY_LOAD = {
 };
 const DEFAULT_COLLAPSE_MODE = 'never';
 let adCountArray = [];
+let adsDisplayed = false;
 let breakpoints = false;
 /*
 //###########################
@@ -37,7 +38,7 @@ function init() {
 	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
-	if (gptConfig.rendering !== 'sra') { googletag.cmd.push(() => setup(gptConfig)); }
+	if (gptConfig.rendering !== 'sra' && !gptConfig.enableLazyLoad) { googletag.cmd.push(() => setup(gptConfig)); }
 }
 
 /*
@@ -250,6 +251,10 @@ function onReady(slotMethods, gptConfig, event) {
 				googletag.cmd.push(() => setup(gptConfig));
 			}
 			if (!slot.defer && slot.hasValidSize()) {
+				if(!adsDisplayed && gptConfig.rendering !== 'sra' && gptConfig.enableLazyLoad) {
+					googletag.cmd.push(() => setup(gptConfig));
+					adsDisplayed = true;
+				}
 				slot.display();
 			}
 		});
