@@ -37,6 +37,7 @@ function init() {
 	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
+	if (gptConfig.rendering !== 'sra') { googletag.cmd.push(() => setup(gptConfig)); }
 }
 
 /*
@@ -230,6 +231,7 @@ function enableCompanions(gptConfig) {
 function onReady(slotMethods, gptConfig, event) {
 	const slot = event.detail.slot;
 	adCountArray.push(slot);
+	console.log('ad is ready at', adCountArray.length)
 	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
@@ -245,14 +247,17 @@ function onReady(slotMethods, gptConfig, event) {
 				.setCollapseEmpty()
 				.setTargeting()
 				.setURL();
-			if(adCountArray.indexOf(slot) === adCountArray.length-1) {
+			if(gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+				console.log('last ad')
 				googletag.cmd.push(() => setup(gptConfig));
 			}
 			if (!slot.defer && slot.hasValidSize()) {
+				console.log('display')
 				slot.display();
 			}
 		});
-	}	else if (adCountArray.indexOf(slot) === adCountArray.length-1) {
+	}	else if (gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+		console.log('last ad')
 		googletag.cmd.push(() => setup(gptConfig));
 	}
 }
