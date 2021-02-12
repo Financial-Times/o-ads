@@ -153,9 +153,9 @@ QUnit.test('default to async rendering', function(assert) {
 });
 
 QUnit.test('enable gpt lazy loading with default params', function(assert) {
-	this.fixturesContainer.add('<div data-o-ads-name="lazyLoadAdDefaultParams" data-o-ads-formats="MediumRectangle"></div>');
+	this.fixturesContainer.add('<div data-o-ads-name="defaultParamLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ gpt: { enableLazyLoad: true } });
-	this.ads.slots.initSlot('lazyLoadAdDefaultParams');
+	this.ads.slots.initSlot('defaultParamLazyLoad');
 	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
 	assert.ok(
 		googletag.pubads().enableLazyLoad.calledWithExactly({
@@ -168,11 +168,11 @@ QUnit.test('enable gpt lazy loading with default params', function(assert) {
 });
 
 QUnit.test('enable gpt lazy loading with custom params', function(assert) {
-	this.fixturesContainer.add('<div data-o-ads-name="lazyLoadAdCustomParams" data-o-ads-formats="MediumRectangle"></div>');
+	this.fixturesContainer.add('<div data-o-ads-name="customParamLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ gpt: { enableLazyLoad: {
 		fetchMarginPercent: 300
 	} } });
-	this.ads.slots.initSlot('lazyLoadAdCustomParams');
+	this.ads.slots.initSlot('customParamLazyLoad');
 	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
 	assert.ok(
 		googletag.pubads().enableLazyLoad.calledWithExactly({
@@ -185,17 +185,23 @@ QUnit.test('enable gpt lazy loading with custom params', function(assert) {
 });
 
 QUnit.test('disable gpt lazy load explicitly', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="falseLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ gpt: { enableLazyLoad: false } });
+	this.ads.slots.initSlot('falseLazyLoad');
 	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
 });
 
 QUnit.test('not enabled gpt lazy load with invalid custom params', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="invalidLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ gpt: { enableLazyLoad: 'hello' } });
+	this.ads.slots.initSlot('invalidLazyLoad');
 	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
 });
 
 QUnit.test('not enabled gpt lazy load if gpt option not provided', function(assert) {
+	this.fixturesContainer.add('<div data-o-ads-name="emptyGptLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
 	this.ads.init({ gpt: {} });
+	this.ads.slots.initSlot('emptyGptLazyLoad');
 	assert.ok(googletag.pubads().enableLazyLoad.notCalled, 'enable gpt lazy load not called');
 });
 
