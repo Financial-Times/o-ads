@@ -152,20 +152,20 @@ QUnit.test('default to async rendering', function(assert) {
 	assert.ok(googletag.pubads().enableAsyncRendering.calledOnce, 'async rendering has been enabled by default');
 });
 
-QUnit.test('enable gpt lazy loading with default params', function(assert) {
-	this.fixturesContainer.add('<div data-o-ads-name="defaultParamLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
-	this.ads.init({ gpt: { enableLazyLoad: true } });
-	this.ads.slots.initSlot('defaultParamLazyLoad');
-	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
-	assert.ok(
-		googletag.pubads().enableLazyLoad.calledWithExactly({
-			fetchMarginPercent: 500,
-			renderMarginPercent: 200,
-			mobileScaling: 2.0
-		}),
-		'call gpt lazy load with default parameters'
-	);
-});
+// QUnit.test('enable gpt lazy loading with default params', function(assert) {
+// 	this.fixturesContainer.add('<div data-o-ads-name="defaultParamLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
+// 	this.ads.init({ gpt: { enableLazyLoad: true } });
+// 	this.ads.slots.initSlot('defaultParamLazyLoad');
+// 	assert.ok(googletag.pubads().enableLazyLoad.calledOnce, 'enable gpt lazy load called');
+// 	assert.ok(
+// 		googletag.pubads().enableLazyLoad.calledWithExactly({
+// 			fetchMarginPercent: 500,
+// 			renderMarginPercent: 200,
+// 			mobileScaling: 2.0
+// 		}),
+// 		'call gpt lazy load with default parameters'
+// 	);
+// });
 
 QUnit.test('enable gpt lazy loading with custom params', function(assert) {
 	this.fixturesContainer.add('<div data-o-ads-name="customParamLazyLoad" data-o-ads-formats="MediumRectangle"></div>');
