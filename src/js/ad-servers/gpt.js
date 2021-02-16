@@ -18,6 +18,8 @@ export const DEFAULT_LAZY_LOAD = {
 	mobileScaling: 2.0
 };
 const DEFAULT_COLLAPSE_MODE = 'never';
+let adCountArray = [];
+let adsDisplayed = false;
 let breakpoints = false;
 /*
 //###########################
@@ -32,11 +34,11 @@ function init() {
 	const gptConfig = config('gpt') || {};
 	breakpoints = config('responsive');
 	loadGPT();
-	utils.on('slotReady', onReady.bind(null, slotMethods));
+	utils.on('slotReady', onReady.bind(null, slotMethods, gptConfig));
 	utils.on('slotCanRender', onRender);
 	utils.on('refresh', onRefresh);
 	utils.on('resize', onResize);
-	googletag.cmd.push(setup.bind(null, gptConfig));
+	if (gptConfig.rendering !== 'sra' && !gptConfig.enableLazyLoad) { googletag.cmd.push(() => setup(gptConfig)); }
 }
 
 /*
@@ -227,8 +229,9 @@ function enableCompanions(gptConfig) {
 /*
  * Event handler for when a slot is ready for an ad to rendered
  */
-function onReady(slotMethods, event) {
+function onReady(slotMethods, gptConfig, event) {
 	const slot = event.detail.slot;
+	adCountArray.push(slot);
 	/* istanbul ignore else  */
 	if (slot.server === 'gpt') {
 		slot.gpt = {};
@@ -244,11 +247,19 @@ function onReady(slotMethods, event) {
 				.setCollapseEmpty()
 				.setTargeting()
 				.setURL();
-
+			if(gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+				googletag.cmd.push(() => setup(gptConfig));
+			}
 			if (!slot.defer && slot.hasValidSize()) {
+				if(!adsDisplayed && gptConfig.rendering !== 'sra' && gptConfig.enableLazyLoad) {
+					googletag.cmd.push(() => setup(gptConfig));
+					adsDisplayed = true;
+				}
 				slot.display();
 			}
 		});
+	}	else if (gptConfig.rendering === 'sra' && adCountArray.indexOf(slot) === adCountArray.length-1) {
+		googletag.cmd.push(() => setup(gptConfig));
 	}
 }
 /*
