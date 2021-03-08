@@ -1,7 +1,7 @@
 _extends: github-apps-config-next
 
 branches:
-  - name: master
+  - name: main
     protection:
       required_pull_request_reviews: null
       required_status_checks:

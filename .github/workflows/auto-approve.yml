@@ -13,7 +13,7 @@ jobs:
       with:
         github-token: "${{ secrets.ORIGAMI_FOX_ACCESS_TOKEN }}"
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@main
       if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
       with:
         fetch-depth: 1

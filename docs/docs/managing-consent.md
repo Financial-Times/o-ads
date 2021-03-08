@@ -68,7 +68,7 @@ The Ad-operations team use the AdManager ad-server UI to set-up different sets o
 
 ##### o-ads is used to set targeting key/values:
 On FT.com we use a client-side library `o-ads` to abstract away the complexity of making different types of ad-requests on different pages.
-The `o-ads` library contains a module specifically used to handle key/value targeting for ad-requests: [o-ads targeting module](https://github.com/Financial-Times/o-ads/blob/master/src/js/targeting.js)
+The `o-ads` library contains a module specifically used to handle key/value targeting for ad-requests: [o-ads targeting module](https://github.com/Financial-Times/o-ads/blob/HEAD/src/js/targeting.js)
 
 The targeting module implements simple public methods for setting/getting targeting key/values that go into ad-requests. Note that on FT.com all `o-ads` public functions are exposed on the `window.oAds` object, therefore we are able to run the following command `oAds.targeting.get()` in the dev-tools console and this will output the set of targeting key/values that has been set for ads on the page.
 
@@ -85,7 +85,7 @@ In general there are two sources used to derive targeting key/value data on FT.c
 2. [Permutive](https://github.com/Financial-Times/n-permutive) - used for user behavior based data
 
 ##### Ads-api derived targeting
-See the [ads-api repo for full documentation](https://github.com/Financial-Times/next-ads-api/blob/master/README.md): 
+See the [ads-api repo for full documentation](https://github.com/Financial-Times/next-ads-api/blob/HEAD/README.md): 
 This API is an attempt to centralise the data used for targeting adverts for the FT, and allow for a consistent, extensible and performant solution that can work across multiple products.
 
 The API returns a list of key/values which can be passed to the ad server (via o-ads or amp pages).
@@ -126,14 +126,14 @@ These settings are held in the Consent Store (part of the `next-control-center`)
 ##### behavioraladsOnsite 
 The `behavioraladsOnsite` consent setting can be toggled to `on`/`off`.
 
-When `on`; our Permutive integration will run in the users browser - see: [n-permutive FTconsent cookie integration code](https://github.com/Financial-Times/n-permutive/blob/master/src/client/index.js#L56). 
+When `on`; our Permutive integration will run in the users browser - see: [n-permutive FTconsent cookie integration code](https://github.com/Financial-Times/n-permutive/blob/HEAD/src/client/index.js#L56). 
 
 Before running any Permutive related code we check that `behavioraladsOnsite` is `on` in the FTConsent cookie - i.e. User has accepted the cookie banner and/or toggled the Behavioral Ads toggle (on manage cookies or privacy center) to `on`.
 
 
 When `off`; no Permutive related code will run in the users browser - So:
  * Permutive's `<script>` tag will not be written to the page.
- * We will not pass a `permutive` key/value in segments [see the n-permutive readme for full details of how Permutive has been integrated](https://github.com/Financial-Times/n-permutive/blob/master/README.md)
+ * We will not pass a `permutive` key/value in segments [see the n-permutive readme for full details of how Permutive has been integrated](https://github.com/Financial-Times/n-permutive/blob/HEAD/README.md)
 
  
 ##### demographicadsOnsite 

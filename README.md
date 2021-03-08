@@ -31,7 +31,7 @@ This doc is specific to the o-ads library. For more information about the ads ec
 
 **[12. Developing](#developing)**
 
-**[13. Migration](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)**
+**[13. Migration](https://github.com/financial-times/o-ads/blob/HEAD/MIGRATION.md)**
 
 
 ## Install
@@ -498,14 +498,14 @@ A product can use this to change the styles based on which ad has loaded (for ex
 
 #### Tests
 
-See the [test documentation](https://github.com/Financial-Times/o-ads/blob/master/test/README.md)
+See the [test documentation](https://github.com/Financial-Times/o-ads/blob/HEAD/test/README.md)
 
 #### Releasing
 
 You will need a `GITHUB_TOKEN` environment variable with access to the repository in your .env file
 [Get a github token](https://github.com/settings/tokens) with "repo" access and make it accessible as an environment variable.
 
-Run `npm run release (patch|minor|major|x.y.z)` in `master` then follow the interactive steps.
+Run `npm run release (patch|minor|major|x.y.z)` in `main` then follow the interactive steps.
 
 This will bump version numbers in the source and commit them, push to github and create a new release.
 
@@ -513,4 +513,4 @@ The command uses [release-it](https://github.com/webpro/release-it) under the ho
 
 ## Migration
 
-See the [migration guide](https://github.com/financial-times/o-ads/blob/master/MIGRATION.md)
+See the [migration guide](https://github.com/financial-times/o-ads/blob/HEAD/MIGRATION.md)
