@@ -47,7 +47,7 @@ e.g.,
 
 #### 1.1.3. References
 - [Ads API data provider](https://github.com/Financial-Times/o-ads/blob/35a33741118a80efabcaec9505c2dead064528ea/src/js/data-providers/api.js#L50)
-- [gpt.setUnitName()](https://github.com/Financial-Times/o-ads/blob/master/src/js/ad-servers/gpt.js#L363)
+- [gpt.setUnitName()](https://github.com/Financial-Times/o-ads/blob/HEAD/src/js/ad-servers/gpt.js#L363)
 
 ### 1.2. nAds
 
