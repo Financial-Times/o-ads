@@ -74,10 +74,10 @@ adIframeLoaded | slotRenderEnded
 A guide can to the new names can also be found in this two diagrams:
 
 ### Event renaming pt. 1
-![event renaming 1](https://raw.githubusercontent.com/Financial-Times/o-ads/master/docs/assets/v12_event_renaming_1.png)
+![event renaming 1](https://raw.githubusercontent.com/Financial-Times/o-ads/HEAD/docs/assets/v12_event_renaming_1.png)
 
 ### Event renaming pt. 2
-![event renaming 2](https://raw.githubusercontent.com/Financial-Times/o-ads/master/docs/assets/v12_event_renaming_2.png)
+![event renaming 2](https://raw.githubusercontent.com/Financial-Times/o-ads/HEAD/docs/assets/v12_event_renaming_2.png)
 
 ## Upgrading to v11
 
