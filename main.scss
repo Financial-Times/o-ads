@@ -1,13 +1,13 @@
 $o-ads-is-silent: true !default;
 
 @import "src/scss/base";
-@import "o-visual-effects/main";
-@import "o-colors/main";
+@import "@financial-times/o-visual-effects/main";
+@import "@financial-times/o-colors/main";
 
 @if($o-ads-is-silent == false) {
 	@media print {
 		.o-ads {
-			display: none !important; // sass-lint:disable-line no-important
+			display: none !important; /* stylelint-disable-line declaration-no-important */
 		}
 	}
 	.o-ads,
@@ -64,12 +64,12 @@ $o-ads-is-silent: true !default;
 		@include oAdsResponsiveReserve();
 	}
 
-  // HACK: This is necessary to overcome an issue introducedy by GPT that misplaces ads
-  // See: https://ads.google.com/status#hl=en&v=issue&sid=24&iid=6790def915d959f61f56fb7005cba2cc
+	// HACK: This is necessary to overcome an issue introducedy by GPT that misplaces ads
+	// See: https://ads.google.com/status#hl=en&v=issue&sid=24&iid=6790def915d959f61f56fb7005cba2cc
 
-  div[id^='google_ads_iframe_'] { // sass-lint:disable-line no-qualifying-elements
-    margin: 0 auto;
-  }
+	div[id^='google_ads_iframe_'] { /* stylelint-disable-line selector-no-qualifying-type */
+		margin: 0 auto;
+	}
 
 	$o-ads-is-silent: true !global;
 }

@@ -1,9 +1,6 @@
 {
-	"description": "Enables advertising from Google's DFP Ad server, and provides customised demographic, and contextual (via Admantx) targeting.",
-	"origamiType": "module",
-	"origamiCategory": "components",
-	"origamiVersion": 1,
-	"keywords": [ "adverts" ],
+	"origamiType": "component",
+	"origamiVersion": "2.0",
 	"support": "origami.advertising.technology@ft.com",
 	"supportContact": {
 		"email": "origami.advertising.technology@ft.com",

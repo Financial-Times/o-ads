@@ -1,55 +1,9 @@
-# Build Generated Files #
-#########################
-build/
-reports/
-demos/local/
-.editorconfig
-test-results.xml
-.haikro-cache/
-node*linux*/
-*/*.xml
-.env
-test/cypress/screenshots/
-test/cypress/videos
-
-# Local config files #
-######################
-karma.local.js
-
-# Dependency Files #
-####################
-node_modules/
-bower_components/
-.sass-cache/
-
-# Log Files #
-#############
-*.log
-timestamp.dat
-
-# OS generated files #
-######################
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
-
-# VIM/editor generated files #
-##############################
+.env
+/.sass-cache/
+/bower_components/
+/node_modules/
+/build/
 .idea/
-*.iml
-*.sublime*
-*.bak
-*.swp
-
-# Linter config files #
-##############################
-.jshintrc
-.eslintrc
-
-# Local selenium
-bin/
+/demos/local
+/coverage
