@@ -62,7 +62,7 @@
     "jest": "25.5.4",
     "jest-environment-jsdom": "26.6.2",
     "jest-environment-jsdom-global": "2.0.4",
-    "jest-puppeteer": "4.4.0",
+    "jest-puppeteer": "5.0.4",
     "karma": "6.0.2",
     "karma-chrome-launcher": "3.1.0",
     "karma-cli": "2.0.0",
@@ -112,5 +112,9 @@
       "path": "./build/main.js",
       "maxSize": "118 kB"
     }
-  ]
+  ],
+  "volta": {
+    "node": "12.22.7",
+    "npm": "7.20.2"
+  }
 }
