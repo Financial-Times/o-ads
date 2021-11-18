@@ -1,3 +1,5 @@
+# Deprecated. This package is no longer supported. Please use: https://github.com/Financial-Times/advertising/tree/main/packages/legacy-o-ads
+
 # @financial-times/o-ads [![CircleCI](https://circleci.com/gh/Financial-Times/o-ads/tree/main.svg?style=svg&circle-token=c8de82644b3706d8e02d666d4626c9aba3c6c042)](https://circleci.com/gh/Financial-Times/o-ads/tree/main)
 
 This package contains the core functionality used by the FT in providing ads across all of its sites. This includes ft.com, howtospendit.com, ftadviser.com and other specialist titles.
