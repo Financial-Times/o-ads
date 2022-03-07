@@ -78,7 +78,7 @@
     "release-it": "14.2.2",
     "snyk": "1.431.2",
     "start-server-and-test": "1.11.6",
-    "watchify": "3.11.1",
+    "watchify": "4.0.0",
     "webpack": "4.43.0"
   },
   "browserify-swap": {
