@@ -103,7 +103,7 @@
   },
   "engines": {
     "node": ">14",
-		"npm": ">6"
+    "npm": ">6"
   },
   "release": {
     "analyzeCommits": "simple-commit-message"
@@ -113,5 +113,11 @@
       "path": "./build/main.js",
       "maxSize": "118 kB"
     }
-  ]
+  ],
+  "dependencies": {
+    "@financial-times/o-colors": "^6.4.2",
+    "@financial-times/o-grid": "^6.1.5",
+    "@financial-times/o-viewport": "^5.1.1",
+    "@financial-times/o-visual-effects": "^4.2.0"
+  }
 }
